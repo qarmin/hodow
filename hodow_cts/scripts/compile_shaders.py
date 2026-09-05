@@ -344,8 +344,13 @@ def main() -> int:
                 words = compile_glsl_cached(args.glslang, source, stage, where, program.get("spirv_version", spirv_version))
                 total_words += len(words)
 
-                spv_sym = f"SPV_{const}_{pname.upper()}"
-                glsl_sym = f"GLSL_{const}_{pname.upper()}"
+                # A program name is the string `BinaryCollection::get` is called with,
+                # and upstream's are not all Rust identifiers - the renderpass tests
+                # name theirs `<subpassNdx>-vert`. The lookup keeps the exact name; only
+                # the symbol is sanitised.
+                sym_suffix = re.sub(r"[^A-Za-z0-9_]", "_", pname.upper())
+                spv_sym = f"SPV_{const}_{sym_suffix}"
+                glsl_sym = f"GLSL_{const}_{sym_suffix}"
 
                 out.append(f"    #[rustfmt::skip]")
                 out.append(f"    static {spv_sym}: [u32; {len(words)}] = [")

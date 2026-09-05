@@ -30,6 +30,7 @@ pub fn create_test_hierarchy() -> tcu::TestCaseGroup {
     root.add_child(vkt::tests::api::create_tests());
     root.add_child(vkt::tests::compute::create_tests());
     root.add_child(vkt::tests::memory::create_tests());
+    root.add_child(vkt::tests::renderpass::create_tests());
     root
 }
 

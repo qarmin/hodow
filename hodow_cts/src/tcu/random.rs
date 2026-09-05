@@ -144,6 +144,17 @@ mod tests {
 
 /// `deInt32Hash` - Thomas Wang's 32-bit integer hash, which upstream uses to turn a
 /// small enum value into a usable seed.
+impl Random {
+    /// `de::Random::shuffle` - Fisher-Yates, walking down so the rng is consumed in
+    /// the same order as upstream.
+    pub fn shuffle<T>(&mut self, items: &mut [T]) {
+        for i in (1..items.len()).rev() {
+            let j = self.get_int(0, i as i32) as usize;
+            items.swap(i, j);
+        }
+    }
+}
+
 pub fn de_int32_hash(a: i32) -> u32 {
     let mut key = a as u32;
     key = (key ^ 61) ^ (key >> 16);

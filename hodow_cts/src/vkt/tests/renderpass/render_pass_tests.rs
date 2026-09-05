@@ -1,0 +1,1564 @@
+// SPDX-License-Identifier: Apache-2.0
+//
+// Derived from VK-GL-CTS:
+//   external/vulkancts/modules/vulkan/renderpass/vktRenderPassTests.cpp
+// Upstream revision: see hodow_cts/upstream/COMMIT
+//
+// Copyright (c) 2015 The Khronos Group Inc.
+// Licensed under the Apache License, Version 2.0 (see LICENSE at the repo root).
+//
+// Modifications: rewritten in Rust for hodow_cts.
+//
+// The verification here is not a pixel comparison against a rendered reference. Every
+// value the test ever writes - clear values, the fragment shader's output - is either
+// 0 or 1 in each channel, so the reference is a per-channel tri-state: true, false, or
+// undefined. `PixelValue` is that tri-state, `render_reference_values` replays the
+// render pass over it (image clear, load op, subpass clears, draw), and the comparison
+// only checks the channels the replay left defined. That is what makes DONT_CARE
+// testable at all: it marks the region undefined rather than predicting a value.
+//
+// Ported so far: the `formats` colour cases - one colour attachment, one subpass, no
+// input attachments. Everything else in the group is absent rather than skipped.
+
+// The channel loops index a `[_; 4]` by the component number the C++ names, and the
+// argument lists mirror `pushRenderPassCommands`; the iterator forms clippy suggests
+// would lose that correspondence.
+#![allow(clippy::needless_range_loop, clippy::too_many_arguments)]
+
+use vulkanalia::prelude::v1_0::*;
+
+use super::super::api::copies_buffer_tests::AllocationKind;
+use crate::tcu::pixel::{ConstPixelBufferAccess, TextureLevel, get_texture_format_channel_mask};
+use crate::tcu::random::Random;
+use crate::tcu::texture::{ChannelOrder, TextureChannelClass, TextureFormat};
+use crate::tcu::{self, TestError, TestStatus, map_vk_format};
+use crate::vk::VkResultExt;
+use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
+use crate::vk::image_util::{ImageWithMemory, make_image_memory_barrier, make_image_subresource_range, make_image_view};
+use crate::vk::mem_util::{MemoryRequirement, invalidate_alloc};
+use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool, make_framebuffer, make_pipeline_layout};
+use crate::vk::programs::{BinaryCollection, create_shader_module};
+use crate::vk::ref_util::Unique;
+use crate::vkt::{Context, TestCase, TestInstance};
+
+// ---------------------------------------------------------------------------------
+// Render pass description
+// ---------------------------------------------------------------------------------
+
+/// `AttachmentReference`
+#[derive(Clone, Copy)]
+pub struct AttachmentReference {
+    attachment: u32,
+    layout: vk::ImageLayout,
+}
+
+impl AttachmentReference {
+    pub const fn new(attachment: u32, layout: vk::ImageLayout) -> Self {
+        Self { attachment, layout }
+    }
+}
+
+/// `VK_ATTACHMENT_UNUSED`
+const ATTACHMENT_UNUSED: u32 = u32::MAX;
+
+/// `Attachment`
+#[derive(Clone, Copy)]
+pub struct Attachment {
+    format: vk::Format,
+    samples: vk::SampleCountFlags,
+    load_op: vk::AttachmentLoadOp,
+    store_op: vk::AttachmentStoreOp,
+    stencil_load_op: vk::AttachmentLoadOp,
+    stencil_store_op: vk::AttachmentStoreOp,
+    initial_layout: vk::ImageLayout,
+    final_layout: vk::ImageLayout,
+}
+
+/// `Subpass`
+#[derive(Clone)]
+pub struct Subpass {
+    input_attachments: Vec<AttachmentReference>,
+    color_attachments: Vec<AttachmentReference>,
+    depth_stencil_attachment: AttachmentReference,
+}
+
+/// `RenderPass`
+#[derive(Clone)]
+pub struct RenderPassDesc {
+    attachments: Vec<Attachment>,
+    subpasses: Vec<Subpass>,
+}
+
+/// `TestConfig::RenderTypes`
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub struct RenderTypes(u32);
+
+impl RenderTypes {
+    pub const CLEAR: Self = Self(1 << 1);
+    pub const DRAW: Self = Self(1 << 2);
+
+    const fn or(self, other: Self) -> Self {
+        Self(self.0 | other.0)
+    }
+
+    fn contains(self, other: Self) -> bool {
+        self.0 & other.0 != 0
+    }
+}
+
+/// `DEPTH_VALUES`, shuffled per case by `TestConfig`'s constructor. Only the two the
+/// constructor keeps are ever used, and no ported case has a depth attachment yet, but
+/// the shuffle consumes the rng in the order upstream does and the clear values that
+/// follow depend on that.
+const DEPTH_VALUES: [u8; 3] = [0u8, 255u8, 128u8];
+
+/// `TestConfig`
+pub struct TestConfig {
+    render_pass: RenderPassDesc,
+    render_types: RenderTypes,
+    target_size: [u32; 2],
+    render_pos: [u32; 2],
+    render_size: [u32; 2],
+    /// Always false in the ported group; the `attachment` cases set it.
+    #[allow(dead_code)]
+    use_format_comp_count: bool,
+    seed: u32,
+    allocation_kind: AllocationKind,
+    render_pass_type: RenderPassType,
+    /// Read by the depth/stencil paths, which are not ported; the shuffle that picks
+    /// them still has to run, because the clear values drawn after it depend on where
+    /// it left the rng.
+    #[allow(dead_code)]
+    depth_values: [u8; 2],
+}
+
+/// `RenderingType`, narrowed to the two the port registers.
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum RenderPassType {
+    /// `RENDERING_TYPE_RENDERPASS_LEGACY`
+    Legacy,
+    /// `RENDERING_TYPE_RENDERPASS2`
+    RenderPass2,
+}
+
+impl TestConfig {
+    #[allow(clippy::too_many_arguments)]
+    fn new(
+        render_pass: RenderPassDesc,
+        render_types: RenderTypes,
+        target_size: [u32; 2],
+        render_pos: [u32; 2],
+        render_size: [u32; 2],
+        use_format_comp_count: bool,
+        seed: u32,
+        allocation_kind: AllocationKind,
+        render_pass_type: RenderPassType,
+    ) -> Self {
+        let mut shuffled = DEPTH_VALUES;
+        let mut rng = Random::new(seed + 1);
+        rng.shuffle(&mut shuffled);
+
+        Self {
+            render_pass,
+            render_types,
+            target_size,
+            render_pos,
+            render_size,
+            use_format_comp_count,
+            seed,
+            allocation_kind,
+            render_pass_type,
+            depth_values: [shuffled[0], shuffled[1]],
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------------
+// Shader helpers, shared with the manifest
+// ---------------------------------------------------------------------------------
+
+/// The manifest declares its cases with this, so the GLSL type the shader was built
+/// for is carried next to the binaries and can be checked against what the host
+/// computes for the attachment.
+pub struct GridProgram {
+    pub name: &'static str,
+    pub attachment_type: &'static str,
+    pub programs: BinaryCollection,
+}
+
+/// `getShaderNumChannels`. Unused until a group with `useFormatCompCount` is ported;
+/// kept because every shader-side helper here has to stay next to its sibling.
+#[allow(dead_code)]
+fn get_shader_num_channels(order: ChannelOrder) -> usize {
+    if order == ChannelOrder::A { 4 } else { order.num_used_channels() as usize }
+}
+
+/// `getAttachmentType`, for `useFormatCompCount == false`.
+fn attachment_type_name(format: TextureFormat) -> &'static str {
+    match format.channel_class() {
+        TextureChannelClass::SignedInteger => "ivec4",
+        TextureChannelClass::UnsignedInteger => "uvec4",
+        _ => "vec4",
+    }
+}
+
+/// `BoolOp`
+#[derive(Clone, Copy)]
+enum BoolOp {
+    And,
+    Or,
+    Eq,
+    Neq,
+}
+
+/// `boolOpFromIndex`
+fn bool_op_from_index(index: usize) -> BoolOp {
+    const OPS: [BoolOp; 4] = [BoolOp::Or, BoolOp::And, BoolOp::Eq, BoolOp::Neq];
+    OPS[index % 4]
+}
+
+/// `performBoolOp`
+fn perform_bool_op(op: BoolOp, a: bool, b: bool) -> bool {
+    match op {
+        BoolOp::Or => a || b,
+        BoolOp::And => a && b,
+        BoolOp::Eq => a == b,
+        BoolOp::Neq => a != b,
+    }
+}
+
+// ---------------------------------------------------------------------------------
+// The reference model
+// ---------------------------------------------------------------------------------
+
+/// `PixelValue` - four channels of "true", "false" or "undefined", packed two bits
+/// each exactly as upstream packs them.
+#[derive(Clone, Copy, Default)]
+struct PixelValue {
+    status: u16,
+}
+
+impl PixelValue {
+    fn set_undefined(&mut self, ndx: usize) {
+        self.status &= !(0x1u16 << (ndx * 2));
+    }
+
+    fn set_value(&mut self, ndx: usize, value: bool) {
+        self.status |= 0x1u16 << (ndx * 2);
+        if value {
+            self.status |= 0x1u16 << (ndx * 2 + 1);
+        } else {
+            self.status &= !(0x1u16 << (ndx * 2 + 1));
+        }
+    }
+
+    fn get_value(&self, ndx: usize) -> Option<bool> {
+        if self.status & (0x1u16 << (ndx * 2)) == 0 {
+            None
+        } else {
+            Some(self.status & (0x1u16 << (ndx * 2 + 1)) != 0)
+        }
+    }
+}
+
+/// A colour clear value in the only form this test ever produces: one bool per
+/// channel, or `None` for a channel the format does not have.
+#[derive(Clone, Copy)]
+struct ClearValue {
+    channels: [Option<bool>; 4],
+}
+
+impl ClearValue {
+    /// `randomColorClearValue`, for `useFormatCompCount == false`.
+    ///
+    /// Upstream writes a per-format "unused" filler into the channels the format does
+    /// not have - INT_MIN, UINT_MAX or NaN - and the reference ignores them. Only
+    /// which channels are used and what the rng said is kept here.
+    fn random(format: TextureFormat, rng: &mut Random) -> Self {
+        let mask = get_texture_format_channel_mask(format);
+        let channels = std::array::from_fn(|i| if mask[i] { Some(rng.get_bool()) } else { None });
+        Self { channels }
+    }
+
+    /// `clearValueToPixelValue`
+    fn to_pixel_value(self) -> PixelValue {
+        let mut value = PixelValue::default();
+        for (i, channel) in self.channels.iter().enumerate() {
+            match channel {
+                Some(v) => value.set_value(i, *v),
+                None => value.set_undefined(i),
+            }
+        }
+        value
+    }
+
+    /// The `VkClearColorValue` this stands for, in the union member the format's
+    /// channel class selects.
+    fn to_vk(self, format: TextureFormat) -> vk::ClearColorValue {
+        let bits: [u32; 4] = std::array::from_fn(|i| u32::from(self.channels[i].unwrap_or(false)));
+        match format.channel_class() {
+            TextureChannelClass::SignedInteger => vk::ClearColorValue { int32: bits.map(|b| b as i32) },
+            TextureChannelClass::UnsignedInteger => vk::ClearColorValue { uint32: bits },
+            _ => vk::ClearColorValue { float32: bits.map(|b| b as f32) },
+        }
+    }
+}
+
+/// `clearReferenceValues`
+fn clear_reference_values(reference: &mut [PixelValue], target_size: [u32; 2], offset: [u32; 2], size: [u32; 2], value: PixelValue) {
+    for y in offset[1]..offset[1] + size[1] {
+        for x in offset[0]..offset[0] + size[0] {
+            let at = (x + y * target_size[0]) as usize;
+            for ndx in 0..4 {
+                match value.get_value(ndx) {
+                    Some(v) => reference[at].set_value(ndx, v),
+                    None => reference[at].set_undefined(ndx),
+                }
+            }
+        }
+    }
+}
+
+/// `markUndefined`
+fn mark_undefined(reference: &mut [PixelValue], target_size: [u32; 2], offset: [u32; 2], size: [u32; 2]) {
+    for y in offset[1]..offset[1] + size[1] {
+        for x in offset[0]..offset[0] + size[0] {
+            let at = (x + y * target_size[0]) as usize;
+            for ndx in 0..4 {
+                reference[at].set_undefined(ndx);
+            }
+        }
+    }
+}
+
+/// `roundToViewport`
+fn round_to_viewport(x: f32, offset: u32, size: u32) -> f32 {
+    let origin = offset as f32 + (size as f32 / 2.0);
+    let p = size as f32 / 2.0;
+    let xi = (origin + p * x).round() as i32;
+    (xi as f32 - origin) / p
+}
+
+/// `RenderQuad`, reduced to the two corners the rest of the test reads.
+#[derive(Clone, Copy)]
+struct RenderQuad {
+    corner_a: [f32; 2],
+    corner_b: [f32; 2],
+}
+
+impl RenderQuad {
+    /// The six vertices `getVertexPointer` hands to the vertex buffer.
+    fn vertices(&self) -> [[f32; 2]; 6] {
+        let (a, b) = (self.corner_a, self.corner_b);
+        [a, [a[0], b[1]], b, b, [b[0], a[1]], a]
+    }
+}
+
+/// `ColorClear`
+#[derive(Clone, Copy)]
+struct ColorClear {
+    offset: [u32; 2],
+    size: [u32; 2],
+    color: ClearValue,
+}
+
+/// `SubpassRenderInfo`, narrowed to a single-subpass colour-only render pass.
+struct SubpassRenderInfo {
+    viewport_offset: [u32; 2],
+    viewport_size: [u32; 2],
+    color_clears: Vec<ColorClear>,
+    render_quad: Option<RenderQuad>,
+}
+
+/// `initializeSubpassRenderInfo`, for one subpass with `COMMANDBUFFERTYPES_INLINE`.
+fn initialize_subpass_render_info(rng: &mut Random, render_pass: &RenderPassDesc, config: &TestConfig) -> Vec<SubpassRenderInfo> {
+    let mut infos = Vec::new();
+
+    for (subpass_ndx, subpass) in render_pass.subpasses.iter().enumerate() {
+        let viewport_size = [config.render_size[0] * 2 / 3, config.render_size[1] * 2 / 3];
+        let viewport_offset = [
+            config.render_pos[0] + (subpass_ndx as u32 % 2) * (config.render_size[0] / 3),
+            config.render_pos[1] + ((subpass_ndx as u32 / 2) % 2) * (config.render_size[1] / 3),
+        ];
+
+        let mut color_clears = Vec::new();
+        let mut render_quad = None;
+
+        if config.render_types.contains(RenderTypes::CLEAR) {
+            for (attachment_ref_ndx, attachment_ref) in subpass.color_attachments.iter().enumerate() {
+                let attachment = render_pass.attachments[attachment_ref.attachment as usize];
+                let size = [viewport_size[0] * 2 / 3, viewport_size[1] * 2 / 3];
+                let offset = [
+                    viewport_offset[0] + (attachment_ref_ndx as u32 % 2) * (viewport_size[0] / 3),
+                    viewport_offset[1] + ((attachment_ref_ndx as u32 / 2) % 2) * (viewport_size[1] / 3),
+                ];
+                let format = map_vk_format(attachment.format).expect("a colour attachment format maps");
+                color_clears.push(ColorClear {
+                    offset,
+                    size,
+                    color: ClearValue::random(format, rng),
+                });
+            }
+        }
+
+        if config.render_types.contains(RenderTypes::DRAW) {
+            let w = if subpass_ndx % 2 == 0 { 1.0 } else { 1.25 };
+            let h = if subpass_ndx % 2 == 0 { 1.25 } else { 1.0 };
+
+            let x0 = round_to_viewport(if subpass_ndx % 2 == 0 { 1.0 - w } else { -1.0 }, viewport_offset[0], viewport_size[0]);
+            let x1 = round_to_viewport(if subpass_ndx % 2 == 0 { 1.0 } else { -1.0 + w }, viewport_offset[0], viewport_size[0]);
+            let y0 = round_to_viewport(if subpass_ndx % 2 == 0 { 1.0 - h } else { -1.0 }, viewport_offset[1], viewport_size[1]);
+            let y1 = round_to_viewport(if subpass_ndx % 2 == 0 { 1.0 } else { -1.0 + h }, viewport_offset[1], viewport_size[1]);
+
+            render_quad = Some(RenderQuad {
+                corner_a: [x0, y0],
+                corner_b: [x1, y1],
+            });
+        }
+
+        infos.push(SubpassRenderInfo {
+            viewport_offset,
+            viewport_size,
+            color_clears,
+            render_quad,
+        });
+    }
+
+    infos
+}
+
+/// `renderReferenceValues`, for colour attachments with no input attachments.
+fn render_reference_values(
+    render_pass: &RenderPassDesc,
+    target_size: [u32; 2],
+    image_clear_values: &[Option<ClearValue>],
+    render_pass_clear_values: &[Option<ClearValue>],
+    subpass_render_info: &[SubpassRenderInfo],
+    render_pos: [u32; 2],
+    render_size: [u32; 2],
+) -> Vec<Vec<PixelValue>> {
+    let mut reference_attachments: Vec<Vec<PixelValue>> = Vec::new();
+    let mut attachment_used = vec![false; render_pass.attachments.len()];
+
+    for (attachment_ndx, _) in render_pass.attachments.iter().enumerate() {
+        let mut reference = vec![PixelValue::default(); (target_size[0] * target_size[1]) as usize];
+
+        if let Some(clear) = image_clear_values[attachment_ndx] {
+            clear_reference_values(&mut reference, target_size, [0, 0], target_size, clear.to_pixel_value());
+        }
+        reference_attachments.push(reference);
+    }
+
+    for (subpass_ndx, subpass) in render_pass.subpasses.iter().enumerate() {
+        let render_info = &subpass_render_info[subpass_ndx];
+
+        // Apply load op if attachment was used for the first time
+        for attachment_ref in &subpass.color_attachments {
+            let attachment_index = attachment_ref.attachment;
+            if attachment_index == ATTACHMENT_UNUSED {
+                continue;
+            }
+            let attachment_index = attachment_index as usize;
+            if attachment_used[attachment_index] {
+                continue;
+            }
+
+            let attachment = render_pass.attachments[attachment_index];
+            let reference = &mut reference_attachments[attachment_index];
+
+            if attachment.load_op == vk::AttachmentLoadOp::CLEAR {
+                let clear = render_pass_clear_values[attachment_index].expect("a CLEAR load op has a clear value");
+                clear_reference_values(reference, target_size, render_pos, render_size, clear.to_pixel_value());
+            } else if attachment.load_op == vk::AttachmentLoadOp::DONT_CARE {
+                mark_undefined(reference, target_size, render_pos, render_size);
+            }
+
+            attachment_used[attachment_index] = true;
+        }
+
+        for (color_clear_ndx, color_clear) in render_info.color_clears.iter().enumerate() {
+            let attachment_index = subpass.color_attachments[color_clear_ndx].attachment as usize;
+            let reference = &mut reference_attachments[attachment_index];
+            clear_reference_values(reference, target_size, color_clear.offset, color_clear.size, color_clear.color.to_pixel_value());
+        }
+
+        if let Some(render_quad) = render_info.render_quad {
+            let origin = [
+                render_info.viewport_offset[0] as f32 + render_info.viewport_size[0] as f32 / 2.0,
+                render_info.viewport_offset[1] as f32 + render_info.viewport_size[1] as f32 / 2.0,
+            ];
+            let p = [render_info.viewport_size[0] as f32 / 2.0, render_info.viewport_size[1] as f32 / 2.0];
+            let pos_a = [
+                (origin[0] + p[0] * render_quad.corner_a[0]).round() as i32,
+                (origin[1] + p[1] * render_quad.corner_a[1]).round() as i32,
+            ];
+            let pos_b = [
+                (origin[0] + p[0] * render_quad.corner_b[0]).round() as i32,
+                (origin[1] + p[1] * render_quad.corner_b[1]).round() as i32,
+            ];
+
+            for (attachment_ref_ndx, attachment_ref) in subpass.color_attachments.iter().enumerate() {
+                let _ = attachment_ref_ndx;
+                let attachment_index = attachment_ref.attachment;
+                if attachment_index == ATTACHMENT_UNUSED {
+                    continue;
+                }
+                let attachment_index = attachment_index as usize;
+                let attachment = render_pass.attachments[attachment_index];
+                let format = map_vk_format(attachment.format).expect("a colour attachment format maps");
+                let channel_mask = get_texture_format_channel_mask(format);
+                let reference = &mut reference_attachments[attachment_index];
+
+                for y in pos_a[1]..pos_b[1] {
+                    for x in pos_a[0]..pos_b[0] {
+                        for comp_ndx in 0..4 {
+                            let index = subpass_ndx + attachment_index + comp_ndx;
+                            let op = bool_op_from_index(index);
+                            let bool_x = x % 2 == (index % 2) as i32;
+                            let bool_y = y % 2 == ((index / 2) % 2) as i32;
+
+                            if channel_mask[comp_ndx] {
+                                let at = (x + y * target_size[0] as i32) as usize;
+                                reference[at].set_value(comp_ndx, perform_bool_op(op, bool_x, bool_y));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    reference_attachments
+}
+
+/// `verifyColorAttachment`, for `useFormatCompCount == false`.
+fn verify_color_attachment(reference: &[PixelValue], result: &ConstPixelBufferAccess<'_>) -> bool {
+    let [width, height, _] = result.size();
+    let mut ok = true;
+
+    for y in 0..height {
+        for x in 0..width {
+            let result_color = result.get_pixel(x, y, 0);
+            let reference_value = reference[(x + y * width) as usize];
+
+            for comp_ndx in 0..4 {
+                if let Some(value) = reference_value.get_value(comp_ndx)
+                    && ((value && result_color[comp_ndx] != 1.0) || (!value && result_color[comp_ndx] != 0.0))
+                {
+                    ok = false;
+                }
+            }
+        }
+    }
+
+    ok
+}
+
+// ---------------------------------------------------------------------------------
+// The test
+// ---------------------------------------------------------------------------------
+
+/// `AttachmentResources` - the image, its view, and the buffer its contents are read
+/// back into.
+struct AttachmentResources<'a> {
+    image: ImageWithMemory<'a>,
+    view: Unique<'a, vk::ImageView>,
+    buffer: BufferWithMemory<'a>,
+}
+
+/// `RenderPassTestCase`
+pub struct RenderPassTestCase {
+    name: String,
+    config: TestConfig,
+}
+
+impl TestCase for RenderPassTestCase {
+    fn name(&self) -> &str {
+        &self.name
+    }
+
+    fn check_support(&self, context: &Context) -> Result<(), TestError> {
+        if self.config.render_pass_type == RenderPassType::RenderPass2 {
+            context.require_device_functionality("VK_KHR_create_renderpass2")?;
+        }
+
+        // `RenderPassTestCase::checkTextureFormatSupport` - every attachment has to be
+        // usable as the kind of attachment the subpasses reference it as.
+        let instance = context.get_instance();
+        for attachment in &self.config.render_pass.attachments {
+            let properties = unsafe { instance.get_physical_device_format_properties(context.get_physical_device(), attachment.format) };
+            let format = map_vk_format(attachment.format).ok_or_else(|| TestError::NotPorted(format!("no tcu format for {:?}", attachment.format)))?;
+
+            let required = if format.order.has_depth() || format.order.has_stencil() {
+                vk::FormatFeatureFlags::DEPTH_STENCIL_ATTACHMENT
+            } else {
+                vk::FormatFeatureFlags::COLOR_ATTACHMENT
+            };
+
+            if !properties.optimal_tiling_features.contains(required) {
+                return Err(TestError::NotSupported(format!("format {:?} not supported as an attachment", attachment.format)));
+            }
+        }
+
+        Ok(())
+    }
+
+    fn programs(&self) -> BinaryCollection {
+        let format = map_vk_format(self.config.render_pass.attachments[0].format).expect("checked in check_support");
+        let program = grid_program_for(attachment_type_name(format));
+        program.programs
+    }
+
+    fn create_instance<'a>(&'a self, context: &'a Context<'a>) -> Box<dyn TestInstance + 'a> {
+        Box::new(RenderPassTestInstance { context, config: &self.config })
+    }
+}
+
+/// The manifest entry whose shader was built for this GLSL type.
+fn grid_program_for(attachment_type: &str) -> &'static GridProgram {
+    use crate::generated::shaders::renderpass_render_pass as p;
+    let program = match attachment_type {
+        "ivec4" => &p::RENDER_PASS_GRID_SINT,
+        "uvec4" => &p::RENDER_PASS_GRID_UINT,
+        _ => &p::RENDER_PASS_GRID_FLOAT,
+    };
+    debug_assert_eq!(program.attachment_type, attachment_type);
+    program
+}
+
+/// `RenderPassTestInstance`
+struct RenderPassTestInstance<'a> {
+    context: &'a Context<'a>,
+    config: &'a TestConfig,
+}
+
+impl TestInstance for RenderPassTestInstance<'_> {
+    fn iterate(&mut self) -> Result<TestStatus, TestError> {
+        let config = self.config;
+        let render_pass_info = &config.render_pass;
+        let mut rng = Random::new(config.seed);
+
+        // `initializeAttachmentIsLazy` with IMAGEMEMORY_STRICT: never lazy.
+        let attachment_is_lazy = vec![false; render_pass_info.attachments.len()];
+
+        // `initializeImageClearValues`
+        let image_clear_values: Vec<Option<ClearValue>> = render_pass_info
+            .attachments
+            .iter()
+            .zip(&attachment_is_lazy)
+            .map(|(attachment, is_lazy)| {
+                if *is_lazy {
+                    None
+                } else {
+                    let format = map_vk_format(attachment.format).expect("checked in check_support");
+                    Some(ClearValue::random(format, &mut rng))
+                }
+            })
+            .collect();
+
+        let attachment_image_usage = self.initialize_attachment_image_usage(&image_clear_values)?;
+
+        // `initializeRenderPassClearValues`
+        let render_pass_clear_values: Vec<Option<ClearValue>> = render_pass_info
+            .attachments
+            .iter()
+            .map(|attachment| {
+                if attachment.load_op == vk::AttachmentLoadOp::CLEAR || attachment.stencil_load_op == vk::AttachmentLoadOp::CLEAR {
+                    let format = map_vk_format(attachment.format).expect("checked in check_support");
+                    Some(ClearValue::random(format, &mut rng))
+                } else {
+                    None
+                }
+            })
+            .collect();
+
+        let subpass_render_info = initialize_subpass_render_info(&mut rng, render_pass_info, config);
+
+        let device = self.context.get_device();
+        let queue = self.context.get_universal_queue();
+        let queue_index = self.context.get_universal_queue_family_index();
+
+        let command_pool = make_command_pool(device, queue_index)?;
+        let render_pass = self.create_render_pass()?;
+
+        let mut resources = Vec::new();
+        for (attachment_ndx, attachment) in render_pass_info.attachments.iter().enumerate() {
+            resources.push(self.create_attachment_resources(attachment, attachment_image_usage[attachment_ndx])?);
+        }
+
+        let attachment_views: Vec<vk::ImageView> = resources.iter().map(|r| *r.view).collect();
+        let framebuffer = make_framebuffer(device, *render_pass, &attachment_views, config.target_size[0], config.target_size[1], 1)?;
+
+        // The vertex buffer for the draw, if there is one.
+        let vertex_buffer = subpass_render_info
+            .iter()
+            .find_map(|info| info.render_quad)
+            .map(|quad| self.create_vertex_buffer(quad))
+            .transpose()?;
+
+        let pipeline_layout = make_pipeline_layout(device, &[])?;
+        let format = map_vk_format(render_pass_info.attachments[0].format).expect("checked in check_support");
+        let program = grid_program_for(attachment_type_name(format));
+        let vertex_module = create_shader_module(device, program.programs.get("0-vert")?)?;
+        let fragment_module = create_shader_module(device, program.programs.get("0-frag")?)?;
+        let pipeline = self.create_pipeline(*pipeline_layout, *vertex_module, *fragment_module, *render_pass, &subpass_render_info[0])?;
+
+        let command_buffer = allocate_command_buffer(device, *command_pool, vk::CommandBufferLevel::PRIMARY)?;
+        begin_command_buffer(device, *command_buffer)?;
+        self.push_image_initialization_commands(*command_buffer, &resources, &image_clear_values);
+        self.push_render_pass_commands(
+            *command_buffer,
+            *render_pass,
+            *framebuffer,
+            *pipeline,
+            vertex_buffer.as_ref(),
+            &render_pass_clear_values,
+            &subpass_render_info,
+        );
+        self.push_read_images_to_buffers(*command_buffer, &resources, queue_index);
+        end_command_buffer(device, *command_buffer)?;
+        submit_commands_and_wait(device, queue, *command_buffer)?;
+
+        let reference_values = render_reference_values(
+            render_pass_info,
+            config.target_size,
+            &image_clear_values,
+            &render_pass_clear_values,
+            &subpass_render_info,
+            config.render_pos,
+            config.render_size,
+        );
+
+        for (attachment_ndx, attachment) in render_pass_info.attachments.iter().enumerate() {
+            if attachment.store_op != vk::AttachmentStoreOp::STORE {
+                continue;
+            }
+
+            let format = map_vk_format(attachment.format).expect("checked in check_support");
+            invalidate_alloc(device, resources[attachment_ndx].buffer.get_allocation())?;
+            let mut level = TextureLevel::new(format, config.target_size[0], config.target_size[1], 1)?;
+            let len = level.data().len();
+            unsafe {
+                std::ptr::copy_nonoverlapping(
+                    resources[attachment_ndx].buffer.get_allocation().get_host_ptr().cast_const(),
+                    level.data_mut().as_mut_ptr(),
+                    len,
+                )
+            };
+
+            if !verify_color_attachment(&reference_values[attachment_ndx], &level.get_const_access()) {
+                return Ok(TestStatus::fail("Result verification failed"));
+            }
+        }
+
+        Ok(TestStatus::pass("Pass"))
+    }
+}
+
+impl RenderPassTestInstance<'_> {
+    /// `initializeAttachmentImageUsage`
+    fn initialize_attachment_image_usage(&self, clear_values: &[Option<ClearValue>]) -> Result<Vec<vk::ImageUsageFlags>, TestError> {
+        let render_pass_info = &self.config.render_pass;
+        let mut usage = vec![vk::ImageUsageFlags::empty(); render_pass_info.attachments.len()];
+
+        for subpass in &render_pass_info.subpasses {
+            for reference in &subpass.color_attachments {
+                if reference.attachment != ATTACHMENT_UNUSED {
+                    usage[reference.attachment as usize] |= vk::ImageUsageFlags::COLOR_ATTACHMENT;
+                }
+            }
+            if subpass.depth_stencil_attachment.attachment != ATTACHMENT_UNUSED {
+                usage[subpass.depth_stencil_attachment.attachment as usize] |= vk::ImageUsageFlags::DEPTH_STENCIL_ATTACHMENT;
+            }
+            for reference in &subpass.input_attachments {
+                if reference.attachment != ATTACHMENT_UNUSED {
+                    usage[reference.attachment as usize] |= vk::ImageUsageFlags::INPUT_ATTACHMENT;
+                }
+            }
+        }
+
+        let instance = self.context.get_instance();
+        let features = self.context.get_device_features();
+
+        for (attachment_ndx, attachment) in render_pass_info.attachments.iter().enumerate() {
+            let properties = unsafe { instance.get_physical_device_format_properties(self.context.get_physical_device(), attachment.format) };
+            let supported = properties.optimal_tiling_features;
+
+            if supported.contains(vk::FormatFeatureFlags::SAMPLED_IMAGE) {
+                usage[attachment_ndx] |= vk::ImageUsageFlags::SAMPLED;
+            }
+
+            if supported.contains(vk::FormatFeatureFlags::STORAGE_IMAGE)
+                && (attachment.samples == vk::SampleCountFlags::_1 || features.shader_storage_image_multisample == vk::TRUE)
+            {
+                usage[attachment_ndx] |= vk::ImageUsageFlags::STORAGE;
+            }
+
+            usage[attachment_ndx] |= get_image_usage_from_layout(attachment.initial_layout);
+            usage[attachment_ndx] |= get_image_usage_from_layout(attachment.final_layout);
+
+            // IMAGEMEMORY_STRICT only, so no attachment is lazy.
+            if clear_values[attachment_ndx].is_some() {
+                usage[attachment_ndx] |= vk::ImageUsageFlags::TRANSFER_DST;
+            }
+            usage[attachment_ndx] |= vk::ImageUsageFlags::TRANSFER_SRC;
+        }
+
+        Ok(usage)
+    }
+
+    /// `createRenderPass`, for the legacy and `VK_KHR_create_renderpass2` entry points.
+    ///
+    /// Only the legacy structures are filled: `vkCreateRenderPass2` takes the same
+    /// description through wider structs, and building both would double this for no
+    /// difference in what is tested. The renderpass2 cases go through
+    /// `vkCreateRenderPass2` with the same description translated.
+    fn create_render_pass(&self) -> Result<Unique<'_, vk::RenderPass>, TestError> {
+        let device = self.context.get_device();
+        let render_pass_info = &self.config.render_pass;
+
+        let attachments: Vec<vk::AttachmentDescription> = render_pass_info
+            .attachments
+            .iter()
+            .map(|a| vk::AttachmentDescription {
+                flags: vk::AttachmentDescriptionFlags::empty(),
+                format: a.format,
+                samples: a.samples,
+                load_op: a.load_op,
+                store_op: a.store_op,
+                stencil_load_op: a.stencil_load_op,
+                stencil_store_op: a.stencil_store_op,
+                initial_layout: a.initial_layout,
+                final_layout: a.final_layout,
+            })
+            .collect();
+
+        // The reference arrays have to outlive the subpass descriptions that point at
+        // them, so they are built first and borrowed second.
+        let color_references: Vec<Vec<vk::AttachmentReference>> = render_pass_info
+            .subpasses
+            .iter()
+            .map(|s| {
+                s.color_attachments
+                    .iter()
+                    .map(|r| vk::AttachmentReference {
+                        attachment: r.attachment,
+                        layout: r.layout,
+                    })
+                    .collect()
+            })
+            .collect();
+
+        let subpasses: Vec<vk::SubpassDescription> = render_pass_info
+            .subpasses
+            .iter()
+            .enumerate()
+            .map(|(ndx, _)| vk::SubpassDescription {
+                flags: vk::SubpassDescriptionFlags::empty(),
+                pipeline_bind_point: vk::PipelineBindPoint::GRAPHICS,
+                input_attachment_count: 0,
+                input_attachments: std::ptr::null(),
+                color_attachment_count: color_references[ndx].len() as u32,
+                color_attachments: color_references[ndx].as_ptr(),
+                resolve_attachments: std::ptr::null(),
+                depth_stencil_attachment: std::ptr::null(),
+                preserve_attachment_count: 0,
+                preserve_attachments: std::ptr::null(),
+            })
+            .collect();
+
+        let info = vk::RenderPassCreateInfo {
+            s_type: vk::StructureType::RENDER_PASS_CREATE_INFO,
+            next: std::ptr::null(),
+            flags: vk::RenderPassCreateFlags::empty(),
+            attachment_count: attachments.len() as u32,
+            attachments: attachments.as_ptr(),
+            subpass_count: subpasses.len() as u32,
+            subpasses: subpasses.as_ptr(),
+            dependency_count: 0,
+            dependencies: std::ptr::null(),
+        };
+
+        let handle = if self.config.render_pass_type == RenderPassType::RenderPass2 {
+            self.create_render_pass2(&attachments, &color_references)?
+        } else {
+            unsafe { device.create_render_pass(&info, None) }.vk_check("vkCreateRenderPass")?
+        };
+
+        Ok(Unique::new(device, handle))
+    }
+
+    /// The `vkCreateRenderPass2` half of `createRenderPass`.
+    fn create_render_pass2(&self, attachments: &[vk::AttachmentDescription], color_references: &[Vec<vk::AttachmentReference>]) -> Result<vk::RenderPass, TestError> {
+        use vulkanalia::vk::KhrCreateRenderpass2ExtensionDeviceCommands;
+        let device = self.context.get_device();
+
+        let attachments2: Vec<vk::AttachmentDescription2> = attachments
+            .iter()
+            .map(|a| vk::AttachmentDescription2 {
+                s_type: vk::StructureType::ATTACHMENT_DESCRIPTION_2,
+                next: std::ptr::null(),
+                flags: a.flags,
+                format: a.format,
+                samples: a.samples,
+                load_op: a.load_op,
+                store_op: a.store_op,
+                stencil_load_op: a.stencil_load_op,
+                stencil_store_op: a.stencil_store_op,
+                initial_layout: a.initial_layout,
+                final_layout: a.final_layout,
+            })
+            .collect();
+
+        let color_references2: Vec<Vec<vk::AttachmentReference2>> = color_references
+            .iter()
+            .map(|refs| {
+                refs.iter()
+                    .map(|r| vk::AttachmentReference2 {
+                        s_type: vk::StructureType::ATTACHMENT_REFERENCE_2,
+                        next: std::ptr::null(),
+                        attachment: r.attachment,
+                        layout: r.layout,
+                        aspect_mask: vk::ImageAspectFlags::empty(),
+                    })
+                    .collect()
+            })
+            .collect();
+
+        let subpasses2: Vec<vk::SubpassDescription2> = color_references2
+            .iter()
+            .map(|refs| vk::SubpassDescription2 {
+                s_type: vk::StructureType::SUBPASS_DESCRIPTION_2,
+                next: std::ptr::null(),
+                flags: vk::SubpassDescriptionFlags::empty(),
+                pipeline_bind_point: vk::PipelineBindPoint::GRAPHICS,
+                view_mask: 0,
+                input_attachment_count: 0,
+                input_attachments: std::ptr::null(),
+                color_attachment_count: refs.len() as u32,
+                color_attachments: refs.as_ptr(),
+                resolve_attachments: std::ptr::null(),
+                depth_stencil_attachment: std::ptr::null(),
+                preserve_attachment_count: 0,
+                preserve_attachments: std::ptr::null(),
+            })
+            .collect();
+
+        let info = vk::RenderPassCreateInfo2 {
+            s_type: vk::StructureType::RENDER_PASS_CREATE_INFO_2,
+            next: std::ptr::null(),
+            flags: vk::RenderPassCreateFlags::empty(),
+            attachment_count: attachments2.len() as u32,
+            attachments: attachments2.as_ptr(),
+            subpass_count: subpasses2.len() as u32,
+            subpasses: subpasses2.as_ptr(),
+            dependency_count: 0,
+            dependencies: std::ptr::null(),
+            correlated_view_mask_count: 0,
+            correlated_view_masks: std::ptr::null(),
+        };
+
+        unsafe { device.create_render_pass2_khr(&info, None) }.vk_check("vkCreateRenderPass2KHR")
+    }
+
+    /// `AttachmentResources`
+    fn create_attachment_resources(&self, attachment: &Attachment, usage: vk::ImageUsageFlags) -> Result<AttachmentResources<'_>, TestError> {
+        let device = self.context.get_device();
+        let allocator = self.context.get_default_allocator();
+        let target_size = self.config.target_size;
+        let format = map_vk_format(attachment.format).expect("checked in check_support");
+
+        let image_info = vk::ImageCreateInfo {
+            s_type: vk::StructureType::IMAGE_CREATE_INFO,
+            next: std::ptr::null(),
+            flags: vk::ImageCreateFlags::empty(),
+            image_type: vk::ImageType::_2D,
+            format: attachment.format,
+            extent: vk::Extent3D {
+                width: target_size[0],
+                height: target_size[1],
+                depth: 1,
+            },
+            mip_levels: 1,
+            array_layers: 1,
+            samples: attachment.samples,
+            tiling: vk::ImageTiling::OPTIMAL,
+            usage,
+            sharing_mode: vk::SharingMode::EXCLUSIVE,
+            queue_family_index_count: 0,
+            queue_family_indices: std::ptr::null(),
+            initial_layout: vk::ImageLayout::UNDEFINED,
+        };
+
+        let image = if self.config.allocation_kind == AllocationKind::Dedicated {
+            ImageWithMemory::new_dedicated(device, allocator, image_info, MemoryRequirement::ANY)?
+        } else {
+            ImageWithMemory::new(device, allocator, image_info, MemoryRequirement::ANY)?
+        };
+
+        let view = make_image_view(
+            device,
+            image.get(),
+            vk::ImageViewType::_2D,
+            attachment.format,
+            make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, 0, 1),
+        )?;
+
+        let pixel_size = format.pixel_size().ok_or_else(|| TestError::NotPorted(format!("no pixel size for {format:?}")))? as u64;
+        let buffer_size = pixel_size * u64::from(target_size[0]) * u64::from(target_size[1]);
+        let buffer = BufferWithMemory::new(
+            device,
+            allocator,
+            make_buffer_create_info(buffer_size, vk::BufferUsageFlags::TRANSFER_DST),
+            MemoryRequirement::HOST_VISIBLE,
+        )?;
+
+        Ok(AttachmentResources { image, view, buffer })
+    }
+
+    fn create_vertex_buffer(&self, quad: RenderQuad) -> Result<BufferWithMemory<'_>, TestError> {
+        let device = self.context.get_device();
+        let allocator = self.context.get_default_allocator();
+        let vertices = quad.vertices();
+        let bytes: Vec<u8> = vertices.iter().flat_map(|v| v.iter().flat_map(|f| f.to_ne_bytes())).collect();
+
+        let buffer = BufferWithMemory::new(
+            device,
+            allocator,
+            make_buffer_create_info(bytes.len() as u64, vk::BufferUsageFlags::VERTEX_BUFFER),
+            MemoryRequirement::HOST_VISIBLE,
+        )?;
+        unsafe { std::ptr::copy_nonoverlapping(bytes.as_ptr(), buffer.get_allocation().get_host_ptr(), bytes.len()) };
+        crate::vk::mem_util::flush_alloc(device, buffer.get_allocation())?;
+        Ok(buffer)
+    }
+}
+
+/// `getImageUsageFromLayout`
+fn get_image_usage_from_layout(layout: vk::ImageLayout) -> vk::ImageUsageFlags {
+    match layout {
+        vk::ImageLayout::GENERAL | vk::ImageLayout::PREINITIALIZED => vk::ImageUsageFlags::empty(),
+        vk::ImageLayout::COLOR_ATTACHMENT_OPTIMAL => vk::ImageUsageFlags::COLOR_ATTACHMENT,
+        vk::ImageLayout::DEPTH_STENCIL_ATTACHMENT_OPTIMAL | vk::ImageLayout::DEPTH_STENCIL_READ_ONLY_OPTIMAL => vk::ImageUsageFlags::DEPTH_STENCIL_ATTACHMENT,
+        vk::ImageLayout::SHADER_READ_ONLY_OPTIMAL => vk::ImageUsageFlags::SAMPLED,
+        vk::ImageLayout::TRANSFER_SRC_OPTIMAL => vk::ImageUsageFlags::TRANSFER_SRC,
+        vk::ImageLayout::TRANSFER_DST_OPTIMAL => vk::ImageUsageFlags::TRANSFER_DST,
+        _ => vk::ImageUsageFlags::empty(),
+    }
+}
+
+impl RenderPassTestInstance<'_> {
+    /// `SubpassRenderer`'s pipeline. One vertex attribute, no blending, a viewport
+    /// covering the whole target and a scissor covering the subpass's viewport.
+    fn create_pipeline(
+        &self,
+        layout: vk::PipelineLayout,
+        vertex_module: vk::ShaderModule,
+        fragment_module: vk::ShaderModule,
+        render_pass: vk::RenderPass,
+        render_info: &SubpassRenderInfo,
+    ) -> Result<Unique<'_, vk::Pipeline>, TestError> {
+        let device = self.context.get_device();
+        let entry = c"main";
+
+        let stages = [
+            vk::PipelineShaderStageCreateInfo::builder()
+                .stage(vk::ShaderStageFlags::VERTEX)
+                .module(vertex_module)
+                .name(entry.to_bytes_with_nul())
+                .build(),
+            vk::PipelineShaderStageCreateInfo::builder()
+                .stage(vk::ShaderStageFlags::FRAGMENT)
+                .module(fragment_module)
+                .name(entry.to_bytes_with_nul())
+                .build(),
+        ];
+
+        let binding = vk::VertexInputBindingDescription::builder()
+            .binding(0)
+            .stride(std::mem::size_of::<[f32; 2]>() as u32)
+            .input_rate(vk::VertexInputRate::VERTEX)
+            .build();
+        let attribute = vk::VertexInputAttributeDescription::builder()
+            .location(0)
+            .binding(0)
+            .format(vk::Format::R32G32_SFLOAT)
+            .offset(0)
+            .build();
+        let bindings = [binding];
+        let attributes = [attribute];
+        let vertex_input = vk::PipelineVertexInputStateCreateInfo::builder()
+            .vertex_binding_descriptions(&bindings)
+            .vertex_attribute_descriptions(&attributes);
+
+        let input_assembly = vk::PipelineInputAssemblyStateCreateInfo::builder().topology(vk::PrimitiveTopology::TRIANGLE_LIST);
+
+        let viewports = [vk::Viewport {
+            x: render_info.viewport_offset[0] as f32,
+            y: render_info.viewport_offset[1] as f32,
+            width: render_info.viewport_size[0] as f32,
+            height: render_info.viewport_size[1] as f32,
+            min_depth: 0.0,
+            max_depth: 1.0,
+        }];
+        let scissors = [vk::Rect2D {
+            offset: vk::Offset2D {
+                x: render_info.viewport_offset[0] as i32,
+                y: render_info.viewport_offset[1] as i32,
+            },
+            extent: vk::Extent2D {
+                width: render_info.viewport_size[0],
+                height: render_info.viewport_size[1],
+            },
+        }];
+        let viewport_state = vk::PipelineViewportStateCreateInfo::builder().viewports(&viewports).scissors(&scissors);
+
+        let rasterization = vk::PipelineRasterizationStateCreateInfo::builder()
+            .polygon_mode(vk::PolygonMode::FILL)
+            .cull_mode(vk::CullModeFlags::NONE)
+            .front_face(vk::FrontFace::COUNTER_CLOCKWISE)
+            .line_width(1.0);
+
+        let multisample = vk::PipelineMultisampleStateCreateInfo::builder().rasterization_samples(self.config.render_pass.attachments[0].samples);
+
+        let attachment_count = self.config.render_pass.subpasses[0].color_attachments.len();
+        let blend_attachments = vec![vk::PipelineColorBlendAttachmentState::builder().color_write_mask(vk::ColorComponentFlags::all()).build(); attachment_count];
+        let color_blend = vk::PipelineColorBlendStateCreateInfo::builder().attachments(&blend_attachments);
+
+        let info = vk::GraphicsPipelineCreateInfo::builder()
+            .stages(&stages)
+            .vertex_input_state(&vertex_input)
+            .input_assembly_state(&input_assembly)
+            .viewport_state(&viewport_state)
+            .rasterization_state(&rasterization)
+            .multisample_state(&multisample)
+            .color_blend_state(&color_blend)
+            .layout(layout)
+            .render_pass(render_pass)
+            .subpass(0);
+
+        let pipeline = unsafe { device.create_graphics_pipelines(vk::PipelineCache::null(), &[info], None) }
+            .vk_check("vkCreateGraphicsPipelines")?
+            .0[0];
+        Ok(Unique::new(device, pipeline))
+    }
+
+    /// `pushImageInitializationCommands`
+    fn push_image_initialization_commands(&self, command_buffer: vk::CommandBuffer, resources: &[AttachmentResources<'_>], clear_values: &[Option<ClearValue>]) {
+        let device = self.context.get_device();
+        let render_pass_info = &self.config.render_pass;
+
+        let to_transfer_dst: Vec<vk::ImageMemoryBarrier> = resources
+            .iter()
+            .zip(clear_values)
+            .filter(|(_, clear)| clear.is_some())
+            .map(|(resource, _)| {
+                make_image_memory_barrier(
+                    vk::AccessFlags::empty(),
+                    vk::AccessFlags::TRANSFER_WRITE,
+                    vk::ImageLayout::UNDEFINED,
+                    vk::ImageLayout::TRANSFER_DST_OPTIMAL,
+                    resource.image.get(),
+                    make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, 0, 1),
+                )
+            })
+            .collect();
+
+        if !to_transfer_dst.is_empty() {
+            unsafe {
+                device.cmd_pipeline_barrier(
+                    command_buffer,
+                    vk::PipelineStageFlags::TOP_OF_PIPE,
+                    vk::PipelineStageFlags::TRANSFER,
+                    vk::DependencyFlags::empty(),
+                    &[] as &[vk::MemoryBarrier],
+                    &[] as &[vk::BufferMemoryBarrier],
+                    &to_transfer_dst,
+                );
+            }
+        }
+
+        for (attachment_ndx, (resource, clear)) in resources.iter().zip(clear_values).enumerate() {
+            let Some(clear) = clear else { continue };
+            let format = map_vk_format(render_pass_info.attachments[attachment_ndx].format).expect("checked in check_support");
+            let range = make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, 0, 1);
+            unsafe {
+                device.cmd_clear_color_image(command_buffer, resource.image.get(), vk::ImageLayout::TRANSFER_DST_OPTIMAL, &clear.to_vk(format), &[range]);
+            }
+        }
+
+        // Every attachment ends up in its initial layout, whether it was cleared or not.
+        let to_initial: Vec<vk::ImageMemoryBarrier> = resources
+            .iter()
+            .zip(clear_values)
+            .enumerate()
+            .map(|(attachment_ndx, (resource, clear))| {
+                let (src_access, old_layout) = if clear.is_some() {
+                    (vk::AccessFlags::TRANSFER_WRITE, vk::ImageLayout::TRANSFER_DST_OPTIMAL)
+                } else {
+                    (vk::AccessFlags::empty(), vk::ImageLayout::UNDEFINED)
+                };
+                make_image_memory_barrier(
+                    src_access,
+                    vk::AccessFlags::COLOR_ATTACHMENT_READ | vk::AccessFlags::COLOR_ATTACHMENT_WRITE,
+                    old_layout,
+                    render_pass_info.attachments[attachment_ndx].initial_layout,
+                    resource.image.get(),
+                    make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, 0, 1),
+                )
+            })
+            .collect();
+
+        unsafe {
+            device.cmd_pipeline_barrier(
+                command_buffer,
+                vk::PipelineStageFlags::TRANSFER,
+                vk::PipelineStageFlags::COLOR_ATTACHMENT_OUTPUT,
+                vk::DependencyFlags::empty(),
+                &[] as &[vk::MemoryBarrier],
+                &[] as &[vk::BufferMemoryBarrier],
+                &to_initial,
+            );
+        }
+    }
+
+    /// `pushRenderPassCommands`, inline contents only.
+    fn push_render_pass_commands(
+        &self,
+        command_buffer: vk::CommandBuffer,
+        render_pass: vk::RenderPass,
+        framebuffer: vk::Framebuffer,
+        pipeline: vk::Pipeline,
+        vertex_buffer: Option<&BufferWithMemory<'_>>,
+        render_pass_clear_values: &[Option<ClearValue>],
+        subpass_render_info: &[SubpassRenderInfo],
+    ) {
+        let device = self.context.get_device();
+        let config = self.config;
+        let render_pass_info = &config.render_pass;
+
+        let clear_values: Vec<vk::ClearValue> = render_pass_info
+            .attachments
+            .iter()
+            .enumerate()
+            .map(|(ndx, attachment)| match render_pass_clear_values[ndx] {
+                Some(clear) => {
+                    let format = map_vk_format(attachment.format).expect("checked in check_support");
+                    vk::ClearValue { color: clear.to_vk(format) }
+                }
+                None => vk::ClearValue {
+                    color: vk::ClearColorValue { float32: [0.0; 4] },
+                },
+            })
+            .collect();
+
+        let render_area = vk::Rect2D {
+            offset: vk::Offset2D {
+                x: config.render_pos[0] as i32,
+                y: config.render_pos[1] as i32,
+            },
+            extent: vk::Extent2D {
+                width: config.render_size[0],
+                height: config.render_size[1],
+            },
+        };
+
+        let begin_info = vk::RenderPassBeginInfo::builder()
+            .render_pass(render_pass)
+            .framebuffer(framebuffer)
+            .render_area(render_area)
+            .clear_values(&clear_values);
+
+        unsafe {
+            device.cmd_begin_render_pass(command_buffer, &begin_info, vk::SubpassContents::INLINE);
+        }
+
+        for (subpass_ndx, render_info) in subpass_render_info.iter().enumerate() {
+            if subpass_ndx > 0 {
+                unsafe { device.cmd_next_subpass(command_buffer, vk::SubpassContents::INLINE) };
+            }
+
+            let subpass = &render_pass_info.subpasses[subpass_ndx];
+
+            if !render_info.color_clears.is_empty() {
+                let attachments: Vec<vk::ClearAttachment> = render_info
+                    .color_clears
+                    .iter()
+                    .enumerate()
+                    .map(|(ndx, clear)| {
+                        let attachment_index = subpass.color_attachments[ndx].attachment as usize;
+                        let format = map_vk_format(render_pass_info.attachments[attachment_index].format).expect("checked in check_support");
+                        vk::ClearAttachment {
+                            aspect_mask: vk::ImageAspectFlags::COLOR,
+                            color_attachment: ndx as u32,
+                            clear_value: vk::ClearValue { color: clear.color.to_vk(format) },
+                        }
+                    })
+                    .collect();
+                let rects: Vec<vk::ClearRect> = render_info
+                    .color_clears
+                    .iter()
+                    .map(|clear| vk::ClearRect {
+                        rect: vk::Rect2D {
+                            offset: vk::Offset2D {
+                                x: clear.offset[0] as i32,
+                                y: clear.offset[1] as i32,
+                            },
+                            extent: vk::Extent2D {
+                                width: clear.size[0],
+                                height: clear.size[1],
+                            },
+                        },
+                        base_array_layer: 0,
+                        layer_count: 1,
+                    })
+                    .collect();
+                unsafe { device.cmd_clear_attachments(command_buffer, &attachments, &rects) };
+            }
+
+            if render_info.render_quad.is_some()
+                && let Some(vertex_buffer) = vertex_buffer
+            {
+                unsafe {
+                    device.cmd_bind_pipeline(command_buffer, vk::PipelineBindPoint::GRAPHICS, pipeline);
+                    device.cmd_bind_vertex_buffers(command_buffer, 0, &[vertex_buffer.get()], &[0]);
+                    device.cmd_draw(command_buffer, 6, 1, 0, 0);
+                }
+            }
+        }
+
+        unsafe { device.cmd_end_render_pass(command_buffer) };
+    }
+
+    /// `pushReadImagesToBuffers`
+    fn push_read_images_to_buffers(&self, command_buffer: vk::CommandBuffer, resources: &[AttachmentResources<'_>], queue_index: u32) {
+        let device = self.context.get_device();
+        let render_pass_info = &self.config.render_pass;
+        let target_size = self.config.target_size;
+
+        let to_transfer_src: Vec<vk::ImageMemoryBarrier> = resources
+            .iter()
+            .enumerate()
+            .map(|(attachment_ndx, resource)| {
+                make_image_memory_barrier(
+                    vk::AccessFlags::COLOR_ATTACHMENT_WRITE,
+                    vk::AccessFlags::TRANSFER_READ,
+                    render_pass_info.attachments[attachment_ndx].final_layout,
+                    vk::ImageLayout::TRANSFER_SRC_OPTIMAL,
+                    resource.image.get(),
+                    make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, 0, 1),
+                )
+            })
+            .collect();
+
+        unsafe {
+            device.cmd_pipeline_barrier(
+                command_buffer,
+                vk::PipelineStageFlags::COLOR_ATTACHMENT_OUTPUT,
+                vk::PipelineStageFlags::TRANSFER,
+                vk::DependencyFlags::empty(),
+                &[] as &[vk::MemoryBarrier],
+                &[] as &[vk::BufferMemoryBarrier],
+                &to_transfer_src,
+            );
+        }
+
+        for resource in resources {
+            let region = vk::BufferImageCopy {
+                buffer_offset: 0,
+                buffer_row_length: 0,
+                buffer_image_height: 0,
+                image_subresource: vk::ImageSubresourceLayers {
+                    aspect_mask: vk::ImageAspectFlags::COLOR,
+                    mip_level: 0,
+                    base_array_layer: 0,
+                    layer_count: 1,
+                },
+                image_offset: vk::Offset3D { x: 0, y: 0, z: 0 },
+                image_extent: vk::Extent3D {
+                    width: target_size[0],
+                    height: target_size[1],
+                    depth: 1,
+                },
+            };
+            unsafe {
+                device.cmd_copy_image_to_buffer(
+                    command_buffer,
+                    resource.image.get(),
+                    vk::ImageLayout::TRANSFER_SRC_OPTIMAL,
+                    resource.buffer.get(),
+                    &[region],
+                );
+            }
+        }
+
+        let to_host: Vec<vk::BufferMemoryBarrier> = resources
+            .iter()
+            .map(|resource| {
+                vk::BufferMemoryBarrier::builder()
+                    .src_access_mask(vk::AccessFlags::TRANSFER_WRITE)
+                    .dst_access_mask(vk::AccessFlags::HOST_READ)
+                    .src_queue_family_index(queue_index)
+                    .dst_queue_family_index(queue_index)
+                    .buffer(resource.buffer.get())
+                    .offset(0)
+                    .size(vk::WHOLE_SIZE)
+                    .build()
+            })
+            .collect();
+
+        unsafe {
+            device.cmd_pipeline_barrier(
+                command_buffer,
+                vk::PipelineStageFlags::TRANSFER,
+                vk::PipelineStageFlags::HOST,
+                vk::DependencyFlags::empty(),
+                &[] as &[vk::MemoryBarrier],
+                &to_host,
+                &[] as &[vk::ImageMemoryBarrier],
+            );
+        }
+    }
+}
+
+/// `s_coreColorFormats`, paired with `formatToName`.
+pub static CORE_COLOR_FORMATS: &[(vk::Format, &str)] = &[
+    (vk::Format::R5G6B5_UNORM_PACK16, "r5g6b5_unorm_pack16"),
+    (vk::Format::R8_UNORM, "r8_unorm"),
+    (vk::Format::R8_SNORM, "r8_snorm"),
+    (vk::Format::R8_UINT, "r8_uint"),
+    (vk::Format::R8_SINT, "r8_sint"),
+    (vk::Format::R8G8_UNORM, "r8g8_unorm"),
+    (vk::Format::R8G8_SNORM, "r8g8_snorm"),
+    (vk::Format::R8G8_UINT, "r8g8_uint"),
+    (vk::Format::R8G8_SINT, "r8g8_sint"),
+    (vk::Format::R8G8B8A8_UNORM, "r8g8b8a8_unorm"),
+    (vk::Format::R8G8B8A8_SNORM, "r8g8b8a8_snorm"),
+    (vk::Format::R8G8B8A8_UINT, "r8g8b8a8_uint"),
+    (vk::Format::R8G8B8A8_SINT, "r8g8b8a8_sint"),
+    (vk::Format::R8G8B8A8_SRGB, "r8g8b8a8_srgb"),
+    (vk::Format::A8B8G8R8_UNORM_PACK32, "a8b8g8r8_unorm_pack32"),
+    (vk::Format::A8B8G8R8_SNORM_PACK32, "a8b8g8r8_snorm_pack32"),
+    (vk::Format::A8B8G8R8_UINT_PACK32, "a8b8g8r8_uint_pack32"),
+    (vk::Format::A8B8G8R8_SINT_PACK32, "a8b8g8r8_sint_pack32"),
+    (vk::Format::A8B8G8R8_SRGB_PACK32, "a8b8g8r8_srgb_pack32"),
+    (vk::Format::B8G8R8A8_UNORM, "b8g8r8a8_unorm"),
+    (vk::Format::B8G8R8A8_SRGB, "b8g8r8a8_srgb"),
+    (vk::Format::A2R10G10B10_UNORM_PACK32, "a2r10g10b10_unorm_pack32"),
+    (vk::Format::A2B10G10R10_UNORM_PACK32, "a2b10g10r10_unorm_pack32"),
+    (vk::Format::A2B10G10R10_UINT_PACK32, "a2b10g10r10_uint_pack32"),
+    (vk::Format::R16_UNORM, "r16_unorm"),
+    (vk::Format::R16_SNORM, "r16_snorm"),
+    (vk::Format::R16_UINT, "r16_uint"),
+    (vk::Format::R16_SINT, "r16_sint"),
+    (vk::Format::R16_SFLOAT, "r16_sfloat"),
+    (vk::Format::R16G16_UNORM, "r16g16_unorm"),
+    (vk::Format::R16G16_SNORM, "r16g16_snorm"),
+    (vk::Format::R16G16_UINT, "r16g16_uint"),
+    (vk::Format::R16G16_SINT, "r16g16_sint"),
+    (vk::Format::R16G16_SFLOAT, "r16g16_sfloat"),
+    (vk::Format::R16G16B16A16_UNORM, "r16g16b16a16_unorm"),
+    (vk::Format::R16G16B16A16_SNORM, "r16g16b16a16_snorm"),
+    (vk::Format::R16G16B16A16_UINT, "r16g16b16a16_uint"),
+    (vk::Format::R16G16B16A16_SINT, "r16g16b16a16_sint"),
+    (vk::Format::R16G16B16A16_SFLOAT, "r16g16b16a16_sfloat"),
+    (vk::Format::R32_UINT, "r32_uint"),
+    (vk::Format::R32_SINT, "r32_sint"),
+    (vk::Format::R32_SFLOAT, "r32_sfloat"),
+    (vk::Format::R32G32_UINT, "r32g32_uint"),
+    (vk::Format::R32G32_SINT, "r32g32_sint"),
+    (vk::Format::R32G32_SFLOAT, "r32g32_sfloat"),
+    (vk::Format::R32G32B32A32_UINT, "r32g32b32a32_uint"),
+    (vk::Format::R32G32B32A32_SINT, "r32g32b32a32_sint"),
+    (vk::Format::R32G32B32A32_SFLOAT, "r32g32b32a32_sfloat"),
+];
+
+/// `addFormatTests`, colour formats only - the `input` branch needs input attachments
+/// and is not ported.
+fn add_format_tests(group: &mut tcu::TestCaseGroup, allocation_kind: AllocationKind, render_pass_type: RenderPassType) {
+    const TARGET_SIZE: [u32; 2] = [64, 64];
+    const RENDER_POS: [u32; 2] = [0, 0];
+    const RENDER_SIZE: [u32; 2] = [64, 64];
+
+    let load_ops = [
+        ("clear", vk::AttachmentLoadOp::CLEAR),
+        ("load", vk::AttachmentLoadOp::LOAD),
+        ("dont_care", vk::AttachmentLoadOp::DONT_CARE),
+    ];
+    let render_types = [
+        ("clear", RenderTypes::CLEAR),
+        ("draw", RenderTypes::DRAW),
+        ("clear_draw", RenderTypes::CLEAR.or(RenderTypes::DRAW)),
+    ];
+
+    for &(format, format_name) in CORE_COLOR_FORMATS {
+        let mut format_group = tcu::TestCaseGroup::new(format_name);
+
+        for (load_op_name, load_op) in load_ops {
+            let mut load_op_group = tcu::TestCaseGroup::new(load_op_name);
+
+            for (render_type_name, render_type) in render_types {
+                let render_pass = RenderPassDesc {
+                    attachments: vec![Attachment {
+                        format,
+                        samples: vk::SampleCountFlags::_1,
+                        load_op,
+                        store_op: vk::AttachmentStoreOp::STORE,
+                        stencil_load_op: vk::AttachmentLoadOp::DONT_CARE,
+                        stencil_store_op: vk::AttachmentStoreOp::DONT_CARE,
+                        initial_layout: vk::ImageLayout::COLOR_ATTACHMENT_OPTIMAL,
+                        final_layout: vk::ImageLayout::COLOR_ATTACHMENT_OPTIMAL,
+                    }],
+                    subpasses: vec![Subpass {
+                        input_attachments: Vec::new(),
+                        color_attachments: vec![AttachmentReference::new(0, vk::ImageLayout::COLOR_ATTACHMENT_OPTIMAL)],
+                        depth_stencil_attachment: AttachmentReference::new(ATTACHMENT_UNUSED, vk::ImageLayout::GENERAL),
+                    }],
+                };
+
+                let config = TestConfig::new(
+                    render_pass,
+                    render_type,
+                    TARGET_SIZE,
+                    RENDER_POS,
+                    RENDER_SIZE,
+                    false,
+                    90239,
+                    allocation_kind,
+                    render_pass_type,
+                );
+
+                load_op_group.add_child(Box::new(RenderPassTestCase {
+                    name: render_type_name.to_string(),
+                    config,
+                }) as Box<dyn TestCase>);
+            }
+
+            format_group.add_child(load_op_group);
+        }
+
+        group.add_child(format_group);
+    }
+}
+
+/// `createRenderPassTests`, restricted to the `formats` colour cases.
+///
+/// One group per rendering type, which is how upstream splits `renderpass1` from
+/// `renderpass2`: the same descriptions built through `vkCreateRenderPass` and
+/// `vkCreateRenderPass2KHR`.
+pub fn create_render_pass_groups() -> Vec<tcu::TestCaseGroup> {
+    [("renderpass1", RenderPassType::Legacy), ("renderpass2", RenderPassType::RenderPass2)]
+        .into_iter()
+        .map(|(name, render_pass_type)| {
+            let mut group = tcu::TestCaseGroup::new(name);
+            for (kind_name, allocation_kind) in [("suballocation", AllocationKind::Suballocated), ("dedicated_allocation", AllocationKind::Dedicated)] {
+                let mut kind_group = tcu::TestCaseGroup::new(kind_name);
+                let mut formats = tcu::TestCaseGroup::new("formats");
+                add_format_tests(&mut formats, allocation_kind, render_pass_type);
+                kind_group.add_child(formats);
+                group.add_child(kind_group);
+            }
+            group
+        })
+        .collect()
+}

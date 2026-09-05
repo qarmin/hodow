@@ -1,76 +1,75 @@
-# Upstream VK-GL-CTS files that hodow_cts has ported.
 #
+# --- common framework (tcu::, de::) ------------------------------------------------
+# --- test framework (vkt::) --------------------------------------------------------
+# --- tests -----------------------------------------------------------------------
+# --- vulkan framework (vk::) -------------------------------------------------------
+# Add a line here as soon as a file is ported. A ported file that is missing from this
 # Paths are relative to a VK-GL-CTS checkout. `scripts/vendor_upstream.py --sync`
+# Upstream VK-GL-CTS files that hodow_cts has ported.
+# changed since the revision in COMMIT.
 # copies each one into this directory verbatim (Apache-2.0 section 4 requires the
 # copyright notices to be kept), and `--check` reports which of them upstream has
-# changed since the revision in COMMIT.
-#
-# Add a line here as soon as a file is ported. A ported file that is missing from this
 # list will silently stop being tracked for re-sync, which is the one failure mode this
 # whole mechanism exists to prevent.
-# --- tests -----------------------------------------------------------------------
-external/vulkancts/modules/vulkan/compute/vktComputeBasicComputeShaderTests.cpp
-external/vulkancts/modules/vulkan/compute/vktComputeTests.cpp
-external/vulkancts/modules/vulkan/compute/vktComputeZeroInitializeWorkgroupMemoryTests.cpp
-external/vulkancts/modules/vulkan/compute/vktComputeIndirectComputeDispatchTests.cpp
-external/vulkancts/modules/vulkan/compute/vktComputeWorkgroupMemoryExplicitLayoutTests.cpp
-external/vulkancts/modules/vulkan/compute/vktComputeShaderBuiltinVarTests.cpp
-external/vulkancts/modules/vulkan/api/vktApiSmokeTests.cpp
-external/vulkancts/modules/vulkan/api/vktApiCopyBufferToBufferTests.cpp
-external/vulkancts/modules/vulkan/api/vktApiCopiesAndBlittingTests.cpp
-external/vulkancts/modules/vulkan/api/vktApiCopiesAndBlittingUtil.cpp
-external/vulkancts/modules/vulkan/api/vktApiCopyBufferToImageTests.cpp
-external/vulkancts/modules/vulkan/api/vktApiCopyImageToBufferTests.cpp
-external/vulkancts/modules/vulkan/api/vktApiCopyImageToImageTests.cpp
-external/vulkancts/modules/vulkan/api/vktApiCopyBufferToDepthStencilTests.cpp
-external/vulkancts/modules/vulkan/api/vktApiCopyDepthStencilToBufferTests.cpp
-external/vulkancts/modules/vulkan/api/vktApiCopiesAndBlittingUtil.hpp
-external/vulkancts/modules/vulkan/api/vktApiBlittingTests.cpp
-external/vulkancts/modules/vulkan/api/vktApiDSColorBitCopyTests.cpp
-external/vulkancts/modules/vulkan/api/vktApiFeatureInfo.cpp
-external/vulkancts/modules/vulkan/api/vktApiImageClearingTests.cpp
-external/vulkancts/modules/vulkan/memory/vktMemoryMappingTests.cpp
-framework/common/tcuTextureUtil.cpp
-framework/common/tcuTextureUtil.hpp
-# --- vulkan framework (vk::) -------------------------------------------------------
+external/vulkancts/framework/vulkan/generated/vulkan/vkBasicTypes.inl
+external/vulkancts/framework/vulkan/generated/vulkan/vkDeviceFeatures2.inl
+external/vulkancts/framework/vulkan/generated/vulkan/vkFormatLists.inl
+external/vulkancts/framework/vulkan/generated/vulkan/vkStructTypes.inl
+external/vulkancts/framework/vulkan/vkAllocationCallbackUtil.cpp
+external/vulkancts/framework/vulkan/vkBarrierUtil.cpp
+external/vulkancts/framework/vulkan/vkBarrierUtil.hpp
+external/vulkancts/framework/vulkan/vkBufferWithMemory.hpp
 external/vulkancts/framework/vulkan/vkBuilderUtil.cpp
 external/vulkancts/framework/vulkan/vkBuilderUtil.hpp
 external/vulkancts/framework/vulkan/vkCmdUtil.cpp
 external/vulkancts/framework/vulkan/vkCmdUtil.hpp
+external/vulkancts/framework/vulkan/vkComputePipelineConstructionUtil.hpp
+external/vulkancts/framework/vulkan/vkImageUtil.cpp
+external/vulkancts/framework/vulkan/vkImageUtil.hpp
+external/vulkancts/framework/vulkan/vkImageWithMemory.hpp
 external/vulkancts/framework/vulkan/vkMemUtil.cpp
 external/vulkancts/framework/vulkan/vkMemUtil.hpp
 external/vulkancts/framework/vulkan/vkObjUtil.cpp
 external/vulkancts/framework/vulkan/vkObjUtil.hpp
-external/vulkancts/framework/vulkan/vkBarrierUtil.cpp
-external/vulkancts/framework/vulkan/vkBarrierUtil.hpp
 external/vulkancts/framework/vulkan/vkRef.hpp
 external/vulkancts/framework/vulkan/vkRefUtil.hpp
-external/vulkancts/framework/vulkan/vkBufferWithMemory.hpp
-external/vulkancts/framework/vulkan/vkImageWithMemory.hpp
-external/vulkancts/framework/vulkan/vkImageUtil.hpp
-external/vulkancts/framework/vulkan/vkImageUtil.cpp
-external/vulkancts/framework/vulkan/generated/vulkan/vkFormatLists.inl
-external/vulkancts/framework/vulkan/vkComputePipelineConstructionUtil.hpp
-# --- test framework (vkt::) --------------------------------------------------------
+external/vulkancts/modules/vulkan/api/vktApiBlittingTests.cpp
+external/vulkancts/modules/vulkan/api/vktApiCopiesAndBlittingTests.cpp
+external/vulkancts/modules/vulkan/api/vktApiCopiesAndBlittingUtil.cpp
+external/vulkancts/modules/vulkan/api/vktApiCopiesAndBlittingUtil.hpp
+external/vulkancts/modules/vulkan/api/vktApiCopyBufferToBufferTests.cpp
+external/vulkancts/modules/vulkan/api/vktApiCopyBufferToDepthStencilTests.cpp
+external/vulkancts/modules/vulkan/api/vktApiCopyBufferToImageTests.cpp
+external/vulkancts/modules/vulkan/api/vktApiCopyDepthStencilToBufferTests.cpp
+external/vulkancts/modules/vulkan/api/vktApiCopyImageToBufferTests.cpp
+external/vulkancts/modules/vulkan/api/vktApiCopyImageToImageTests.cpp
+external/vulkancts/modules/vulkan/api/vktApiDSColorBitCopyTests.cpp
+external/vulkancts/modules/vulkan/api/vktApiFeatureInfo.cpp
+external/vulkancts/modules/vulkan/api/vktApiImageClearingTests.cpp
+external/vulkancts/modules/vulkan/api/vktApiObjectManagementTests.cpp
+external/vulkancts/modules/vulkan/api/vktApiSmokeTests.cpp
+external/vulkancts/modules/vulkan/compute/vktComputeBasicComputeShaderTests.cpp
+external/vulkancts/modules/vulkan/compute/vktComputeIndirectComputeDispatchTests.cpp
+external/vulkancts/modules/vulkan/compute/vktComputeShaderBuiltinVarTests.cpp
+external/vulkancts/modules/vulkan/compute/vktComputeTests.cpp
+external/vulkancts/modules/vulkan/compute/vktComputeWorkgroupMemoryExplicitLayoutTests.cpp
+external/vulkancts/modules/vulkan/compute/vktComputeZeroInitializeWorkgroupMemoryTests.cpp
+external/vulkancts/modules/vulkan/memory/vktMemoryMappingTests.cpp
+external/vulkancts/modules/vulkan/pipeline/vktPipelineImageUtil.cpp
+external/vulkancts/modules/vulkan/renderpass/vktRenderPassTests.cpp
 external/vulkancts/modules/vulkan/vktTestCase.hpp
-# --- common framework (tcu::, de::) ------------------------------------------------
+framework/common/tcuAstcUtil.cpp
+framework/common/tcuCompressedTexture.cpp
 framework/common/tcuTestCase.hpp
-framework/common/tcuVector.hpp
-framework/common/tcuTexture.hpp
-framework/common/tcuTexture.cpp
-framework/common/tcuTexVerifierUtil.hpp
-framework/common/tcuTexVerifierUtil.cpp
-framework/common/tcuTexLookupVerifier.hpp
 framework/common/tcuTexLookupVerifier.cpp
-external/vulkancts/framework/vulkan/vkImageUtil.cpp
+framework/common/tcuTexLookupVerifier.hpp
+framework/common/tcuTexVerifierUtil.cpp
+framework/common/tcuTexVerifierUtil.hpp
+framework/common/tcuTexture.cpp
+framework/common/tcuTexture.hpp
+framework/common/tcuTextureUtil.cpp
+framework/common/tcuTextureUtil.hpp
+framework/common/tcuVector.hpp
 framework/delibs/debase/deRandom.c
 framework/delibs/debase/deRandom.h
 framework/delibs/decpp/deRandom.hpp
-external/vulkancts/modules/vulkan/pipeline/vktPipelineImageUtil.cpp
-external/vulkancts/framework/vulkan/generated/vulkan/vkDeviceFeatures2.inl
-external/vulkancts/framework/vulkan/generated/vulkan/vkStructTypes.inl
-external/vulkancts/framework/vulkan/generated/vulkan/vkBasicTypes.inl
-external/vulkancts/modules/vulkan/api/vktApiObjectManagementTests.cpp
-external/vulkancts/framework/vulkan/vkAllocationCallbackUtil.cpp
-framework/common/tcuCompressedTexture.cpp
-framework/common/tcuAstcUtil.cpp
