@@ -9,3 +9,6 @@ winit
 glutin
 ___*
 core.*
+
+# Scratch scripts and CTS run logs.
+tmp/
