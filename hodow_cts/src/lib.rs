@@ -13,6 +13,7 @@
 //   vk/    <- external/vulkancts/framework/vulkan  (vk::)
 //   vkt/   <- external/vulkancts/modules/vulkan    (vkt::)
 
+pub mod color;
 pub mod generated;
 pub mod report;
 pub mod runner;

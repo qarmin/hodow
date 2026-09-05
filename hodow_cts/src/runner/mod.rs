@@ -77,6 +77,10 @@ pub fn execute_selected(
     for flat in cases {
         let started = std::time::Instant::now();
         VALIDATION_MESSAGES.store(0, std::sync::atomic::Ordering::Relaxed);
+        // Anything a test logs from here on is prefixed with this name. Upstream logs
+        // into a per-case .qpa section, which does the same job; a bare line in a
+        // terminal has nothing to tell you which of 20000 cases it came from.
+        crate::color::set_current_case(&flat.full_name);
 
         context.set_binary_collection(flat.case.programs());
 
@@ -100,6 +104,7 @@ pub fn execute_selected(
             _ => status,
         };
 
+        crate::color::clear_current_case();
         let result = CaseResult::from_status(&flat.full_name, &status, started.elapsed().as_micros() as u64);
         summary.record(result.status);
         writer.write_case(&result)?;

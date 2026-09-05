@@ -8,6 +8,7 @@ use std::path::PathBuf;
 use std::time::Duration;
 
 use clap::Parser;
+use hodow_cts::color;
 use hodow_cts::report::{CaseResult, JsonlWriter, Summary};
 use hodow_cts::runner::isolate::{EXIT_VULKAN_UNAVAILABLE, IsolateOptions, WORKER_ENV, run_isolated};
 use hodow_cts::runner::{RunOptions, execute_selected, matches_filter};
@@ -35,6 +36,10 @@ struct Args {
     /// Print the matching case names and exit without touching Vulkan.
     #[arg(short, long)]
     list: bool,
+
+    /// Turn off ANSI colours. `NO_COLOR` in the environment does the same.
+    #[arg(long)]
+    no_color: bool,
 
     /// Write machine-readable results here (JSON Lines, one record per case).
     #[arg(short, long, value_name = "FILE")]
@@ -72,8 +77,8 @@ struct Args {
 }
 
 fn main() -> std::process::ExitCode {
-    env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info")).init();
     let args = Args::parse();
+    init_logger(&args);
 
     if std::env::var(WORKER_ENV).is_ok() {
         return run_as_worker(&args);
@@ -162,13 +167,53 @@ fn make_writer(args: &Args) -> std::io::Result<JsonlWriter> {
     }
 }
 
+/// Colours are forced on rather than gated on a terminal: every recipe pipes this
+/// through `tee`, so terminal detection would turn them off exactly where they are
+/// wanted. `NO_COLOR` and `--no-color` turn them off; `--list` output stays plain
+/// either way, since that is what `diff_vs_deqp.py` reads.
+fn init_logger(args: &Args) {
+    let colors = !args.no_color && std::env::var_os("NO_COLOR").is_none();
+    color::set_enabled(colors);
+    // Isolated workers are separate processes that inherit the environment but not the
+    // flags, so `--no-color` is passed on as the variable rather than as an argument.
+    if !colors {
+        unsafe { std::env::set_var("NO_COLOR", "1") };
+    }
+
+    env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info"))
+        .write_style(if colors { env_logger::WriteStyle::Always } else { env_logger::WriteStyle::Never })
+        .format(|buf, record| {
+            let level = match record.level() {
+                log::Level::Error => color::paint(color::BOLD_RED, "ERROR"),
+                log::Level::Warn => color::paint(color::YELLOW, "WARN "),
+                log::Level::Info => color::paint(color::GREEN, "INFO "),
+                log::Level::Debug => color::paint(color::BLUE, "DEBUG"),
+                log::Level::Trace => color::paint(color::MAGENTA, "TRACE"),
+            };
+            let case = color::current_case();
+            if case.is_empty() {
+                writeln!(buf, "{level} {}", record.args())
+            } else {
+                writeln!(buf, "{level} {} {}", color::paint(color::DIM, &case), record.args())
+            }
+        })
+        .init();
+}
+
 fn print_case(result: &CaseResult) {
     let marker = match result.status {
-        TestResult::Pass => "Pass",
-        TestResult::Fail => "FAIL",
-        other => other.as_str(),
+        TestResult::Pass => color::paint(color::GREEN, "Pass"),
+        TestResult::Fail => color::paint(color::BOLD_RED, "FAIL"),
+        TestResult::Crash | TestResult::DeviceLost => color::paint(color::BOLD_RED, result.status.as_str()),
+        TestResult::NotSupported => color::paint(color::YELLOW, result.status.as_str()),
+        other => color::paint(color::CYAN, other.as_str()),
     };
-    println!("{}: {marker} ({}) [{}]", result.name, result.message, format_duration(result.duration_us));
+    println!(
+        "{}: {marker} ({}) [{}]",
+        result.name,
+        result.message,
+        color::paint(color::DIM, &format_duration(result.duration_us))
+    );
 }
 
 /// Whole-run wall time. Minutes once it is past one, because a four-digit second

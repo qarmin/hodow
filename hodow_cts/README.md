@@ -64,7 +64,15 @@ hodow_cts --output results.jsonl          # machine-readable results (see below)
 hodow_cts --device-id 2                   # second GPU, in enumeration order
 hodow_cts --isolate-per-test              # one process per case, to pin down a crash
 hodow_cts --validation                    # see "Telling a port bug from a driver bug"
+hodow_cts --no-color                      # or set NO_COLOR; --list is plain either way
 ```
+
+Verdicts and log lines are coloured, and every log line a test emits is prefixed with
+the case it came from - upstream puts those into a per-case `.qpa` section, and a bare
+line in a terminal has nothing to say which of twenty thousand cases produced it. The
+colours are on even when the output is a pipe, because every `just` recipe here tees
+into `tmp/cts-logs/`; terminal detection would turn them off exactly where they are
+wanted.
 
 **Windows** works the same way: install Rust and a GPU driver, then `cargo run`. The
 loader (`vulkan-1.dll`) comes with the driver.
