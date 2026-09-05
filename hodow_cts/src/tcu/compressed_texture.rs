@@ -9,7 +9,7 @@
 //
 // Modifications: rewritten in Rust for hodow_cts.
 //
-// The BC1-BC5 decoders, which a blit out of a compressed image needs: the reference
+// The BC1-BC5 and ETC2/EAC decoders, which a blit out of a compressed image needs: the reference
 // has to be built from the same texels the driver samples, and there is no way to get
 // those without decoding the blocks on the host. Everything here is exact integer or
 // exactly-representable float arithmetic straight out of the spec, so the reference
@@ -33,6 +33,14 @@ pub fn get_uncompressed_format(format: vk::Format) -> Option<TextureFormat> {
     use ChannelOrder::*;
     use ChannelType::*;
     Some(match format {
+        vk::Format::EAC_R11_UNORM_BLOCK => TextureFormat::new(R, UNORM_INT16),
+        vk::Format::EAC_R11_SNORM_BLOCK => TextureFormat::new(R, SNORM_INT16),
+        vk::Format::EAC_R11G11_UNORM_BLOCK => TextureFormat::new(RG, UNORM_INT16),
+        vk::Format::EAC_R11G11_SNORM_BLOCK => TextureFormat::new(RG, SNORM_INT16),
+        vk::Format::ETC2_R8G8B8_UNORM_BLOCK => TextureFormat::new(RGB, UNORM_INT8),
+        vk::Format::ETC2_R8G8B8_SRGB_BLOCK => TextureFormat::new(sRGB, UNORM_INT8),
+        vk::Format::ETC2_R8G8B8A1_UNORM_BLOCK | vk::Format::ETC2_R8G8B8A8_UNORM_BLOCK => TextureFormat::new(RGBA, UNORM_INT8),
+        vk::Format::ETC2_R8G8B8A1_SRGB_BLOCK | vk::Format::ETC2_R8G8B8A8_SRGB_BLOCK => TextureFormat::new(sRGBA, UNORM_INT8),
         vk::Format::BC4_UNORM_BLOCK | vk::Format::BC4_SNORM_BLOCK => TextureFormat::new(R, FLOAT),
         vk::Format::BC5_UNORM_BLOCK | vk::Format::BC5_SNORM_BLOCK => TextureFormat::new(RG, FLOAT),
         vk::Format::BC1_RGB_SRGB_BLOCK | vk::Format::BC1_RGBA_SRGB_BLOCK | vk::Format::BC2_SRGB_BLOCK | vk::Format::BC3_SRGB_BLOCK => TextureFormat::new(sRGBA, UNORM_INT8),
@@ -129,6 +137,11 @@ struct BlockOut<'a> {
 }
 
 impl BlockOut<'_> {
+    fn write_bytes(&mut self, x: usize, y: usize, bytes: &[u8]) {
+        let at = y * self.row_pitch + x * self.pixel_size;
+        self.data[at..at + bytes.len()].copy_from_slice(bytes);
+    }
+
     fn write_u32(&mut self, x: usize, y: usize, value: u32) {
         let at = y * self.row_pitch + x * self.pixel_size;
         self.data[at..at + 4].copy_from_slice(&value.to_ne_bytes());
@@ -265,7 +278,398 @@ fn decompress_bc5(dst: &mut BlockOut<'_>, src: &[u8], has_sign: bool) {
     }
 }
 
-/// `decompressBlock`, narrowed to the BC1-BC5 family.
+// ---------------------------------------------------------------------------------
+// ETC2 and EAC
+// ---------------------------------------------------------------------------------
+
+/// `get64BitBlock` - big-endian, unlike the BC blocks.
+fn get_64bit_block(src: &[u8], block_ndx: usize) -> u64 {
+    let mut block = 0u64;
+    for i in 0..8 {
+        block = (block << 8) | u64::from(src[block_ndx * 8 + i]);
+    }
+    block
+}
+
+fn get_bit(src: u64, bit: u32) -> u32 {
+    ((src >> bit) & 1) as u32
+}
+
+fn get_bits(src: u64, low: u32, high: u32) -> u32 {
+    let num_bits = high - low + 1;
+    if num_bits < 32 {
+        ((src >> low) & ((1u64 << num_bits) - 1)) as u32
+    } else {
+        ((src >> low) & 0xFFFF_FFFF) as u32
+    }
+}
+
+fn extend7_to_8(src: u8) -> u8 {
+    (src << 1) | (src >> 6)
+}
+
+fn extend_signed3_to_8(src: u8) -> i8 {
+    let is_neg = (src & (1 << 2)) != 0;
+    ((if is_neg { !((1u8 << 3) - 1) } else { 0 }) | src) as i8
+}
+
+fn extend11_to_16(src: u16) -> u16 {
+    (src << 5) | (src >> 6)
+}
+
+fn extend11_to_16_with_sign(src: i16) -> i16 {
+    if src < 0 {
+        -(extend11_to_16(src.unsigned_abs()) as i16)
+    } else {
+        extend11_to_16(src as u16) as i16
+    }
+}
+
+fn clamp_u8(value: i32) -> u8 {
+    value.clamp(0, 255) as u8
+}
+
+/// `modifierTable` shared by the individual and differential ETC modes.
+const ETC_MODIFIER_TABLE: [[i32; 4]; 8] = [
+    [2, 8, -2, -8],
+    [5, 17, -5, -17],
+    [9, 29, -9, -29],
+    [13, 42, -13, -42],
+    [18, 60, -18, -60],
+    [24, 80, -24, -80],
+    [33, 106, -33, -106],
+    [47, 183, -47, -183],
+];
+
+/// `modifierTable` shared by EAC's 8-bit and 11-bit blocks.
+const EAC_MODIFIER_TABLE: [[i32; 8]; 16] = [
+    [-3, -6, -9, -15, 2, 5, 8, 14],
+    [-3, -7, -10, -13, 2, 6, 9, 12],
+    [-2, -5, -8, -13, 1, 4, 7, 12],
+    [-2, -4, -6, -13, 1, 3, 5, 12],
+    [-3, -6, -8, -12, 2, 5, 7, 11],
+    [-3, -7, -9, -11, 2, 6, 8, 10],
+    [-4, -7, -8, -11, 3, 6, 7, 10],
+    [-3, -5, -8, -11, 2, 4, 7, 10],
+    [-2, -6, -8, -10, 1, 5, 7, 9],
+    [-2, -5, -8, -10, 1, 4, 7, 9],
+    [-2, -4, -8, -10, 1, 3, 7, 9],
+    [-2, -5, -7, -10, 1, 4, 6, 9],
+    [-3, -4, -7, -10, 2, 3, 6, 9],
+    [-1, -2, -3, -10, 0, 1, 2, 9],
+    [-4, -6, -8, -9, 3, 5, 7, 8],
+    [-3, -5, -7, -9, 2, 4, 6, 8],
+];
+
+/// `decompressETC2Block` - the RGB half of every ETC2 format, writing a 4x4 block of
+/// RGB triples and, in punchthrough mode, the alpha that goes with them.
+fn decompress_etc2_block(rgb: &mut [u8; 48], src: u64, alpha: Option<&mut [u8; 16]>, alpha_mode: bool) {
+    let diff_opaque_bit = get_bit(src, 33) as i32;
+    let sel_br = get_bits(src, 59, 63) as i8;
+    let sel_bg = get_bits(src, 51, 55) as i8;
+    let sel_bb = get_bits(src, 43, 47) as i8;
+    let sel_dr = extend_signed3_to_8(get_bits(src, 56, 58) as u8);
+    let sel_dg = extend_signed3_to_8(get_bits(src, 48, 50) as u8);
+    let sel_db = extend_signed3_to_8(get_bits(src, 40, 42) as u8);
+
+    #[derive(PartialEq, Eq)]
+    enum Etc2Mode {
+        Individual,
+        Differential,
+        T,
+        H,
+        Planar,
+    }
+    let in_range = |v: i32| (0..=31).contains(&v);
+    let mode = if !alpha_mode && diff_opaque_bit == 0 {
+        Etc2Mode::Individual
+    } else if !in_range(i32::from(sel_br) + i32::from(sel_dr)) {
+        Etc2Mode::T
+    } else if !in_range(i32::from(sel_bg) + i32::from(sel_dg)) {
+        Etc2Mode::H
+    } else if !in_range(i32::from(sel_bb) + i32::from(sel_db)) {
+        Etc2Mode::Planar
+    } else {
+        Etc2Mode::Differential
+    };
+
+    let mut alpha = alpha;
+    let mut set_alpha = |index: usize, value: u8| {
+        if let Some(dst) = alpha.as_deref_mut() {
+            dst[index] = value;
+        }
+    };
+
+    match mode {
+        Etc2Mode::Individual | Etc2Mode::Differential => {
+            let flip_bit = get_bit(src, 32);
+            let table = [get_bits(src, 37, 39), get_bits(src, 34, 36)];
+            let (base_r, base_g, base_b) = if mode == Etc2Mode::Individual {
+                (
+                    [extend4_to_8(get_bits(src, 60, 63) as u8), extend4_to_8(get_bits(src, 56, 59) as u8)],
+                    [extend4_to_8(get_bits(src, 52, 55) as u8), extend4_to_8(get_bits(src, 48, 51) as u8)],
+                    [extend4_to_8(get_bits(src, 44, 47) as u8), extend4_to_8(get_bits(src, 40, 43) as u8)],
+                )
+            } else {
+                (
+                    [extend5_to_8(sel_br as u8), extend5_to_8(sel_br.wrapping_add(sel_dr) as u8)],
+                    [extend5_to_8(sel_bg as u8), extend5_to_8(sel_bg.wrapping_add(sel_dg) as u8)],
+                    [extend5_to_8(sel_bb as u8), extend5_to_8(sel_bb.wrapping_add(sel_db) as u8)],
+                )
+            };
+
+            for pixel_ndx in 0..16u32 {
+                let x = (pixel_ndx / 4) as usize;
+                let y = (pixel_ndx % 4) as usize;
+                let dst_offset = (y * BC_BLOCK_WIDTH + x) * 3;
+                let sub_block = usize::from(if flip_bit != 0 { y } else { x } >= 2);
+                let table_ndx = table[sub_block] as usize;
+                let modifier_ndx = (get_bit(src, 16 + pixel_ndx) << 1) | get_bit(src, pixel_ndx);
+
+                if alpha_mode && diff_opaque_bit == 0 && modifier_ndx == 2 {
+                    rgb[dst_offset..dst_offset + 3].fill(0);
+                    set_alpha(y * BC_BLOCK_WIDTH + x, 0);
+                } else {
+                    let modifier = if alpha_mode && diff_opaque_bit == 0 && (modifier_ndx == 0 || modifier_ndx == 2) {
+                        0
+                    } else {
+                        ETC_MODIFIER_TABLE[table_ndx][modifier_ndx as usize]
+                    };
+                    rgb[dst_offset] = clamp_u8(i32::from(base_r[sub_block]) + modifier);
+                    rgb[dst_offset + 1] = clamp_u8(i32::from(base_g[sub_block]) + modifier);
+                    rgb[dst_offset + 2] = clamp_u8(i32::from(base_b[sub_block]) + modifier);
+                    if alpha_mode {
+                        set_alpha(y * BC_BLOCK_WIDTH + x, 255);
+                    }
+                }
+            }
+        }
+        Etc2Mode::T | Etc2Mode::H => {
+            const DIST_TABLE: [i32; 8] = [3, 6, 11, 16, 23, 32, 41, 64];
+            let (paint_r, paint_g, paint_b) = if mode == Etc2Mode::T {
+                let r1a = get_bits(src, 59, 60) as u8;
+                let r1b = get_bits(src, 56, 57) as u8;
+                let g1 = get_bits(src, 52, 55) as u8;
+                let b1 = get_bits(src, 48, 51) as u8;
+                let r2 = get_bits(src, 44, 47) as u8;
+                let g2 = get_bits(src, 40, 43) as u8;
+                let b2 = get_bits(src, 36, 39) as u8;
+                let dist = DIST_TABLE[(((get_bits(src, 34, 35) << 1) | get_bit(src, 32)) & 0x7) as usize];
+                let base = |c0: u8, c2: u8| {
+                    [
+                        extend4_to_8(c0),
+                        clamp_u8(i32::from(extend4_to_8(c2)) + dist),
+                        extend4_to_8(c2),
+                        clamp_u8(i32::from(extend4_to_8(c2)) - dist),
+                    ]
+                };
+                (base((r1a << 2) | r1b, r2), base(g1, g2), base(b1, b2))
+            } else {
+                let r1 = get_bits(src, 59, 62) as u8;
+                let g1a = get_bits(src, 56, 58) as u8;
+                let g1b = get_bit(src, 52) as u8;
+                let b1a = get_bit(src, 51) as u8;
+                let b1b = get_bits(src, 47, 49) as u8;
+                let r2 = get_bits(src, 43, 46) as u8;
+                let g2 = get_bits(src, 39, 42) as u8;
+                let b2 = get_bits(src, 35, 38) as u8;
+                let base_r = [extend4_to_8(r1), extend4_to_8(r2)];
+                let base_g = [extend4_to_8((g1a << 1) | g1b), extend4_to_8(g2)];
+                let base_b = [extend4_to_8((b1a << 3) | b1b), extend4_to_8(b2)];
+                let base_value = |i: usize| (u32::from(base_r[i]) << 16) | (u32::from(base_g[i]) << 8) | u32::from(base_b[i]);
+                let dist_ndx = (get_bit(src, 34) << 2) | (get_bit(src, 32) << 1) | u32::from(base_value(0) >= base_value(1));
+                let dist = DIST_TABLE[dist_ndx as usize];
+                let paint = |base: [u8; 2]| {
+                    [
+                        clamp_u8(i32::from(base[0]) + dist),
+                        clamp_u8(i32::from(base[0]) - dist),
+                        clamp_u8(i32::from(base[1]) + dist),
+                        clamp_u8(i32::from(base[1]) - dist),
+                    ]
+                };
+                (paint(base_r), paint(base_g), paint(base_b))
+            };
+
+            for pixel_ndx in 0..16u32 {
+                let x = (pixel_ndx / 4) as usize;
+                let y = (pixel_ndx % 4) as usize;
+                let dst_offset = (y * BC_BLOCK_WIDTH + x) * 3;
+                let paint_ndx = ((get_bit(src, 16 + pixel_ndx) << 1) | get_bit(src, pixel_ndx)) as usize;
+
+                if alpha_mode && diff_opaque_bit == 0 && paint_ndx == 2 {
+                    rgb[dst_offset..dst_offset + 3].fill(0);
+                    set_alpha(y * BC_BLOCK_WIDTH + x, 0);
+                } else {
+                    rgb[dst_offset] = paint_r[paint_ndx];
+                    rgb[dst_offset + 1] = paint_g[paint_ndx];
+                    rgb[dst_offset + 2] = paint_b[paint_ndx];
+                    if alpha_mode {
+                        set_alpha(y * BC_BLOCK_WIDTH + x, 255);
+                    }
+                }
+            }
+        }
+        Etc2Mode::Planar => {
+            let go1 = get_bit(src, 56) as u8;
+            let go2 = get_bits(src, 49, 54) as u8;
+            let bo1 = get_bit(src, 48) as u8;
+            let bo2 = get_bits(src, 43, 44) as u8;
+            let bo3 = get_bits(src, 39, 41) as u8;
+            let rh1 = get_bits(src, 34, 38) as u8;
+            let rh2 = get_bit(src, 32) as u8;
+            let origin = [
+                extend6_to_8(get_bits(src, 57, 62) as u8),
+                extend7_to_8((go1 << 6) | go2),
+                extend6_to_8((bo1 << 5) | (bo2 << 3) | bo3),
+            ];
+            let horizontal = [
+                extend6_to_8((rh1 << 1) | rh2),
+                extend7_to_8(get_bits(src, 25, 31) as u8),
+                extend6_to_8(get_bits(src, 19, 24) as u8),
+            ];
+            let vertical = [
+                extend6_to_8(get_bits(src, 13, 18) as u8),
+                extend7_to_8(get_bits(src, 6, 12) as u8),
+                extend6_to_8(get_bits(src, 0, 5) as u8),
+            ];
+
+            for y in 0..BC_BLOCK_HEIGHT {
+                for x in 0..BC_BLOCK_WIDTH {
+                    let dst_offset = (y * BC_BLOCK_WIDTH + x) * 3;
+                    for c in 0..3 {
+                        let (o, h, v) = (i32::from(origin[c]), i32::from(horizontal[c]), i32::from(vertical[c]));
+                        let unclamped = (x as i32 * (h - o) + y as i32 * (v - o) + 4 * o + 2) >> 2;
+                        rgb[dst_offset + c] = clamp_u8(unclamped);
+                    }
+                    if alpha_mode {
+                        set_alpha(y * BC_BLOCK_WIDTH + x, 255);
+                    }
+                }
+            }
+        }
+    }
+}
+
+/// `decompressEAC8Block`
+fn decompress_eac8_block(dst: &mut [u8; 16], src: u64) {
+    let base_codeword = i32::from(get_bits(src, 56, 63) as u8);
+    let multiplier = i32::from(get_bits(src, 52, 55) as u8);
+    let table_ndx = get_bits(src, 48, 51) as usize;
+
+    for pixel_ndx in 0..16u32 {
+        let x = (pixel_ndx / 4) as usize;
+        let y = (pixel_ndx % 4) as usize;
+        let pixel_bit_ndx = 45 - 3 * pixel_ndx;
+        let modifier_ndx = (get_bit(src, pixel_bit_ndx + 2) << 2) | (get_bit(src, pixel_bit_ndx + 1) << 1) | get_bit(src, pixel_bit_ndx);
+        let modifier = EAC_MODIFIER_TABLE[table_ndx][modifier_ndx as usize];
+        dst[y * BC_BLOCK_WIDTH + x] = clamp_u8(base_codeword + multiplier * modifier);
+    }
+}
+
+/// `decompressEAC11Block` - 16 values in the 11-bit range, before the widening to 16.
+fn decompress_eac11_block(dst: &mut [i32; 16], src: u64, signed_mode: bool) {
+    let multiplier = get_bits(src, 52, 55) as i32;
+    let table_ndx = get_bits(src, 48, 51) as usize;
+    let mut base_codeword = get_bits(src, 56, 63) as i32;
+
+    if signed_mode {
+        if base_codeword > 127 {
+            base_codeword -= 256;
+        }
+        if base_codeword == -128 {
+            base_codeword = -127;
+        }
+    }
+
+    for pixel_ndx in 0..16u32 {
+        let x = (pixel_ndx / 4) as usize;
+        let y = (pixel_ndx % 4) as usize;
+        let pixel_bit_ndx = 45 - 3 * pixel_ndx;
+        let modifier_ndx = (get_bit(src, pixel_bit_ndx + 2) << 2) | (get_bit(src, pixel_bit_ndx + 1) << 1) | get_bit(src, pixel_bit_ndx);
+        let modifier = EAC_MODIFIER_TABLE[table_ndx][modifier_ndx as usize];
+
+        let value = if signed_mode {
+            let raw = if multiplier != 0 {
+                base_codeword * 8 + multiplier * modifier * 8
+            } else {
+                base_codeword * 8 + modifier
+            };
+            raw.clamp(-1023, 1023)
+        } else {
+            let raw = if multiplier != 0 {
+                base_codeword * 8 + 4 + multiplier * modifier * 8
+            } else {
+                base_codeword * 8 + 4 + modifier
+            };
+            raw.clamp(0, 2047)
+        };
+        dst[y * BC_BLOCK_WIDTH + x] = value;
+    }
+}
+
+/// `decompressETC2` / `decompressETC2_EAC_RGBA8` / `decompressETC2_RGB8_PUNCHTHROUGH_ALPHA1`
+fn decompress_etc2(dst: &mut BlockOut<'_>, src: &[u8], format: vk::Format) {
+    let mut rgb = [0u8; 48];
+    let mut alpha = [0u8; 16];
+
+    match format {
+        vk::Format::ETC2_R8G8B8_UNORM_BLOCK | vk::Format::ETC2_R8G8B8_SRGB_BLOCK => {
+            decompress_etc2_block(&mut rgb, get_64bit_block(src, 0), None, false);
+            for y in 0..BC_BLOCK_HEIGHT {
+                for x in 0..BC_BLOCK_WIDTH {
+                    let at = (y * BC_BLOCK_WIDTH + x) * 3;
+                    dst.write_bytes(x, y, &rgb[at..at + 3]);
+                }
+            }
+        }
+        vk::Format::ETC2_R8G8B8A1_UNORM_BLOCK | vk::Format::ETC2_R8G8B8A1_SRGB_BLOCK => {
+            decompress_etc2_block(&mut rgb, get_64bit_block(src, 0), Some(&mut alpha), true);
+            for y in 0..BC_BLOCK_HEIGHT {
+                for x in 0..BC_BLOCK_WIDTH {
+                    let i = y * BC_BLOCK_WIDTH + x;
+                    dst.write_bytes(x, y, &[rgb[i * 3], rgb[i * 3 + 1], rgb[i * 3 + 2], alpha[i]]);
+                }
+            }
+        }
+        vk::Format::ETC2_R8G8B8A8_UNORM_BLOCK | vk::Format::ETC2_R8G8B8A8_SRGB_BLOCK => {
+            decompress_etc2_block(&mut rgb, get_64bit_block(src, 1), None, false);
+            decompress_eac8_block(&mut alpha, get_64bit_block(src, 0));
+            for y in 0..BC_BLOCK_HEIGHT {
+                for x in 0..BC_BLOCK_WIDTH {
+                    let i = y * BC_BLOCK_WIDTH + x;
+                    dst.write_bytes(x, y, &[rgb[i * 3], rgb[i * 3 + 1], rgb[i * 3 + 2], alpha[i]]);
+                }
+            }
+        }
+        other => unreachable!("decompress_etc2 called for {other:?}"),
+    }
+}
+
+/// `decompressEAC_R11` / `decompressEAC_RG11`
+fn decompress_eac11(dst: &mut BlockOut<'_>, src: &[u8], channels: usize, signed_mode: bool) {
+    let mut values = [[0i32; 16]; 2];
+    for (c, channel) in values.iter_mut().enumerate().take(channels) {
+        decompress_eac11_block(channel, get_64bit_block(src, c), signed_mode);
+    }
+
+    for y in 0..BC_BLOCK_HEIGHT {
+        for x in 0..BC_BLOCK_WIDTH {
+            let i = y * BC_BLOCK_WIDTH + x;
+            let mut bytes = [0u8; 4];
+            for c in 0..channels {
+                let widened = if signed_mode {
+                    extend11_to_16_with_sign(values[c][i] as i16) as u16
+                } else {
+                    extend11_to_16(values[c][i] as u16)
+                };
+                bytes[c * 2..c * 2 + 2].copy_from_slice(&widened.to_ne_bytes());
+            }
+            dst.write_bytes(x, y, &bytes[..channels * 2]);
+        }
+    }
+}
+
+/// `decompressBlock`, narrowed to the BC1-BC5 and ETC2/EAC families.
 fn decompress_block(dst: &mut BlockOut<'_>, format: vk::Format, src: &[u8]) {
     match format {
         vk::Format::BC1_RGB_UNORM_BLOCK | vk::Format::BC1_RGB_SRGB_BLOCK => decompress_bc1(dst, src, false),
@@ -276,6 +680,16 @@ fn decompress_block(dst: &mut BlockOut<'_>, format: vk::Format, src: &[u8]) {
         vk::Format::BC4_SNORM_BLOCK => decompress_bc4(dst, src, true),
         vk::Format::BC5_UNORM_BLOCK => decompress_bc5(dst, src, false),
         vk::Format::BC5_SNORM_BLOCK => decompress_bc5(dst, src, true),
+        vk::Format::ETC2_R8G8B8_UNORM_BLOCK
+        | vk::Format::ETC2_R8G8B8_SRGB_BLOCK
+        | vk::Format::ETC2_R8G8B8A1_UNORM_BLOCK
+        | vk::Format::ETC2_R8G8B8A1_SRGB_BLOCK
+        | vk::Format::ETC2_R8G8B8A8_UNORM_BLOCK
+        | vk::Format::ETC2_R8G8B8A8_SRGB_BLOCK => decompress_etc2(dst, src, format),
+        vk::Format::EAC_R11_UNORM_BLOCK => decompress_eac11(dst, src, 1, false),
+        vk::Format::EAC_R11_SNORM_BLOCK => decompress_eac11(dst, src, 1, true),
+        vk::Format::EAC_R11G11_UNORM_BLOCK => decompress_eac11(dst, src, 2, false),
+        vk::Format::EAC_R11G11_SNORM_BLOCK => decompress_eac11(dst, src, 2, true),
         other => unreachable!("decompress_block called for {other:?}"),
     }
 }
@@ -375,6 +789,39 @@ mod tests {
         let access = level.get_const_access();
         assert_eq!(access.get_pixel(0, 0, 0)[0], 1.0);
         assert_eq!(access.get_pixel(1, 0, 0)[0], 0.0);
+    }
+
+    /// An all-zero ETC2 block takes the individual path: every base is zero, the
+    /// modifier table index is zero and the per-texel index is zero, so every texel
+    /// comes out at the first modifier, 2.
+    #[test]
+    fn etc2_zero_block_decodes_to_the_first_modifier() {
+        let block = [0u8; 8];
+        let format = vk::Format::ETC2_R8G8B8_UNORM_BLOCK;
+        let mut level = TextureLevel::new(get_uncompressed_format(format).unwrap(), 4, 4, 1).unwrap();
+        assert!(decompress(&mut level.get_access(), format, &block));
+
+        let access = level.get_const_access();
+        let expected = 2.0 / 255.0;
+        for y in 0..4 {
+            for x in 0..4 {
+                assert_eq!(access.get_pixel(x, y, 0), [expected, expected, expected, 1.0], "at ({x}, {y})");
+            }
+        }
+    }
+
+    /// The 11-bit EAC path: base 0, multiplier 0 and table 0 give `0*8 + 4 - 3 = 1`,
+    /// which `extend11To16` widens to 32.
+    #[test]
+    fn eac_r11_zero_block_widens_to_16_bits() {
+        let block = [0u8; 8];
+        let format = vk::Format::EAC_R11_UNORM_BLOCK;
+        let mut level = TextureLevel::new(get_uncompressed_format(format).unwrap(), 4, 4, 1).unwrap();
+        assert!(decompress(&mut level.get_access(), format, &block));
+
+        let access = level.get_const_access();
+        assert_eq!(access.get_pixel(0, 0, 0)[0], 32.0 / 65535.0);
+        assert_eq!(access.get_pixel(3, 3, 0)[0], 32.0 / 65535.0);
     }
 
     /// The last block of a row is clipped rather than written past the edge.

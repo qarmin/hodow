@@ -38,10 +38,10 @@ use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_comma
 use crate::vk::image_util::{ImageWithMemory, make_image_memory_barrier, make_image_subresource_range, make_image_view};
 use crate::vk::mem_util::{MemoryRequirement, flush_alloc, invalidate_alloc};
 use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool, make_descriptor_set, make_framebuffer, make_pipeline_layout};
-use crate::vk::programs::{BinaryCollection, create_shader_module};
 // Re-exported so the generated shader module, which imports this module wholesale,
 // can name the type its manifest entries are declared with.
 pub use crate::vk::programs::SharedProgram;
+use crate::vk::programs::{BinaryCollection, create_shader_module};
 use crate::vk::ref_util::Unique;
 use crate::vkt::{Context, TestCase, TestInstance};
 

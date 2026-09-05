@@ -75,10 +75,13 @@ fn get_compressed_format_threshold(format: vk::Format) -> [f32; 4] {
         | vk::Format::BC3_UNORM_BLOCK
         | vk::Format::BC3_SRGB_BLOCK => ([5, 6, 5, 0], false),
         vk::Format::BC1_RGBA_UNORM_BLOCK | vk::Format::BC1_RGBA_SRGB_BLOCK => ([5, 5, 5, 1], false),
-        vk::Format::BC4_SNORM_BLOCK => ([7, 0, 0, 0], true),
-        vk::Format::BC4_UNORM_BLOCK => ([8, 0, 0, 0], false),
-        vk::Format::BC5_SNORM_BLOCK => ([7, 7, 0, 0], true),
-        vk::Format::BC5_UNORM_BLOCK => ([8, 8, 0, 0], false),
+        vk::Format::BC4_SNORM_BLOCK | vk::Format::EAC_R11_SNORM_BLOCK => ([7, 0, 0, 0], true),
+        vk::Format::BC4_UNORM_BLOCK | vk::Format::EAC_R11_UNORM_BLOCK => ([8, 0, 0, 0], false),
+        vk::Format::BC5_SNORM_BLOCK | vk::Format::EAC_R11G11_SNORM_BLOCK => ([7, 7, 0, 0], true),
+        vk::Format::BC5_UNORM_BLOCK | vk::Format::EAC_R11G11_UNORM_BLOCK => ([8, 8, 0, 0], false),
+        vk::Format::ETC2_R8G8B8_UNORM_BLOCK | vk::Format::ETC2_R8G8B8_SRGB_BLOCK => ([8, 8, 8, 0], false),
+        vk::Format::ETC2_R8G8B8A1_UNORM_BLOCK | vk::Format::ETC2_R8G8B8A1_SRGB_BLOCK => ([8, 8, 8, 1], false),
+        vk::Format::ETC2_R8G8B8A8_UNORM_BLOCK | vk::Format::ETC2_R8G8B8A8_SRGB_BLOCK => ([8, 8, 8, 8], false),
         other => unreachable!("no compressed threshold for {other:?}"),
     };
     let range = if is_signed { 2.0 } else { 1.0 };
@@ -89,7 +92,10 @@ fn get_compressed_format_threshold(format: vk::Format) -> [f32; 4] {
 /// signed block format blitted into an unsigned destination is clamped on the device,
 /// and the software sampler does not do that on its own.
 fn needs_source_clamp(compressed_format: vk::Format, result_format: TextureFormat) -> bool {
-    let signed_block = matches!(compressed_format, vk::Format::BC4_SNORM_BLOCK | vk::Format::BC5_SNORM_BLOCK);
+    let signed_block = matches!(
+        compressed_format,
+        vk::Format::BC4_SNORM_BLOCK | vk::Format::BC5_SNORM_BLOCK | vk::Format::EAC_R11_SNORM_BLOCK | vk::Format::EAC_R11G11_SNORM_BLOCK
+    );
     let unsigned_result = matches!(
         result_format.type_,
         ChannelType::UNORM_INT8
@@ -1680,7 +1686,7 @@ fn add_blitting_image_all_formats_color_src_format_dst_format_tests(group: &mut 
 
                     // A 3D source also gets the stripe fills, one per axis - a gradient
                     // varies too slowly to notice a filter reaching for the wrong slice.
-                    if p.image_type == vk::ImageType::_3D {
+                    if p.image_type == vk::ImageType::_3D && !is_compressed_format(p.src.format) {
                         for (mode, name) in [(FillMode::BlueRedX, "x"), (FillMode::BlueRedY, "y"), (FillMode::BlueRedZ, "z")] {
                             // Upstream emits linear before nearest for these.
                             group.add_child(make(format!("{test_name}_linear_stripes_{name}"), mode, vk::Filter::LINEAR));

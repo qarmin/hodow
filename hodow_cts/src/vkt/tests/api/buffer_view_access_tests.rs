@@ -36,10 +36,10 @@ use crate::vk::obj_util::{
     BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool, make_descriptor_buffer_info, make_descriptor_set, make_framebuffer,
     make_graphics_pipeline, make_pipeline_layout, make_render_pass,
 };
-use crate::vk::programs::{BinaryCollection, create_shader_module};
 // Re-exported so the generated shader module, which imports this module wholesale,
 // can name the type its manifest entries are declared with.
 pub use crate::vk::programs::SharedProgram;
+use crate::vk::programs::{BinaryCollection, create_shader_module};
 use crate::vk::ref_util::Unique;
 use crate::vkt::{Context, TestCase, TestInstance};
 

@@ -24,10 +24,10 @@ use vulkanalia::vk::{ExtPrivateDataExtensionDeviceCommands, Handle as VkHandle, 
 use crate::tcu::{self, TestError, TestOutcome, TestStatus};
 use crate::vk::VkResultExt;
 use crate::vk::alloc_callback_util::AllocationCallbackRecorder;
-use crate::vk::programs::{BinaryCollection, create_shader_module};
 // Re-exported so the generated shader module, which imports this one wholesale, can
 // name the type its manifest entries are declared with.
 pub use crate::vk::programs::SharedProgram;
+use crate::vk::programs::{BinaryCollection, create_shader_module};
 use crate::vk::ref_util::{Unique, UniqueCommandBuffer, UniqueDescriptorSet};
 use crate::vkt::{Context, TestCase, TestInstance};
 
