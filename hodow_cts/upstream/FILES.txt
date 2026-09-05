@@ -58,6 +58,7 @@ external/vulkancts/modules/vulkan/compute/vktComputeZeroInitializeWorkgroupMemor
 external/vulkancts/modules/vulkan/memory/vktMemoryMappingTests.cpp
 external/vulkancts/modules/vulkan/pipeline/vktPipelineImageUtil.cpp
 external/vulkancts/modules/vulkan/renderpass/vktRenderPassTests.cpp
+external/vulkancts/modules/vulkan/renderpass/vktRenderPassUnusedClearAttachmentTests.cpp
 external/vulkancts/modules/vulkan/vktTestCase.hpp
 framework/common/tcuAstcUtil.cpp
 framework/common/tcuCompressedTexture.cpp

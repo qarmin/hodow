@@ -301,20 +301,24 @@ pub fn make_graphics_pipeline_full<'a>(
         .min_depth_bounds(0.0)
         .max_depth_bounds(1.0);
 
-    let blend_attachments = [vk::PipelineColorBlendAttachmentState::builder()
-        .blend_enable(false)
-        .src_color_blend_factor(vk::BlendFactor::ZERO)
-        .dst_color_blend_factor(vk::BlendFactor::ZERO)
-        .color_blend_op(vk::BlendOp::ADD)
-        .src_alpha_blend_factor(vk::BlendFactor::ZERO)
-        .dst_alpha_blend_factor(vk::BlendFactor::ZERO)
-        .alpha_blend_op(vk::BlendOp::ADD)
-        .color_write_mask(vk::ColorComponentFlags::R | vk::ColorComponentFlags::G | vk::ColorComponentFlags::B | vk::ColorComponentFlags::A)
-        .build()];
+    // One identical state per colour attachment, as upstream pushes.
+    let blend_attachments = vec![
+        vk::PipelineColorBlendAttachmentState::builder()
+            .blend_enable(false)
+            .src_color_blend_factor(vk::BlendFactor::ZERO)
+            .dst_color_blend_factor(vk::BlendFactor::ZERO)
+            .color_blend_op(vk::BlendOp::ADD)
+            .src_alpha_blend_factor(vk::BlendFactor::ZERO)
+            .dst_alpha_blend_factor(vk::BlendFactor::ZERO)
+            .alpha_blend_op(vk::BlendOp::ADD)
+            .color_write_mask(vk::ColorComponentFlags::R | vk::ColorComponentFlags::G | vk::ColorComponentFlags::B | vk::ColorComponentFlags::A)
+            .build();
+        color_attachment_count
+    ];
     let color_blend = vk::PipelineColorBlendStateCreateInfo::builder()
         .logic_op_enable(false)
         .logic_op(vk::LogicOp::CLEAR)
-        .attachments(&blend_attachments[..color_attachment_count])
+        .attachments(&blend_attachments)
         .blend_constants([0.0; 4]);
 
     let info = vk::GraphicsPipelineCreateInfo::builder()
