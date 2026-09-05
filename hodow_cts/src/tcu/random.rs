@@ -145,6 +145,21 @@ mod tests {
 /// `deInt32Hash` - Thomas Wang's 32-bit integer hash, which upstream uses to turn a
 /// small enum value into a usable seed.
 impl Random {
+    /// `de::Random::choose<T>(first, last)` - one item, by reservoir sampling.
+    ///
+    /// Not `get_int(0, n - 1)`: the reservoir draws once per element past the first,
+    /// so choosing from an n-element list consumes n-1 numbers. Everything drawn after
+    /// it depends on that.
+    pub fn choose<'a, T>(&mut self, items: &'a [T]) -> &'a T {
+        let mut chosen = &items[0];
+        for (ndx, item) in items.iter().enumerate().skip(1) {
+            if self.get_int(0, ndx as i32) < 1 {
+                chosen = item;
+            }
+        }
+        chosen
+    }
+
     /// `de::Random::shuffle` - Fisher-Yates, walking down so the rng is consumed in
     /// the same order as upstream.
     pub fn shuffle<T>(&mut self, items: &mut [T]) {

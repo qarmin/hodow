@@ -250,9 +250,29 @@ The pattern behind the numbers: `dEQP-VK.api` was the shader-light corner of the
 suite, which is why it reached 95% first. Everything large that remains generates
 its shaders from the test parameters, so porting it means generating the same
 shaders ahead of time and committing the SPIR-V. That is affordable where the
-distinct-shader count saturates - the renderpass group logs 247 distinct shaders
-across 2500 random cases and is still nearly flat at that point - and not where it
-is one per case.
+distinct-shader count saturates and not where it is one per case, so measure it
+before starting: run a random sample under `deqp-vk --deqp-log-shader-sources=enable`
+and count distinct `<ShaderSource>` blocks as the sample grows.
+
+Measured so far (2026-09-05):
+
+| group | sample | distinct shaders | saturating? |
+| --- | --- | --- | --- |
+| `renderpasses.*.formats` | 2500 | 247 | yes - flat by 1500 |
+| `renderpasses.*.multisample_resolve` | 400 | 18 | yes |
+| `renderpasses.*.unused_clear_attachments` | 400 | 17 | yes |
+| `binding_model.shader_access` | 1500 | 329 | yes - flat by 1200 |
+| `renderpasses.*.attachment` | 1200 | 338 | **no** - still climbing |
+
+`renderpasses.*.attachment` is the cautionary one. Its render passes are generated
+from a seeded `de::Random`, so the shader is a function of a random sequence of
+formats rather than of a small key, and there is one distinct shader per generated
+configuration (700 of them). Porting it would also mean reproducing that rng draw
+for draw - note `de::Random::choose` is reservoir sampling and consumes n-1 numbers
+per call, not one - and a divergence there changes the render pass without changing
+the case name, which is precisely the drift `cts-diff` cannot see. Its pass rate is
+also capped near 30%: 720 of 838 sampled skips are a random format the driver does
+not support as an attachment.
 
 ### Adding a test
 
