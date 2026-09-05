@@ -15,10 +15,10 @@
 // for VK_FILTER_NEAREST asks, for every destination pixel, whether *some* texel the
 // coordinate could legally have landed on explains the result - `tcu::tex_verifier`.
 //
-// Ported so far: the VK_FILTER_NEAREST cases of the 2D simple_tests subgroups. LINEAR
-// and CUBIC need two reference images built with a scaled filter (`checkNonNearest-
-// FilteredResult`), which is not ported; the 3D, array and all_formats groups are not
-// registered yet either.
+// Ported so far: the VK_FILTER_NEAREST cases of the 2D and 3D simple_tests subgroups.
+// LINEAR and CUBIC need two reference images built with a scaled filter
+// (`checkNonNearestFilteredResult`), which is not ported; the array-to-3D groups and
+// all_formats are not registered yet either.
 
 use vulkanalia::prelude::v1_0::*;
 use vulkanalia::vk::DeviceV1_3;
@@ -643,34 +643,45 @@ fn simple_without_scaling_partial(image_type: vk::ImageType) -> SimpleBlitParams
 
 /// `addBlittingImageSimpleTests(group, allocationKind, extensionFlags)`
 ///
-/// Only the 2D subgroups are registered. The 3D ones, `array`, `3d_to_2d_array` and
-/// `2d_array_to_3d` need a per-layer or 3D-aware host reference the ported verifier
-/// does not cover yet.
+/// The 2D and 3D subgroups. `array`, `3d_to_2d_array` and `2d_array_to_3d` are not
+/// registered: they blit between array layers and 3D slices, which needs the
+/// per-layer `getUsedZRange` path the ported verifier does not cover yet.
 fn add_blitting_image_simple_tests_group(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
-    let t = vk::ImageType::_2D;
-    let d = 1;
     let s = DEFAULT_SIZE;
 
-    let subgroups: [(&str, SimpleBlitParams); 8] = [
-        ("whole", simple_whole_like(t, [[0, 0, 0], [s, s, d]])),
-        ("mirror_xy", simple_whole_like(t, [[s, s, 0], [0, 0, d]])),
-        ("mirror_x", simple_whole_like(t, [[s, 0, 0], [0, s, d]])),
-        ("mirror_y", simple_whole_like(t, [[0, s, 0], [s, 0, d]])),
-        ("mirror_subregions", simple_mirror_subregions(t)),
-        ("scaling_whole1", simple_scaling_whole(t, false)),
-        ("scaling_whole2", simple_scaling_whole(t, true)),
-        ("scaling_and_offset", simple_scaling_and_offset(t)),
-    ];
+    for image_type in [vk::ImageType::_2D, vk::ImageType::_3D] {
+        let t = image_type;
+        let is_3d = t == vk::ImageType::_3D;
+        // `imageDepth` - the z the whole-image blits span.
+        let d = if is_3d { DEFAULT_SIZE } else { 1 };
+        let suffix = if is_3d { "_3d" } else { "" };
 
-    for (name, sp) in &subgroups {
-        let mut sub = tcu::TestCaseGroup::new(*name);
-        add_blitting_image_simple_tests(&mut sub, gp, t, sp);
-        group.add_child(sub);
+        let mut subgroups: Vec<(String, SimpleBlitParams)> = vec![
+            ("whole".to_string(), simple_whole_like(t, [[0, 0, 0], [s, s, d]])),
+            ("mirror_xy".to_string(), simple_whole_like(t, [[s, s, 0], [0, 0, d]])),
+            ("mirror_x".to_string(), simple_whole_like(t, [[s, 0, 0], [0, s, d]])),
+            ("mirror_y".to_string(), simple_whole_like(t, [[0, s, 0], [s, 0, d]])),
+        ];
+        // Mirroring z only makes sense for a 3D image, so upstream registers it there
+        // alone - and it is the reason the 2D and 3D lists are not the same list.
+        if is_3d {
+            subgroups.push(("mirror_z".to_string(), simple_whole_like(t, [[0, 0, s], [s, s, 0]])));
+        }
+        subgroups.extend([
+            ("mirror_subregions".to_string(), simple_mirror_subregions(t)),
+            ("scaling_whole1".to_string(), simple_scaling_whole(t, false)),
+            ("scaling_whole2".to_string(), simple_scaling_whole(t, true)),
+            ("scaling_and_offset".to_string(), simple_scaling_and_offset(t)),
+            ("without_scaling_partial".to_string(), simple_without_scaling_partial(t)),
+        ]);
+
+        // `array` sits between `whole` and `mirror_xy` upstream, in the 2D list only.
+        for (name, sp) in &subgroups {
+            let mut sub = tcu::TestCaseGroup::new(format!("{name}{suffix}"));
+            add_blitting_image_simple_tests(&mut sub, gp, t, sp);
+            group.add_child(sub);
+        }
     }
-
-    let mut sub = tcu::TestCaseGroup::new("without_scaling_partial");
-    add_blitting_image_simple_tests(&mut sub, gp, t, &simple_without_scaling_partial(t));
-    group.add_child(sub);
 }
 
 /// `addBlittingImageTests`
