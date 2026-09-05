@@ -28,8 +28,9 @@ use super::copies_buffer_tests::{AllocationKind, CopyCommandVariant};
 use super::copies_image_tests::{FillMode, GroupParams, ImageParms, generate_buffer, get_aspect_flags, is_supported_by_framework, read_image, upload_image};
 use super::copy_format_lists::{BlitFormat, COMPATIBLE_FORMATS_FLOATS, COMPATIBLE_FORMATS_S_INTS, COMPATIBLE_FORMATS_SRGB, COMPATIBLE_FORMATS_U_INTS, DEPTH_AND_STENCIL_FORMATS};
 use crate::tcu::pixel::{
-    ConstPixelBufferAccess, DepthStencilMode, TextureLevel, get_effective_depth_stencil_access, get_texture_format_bit_depth, get_texture_format_mantissa_bit_depth,
-    has_depth_component, has_stencil_component, is_combined_depth_stencil_type,
+    ConstPixelBufferAccess, DepthStencilMode, FilterMode, PixelBufferAccess, Sampler, TextureLevel, get_effective_depth_stencil_access, get_effective_depth_stencil_access_mut,
+    get_effective_depth_stencil_texture_format, get_texture_format_bit_depth, get_texture_format_mantissa_bit_depth, has_depth_component, has_stencil_component,
+    is_combined_depth_stencil_type, linear_to_srgb_if_needed,
 };
 use crate::tcu::tex_verifier::{LookupPrecision, is_nearest_sample_result_valid_float, is_nearest_sample_result_valid_int, srgb_to_linear};
 use crate::tcu::texture::{ChannelOrder, ChannelType, TextureChannelClass, TextureFormat};
@@ -97,6 +98,14 @@ impl ImageBlit {
             _ => [0, 1],
         }
     }
+}
+
+/// `vkt::api::isFloatFormat`
+///
+/// Not `vk::isFloatFormat(mapTextureFormat(format))`: a single aspect of a combined
+/// depth/stencil format has no VkFormat to map back to.
+fn is_float_format(format: TextureFormat) -> bool {
+    format.channel_class() == TextureChannelClass::FloatingPoint
 }
 
 /// `calculateFloatConversionError`
@@ -262,6 +271,168 @@ fn int_nearest_blit_compare(source: &ConstPixelBufferAccess<'_>, result: &ConstP
     }))
 }
 
+/// The two reference images a non-nearest blit is checked against.
+struct ExpectedLevels {
+    clamped: TextureLevel,
+    unclamped: TextureLevel,
+}
+
+/// `MirrorModeBits`
+const MIRROR_MODE_X: u32 = 1 << 0;
+const MIRROR_MODE_Y: u32 = 1 << 1;
+const MIRROR_MODE_Z: u32 = 1 << 2;
+
+/// `getMirrorMode(from, to)`
+fn get_mirror_mode_pair(from: [i32; 3], to: [i32; 3]) -> u32 {
+    let mut mode = 0;
+    if from[0] > to[0] {
+        mode |= MIRROR_MODE_X;
+    }
+    if from[1] > to[1] {
+        mode |= MIRROR_MODE_Y;
+    }
+    if from[2] > to[2] {
+        mode |= MIRROR_MODE_Z;
+    }
+    mode
+}
+
+/// `getMirrorMode(s1, s2, d1, d2)` - an axis is mirrored when the two sides disagree
+/// about its direction, so a blit that reverses both is not a mirror at all.
+fn get_mirror_mode(s1: [i32; 3], s2: [i32; 3], d1: [i32; 3], d2: [i32; 3]) -> u32 {
+    let source = get_mirror_mode_pair(s1, s2);
+    let destination = get_mirror_mode_pair(d1, d2);
+    let mut mode = 0;
+    for bit in [MIRROR_MODE_X, MIRROR_MODE_Y, MIRROR_MODE_Z] {
+        if (source & bit) != (destination & bit) {
+            mode |= bit;
+        }
+    }
+    mode
+}
+
+/// `flipCoordinates`
+fn flip_coordinates(region: &mut ImageBlit, mirror_mode: u32) {
+    if mirror_mode == 0 {
+        return;
+    }
+    let (s0, s1) = (region.src_offsets[0], region.src_offsets[1]);
+    let (d0, d1) = (region.dst_offsets[0], region.dst_offsets[1]);
+    region.src_offsets = [std::array::from_fn(|c| s0[c].min(s1[c])), std::array::from_fn(|c| s0[c].max(s1[c]))];
+    region.dst_offsets = [std::array::from_fn(|c| d0[c].min(d1[c])), std::array::from_fn(|c| d0[c].max(d1[c]))];
+}
+
+/// `vkt::api::blit` - the clamped reference, sampled inside the source subregion so
+/// its edges clamp to the region rather than to the whole image.
+fn blit_reference(dst: &mut PixelBufferAccess<'_>, src: &ConstPixelBufferAccess<'_>, filter: FilterMode, mirror_mode: u32) {
+    let sampler = Sampler::clamp_to_edge(filter);
+    let [sw, sh, sd] = src.size();
+    let [dw, dh, dd] = dst.size();
+
+    let s_x = sw as f32 / dw as f32;
+    let s_y = sh as f32 / dh as f32;
+    let s_z = sd as f32 / dd as f32;
+
+    let (x_offset, x_scale) = if mirror_mode & MIRROR_MODE_X != 0 { (dw as i32 - 1, -1) } else { (0, 1) };
+    let (y_offset, y_scale) = if mirror_mode & MIRROR_MODE_Y != 0 { (dh as i32 - 1, -1) } else { (0, 1) };
+    let (z_offset, z_scale) = if mirror_mode & MIRROR_MODE_Z != 0 { (dd as i32 - 1, -1) } else { (0, 1) };
+    let dst_format = dst.format();
+
+    for z in 0..dd {
+        for y in 0..dh {
+            for x in 0..dw {
+                let c = src.sample_3d(&sampler, (x as f32 + 0.5) * s_x, (y as f32 + 0.5) * s_y, (z as f32 + 0.5) * s_z);
+                dst.set_pixel(
+                    linear_to_srgb_if_needed(dst_format, c),
+                    (x as i32 * x_scale + x_offset) as u32,
+                    (y as i32 * y_scale + y_offset) as u32,
+                    (z as i32 * z_scale + z_offset) as u32,
+                );
+            }
+        }
+    }
+}
+
+/// `scaleFromWholeSrcBuffer` - the same reference sampled from the *whole* source, so
+/// a texel at the region's edge blends with what lies outside it. A driver may legally
+/// do either, which is why the check accepts the result if it matches this or the
+/// clamped one.
+fn scale_from_whole_src_buffer(
+    dst: &mut PixelBufferAccess<'_>,
+    src: &ConstPixelBufferAccess<'_>,
+    region_offset: [i32; 3],
+    region_extent: [i32; 3],
+    filter: FilterMode,
+    mirror_mode: u32,
+) {
+    let sampler = Sampler::clamp_to_edge(filter);
+    let [dw, dh, dd] = dst.size();
+
+    let s_x = region_extent[0] as f32 / dw as f32;
+    let s_y = region_extent[1] as f32 / dh as f32;
+    let s_z = region_extent[2] as f32 / dd as f32;
+    let dst_format = dst.format();
+
+    for z in 0..dd {
+        for y in 0..dh {
+            for x in 0..dw {
+                let coord = |i: u32, s: f32, axis: usize, bit: u32| {
+                    if mirror_mode & bit != 0 {
+                        region_extent[axis] as f32 + region_offset[axis] as f32 - (i as f32 + 0.5) * s
+                    } else {
+                        region_offset[axis] as f32 + (i as f32 + 0.5) * s
+                    }
+                };
+                let src_x = coord(x, s_x, 0, MIRROR_MODE_X);
+                let src_y = coord(y, s_y, 1, MIRROR_MODE_Y);
+                let src_z = coord(z, s_z, 2, MIRROR_MODE_Z);
+                let c = if dd > 1 {
+                    src.sample_3d(&sampler, src_x, src_y, src_z)
+                } else {
+                    src.sample_2d(&sampler, src_x, src_y, 0)
+                };
+                dst.set_pixel(linear_to_srgb_if_needed(dst_format, c), x, y, z);
+            }
+        }
+    }
+}
+
+/// `tcu::floatThresholdCompare`
+fn float_threshold_compare(reference: &ConstPixelBufferAccess<'_>, result: &ConstPixelBufferAccess<'_>, threshold: [f32; 4]) -> bool {
+    let [w, h, d] = reference.size();
+    for z in 0..d {
+        for y in 0..h {
+            for x in 0..w {
+                let r = reference.get_pixel(x, y, z);
+                let c = result.get_pixel(x, y, z);
+                // Negated rather than `>`: a NaN difference must fail, and `>` would
+                // let it through.
+                if !(0..4).all(|i| (r[i] - c[i]).abs() <= threshold[i]) {
+                    return false;
+                }
+            }
+        }
+    }
+    true
+}
+
+/// `tcu::intThresholdCompare`, the 32-bit form the blit checks call.
+fn int_threshold_compare(reference: &ConstPixelBufferAccess<'_>, result: &ConstPixelBufferAccess<'_>, threshold: [u32; 4]) -> bool {
+    let [w, h, d] = reference.size();
+    for z in 0..d {
+        for y in 0..h {
+            for x in 0..w {
+                let r = reference.get_pixel_int(x, y, z);
+                let c = result.get_pixel_int(x, y, z);
+                if (0..4).any(|i| r[i].abs_diff(c[i]) > threshold[i]) {
+                    return false;
+                }
+            }
+        }
+    }
+    true
+}
+
 /// `BlitImageTestCase`
 pub struct BlitImageCase {
     name: String,
@@ -341,6 +512,99 @@ struct BlittingImages<'a> {
     params: &'a BlitImageCase,
 }
 
+/// `BlittingImages::copyRegionToTextureLevel`
+///
+/// Builds both references for one region: `clamped` samples inside the source
+/// subregion, `unclamped` from the whole source image.
+fn copy_region_to_texture_level(
+    src: &ConstPixelBufferAccess<'_>,
+    expected: &mut ExpectedLevels,
+    region: ImageBlit,
+    filter: FilterMode,
+    src_image_type: vk::ImageType,
+    dst_image_type: vk::ImageType,
+) {
+    let mut region = region;
+    let mirror_mode = get_mirror_mode(region.src_offsets[0], region.src_offsets[1], region.dst_offsets[0], region.dst_offsets[1]);
+    flip_coordinates(&mut region, mirror_mode);
+
+    let mut src_offset = region.src_offsets[0];
+    let mut src_extent: [i32; 3] = std::array::from_fn(|c| region.src_offsets[1][c] - src_offset[c]);
+    let mut dst_offset = region.dst_offsets[0];
+    let mut dst_extent: [i32; 3] = std::array::from_fn(|c| region.dst_offsets[1][c] - dst_offset[c]);
+
+    // A 2D side addresses its slice through the subresource layers, so the z axis of
+    // the host reference has to be taken from there instead of from the offsets. Only
+    // the array-to-3D groups exercise this; every other blit has one layer at zero.
+    if src_image_type == vk::ImageType::_2D {
+        src_offset[2] = 0;
+        src_extent[2] = 1;
+    }
+    if dst_image_type == vk::ImageType::_2D {
+        dst_offset[2] = 0;
+        dst_extent[2] = 1;
+    }
+
+    // flipCoordinates is not detailed enough for what follows: the extent is used to
+    // take subregions, so it has to be positive.
+    let mut src_region_offset = src_offset;
+    let mut src_region_extent = src_extent;
+    let mut dst_region_offset = dst_offset;
+    let mut dst_region_extent = dst_extent;
+    for c in 0..3 {
+        if src_region_extent[c] < 0 {
+            src_region_extent[c] = -src_region_extent[c];
+            src_region_offset[c] = region.src_offsets[1][c];
+        }
+        if dst_region_extent[c] < 0 {
+            dst_region_extent[c] = -dst_region_extent[c];
+            dst_region_offset[c] = region.dst_offsets[1][c];
+        }
+    }
+
+    let u = |v: [i32; 3]| [v[0] as u32, v[1] as u32, v[2] as u32];
+    let (so, se) = (u(src_region_offset), u(src_region_extent));
+    let (dfo, de) = (u(dst_region_offset), u(dst_region_extent));
+
+    if is_combined_depth_stencil_type(src.format().type_) {
+        for (mode, present) in [
+            (DepthStencilMode::Depth, has_depth_component(src.format().order)),
+            (DepthStencilMode::Stencil, has_stencil_component(src.format().order)),
+        ] {
+            if !present {
+                continue;
+            }
+            let src_sub_combined = src.get_subregion(so[0], so[1], so[2], se[0], se[1], se[2]);
+            let src_sub = get_effective_depth_stencil_access(&src_sub_combined, mode);
+            {
+                let mut clamped = expected.clamped.get_access();
+                let mut dst_sub_combined = clamped.get_subregion(dfo[0], dfo[1], dfo[2], de[0], de[1], de[2]);
+                let mut dst_sub = get_effective_depth_stencil_access_mut(&mut dst_sub_combined, mode);
+                blit_reference(&mut dst_sub, &src_sub, filter, mirror_mode);
+            }
+            if filter != FilterMode::Nearest {
+                let aspect_src = get_effective_depth_stencil_access(src, mode);
+                let mut unclamped = expected.unclamped.get_access();
+                let mut dst_sub_combined = unclamped.get_subregion(dfo[0], dfo[1], dfo[2], de[0], de[1], de[2]);
+                let mut dst_sub = get_effective_depth_stencil_access_mut(&mut dst_sub_combined, mode);
+                scale_from_whole_src_buffer(&mut dst_sub, &aspect_src, src_offset, src_extent, filter, mirror_mode);
+            }
+        }
+    } else {
+        {
+            let src_sub = src.get_subregion(so[0], so[1], so[2], se[0], se[1], se[2]);
+            let mut clamped = expected.clamped.get_access();
+            let mut dst_sub = clamped.get_subregion(dfo[0], dfo[1], dfo[2], de[0], de[1], de[2]);
+            blit_reference(&mut dst_sub, &src_sub, filter, mirror_mode);
+        }
+        if filter != FilterMode::Nearest {
+            let mut unclamped = expected.unclamped.get_access();
+            let mut dst_sub = unclamped.get_subregion(dfo[0], dfo[1], dfo[2], de[0], de[1], de[2]);
+            scale_from_whole_src_buffer(&mut dst_sub, src, src_region_offset, src_region_extent, filter, mirror_mode);
+        }
+    }
+}
+
 impl BlittingImages<'_> {
     fn make_image(&self, parms: &ImageParms) -> Result<ImageWithMemory<'_>, TestError> {
         let vk_device = self.context.get_device();
@@ -392,9 +656,78 @@ impl BlittingImages<'_> {
         }
     }
 
-    /// `BlittingImages::checkTestResult`, NEAREST branch only.
-    fn check_test_result(&self, result: &ConstPixelBufferAccess<'_>, source: &ConstPixelBufferAccess<'_>) -> Result<TestStatus, TestError> {
+    /// `BlittingImages::checkNonNearestFilteredResult`
+    fn check_non_nearest_filtered_result(
+        &self,
+        result: &ConstPixelBufferAccess<'_>,
+        clamped_expected: &ConstPixelBufferAccess<'_>,
+        unclamped_expected: &ConstPixelBufferAccess<'_>,
+        src_format: TextureFormat,
+    ) -> bool {
+        let dst_format = result.format();
+        let dst_channel_class = dst_format.channel_class();
+        let src_channel_class = src_format.channel_class();
+
+        let is_int_class = |c: TextureChannelClass| matches!(c, TextureChannelClass::SignedInteger | TextureChannelClass::UnsignedInteger);
+        if is_int_class(dst_channel_class) != is_int_class(src_channel_class) {
+            return false;
+        }
+
+        // The driver may clamp the sample at the region's edge or let it reach outside,
+        // so the result is accepted if it matches either reference.
+        if is_float_format(dst_format) {
+            let src_is_srgb = src_format.order.is_srgb();
+            let src_max_diff = get_format_threshold(src_format).map(|v| v * if src_is_srgb { 2.0 } else { 1.0 });
+            let dst_max_diff = get_format_threshold(dst_format);
+            let threshold: [f32; 4] = std::array::from_fn(|c| src_max_diff[c] + dst_max_diff[c]);
+
+            float_threshold_compare(clamped_expected, result, threshold) || float_threshold_compare(unclamped_expected, result, threshold)
+        } else {
+            // Calculate threshold depending on channel width of destination format.
+            let dst_bit_depth = get_texture_format_bit_depth(dst_format);
+            let src_bit_depth = get_texture_format_bit_depth(src_format);
+            let threshold: [u32; 4] = std::array::from_fn(|i| {
+                let max_of = |bits: i32| if bits >= 64 { u64::MAX } else { (1u64 << bits) - 1 };
+                let dst_max = max_of(dst_bit_depth[i]);
+                let src_max = max_of(src_bit_depth[i]);
+                let threshold64 = 1 + (dst_max / src_max.clamp(1, 256)).max(1);
+                threshold64.min(u64::from(u32::MAX)) as u32
+            });
+
+            int_threshold_compare(clamped_expected, result, threshold) || int_threshold_compare(unclamped_expected, result, threshold)
+        }
+    }
+
+    /// `BlittingImages::checkTestResult`
+    fn check_test_result(&self, result: &ConstPixelBufferAccess<'_>, source: &ConstPixelBufferAccess<'_>, expected: Option<&ExpectedLevels>) -> Result<TestStatus, TestError> {
         const FAIL_MESSAGE: &str = "Result image is incorrect";
+
+        if let Some(expected) = expected {
+            let src_format = source.format();
+            let clamped = expected.clamped.get_const_access();
+            let unclamped = expected.unclamped.get_const_access();
+
+            if is_combined_depth_stencil_type(result.format().type_) {
+                for (mode, present) in [
+                    (DepthStencilMode::Depth, has_depth_component(result.format().order)),
+                    (DepthStencilMode::Stencil, has_stencil_component(result.format().order)),
+                ] {
+                    if !present {
+                        continue;
+                    }
+                    let aspect_result = get_effective_depth_stencil_access(result, mode);
+                    let aspect_clamped = get_effective_depth_stencil_access(&clamped, mode);
+                    let aspect_unclamped = get_effective_depth_stencil_access(&unclamped, mode);
+                    let aspect_src_format = get_effective_depth_stencil_texture_format(src_format, mode);
+                    if !self.check_non_nearest_filtered_result(&aspect_result, &aspect_clamped, &aspect_unclamped, aspect_src_format) {
+                        return Ok(TestStatus::fail(FAIL_MESSAGE));
+                    }
+                }
+            } else if !self.check_non_nearest_filtered_result(result, &clamped, &unclamped, src_format) {
+                return Ok(TestStatus::fail(FAIL_MESSAGE));
+            }
+            return Ok(TestStatus::pass("Pass"));
+        }
 
         // A combined depth/stencil result is checked one aspect at a time: the two have
         // different channel classes, so there is no single comparison covering both.
@@ -470,6 +803,34 @@ impl TestInstance for BlittingImages<'_> {
             &families,
             p.separate_depth_stencil_layouts,
         )?;
+
+        // `generateExpectedResult`. A NEAREST blit is checked against the source
+        // directly, so it builds nothing here.
+        let expected = if p.filter == vk::Filter::NEAREST {
+            None
+        } else {
+            let filter = match p.filter {
+                vk::Filter::LINEAR => FilterMode::Linear,
+                other => return Err(TestError::NotPorted(format!("blit filter {other:?}"))),
+            };
+            let mut levels = ExpectedLevels {
+                clamped: TextureLevel::new(dst_tcu_format, dst_width, dst_height, dst_depth)?,
+                unclamped: TextureLevel::new(dst_tcu_format, dst_width, dst_height, dst_depth)?,
+            };
+            levels.clamped.data_mut().copy_from_slice(destination_texture_level.data());
+            levels.unclamped.data_mut().copy_from_slice(destination_texture_level.data());
+            for region in &p.regions {
+                copy_region_to_texture_level(
+                    &source_texture_level.get_const_access(),
+                    &mut levels,
+                    *region,
+                    filter,
+                    src_image_params.image_type,
+                    dst_image_params.image_type,
+                );
+            }
+            Some(levels)
+        };
 
         let cmd_pool = make_command_pool(vk_device, queue_family_index)?;
         let cmd_buffer = allocate_command_buffer(vk_device, *cmd_pool, vk::CommandBufferLevel::PRIMARY)?;
@@ -549,7 +910,7 @@ impl TestInstance for BlittingImages<'_> {
         let mut result_level = TextureLevel::new(dst_tcu_format, dst_width, dst_height, dst_depth)?;
         read_image(self.context, destination.get(), dst_image_params, &mut result_level, false, &families)?;
 
-        self.check_test_result(&result_level.get_const_access(), &source_texture_level.get_const_access())
+        self.check_test_result(&result_level.get_const_access(), &source_texture_level.get_const_access(), expected.as_ref())
     }
 }
 
@@ -566,7 +927,7 @@ struct SimpleBlitParams {
 /// Only the VK_FILTER_NEAREST third of it: LINEAR and CUBIC need the reference images
 /// that `checkNonNearestFilteredResult` compares against, which is not ported.
 fn add_blitting_image_simple_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams, image_type: vk::ImageType, sp: &SimpleBlitParams) {
-    let make = |dst_format: vk::Format, name: String| BlitImageCase {
+    let make = |dst_format: vk::Format, name: String, filter: vk::Filter| BlitImageCase {
         name,
         src: ImageParms {
             image_type,
@@ -587,16 +948,19 @@ fn add_blitting_image_simple_tests(group: &mut tcu::TestCaseGroup, gp: &GroupPar
         src_operation_layout: vk::ImageLayout::TRANSFER_SRC_OPTIMAL,
         dst_operation_layout: vk::ImageLayout::TRANSFER_DST_OPTIMAL,
         regions: sp.regions.clone(),
-        filter: vk::Filter::NEAREST,
+        filter,
         allocation_kind: gp.allocation_kind,
         command_variant: gp.command_variant,
         separate_depth_stencil_layouts: false,
     };
 
-    group.add_child(Box::new(make(vk::Format::R8G8B8A8_UNORM, "nearest".to_string())) as Box<dyn TestCase>);
     // `getFormatCaseName` - the enum name lowercased, minus the VK_FORMAT_ prefix.
-    for (format, case_name) in [(vk::Format::R32_SFLOAT, "r32_sfloat"), (vk::Format::B8G8R8A8_UNORM, "b8g8r8a8_unorm")] {
-        group.add_child(Box::new(make(format, format!("{case_name}_nearest"))) as Box<dyn TestCase>);
+    // CUBIC is not registered: it needs sampleCubic, which is not ported.
+    for (filter, suffix) in [(vk::Filter::NEAREST, "nearest"), (vk::Filter::LINEAR, "linear")] {
+        group.add_child(Box::new(make(vk::Format::R8G8B8A8_UNORM, suffix.to_string(), filter)) as Box<dyn TestCase>);
+        for (format, case_name) in [(vk::Format::R32_SFLOAT, "r32_sfloat"), (vk::Format::B8G8R8A8_UNORM, "b8g8r8a8_unorm")] {
+            group.add_child(Box::new(make(format, format!("{case_name}_{suffix}"), filter)) as Box<dyn TestCase>);
+        }
     }
 }
 
@@ -896,6 +1260,9 @@ struct BlitColorTestParams<'a> {
     extent: [u32; 3],
     regions: &'a [ImageBlit],
     src: &'a BlitFormat,
+    /// `makeFilterMask`'s LINEAR bit. The integer format lists are nearest-only:
+    /// a linear filter has nothing to interpolate between integer texels.
+    test_linear: bool,
 }
 
 /// `addBlittingImageAllFormatsColorSrcFormatDstFormatTests`
@@ -935,7 +1302,7 @@ fn add_blitting_image_all_formats_color_src_format_dst_format_tests(group: &mut 
                         blit_image_tiling_layout_case_name(src_tiling, src_layout),
                         blit_image_tiling_layout_case_name(dst_tiling, dst_layout)
                     );
-                    let make = |name: String, src_fill: FillMode| {
+                    let make = |name: String, src_fill: FillMode, filter: vk::Filter| {
                         Box::new(BlitImageCase {
                             name,
                             src: ImageParms {
@@ -957,19 +1324,24 @@ fn add_blitting_image_all_formats_color_src_format_dst_format_tests(group: &mut 
                             src_operation_layout: src_layout,
                             dst_operation_layout: dst_layout,
                             regions: p.regions.to_vec(),
-                            filter: vk::Filter::NEAREST,
+                            filter,
                             allocation_kind: gp.allocation_kind,
                             command_variant: gp.command_variant,
                             separate_depth_stencil_layouts: false,
                         }) as Box<dyn TestCase>
                     };
-                    group.add_child(make(format!("{test_name}_nearest"), FillMode::Gradient));
+                    group.add_child(make(format!("{test_name}_nearest"), FillMode::Gradient, vk::Filter::NEAREST));
+                    if p.test_linear {
+                        group.add_child(make(format!("{test_name}_linear"), FillMode::Gradient, vk::Filter::LINEAR));
+                    }
 
                     // A 3D source also gets the stripe fills, one per axis - a gradient
                     // varies too slowly to notice a filter reaching for the wrong slice.
                     if p.image_type == vk::ImageType::_3D {
                         for (mode, name) in [(FillMode::BlueRedX, "x"), (FillMode::BlueRedY, "y"), (FillMode::BlueRedZ, "z")] {
-                            group.add_child(make(format!("{test_name}_nearest_stripes_{name}"), mode));
+                            // Upstream emits linear before nearest for these.
+                            group.add_child(make(format!("{test_name}_linear_stripes_{name}"), mode, vk::Filter::LINEAR));
+                            group.add_child(make(format!("{test_name}_nearest_stripes_{name}"), mode, vk::Filter::NEAREST));
                         }
                     }
                 }
@@ -1006,12 +1378,12 @@ fn add_blitting_image_all_formats_color_src_format_tests(group: &mut tcu::TestCa
 }
 
 /// `colorImageFormatsToTestBlit`, minus the two compressed source lists.
-fn color_image_formats_to_test_blit() -> [(&'static [BlitFormat], &'static [BlitFormat]); 4] {
+fn color_image_formats_to_test_blit() -> [(&'static [BlitFormat], &'static [BlitFormat], bool); 4] {
     [
-        (COMPATIBLE_FORMATS_U_INTS, COMPATIBLE_FORMATS_U_INTS),
-        (COMPATIBLE_FORMATS_S_INTS, COMPATIBLE_FORMATS_S_INTS),
-        (COMPATIBLE_FORMATS_FLOATS, COMPATIBLE_FORMATS_FLOATS),
-        (COMPATIBLE_FORMATS_SRGB, COMPATIBLE_FORMATS_SRGB),
+        (COMPATIBLE_FORMATS_U_INTS, COMPATIBLE_FORMATS_U_INTS, true),
+        (COMPATIBLE_FORMATS_S_INTS, COMPATIBLE_FORMATS_S_INTS, true),
+        (COMPATIBLE_FORMATS_FLOATS, COMPATIBLE_FORMATS_FLOATS, false),
+        (COMPATIBLE_FORMATS_SRGB, COMPATIBLE_FORMATS_SRGB, false),
     ]
 }
 
@@ -1022,13 +1394,14 @@ fn add_blitting_image_all_formats_color_tests(group: &mut tcu::TestCaseGroup, gp
         let mut sub_group = tcu::TestCaseGroup::new("2d");
         let regions = create_2d_copy_regions(DEFAULT_SIZE, DEFAULT_SIZE, DEFAULT_SIZE, DEFAULT_SIZE);
 
-        for (source_formats, destination_formats) in color_image_formats_to_test_blit() {
+        for (source_formats, destination_formats, only_nearest) in color_image_formats_to_test_blit() {
             for src in source_formats {
                 let p = BlitColorTestParams {
                     image_type: vk::ImageType::_2D,
                     extent: [DEFAULT_SIZE as u32, DEFAULT_SIZE as u32, 1],
                     regions: &regions,
                     src,
+                    test_linear: !only_nearest,
                 };
                 let mut src_group = tcu::TestCaseGroup::new(src.name);
                 add_blitting_image_all_formats_color_src_format_tests(&mut src_group, gp, &p, Some(destination_formats));
@@ -1043,7 +1416,7 @@ fn add_blitting_image_all_formats_color_tests(group: &mut tcu::TestCaseGroup, gp
         let mut sub_group = tcu::TestCaseGroup::new("1d");
         let regions = create_1d_copy_regions();
 
-        for (source_formats, _) in color_image_formats_to_test_blit() {
+        for (source_formats, _, only_nearest) in color_image_formats_to_test_blit() {
             for src in source_formats {
                 if !is_supported_by_framework(src.format) {
                     continue;
@@ -1053,6 +1426,7 @@ fn add_blitting_image_all_formats_color_tests(group: &mut tcu::TestCaseGroup, gp
                     extent: [DEFAULT_SIZE as u32, 1, 1],
                     regions: &regions,
                     src,
+                    test_linear: !only_nearest,
                 };
                 let mut src_group = tcu::TestCaseGroup::new(src.name);
                 add_blitting_image_all_formats_color_src_format_tests(&mut src_group, gp, &p, None);
@@ -1067,7 +1441,7 @@ fn add_blitting_image_all_formats_color_tests(group: &mut tcu::TestCaseGroup, gp
         let mut sub_group = tcu::TestCaseGroup::new("3d");
         let regions = create_3d_all_formats_regions();
 
-        for (source_formats, _) in color_image_formats_to_test_blit() {
+        for (source_formats, _, only_nearest) in color_image_formats_to_test_blit() {
             for src in source_formats {
                 if !is_supported_by_framework(src.format) {
                     continue;
@@ -1078,6 +1452,7 @@ fn add_blitting_image_all_formats_color_tests(group: &mut tcu::TestCaseGroup, gp
                     extent: [DEFAULT_QUARTER_SIZE as u32; 3],
                     regions: &regions,
                     src,
+                    test_linear: !only_nearest,
                 };
                 let mut src_group = tcu::TestCaseGroup::new(src.name);
                 add_blitting_image_all_formats_color_src_format_tests(&mut src_group, gp, &p, None);

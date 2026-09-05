@@ -938,6 +938,9 @@ fn set_packed_pixel(dst: &mut [u8], color: [f32; 4], format: TextureFormat) {
     // The write swizzle runs RGBA -> order, the opposite direction from the read path's
     // order -> RGBA.
     let sw = swizzle_ge(color, ChannelOrder::RGBA, format.order);
+    // The three-channel packings swizzle from RGB, not RGBA - with a BGR order the two
+    // disagree, and the write would land R and B in each other's bits.
+    let sw3 = swizzle_ge(color, ChannelOrder::RGB, format.order);
     let pn = |v: f32, offs: u32, bits: i32| unorm_float_to_channel(v, bits) << offs;
     let ps = |v: f32, offs: u32, bits: i32| snorm_float_to_channel(v, bits) << offs;
     let pu = |v: f32, offs: u32, bits: i32| uint_to_channel(v as u32, bits) << offs;
@@ -950,9 +953,9 @@ fn set_packed_pixel(dst: &mut [u8], color: [f32; 4], format: TextureFormat) {
         UNORM_BYTE_44 => dst[0] = (pn(color[0], 4, 4) | pn(color[1], 0, 4)) as u8,
         UNSIGNED_BYTE_44 => dst[0] = (pu(color[0], 4, 4) | pu(color[1], 0, 4)) as u8,
         UNORM_INT_101010 => write32(dst, pn(color[0], 22, 10) | pn(color[1], 12, 10) | pn(color[2], 2, 10)),
-        UNORM_SHORT_565 => write16(dst, pn(sw[0], 11, 5) | pn(sw[1], 5, 6) | pn(sw[2], 0, 5)),
-        UNSIGNED_SHORT_565 => write16(dst, pu(sw[0], 11, 5) | pu(sw[1], 5, 6) | pu(sw[2], 0, 5)),
-        UNORM_SHORT_555 => write16(dst, pn(sw[0], 10, 5) | pn(sw[1], 5, 5) | pn(sw[2], 0, 5)),
+        UNORM_SHORT_565 => write16(dst, pn(sw3[0], 11, 5) | pn(sw3[1], 5, 6) | pn(sw3[2], 0, 5)),
+        UNSIGNED_SHORT_565 => write16(dst, pu(sw3[0], 11, 5) | pu(sw3[1], 5, 6) | pu(sw3[2], 0, 5)),
+        UNORM_SHORT_555 => write16(dst, pn(sw3[0], 10, 5) | pn(sw3[1], 5, 5) | pn(sw3[2], 0, 5)),
         UNORM_SHORT_4444 => write16(dst, pn(sw[0], 12, 4) | pn(sw[1], 8, 4) | pn(sw[2], 4, 4) | pn(sw[3], 0, 4)),
         UNSIGNED_SHORT_4444 => write16(dst, pu(sw[0], 12, 4) | pu(sw[1], 8, 4) | pu(sw[2], 4, 4) | pu(sw[3], 0, 4)),
         UNORM_SHORT_5551 => write16(dst, pn(sw[0], 11, 5) | pn(sw[1], 6, 5) | pn(sw[2], 1, 5) | pn(sw[3], 0, 1)),
@@ -1014,6 +1017,7 @@ fn is_packed_writable(type_: ChannelType) -> bool {
 fn set_packed_pixel_int(dst: &mut [u8], color: [i32; 4], format: TextureFormat) {
     use ChannelType::*;
     let sw = swizzle_ge(color, ChannelOrder::RGBA, format.order);
+    let sw3 = swizzle_ge(color, ChannelOrder::RGB, format.order);
     let pu = |v: i32, offs: u32, bits: i32| uint_to_channel(v as u32, bits) << offs;
     let pi = |v: i32, offs: u32, bits: i32| int_to_channel(v, bits) << offs;
 
@@ -1026,8 +1030,8 @@ fn set_packed_pixel_int(dst: &mut [u8], color: [i32; 4], format: TextureFormat) 
     match format.type_ {
         UNORM_BYTE_44 | UNSIGNED_BYTE_44 => dst[0] = (pu(color[0], 4, 4) | pu(color[1], 0, 4)) as u8,
         UNORM_INT_101010 => write32(dst, pu(color[0], 22, 10) | pu(color[1], 12, 10) | pu(color[2], 2, 10)),
-        UNORM_SHORT_565 | UNSIGNED_SHORT_565 => write16(dst, pu(sw[0], 11, 5) | pu(sw[1], 5, 6) | pu(sw[2], 0, 5)),
-        UNORM_SHORT_555 => write16(dst, pu(sw[0], 10, 5) | pu(sw[1], 5, 5) | pu(sw[2], 0, 5)),
+        UNORM_SHORT_565 | UNSIGNED_SHORT_565 => write16(dst, pu(sw3[0], 11, 5) | pu(sw3[1], 5, 6) | pu(sw3[2], 0, 5)),
+        UNORM_SHORT_555 => write16(dst, pu(sw3[0], 10, 5) | pu(sw3[1], 5, 5) | pu(sw3[2], 0, 5)),
         UNORM_SHORT_4444 | UNSIGNED_SHORT_4444 => write16(dst, pu(sw[0], 12, 4) | pu(sw[1], 8, 4) | pu(sw[2], 4, 4) | pu(sw[3], 0, 4)),
         UNORM_SHORT_5551 | UNSIGNED_SHORT_5551 => write16(dst, pu(sw[0], 11, 5) | pu(sw[1], 6, 5) | pu(sw[2], 1, 5) | pu(sw[3], 0, 1)),
         UNORM_SHORT_1555 => write16(dst, pu(sw[0], 15, 1) | pu(sw[1], 10, 5) | pu(sw[2], 5, 5) | pu(sw[3], 0, 5)),
@@ -1231,6 +1235,17 @@ fn effective_depth_stencil_view(base: TextureFormat, mode: DepthStencilMode) -> 
         (UNSIGNED_INT_24_8_REV, Stencil) => (stencil.0, 3),
         (other, _) => unreachable!("unknown combined format {other:?}"),
     })
+}
+
+/// `tcu::getEffectiveDepthStencilAccess` on a writable level.
+pub fn get_effective_depth_stencil_access_mut<'a>(base: &'a mut PixelBufferAccess<'a>, mode: DepthStencilMode) -> PixelBufferAccess<'a> {
+    let (format, offset) = effective_depth_stencil_view(base.format(), mode).unwrap_or((base.format(), 0));
+    PixelBufferAccess {
+        format,
+        size: base.size(),
+        pitch: base.pitch,
+        data: &mut base.data[offset..],
+    }
 }
 
 /// `tcu::getEffectiveDepthStencilAccess`
@@ -1537,6 +1552,11 @@ impl PixelBufferAccess<'_> {
 
     pub fn size(&self) -> [u32; 3] {
         self.size
+    }
+
+    /// `getPitch`
+    pub fn pitch(&self) -> [usize; 3] {
+        self.pitch
     }
 
     fn pixel_size(&self) -> usize {
@@ -2208,6 +2228,32 @@ mod write_tests {
             let a = src.get_const_access().get_pixel_int(x, 0, 0)[0];
             let b = dst.get_const_access().get_pixel_int(x, 0, 0)[0];
             assert!((a - b).abs() <= 1, "{x}: {a} vs {b}");
+        }
+    }
+
+    /// The three-channel packings swizzle from RGB where the four-channel ones swizzle
+    /// from RGBA, and with a BGR order the two disagree. Writing a distinguishable
+    /// colour and reading it back catches R and B landing in each other's bits - which
+    /// they did until a linear blit into b5g6r5_unorm_pack16 exposed it.
+    #[test]
+    fn packed_565_write_swizzles_from_rgb() {
+        for (order, expect_swapped) in [(ChannelOrder::RGB, false), (ChannelOrder::BGR, true)] {
+            let format = TextureFormat::new(order, ChannelType::UNORM_SHORT_565);
+            let mut level = TextureLevel::new(format, 1, 1, 1).unwrap();
+            level.get_access().set_pixel([1.0, 0.5, 0.0, 1.0], 0, 0, 0);
+            let read = level.get_const_access().get_pixel(0, 0, 0);
+            // The read path is the inverse of the write path, so a round trip holds
+            // whichever way the swizzle goes...
+            assert!((read[0] - 1.0).abs() < 0.05 && (read[2] - 0.0).abs() < 0.05, "{order:?} {read:?}");
+
+            // ...and the raw bits say which way it actually went.
+            let bits = u16::from_le_bytes([level.data()[0], level.data()[1]]);
+            let top5 = bits >> 11;
+            if expect_swapped {
+                assert_eq!(top5, 0, "{order:?}: red must sit in the low bits of a BGR 565");
+            } else {
+                assert_eq!(top5, 31, "{order:?}: red must sit in the high bits of an RGB 565");
+            }
         }
     }
 }

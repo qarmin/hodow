@@ -16,7 +16,7 @@ hand-picked, growing subset, currently:
 
 | group | cases | not ported yet |
 |---|---|---|
-| `dEQP-VK.api.*` | 153440 of 267497 | `smoke`, `descriptor_set`, `external`, the compressed-format and non-nearest halves of `copy_and_blit`, ... |
+| `dEQP-VK.api.*` | 174837 of 267497 | `smoke`, `descriptor_set`, `external`, the compressed-format and cubic-filter halves of `copy_and_blit`, ... |
 | `dEQP-VK.memory.*` | 5472 of 6363 | `pipeline_barrier`, `requirements`, `external_memory_*`, `device_memory_report` |
 | `dEQP-VK.compute.*` | 4559 of 60811 | `cooperative_matrix`, the Amber-driven cases, `replicated_composites_*` |
 
