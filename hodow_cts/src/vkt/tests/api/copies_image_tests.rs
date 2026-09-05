@@ -20,7 +20,7 @@ use vulkanalia::prelude::v1_0::*;
 use vulkanalia::vk::DeviceV1_3;
 
 use super::copies_buffer_tests::{AllocationKind, CopyCommandVariant, QueueSelection, bind_buffer_memory, select_queue};
-use super::copy_format_lists::COLOR_IMAGE_FORMATS_TO_TEST;
+use super::copy_format_lists::{COLOR_IMAGE_FORMATS_TO_TEST, CopyFormat};
 use crate::tcu::pixel::{
     ConstPixelBufferAccess, PixelBufferAccess, TextureLevel, fill_with_component_gradients2, fill_with_component_gradients3, get_texture_format_bit_depth, has_depth_component,
     has_stencil_component,
@@ -2668,7 +2668,14 @@ fn all_formats_same_format_blocks() -> Vec<(&'static str, AllFormatsBlock)> {
         i += DEFAULT_SIXTEENTH_SIZE;
     }
 
+    // 2d_to_1d: each row of a quarter-size square is laid end to end along the 1D run.
+    let regions_2d_1d: Vec<ImageCopy> = (0..DEFAULT_QUARTER_SIZE)
+        .map(|i| color_copy([0, i as i32, 0], [(i * DEFAULT_QUARTER_SIZE) as i32, 0, 0], [DEFAULT_QUARTER_SIZE, 1, 1]))
+        .collect();
+
     let extent_3d = [DEFAULT_QUARTER_SIZE, DEFAULT_QUARTER_SIZE, DEFAULT_QUARTER_SIZE];
+    let quarter_extent = [DEFAULT_QUARTER_SIZE, DEFAULT_QUARTER_SIZE, 1];
+    let quarter_squared_1d = [DEFAULT_QUARTER_SIZE * DEFAULT_QUARTER_SIZE, 1, 1];
 
     let root_extent = [DEFAULT_ROOT_SIZE, DEFAULT_ROOT_SIZE, 1];
     let small_3d = [DEFAULT_SIXTEENTH_SIZE, DEFAULT_SIXTEENTH_SIZE, DEFAULT_SIXTEENTH_SIZE];
@@ -2684,6 +2691,7 @@ fn all_formats_same_format_blocks() -> Vec<(&'static str, AllFormatsBlock)> {
                 regions: regions_1d,
                 needs_maintenance5: false,
                 needs_maintenance1: false,
+                cross_format: false,
             },
         ),
         (
@@ -2696,6 +2704,7 @@ fn all_formats_same_format_blocks() -> Vec<(&'static str, AllFormatsBlock)> {
                 regions: regions_1d_2d,
                 needs_maintenance5: true,
                 needs_maintenance1: false,
+                cross_format: false,
             },
         ),
         (
@@ -2708,6 +2717,20 @@ fn all_formats_same_format_blocks() -> Vec<(&'static str, AllFormatsBlock)> {
                 regions: regions_1d_3d,
                 needs_maintenance5: true,
                 needs_maintenance1: false,
+                cross_format: false,
+            },
+        ),
+        (
+            "2d_to_1d",
+            AllFormatsBlock {
+                src_type: vk::ImageType::_2D,
+                dst_type: vk::ImageType::_1D,
+                src_extent: quarter_extent,
+                dst_extent: quarter_squared_1d,
+                regions: regions_2d_1d,
+                needs_maintenance5: true,
+                needs_maintenance1: false,
+                cross_format: true,
             },
         ),
         (
@@ -2720,6 +2743,7 @@ fn all_formats_same_format_blocks() -> Vec<(&'static str, AllFormatsBlock)> {
                 regions: regions_3d_1d,
                 needs_maintenance5: true,
                 needs_maintenance1: false,
+                cross_format: false,
             },
         ),
         (
@@ -2732,6 +2756,7 @@ fn all_formats_same_format_blocks() -> Vec<(&'static str, AllFormatsBlock)> {
                 regions: regions_3d_2d,
                 needs_maintenance5: false,
                 needs_maintenance1: true,
+                cross_format: false,
             },
         ),
         (
@@ -2744,6 +2769,7 @@ fn all_formats_same_format_blocks() -> Vec<(&'static str, AllFormatsBlock)> {
                 regions: regions_3d_3d,
                 needs_maintenance5: false,
                 needs_maintenance1: false,
+                cross_format: false,
             },
         ),
     ]
@@ -2761,12 +2787,14 @@ struct AllFormatsBlock {
     needs_maintenance5: bool,
     /// 3D-to-2D is the one pairing that predates it, under VK_KHR_maintenance1.
     needs_maintenance1: bool,
+    /// When set, the destination iterates over the whole compatible-format group
+    /// instead of following the source. Upstream expresses this by passing the group
+    /// rather than a null list.
+    cross_format: bool,
 }
 
-/// The blocks where the destination format is the source format - upstream passes a
-/// null compatible list, which it reads as "copy the destination from the source". The
-/// cross-format pairs only appear in the 2D and 3D blocks.
-fn add_image_to_image_all_formats_same_format(group: &mut tcu::TestCaseGroup, gp: &GroupParams, block: &AllFormatsBlock) {
+/// One `<src>_to_<dst>` block of `addImageToImageAllFormatsColorTests`.
+fn add_image_to_image_all_formats_block(group: &mut tcu::TestCaseGroup, gp: &GroupParams, block: &AllFormatsBlock) {
     const SRC_LAYOUTS: [vk::ImageLayout; 2] = [vk::ImageLayout::TRANSFER_SRC_OPTIMAL, vk::ImageLayout::GENERAL];
     const DST_LAYOUTS: [vk::ImageLayout; 2] = [vk::ImageLayout::TRANSFER_DST_OPTIMAL, vk::ImageLayout::GENERAL];
 
@@ -2777,46 +2805,70 @@ fn add_image_to_image_all_formats_same_format(group: &mut tcu::TestCaseGroup, gp
             if entry.compressed || !is_supported_by_framework(entry.format) {
                 continue;
             }
-            if gp.allocation_kind == AllocationKind::Dedicated && !DEDICATED_ALLOCATION_FORMATS.contains(&entry.format) {
+            // The dedicated filter is deliberately not applied to the source alone:
+            // `isAllowedImageToImageAllFormatsColorSrcFormatTests` accepts a pair when
+            // *either* side is in the list, so a source outside it still gets a group as
+            // long as some destination is inside. Applying it per side instead drops a
+            // quarter of the cross-format pairs.
+            let allowed = |src: vk::Format, dst: vk::Format| {
+                gp.allocation_kind != AllocationKind::Dedicated || DEDICATED_ALLOCATION_FORMATS.contains(&src) || DEDICATED_ALLOCATION_FORMATS.contains(&dst)
+            };
+            let mut src_group = tcu::TestCaseGroup::new(entry.name);
+
+            // Either the whole compatible group, or just this format.
+            let destinations: Vec<&CopyFormat> = if block.cross_format {
+                compatible
+                    .iter()
+                    .filter(|d| !d.compressed && is_supported_by_framework(d.format) && allowed(entry.format, d.format))
+                    .collect()
+            } else {
+                if !allowed(entry.format, entry.format) {
+                    continue;
+                }
+                vec![entry]
+            };
+            if destinations.is_empty() {
                 continue;
             }
-            let mut src_group = tcu::TestCaseGroup::new(entry.name);
-            let mut dst_group = tcu::TestCaseGroup::new(entry.name);
 
-            for src_layout in SRC_LAYOUTS {
-                for dst_layout in DST_LAYOUTS {
-                    dst_group.add_child(Box::new(CopyImageToImageCase {
-                        name: format!("{}_{}", image_layout_case_name(src_layout), image_layout_case_name(dst_layout)),
-                        src: ImageParms {
-                            image_type: block.src_type,
-                            format: entry.format,
-                            extent: block.src_extent,
-                            tiling: vk::ImageTiling::OPTIMAL,
-                            fill_mode: FillMode::White,
-                            create_flags: None,
-                        },
-                        dst: ImageParms {
-                            image_type: block.dst_type,
-                            format: entry.format,
-                            extent: block.dst_extent,
-                            tiling: vk::ImageTiling::OPTIMAL,
-                            fill_mode: FillMode::Gradient,
-                            create_flags: None,
-                        },
-                        regions: block.regions.clone(),
-                        clear_destination_with_red: false,
-                        needs_maintenance5: block.needs_maintenance5,
-                        needs_maintenance1: block.needs_maintenance1,
-                        src_operation_layout: Some(src_layout),
-                        dst_operation_layout: Some(dst_layout),
-                        allocation_kind: gp.allocation_kind,
-                        command_variant: gp.command_variant,
-                        queue_selection: gp.queue_selection,
-                        general_layout: gp.general_layout,
-                    }) as Box<dyn TestCase>);
+            for dst_entry in destinations {
+                let mut dst_group = tcu::TestCaseGroup::new(dst_entry.name);
+
+                for src_layout in SRC_LAYOUTS {
+                    for dst_layout in DST_LAYOUTS {
+                        dst_group.add_child(Box::new(CopyImageToImageCase {
+                            name: format!("{}_{}", image_layout_case_name(src_layout), image_layout_case_name(dst_layout)),
+                            src: ImageParms {
+                                image_type: block.src_type,
+                                format: entry.format,
+                                extent: block.src_extent,
+                                tiling: vk::ImageTiling::OPTIMAL,
+                                fill_mode: FillMode::White,
+                                create_flags: None,
+                            },
+                            dst: ImageParms {
+                                image_type: block.dst_type,
+                                format: dst_entry.format,
+                                extent: block.dst_extent,
+                                tiling: vk::ImageTiling::OPTIMAL,
+                                fill_mode: FillMode::Gradient,
+                                create_flags: None,
+                            },
+                            regions: block.regions.clone(),
+                            clear_destination_with_red: false,
+                            needs_maintenance5: block.needs_maintenance5,
+                            needs_maintenance1: block.needs_maintenance1,
+                            src_operation_layout: Some(src_layout),
+                            dst_operation_layout: Some(dst_layout),
+                            allocation_kind: gp.allocation_kind,
+                            command_variant: gp.command_variant,
+                            queue_selection: gp.queue_selection,
+                            general_layout: gp.general_layout,
+                        }) as Box<dyn TestCase>);
+                    }
                 }
+                src_group.add_child(dst_group);
             }
-            src_group.add_child(dst_group);
             group.add_child(src_group);
         }
     }
@@ -2853,7 +2905,7 @@ pub fn add_image_to_image_groups(
         let mut color = tcu::TestCaseGroup::new("color");
         for (name, block) in all_formats_same_format_blocks() {
             let mut sub = tcu::TestCaseGroup::new(name);
-            add_image_to_image_all_formats_same_format(&mut sub, &gp, &block);
+            add_image_to_image_all_formats_block(&mut sub, &gp, &block);
             color.add_child(sub);
         }
         all_formats.add_child(color);
