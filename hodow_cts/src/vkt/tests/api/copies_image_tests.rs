@@ -1487,11 +1487,22 @@ impl TestInstance for CopyImageToBufferInstance<'_> {
         let texture_format = map_vk_format(p.src.format).ok_or_else(|| TestError::NotSupported("format has no tcu mapping".to_string()))?;
         let texel_size = texture_format.pixel_size().ok_or_else(|| TestError::NotSupported("format has no pixel size".to_string()))? as usize;
 
+        // FILL_MODE_RANDOM_GRAY takes its byte-pattern branch when either side is a
+        // float format; the destination here is a buffer, so only the image counts.
+        let float_byte_pattern = SIGNED_AND_UNSIGNED_FLOAT_FORMATS.contains(&p.src.format);
+
         let mut source_level = TextureLevel::new(texture_format, p.src.extent[0], p.src.extent[1], p.src.extent[2])?;
-        generate_buffer(&mut source_level.get_access(), p.src.extent[0], p.src.extent[1], p.src.extent[2], p.src.fill_mode, false);
+        generate_buffer(
+            &mut source_level.get_access(),
+            p.src.extent[0],
+            p.src.extent[1],
+            p.src.extent[2],
+            p.src.fill_mode,
+            float_byte_pattern,
+        );
 
         let mut destination_level = TextureLevel::new(texture_format, p.dst_buffer_size, 1, 1)?;
-        generate_buffer(&mut destination_level.get_access(), p.dst_buffer_size, 1, 1, p.dst_fill_mode, false);
+        generate_buffer(&mut destination_level.get_access(), p.dst_buffer_size, 1, 1, p.dst_fill_mode, float_byte_pattern);
 
         let mut expected_level = TextureLevel::new(texture_format, p.dst_buffer_size, 1, 1)?;
         expected_level.data_mut().copy_from_slice(destination_level.data());
@@ -1997,8 +2008,32 @@ fn add_2d_image_to_buffer_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams
                 ));
             }
 
-            // `padding_bytes` is not registered: it fills the destination with
-            // FILL_MODE_RANDOM_GRAY, which is not ported yet.
+            // Checks that padding bytes are not overwritten between rows or between
+            // images when the row pitch is larger than the copy's row. Only meaningful
+            // for a linear image, and upstream leaves it out of the general-layout run.
+            if tiling == vk::ImageTiling::LINEAR && !gp.general_layout {
+                group.add_child(Box::new(CopyImageToBufferCase {
+                    name: format!("padding_bytes{suffix}"),
+                    src: ImageParms {
+                        image_type: vk::ImageType::_2D,
+                        format,
+                        // Small enough to leave padding on every row.
+                        extent: [2, 2, 1],
+                        tiling,
+                        fill_mode: FillMode::Red,
+                        create_flags: None,
+                    },
+                    dst_buffer_size: DEFAULT_SIZE * DEFAULT_SIZE,
+                    dst_fill_mode: FillMode::RandomGray,
+                    regions: vec![region(0, 8, 8, 0, 1, [0, 0, 0], [2, 2, 1])],
+                    allocation_kind: gp.allocation_kind,
+                    command_variant: gp.command_variant,
+                    queue_selection: gp.queue_selection,
+                    general_layout: gp.general_layout,
+                    needs_maintenance5: false,
+                    needs_maintenance11: false,
+                }) as Box<dyn TestCase>);
+            }
         }
     }
 }
