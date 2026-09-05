@@ -127,10 +127,47 @@ def image_compute_shader(image_format: str, image_type: str, size: tuple[int, in
     )
 
 
+# `s_perVertexBlock`
+PER_VERTEX_BLOCK = "out gl_PerVertex {\n    vec4 gl_Position;\n}"
+
+
+def graphics_shaders(decl: str, copy: str, stage: str) -> tuple[str, str]:
+    """`initPassthroughPrograms` for a graphics stage: the vertex and fragment shaders
+    it emits, with the payload in whichever of the two the operation names."""
+    vert = (
+        "#version 440\n"
+        "\n"
+        "layout(location = 0) in vec4 v_in_position;\n"
+        "\n"
+        f"{PER_VERTEX_BLOCK};\n"
+        "\n"
+        + (decl + "\n" if stage == "vertex" else "")
+        + "void main (void)\n"
+        "{\n"
+        "    gl_Position = v_in_position;\n"
+        + (copy if stage == "vertex" else "")
+        + "}\n"
+    )
+    frag = (
+        "#version 440\n"
+        "\n"
+        "layout(location = 0) out vec4 o_color;\n"
+        "\n"
+        + (decl + "\n" if stage == "fragment" else "")
+        + "void main (void)\n"
+        "{\n"
+        "    o_color = vec4(1.0);\n"
+        + ("\n" + copy if stage == "fragment" else "")
+        + "}\n"
+    )
+    return vert, frag
+
+
 def main() -> int:
     SRC_DIR.mkdir(parents=True, exist_ok=True)
-    for existing in SRC_DIR.glob("*.comp"):
-        existing.unlink()
+    for pattern in ("*.comp", "*.vert", "*.frag"):
+        for existing in SRC_DIR.glob(pattern):
+            existing.unlink()
 
     lines = [
         "# Shader manifest for dEQP-VK.synchronization{,2}.op.*.{read,write}_{ssbo,ubo,ubo_texel}_compute*",
@@ -167,6 +204,39 @@ def main() -> int:
                 "",
             ]
             count += 1
+
+    # The graphics stages SwiftShader can actually run. Tessellation and geometry are
+    # left out deliberately: both sides report NotSupported for them here, so a
+    # differential run would say nothing about whether they were ported correctly.
+    for stage in ("vertex", "fragment"):
+        for buffer_type, mode in variants:
+            for size in BUFFER_SIZES:
+                if buffer_type.startswith("ubo") and size > MAX_UBO_RANGE:
+                    continue
+                num = size // 16
+                decl = declarations(buffer_type, mode, num)
+                copy = copy_source(buffer_type, num)
+                vert, frag = graphics_shaders(decl, copy, stage)
+                name = f"{mode}_{buffer_type}_{stage}_buffer_{size}"
+                (SRC_DIR / f"{name}.vert").write_text(vert)
+                (SRC_DIR / f"{name}.frag").write_text(frag)
+                lines += [
+                    "[[case]]",
+                    f'name = "{name}"',
+                    f'rust_const = "{name.upper()}"',
+                    'rust_type = "BufferGraphicsShader"',
+                    "programs = [",
+                    f'    {{ name = "vert", template = "synchronization/generated/{name}.vert", stage = "vert" }},',
+                    f'    {{ name = "frag", template = "synchronization/generated/{name}.frag", stage = "frag" }},',
+                    "]",
+                    "[case.params]",
+                    f'buffer_type = {{ type = "str", value = "{buffer_type}" }}',
+                    f'mode = {{ type = "str", value = "{mode}" }}',
+                    f'stage = {{ type = "str", value = "{stage}" }}',
+                    f'buffer_size = {{ type = "u32", value = {size} }}',
+                    "",
+                ]
+                count += 1
 
     for resource_name, image_format, image_type, size in IMAGE_RESOURCES:
         name = f"image_{resource_name}"

@@ -68,6 +68,174 @@ mode = { type = "str", value = "read" }
 buffer_size = { type = "u32", value = 16384 }
 
 [[case]]
+name = "write_ssbo_vertex_buffer_16384"
+rust_const = "WRITE_SSBO_VERTEX_BUFFER_16384"
+rust_type = "BufferGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/write_ssbo_vertex_buffer_16384.vert", stage = "vert" },
+    { name = "frag", template = "synchronization/generated/write_ssbo_vertex_buffer_16384.frag", stage = "frag" },
+]
+[case.params]
+buffer_type = { type = "str", value = "ssbo" }
+mode = { type = "str", value = "write" }
+stage = { type = "str", value = "vertex" }
+buffer_size = { type = "u32", value = 16384 }
+
+[[case]]
+name = "write_ssbo_vertex_buffer_262144"
+rust_const = "WRITE_SSBO_VERTEX_BUFFER_262144"
+rust_type = "BufferGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/write_ssbo_vertex_buffer_262144.vert", stage = "vert" },
+    { name = "frag", template = "synchronization/generated/write_ssbo_vertex_buffer_262144.frag", stage = "frag" },
+]
+[case.params]
+buffer_type = { type = "str", value = "ssbo" }
+mode = { type = "str", value = "write" }
+stage = { type = "str", value = "vertex" }
+buffer_size = { type = "u32", value = 262144 }
+
+[[case]]
+name = "read_ssbo_vertex_buffer_16384"
+rust_const = "READ_SSBO_VERTEX_BUFFER_16384"
+rust_type = "BufferGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/read_ssbo_vertex_buffer_16384.vert", stage = "vert" },
+    { name = "frag", template = "synchronization/generated/read_ssbo_vertex_buffer_16384.frag", stage = "frag" },
+]
+[case.params]
+buffer_type = { type = "str", value = "ssbo" }
+mode = { type = "str", value = "read" }
+stage = { type = "str", value = "vertex" }
+buffer_size = { type = "u32", value = 16384 }
+
+[[case]]
+name = "read_ssbo_vertex_buffer_262144"
+rust_const = "READ_SSBO_VERTEX_BUFFER_262144"
+rust_type = "BufferGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/read_ssbo_vertex_buffer_262144.vert", stage = "vert" },
+    { name = "frag", template = "synchronization/generated/read_ssbo_vertex_buffer_262144.frag", stage = "frag" },
+]
+[case.params]
+buffer_type = { type = "str", value = "ssbo" }
+mode = { type = "str", value = "read" }
+stage = { type = "str", value = "vertex" }
+buffer_size = { type = "u32", value = 262144 }
+
+[[case]]
+name = "read_ubo_vertex_buffer_16384"
+rust_const = "READ_UBO_VERTEX_BUFFER_16384"
+rust_type = "BufferGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/read_ubo_vertex_buffer_16384.vert", stage = "vert" },
+    { name = "frag", template = "synchronization/generated/read_ubo_vertex_buffer_16384.frag", stage = "frag" },
+]
+[case.params]
+buffer_type = { type = "str", value = "ubo" }
+mode = { type = "str", value = "read" }
+stage = { type = "str", value = "vertex" }
+buffer_size = { type = "u32", value = 16384 }
+
+[[case]]
+name = "read_ubo_texel_vertex_buffer_16384"
+rust_const = "READ_UBO_TEXEL_VERTEX_BUFFER_16384"
+rust_type = "BufferGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/read_ubo_texel_vertex_buffer_16384.vert", stage = "vert" },
+    { name = "frag", template = "synchronization/generated/read_ubo_texel_vertex_buffer_16384.frag", stage = "frag" },
+]
+[case.params]
+buffer_type = { type = "str", value = "ubo_texel" }
+mode = { type = "str", value = "read" }
+stage = { type = "str", value = "vertex" }
+buffer_size = { type = "u32", value = 16384 }
+
+[[case]]
+name = "write_ssbo_fragment_buffer_16384"
+rust_const = "WRITE_SSBO_FRAGMENT_BUFFER_16384"
+rust_type = "BufferGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/write_ssbo_fragment_buffer_16384.vert", stage = "vert" },
+    { name = "frag", template = "synchronization/generated/write_ssbo_fragment_buffer_16384.frag", stage = "frag" },
+]
+[case.params]
+buffer_type = { type = "str", value = "ssbo" }
+mode = { type = "str", value = "write" }
+stage = { type = "str", value = "fragment" }
+buffer_size = { type = "u32", value = 16384 }
+
+[[case]]
+name = "write_ssbo_fragment_buffer_262144"
+rust_const = "WRITE_SSBO_FRAGMENT_BUFFER_262144"
+rust_type = "BufferGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/write_ssbo_fragment_buffer_262144.vert", stage = "vert" },
+    { name = "frag", template = "synchronization/generated/write_ssbo_fragment_buffer_262144.frag", stage = "frag" },
+]
+[case.params]
+buffer_type = { type = "str", value = "ssbo" }
+mode = { type = "str", value = "write" }
+stage = { type = "str", value = "fragment" }
+buffer_size = { type = "u32", value = 262144 }
+
+[[case]]
+name = "read_ssbo_fragment_buffer_16384"
+rust_const = "READ_SSBO_FRAGMENT_BUFFER_16384"
+rust_type = "BufferGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/read_ssbo_fragment_buffer_16384.vert", stage = "vert" },
+    { name = "frag", template = "synchronization/generated/read_ssbo_fragment_buffer_16384.frag", stage = "frag" },
+]
+[case.params]
+buffer_type = { type = "str", value = "ssbo" }
+mode = { type = "str", value = "read" }
+stage = { type = "str", value = "fragment" }
+buffer_size = { type = "u32", value = 16384 }
+
+[[case]]
+name = "read_ssbo_fragment_buffer_262144"
+rust_const = "READ_SSBO_FRAGMENT_BUFFER_262144"
+rust_type = "BufferGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/read_ssbo_fragment_buffer_262144.vert", stage = "vert" },
+    { name = "frag", template = "synchronization/generated/read_ssbo_fragment_buffer_262144.frag", stage = "frag" },
+]
+[case.params]
+buffer_type = { type = "str", value = "ssbo" }
+mode = { type = "str", value = "read" }
+stage = { type = "str", value = "fragment" }
+buffer_size = { type = "u32", value = 262144 }
+
+[[case]]
+name = "read_ubo_fragment_buffer_16384"
+rust_const = "READ_UBO_FRAGMENT_BUFFER_16384"
+rust_type = "BufferGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/read_ubo_fragment_buffer_16384.vert", stage = "vert" },
+    { name = "frag", template = "synchronization/generated/read_ubo_fragment_buffer_16384.frag", stage = "frag" },
+]
+[case.params]
+buffer_type = { type = "str", value = "ubo" }
+mode = { type = "str", value = "read" }
+stage = { type = "str", value = "fragment" }
+buffer_size = { type = "u32", value = 16384 }
+
+[[case]]
+name = "read_ubo_texel_fragment_buffer_16384"
+rust_const = "READ_UBO_TEXEL_FRAGMENT_BUFFER_16384"
+rust_type = "BufferGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/read_ubo_texel_fragment_buffer_16384.vert", stage = "vert" },
+    { name = "frag", template = "synchronization/generated/read_ubo_texel_fragment_buffer_16384.frag", stage = "frag" },
+]
+[case.params]
+buffer_type = { type = "str", value = "ubo_texel" }
+mode = { type = "str", value = "read" }
+stage = { type = "str", value = "fragment" }
+buffer_size = { type = "u32", value = 16384 }
+
+[[case]]
 name = "image_image_128_r32_uint"
 rust_const = "IMAGE_IMAGE_128_R32_UINT"
 rust_type = "ImageAccessShader"
