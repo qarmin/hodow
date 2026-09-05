@@ -26,6 +26,9 @@ use vulkanalia::vk;
 /// The bookkeeping the callbacks write into. Boxed so its address is stable for as
 /// long as the driver holds the `VkAllocationCallbacks`.
 struct Ledger {
+    /// `DeterministicFailAllocator` in MODE_COUNT_AND_FAIL: how many allocations may
+    /// still succeed before every later one fails. `None` means never fail.
+    remaining_successes: Option<Mutex<u32>>,
     /// Pointer to the layout it was allocated with and the scope it was asked for;
     /// `dealloc` needs the layout back, and `validate` needs the scope.
     live: Mutex<HashMap<usize, (Layout, vk::SystemAllocationScope)>>,
@@ -34,10 +37,27 @@ struct Ledger {
 }
 
 impl Ledger {
-    fn new() -> Self {
+    fn new(remaining_successes: Option<u32>) -> Self {
         Self {
+            remaining_successes: remaining_successes.map(Mutex::new),
             live: Mutex::new(HashMap::new()),
             violations: Mutex::new(0),
+        }
+    }
+
+    /// Consumes one of the allowed successes, or reports that the budget is spent.
+    fn take_success(&self) -> bool {
+        match &self.remaining_successes {
+            None => true,
+            Some(remaining) => {
+                let mut remaining = remaining.lock().expect("allocation ledger poisoned");
+                if *remaining == 0 {
+                    false
+                } else {
+                    *remaining -= 1;
+                    true
+                }
+            }
         }
     }
 }
@@ -56,7 +76,18 @@ const SYSTEM_ALLOCATION_OVERHEAD: usize = std::mem::size_of::<*mut c_void>() * 2
 
 impl AllocationCallbackRecorder {
     pub fn new() -> Self {
-        let ledger = Box::new(Ledger::new());
+        Self::with_budget(None)
+    }
+
+    /// `DeterministicFailAllocator` layered under a recorder: the first
+    /// `passing_allocations` requests succeed and every later one returns null, which
+    /// is how the driver is told it is out of host memory.
+    pub fn failing_after(passing_allocations: u32) -> Self {
+        Self::with_budget(Some(passing_allocations))
+    }
+
+    fn with_budget(remaining_successes: Option<u32>) -> Self {
+        let ledger = Box::new(Ledger::new(remaining_successes));
         let user_data = (&raw const *ledger).cast::<c_void>().cast_mut();
         let callbacks = Box::new(vk::AllocationCallbacks {
             user_data,
@@ -125,6 +156,9 @@ unsafe extern "system" fn allocation_callback(user_data: *mut c_void, size: usiz
     let Some(layout) = layout_for(size, alignment) else {
         return std::ptr::null_mut();
     };
+    if !ledger.take_success() {
+        return std::ptr::null_mut();
+    }
     let pointer = unsafe { alloc(layout) };
     if pointer.is_null() {
         return std::ptr::null_mut();
@@ -143,6 +177,9 @@ unsafe extern "system" fn reallocation_callback(user_data: *mut c_void, original
     }
 
     let ledger = unsafe { &*user_data.cast::<Ledger>() };
+    if !ledger.take_success() {
+        return std::ptr::null_mut();
+    }
     let mut live = ledger.live.lock().expect("allocation ledger poisoned");
     let Some((old_layout, old_scope)) = live.remove(&(original as usize)) else {
         drop(live);
@@ -245,6 +282,24 @@ mod tests {
         assert!(!recorder.validate(0));
 
         unsafe { free(callbacks.user_data, pointer) };
+        assert!(recorder.validate(0));
+    }
+
+    #[test]
+    fn a_budgeted_recorder_fails_every_allocation_past_the_budget() {
+        let recorder = AllocationCallbackRecorder::failing_after(2);
+        let callbacks = recorder.callbacks();
+        let allocate = callbacks.allocation.expect("set");
+        let first = unsafe { allocate(callbacks.user_data, 16, 8, vk::SystemAllocationScope::OBJECT) };
+        let second = unsafe { allocate(callbacks.user_data, 16, 8, vk::SystemAllocationScope::OBJECT) };
+        let third = unsafe { allocate(callbacks.user_data, 16, 8, vk::SystemAllocationScope::OBJECT) };
+        assert!(!first.is_null() && !second.is_null());
+        assert!(third.is_null());
+        assert_eq!(recorder.live_allocation_count(), 2);
+
+        let free = callbacks.free.expect("set");
+        unsafe { free(callbacks.user_data, first) };
+        unsafe { free(callbacks.user_data, second) };
         assert!(recorder.validate(0));
     }
 

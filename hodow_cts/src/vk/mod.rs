@@ -45,7 +45,11 @@ impl<T> VkResultExt<T> for Result<T, vulkanalia::vk::ErrorCode> {
         self.map_err(|code| {
             let msg = format!("{what} returned {code:?}");
             match code {
-                ErrorCode::OUT_OF_HOST_MEMORY | ErrorCode::OUT_OF_DEVICE_MEMORY | ErrorCode::OUT_OF_POOL_MEMORY => TestError::ResourceError(msg),
+                // Host-memory exhaustion is its own variant because the alloc-callback
+                // tests induce it deliberately and have to tell it from any other
+                // out-of-memory; both still report as ResourceError.
+                ErrorCode::OUT_OF_HOST_MEMORY => TestError::OutOfHostMemory(msg),
+                ErrorCode::OUT_OF_DEVICE_MEMORY | ErrorCode::OUT_OF_POOL_MEMORY => TestError::ResourceError(msg),
                 ErrorCode::DEVICE_LOST => TestError::DeviceLost(msg),
                 ErrorCode::FEATURE_NOT_PRESENT | ErrorCode::EXTENSION_NOT_PRESENT | ErrorCode::FORMAT_NOT_SUPPORTED => TestError::NotSupported(msg),
                 _ => TestError::InternalError(msg),

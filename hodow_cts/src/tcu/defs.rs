@@ -114,6 +114,10 @@ pub enum TestError {
     NotSupported(String),
     /// `tcu::ResourceError` - the implementation ran out of some resource.
     ResourceError(String),
+    /// `VK_ERROR_OUT_OF_HOST_MEMORY` specifically. Reported as ResourceError like any
+    /// other, but kept apart because the allocation-callback tests provoke it on
+    /// purpose and have to tell it from every other out-of-memory.
+    OutOfHostMemory(String),
     /// `tcu::InternalError` - a bug on our side, never a driver verdict.
     InternalError(String),
     /// `tcu::TestException` with a device lost code.
@@ -128,7 +132,7 @@ impl TestError {
     pub fn to_status(&self) -> TestStatus {
         match self {
             Self::NotSupported(m) => TestStatus::new(TestResult::NotSupported, m.clone()),
-            Self::ResourceError(m) => TestStatus::new(TestResult::ResourceError, m.clone()),
+            Self::ResourceError(m) | Self::OutOfHostMemory(m) => TestStatus::new(TestResult::ResourceError, m.clone()),
             Self::InternalError(m) => TestStatus::new(TestResult::InternalError, m.clone()),
             Self::DeviceLost(m) => TestStatus::new(TestResult::DeviceLost, m.clone()),
             Self::NotPorted(m) => TestStatus::new(TestResult::InternalError, format!("not ported: {m}")),

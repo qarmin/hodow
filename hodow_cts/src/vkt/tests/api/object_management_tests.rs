@@ -17,10 +17,9 @@
 // `create_object`, both dispatching on it. The per-object bodies are otherwise a
 // line-by-line transcription and stay in upstream's order.
 //
-// Not ported here: the `private_data` and `alloc_callback_fail*` variants. The former
-// needs a device built with a chosen private-data slot count, the latter an allocator
-// that fails the Nth call and a `create` that reports VK_ERROR_OUT_OF_HOST_MEMORY as
-// something other than a test failure.
+// Not ported here: the `private_data` variant, which needs a device built with a
+// chosen private-data slot count, and `alloc_callback_fail_multiple`, which allocates
+// several pooled objects at once and checks which handles come back null.
 
 use vulkanalia::prelude::v1_0::*;
 use vulkanalia::vk::{Handle as VkHandle, InstanceV1_1};
@@ -1234,6 +1233,8 @@ enum Variant {
     MultithreadedPerThreadDevice,
     /// `createSingleAllocCallbacksTest`
     SingleAllocCallbacks,
+    /// `allocCallbackFailTest`
+    AllocCallbackFail,
 }
 
 struct ObjectManagementCase {
@@ -1355,6 +1356,7 @@ impl TestInstance for ObjectManagementInstance<'_> {
                 drop(resources);
             }
             Variant::SingleAllocCallbacks => return self.single_alloc_callbacks(),
+            Variant::AllocCallbackFail => return self.alloc_callback_fail(),
             Variant::MultipleSharedResources => {
                 let env = Environment::new(self.context, 4);
                 let res = Resources::new(&env, &case.params)?;
@@ -1519,6 +1521,85 @@ impl ObjectManagementInstance<'_> {
             return Ok(TestStatus::fail("Invalid allocation callback"));
         }
         Ok(TestStatus::pass("Ok"))
+    }
+
+    /// `allocCallbackFailTest` - creates the object again and again with one more host
+    /// allocation allowed each time, so every allocation the driver makes is once the
+    /// one that fails. Every attempt has to clean up after itself.
+    fn alloc_callback_fail(&self) -> TestOutcome {
+        let case = self.params;
+        let res_callbacks = AllocationCallbackRecorder::new();
+        let root_env = Environment::with_callbacks(self.context, 1, res_callbacks.callbacks());
+
+        let max_tries = oom_iter_limit(&case.params);
+        let final_limit = max_tries.max(10000);
+
+        let (num_passing_allocs, create_ok) = {
+            let res_env = EnvClone::new(&root_env, DEFAULT_DEVICE_PARAMS, 1)?;
+            let env = res_env.env();
+            let res = Resources::new(&env, &case.params)?;
+            let mut num_passing_allocs = 0u32;
+
+            loop {
+                let recorder = AllocationCallbackRecorder::failing_after(num_passing_allocs);
+                let obj_env = Environment {
+                    allocation_callbacks: Some(recorder.callbacks()),
+                    ..env
+                };
+
+                let create_ok = {
+                    match create_object(&obj_env, &res, &case.params) {
+                        Ok(_object) => true,
+                        Err(TestError::OutOfHostMemory(_)) => false,
+                        Err(TestError::ResourceError(message)) => return Ok(TestStatus::fail(format!("Got invalid error code: {message}"))),
+                        Err(other) => return Err(other),
+                    }
+                };
+
+                if !recorder.validate(0) {
+                    return Ok(TestStatus::fail("Invalid allocation callback"));
+                }
+                if create_ok {
+                    break (num_passing_allocs, true);
+                }
+
+                num_passing_allocs += 1;
+                // If it did not succeed even with the large limit, stop trying.
+                if num_passing_allocs >= final_limit {
+                    break (num_passing_allocs, false);
+                }
+                // Having reached maxTries without success, jump straight to the large
+                // limit rather than walking there one allocation at a time.
+                if num_passing_allocs >= max_tries {
+                    num_passing_allocs = final_limit;
+                }
+            }
+        };
+
+        if !res_callbacks.validate(0) {
+            return Ok(TestStatus::fail("Invalid allocation callback"));
+        }
+        if num_passing_allocs == 0 {
+            return Ok(TestStatus::new(tcu::TestResult::QualityWarning, "Allocation callbacks not called"));
+        }
+        if num_passing_allocs >= final_limit {
+            return Ok(if create_ok {
+                TestStatus::pass("Construction passed but not all iterations were checked")
+            } else {
+                TestStatus::pass("Max iter count reached")
+            });
+        }
+        Ok(TestStatus::pass("Ok"))
+    }
+}
+
+/// `getOomIterLimit` - how many allocation budgets to walk before giving up on the
+/// object ever being created. A device costs far more allocations than anything else,
+/// so upstream gives it fewer tries before jumping to the large limit.
+fn oom_iter_limit(params: &ObjectParams) -> u32 {
+    match params {
+        ObjectParams::Device(_) | ObjectParams::DeviceGroup(_) => 20,
+        _ => 40,
     }
 }
 
@@ -1890,6 +1971,7 @@ pub fn create_object_management_tests() -> tcu::TestCaseGroup {
         ("multithreaded_per_thread_resources", Variant::MultithreadedPerThreadResources),
         ("multithreaded_per_thread_device", Variant::MultithreadedPerThreadDevice),
         ("single_alloc_callbacks", Variant::SingleAllocCallbacks),
+        ("alloc_callback_fail", Variant::AllocCallbackFail),
     ] {
         let mut group = tcu::TestCaseGroup::new(group_name);
         for (name, params) in all_cases() {
@@ -1902,6 +1984,12 @@ pub fn create_object_management_tests() -> tcu::TestCaseGroup {
             // An instance has no resources to share, so the two shared-resource
             // variants have nothing to say about it and upstream leaves it out.
             if matches!(variant, Variant::MultipleSharedResources | Variant::MultithreadedSharedResources) && matches!(params, ObjectParams::Instance) {
+                continue;
+            }
+            // A pooled object is allocated, not created, and a failed allocation there
+            // is the pool's business; upstream puts those in
+            // `alloc_callback_fail_multiple` instead.
+            if variant == Variant::AllocCallbackFail && matches!(params, ObjectParams::CommandBuffer(_) | ObjectParams::DescriptorSet(_)) {
                 continue;
             }
             // The per-thread-device variant already makes an instance and a device per
