@@ -45,6 +45,10 @@ STAGE_TO_GLSLANG = {"comp": "comp", "vert": "vert", "frag": "frag"}
 SUBST_RE = re.compile(r"\$\{([^}]+)\}")
 
 
+def camel_to_upper_snake(name: str) -> str:
+    return re.sub(r"(?<!^)(?=[A-Z])", "_", name).upper()
+
+
 def prod(v):
     """multiplyComponents()"""
     r = 1
@@ -311,6 +315,10 @@ def main() -> int:
         out.append(f"    use crate::vkt::tests::{rust_module.replace('/', '::')}::*;")
         out.append("")
 
+        # Constants of the same rust_type get an ALL_* array, so a test module looks up
+        # what the generator actually emitted rather than a second list beside it.
+        by_type: dict[str, list[str]] = {}
+
         for case in manifest["case"]:
             name = case["name"]
             where = f"{manifest_path.name}:{name}"
@@ -377,7 +385,15 @@ def main() -> int:
             out.append(f"        programs: BinaryCollection::new(&PROGRAMS_{const}),")
             out.append("    };")
             out.append("")
+            by_type.setdefault(rust_type, []).append(const)
             total_cases += 1
+
+        for rust_type, consts in by_type.items():
+            array = f"ALL_{camel_to_upper_snake(rust_type)}"
+            out.append(f"    pub static {array}: [&{rust_type}; {len(consts)}] = [")
+            out.extend(f"        &{c}," for c in consts)
+            out.append("    ];")
+            out.append("")
 
         out.append("}")
         out.append("")

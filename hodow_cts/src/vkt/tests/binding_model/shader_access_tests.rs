@@ -16,14 +16,18 @@
 // as a crash. The result buffer starts as -1 in every component, which distinguishes
 // "wrote the wrong thing" from "never ran".
 //
-// Ported so far: the compute half of the buffer descriptor types.
+// Ported so far: the compute half of the buffer and storage image descriptor types.
 
 use vulkanalia::prelude::v1_0::*;
 
+use crate::generated::shaders::binding_model_shader_access::{ALL_BUFFER_ACCESS_PROGRAM, ALL_IMAGE_ACCESS_PROGRAM};
+use crate::tcu::pixel::TextureLevel;
+use crate::tcu::texture::{ChannelOrder, ChannelType, TextureFormat};
 use crate::tcu::{self, TestError, TestStatus};
 use crate::vk::VkResultExt;
 use crate::vk::builder_util::{DescriptorPoolBuilder, DescriptorSetLayoutBuilder};
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
+use crate::vk::image_util::{ImageWithMemory, make_image_view};
 use crate::vk::mem_util::{MemoryRequirement, flush_alloc, invalidate_alloc};
 use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool, make_descriptor_set, make_pipeline_layout};
 use crate::vk::programs::{BinaryCollection, create_shader_module};
@@ -40,70 +44,16 @@ pub struct BufferAccessProgram {
     pub programs: BinaryCollection,
 }
 
-/// Every entry the shader generator emitted, so the lookup searches what exists
-/// rather than a second list that has to be kept in step with it.
-static ALL_BUFFER_ACCESS_PROGRAMS: &[&BufferAccessProgram] = &[
-    &crate::generated::shaders::binding_model_shader_access::BUFFER_UNIFORM_SINGLE_SINGLE_DESCRIPTOR,
-    &crate::generated::shaders::binding_model_shader_access::BUFFER_UNIFORM_SINGLE_MULTIPLE_CONTIGUOUS,
-    &crate::generated::shaders::binding_model_shader_access::BUFFER_UNIFORM_SINGLE_MULTIPLE_DISCONTIGUOUS,
-    &crate::generated::shaders::binding_model_shader_access::BUFFER_UNIFORM_SINGLE_MULTIPLE_ARBITRARY,
-    &crate::generated::shaders::binding_model_shader_access::BUFFER_UNIFORM_SINGLE_DESCRIPTOR_ARRAY,
-    &crate::generated::shaders::binding_model_shader_access::BUFFER_UNIFORM_MULTIPLE_SINGLE_DESCRIPTOR,
-    &crate::generated::shaders::binding_model_shader_access::BUFFER_UNIFORM_MULTIPLE_MULTIPLE_CONTIGUOUS,
-    &crate::generated::shaders::binding_model_shader_access::BUFFER_UNIFORM_MULTIPLE_MULTIPLE_DISCONTIGUOUS,
-    &crate::generated::shaders::binding_model_shader_access::BUFFER_UNIFORM_MULTIPLE_MULTIPLE_ARBITRARY,
-    &crate::generated::shaders::binding_model_shader_access::BUFFER_UNIFORM_MULTIPLE_DESCRIPTOR_ARRAY,
-    &crate::generated::shaders::binding_model_shader_access::BUFFER_UNIFORM_MULTIPLE_DISCONTIGUOUS_SINGLE_DESCRIPTOR,
-    &crate::generated::shaders::binding_model_shader_access::BUFFER_UNIFORM_MULTIPLE_DISCONTIGUOUS_MULTIPLE_CONTIGUOUS,
-    &crate::generated::shaders::binding_model_shader_access::BUFFER_UNIFORM_MULTIPLE_DISCONTIGUOUS_MULTIPLE_DISCONTIGUOUS,
-    &crate::generated::shaders::binding_model_shader_access::BUFFER_UNIFORM_MULTIPLE_DISCONTIGUOUS_MULTIPLE_ARBITRARY,
-    &crate::generated::shaders::binding_model_shader_access::BUFFER_UNIFORM_MULTIPLE_DISCONTIGUOUS_DESCRIPTOR_ARRAY,
-    &crate::generated::shaders::binding_model_shader_access::BUFFER_BUFFER_SINGLE_SINGLE_DESCRIPTOR,
-    &crate::generated::shaders::binding_model_shader_access::BUFFER_BUFFER_SINGLE_MULTIPLE_CONTIGUOUS,
-    &crate::generated::shaders::binding_model_shader_access::BUFFER_BUFFER_SINGLE_MULTIPLE_DISCONTIGUOUS,
-    &crate::generated::shaders::binding_model_shader_access::BUFFER_BUFFER_SINGLE_MULTIPLE_ARBITRARY,
-    &crate::generated::shaders::binding_model_shader_access::BUFFER_BUFFER_SINGLE_DESCRIPTOR_ARRAY,
-    &crate::generated::shaders::binding_model_shader_access::BUFFER_BUFFER_MULTIPLE_SINGLE_DESCRIPTOR,
-    &crate::generated::shaders::binding_model_shader_access::BUFFER_BUFFER_MULTIPLE_MULTIPLE_CONTIGUOUS,
-    &crate::generated::shaders::binding_model_shader_access::BUFFER_BUFFER_MULTIPLE_MULTIPLE_DISCONTIGUOUS,
-    &crate::generated::shaders::binding_model_shader_access::BUFFER_BUFFER_MULTIPLE_MULTIPLE_ARBITRARY,
-    &crate::generated::shaders::binding_model_shader_access::BUFFER_BUFFER_MULTIPLE_DESCRIPTOR_ARRAY,
-    &crate::generated::shaders::binding_model_shader_access::BUFFER_BUFFER_MULTIPLE_DISCONTIGUOUS_SINGLE_DESCRIPTOR,
-    &crate::generated::shaders::binding_model_shader_access::BUFFER_BUFFER_MULTIPLE_DISCONTIGUOUS_MULTIPLE_CONTIGUOUS,
-    &crate::generated::shaders::binding_model_shader_access::BUFFER_BUFFER_MULTIPLE_DISCONTIGUOUS_MULTIPLE_DISCONTIGUOUS,
-    &crate::generated::shaders::binding_model_shader_access::BUFFER_BUFFER_MULTIPLE_DISCONTIGUOUS_MULTIPLE_ARBITRARY,
-    &crate::generated::shaders::binding_model_shader_access::BUFFER_BUFFER_MULTIPLE_DISCONTIGUOUS_DESCRIPTOR_ARRAY,
-    &crate::generated::shaders::binding_model_shader_access::TEXEL_UNIFORM_SINGLE_SINGLE_DESCRIPTOR,
-    &crate::generated::shaders::binding_model_shader_access::TEXEL_UNIFORM_SINGLE_MULTIPLE_CONTIGUOUS,
-    &crate::generated::shaders::binding_model_shader_access::TEXEL_UNIFORM_SINGLE_MULTIPLE_DISCONTIGUOUS,
-    &crate::generated::shaders::binding_model_shader_access::TEXEL_UNIFORM_SINGLE_MULTIPLE_ARBITRARY,
-    &crate::generated::shaders::binding_model_shader_access::TEXEL_UNIFORM_SINGLE_DESCRIPTOR_ARRAY,
-    &crate::generated::shaders::binding_model_shader_access::TEXEL_UNIFORM_MULTIPLE_SINGLE_DESCRIPTOR,
-    &crate::generated::shaders::binding_model_shader_access::TEXEL_UNIFORM_MULTIPLE_MULTIPLE_CONTIGUOUS,
-    &crate::generated::shaders::binding_model_shader_access::TEXEL_UNIFORM_MULTIPLE_MULTIPLE_DISCONTIGUOUS,
-    &crate::generated::shaders::binding_model_shader_access::TEXEL_UNIFORM_MULTIPLE_MULTIPLE_ARBITRARY,
-    &crate::generated::shaders::binding_model_shader_access::TEXEL_UNIFORM_MULTIPLE_DESCRIPTOR_ARRAY,
-    &crate::generated::shaders::binding_model_shader_access::TEXEL_UNIFORM_MULTIPLE_DISCONTIGUOUS_SINGLE_DESCRIPTOR,
-    &crate::generated::shaders::binding_model_shader_access::TEXEL_UNIFORM_MULTIPLE_DISCONTIGUOUS_MULTIPLE_CONTIGUOUS,
-    &crate::generated::shaders::binding_model_shader_access::TEXEL_UNIFORM_MULTIPLE_DISCONTIGUOUS_MULTIPLE_DISCONTIGUOUS,
-    &crate::generated::shaders::binding_model_shader_access::TEXEL_UNIFORM_MULTIPLE_DISCONTIGUOUS_MULTIPLE_ARBITRARY,
-    &crate::generated::shaders::binding_model_shader_access::TEXEL_UNIFORM_MULTIPLE_DISCONTIGUOUS_DESCRIPTOR_ARRAY,
-    &crate::generated::shaders::binding_model_shader_access::TEXEL_BUFFER_SINGLE_SINGLE_DESCRIPTOR,
-    &crate::generated::shaders::binding_model_shader_access::TEXEL_BUFFER_SINGLE_MULTIPLE_CONTIGUOUS,
-    &crate::generated::shaders::binding_model_shader_access::TEXEL_BUFFER_SINGLE_MULTIPLE_DISCONTIGUOUS,
-    &crate::generated::shaders::binding_model_shader_access::TEXEL_BUFFER_SINGLE_MULTIPLE_ARBITRARY,
-    &crate::generated::shaders::binding_model_shader_access::TEXEL_BUFFER_SINGLE_DESCRIPTOR_ARRAY,
-    &crate::generated::shaders::binding_model_shader_access::TEXEL_BUFFER_MULTIPLE_SINGLE_DESCRIPTOR,
-    &crate::generated::shaders::binding_model_shader_access::TEXEL_BUFFER_MULTIPLE_MULTIPLE_CONTIGUOUS,
-    &crate::generated::shaders::binding_model_shader_access::TEXEL_BUFFER_MULTIPLE_MULTIPLE_DISCONTIGUOUS,
-    &crate::generated::shaders::binding_model_shader_access::TEXEL_BUFFER_MULTIPLE_MULTIPLE_ARBITRARY,
-    &crate::generated::shaders::binding_model_shader_access::TEXEL_BUFFER_MULTIPLE_DESCRIPTOR_ARRAY,
-    &crate::generated::shaders::binding_model_shader_access::TEXEL_BUFFER_MULTIPLE_DISCONTIGUOUS_SINGLE_DESCRIPTOR,
-    &crate::generated::shaders::binding_model_shader_access::TEXEL_BUFFER_MULTIPLE_DISCONTIGUOUS_MULTIPLE_CONTIGUOUS,
-    &crate::generated::shaders::binding_model_shader_access::TEXEL_BUFFER_MULTIPLE_DISCONTIGUOUS_MULTIPLE_DISCONTIGUOUS,
-    &crate::generated::shaders::binding_model_shader_access::TEXEL_BUFFER_MULTIPLE_DISCONTIGUOUS_MULTIPLE_ARBITRARY,
-    &crate::generated::shaders::binding_model_shader_access::TEXEL_BUFFER_MULTIPLE_DISCONTIGUOUS_DESCRIPTOR_ARRAY,
-];
+/// The manifest declares the storage image cases with this. Unlike the buffer types,
+/// which share a shader across every view, an image case bakes its fetch coordinates
+/// into the GLSL, so there is one program per case and `view_name` identifies it.
+pub struct ImageAccessProgram {
+    pub name: &'static str,
+    pub view_name: &'static str,
+    pub set_count: &'static str,
+    pub shader_interface: &'static str,
+    pub programs: BinaryCollection,
+}
 
 /// `DescriptorSetCount`
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -244,7 +194,7 @@ impl BufferAccessCase {
             ResourceKind::Buffer => "buffer_",
             ResourceKind::TexelBuffer => "texel_",
         };
-        ALL_BUFFER_ACCESS_PROGRAMS
+        ALL_BUFFER_ACCESS_PROGRAM
             .iter()
             .copied()
             .filter(|p| p.name.starts_with(prefix))
@@ -735,6 +685,22 @@ impl BufferAccessInstance<'_> {
     }
 }
 
+/// The descriptor set arrangements, and the group each gets. The single-set one has
+/// no group of its own; its interfaces sit directly under the stage.
+const SET_COUNTS: [(&str, DescriptorSetCount); 3] = [
+    ("", DescriptorSetCount::Single),
+    ("multiple_descriptor_sets", DescriptorSetCount::Multiple),
+    ("multiple_discontiguous_descriptor_sets", DescriptorSetCount::MultipleDiscontiguous),
+];
+
+const INTERFACES: [ShaderInputInterface; 5] = [
+    ShaderInputInterface::SingleDescriptor,
+    ShaderInputInterface::MultipleContiguousDescriptors,
+    ShaderInputInterface::MultipleDiscontiguousDescriptors,
+    ShaderInputInterface::MultipleArbitraryDescriptors,
+    ShaderInputInterface::DescriptorArray,
+];
+
 /// `createShaderAccessTests`, restricted to the compute half of the buffer types.
 ///
 /// The group tree upstream builds is
@@ -746,6 +712,8 @@ pub fn create_shader_access_tests() -> tcu::TestCaseGroup {
     let mut primary = tcu::TestCaseGroup::new("primary_cmd_buf");
     let mut bind = tcu::TestCaseGroup::new("bind");
 
+    bind.add_child(create_storage_image_group());
+
     let descriptor_types = [
         ("uniform_buffer", vk::DescriptorType::UNIFORM_BUFFER, ResourceKind::Buffer),
         ("storage_buffer", vk::DescriptorType::STORAGE_BUFFER, ResourceKind::Buffer),
@@ -754,30 +722,18 @@ pub fn create_shader_access_tests() -> tcu::TestCaseGroup {
         ("uniform_buffer_dynamic", vk::DescriptorType::UNIFORM_BUFFER_DYNAMIC, ResourceKind::Buffer),
         ("storage_buffer_dynamic", vk::DescriptorType::STORAGE_BUFFER_DYNAMIC, ResourceKind::Buffer),
     ];
-    let set_counts = [
-        ("", DescriptorSetCount::Single),
-        ("multiple_descriptor_sets", DescriptorSetCount::Multiple),
-        ("multiple_discontiguous_descriptor_sets", DescriptorSetCount::MultipleDiscontiguous),
-    ];
-    let interfaces = [
-        ShaderInputInterface::SingleDescriptor,
-        ShaderInputInterface::MultipleContiguousDescriptors,
-        ShaderInputInterface::MultipleDiscontiguousDescriptors,
-        ShaderInputInterface::MultipleArbitraryDescriptors,
-        ShaderInputInterface::DescriptorArray,
-    ];
 
     for (type_name, descriptor_type, resource_kind) in descriptor_types {
         let is_dynamic = is_dynamic_descriptor_type(descriptor_type);
         let mut type_group = tcu::TestCaseGroup::new(type_name);
         let mut stage_group = tcu::TestCaseGroup::new("compute");
 
-        for (set_group_name, descriptor_set_count) in set_counts {
+        for (set_group_name, descriptor_set_count) in SET_COUNTS {
             // The single-set arrangement has no group of its own; its interfaces sit
             // directly under the stage.
             let mut set_group = (!set_group_name.is_empty()).then(|| tcu::TestCaseGroup::new(set_group_name));
 
-            for shader_interface in interfaces {
+            for shader_interface in INTERFACES {
                 let mut interface_group = tcu::TestCaseGroup::new(shader_interface.case_name());
 
                 for set_view_offset in [false, true] {
@@ -837,6 +793,50 @@ pub fn create_shader_access_tests() -> tcu::TestCaseGroup {
     primary.add_child(bind);
     group.add_child(primary);
     group
+}
+
+/// `createShaderAccessImageTests` for `VK_DESCRIPTOR_TYPE_STORAGE_IMAGE`, compute
+/// stage. The view type is the innermost level of the tree here, where the buffer
+/// types put their offset variants.
+fn create_storage_image_group() -> tcu::TestCaseGroup {
+    let mut type_group = tcu::TestCaseGroup::new("storage_image");
+    let mut stage_group = tcu::TestCaseGroup::new("compute");
+
+    for (set_group_name, descriptor_set_count) in SET_COUNTS {
+        let mut set_group = (!set_group_name.is_empty()).then(|| tcu::TestCaseGroup::new(set_group_name));
+
+        for shader_interface in INTERFACES {
+            let mut interface_group = tcu::TestCaseGroup::new(shader_interface.case_name());
+
+            for (name, view_type, base_mip_level, base_array_slice) in IMAGE_TYPES {
+                if !image_case_exists(view_type, descriptor_set_count, shader_interface) {
+                    continue;
+                }
+                interface_group.add_child(Box::new(ImageAccessCase {
+                    name,
+                    descriptor_type: vk::DescriptorType::STORAGE_IMAGE,
+                    descriptor_set_count,
+                    shader_interface,
+                    view_type,
+                    base_mip_level,
+                    base_array_slice,
+                }) as Box<dyn TestCase>);
+            }
+
+            if let Some(g) = set_group.as_mut() {
+                g.add_child(interface_group);
+            } else {
+                stage_group.add_child(interface_group);
+            }
+        }
+
+        if let Some(g) = set_group {
+            stage_group.add_child(g);
+        }
+    }
+
+    type_group.add_child(stage_group);
+    type_group
 }
 
 /// `createUnusedLayout` - the filler that keeps the set indices apart. Its contents
@@ -978,4 +978,757 @@ impl BufferAccessInstance<'_> {
 
         unsafe { device.update_descriptor_sets(&writes, &[] as &[vk::CopyDescriptorSet]) };
     }
+}
+
+// ---------------------------------------------------------------------------------
+// Images
+// ---------------------------------------------------------------------------------
+
+/// `ImageInstanceImages::IMAGE_SIZE` / `ARRAY_SIZE`
+const IMAGE_SIZE: u32 = 64;
+const ARRAY_SIZE: u32 = 2;
+
+/// `ImageFetchInstanceImages::SAMPLE_POINT_*` - arbitrary points, one per quadrant.
+const FETCH_POSITIONS: [[u32; 3]; 4] = [[6, 13, 49], [51, 40, 44], [42, 26, 19], [25, 25, 18]];
+
+/// `isImageViewTypeArray`
+fn is_image_view_type_array(t: vk::ImageViewType) -> bool {
+    matches!(t, vk::ImageViewType::_1D_ARRAY | vk::ImageViewType::_2D_ARRAY | vk::ImageViewType::CUBE_ARRAY)
+}
+
+fn is_image_view_type_1d(t: vk::ImageViewType) -> bool {
+    matches!(t, vk::ImageViewType::_1D | vk::ImageViewType::_1D_ARRAY)
+}
+
+fn is_image_view_type_2d(t: vk::ImageViewType) -> bool {
+    matches!(t, vk::ImageViewType::_2D | vk::ImageViewType::_2D_ARRAY)
+}
+
+fn is_image_view_type_cube(t: vk::ImageViewType) -> bool {
+    matches!(t, vk::ImageViewType::CUBE | vk::ImageViewType::CUBE_ARRAY)
+}
+
+/// `viewTypeToImageType`
+fn view_type_to_image_type(t: vk::ImageViewType) -> vk::ImageType {
+    match t {
+        vk::ImageViewType::_1D | vk::ImageViewType::_1D_ARRAY => vk::ImageType::_1D,
+        vk::ImageViewType::_3D => vk::ImageType::_3D,
+        _ => vk::ImageType::_2D,
+    }
+}
+
+/// `getImageLayoutForDescriptorType`
+fn image_layout_for_descriptor_type(t: vk::DescriptorType) -> vk::ImageLayout {
+    if t == vk::DescriptorType::STORAGE_IMAGE {
+        vk::ImageLayout::GENERAL
+    } else {
+        vk::ImageLayout::SHADER_READ_ONLY_OPTIMAL
+    }
+}
+
+/// `ImageFetchInstanceImages::getFetchPos` - the sample points wrapped into whatever
+/// the view actually exposes, so a view that starts at mip 1 or slice 1 still reads
+/// in range.
+fn get_fetch_pos(view_type: vk::ImageViewType, base_mip_level: u32, base_array_slice: u32, fetch_pos_ndx: usize) -> [u32; 3] {
+    let coord = FETCH_POSITIONS[fetch_pos_ndx];
+    let image_size = IMAGE_SIZE >> base_mip_level;
+    let array_size = if is_image_view_type_array(view_type) { ARRAY_SIZE - base_array_slice } else { 1 };
+
+    if is_image_view_type_1d(view_type) {
+        [coord[0] % image_size, coord[1] % array_size, 0]
+    } else if is_image_view_type_2d(view_type) {
+        [coord[0] % image_size, coord[1] % image_size, coord[2] % array_size]
+    } else if is_image_view_type_cube(view_type) {
+        [coord[0] % image_size, coord[1] % image_size, coord[2] % (array_size * 6)]
+    } else {
+        [coord[0] % image_size, coord[1] % image_size, coord[2] % image_size]
+    }
+}
+
+/// `ImageInstanceImages::populateSourceImage` - a gradient, a three-level pattern and
+/// a per-level/per-image constant, so a fetch that lands at the wrong texel, the wrong
+/// mip level or the wrong image all read visibly different values. Each image inverts
+/// a different subset of the channels.
+fn populate_source_image(view_type: vk::ImageViewType, image_ndx: u32, num_levels: u32) -> Result<Vec<TextureLevel>, TestError> {
+    let format = TextureFormat::new(ChannelOrder::RGBA, ChannelType::UNORM_INT8);
+    let mut levels = Vec::with_capacity(num_levels as usize);
+
+    for level in 0..num_levels {
+        let width = IMAGE_SIZE >> level;
+        let height = if is_image_view_type_1d(view_type) { ARRAY_SIZE } else { IMAGE_SIZE >> level };
+        let depth = if is_image_view_type_1d(view_type) {
+            1
+        } else if is_image_view_type_2d(view_type) {
+            ARRAY_SIZE
+        } else if is_image_view_type_cube(view_type) {
+            6 * ARRAY_SIZE
+        } else {
+            IMAGE_SIZE >> level
+        };
+
+        let mut texture = TextureLevel::new(format, width, height, depth)?;
+        {
+            let mut access = texture.get_access();
+            for z in 0..depth {
+                for y in 0..height {
+                    for x in 0..width {
+                        let grad_pos = x + y + z;
+                        let grad_max = width + height + depth - 3;
+
+                        let mut red = (255 * grad_pos / grad_max) as i32;
+                        let mut green = if grad_pos.is_multiple_of(2) { 127 } else { 0 } + if grad_pos % 4 < 3 { 128 } else { 0 };
+                        let mut blue = (128 * level / num_levels) as i32 + if image_ndx.is_multiple_of(2) { 127 } else { 0 };
+
+                        if image_ndx.is_multiple_of(3) {
+                            red = 255 - red;
+                        }
+                        if image_ndx.is_multiple_of(4) {
+                            green = 255 - green;
+                        }
+                        if image_ndx.is_multiple_of(5) {
+                            blue = 255 - blue;
+                        }
+
+                        if !access.set_pixel_int([red, green, blue, 255], x, y, z) {
+                            return Err(TestError::NotPorted(format!("integer write path for {:?}", access.format())));
+                        }
+                    }
+                }
+            }
+        }
+        levels.push(texture);
+    }
+
+    Ok(levels)
+}
+
+/// `ImageFetchInstanceImages::fetchImageValue` - what the shader should have read for
+/// `fetch_pos_ndx` in set `set_ndx`, taken from the very texels the image was filled
+/// with rather than from a second formula.
+fn fetch_image_value(
+    source_images: &[Vec<TextureLevel>],
+    shader_interface: ShaderInputInterface,
+    view_type: vk::ImageViewType,
+    base_mip_level: u32,
+    base_array_slice: u32,
+    fetch_pos_ndx: usize,
+    set_ndx: u32,
+) -> [f32; 4] {
+    let num_resources = shader_interface.num_resources();
+    let src_a = (set_ndx * num_resources) as usize;
+    let src_b = if shader_interface == ShaderInputInterface::SingleDescriptor { src_a } else { src_a + 1 };
+    // Sampling order is ABAB.
+    let src = if fetch_pos_ndx.is_multiple_of(2) { src_a } else { src_b };
+
+    let mut pos = get_fetch_pos(view_type, base_mip_level, base_array_slice, fetch_pos_ndx);
+
+    // The base array layer goes into whichever coordinate the view type puts it in.
+    if is_image_view_type_cube(view_type) {
+        pos[2] += 6 * base_array_slice;
+    } else if is_image_view_type_1d(view_type) {
+        pos[1] += base_array_slice;
+    } else {
+        pos[2] += base_array_slice;
+    }
+
+    source_images[src][base_mip_level as usize].get_const_access().get_pixel(pos[0], pos[1], pos[2])
+}
+
+pub struct ImageAccessCase {
+    name: &'static str,
+    descriptor_type: vk::DescriptorType,
+    descriptor_set_count: DescriptorSetCount,
+    shader_interface: ShaderInputInterface,
+    view_type: vk::ImageViewType,
+    /// `FLAG_BASE_MIP` - the view starts one mip level in.
+    base_mip_level: u32,
+    /// `FLAG_BASE_SLICE` - and/or one array slice in.
+    base_array_slice: u32,
+}
+
+impl ImageAccessCase {
+    fn program(&self) -> &'static ImageAccessProgram {
+        ALL_IMAGE_ACCESS_PROGRAM
+            .iter()
+            .copied()
+            .find(|p| p.view_name == self.name && p.set_count == self.descriptor_set_count.manifest_name() && p.shader_interface == self.shader_interface.manifest_name())
+            .expect("the generator covers every combination")
+    }
+}
+
+impl TestCase for ImageAccessCase {
+    fn name(&self) -> &str {
+        self.name
+    }
+
+    fn check_support(&self, context: &Context) -> Result<(), TestError> {
+        // `verifyDriverSupport`, restricted to what the compute stage can reach.
+        if self.view_type == vk::ImageViewType::CUBE_ARRAY && context.get_device_features().image_cube_array == vk::FALSE {
+            return Err(TestError::NotSupported("imageCubeArray feature not supported".into()));
+        }
+
+        let required_sets = match self.descriptor_set_count {
+            DescriptorSetCount::Single => 1,
+            DescriptorSetCount::Multiple => 2,
+            DescriptorSetCount::MultipleDiscontiguous => 3,
+        };
+        let limits = context.get_device_properties().limits;
+        if limits.max_bound_descriptor_sets < required_sets {
+            return Err(TestError::NotSupported(format!("maxBoundDescriptorSets is {}", limits.max_bound_descriptor_sets)));
+        }
+
+        if self.base_mip_level == 1 {
+            let properties = unsafe {
+                context.get_instance().get_physical_device_image_format_properties(
+                    context.get_physical_device(),
+                    vk::Format::R8G8B8A8_UNORM,
+                    view_type_to_image_type(self.view_type),
+                    vk::ImageTiling::OPTIMAL,
+                    vk::ImageUsageFlags::STORAGE | vk::ImageUsageFlags::TRANSFER_DST,
+                    vk::ImageCreateFlags::empty(),
+                )
+            };
+            match properties {
+                Err(_) => return Err(TestError::NotSupported("Required format not supported".into())),
+                Ok(p) if p.max_mip_levels < 2 => return Err(TestError::NotSupported("Required mipmap count not supported".into())),
+                Ok(_) => {}
+            }
+        }
+
+        Ok(())
+    }
+
+    fn programs(&self) -> BinaryCollection {
+        self.program().programs
+    }
+
+    fn create_instance<'a>(&'a self, context: &'a Context<'a>) -> Box<dyn TestInstance + 'a> {
+        Box::new(ImageAccessInstance { context, params: self })
+    }
+}
+
+struct ImageAccessInstance<'a> {
+    context: &'a Context<'a>,
+    params: &'a ImageAccessCase,
+}
+
+impl TestInstance for ImageAccessInstance<'_> {
+    fn iterate(&mut self) -> Result<TestStatus, TestError> {
+        let p = self.params;
+        let device = self.context.get_device();
+        let allocator = self.context.get_default_allocator();
+        let queue = self.context.get_universal_queue();
+        let queue_index = self.context.get_universal_queue_family_index();
+
+        // `ImageFetchComputeInstance` builds a pyramid just deep enough to reach the
+        // level the view starts at.
+        let num_levels = p.base_mip_level + 1;
+        let num_sets = p.descriptor_set_count.count();
+        let num_resources = p.shader_interface.num_resources();
+        let num_images = num_sets * num_resources;
+
+        let mut source_images = Vec::with_capacity(num_images as usize);
+        let mut images = Vec::with_capacity(num_images as usize);
+        let mut image_views = Vec::with_capacity(num_images as usize);
+
+        for image_ndx in 0..num_images {
+            let source = populate_source_image(p.view_type, image_ndx, num_levels)?;
+            let image = self.create_image(&source)?;
+            self.upload_image(&source, image.get(), queue, queue_index)?;
+            let view = self.create_image_view(&source, image.get())?;
+
+            source_images.push(source);
+            images.push(image);
+            image_views.push(view);
+        }
+
+        // `ComputeInstanceResultBuffer` - cleared to -1 so "never written" is
+        // distinguishable from "written with the wrong value".
+        let result_buffer = BufferWithMemory::new(
+            device,
+            allocator,
+            make_buffer_create_info(RESULT_DATA_SIZE, vk::BufferUsageFlags::STORAGE_BUFFER | vk::BufferUsageFlags::TRANSFER_DST),
+            MemoryRequirement::HOST_VISIBLE,
+        )?;
+        unsafe {
+            let ptr = result_buffer.get_allocation().get_host_ptr().cast::<f32>();
+            for i in 0..(RESULT_DATA_SIZE as usize / 4) {
+                ptr.add(i).write(-1.0);
+            }
+        }
+        flush_alloc(device, result_buffer.get_allocation())?;
+
+        let pool = self.create_descriptor_pool()?;
+        let mut set_layouts = Vec::new();
+        let mut layout_handles = Vec::new();
+        let mut sets = Vec::new();
+
+        for set_ndx in 0..num_sets {
+            let layout = self.create_descriptor_set_layout(set_ndx)?;
+            let set = make_descriptor_set(device, *pool, *layout)?;
+
+            let ndx0 = (set_ndx * num_resources) as usize % image_views.len();
+            let ndx1 = (set_ndx * num_resources + 1) as usize % image_views.len();
+            self.write_descriptor_set(*set, set_ndx, *image_views[ndx0], *image_views[ndx1], result_buffer.get());
+
+            layout_handles.push(*layout);
+            set_layouts.push(layout);
+            sets.push(set);
+
+            if set_ndx == 0 && p.descriptor_set_count == DescriptorSetCount::MultipleDiscontiguous {
+                let unused = create_unused_layout(
+                    device,
+                    crate::tcu::random::de_int32_hash(p.descriptor_type.as_raw()) ^ crate::tcu::random::de_int32_hash(num_levels as i32),
+                )?;
+                layout_handles.push(*unused);
+                set_layouts.push(unused);
+            }
+        }
+
+        let pipeline_layout = make_pipeline_layout(device, &layout_handles)?;
+        let module = create_shader_module(device, p.program().programs.get("compute")?)?;
+        let pipeline = self.create_compute_pipeline(*pipeline_layout, *module)?;
+
+        let command_pool = make_command_pool(device, queue_index)?;
+        let command_buffer = allocate_command_buffer(device, *command_pool, vk::CommandBufferLevel::PRIMARY)?;
+        let set_handles: Vec<vk::DescriptorSet> = sets.iter().map(|s| **s).collect();
+
+        begin_command_buffer(device, *command_buffer)?;
+        unsafe {
+            device.cmd_bind_pipeline(*command_buffer, vk::PipelineBindPoint::COMPUTE, *pipeline);
+
+            // The discontiguous arrangement's sets are 0 and 2, so each binds at its
+            // own index rather than all of them in one call from index 0.
+            if p.descriptor_set_count == DescriptorSetCount::MultipleDiscontiguous {
+                for set_ndx in 0..num_sets {
+                    device.cmd_bind_descriptor_sets(
+                        *command_buffer,
+                        vk::PipelineBindPoint::COMPUTE,
+                        *pipeline_layout,
+                        p.descriptor_set_count.set_ndx(set_ndx),
+                        &set_handles[set_ndx as usize..set_ndx as usize + 1],
+                        &[] as &[u32],
+                    );
+                }
+            } else {
+                device.cmd_bind_descriptor_sets(*command_buffer, vk::PipelineBindPoint::COMPUTE, *pipeline_layout, 0, &set_handles, &[] as &[u32]);
+            }
+
+            device.cmd_dispatch(*command_buffer, 4, 1, 1);
+
+            let post = vk::BufferMemoryBarrier::builder()
+                .src_access_mask(vk::AccessFlags::SHADER_WRITE)
+                .dst_access_mask(vk::AccessFlags::HOST_READ)
+                .src_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+                .dst_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+                .buffer(result_buffer.get())
+                .offset(0)
+                .size(vk::WHOLE_SIZE)
+                .build();
+            device.cmd_pipeline_barrier(
+                *command_buffer,
+                vk::PipelineStageFlags::COMPUTE_SHADER,
+                vk::PipelineStageFlags::HOST,
+                vk::DependencyFlags::empty(),
+                &[] as &[vk::MemoryBarrier],
+                &[post],
+                &[] as &[vk::ImageMemoryBarrier],
+            );
+        }
+        end_command_buffer(device, *command_buffer)?;
+        submit_commands_and_wait(device, queue, *command_buffer)?;
+
+        invalidate_alloc(device, result_buffer.get_allocation())?;
+        let mut results = [[0.0f32; 4]; 4];
+        unsafe {
+            let ptr = result_buffer.get_allocation().get_host_ptr().cast::<f32>();
+            for (i, quadrant) in results.iter_mut().enumerate() {
+                for (c, value) in quadrant.iter_mut().enumerate() {
+                    *value = ptr.add(i * 4 + c).read();
+                }
+            }
+        }
+
+        let mut references = [[0.0f32; 4]; 4];
+        for (quadrant, reference) in references.iter_mut().enumerate() {
+            for set_ndx in 0..num_sets {
+                let value = fetch_image_value(&source_images, p.shader_interface, p.view_type, p.base_mip_level, p.base_array_slice, quadrant, set_ndx);
+                for (r, v) in reference.iter_mut().zip(value) {
+                    *r += v;
+                }
+            }
+            if num_sets > 1 {
+                for r in reference.iter_mut() {
+                    *r /= num_sets as f32;
+                }
+            }
+        }
+
+        // The value went through a UNORM8 conversion in the driver, so upstream allows
+        // a whole quantisation step rather than comparing exactly.
+        const CONVERSION_THRESHOLD: f32 = 1.0 / 255.0;
+        let any_result_set = results.iter().any(|q| *q != [-1.0f32; 4]);
+        let all_ok = results
+            .iter()
+            .zip(&references)
+            .all(|(result, reference)| result.iter().zip(reference).all(|(r, e)| (r - e).abs() <= CONVERSION_THRESHOLD));
+
+        if all_ok {
+            Ok(TestStatus::pass("Pass"))
+        } else if any_result_set {
+            Ok(TestStatus::fail("Invalid result values"))
+        } else {
+            Ok(TestStatus::fail("Result buffer was not written to"))
+        }
+    }
+}
+
+impl ImageAccessInstance<'_> {
+    /// `ImageInstanceImages::createImage`
+    fn create_image(&self, source: &[TextureLevel]) -> Result<ImageWithMemory<'_>, TestError> {
+        let p = self.params;
+        let base_level = source[0].size();
+        let is_cube = is_image_view_type_cube(p.view_type);
+
+        let array_size = if is_image_view_type_1d(p.view_type) {
+            base_level[1]
+        } else if p.view_type == vk::ImageViewType::_3D {
+            1
+        } else {
+            // 2D and cube alike; for a cube this is numFaces * numLayers.
+            base_level[2]
+        };
+        let extent = vk::Extent3D {
+            width: base_level[0],
+            height: if is_image_view_type_1d(p.view_type) { 1 } else { base_level[1] },
+            depth: if p.view_type == vk::ImageViewType::_3D { base_level[2] } else { 1 },
+        };
+
+        let info = vk::ImageCreateInfo::builder()
+            .flags(if is_cube { vk::ImageCreateFlags::CUBE_COMPATIBLE } else { vk::ImageCreateFlags::empty() })
+            .image_type(view_type_to_image_type(p.view_type))
+            .format(vk::Format::R8G8B8A8_UNORM)
+            .extent(extent)
+            .mip_levels(source.len() as u32)
+            .array_layers(array_size)
+            .samples(vk::SampleCountFlags::_1)
+            .tiling(vk::ImageTiling::OPTIMAL)
+            .usage(vk::ImageUsageFlags::STORAGE | vk::ImageUsageFlags::TRANSFER_DST)
+            .sharing_mode(vk::SharingMode::EXCLUSIVE)
+            .initial_layout(vk::ImageLayout::UNDEFINED)
+            .build();
+
+        ImageWithMemory::new(self.context.get_device(), self.context.get_default_allocator(), info, MemoryRequirement::ANY)
+    }
+
+    /// `ImageInstanceImages::createImageView`
+    fn create_image_view(&self, source: &[TextureLevel], image: vk::Image) -> Result<Unique<'_, vk::ImageView>, TestError> {
+        let p = self.params;
+        let base_level = source[0].size();
+        // A cube view counts slices in faces, so the base slice is six layers in.
+        let view_type_base_slice = if is_image_view_type_cube(p.view_type) { 6 * p.base_array_slice } else { p.base_array_slice };
+        let view_array_size = match p.view_type {
+            vk::ImageViewType::_1D | vk::ImageViewType::_2D | vk::ImageViewType::_3D => 1,
+            vk::ImageViewType::_1D_ARRAY => base_level[1] - view_type_base_slice,
+            vk::ImageViewType::CUBE => 6,
+            _ => base_level[2] - view_type_base_slice,
+        };
+
+        let range = vk::ImageSubresourceRange {
+            aspect_mask: vk::ImageAspectFlags::COLOR,
+            base_mip_level: p.base_mip_level,
+            level_count: source.len() as u32 - p.base_mip_level,
+            base_array_layer: view_type_base_slice,
+            layer_count: view_array_size,
+        };
+        make_image_view(self.context.get_device(), image, p.view_type, vk::Format::R8G8B8A8_UNORM, range)
+    }
+
+    /// `ImageInstanceImages::uploadImage` plus the `writeTextureLevelPyramidData` that
+    /// lays the levels out for it. Every level is tightly packed and every array slice
+    /// gets its own copy region, which is also how a cube's six faces are fed in.
+    fn upload_image(&self, source: &[TextureLevel], image: vk::Image, queue: vk::Queue, queue_index: u32) -> Result<(), TestError> {
+        let p = self.params;
+        let device = self.context.get_device();
+        let allocator = self.context.get_default_allocator();
+
+        let base_level = source[0].size();
+        let slice_count = if is_image_view_type_1d(p.view_type) {
+            base_level[1]
+        } else if p.view_type == vk::ImageViewType::_3D {
+            1
+        } else {
+            base_level[2]
+        };
+
+        let data_size: usize = source.iter().map(|l| l.data().len()).sum();
+        let staging = BufferWithMemory::new(
+            device,
+            allocator,
+            make_buffer_create_info(data_size as u64, vk::BufferUsageFlags::TRANSFER_SRC),
+            MemoryRequirement::HOST_VISIBLE,
+        )?;
+
+        let mut copies = Vec::new();
+        let mut level_offset = 0usize;
+        for (level, texture) in source.iter().enumerate() {
+            let size = texture.size();
+            let level_data_size = texture.data().len();
+            let slice_data_size = level_data_size / slice_count as usize;
+            let slice_height = if is_image_view_type_1d(p.view_type) { 1 } else { size[1] };
+            let slice_depth = if p.view_type == vk::ImageViewType::_3D { size[2] } else { 1 };
+
+            for slice_ndx in 0..slice_count {
+                copies.push(vk::BufferImageCopy {
+                    buffer_offset: (level_offset + slice_ndx as usize * slice_data_size) as u64,
+                    buffer_row_length: size[0],
+                    buffer_image_height: slice_height,
+                    image_subresource: vk::ImageSubresourceLayers {
+                        aspect_mask: vk::ImageAspectFlags::COLOR,
+                        mip_level: level as u32,
+                        base_array_layer: slice_ndx,
+                        layer_count: 1,
+                    },
+                    image_offset: vk::Offset3D { x: 0, y: 0, z: 0 },
+                    image_extent: vk::Extent3D {
+                        width: size[0],
+                        height: slice_height,
+                        depth: slice_depth,
+                    },
+                });
+            }
+
+            unsafe {
+                std::ptr::copy_nonoverlapping(texture.data().as_ptr(), staging.get_allocation().get_host_ptr().add(level_offset), level_data_size);
+            }
+            level_offset += level_data_size;
+        }
+        flush_alloc(device, staging.get_allocation())?;
+
+        let layout = image_layout_for_descriptor_type(p.descriptor_type);
+        let array_layers = if p.view_type == vk::ImageViewType::_3D {
+            1
+        } else if is_image_view_type_cube(p.view_type) {
+            6 * ARRAY_SIZE
+        } else {
+            ARRAY_SIZE
+        };
+        let range = vk::ImageSubresourceRange {
+            aspect_mask: vk::ImageAspectFlags::COLOR,
+            base_mip_level: 0,
+            level_count: source.len() as u32,
+            base_array_layer: 0,
+            layer_count: array_layers,
+        };
+
+        let command_pool = make_command_pool(device, queue_index)?;
+        let command_buffer = allocate_command_buffer(device, *command_pool, vk::CommandBufferLevel::PRIMARY)?;
+        begin_command_buffer(device, *command_buffer)?;
+        unsafe {
+            let pre = vk::ImageMemoryBarrier::builder()
+                .src_access_mask(vk::AccessFlags::empty())
+                .dst_access_mask(vk::AccessFlags::TRANSFER_WRITE)
+                .old_layout(vk::ImageLayout::UNDEFINED)
+                .new_layout(vk::ImageLayout::TRANSFER_DST_OPTIMAL)
+                .src_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+                .dst_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+                .image(image)
+                .subresource_range(range)
+                .build();
+            device.cmd_pipeline_barrier(
+                *command_buffer,
+                vk::PipelineStageFlags::HOST,
+                vk::PipelineStageFlags::TRANSFER,
+                vk::DependencyFlags::empty(),
+                &[] as &[vk::MemoryBarrier],
+                &[] as &[vk::BufferMemoryBarrier],
+                &[pre],
+            );
+
+            device.cmd_copy_buffer_to_image(*command_buffer, staging.get(), image, vk::ImageLayout::TRANSFER_DST_OPTIMAL, &copies);
+
+            let post = vk::ImageMemoryBarrier::builder()
+                .src_access_mask(vk::AccessFlags::TRANSFER_WRITE)
+                .dst_access_mask(vk::AccessFlags::SHADER_READ)
+                .old_layout(vk::ImageLayout::TRANSFER_DST_OPTIMAL)
+                .new_layout(layout)
+                .src_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+                .dst_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+                .image(image)
+                .subresource_range(range)
+                .build();
+            device.cmd_pipeline_barrier(
+                *command_buffer,
+                vk::PipelineStageFlags::TRANSFER,
+                vk::PipelineStageFlags::COMPUTE_SHADER,
+                vk::DependencyFlags::empty(),
+                &[] as &[vk::MemoryBarrier],
+                &[] as &[vk::BufferMemoryBarrier],
+                &[post],
+            );
+        }
+        end_command_buffer(device, *command_buffer)?;
+        submit_commands_and_wait(device, queue, *command_buffer)
+    }
+
+    /// `ImageFetchComputeInstance::createDescriptorSetLayout`
+    fn create_descriptor_set_layout(&self, set_ndx: u32) -> Result<Unique<'_, vk::DescriptorSetLayout>, TestError> {
+        let p = self.params;
+        let mut builder = DescriptorSetLayoutBuilder::new();
+        let mut binding = 0;
+
+        if set_ndx == 0 {
+            builder = builder.add_indexed_binding(vk::DescriptorType::STORAGE_BUFFER, vk::ShaderStageFlags::COMPUTE, binding, 1);
+            binding += 1;
+        }
+
+        builder = match p.shader_interface {
+            ShaderInputInterface::SingleDescriptor => builder.add_indexed_binding(p.descriptor_type, vk::ShaderStageFlags::COMPUTE, binding, 1),
+            ShaderInputInterface::MultipleContiguousDescriptors => builder
+                .add_indexed_binding(p.descriptor_type, vk::ShaderStageFlags::COMPUTE, binding, 1)
+                .add_indexed_binding(p.descriptor_type, vk::ShaderStageFlags::COMPUTE, binding + 1, 1),
+            ShaderInputInterface::MultipleDiscontiguousDescriptors => builder
+                .add_indexed_binding(p.descriptor_type, vk::ShaderStageFlags::COMPUTE, binding, 1)
+                .add_indexed_binding(p.descriptor_type, vk::ShaderStageFlags::COMPUTE, binding + 2, 1),
+            ShaderInputInterface::MultipleArbitraryDescriptors => builder
+                .add_indexed_binding(p.descriptor_type, vk::ShaderStageFlags::COMPUTE, arbitrary_binding_index(0), 1)
+                .add_indexed_binding(p.descriptor_type, vk::ShaderStageFlags::COMPUTE, arbitrary_binding_index(1), 1),
+            ShaderInputInterface::DescriptorArray => builder.add_indexed_binding(p.descriptor_type, vk::ShaderStageFlags::COMPUTE, binding, 2),
+        };
+
+        builder.build(self.context.get_device())
+    }
+
+    /// `ImageFetchComputeInstance::createDescriptorPool`
+    fn create_descriptor_pool(&self) -> Result<Unique<'_, vk::DescriptorPool>, TestError> {
+        let p = self.params;
+        let num = p.descriptor_set_count.count() * p.shader_interface.num_resources();
+        DescriptorPoolBuilder::new()
+            .add_type(vk::DescriptorType::STORAGE_BUFFER, 1)
+            .add_type(p.descriptor_type, num)
+            .build(
+                self.context.get_device(),
+                vk::DescriptorPoolCreateFlags::FREE_DESCRIPTOR_SET,
+                p.descriptor_set_count.count(),
+            )
+    }
+
+    /// `ImageFetchComputeInstance::writeDescriptorSet`
+    fn write_descriptor_set(&self, set: vk::DescriptorSet, set_ndx: u32, view_a: vk::ImageView, view_b: vk::ImageView, result: vk::Buffer) {
+        let p = self.params;
+        let device = self.context.get_device();
+        let layout = image_layout_for_descriptor_type(p.descriptor_type);
+
+        let result_info = [vk::DescriptorBufferInfo {
+            buffer: result,
+            offset: 0,
+            range: RESULT_DATA_SIZE,
+        }];
+        let image_infos = [
+            vk::DescriptorImageInfo {
+                sampler: vk::Sampler::null(),
+                image_view: view_a,
+                image_layout: layout,
+            },
+            vk::DescriptorImageInfo {
+                sampler: vk::Sampler::null(),
+                image_view: view_b,
+                image_layout: layout,
+            },
+        ];
+
+        let mut writes = Vec::new();
+        let mut binding = 0;
+
+        if set_ndx == 0 {
+            writes.push(
+                vk::WriteDescriptorSet::builder()
+                    .dst_set(set)
+                    .dst_binding(binding)
+                    .descriptor_type(vk::DescriptorType::STORAGE_BUFFER)
+                    .buffer_info(&result_info)
+                    .build(),
+            );
+            binding += 1;
+        }
+
+        let single = |dst_binding: u32, info: &[vk::DescriptorImageInfo]| {
+            vk::WriteDescriptorSet::builder()
+                .dst_set(set)
+                .dst_binding(dst_binding)
+                .descriptor_type(p.descriptor_type)
+                .image_info(info)
+                .build()
+        };
+
+        match p.shader_interface {
+            ShaderInputInterface::SingleDescriptor => writes.push(single(binding, &image_infos[0..1])),
+            ShaderInputInterface::MultipleContiguousDescriptors => {
+                writes.push(single(binding, &image_infos[0..1]));
+                writes.push(single(binding + 1, &image_infos[1..2]));
+            }
+            ShaderInputInterface::MultipleDiscontiguousDescriptors => {
+                writes.push(single(binding, &image_infos[0..1]));
+                writes.push(single(binding + 2, &image_infos[1..2]));
+            }
+            ShaderInputInterface::MultipleArbitraryDescriptors => {
+                writes.push(single(arbitrary_binding_index(0), &image_infos[0..1]));
+                writes.push(single(arbitrary_binding_index(1), &image_infos[1..2]));
+            }
+            ShaderInputInterface::DescriptorArray => writes.push(single(binding, &image_infos)),
+        }
+
+        unsafe { device.update_descriptor_sets(&writes, &[] as &[vk::CopyDescriptorSet]) };
+    }
+
+    fn create_compute_pipeline(&self, layout: vk::PipelineLayout, module: vk::ShaderModule) -> Result<Unique<'_, vk::Pipeline>, TestError> {
+        let device = self.context.get_device();
+        let entry = c"main";
+        let stage = vk::PipelineShaderStageCreateInfo::builder()
+            .stage(vk::ShaderStageFlags::COMPUTE)
+            .module(module)
+            .name(entry.to_bytes_with_nul())
+            .build();
+        let info = vk::ComputePipelineCreateInfo::builder().stage(stage).layout(layout);
+        let pipeline = unsafe { device.create_compute_pipelines(vk::PipelineCache::null(), &[info], None) }
+            .vk_check("vkCreateComputePipelines")?
+            .0[0];
+        Ok(Unique::new(device, pipeline))
+    }
+}
+
+/// `s_imageTypes` - the view type each case name stands for.
+const IMAGE_TYPES: [(&str, vk::ImageViewType, u32, u32); 20] = [
+    ("1d", vk::ImageViewType::_1D, 0, 0),
+    ("1d_base_mip", vk::ImageViewType::_1D, 1, 0),
+    ("1d_base_slice", vk::ImageViewType::_1D, 0, 1),
+    ("1d_array", vk::ImageViewType::_1D_ARRAY, 0, 0),
+    ("1d_array_base_mip", vk::ImageViewType::_1D_ARRAY, 1, 0),
+    ("1d_array_base_slice", vk::ImageViewType::_1D_ARRAY, 0, 1),
+    ("2d", vk::ImageViewType::_2D, 0, 0),
+    ("2d_base_mip", vk::ImageViewType::_2D, 1, 0),
+    ("2d_base_slice", vk::ImageViewType::_2D, 0, 1),
+    ("2d_array", vk::ImageViewType::_2D_ARRAY, 0, 0),
+    ("2d_array_base_mip", vk::ImageViewType::_2D_ARRAY, 1, 0),
+    ("2d_array_base_slice", vk::ImageViewType::_2D_ARRAY, 0, 1),
+    ("3d", vk::ImageViewType::_3D, 0, 0),
+    ("3d_base_mip", vk::ImageViewType::_3D, 1, 0),
+    // no 3d array textures
+    ("cube", vk::ImageViewType::CUBE, 0, 0),
+    ("cube_base_mip", vk::ImageViewType::CUBE, 1, 0),
+    ("cube_base_slice", vk::ImageViewType::CUBE, 0, 1),
+    ("cube_array", vk::ImageViewType::CUBE_ARRAY, 0, 0),
+    ("cube_array_base_mip", vk::ImageViewType::CUBE_ARRAY, 1, 0),
+    ("cube_array_base_slice", vk::ImageViewType::CUBE_ARRAY, 0, 1),
+];
+
+/// `createShaderAccessImageTests`' "skip some image view variations to avoid
+/// unnecessary bloating": only the plain 2D view gets the arrangements that already
+/// multiply out, so the group does not become the product of every axis.
+fn image_case_exists(view_type: vk::ImageViewType, descriptor_set_count: DescriptorSetCount, shader_interface: ShaderInputInterface) -> bool {
+    view_type == vk::ImageViewType::_2D
+        || (!matches!(
+            shader_interface,
+            ShaderInputInterface::MultipleDiscontiguousDescriptors | ShaderInputInterface::MultipleArbitraryDescriptors
+        ) && descriptor_set_count != DescriptorSetCount::MultipleDiscontiguous)
 }
