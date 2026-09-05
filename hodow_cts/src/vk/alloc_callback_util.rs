@@ -27,8 +27,9 @@ use vulkanalia::vk;
 /// long as the driver holds the `VkAllocationCallbacks`.
 struct Ledger {
     /// `DeterministicFailAllocator` in MODE_COUNT_AND_FAIL: how many allocations may
-    /// still succeed before every later one fails. `None` means never fail.
-    remaining_successes: Option<Mutex<u32>>,
+    /// still succeed before every later one fails. `None` is MODE_DO_NOT_COUNT - every
+    /// allocation goes through.
+    remaining_successes: Mutex<Option<u32>>,
     /// Pointer to the layout it was allocated with and the scope it was asked for;
     /// `dealloc` needs the layout back, and `validate` needs the scope.
     live: Mutex<HashMap<usize, (Layout, vk::SystemAllocationScope)>>,
@@ -39,7 +40,7 @@ struct Ledger {
 impl Ledger {
     fn new(remaining_successes: Option<u32>) -> Self {
         Self {
-            remaining_successes: remaining_successes.map(Mutex::new),
+            remaining_successes: Mutex::new(remaining_successes),
             live: Mutex::new(HashMap::new()),
             violations: Mutex::new(0),
         }
@@ -47,16 +48,13 @@ impl Ledger {
 
     /// Consumes one of the allowed successes, or reports that the budget is spent.
     fn take_success(&self) -> bool {
-        match &self.remaining_successes {
+        let mut remaining = self.remaining_successes.lock().expect("allocation ledger poisoned");
+        match *remaining {
             None => true,
-            Some(remaining) => {
-                let mut remaining = remaining.lock().expect("allocation ledger poisoned");
-                if *remaining == 0 {
-                    false
-                } else {
-                    *remaining -= 1;
-                    true
-                }
+            Some(0) => false,
+            Some(left) => {
+                *remaining = Some(left - 1);
+                true
             }
         }
     }
@@ -118,6 +116,12 @@ impl AllocationCallbackRecorder {
     /// `validateAllocationCallbacks` expects once every object is destroyed.
     pub fn live_allocation_count(&self) -> usize {
         self.ledger.live.lock().expect("allocation ledger poisoned").len()
+    }
+
+    /// `DeterministicFailAllocator::reset` - switches between counting-and-failing
+    /// (`Some(budget)`) and letting everything through (`None`).
+    pub fn set_budget(&self, remaining_successes: Option<u32>) {
+        *self.ledger.remaining_successes.lock().expect("allocation ledger poisoned") = remaining_successes;
     }
 
     /// Frees or reallocations of pointers this recorder never handed out.

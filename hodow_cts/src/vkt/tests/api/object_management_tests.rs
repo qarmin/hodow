@@ -17,8 +17,6 @@
 // `create_object`, both dispatching on it. The per-object bodies are otherwise a
 // line-by-line transcription and stay in upstream's order.
 //
-// Not ported here: `alloc_callback_fail_multiple`, the one variant that allocates
-// several pooled objects in a single call and checks which handles come back null.
 
 use vulkanalia::prelude::v1_0::*;
 use vulkanalia::vk::{ExtPrivateDataExtensionDeviceCommands, Handle as VkHandle, InstanceV1_1};
@@ -1073,8 +1071,9 @@ fn make_object_management_render_pass<'a>(device: &'a Device, allocator: Option<
     ))
 }
 
-/// `GraphicsPipeline::createMultiple` with one pipeline.
-fn create_graphics_pipeline<'a>(env: &Environment<'a>, res: &Resources<'a>) -> Result<Unique<'a, vk::Pipeline>, TestError> {
+/// `GraphicsPipeline::createMultiple` - `out` is written by the driver, which may set
+/// some handles and not others when it runs out of memory part-way.
+fn create_graphics_pipelines_raw(env: &Environment<'_>, res: &Resources<'_>, out: &mut [vk::Pipeline]) -> vk::Result {
     let device = env.device;
     let entry = c"main";
     let stages = [
@@ -1174,8 +1173,66 @@ fn create_graphics_pipeline<'a>(env: &Environment<'a>, res: &Resources<'a>) -> R
         .layout(res.pipeline_layout)
         .render_pass(res.render_pass)
         .subpass(0);
-    let pipelines = unsafe { device.create_graphics_pipelines(res.pipeline_cache, &[info], env.allocation_callbacks) }.vk_check("vkCreateGraphicsPipelines")?;
-    Ok(Unique::with_allocator(device, pipelines.0[0], env.allocation_callbacks))
+    // The raw entry point rather than vulkanalia's wrapper: on failure the wrapper
+    // discards the handle array, and `alloc_callback_fail_multiple` has to look at
+    // which handles the driver did and did not set.
+    let infos = vec![info.build(); out.len()];
+    let create = device.commands().create_graphics_pipelines;
+    unsafe {
+        create(
+            device.handle(),
+            res.pipeline_cache,
+            out.len() as u32,
+            infos.as_ptr(),
+            env.allocation_callbacks.map_or(std::ptr::null(), |a| a),
+            out.as_mut_ptr(),
+        )
+    }
+}
+
+/// `GraphicsPipeline::create`
+fn create_graphics_pipeline<'a>(env: &Environment<'a>, res: &Resources<'a>) -> Result<Unique<'a, vk::Pipeline>, TestError> {
+    let mut out = [vk::Pipeline::null()];
+    check_result(create_graphics_pipelines_raw(env, res, &mut out), "vkCreateGraphicsPipelines")?;
+    Ok(Unique::with_allocator(env.device, out[0], env.allocation_callbacks))
+}
+
+/// `VkResult` as this port's error type, for the raw entry points.
+fn check_result(result: vk::Result, what: &str) -> Result<(), TestError> {
+    if result == vk::Result::SUCCESS {
+        return Ok(());
+    }
+    Err::<(), _>(vk::ErrorCode::from_raw(result.as_raw())).vk_check(what)
+}
+
+/// `ComputePipeline::createMultiple`
+fn create_compute_pipelines_raw(
+    device: &Device,
+    module: vk::ShaderModule,
+    layout: vk::PipelineLayout,
+    cache: vk::PipelineCache,
+    allocator: Option<&vk::AllocationCallbacks>,
+    out: &mut [vk::Pipeline],
+) -> vk::Result {
+    let entry = c"main";
+    let stage = vk::PipelineShaderStageCreateInfo::builder()
+        .stage(vk::ShaderStageFlags::COMPUTE)
+        .module(module)
+        .name(entry.to_bytes_with_nul())
+        .build();
+    let info = vk::ComputePipelineCreateInfo::builder().stage(stage).layout(layout).build();
+    let infos = vec![info; out.len()];
+    let create = device.commands().create_compute_pipelines;
+    unsafe {
+        create(
+            device.handle(),
+            cache,
+            out.len() as u32,
+            infos.as_ptr(),
+            allocator.map_or(std::ptr::null(), |a| a),
+            out.as_mut_ptr(),
+        )
+    }
 }
 
 /// `ComputePipeline::create`
@@ -1186,15 +1243,9 @@ fn create_compute_pipeline<'a>(
     cache: vk::PipelineCache,
     allocator: Option<&'a vk::AllocationCallbacks>,
 ) -> Result<Unique<'a, vk::Pipeline>, TestError> {
-    let entry = c"main";
-    let stage = vk::PipelineShaderStageCreateInfo::builder()
-        .stage(vk::ShaderStageFlags::COMPUTE)
-        .module(module)
-        .name(entry.to_bytes_with_nul())
-        .build();
-    let info = vk::ComputePipelineCreateInfo::builder().stage(stage).layout(layout);
-    let pipelines = unsafe { device.create_compute_pipelines(cache, &[info], allocator) }.vk_check("vkCreateComputePipelines")?;
-    Ok(Unique::with_allocator(device, pipelines.0[0], allocator))
+    let mut out = [vk::Pipeline::null()];
+    check_result(create_compute_pipelines_raw(device, module, layout, cache, allocator, &mut out), "vkCreateComputePipelines")?;
+    Ok(Unique::with_allocator(device, out[0], allocator))
 }
 
 /// The throwaway compute pipeline `MergedPipelineCache::create` builds so the source
@@ -1262,6 +1313,8 @@ enum Variant {
     AllocCallbackFail,
     /// `createPrivateDataTest`
     PrivateData,
+    /// `allocCallbackFailMultipleObjectsTest`
+    AllocCallbackFailMultiple,
 }
 
 struct ObjectManagementCase {
@@ -1399,6 +1452,7 @@ impl TestInstance for ObjectManagementInstance<'_> {
             Variant::SingleAllocCallbacks => return self.single_alloc_callbacks(),
             Variant::AllocCallbackFail => return self.alloc_callback_fail(),
             Variant::PrivateData => return self.private_data(),
+            Variant::AllocCallbackFailMultiple => return self.alloc_callback_fail_multiple(),
             Variant::MultipleSharedResources => {
                 let env = Environment::new(self.context, 4);
                 let res = Resources::new(&env, &case.params)?;
@@ -1634,6 +1688,65 @@ impl ObjectManagementInstance<'_> {
         Ok(TestStatus::pass("Ok"))
     }
 
+    /// `allocCallbackFailMultipleObjectsTest` - four objects at a time, with one more
+    /// host allocation allowed each round, checking that a partial failure reports
+    /// out-of-host-memory and leaves the handles it did not create null.
+    fn alloc_callback_fail_multiple(&self) -> TestOutcome {
+        let case = self.params;
+        const NUM_OBJECTS: usize = 4;
+        let expect_null_handles = expects_null_handles_on_failure(self.context, &case.params);
+        let mut num_passing_allocs = 0u32;
+
+        while num_passing_allocs as usize <= NUM_OBJECTS {
+            // The same allocator serves the resources and the objects, because a
+            // pooled object takes its memory from the pool - so the resource phase runs
+            // with no budget and the budget is set just before the objects are made.
+            let recorder = AllocationCallbackRecorder::new();
+            let env = Environment {
+                allocation_callbacks: Some(recorder.callbacks()),
+                max_resource_consumers: NUM_OBJECTS as u32,
+                ..Environment::new(self.context, NUM_OBJECTS as u32)
+            };
+
+            let (handles, result) = {
+                let res = Resources::new(&env, &case.params)?;
+                recorder.set_budget(Some(num_passing_allocs));
+                let (objects, handles, result) = create_multiple(&env, &res, &case.params, NUM_OBJECTS);
+                drop(objects);
+                (handles, result)
+            };
+            recorder.set_budget(None);
+
+            if result == vk::Result::SUCCESS {
+                break;
+            }
+
+            if expect_null_handles {
+                for handle in &handles[num_passing_allocs as usize..] {
+                    if *handle != 0 {
+                        return Ok(TestStatus::fail("Some object handles weren't set to NULL"));
+                    }
+                }
+            }
+            if result != vk::Result::ERROR_OUT_OF_HOST_MEMORY {
+                return Ok(TestStatus::fail(format!("Got invalid error code: {result:?}")));
+            }
+            if !recorder.validate(0) {
+                return Ok(TestStatus::fail("Invalid allocation callback"));
+            }
+            num_passing_allocs += 1;
+        }
+
+        if num_passing_allocs == 0 {
+            return Ok(if is_pooled_object(&case.params) {
+                TestStatus::pass("Not validated: pooled objects didn't seem to use host memory")
+            } else {
+                TestStatus::new(tcu::TestResult::QualityWarning, "Allocation callbacks not called")
+            });
+        }
+        Ok(TestStatus::pass("Ok"))
+    }
+
     /// `createPrivateDataTest` - on each of five devices asked for a different number
     /// of private-data slots up front, write and read back a distinct value in every
     /// (object, slot) pair, three times over with the slots reallocated in between.
@@ -1760,6 +1873,90 @@ impl ObjectManagementInstance<'_> {
         }
         Ok(TestStatus::pass("Ok"))
     }
+}
+
+/// `Object::createMultiple` - the four object kinds that can be made several at a
+/// time, so a driver that runs out of memory part-way through leaves some handles set
+/// and some not. Returns what it created and the raw handle array the driver wrote.
+fn create_multiple<'a>(env: &Environment<'a>, res: &Resources<'a>, params: &ObjectParams, count: usize) -> (Vec<Owned<'a>>, Vec<u64>, vk::Result) {
+    use vulkanalia::vk::Handle as _;
+    let device = env.device;
+    let allocator = env.allocation_callbacks;
+    // Pre-filled with something that is not a null handle, so "the driver left this
+    // alone" and "the driver set it to null" are distinguishable.
+    const GARBAGE: u64 = 0xcdcd_cdcd_cdcd_cdcd;
+
+    match params {
+        ObjectParams::GraphicsPipeline | ObjectParams::ComputePipeline => {
+            let mut handles = vec![vk::Pipeline::from_raw(GARBAGE); count];
+            let result = if matches!(params, ObjectParams::GraphicsPipeline) {
+                create_graphics_pipelines_raw(env, res, &mut handles)
+            } else {
+                create_compute_pipelines_raw(device, res.shader_modules[0], res.pipeline_layout, res.pipeline_cache, allocator, &mut handles)
+            };
+            let raw = handles.iter().map(|h| h.as_raw()).collect();
+            let objects = handles
+                .iter()
+                .filter(|h| !h.is_null())
+                .map(|h| Owned::Pipeline(Unique::with_allocator(device, *h, allocator)))
+                .collect();
+            (objects, raw, result)
+        }
+        ObjectParams::CommandBuffer(p) => {
+            let mut handles = vec![vk::CommandBuffer::null(); count];
+            let info = vk::CommandBufferAllocateInfo::builder()
+                .command_pool(res.command_pool)
+                .level(p.level)
+                .command_buffer_count(count as u32)
+                .build();
+            let allocate = device.commands().allocate_command_buffers;
+            let result = unsafe { allocate(device.handle(), &info, handles.as_mut_ptr()) };
+            let raw = handles.iter().map(|h| h.as_raw() as u64).collect();
+            let objects = if result == vk::Result::SUCCESS {
+                handles
+                    .iter()
+                    .map(|h| Owned::CommandBuffer(UniqueCommandBuffer::new(device, res.command_pool, *h)))
+                    .collect()
+            } else {
+                Vec::new()
+            };
+            (objects, raw, result)
+        }
+        ObjectParams::DescriptorSet(_) => {
+            let mut handles = vec![vk::DescriptorSet::from_raw(GARBAGE); count];
+            let layouts = vec![res.descriptor_set_layout; count];
+            let info = vk::DescriptorSetAllocateInfo::builder().descriptor_pool(res.descriptor_pool).set_layouts(&layouts).build();
+            let allocate = device.commands().allocate_descriptor_sets;
+            let result = unsafe { allocate(device.handle(), &info, handles.as_mut_ptr()) };
+            let raw = handles.iter().map(|h| h.as_raw()).collect();
+            let objects = if result == vk::Result::SUCCESS {
+                handles
+                    .iter()
+                    .map(|h| Owned::DescriptorSet(UniqueDescriptorSet::new(device, res.descriptor_pool, *h)))
+                    .collect()
+            } else {
+                Vec::new()
+            };
+            (objects, raw, result)
+        }
+        _ => unreachable!("createMultiple is only defined for pipelines and pooled objects"),
+    }
+}
+
+/// `isNullHandleOnAllocationFailure` - whether the driver promises to set the handles
+/// it did not create to null.
+fn expects_null_handles_on_failure(context: &Context<'_>, params: &ObjectParams) -> bool {
+    match params {
+        ObjectParams::GraphicsPipeline | ObjectParams::ComputePipeline => true,
+        ObjectParams::CommandBuffer(_) | ObjectParams::DescriptorSet(_) => context.is_device_functionality_supported("VK_KHR_maintenance1"),
+        _ => false,
+    }
+}
+
+/// `isPooledObject` - a pooled object takes its memory from the pool, so a driver that
+/// never calls the host allocator for one is not misbehaving.
+fn is_pooled_object(params: &ObjectParams) -> bool {
+    matches!(params, ObjectParams::CommandBuffer(_) | ObjectParams::DescriptorSet(_))
 }
 
 /// `SingletonDevice::requestedSlots` - the private-data slot counts the five devices
@@ -2221,6 +2418,7 @@ pub fn create_object_management_tests() -> tcu::TestCaseGroup {
         ("single_alloc_callbacks", Variant::SingleAllocCallbacks),
         ("alloc_callback_fail", Variant::AllocCallbackFail),
         ("private_data", Variant::PrivateData),
+        ("alloc_callback_fail_multiple", Variant::AllocCallbackFailMultiple),
     ] {
         let mut group = tcu::TestCaseGroup::new(group_name);
         for (name, params) in all_cases() {
@@ -2242,6 +2440,15 @@ pub fn create_object_management_tests() -> tcu::TestCaseGroup {
                 && matches!(
                     params,
                     ObjectParams::Instance | ObjectParams::Device(_) | ObjectParams::DeviceGroup(_) | ObjectParams::MergedPipelineCache { .. }
+                )
+            {
+                continue;
+            }
+            // Only the four object kinds that can be made several at a time.
+            if variant == Variant::AllocCallbackFailMultiple
+                && !matches!(
+                    params,
+                    ObjectParams::GraphicsPipeline | ObjectParams::ComputePipeline | ObjectParams::CommandBuffer(_) | ObjectParams::DescriptorSet(_)
                 )
             {
                 continue;
