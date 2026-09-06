@@ -7,6 +7,7 @@
 // would produce a verdict indistinguishable from a real driver bug.
 
 pub mod astc;
+pub mod bilinear_image_compare;
 pub mod compressed_texture;
 pub mod defs;
 pub mod fuzzy_image_compare;
