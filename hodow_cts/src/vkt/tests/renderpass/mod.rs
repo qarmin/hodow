@@ -9,6 +9,7 @@
 //
 // Modifications: rewritten in Rust for hodow_cts.
 
+pub mod depth_stencil_resolve_tests;
 pub mod render_pass_tests;
 pub mod unused_attachment_tests;
 pub mod unused_clear_attachment_tests;
@@ -22,7 +23,12 @@ use crate::tcu::TestCaseGroup;
 /// missing instead of as passing.
 pub fn create_tests() -> TestCaseGroup {
     let mut tests = TestCaseGroup::new("renderpasses");
-    for group in render_pass_tests::create_render_pass_groups() {
+    for mut group in render_pass_tests::create_render_pass_groups() {
+        // `depth_stencil_resolve` is a renderpass2 test: it needs the resolve mode
+        // fields that only VkSubpassDescription2 carries.
+        if group.name() == "renderpass2" {
+            group.add_child(depth_stencil_resolve_tests::create_tests());
+        }
         tests.add_child(group);
     }
     tests

@@ -461,6 +461,7 @@ pub fn download_image(
 
     let mut staging = Vec::new();
     for plane_ndx in 0..info.planes.len() {
+        let _ = plane_ndx;
         staging.push(BufferWithMemory::new(
             device,
             allocator,
