@@ -167,7 +167,7 @@ def graphics_vertex_shader(declarations: str, access: str, contributing: bool, e
     )
 
 
-def graphics_vertex_passthrough(extension: str = "", version: str = "#version 310 es\n") -> str:
+def graphics_vertex_passthrough(extension: str = "", version: str = "#version 310 es\n", next_stage: str = "frag") -> str:
     """The same, for the branch where the vertex stage reads nothing.
 
     Upstream emits `genExtensionDeclarations` here too even though nothing in the shader
@@ -176,7 +176,7 @@ def graphics_vertex_passthrough(extension: str = "", version: str = "#version 31
     return (
         version
         + extension
-        + "layout(location = 1) flat out highp int frag_quadrant_id;\n"
+        + f"layout(location = 1) flat out highp int {next_stage}_quadrant_id;\n"
         + per_vertex_block(version)
         + "void main (void)\n"
         "{\n"
@@ -184,8 +184,8 @@ def graphics_vertex_passthrough(extension: str = "", version: str = "#version 31
         "    highp int quadrant_id;\n"
         + QUADRANT_GEN_VERTEX_POS
         + "    gl_Position = result_position;\n"
-        "    frag_quadrant_id = quadrant_id;\n"
-        "}\n"
+        + f"    {next_stage}_quadrant_id = quadrant_id;\n"
+        + "}\n"
     )
 
 
@@ -671,6 +671,166 @@ def image_case_exists(view_type: str, set_count: str, interface: str, descriptor
     return True
 
 
+# `genPerVertexBlock` for the stages that read a block in as well as writing one out.
+PER_VERTEX_TESC = (
+    "in gl_PerVertex {\n    vec4  gl_Position;\n    float gl_PointSize;\n} gl_in[gl_MaxPatchVertices];\n"
+    "out gl_PerVertex {\n    vec4  gl_Position;\n    float gl_PointSize;\n} gl_out[];\n"
+)
+PER_VERTEX_TESE = (
+    "in gl_PerVertex {\n    vec4  gl_Position;\n    float gl_PointSize;\n} gl_in[gl_MaxPatchVertices];\n"
+    "out gl_PerVertex {\n    vec4  gl_Position;\n    float gl_PointSize;\n};\n"
+)
+PER_VERTEX_GEOM = (
+    "in gl_PerVertex {\n    vec4  gl_Position;\n    float gl_PointSize;\n} gl_in[];\n"
+    "out gl_PerVertex {\n    vec4  gl_Position;\n    float gl_PointSize;\n};\n"
+)
+
+# Every tessellation shader here sets the same levels and forwards the position without
+# indexing the input block dynamically, which ES does not allow.
+TESS_COMMON_TAIL = (
+    "    // no dynamic input block indexing\n"
+    "    highp vec4 position;\n"
+    "    if (gl_InvocationID == 0)\n"
+    "        position = gl_in[0].gl_Position;\n"
+    "    else if (gl_InvocationID == 1)\n"
+    "        position = gl_in[1].gl_Position;\n"
+    "    else\n"
+    "        position = gl_in[2].gl_Position;\n"
+    "    gl_out[gl_InvocationID].gl_Position = position;\n"
+    "    gl_TessLevelInner[0] = 2.8;\n"
+    "    gl_TessLevelInner[1] = 2.8;\n"
+    "    gl_TessLevelOuter[0] = 2.8;\n"
+    "    gl_TessLevelOuter[1] = 2.8;\n"
+    "    gl_TessLevelOuter[2] = 2.8;\n"
+    "    gl_TessLevelOuter[3] = 2.8;\n"
+    "}\n"
+)
+
+TESE_POSITION = (
+    "    gl_Position = gl_TessCoord.x * gl_in[0].gl_Position + gl_TessCoord.y * gl_in[1].gl_Position + "
+    "gl_TessCoord.z * gl_in[2].gl_Position;\n"
+)
+
+
+def tess_ext(version: str) -> str:
+    """`tessExtDecl` - required only on an ES version at or below 310."""
+    return "#extension GL_EXT_tessellation_shader : require\n" if version.strip().endswith("es") else ""
+
+
+def geom_ext(version: str) -> str:
+    return "#extension GL_EXT_geometry_shader : require\n" if version.strip().endswith("es") else ""
+
+
+def per_vertex(kind: str, version: str) -> str:
+    if version.strip().endswith("es"):
+        return ""
+    return {"tesc": PER_VERTEX_TESC, "tese": PER_VERTEX_TESE, "geom": PER_VERTEX_GEOM}[kind]
+
+
+def graphics_tesc_active(declarations: str, access: str, extension: str, version: str) -> str:
+    """`genTessCtrlSource`, the branch where the control stage is the one that reads."""
+    return (
+        version
+        + tess_ext(version)
+        + extension
+        + "layout(vertices=3) out;\n"
+        + declarations
+        + "layout(location = 1) flat in highp int tsc_quadrant_id[];\n"
+        "layout(location = 0) out highp vec4 tes_color[];\n"
+        + per_vertex("tesc", version)
+        + "void main (void)\n"
+        "{\n"
+        "    highp vec4 result_color;\n"
+        "    highp int quadrant_id = tsc_quadrant_id[gl_InvocationID];\n"
+        + access
+        + "\n"
+        "    tes_color[gl_InvocationID] = result_color;\n"
+        "\n" + TESS_COMMON_TAIL
+    )
+
+
+def graphics_tesc_passthrough(version: str) -> str:
+    """The same, for the branch where the evaluation stage is the reader."""
+    return (
+        version
+        + tess_ext(version)
+        + "layout(vertices=3) out;\n"
+        "layout(location = 1) flat in highp int tsc_quadrant_id[];\n"
+        "layout(location = 1) flat out highp int tes_quadrant_id[];\n"
+        + per_vertex("tesc", version)
+        + "void main (void)\n"
+        "{\n"
+        "    tes_quadrant_id[gl_InvocationID] = tsc_quadrant_id[0];\n"
+        "\n" + TESS_COMMON_TAIL
+    )
+
+
+def graphics_tese_active(declarations: str, access: str, extension: str, version: str) -> str:
+    """`genTessEvalSource`, the branch where the evaluation stage reads."""
+    return (
+        version
+        + tess_ext(version)
+        + extension
+        + "layout(triangles) in;\n"
+        + declarations
+        + "layout(location = 1) flat in highp int tes_quadrant_id[];\n"
+        "layout(location = 0) out mediump vec4 frag_color;\n"
+        + per_vertex("tese", version)
+        + "void main (void)\n"
+        "{\n"
+        "    highp vec4 result_color;\n"
+        "    highp int quadrant_id = tes_quadrant_id[0];\n"
+        + access
+        + "\n"
+        "    frag_color = result_color;\n" + TESE_POSITION + "}\n"
+    )
+
+
+def graphics_tese_passthrough(version: str) -> str:
+    """The same, when the control stage was the reader and only forwards its colour."""
+    return (
+        version
+        + tess_ext(version)
+        + "layout(triangles) in;\n"
+        "layout(location = 0) in highp vec4 tes_color[];\n"
+        "layout(location = 0) out mediump vec4 frag_color;\n"
+        + per_vertex("tese", version)
+        + "void main (void)\n"
+        "{\n"
+        "    frag_color = tes_color[0];\n" + TESE_POSITION + "}\n"
+    )
+
+
+def graphics_geom_active(declarations: str, access: str, extension: str, version: str) -> str:
+    """`genGeometrySource`. It reads the descriptor once per emitted vertex, and the
+    quadrant it asks for is deliberately not the vertex's own on the last one."""
+    quadrants = [("0", "gl_in[0].gl_Position"), ("1", "gl_in[1].gl_Position"), ("2", "gl_in[0].gl_Position * 0.5 + gl_in[2].gl_Position * 0.5"), ("0", "gl_in[2].gl_Position")]
+    body = ""
+    for ndx, (which, position) in enumerate(quadrants):
+        body += ("" if ndx == 0 else "\n")
+        body += f"    quadrant_id = geo_quadrant_id[{which}];\n"
+        body += access
+        body += "    frag_color = result_color;\n"
+        body += f"    gl_Position = {position};\n"
+        body += "    EmitVertex();\n"
+    return (
+        version
+        + geom_ext(version)
+        + extension
+        + "layout(triangles) in;\n"
+        "layout(triangle_strip, max_vertices=4) out;\n"
+        + declarations
+        + "layout(location = 1) flat in highp int geo_quadrant_id[];\n"
+        "layout(location = 0) out mediump vec4 frag_color;\n"
+        + per_vertex("geom", version)
+        + "void main (void)\n"
+        "{\n"
+        "    highp int quadrant_id;\n"
+        "    highp vec4 result_color;\n"
+        "\n" + body + "}\n"
+    )
+
+
 def emit_graphics_programs(name: str, declarations: str, access: str, extension: str = "", version: str = "#version 310 es\n") -> list[str]:
     """The four stage-active combinations a graphics case needs, as manifest entries.
 
@@ -688,6 +848,15 @@ def emit_graphics_programs(name: str, declarations: str, access: str, extension:
         # gets desktop-GLSL pass-throughs while a 2D one gets ES ones.
         ("frag_passthrough", graphics_fragment_passthrough(version), "frag"),
         ("frag_no_access", graphics_fragment_no_access(version), "frag"),
+        # The tessellation and geometry configurations. The vertex stage only forwards
+        # the quadrant id there, and its name depends on which stage comes next.
+        ("vert_passthrough_tsc", graphics_vertex_passthrough(extension, version, "tsc"), "vert"),
+        ("vert_passthrough_geo", graphics_vertex_passthrough(extension, version, "geo"), "vert"),
+        ("tesc", graphics_tesc_active(declarations, access, extension, version), "tesc"),
+        ("tesc_passthrough", graphics_tesc_passthrough(version), "tesc"),
+        ("tese", graphics_tese_active(declarations, access, extension, version), "tese"),
+        ("tese_passthrough", graphics_tese_passthrough(version), "tese"),
+        ("geom", graphics_geom_active(declarations, access, extension, version), "geom"),
     ]
     entries = []
     for suffix, source, stage in variants:

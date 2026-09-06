@@ -30,7 +30,9 @@ use crate::vk::builder_util::{DescriptorPoolBuilder, DescriptorSetLayoutBuilder}
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
 use crate::vk::image_util::{ImageWithMemory, make_image_view};
 use crate::vk::mem_util::{MemoryRequirement, flush_alloc, invalidate_alloc};
-use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool, make_descriptor_set, make_pipeline_layout};
+use crate::vk::obj_util::{
+    BufferWithMemory, GraphicsPipelineStages, allocate_command_buffer, make_buffer_create_info, make_command_pool, make_descriptor_set, make_pipeline_layout,
+};
 use crate::vk::programs::{BinaryCollection, create_shader_module};
 use crate::vk::ref_util::Unique;
 use crate::vkt::{Context, TestCase, TestInstance};
@@ -209,6 +211,24 @@ pub enum ResourceKind {
     TexelBuffer,
 }
 
+/// `verifyDriverSupport` - the stage a case reads its descriptor in has to exist on the
+/// device at all. Both tessellation configurations build both tessellation shaders, so
+/// either one needs the feature.
+fn check_stage_support(context: &Context, stage_flags: vk::ShaderStageFlags) -> Result<(), TestError> {
+    let features = context.get_device_features();
+    let tessellation = stage_flags.intersects(vk::ShaderStageFlags::TESSELLATION_CONTROL | vk::ShaderStageFlags::TESSELLATION_EVALUATION);
+    if tessellation && features.tessellation_shader != vk::TRUE {
+        return Err(TestError::NotSupported("tessellationShader not supported".into()));
+    }
+    if stage_flags.contains(vk::ShaderStageFlags::GEOMETRY) && features.geometry_shader != vk::TRUE {
+        return Err(TestError::NotSupported("geometryShader not supported".into()));
+    }
+    // A descriptor read from a vertex, tessellation or geometry stage is a store-free
+    // read, so `vertexPipelineStoresAndAtomics` is not what is at stake here; upstream
+    // asks for nothing more than the stage itself.
+    Ok(())
+}
+
 /// `SingleTargetRenderInstance` + `SingleCmdRenderInstance::renderToTarget` - the part
 /// that is the same whatever the descriptors are: a 128x128 colour target, one draw of
 /// 24 vertices covering it in four quadrants, and the result read back.
@@ -223,8 +243,7 @@ fn render_quadrants(
     queue: vk::Queue,
     queue_index: u32,
     pipeline_layout: vk::PipelineLayout,
-    vert: vk::ShaderModule,
-    frag: vk::ShaderModule,
+    stages: GraphicsPipelineStages,
     is_primary: bool,
     bind: &dyn Fn(&Device, vk::CommandBuffer),
 ) -> Result<Vec<u8>, TestError> {
@@ -268,7 +287,7 @@ fn render_quadrants(
     let render_pass = make_render_pass(device, format)?;
     let framebuffer = make_framebuffer(device, *render_pass, &[*color_view], RENDER_SIZE, RENDER_SIZE, 1)?;
 
-    let pipeline = make_quadrant_pipeline(device, pipeline_layout, *render_pass, vert, frag)?;
+    let pipeline = make_quadrant_pipeline(device, pipeline_layout, *render_pass, stages)?;
 
     let read_buffer = BufferWithMemory::new(
         device,
@@ -414,20 +433,62 @@ fn render_quadrants(
 /// `RenderInstanceShaders` - which of the generated programs each stage configuration
 /// uses. The "contributing" pair is for the case where both stages read a descriptor
 /// and each owns half the image.
+#[allow(clippy::type_complexity)]
 fn graphics_modules<'a>(
     device: &'a Device,
     programs: &BinaryCollection,
     stage_flags: vk::ShaderStageFlags,
-) -> Result<(Unique<'a, vk::ShaderModule>, Unique<'a, vk::ShaderModule>), TestError> {
+) -> Result<(Vec<Unique<'a, vk::ShaderModule>>, GraphicsPipelineStages), TestError> {
     let vertex = stage_flags.contains(vk::ShaderStageFlags::VERTEX);
     let fragment = stage_flags.contains(vk::ShaderStageFlags::FRAGMENT);
-    let (vert, frag) = match (vertex, fragment) {
-        (true, true) => (programs.get("vert_contrib")?, programs.get("frag_contrib")?),
-        (true, false) => (programs.get("vert")?, programs.get("frag_passthrough")?),
-        (false, true) => (programs.get("vert_passthrough")?, programs.get("frag")?),
-        (false, false) => (programs.get("vert_passthrough")?, programs.get("frag_no_access")?),
+    let tesc = stage_flags.contains(vk::ShaderStageFlags::TESSELLATION_CONTROL);
+    let tese = stage_flags.contains(vk::ShaderStageFlags::TESSELLATION_EVALUATION);
+    let geom = stage_flags.contains(vk::ShaderStageFlags::GEOMETRY);
+
+    // The vertex stage only forwards the quadrant id when a later stage is the reader,
+    // and the name it forwards under depends on which stage that is.
+    let (vert_name, frag_name) = if tesc || tese {
+        ("vert_passthrough_tsc", "frag_passthrough")
+    } else if geom {
+        ("vert_passthrough_geo", "frag_passthrough")
+    } else {
+        match (vertex, fragment) {
+            (true, true) => ("vert_contrib", "frag_contrib"),
+            (true, false) => ("vert", "frag_passthrough"),
+            (false, true) => ("vert_passthrough", "frag"),
+            (false, false) => ("vert_passthrough", "frag_no_access"),
+        }
     };
-    Ok((create_shader_module(device, vert)?, create_shader_module(device, frag)?))
+
+    let mut owned = Vec::new();
+    let vert = create_shader_module(device, programs.get(vert_name)?)?;
+    let frag = create_shader_module(device, programs.get(frag_name)?)?;
+    let mut stages = GraphicsPipelineStages {
+        vertex: *vert,
+        fragment: *frag,
+        tessellation_control: None,
+        tessellation_evaluation: None,
+        geometry: None,
+    };
+    owned.push(vert);
+    owned.push(frag);
+
+    if tesc || tese {
+        // Both tessellation shaders always exist; the one that is not reading forwards.
+        let c = create_shader_module(device, programs.get(if tesc { "tesc" } else { "tesc_passthrough" })?)?;
+        let e = create_shader_module(device, programs.get(if tese { "tese" } else { "tese_passthrough" })?)?;
+        stages.tessellation_control = Some(*c);
+        stages.tessellation_evaluation = Some(*e);
+        owned.push(c);
+        owned.push(e);
+    }
+    if geom {
+        let g = create_shader_module(device, programs.get("geom")?)?;
+        stages.geometry = Some(*g);
+        owned.push(g);
+    }
+
+    Ok((owned, stages))
 }
 
 /// `drawQuadrantReferenceResult` + `bilinearCompare` - build the reference from the
@@ -466,17 +527,21 @@ fn make_quadrant_pipeline(
     device: &Device,
     pipeline_layout: vk::PipelineLayout,
     render_pass: vk::RenderPass,
-    vert: vk::ShaderModule,
-    frag: vk::ShaderModule,
+    stages: GraphicsPipelineStages,
 ) -> Result<Unique<'_, vk::Pipeline>, TestError> {
-    crate::vk::obj_util::make_graphics_pipeline_full(
+    // A tessellated pipeline takes patches; everything else takes triangles.
+    let topology = if stages.tessellation_control.is_some() {
+        vk::PrimitiveTopology::PATCH_LIST
+    } else {
+        vk::PrimitiveTopology::TRIANGLE_LIST
+    };
+    crate::vk::obj_util::make_graphics_pipeline_staged(
         device,
         pipeline_layout,
-        vert,
-        frag,
+        stages,
         render_pass,
         (RENDER_SIZE, RENDER_SIZE),
-        vk::PrimitiveTopology::TRIANGLE_LIST,
+        topology,
         vk::SampleCountFlags::_1,
         None,
         1,
@@ -536,6 +601,7 @@ impl TestCase for BufferAccessCase {
 
     fn check_support(&self, context: &Context) -> Result<(), TestError> {
         verify_update_method_support(context, self.update_method)?;
+        check_stage_support(context, self.stage_flags)?;
 
         // Two sets plus the gap the discontiguous variant leaves.
         let required_sets = match self.descriptor_set_count {
@@ -1008,7 +1074,7 @@ impl BufferAccessInstance<'_> {
         };
         let pipeline_layout = make_pipeline_layout(device, &all_layouts)?;
 
-        let (vert, frag) = graphics_modules(device, &p.program().programs, p.stage_flags)?;
+        let (_modules, stages) = graphics_modules(device, &p.program().programs, p.stage_flags)?;
         let dynamic_offsets: Vec<u32> = if p.set_dynamic_offset { bind_time_offsets.clone() } else { Vec::new() };
         let bind = |device: &Device, cmd: vk::CommandBuffer| unsafe {
             // The discontiguous arrangement's sets are 0 and 2, so each binds at its
@@ -1035,7 +1101,7 @@ impl BufferAccessInstance<'_> {
                 device.cmd_bind_descriptor_sets(cmd, vk::PipelineBindPoint::GRAPHICS, *pipeline_layout, 0, &set_handles, &dynamic_offsets);
             }
         };
-        let pixels = render_quadrants(device, allocator, queue, queue_index, *pipeline_layout, *vert, *frag, p.is_primary_cmd_buf, &bind)?;
+        let pixels = render_quadrants(device, allocator, queue, queue_index, *pipeline_layout, stages, p.is_primary_cmd_buf, &bind)?;
 
         drop(unused);
         drop(set_layouts);
@@ -1460,10 +1526,13 @@ fn create_descriptor_type_groups(update_method: DescriptorUpdateMethod, is_prima
 /// The stage configurations upstream registers, in its order. `no_access` binds the
 /// descriptors and reads none of them, which checks that merely binding a descriptor
 /// does not disturb the pipeline.
-const SHADER_STAGES: [(&str, vk::ShaderStageFlags); 5] = [
+const SHADER_STAGES: [(&str, vk::ShaderStageFlags); 8] = [
     ("no_access", vk::ShaderStageFlags::empty()),
     ("compute", vk::ShaderStageFlags::COMPUTE),
     ("vertex", vk::ShaderStageFlags::VERTEX),
+    ("tess_ctrl", vk::ShaderStageFlags::TESSELLATION_CONTROL),
+    ("tess_eval", vk::ShaderStageFlags::TESSELLATION_EVALUATION),
+    ("geometry", vk::ShaderStageFlags::GEOMETRY),
     ("fragment", vk::ShaderStageFlags::FRAGMENT),
     (
         "vertex_fragment",
@@ -1911,6 +1980,7 @@ impl TestCase for ImageAccessCase {
 
     fn check_support(&self, context: &Context) -> Result<(), TestError> {
         verify_update_method_support(context, self.update_method)?;
+        check_stage_support(context, self.stage_flags)?;
 
         // `verifyDriverSupport`, restricted to what the compute stage can reach.
         if self.view_type == vk::ImageViewType::CUBE_ARRAY && context.get_device_features().image_cube_array == vk::FALSE {
@@ -2062,7 +2132,7 @@ impl TestInstance for ImageAccessInstance<'_> {
         let rendered = if p.is_compute() {
             None
         } else {
-            let (vert, frag) = graphics_modules(device, &p.program().programs, p.stage_flags)?;
+            let (_modules, stages) = graphics_modules(device, &p.program().programs, p.stage_flags)?;
             let bind = |device: &Device, cmd: vk::CommandBuffer| unsafe {
                 if p.descriptor_set_count == DescriptorSetCount::MultipleDiscontiguous {
                     for set_ndx in 0..num_sets {
@@ -2085,8 +2155,7 @@ impl TestInstance for ImageAccessInstance<'_> {
                 queue,
                 queue_index,
                 *pipeline_layout,
-                *vert,
-                *frag,
+                stages,
                 p.is_primary_cmd_buf,
                 &bind,
             )?)
