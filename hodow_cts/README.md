@@ -56,7 +56,31 @@ sudo apt install rustup mesa-vulkan-drivers && rustup default stable
 cargo run --release -p hodow_cts -- --case 'dEQP-VK.compute.*'
 ```
 
-That is the whole list. No `-dev` packages, no Vulkan SDK, no CMake.
+That is the whole list to *run* it. No `-dev` packages, no Vulkan SDK, no CMake.
+
+If you are going to work on the port rather than just run it, install the rest now and
+skip three round trips later:
+
+```bash
+sudo apt install mesa-vulkan-drivers vulkan-validationlayers vulkan-tools \
+                 spirv-tools python3 cmake g++ git
+```
+
+| | |
+|---|---|
+| `mesa-vulkan-drivers` | lavapipe, the software driver - section 2 |
+| `vulkan-validationlayers` | the bug-finding tool - section 3 |
+| `vulkan-tools` | `vulkaninfo`, to see what a driver actually supports |
+| `spirv-tools` | `spirv-val`, to check committed SPIR-V without a driver |
+| `python3 cmake g++ git` | the upstream checkout - section 4 |
+
+Sanity-check what you ended up with:
+
+```bash
+ls /usr/share/vulkan/icd.d/                 # lvp_icd*.json = lavapipe present
+ls /usr/share/vulkan/explicit_layer.d/      # VkLayer_khronos_validation.json
+vulkaninfo --summary | grep deviceName
+```
 
 Useful flags:
 
@@ -119,31 +143,113 @@ failure - it is deliberately distinct from a driver that is present and broken.
 Point it at a software driver instead:
 
 ```bash
-# lavapipe, Mesa's software Vulkan driver
-sudo apt install mesa-vulkan-drivers
+sudo apt install mesa-vulkan-drivers   # lavapipe, Mesa's software Vulkan
 
-# `just cts-sw` finds the ICD manifest and runs against it. Where distributions put
-# that file varies between Mesa versions, so it is searched for rather than assumed.
-just cts-sw
+just cts-sw    # debug
+just cts-swr   # release - use this for anything over a few thousand cases
 ```
 
-If it cannot find one, it prints every ICD manifest it did see. To locate Mesa's by
-hand and use it directly:
+`cts-sw` finds the ICD manifest itself (`scripts/pick_sw_icd.sh`); where distributions
+put that file varies - `lvp_icd.json` on some, `lvp_icd.x86_64.json` on others - so it
+is searched for rather than assumed. If it finds nothing it prints every manifest it
+did see. To pick one by hand:
 
 ```bash
 dpkg -L mesa-vulkan-drivers | grep -i icd
-VK_ICD_FILENAMES=/path/to/lvp_icd.x86_64.json cargo run --release -p hodow_cts
+VK_ICD_FILENAMES=/path/to/lvp_icd.json cargo run --release -p hodow_cts
 ```
 
-SwiftShader works too, and Chrome and Playwright both ship one, so you may already
-have it - `cts-sw` looks for those as well.
+### Use lavapipe, not SwiftShader
+
+Chrome and Playwright both bundle a SwiftShader ICD, so one is often already on the
+machine, and `pick_sw_icd.sh` will fall back to it. Prefer lavapipe when you have the
+choice. SwiftShader supports **neither tessellation, geometry, `VK_KHR_push_descriptor`
+nor `VK_KHR_maintenance6`**, so whole groups can only ever be skipped on it - and it
+**ignores a descriptor update template's descriptor set layout**, which means it passes
+cases that a conformant driver rejects.
+
+That combination is not hypothetical: three bugs reached real hardware behind a clean
+SwiftShader run, one of which hung the GPU hard enough to log the user out. A run that
+skipped 78% of its cases still prints `Failed: 0`.
+
+**Always read the `Not supported` count next to the pass count.** It is the difference
+between "these pass" and "these were never tried".
 
 A software driver proves the tests run and that the port agrees with upstream. It
 cannot tell you anything about your hardware - for that, run on the real GPU.
 
 ---
 
-## 3. Working on the port
+## 3. Finding bugs, in the port or in a driver
+
+### The validation layer
+
+```bash
+sudo apt install vulkan-validationlayers
+just cts-val -c 'dEQP-VK.some.group.*'
+```
+
+This turns invalid API use into an explicit VUID message - an update template built
+against the wrong layout, an object destroyed while a command buffer still refers to
+it - instead of into a driver segfault or a GPU hang. It is the single most effective
+tool here, and it catches things that pass everywhere until they reach one specific
+driver.
+
+Two caveats:
+
+- **A validation run is not a conformance run.** The layer changes driver behaviour,
+  so its verdicts do not count; it is a debugging tool.
+- A case that produces a message is reported as a failure with `Pass (N validation
+  message(s))`, so a "failure" here may mean the test itself is fine and the harness
+  around it is not. Read the message.
+
+If the layer is not installed, `--validation` aborts the run with its own exit code
+rather than blaming whichever case happened to be first.
+
+### Exit codes
+
+| Code | Meaning |
+|------|---------|
+| 0 | every case passed |
+| 1 | a test failed, or the run could not be set up |
+| 2 | **no Vulkan driver** - nothing was run, and this is not a failure |
+| 3 | Vulkan could not be initialised for another reason (a requested layer is missing) |
+
+### When a run hangs or resets the GPU
+
+A test that feeds a driver garbage descriptors will page-fault the GPU. On amdgpu that
+shows up in `journalctl -k` as `ring gfx_0.0.0 timeout`, `page fault`, `device wedged`,
+and eventually `device lost` in the hodow_cts log - and it can take the desktop session
+with it.
+
+Before assuming a driver bug, check the shape of the failures: if they all share one
+parameter (one update method, one descriptor arrangement), it is almost certainly the
+port. Then:
+
+```bash
+just cts-val -c '<the narrowest filter that still fails>'
+```
+
+Work outward from the smallest reproducer rather than re-running the whole group -
+each attempt costs a GPU reset.
+
+### Core dumps
+
+A crashing worker leaves a `core.*` file of a few hundred MB in the repo root; a run
+that crashes a few thousand cases will fill the disk. `scripts/run_cts.sh` sets
+`ulimit -c 0` and sweeps them, but if you run the binary directly, check `ls core.*`
+afterwards. The dumps say nothing the test log does not - the isolate parent already
+reports which case died and how.
+
+### Validating committed SPIR-V without a driver
+
+```bash
+sudo apt install spirv-tools    # spirv-val
+```
+
+---
+
+## 4. Working on the port
 
 Only this section needs anything beyond Rust. None of it is required to build or run.
 

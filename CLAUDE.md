@@ -48,8 +48,9 @@ heavily on AI-assisted code generation (see README.md "AI Usage").
 - `just test-gpu-all` / `just test-gpu-window` / `just test-gpu-matrix` - exercise the full matrix of
   display-api x gl-api x software/hardware combinations.
 - `just gen-gl-table` - regenerate `hodow_core/src/opengl/FUNCTIONS_TABLE.md`.
-- `just cts` / `ctsr` / `cts-list` / `cts-sw` - run the Vulkan CTS port (debug / release / list
-  cases without touching Vulkan / run on a software driver). `just cts-verify` runs every check
+- `just cts` / `ctsr` / `cts-list` / `cts-sw` / `cts-swr` / `cts-val` - run the Vulkan CTS port
+  (debug / release / list cases without touching Vulkan / software driver debug / software
+  driver release / software driver **with the Khronos validation layer**). `just cts-verify` runs every check
   and prints labelled results - that is the one command to reach for. The three run recipes
   go through `hodow_cts/scripts/run_cts.sh`, which tees output to
   `tmp/cts-logs/<timestamp>.log` (newest also at `tmp/cts-last.log`) and records the args,
@@ -189,6 +190,19 @@ Full detail is in `hodow_cts/README.md`. The rules that are easy to break:
 - **glslang and `deqp-vk` are developer tools, never build or runtime dependencies.** SPIR-V is
   committed as Rust `u32` arrays. Drivers only ever consume SPIR-V, so compiling GLSL ahead of
   time costs nothing in coverage. The binary must keep linking only libc/libgcc.
+- **A clean run proves nothing about cases that were skipped.** Always read the
+  `Not supported` count next to the pass count, and report both. SwiftShader - which
+  Chrome/Playwright bundle, and which `pick_sw_icd.sh` falls back to - supports neither
+  tessellation, geometry, `VK_KHR_push_descriptor` nor `VK_KHR_maintenance6`, and it
+  ignores a descriptor update template's descriptor set layout, so it passes cases a
+  conformant driver rejects. Three bugs reached real hardware behind a clean run on it,
+  one hanging the GPU hard enough to end the user's session. Prefer lavapipe
+  (`mesa-vulkan-drivers`), which supports all four.
+- **`just cts-val` is the tool for anything that crashes, hangs, or fails only on real
+  hardware.** The validation layer turns invalid API use into a VUID message instead of
+  a driver segfault. When failures all share one parameter (one update method, one
+  descriptor arrangement), suspect the port before the driver, and work outward from the
+  smallest failing filter - each attempt on a GPU costs a reset.
 - **A ported group is not done until `just cts-diff` agrees with upstream.** Its limit, found by
   negative control: it only catches divergences that change a verdict, so a parameter the test is
   agnostic to can drift unnoticed. `--validation` is the second axis (off by default - the layer

@@ -310,7 +310,17 @@ fn create_device_with_everything(instance: &Instance, physical_device: vk::Physi
         .map(|e| unsafe { CStr::from_ptr(e.extension_name.as_ptr()) }.to_string_lossy().into_owned())
         .collect();
 
-    let extension_names: Vec<CString> = available_extensions.iter().filter_map(|n| CString::new(n.as_str()).ok()).collect();
+    // Enabling every available extension is the point here, but a few cannot be
+    // enabled on their own: `VK_KHR_swapchain` requires the `VK_KHR_surface` instance
+    // extension, which a headless run has no reason to ask for. Enabling it anyway is
+    // invalid (VUID-vkCreateDevice-ppEnabledExtensionNames-01387), and nothing in the
+    // suite presents to a surface.
+    const PRESENTATION_ONLY: [&str; 4] = ["VK_KHR_swapchain", "VK_KHR_display_swapchain", "VK_KHR_present_id", "VK_KHR_present_wait"];
+    let extension_names: Vec<CString> = available_extensions
+        .iter()
+        .filter(|n| !PRESENTATION_ONLY.contains(&n.as_str()))
+        .filter_map(|n| CString::new(n.as_str()).ok())
+        .collect();
     let extension_ptrs: Vec<*const i8> = extension_names.iter().map(|n| n.as_ptr()).collect();
 
     let mut vulkan_11_features = vk::PhysicalDeviceVulkan11Features::default();
@@ -327,6 +337,18 @@ fn create_device_with_everything(instance: &Instance, physical_device: vk::Physi
         .push_next(&mut wmel_features);
 
     unsafe { instance.get_physical_device_features2(physical_device, &mut features2) };
+
+    // Querying through both the promoted struct and the original is fine; *creating*
+    // with both is not, because the two could disagree
+    // (VUID-VkDeviceCreateInfo-pNext-02830). `VkPhysicalDeviceVulkan12Features` already
+    // carries shaderFloat16/shaderInt8, so the 1.1-era struct is dropped from the chain
+    // that goes to vkCreateDevice - the values it reported are in there already.
+    let mut features2 = vk::PhysicalDeviceFeatures2::builder()
+        .features(features2.features)
+        .push_next(&mut vulkan_11_features)
+        .push_next(&mut vulkan_12_features)
+        .push_next(&mut zero_init_features)
+        .push_next(&mut wmel_features);
 
     // `enabled_features` must stay unset: the core features travel inside the features2
     // chain instead, and Vulkan forbids providing both.
