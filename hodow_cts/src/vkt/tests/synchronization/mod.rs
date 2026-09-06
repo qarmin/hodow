@@ -12,5 +12,6 @@
 pub mod basic_tests;
 pub mod multi_queue_tests;
 pub mod operation;
+pub mod signal_order_tests;
 pub mod single_queue_tests;
 pub mod timeline_semaphore_tests;

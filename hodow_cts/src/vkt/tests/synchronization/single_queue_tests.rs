@@ -1172,6 +1172,7 @@ pub fn create_tests() -> Vec<tcu::TestCaseGroup> {
             group.add_child(op);
             group.add_child(super::timeline_semaphore_tests::create_timeline_semaphore_tests(sync_type));
             group.add_child(super::basic_tests::create_basic_tests(sync_type));
+            group.add_child(super::signal_order_tests::create_signal_order_tests(sync_type));
             group
         })
         .collect()

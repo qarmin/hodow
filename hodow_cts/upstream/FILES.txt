@@ -69,6 +69,7 @@ external/vulkancts/modules/vulkan/synchronization/vktSynchronizationOperationMul
 external/vulkancts/modules/vulkan/synchronization/vktSynchronizationOperationResources.hpp
 external/vulkancts/modules/vulkan/synchronization/vktSynchronizationOperationSingleQueueTests.cpp
 external/vulkancts/modules/vulkan/synchronization/vktSynchronizationOperationTestData.hpp
+external/vulkancts/modules/vulkan/synchronization/vktSynchronizationSignalOrderTests.cpp
 external/vulkancts/modules/vulkan/synchronization/vktSynchronizationTimelineSemaphoreTests.cpp
 external/vulkancts/modules/vulkan/synchronization/vktSynchronizationUtil.cpp
 external/vulkancts/modules/vulkan/synchronization/vktSynchronizationUtil.hpp
