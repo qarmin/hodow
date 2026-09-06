@@ -16,9 +16,13 @@ hand-picked, growing subset, currently:
 
 | group | cases | not ported yet |
 |---|---|---|
-| `dEQP-VK.api.*` | 231497 of 267497 | `smoke`, `descriptor_set`, `external`, the ETC/ASTC/BC6H/BC7 sources of `copy_and_blit.blit_image`, `use_after_copy`, ... |
+| `dEQP-VK.api.*` | 254201 of 267497 | `smoke`, `descriptor_set`, `external`, `use_after_copy`, the 3D-ASTC sources of `copy_and_blit.blit_image`, ... |
 | `dEQP-VK.memory.*` | 5472 of 6363 | `pipeline_barrier`, `requirements`, `external_memory_*`, `device_memory_report` |
+| `dEQP-VK.renderpasses.*` | 20348 of 80920 | `attachment`, `attachment_allocation`, `multisample_resolve`, `depth_stencil_resolve`, `dynamic_rendering` |
+| `dEQP-VK.synchronization2.*` | 10918 of 81617 | the geometry and tessellation operations, `timeline_semaphore`, `signal_order`, `cross_instance` |
+| `dEQP-VK.synchronization.*` | 7908 of 64872 | as above |
 | `dEQP-VK.compute.*` | 4559 of 60811 | `cooperative_matrix`, the Amber-driven cases, `replicated_composites_*` |
+| `dEQP-VK.binding_model.*` | 1950 of 150279 | the graphics stages of `shader_access`, `descriptorset_random`, `mutable_descriptor` |
 
 Complete groups: `api.image_clearing`, `api.ds_color_copy`, `api.buffer_view`,
 `api.object_management`,
@@ -328,27 +332,42 @@ descriptor type, 1950 cases. What is left is bounded by three things:
 
 `bind2` needs `VK_KHR_maintenance6` and skips here for the same reason.
 
-`synchronization2.op.single_queue` was the best remaining target and is now the one
-being worked: 4918 cases across both sync groups, built up in four passes - the
-transfer operations first (no shaders at all, so the framework could be verified
-before any shader work), then buffer compute, then image compute, then the vertex and
-fragment stages.
+`synchronization{,2}.op` is the group with the best shader economy in the whole suite,
+and it is now the largest ported group after `api`: 18826 cases across both sync trees
+from 44 shaders. The operation catalogue is what makes that ratio - a write operation
+and a read operation are picked independently, so *n* operations give *n²* cases, and
+most operations need no shader at all. It was built up in passes, each verified against
+upstream before the next: the transfer operations first (no shaders, so the framework
+could be checked before any shader work), then buffer compute, image compute, the
+vertex and fragment stages, `multi_queue`, the draw and attachment-clear writes, and
+the vertex-input and indirect-buffer operations.
 
-What bounds the rest of it, measured rather than assumed:
+34 of upstream's operations are ported. What bounds the rest of it, measured rather
+than assumed:
 
-- **`op.multi_queue`** (23760) is 3% runnable here: SwiftShader has one queue family.
-- **`op.single_queue.timeline_semaphore`** (772 of the ported operation set) is 2.5%
-  runnable, because the timeline case chains the resource through *every* copy
-  operation the resource supports - including the tessellation and geometry ones, which
-  are unsupported here, so the whole case skips.
-- **The tessellation and geometry stage operations** are the same story from the other
-  end: both binaries report NotSupported, so cts-diff would say nothing about whether
-  they were ported right. They are absent rather than present-and-skipped.
-- **`synchronization{,2}.implicit`** (1024, 100% runnable, 2 shaders) is the best
-  remaining ratio in the group and reuses operations already ported. Its cost is that
-  the submit shapes come from a seeded `de::Random` draw order that has to be
-  reproduced exactly, and getting it wrong would change the test without changing a
-  verdict - the divergence cts-diff cannot see.
+- **The tessellation and geometry stage operations** are the whole remainder that
+  matters (14175 cases, and all twelve of the operations still missing are one of
+  those two stages). SwiftShader has neither, so both binaries report NotSupported and
+  `cts-diff` would say nothing about whether they were ported right. Worse, they cannot
+  even be checked at the shader level: `deqp-vk` skips them at `checkSupport` before it
+  builds any program, so `--deqp-log-shader-sources` emits nothing to compare against,
+  and `vk-build-programs` (which does build them) logs no GLSL and produces SPIR-V from
+  a different glslang than this crate's, so its output does not compare either. They
+  are absent rather than present-and-skipped.
+- **`timeline_semaphore`** needs the two-resource "copy" operation family (`s_copyOps`)
+  that chains one resource into the next; `op.single_queue.timeline_semaphore` and
+  `timeline_semaphore.{one_to_n,wait_before_signal}` are 0% runnable here anyway,
+  because that chain pulls in every copy operation the resource supports and the
+  tessellation ones are unsupported. `timeline_semaphore.device_host` (3823) does *not*
+  use the chain and is about 50% runnable - it is the best remaining target in the
+  group, and its cost is `Operation::setData` on every write operation plus a host
+  thread signalling the semaphore while the queue runs.
+- **`op.multi_queue`'s execution path is unverified here** even though its 4584 cases
+  are ported and agree with upstream: SwiftShader has a single queue family with a
+  single queue, so every case is either NotSupported or - for `fence`, which upstream
+  does not guard against an empty queue-pair list - a pass that ran nothing. The
+  queue-pairing logic is covered by unit tests over synthetic family layouts instead,
+  and `tmp/check_multi_queue.sh` runs the real thing on a GPU with several families.
 
 `renderpasses.*.attachment` is the cautionary one. Its render passes are generated
 from a seeded `de::Random`, so the shader is a function of a random sequence of
