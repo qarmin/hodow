@@ -3,9 +3,15 @@
 // Ported from external/vulkancts/modules/vulkan/ycbcr/vktYCbCrUtil.cpp and the plane
 // geometry half of external/vulkancts/framework/vulkan/vkImageUtil.cpp.
 
-use vulkanalia::vk;
+use vulkanalia::Device;
+use vulkanalia::vk::{self, HasBuilder};
 
 use super::format_tables::{FormatInfo, PLANE_COMPATIBLE_FORMATS, PlaneInfo};
+use crate::tcu::TestError;
+use crate::vk::VkResultExt;
+use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
+use crate::vk::mem_util::{Allocation, MemoryRequirement, SimpleAllocator, flush_alloc, invalidate_alloc};
+use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool};
 
 /// The single plane a non-planar format is described by: itself, one texel per block.
 /// Upstream builds this on the fly in `getPlanarFormatDescription`; here it stands in
@@ -66,31 +72,38 @@ pub fn block_byte_size(format: vk::Format) -> u32 {
     }
 }
 
-/// The byte size of one texel of an uncompressed format, from its name's bit layout.
-/// Deliberately not a table: every format that reaches here is one of the plane
-/// compatible formats, which are all plain one- and two-channel integer formats.
+/// The byte size of one element of an uncompressed format, derived from its name.
+///
+/// Only formats absent from the plane table reach here, which are the plain colour
+/// formats and the single-plane formats a copy moves; every one of them states its own
+/// size. A table would be a second place for the same fact to be wrong, and upstream's
+/// own answer comes from a several-hundred-case switch that is no more authoritative
+/// than the name is.
 fn block_byte_size_uncompressed(format: vk::Format) -> u32 {
-    match format {
-        vk::Format::R8_UNORM | vk::Format::R8_UINT | vk::Format::R8_SNORM | vk::Format::R8_SINT | vk::Format::R8_SRGB => 1,
-        vk::Format::R8G8_UNORM | vk::Format::R8G8_UINT | vk::Format::R8G8_SNORM | vk::Format::R8G8_SINT | vk::Format::R8G8_SRGB => 2,
-        vk::Format::R10X6_UNORM_PACK16 | vk::Format::R12X4_UNORM_PACK16 | vk::Format::R16_UNORM | vk::Format::R16_UINT | vk::Format::R16_SFLOAT => 2,
-        vk::Format::R10X6G10X6_UNORM_2PACK16 | vk::Format::R12X4G12X4_UNORM_2PACK16 | vk::Format::R16G16_UNORM | vk::Format::R16G16_UINT => 4,
-        vk::Format::R8G8B8A8_UNORM | vk::Format::B8G8R8A8_UNORM | vk::Format::R32_UINT | vk::Format::R32_SFLOAT => 4,
-        vk::Format::R4G4_UNORM_PACK8 | vk::Format::A8_UNORM => 1,
-        vk::Format::R4G4B4A4_UNORM_PACK16
-        | vk::Format::B4G4R4A4_UNORM_PACK16
-        | vk::Format::R5G6B5_UNORM_PACK16
-        | vk::Format::B5G6R5_UNORM_PACK16
-        | vk::Format::R5G5B5A1_UNORM_PACK16
-        | vk::Format::B5G5R5A1_UNORM_PACK16
-        | vk::Format::A1R5G5B5_UNORM_PACK16
-        | vk::Format::A1B5G5R5_UNORM_PACK16 => 2,
-        vk::Format::R8G8B8_UNORM | vk::Format::B8G8R8_UNORM => 3,
-        vk::Format::R16G16B16_UNORM => 6,
-        vk::Format::R16G16B16A16_UNORM => 8,
-        vk::Format::A2R10G10B10_UNORM_PACK32 | vk::Format::A2B10G10R10_UNORM_PACK32 | vk::Format::A8B8G8R8_UNORM_PACK32 | vk::Format::B10G11R11_UFLOAT_PACK32 => 4,
-        other => panic!("no byte size known for {other:?}"),
+    let name = format!("{format:?}");
+
+    // `..._<n>PACK<bits>` is n elements of that many bits; a bare `PACK<bits>` is one.
+    if let Some(pos) = name.rfind("PACK") {
+        let bits: u32 = name[pos + 4..].parse().unwrap_or_else(|_| panic!("unparseable pack width in {name}"));
+        let count: u32 = name[..pos].chars().last().and_then(|c| c.to_digit(10)).unwrap_or(1);
+        return count * bits / 8;
     }
+
+    // Otherwise the channel widths spell out the total: R16G16B16A16 is 64 bits.
+    let mut bits = 0u32;
+    let mut digits = String::new();
+    for ch in name.split('_').next().unwrap_or(&name).chars() {
+        if ch.is_ascii_digit() {
+            digits.push(ch);
+        } else {
+            bits += digits.parse::<u32>().unwrap_or(0);
+            digits.clear();
+        }
+    }
+    bits += digits.parse::<u32>().unwrap_or(0);
+
+    assert!(bits > 0 && bits.is_multiple_of(8), "no byte size derivable from {name}");
+    bits / 8
 }
 
 /// `getPlaneAspect`
@@ -260,6 +273,407 @@ mod tests {
         data.fill_random(&mut rng);
         for pair in data.plane(0).chunks(2) {
             assert_eq!(pair[0] & 0x3F, 0, "the six unused low bits must be clear");
+        }
+    }
+}
+
+/// `allocateAndBindImageMemory`. A disjoint image binds one allocation per plane; every
+/// other image binds one for the whole thing.
+pub fn allocate_and_bind_image_memory<'a>(
+    device: &'a Device,
+    allocator: &SimpleAllocator,
+    image: vk::Image,
+    format: vk::Format,
+    disjoint: bool,
+    requirement: MemoryRequirement,
+) -> Result<Vec<Allocation<'a>>, TestError> {
+    use vulkanalia::vk::{DeviceV1_0, DeviceV1_1};
+
+    if !disjoint {
+        let reqs = unsafe { device.get_image_memory_requirements(image) };
+        let allocation = allocator.allocate(device, reqs, requirement)?;
+        unsafe { device.bind_image_memory(image, allocation.get_memory(), allocation.get_offset()) }.vk_check("vkBindImageMemory")?;
+        return Ok(vec![allocation]);
+    }
+
+    // `bindImagePlanesMemory` - the plane aspect selects which plane's requirements are
+    // being asked about, and the binds go through in one call.
+    let num_planes = format_description(format).planes.len();
+    let mut allocations = Vec::with_capacity(num_planes);
+    for plane_ndx in 0..num_planes {
+        let mut plane_reqs_info = vk::ImagePlaneMemoryRequirementsInfo::builder().plane_aspect(plane_aspect(plane_ndx));
+        let info = vk::ImageMemoryRequirementsInfo2::builder().image(image).push_next(&mut plane_reqs_info);
+        let mut reqs = vk::MemoryRequirements2::default();
+        unsafe { device.get_image_memory_requirements2(&info, &mut reqs) };
+        allocations.push(allocator.allocate(device, reqs.memory_requirements, requirement)?);
+    }
+
+    let mut plane_infos: Vec<vk::BindImagePlaneMemoryInfo> = (0..num_planes)
+        .map(|ndx| vk::BindImagePlaneMemoryInfo::builder().plane_aspect(plane_aspect(ndx)).build())
+        .collect();
+    let bind_infos: Vec<vk::BindImageMemoryInfo> = allocations
+        .iter()
+        .zip(plane_infos.iter_mut())
+        .map(|(alloc, plane_info)| {
+            vk::BindImageMemoryInfo::builder()
+                .image(image)
+                .memory(alloc.get_memory())
+                .memory_offset(alloc.get_offset())
+                .push_next(plane_info)
+                .build()
+        })
+        .collect();
+    unsafe { device.bind_image_memory2(&bind_infos) }.vk_check("vkBindImageMemory2")?;
+
+    Ok(allocations)
+}
+
+/// The aspect a plane is addressed by: a single-plane format has none, and uses COLOR.
+fn aspect_for(info: &FormatInfo, plane_ndx: usize) -> vk::ImageAspectFlags {
+    if info.planes.len() > 1 { plane_aspect(plane_ndx) } else { vk::ImageAspectFlags::COLOR }
+}
+
+/// `uploadImage` - one staging buffer per plane, copied in and left in `final_layout`.
+#[allow(clippy::too_many_arguments)]
+pub fn upload_image(
+    device: &Device,
+    allocator: &SimpleAllocator,
+    queue: vk::Queue,
+    queue_family_index: u32,
+    image: vk::Image,
+    data: &MultiPlaneImageData,
+    next_access: vk::AccessFlags,
+    final_layout: vk::ImageLayout,
+) -> Result<(), TestError> {
+    use vulkanalia::vk::DeviceV1_0;
+
+    let info = data.description();
+    let command_pool = make_command_pool(device, queue_family_index)?;
+    let command_buffer = allocate_command_buffer(device, *command_pool, vk::CommandBufferLevel::PRIMARY)?;
+
+    // Held until the submit below completes.
+    let mut staging = Vec::new();
+    for plane_ndx in 0..info.planes.len() {
+        let bytes = data.plane(plane_ndx);
+        let buffer = BufferWithMemory::new(
+            device,
+            allocator,
+            make_buffer_create_info(bytes.len() as vk::DeviceSize, vk::BufferUsageFlags::TRANSFER_SRC),
+            MemoryRequirement::HOST_VISIBLE,
+        )?;
+        unsafe { std::ptr::copy_nonoverlapping(bytes.as_ptr(), buffer.get_allocation().get_host_ptr(), bytes.len()) };
+        flush_alloc(device, buffer.get_allocation())?;
+        staging.push(buffer);
+    }
+
+    begin_command_buffer(device, *command_buffer)?;
+    for plane_ndx in 0..info.planes.len() {
+        let aspect = aspect_for(&info, plane_ndx);
+        let (w, h) = plane_extent(&info, data.size(), plane_ndx);
+        let subresource_range = vk::ImageSubresourceRange {
+            aspect_mask: aspect,
+            base_mip_level: 0,
+            level_count: 1,
+            base_array_layer: 0,
+            layer_count: 1,
+        };
+
+        let pre = vk::ImageMemoryBarrier::builder()
+            .src_access_mask(vk::AccessFlags::empty())
+            .dst_access_mask(vk::AccessFlags::TRANSFER_WRITE)
+            .old_layout(vk::ImageLayout::UNDEFINED)
+            .new_layout(vk::ImageLayout::TRANSFER_DST_OPTIMAL)
+            .src_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+            .dst_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+            .image(image)
+            .subresource_range(subresource_range);
+        unsafe {
+            device.cmd_pipeline_barrier(
+                *command_buffer,
+                vk::PipelineStageFlags::HOST,
+                vk::PipelineStageFlags::TRANSFER,
+                vk::DependencyFlags::empty(),
+                &[] as &[vk::MemoryBarrier],
+                &[] as &[vk::BufferMemoryBarrier],
+                &[pre],
+            );
+        }
+
+        let copy = vk::BufferImageCopy::builder()
+            .buffer_offset(0)
+            .buffer_row_length(0)
+            .buffer_image_height(0)
+            .image_subresource(vk::ImageSubresourceLayers {
+                aspect_mask: aspect,
+                mip_level: 0,
+                base_array_layer: 0,
+                layer_count: 1,
+            })
+            .image_offset(vk::Offset3D { x: 0, y: 0, z: 0 })
+            .image_extent(vk::Extent3D { width: w, height: h, depth: 1 });
+        unsafe {
+            device.cmd_copy_buffer_to_image(*command_buffer, staging[plane_ndx].get(), image, vk::ImageLayout::TRANSFER_DST_OPTIMAL, &[copy]);
+        }
+
+        let post = vk::ImageMemoryBarrier::builder()
+            .src_access_mask(vk::AccessFlags::TRANSFER_WRITE)
+            .dst_access_mask(next_access)
+            .old_layout(vk::ImageLayout::TRANSFER_DST_OPTIMAL)
+            .new_layout(final_layout)
+            .src_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+            .dst_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+            .image(image)
+            .subresource_range(subresource_range);
+        unsafe {
+            device.cmd_pipeline_barrier(
+                *command_buffer,
+                vk::PipelineStageFlags::TRANSFER,
+                vk::PipelineStageFlags::ALL_COMMANDS,
+                vk::DependencyFlags::empty(),
+                &[] as &[vk::MemoryBarrier],
+                &[] as &[vk::BufferMemoryBarrier],
+                &[post],
+            );
+        }
+    }
+    end_command_buffer(device, *command_buffer)?;
+    submit_commands_and_wait(device, queue, *command_buffer)?;
+    Ok(())
+}
+
+/// `downloadImage` - the mirror of `upload_image`.
+#[allow(clippy::too_many_arguments)]
+pub fn download_image(
+    device: &Device,
+    allocator: &SimpleAllocator,
+    queue: vk::Queue,
+    queue_family_index: u32,
+    image: vk::Image,
+    data: &mut MultiPlaneImageData,
+    prev_access: vk::AccessFlags,
+    initial_layout: vk::ImageLayout,
+) -> Result<(), TestError> {
+    use vulkanalia::vk::DeviceV1_0;
+
+    let info = data.description();
+    let command_pool = make_command_pool(device, queue_family_index)?;
+    let command_buffer = allocate_command_buffer(device, *command_pool, vk::CommandBufferLevel::PRIMARY)?;
+
+    let mut staging = Vec::new();
+    for plane_ndx in 0..info.planes.len() {
+        staging.push(BufferWithMemory::new(
+            device,
+            allocator,
+            make_buffer_create_info(data.plane(plane_ndx).len() as vk::DeviceSize, vk::BufferUsageFlags::TRANSFER_DST),
+            MemoryRequirement::HOST_VISIBLE,
+        )?);
+    }
+
+    begin_command_buffer(device, *command_buffer)?;
+    for plane_ndx in 0..info.planes.len() {
+        let aspect = aspect_for(&info, plane_ndx);
+        let (w, h) = plane_extent(&info, data.size(), plane_ndx);
+        let subresource_range = vk::ImageSubresourceRange {
+            aspect_mask: aspect,
+            base_mip_level: 0,
+            level_count: 1,
+            base_array_layer: 0,
+            layer_count: 1,
+        };
+
+        let pre = vk::ImageMemoryBarrier::builder()
+            .src_access_mask(prev_access)
+            .dst_access_mask(vk::AccessFlags::TRANSFER_READ)
+            .old_layout(initial_layout)
+            .new_layout(vk::ImageLayout::TRANSFER_SRC_OPTIMAL)
+            .src_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+            .dst_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+            .image(image)
+            .subresource_range(subresource_range);
+        unsafe {
+            device.cmd_pipeline_barrier(
+                *command_buffer,
+                vk::PipelineStageFlags::ALL_COMMANDS,
+                vk::PipelineStageFlags::TRANSFER,
+                vk::DependencyFlags::empty(),
+                &[] as &[vk::MemoryBarrier],
+                &[] as &[vk::BufferMemoryBarrier],
+                &[pre],
+            );
+        }
+
+        let copy = vk::BufferImageCopy::builder()
+            .buffer_offset(0)
+            .buffer_row_length(0)
+            .buffer_image_height(0)
+            .image_subresource(vk::ImageSubresourceLayers {
+                aspect_mask: aspect,
+                mip_level: 0,
+                base_array_layer: 0,
+                layer_count: 1,
+            })
+            .image_offset(vk::Offset3D { x: 0, y: 0, z: 0 })
+            .image_extent(vk::Extent3D { width: w, height: h, depth: 1 });
+        unsafe {
+            device.cmd_copy_image_to_buffer(*command_buffer, image, vk::ImageLayout::TRANSFER_SRC_OPTIMAL, staging[plane_ndx].get(), &[copy]);
+        }
+    }
+    end_command_buffer(device, *command_buffer)?;
+    submit_commands_and_wait(device, queue, *command_buffer)?;
+
+    for plane_ndx in 0..info.planes.len() {
+        invalidate_alloc(device, staging[plane_ndx].get_allocation())?;
+        let len = data.plane(plane_ndx).len();
+        let src = staging[plane_ndx].get_allocation().get_host_ptr();
+        unsafe { std::ptr::copy_nonoverlapping(src, data.plane_mut(plane_ndx).as_mut_ptr(), len) };
+    }
+    Ok(())
+}
+
+/// `fillImageMemory` - a linear image is written through its mapped memory rather than
+/// staged, so the driver's row pitch has to be respected per plane.
+#[allow(clippy::too_many_arguments)]
+pub fn fill_image_memory(
+    device: &Device,
+    queue: vk::Queue,
+    queue_family_index: u32,
+    image: vk::Image,
+    allocations: &[Allocation<'_>],
+    data: &MultiPlaneImageData,
+    next_access: vk::AccessFlags,
+    final_layout: vk::ImageLayout,
+) -> Result<(), TestError> {
+    use vulkanalia::vk::DeviceV1_0;
+
+    let info = data.description();
+    for plane_ndx in 0..info.planes.len() {
+        let aspect = aspect_for(&info, plane_ndx);
+        // A non-disjoint image has one allocation covering every plane.
+        let allocation = if allocations.len() > 1 { &allocations[plane_ndx] } else { &allocations[0] };
+        let plane_bytes = data.plane(plane_ndx);
+        let plane_h = data.size().1 / info.planes[plane_ndx].height_divisor;
+
+        let subresource = vk::ImageSubresource {
+            aspect_mask: aspect,
+            mip_level: 0,
+            array_layer: 0,
+        };
+        let layout = unsafe { device.get_image_subresource_layout(image, &subresource) };
+
+        let row_size = plane_bytes.len() / plane_h as usize;
+        for row in 0..plane_h as usize {
+            let dst = unsafe { allocation.get_host_ptr().add(layout.offset as usize + layout.row_pitch as usize * row) };
+            unsafe { std::ptr::copy_nonoverlapping(plane_bytes[row * row_size..].as_ptr(), dst, row_size) };
+        }
+        flush_alloc(device, allocation)?;
+    }
+
+    let command_pool = make_command_pool(device, queue_family_index)?;
+    let command_buffer = allocate_command_buffer(device, *command_pool, vk::CommandBufferLevel::PRIMARY)?;
+    begin_command_buffer(device, *command_buffer)?;
+    let barrier = vk::ImageMemoryBarrier::builder()
+        .src_access_mask(vk::AccessFlags::empty())
+        .dst_access_mask(next_access)
+        .old_layout(vk::ImageLayout::PREINITIALIZED)
+        .new_layout(final_layout)
+        .src_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+        .dst_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+        .image(image)
+        .subresource_range(vk::ImageSubresourceRange {
+            aspect_mask: vk::ImageAspectFlags::COLOR,
+            base_mip_level: 0,
+            level_count: 1,
+            base_array_layer: 0,
+            layer_count: 1,
+        });
+    unsafe {
+        device.cmd_pipeline_barrier(
+            *command_buffer,
+            vk::PipelineStageFlags::HOST,
+            vk::PipelineStageFlags::ALL_COMMANDS,
+            vk::DependencyFlags::empty(),
+            &[] as &[vk::MemoryBarrier],
+            &[] as &[vk::BufferMemoryBarrier],
+            &[barrier],
+        );
+    }
+    end_command_buffer(device, *command_buffer)?;
+    submit_commands_and_wait(device, queue, *command_buffer)?;
+    Ok(())
+}
+
+/// `readImageMemory` - the mirror of `fill_image_memory`.
+pub fn read_image_memory(device: &Device, image: vk::Image, allocations: &[Allocation<'_>], data: &mut MultiPlaneImageData) -> Result<(), TestError> {
+    use vulkanalia::vk::DeviceV1_0;
+
+    let info = data.description();
+    let size = data.size();
+    for plane_ndx in 0..info.planes.len() {
+        let aspect = aspect_for(&info, plane_ndx);
+        let allocation = if allocations.len() > 1 { &allocations[plane_ndx] } else { &allocations[0] };
+        invalidate_alloc(device, allocation)?;
+
+        let subresource = vk::ImageSubresource {
+            aspect_mask: aspect,
+            mip_level: 0,
+            array_layer: 0,
+        };
+        let layout = unsafe { device.get_image_subresource_layout(image, &subresource) };
+
+        let plane_h = size.1 / info.planes[plane_ndx].height_divisor;
+        let row_size = data.plane(plane_ndx).len() / plane_h as usize;
+        for row in 0..plane_h as usize {
+            let src = unsafe { allocation.get_host_ptr().add(layout.offset as usize + layout.row_pitch as usize * row) };
+            let dst = data.plane_mut(plane_ndx)[row * row_size..].as_mut_ptr();
+            unsafe { std::ptr::copy_nonoverlapping(src, dst, row_size) };
+        }
+    }
+    Ok(())
+}
+
+#[cfg(test)]
+mod byte_size_tests {
+    use super::*;
+
+    /// The sizes are derived from the format name rather than tabulated, so what needs
+    /// pinning is that the derivation agrees with the formats it will actually see.
+    #[test]
+    fn element_sizes_are_derived_correctly() {
+        for (format, expected) in [
+            (vk::Format::R4G4_UNORM_PACK8, 1u32),
+            (vk::Format::A4R4G4B4_UNORM_PACK16, 2),
+            (vk::Format::A4B4G4R4_UNORM_PACK16, 2),
+            (vk::Format::R5G6B5_UNORM_PACK16, 2),
+            (vk::Format::A2B10G10R10_UNORM_PACK32, 4),
+            (vk::Format::R10X6_UNORM_PACK16, 2),
+            (vk::Format::R10X6G10X6_UNORM_2PACK16, 4),
+            (vk::Format::R10X6G10X6B10X6A10X6_UNORM_4PACK16, 8),
+            (vk::Format::R12X4_UNORM_PACK16, 2),
+            (vk::Format::R8_UNORM, 1),
+            (vk::Format::R8G8_UNORM, 2),
+            (vk::Format::R8G8B8_UNORM, 3),
+            (vk::Format::R8G8B8A8_UNORM, 4),
+            (vk::Format::B8G8R8A8_UNORM, 4),
+            (vk::Format::R16_UNORM, 2),
+            (vk::Format::R16G16_UNORM, 4),
+            (vk::Format::R16G16B16_UNORM, 6),
+            (vk::Format::R16G16B16A16_UNORM, 8),
+        ] {
+            assert_eq!(block_byte_size_uncompressed(format), expected, "{format:?}");
+        }
+    }
+
+    /// Every format the copy tests can reach must have a derivable size, or the test
+    /// panics mid-run instead of failing.
+    #[test]
+    fn every_reachable_format_has_a_size() {
+        for (format, _, _) in crate::vkt::tests::api::copy_format_lists::BASIC_UNSIGNED_FLOAT_FORMATS {
+            let info = format_description(*format);
+            for plane in info.planes {
+                let size = block_byte_size(plane.compatible_format);
+                assert!(size > 0, "{:?} plane {:?}", format, plane.compatible_format);
+            }
+            assert!(block_byte_size(*format) > 0, "{format:?}");
         }
     }
 }
