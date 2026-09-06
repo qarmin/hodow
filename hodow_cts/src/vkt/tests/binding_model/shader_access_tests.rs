@@ -45,15 +45,6 @@ pub struct BufferAccessProgram {
     pub programs: BinaryCollection,
 }
 
-/// The manifest declares the two stage-independent graphics shaders with this: the
-/// fragment pass-through used when only the vertex stage reads a descriptor, and the
-/// fragment shader for the `no_access` cases, which writes the colours the descriptors
-/// would have held without reading any of them.
-pub struct QuadrantCommonProgram {
-    pub name: &'static str,
-    pub programs: BinaryCollection,
-}
-
 /// The manifest declares the storage image cases with this. Unlike the buffer types,
 /// which share a shader across every view, an image case bakes its fetch coordinates
 /// into the GLSL, so there is one program per case and `view_name` identifies it.
@@ -218,6 +209,281 @@ pub enum ResourceKind {
     TexelBuffer,
 }
 
+/// `SingleTargetRenderInstance` + `SingleCmdRenderInstance::renderToTarget` - the part
+/// that is the same whatever the descriptors are: a 128x128 colour target, one draw of
+/// 24 vertices covering it in four quadrants, and the result read back.
+///
+/// `is_primary` false is upstream's `secondary_cmd_buf`: the draw is recorded into a
+/// secondary command buffer and executed from inside the render pass, which is the same
+/// work reached through a different recording path.
+#[allow(clippy::too_many_arguments)]
+fn render_quadrants(
+    device: &Device,
+    allocator: &crate::vk::mem_util::SimpleAllocator,
+    queue: vk::Queue,
+    queue_index: u32,
+    pipeline_layout: vk::PipelineLayout,
+    vert: vk::ShaderModule,
+    frag: vk::ShaderModule,
+    is_primary: bool,
+    bind: &dyn Fn(&Device, vk::CommandBuffer),
+) -> Result<Vec<u8>, TestError> {
+    use crate::vk::obj_util::{make_framebuffer, make_render_pass};
+
+    let format = vk::Format::R8G8B8A8_UNORM;
+    let color_image = ImageWithMemory::new(
+        device,
+        allocator,
+        vk::ImageCreateInfo::builder()
+            .image_type(vk::ImageType::_2D)
+            .format(format)
+            .extent(vk::Extent3D {
+                width: RENDER_SIZE,
+                height: RENDER_SIZE,
+                depth: 1,
+            })
+            .mip_levels(1)
+            .array_layers(1)
+            .samples(vk::SampleCountFlags::_1)
+            .tiling(vk::ImageTiling::OPTIMAL)
+            .usage(vk::ImageUsageFlags::COLOR_ATTACHMENT | vk::ImageUsageFlags::TRANSFER_SRC)
+            .sharing_mode(vk::SharingMode::EXCLUSIVE)
+            .initial_layout(vk::ImageLayout::UNDEFINED)
+            .build(),
+        MemoryRequirement::ANY,
+    )?;
+    let color_view = make_image_view(
+        device,
+        color_image.get(),
+        vk::ImageViewType::_2D,
+        format,
+        vk::ImageSubresourceRange {
+            aspect_mask: vk::ImageAspectFlags::COLOR,
+            base_mip_level: 0,
+            level_count: 1,
+            base_array_layer: 0,
+            layer_count: 1,
+        },
+    )?;
+    let render_pass = make_render_pass(device, format)?;
+    let framebuffer = make_framebuffer(device, *render_pass, &[*color_view], RENDER_SIZE, RENDER_SIZE, 1)?;
+
+    let pipeline = make_quadrant_pipeline(device, pipeline_layout, *render_pass, vert, frag)?;
+
+    let read_buffer = BufferWithMemory::new(
+        device,
+        allocator,
+        make_buffer_create_info(u64::from(RENDER_SIZE * RENDER_SIZE * 4), vk::BufferUsageFlags::TRANSFER_DST),
+        MemoryRequirement::HOST_VISIBLE,
+    )?;
+
+    let command_pool = make_command_pool(device, queue_index)?;
+    let command_buffer = allocate_command_buffer(device, *command_pool, vk::CommandBufferLevel::PRIMARY)?;
+
+    // The secondary buffer inherits the render pass it will be executed inside, so
+    // it is recorded before the primary one opens that pass.
+    let pass_cmd = if is_primary {
+        None
+    } else {
+        let cmd = allocate_command_buffer(device, *command_pool, vk::CommandBufferLevel::SECONDARY)?;
+        let inherit = vk::CommandBufferInheritanceInfo::builder()
+            .render_pass(*render_pass)
+            .subpass(0)
+            .framebuffer(*framebuffer)
+            .occlusion_query_enable(false)
+            .build();
+        let info = vk::CommandBufferBeginInfo::builder()
+            .flags(vk::CommandBufferUsageFlags::ONE_TIME_SUBMIT | vk::CommandBufferUsageFlags::RENDER_PASS_CONTINUE)
+            .inheritance_info(&inherit);
+        unsafe { device.begin_command_buffer(*cmd, &info) }.vk_check("vkBeginCommandBuffer")?;
+        unsafe {
+            device.cmd_bind_pipeline(*cmd, vk::PipelineBindPoint::GRAPHICS, *pipeline);
+            bind(device, *cmd);
+            device.cmd_draw(*cmd, 6 * 4, 1, 0, 0);
+        }
+        end_command_buffer(device, *cmd)?;
+        Some(cmd)
+    };
+
+    begin_command_buffer(device, *command_buffer)?;
+    unsafe {
+        let clear = [vk::ClearValue {
+            color: vk::ClearColorValue { float32: [0.0, 0.0, 0.0, 0.0] },
+        }];
+        let begin = vk::RenderPassBeginInfo::builder()
+            .render_pass(*render_pass)
+            .framebuffer(*framebuffer)
+            .render_area(vk::Rect2D {
+                offset: vk::Offset2D { x: 0, y: 0 },
+                extent: vk::Extent2D {
+                    width: RENDER_SIZE,
+                    height: RENDER_SIZE,
+                },
+            })
+            .clear_values(&clear);
+        device.cmd_begin_render_pass(
+            *command_buffer,
+            &begin,
+            if is_primary {
+                vk::SubpassContents::INLINE
+            } else {
+                vk::SubpassContents::SECONDARY_COMMAND_BUFFERS
+            },
+        );
+        if is_primary {
+            device.cmd_bind_pipeline(*command_buffer, vk::PipelineBindPoint::GRAPHICS, *pipeline);
+            bind(device, *command_buffer);
+            // Four quads, two triangles each.
+            device.cmd_draw(*command_buffer, 6 * 4, 1, 0, 0);
+        } else {
+            device.cmd_execute_commands(*command_buffer, &[**pass_cmd.as_ref().expect("recorded above")]);
+        }
+        device.cmd_end_render_pass(*command_buffer);
+
+        let to_src = vk::ImageMemoryBarrier::builder()
+            .src_access_mask(vk::AccessFlags::COLOR_ATTACHMENT_WRITE)
+            .dst_access_mask(vk::AccessFlags::TRANSFER_READ)
+            .old_layout(vk::ImageLayout::COLOR_ATTACHMENT_OPTIMAL)
+            .new_layout(vk::ImageLayout::TRANSFER_SRC_OPTIMAL)
+            .src_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+            .dst_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+            .image(color_image.get())
+            .subresource_range(vk::ImageSubresourceRange {
+                aspect_mask: vk::ImageAspectFlags::COLOR,
+                base_mip_level: 0,
+                level_count: 1,
+                base_array_layer: 0,
+                layer_count: 1,
+            })
+            .build();
+        device.cmd_pipeline_barrier(
+            *command_buffer,
+            vk::PipelineStageFlags::COLOR_ATTACHMENT_OUTPUT,
+            vk::PipelineStageFlags::TRANSFER,
+            vk::DependencyFlags::empty(),
+            &[] as &[vk::MemoryBarrier],
+            &[] as &[vk::BufferMemoryBarrier],
+            &[to_src],
+        );
+
+        let region = vk::BufferImageCopy::builder()
+            .buffer_offset(0)
+            .buffer_row_length(0)
+            .buffer_image_height(0)
+            .image_subresource(vk::ImageSubresourceLayers {
+                aspect_mask: vk::ImageAspectFlags::COLOR,
+                mip_level: 0,
+                base_array_layer: 0,
+                layer_count: 1,
+            })
+            .image_offset(vk::Offset3D { x: 0, y: 0, z: 0 })
+            .image_extent(vk::Extent3D {
+                width: RENDER_SIZE,
+                height: RENDER_SIZE,
+                depth: 1,
+            })
+            .build();
+        device.cmd_copy_image_to_buffer(*command_buffer, color_image.get(), vk::ImageLayout::TRANSFER_SRC_OPTIMAL, read_buffer.get(), &[region]);
+
+        let to_host = vk::BufferMemoryBarrier::builder()
+            .src_access_mask(vk::AccessFlags::TRANSFER_WRITE)
+            .dst_access_mask(vk::AccessFlags::HOST_READ)
+            .src_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+            .dst_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+            .buffer(read_buffer.get())
+            .offset(0)
+            .size(vk::WHOLE_SIZE)
+            .build();
+        device.cmd_pipeline_barrier(
+            *command_buffer,
+            vk::PipelineStageFlags::TRANSFER,
+            vk::PipelineStageFlags::HOST,
+            vk::DependencyFlags::empty(),
+            &[] as &[vk::MemoryBarrier],
+            &[to_host],
+            &[] as &[vk::ImageMemoryBarrier],
+        );
+    }
+    end_command_buffer(device, *command_buffer)?;
+    submit_commands_and_wait(device, queue, *command_buffer)?;
+    invalidate_alloc(device, read_buffer.get_allocation())?;
+
+    Ok(unsafe { std::slice::from_raw_parts(read_buffer.get_allocation().get_host_ptr(), (RENDER_SIZE * RENDER_SIZE * 4) as usize) }.to_vec())
+}
+
+/// `RenderInstanceShaders` - which of the generated programs each stage configuration
+/// uses. The "contributing" pair is for the case where both stages read a descriptor
+/// and each owns half the image.
+fn graphics_modules<'a>(
+    device: &'a Device,
+    programs: &BinaryCollection,
+    stage_flags: vk::ShaderStageFlags,
+) -> Result<(Unique<'a, vk::ShaderModule>, Unique<'a, vk::ShaderModule>), TestError> {
+    let vertex = stage_flags.contains(vk::ShaderStageFlags::VERTEX);
+    let fragment = stage_flags.contains(vk::ShaderStageFlags::FRAGMENT);
+    let (vert, frag) = match (vertex, fragment) {
+        (true, true) => (programs.get("vert_contrib")?, programs.get("frag_contrib")?),
+        (true, false) => (programs.get("vert")?, programs.get("frag_passthrough")?),
+        (false, true) => (programs.get("vert_passthrough")?, programs.get("frag")?),
+        (false, false) => (programs.get("vert_passthrough")?, programs.get("frag_no_access")?),
+    };
+    Ok((create_shader_module(device, vert)?, create_shader_module(device, frag)?))
+}
+
+/// `drawQuadrantReferenceResult` + `bilinearCompare` - build the reference from the
+/// four expected colours and compare, tolerating the pixel of slack a rasteriser is
+/// allowed at the quadrant boundaries.
+fn compare_quadrant_image(pixels: &[u8], quadrants: [[f32; 4]; 4]) -> TestStatus {
+    let format = TextureFormat::new(ChannelOrder::RGBA, ChannelType::UNORM_INT8);
+    let mut reference = vec![0u8; (RENDER_SIZE * RENDER_SIZE * 4) as usize];
+    {
+        let mut access = PixelBufferAccess::new(format, [RENDER_SIZE, RENDER_SIZE, 1], &mut reference);
+        let half = RENDER_SIZE / 2;
+        for y in 0..RENDER_SIZE {
+            for x in 0..RENDER_SIZE {
+                let colour = match (x < half, y < half) {
+                    (true, true) => quadrants[0],
+                    (false, true) => quadrants[1],
+                    (true, false) => quadrants[2],
+                    (false, false) => quadrants[3],
+                };
+                access.set_pixel(colour, x, y, 0);
+            }
+        }
+    }
+    let reference_access = ConstPixelBufferAccess::new(format, [RENDER_SIZE, RENDER_SIZE, 1], &reference);
+    let result_access = ConstPixelBufferAccess::new(format, [RENDER_SIZE, RENDER_SIZE, 1], pixels);
+    if bilinear_compare(&reference_access, &result_access, None, [1, 1, 1, 1]) {
+        TestStatus::pass("Pass")
+    } else {
+        TestStatus::fail("Image verification failed")
+    }
+}
+
+/// `SingleCmdRenderInstance::createPipeline` - no vertex input at all; the vertex
+/// shader derives its position from `gl_VertexIndex`.
+fn make_quadrant_pipeline(
+    device: &Device,
+    pipeline_layout: vk::PipelineLayout,
+    render_pass: vk::RenderPass,
+    vert: vk::ShaderModule,
+    frag: vk::ShaderModule,
+) -> Result<Unique<'_, vk::Pipeline>, TestError> {
+    crate::vk::obj_util::make_graphics_pipeline_full(
+        device,
+        pipeline_layout,
+        vert,
+        frag,
+        render_pass,
+        (RENDER_SIZE, RENDER_SIZE),
+        vk::PrimitiveTopology::TRIANGLE_LIST,
+        vk::SampleCountFlags::_1,
+        None,
+        1,
+        None,
+    )
+}
+
 pub struct BufferAccessCase {
     name: String,
     update_method: DescriptorUpdateMethod,
@@ -235,6 +501,10 @@ pub struct BufferAccessCase {
     /// dispatch path; anything else renders four quadrants and reads the image back.
     /// Empty is upstream's `no_access`: the descriptors are bound and never read.
     stage_flags: vk::ShaderStageFlags,
+    /// `isPrimaryCmdBuf` - false records the draw into a secondary command buffer and
+    /// executes it from inside the render pass. Graphics only; there is no secondary
+    /// variant of the dispatch path.
+    is_primary_cmd_buf: bool,
 }
 
 impl BufferAccessCase {
@@ -677,49 +947,6 @@ impl BufferAccessInstance<'_> {
         Ok((buffers, buffer_views, view_offsets, bind_time_offsets, texel_sources, 0))
     }
 
-    /// `RenderInstanceShaders` - which of the generated programs each stage
-    /// configuration uses. The "contributing" pair is for the case where both stages
-    /// read a descriptor and each owns half the image.
-    fn graphics_shader_modules(&self) -> Result<(Unique<'_, vk::ShaderModule>, Unique<'_, vk::ShaderModule>), TestError> {
-        let device = self.context.get_device();
-        let program = self.params.program();
-        let common = &crate::generated::shaders::binding_model_shader_access::QUADRANT_COMMON;
-        let vertex = self.params.stage_flags.contains(vk::ShaderStageFlags::VERTEX);
-        let fragment = self.params.stage_flags.contains(vk::ShaderStageFlags::FRAGMENT);
-
-        let (vert, frag) = match (vertex, fragment) {
-            (true, true) => (program.programs.get("vert_contrib")?, program.programs.get("frag_contrib")?),
-            (true, false) => (program.programs.get("vert")?, common.programs.get("frag_passthrough")?),
-            (false, true) => (program.programs.get("vert_passthrough")?, program.programs.get("frag")?),
-            (false, false) => (program.programs.get("vert_passthrough")?, common.programs.get("frag_no_access")?),
-        };
-        Ok((create_shader_module(device, vert)?, create_shader_module(device, frag)?))
-    }
-
-    /// `SingleCmdRenderInstance::createPipeline` - no vertex input at all; the vertex
-    /// shader derives its position from `gl_VertexIndex`.
-    fn create_graphics_pipeline(
-        &self,
-        pipeline_layout: vk::PipelineLayout,
-        render_pass: vk::RenderPass,
-        vert: vk::ShaderModule,
-        frag: vk::ShaderModule,
-    ) -> Result<Unique<'_, vk::Pipeline>, TestError> {
-        crate::vk::obj_util::make_graphics_pipeline_full(
-            self.context.get_device(),
-            pipeline_layout,
-            vert,
-            frag,
-            render_pass,
-            (RENDER_SIZE, RENDER_SIZE),
-            vk::PrimitiveTopology::TRIANGLE_LIST,
-            vk::SampleCountFlags::_1,
-            None,
-            1,
-            None,
-        )
-    }
-
     /// `BufferRenderInstance` / `SingleCmdRenderInstance` - the graphics counterpart of
     /// the dispatch path.
     ///
@@ -728,8 +955,6 @@ impl BufferAccessInstance<'_> {
     /// whichever descriptor its quadrant reached. The answer is therefore the image,
     /// and a wrong binding shows up as a quadrant of the wrong colour.
     fn run_graphics(&self) -> Result<TestStatus, TestError> {
-        use crate::vk::obj_util::{make_framebuffer, make_render_pass};
-
         let p = self.params;
         let device = self.context.get_device();
         let allocator = self.context.get_default_allocator();
@@ -783,76 +1008,11 @@ impl BufferAccessInstance<'_> {
         };
         let pipeline_layout = make_pipeline_layout(device, &all_layouts)?;
 
-        let format = vk::Format::R8G8B8A8_UNORM;
-        let color_image = ImageWithMemory::new(
-            device,
-            allocator,
-            vk::ImageCreateInfo::builder()
-                .image_type(vk::ImageType::_2D)
-                .format(format)
-                .extent(vk::Extent3D {
-                    width: RENDER_SIZE,
-                    height: RENDER_SIZE,
-                    depth: 1,
-                })
-                .mip_levels(1)
-                .array_layers(1)
-                .samples(vk::SampleCountFlags::_1)
-                .tiling(vk::ImageTiling::OPTIMAL)
-                .usage(vk::ImageUsageFlags::COLOR_ATTACHMENT | vk::ImageUsageFlags::TRANSFER_SRC)
-                .sharing_mode(vk::SharingMode::EXCLUSIVE)
-                .initial_layout(vk::ImageLayout::UNDEFINED)
-                .build(),
-            MemoryRequirement::ANY,
-        )?;
-        let color_view = make_image_view(
-            device,
-            color_image.get(),
-            vk::ImageViewType::_2D,
-            format,
-            vk::ImageSubresourceRange {
-                aspect_mask: vk::ImageAspectFlags::COLOR,
-                base_mip_level: 0,
-                level_count: 1,
-                base_array_layer: 0,
-                layer_count: 1,
-            },
-        )?;
-        let render_pass = make_render_pass(device, format)?;
-        let framebuffer = make_framebuffer(device, *render_pass, &[*color_view], RENDER_SIZE, RENDER_SIZE, 1)?;
-
-        let (vert, frag) = self.graphics_shader_modules()?;
-        let pipeline = self.create_graphics_pipeline(*pipeline_layout, *render_pass, *vert, *frag)?;
-
-        let read_buffer = BufferWithMemory::new(
-            device,
-            allocator,
-            make_buffer_create_info(u64::from(RENDER_SIZE * RENDER_SIZE * 4), vk::BufferUsageFlags::TRANSFER_DST),
-            MemoryRequirement::HOST_VISIBLE,
-        )?;
-
-        let command_pool = make_command_pool(device, queue_index)?;
-        let command_buffer = allocate_command_buffer(device, *command_pool, vk::CommandBufferLevel::PRIMARY)?;
-        begin_command_buffer(device, *command_buffer)?;
-        unsafe {
-            let clear = [vk::ClearValue {
-                color: vk::ClearColorValue { float32: [0.0, 0.0, 0.0, 0.0] },
-            }];
-            let begin = vk::RenderPassBeginInfo::builder()
-                .render_pass(*render_pass)
-                .framebuffer(*framebuffer)
-                .render_area(vk::Rect2D {
-                    offset: vk::Offset2D { x: 0, y: 0 },
-                    extent: vk::Extent2D {
-                        width: RENDER_SIZE,
-                        height: RENDER_SIZE,
-                    },
-                })
-                .clear_values(&clear);
-            device.cmd_begin_render_pass(*command_buffer, &begin, vk::SubpassContents::INLINE);
-            device.cmd_bind_pipeline(*command_buffer, vk::PipelineBindPoint::GRAPHICS, *pipeline);
-
-            let dynamic_offsets: Vec<u32> = if p.set_dynamic_offset { bind_time_offsets.clone() } else { Vec::new() };
+        let (vert, frag) = graphics_modules(device, &p.program().programs, p.stage_flags)?;
+        let dynamic_offsets: Vec<u32> = if p.set_dynamic_offset { bind_time_offsets.clone() } else { Vec::new() };
+        let bind = |device: &Device, cmd: vk::CommandBuffer| unsafe {
+            // The discontiguous arrangement's sets are 0 and 2, so each binds at its
+            // own index and its dynamic offsets have to be sliced to match.
             if p.descriptor_set_count == DescriptorSetCount::MultipleDiscontiguous {
                 let mut ndx = 0usize;
                 for set_ndx in 0..num_sets {
@@ -862,7 +1022,7 @@ impl BufferAccessInstance<'_> {
                         &[]
                     };
                     device.cmd_bind_descriptor_sets(
-                        *command_buffer,
+                        cmd,
                         vk::PipelineBindPoint::GRAPHICS,
                         *pipeline_layout,
                         p.descriptor_set_count.set_ndx(set_ndx),
@@ -872,86 +1032,15 @@ impl BufferAccessInstance<'_> {
                     ndx += num_resources as usize;
                 }
             } else {
-                device.cmd_bind_descriptor_sets(*command_buffer, vk::PipelineBindPoint::GRAPHICS, *pipeline_layout, 0, &set_handles, &dynamic_offsets);
+                device.cmd_bind_descriptor_sets(cmd, vk::PipelineBindPoint::GRAPHICS, *pipeline_layout, 0, &set_handles, &dynamic_offsets);
             }
-
-            // Four quads, two triangles each.
-            device.cmd_draw(*command_buffer, 6 * 4, 1, 0, 0);
-            device.cmd_end_render_pass(*command_buffer);
-
-            let to_src = vk::ImageMemoryBarrier::builder()
-                .src_access_mask(vk::AccessFlags::COLOR_ATTACHMENT_WRITE)
-                .dst_access_mask(vk::AccessFlags::TRANSFER_READ)
-                .old_layout(vk::ImageLayout::COLOR_ATTACHMENT_OPTIMAL)
-                .new_layout(vk::ImageLayout::TRANSFER_SRC_OPTIMAL)
-                .src_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
-                .dst_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
-                .image(color_image.get())
-                .subresource_range(vk::ImageSubresourceRange {
-                    aspect_mask: vk::ImageAspectFlags::COLOR,
-                    base_mip_level: 0,
-                    level_count: 1,
-                    base_array_layer: 0,
-                    layer_count: 1,
-                })
-                .build();
-            device.cmd_pipeline_barrier(
-                *command_buffer,
-                vk::PipelineStageFlags::COLOR_ATTACHMENT_OUTPUT,
-                vk::PipelineStageFlags::TRANSFER,
-                vk::DependencyFlags::empty(),
-                &[] as &[vk::MemoryBarrier],
-                &[] as &[vk::BufferMemoryBarrier],
-                &[to_src],
-            );
-
-            let region = vk::BufferImageCopy::builder()
-                .buffer_offset(0)
-                .buffer_row_length(0)
-                .buffer_image_height(0)
-                .image_subresource(vk::ImageSubresourceLayers {
-                    aspect_mask: vk::ImageAspectFlags::COLOR,
-                    mip_level: 0,
-                    base_array_layer: 0,
-                    layer_count: 1,
-                })
-                .image_offset(vk::Offset3D { x: 0, y: 0, z: 0 })
-                .image_extent(vk::Extent3D {
-                    width: RENDER_SIZE,
-                    height: RENDER_SIZE,
-                    depth: 1,
-                })
-                .build();
-            device.cmd_copy_image_to_buffer(*command_buffer, color_image.get(), vk::ImageLayout::TRANSFER_SRC_OPTIMAL, read_buffer.get(), &[region]);
-
-            let to_host = vk::BufferMemoryBarrier::builder()
-                .src_access_mask(vk::AccessFlags::TRANSFER_WRITE)
-                .dst_access_mask(vk::AccessFlags::HOST_READ)
-                .src_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
-                .dst_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
-                .buffer(read_buffer.get())
-                .offset(0)
-                .size(vk::WHOLE_SIZE)
-                .build();
-            device.cmd_pipeline_barrier(
-                *command_buffer,
-                vk::PipelineStageFlags::TRANSFER,
-                vk::PipelineStageFlags::HOST,
-                vk::DependencyFlags::empty(),
-                &[] as &[vk::MemoryBarrier],
-                &[to_host],
-                &[] as &[vk::ImageMemoryBarrier],
-            );
-        }
-        end_command_buffer(device, *command_buffer)?;
-        submit_commands_and_wait(device, queue, *command_buffer)?;
-        invalidate_alloc(device, read_buffer.get_allocation())?;
+        };
+        let pixels = render_quadrants(device, allocator, queue, queue_index, *pipeline_layout, *vert, *frag, p.is_primary_cmd_buf, &bind)?;
 
         drop(unused);
         drop(set_layouts);
 
-        let pixels = unsafe { std::slice::from_raw_parts(read_buffer.get_allocation().get_host_ptr(), (RENDER_SIZE * RENDER_SIZE * 4) as usize) };
-        self.verify_rendered_quadrants(pixels, num_sets, num_resources, &texel_sources, texel_view_offset_texels)
+        self.verify_rendered_quadrants(&pixels, num_sets, num_resources, &texel_sources, texel_view_offset_texels)
     }
 
     /// `BufferRenderInstance::verifyResultImage` / `TexelBufferRenderInstance::verifyResultImage`
@@ -1217,45 +1306,63 @@ const INTERFACES: [ShaderInputInterface; 5] = [
     ShaderInputInterface::DescriptorArray,
 ];
 
-/// `createShaderAccessTests`, restricted to the compute stage.
+/// `createShaderAccessTests`.
 ///
 /// The group tree upstream builds is `<cmd buffer>.<bind command>.[<update method>.]
-/// <descriptor type>.<stage>.<descriptor arrangement>`; only
-/// `primary_cmd_buf.bind.*.compute.*` and its `with_template` twin are registered
-/// here, and the rest of the tree is absent rather than present-and-skipped.
+/// <descriptor type>.<stage>.<descriptor arrangement>`. The `bind2` command and the
+/// push-descriptor update methods are not registered here; the rest is.
+///
+/// `secondary_cmd_buf` mirrors the primary tree with the draw recorded into a secondary
+/// command buffer, so it has no compute cases at all.
 pub fn create_shader_access_tests() -> tcu::TestCaseGroup {
     let mut group = tcu::TestCaseGroup::new("shader_access");
-    let mut primary = tcu::TestCaseGroup::new("primary_cmd_buf");
-    let mut bind = tcu::TestCaseGroup::new("bind");
 
-    for update_method in [DescriptorUpdateMethod::Normal, DescriptorUpdateMethod::WithTemplate] {
-        let mut method_group = update_method.group_name().map(tcu::TestCaseGroup::new);
-        for type_group in create_descriptor_type_groups(update_method) {
-            if let Some(g) = method_group.as_mut() {
-                g.add_child(type_group);
-            } else {
-                bind.add_child(type_group);
+    for is_primary in [true, false] {
+        let mut cmd_group = tcu::TestCaseGroup::new(if is_primary { "primary_cmd_buf" } else { "secondary_cmd_buf" });
+        let mut bind = tcu::TestCaseGroup::new("bind");
+
+        for update_method in [DescriptorUpdateMethod::Normal, DescriptorUpdateMethod::WithTemplate] {
+            let mut method_group = update_method.group_name().map(tcu::TestCaseGroup::new);
+            for type_group in create_descriptor_type_groups(update_method, is_primary) {
+                if let Some(g) = method_group.as_mut() {
+                    g.add_child(type_group);
+                } else {
+                    bind.add_child(type_group);
+                }
+            }
+            if let Some(g) = method_group {
+                bind.add_child(g);
             }
         }
-        if let Some(g) = method_group {
-            bind.add_child(g);
-        }
+
+        cmd_group.add_child(bind);
+        group.add_child(cmd_group);
     }
 
-    primary.add_child(bind);
-    group.add_child(primary);
     group
 }
 
 /// One group per descriptor type, in upstream's order - which puts the image types
 /// before the buffer ones.
-fn create_descriptor_type_groups(update_method: DescriptorUpdateMethod) -> Vec<tcu::TestCaseGroup> {
+fn create_descriptor_type_groups(update_method: DescriptorUpdateMethod, is_primary: bool) -> Vec<tcu::TestCaseGroup> {
     let mut groups = vec![
-        create_image_group(update_method, "sampler_mutable", vk::DescriptorType::SAMPLER, false),
-        create_image_group(update_method, "sampler_immutable", vk::DescriptorType::SAMPLER, true),
-        create_image_group(update_method, "combined_image_sampler_mutable", vk::DescriptorType::COMBINED_IMAGE_SAMPLER, false),
-        create_image_group(update_method, "combined_image_sampler_immutable", vk::DescriptorType::COMBINED_IMAGE_SAMPLER, true),
-        create_image_group(update_method, "storage_image", vk::DescriptorType::STORAGE_IMAGE, false),
+        create_image_group(update_method, is_primary, "sampler_mutable", vk::DescriptorType::SAMPLER, false),
+        create_image_group(update_method, is_primary, "sampler_immutable", vk::DescriptorType::SAMPLER, true),
+        create_image_group(
+            update_method,
+            is_primary,
+            "combined_image_sampler_mutable",
+            vk::DescriptorType::COMBINED_IMAGE_SAMPLER,
+            false,
+        ),
+        create_image_group(
+            update_method,
+            is_primary,
+            "combined_image_sampler_immutable",
+            vk::DescriptorType::COMBINED_IMAGE_SAMPLER,
+            true,
+        ),
+        create_image_group(update_method, is_primary, "storage_image", vk::DescriptorType::STORAGE_IMAGE, false),
     ];
 
     let descriptor_types = [
@@ -1272,6 +1379,10 @@ fn create_descriptor_type_groups(update_method: DescriptorUpdateMethod) -> Vec<t
         let mut type_group = tcu::TestCaseGroup::new(type_name);
 
         for (stage_name, stage_flags) in SHADER_STAGES {
+            // There is no secondary variant of the dispatch path.
+            if !is_primary && stage_flags == vk::ShaderStageFlags::COMPUTE {
+                continue;
+            }
             let mut stage_group = tcu::TestCaseGroup::new(stage_name);
 
             for (set_group_name, descriptor_set_count) in SET_COUNTS {
@@ -1306,6 +1417,7 @@ fn create_descriptor_type_groups(update_method: DescriptorUpdateMethod) -> Vec<t
                                     set_dynamic_offset: true,
                                     dynamic_offset_non_zero,
                                     stage_flags,
+                                    is_primary_cmd_buf: is_primary,
                                 }) as Box<dyn TestCase>);
                             }
                         } else {
@@ -1320,6 +1432,7 @@ fn create_descriptor_type_groups(update_method: DescriptorUpdateMethod) -> Vec<t
                                 set_dynamic_offset: false,
                                 dynamic_offset_non_zero: false,
                                 stage_flags,
+                                is_primary_cmd_buf: is_primary,
                             }) as Box<dyn TestCase>);
                         }
                     }
@@ -1360,46 +1473,66 @@ const SHADER_STAGES: [(&str, vk::ShaderStageFlags); 5] = [
 
 /// `createShaderAccessImageTests`, compute stage. The view type is the innermost
 /// level of the tree here, where the buffer types put their offset variants.
-fn create_image_group(update_method: DescriptorUpdateMethod, group_name: &str, descriptor_type: vk::DescriptorType, is_immutable_sampler: bool) -> tcu::TestCaseGroup {
+fn create_image_group(
+    update_method: DescriptorUpdateMethod,
+    is_primary: bool,
+    group_name: &str,
+    descriptor_type: vk::DescriptorType,
+    is_immutable_sampler: bool,
+) -> tcu::TestCaseGroup {
     let mut type_group = tcu::TestCaseGroup::new(group_name);
-    let mut stage_group = tcu::TestCaseGroup::new("compute");
 
-    for (set_group_name, descriptor_set_count) in SET_COUNTS {
-        let mut set_group = (!set_group_name.is_empty()).then(|| tcu::TestCaseGroup::new(set_group_name));
+    for (stage_name, stage_flags) in SHADER_STAGES {
+        if !is_primary && stage_flags == vk::ShaderStageFlags::COMPUTE {
+            continue;
+        }
+        let mut stage_group = tcu::TestCaseGroup::new(stage_name);
 
-        for shader_interface in INTERFACES {
-            let mut interface_group = tcu::TestCaseGroup::new(shader_interface.case_name());
+        for (set_group_name, descriptor_set_count) in SET_COUNTS {
+            let mut set_group = (!set_group_name.is_empty()).then(|| tcu::TestCaseGroup::new(set_group_name));
 
-            for (name, view_type, base_mip_level, base_array_slice) in IMAGE_TYPES {
-                if !image_case_exists(view_type, descriptor_set_count, shader_interface) {
-                    continue;
+            for shader_interface in INTERFACES {
+                let mut interface_group = tcu::TestCaseGroup::new(shader_interface.case_name());
+
+                for (name, view_type, base_mip_level, base_array_slice) in IMAGE_TYPES {
+                    if !image_case_exists(
+                        view_type,
+                        descriptor_set_count,
+                        shader_interface,
+                        descriptor_type,
+                        stage_flags == vk::ShaderStageFlags::COMPUTE,
+                    ) {
+                        continue;
+                    }
+                    interface_group.add_child(Box::new(ImageAccessCase {
+                        name,
+                        update_method,
+                        descriptor_type,
+                        descriptor_set_count,
+                        shader_interface,
+                        view_type,
+                        base_mip_level,
+                        base_array_slice,
+                        is_immutable_sampler,
+                        stage_flags,
+                        is_primary_cmd_buf: is_primary,
+                    }) as Box<dyn TestCase>);
                 }
-                interface_group.add_child(Box::new(ImageAccessCase {
-                    name,
-                    update_method,
-                    descriptor_type,
-                    descriptor_set_count,
-                    shader_interface,
-                    view_type,
-                    base_mip_level,
-                    base_array_slice,
-                    is_immutable_sampler,
-                }) as Box<dyn TestCase>);
+
+                if let Some(g) = set_group.as_mut() {
+                    g.add_child(interface_group);
+                } else {
+                    stage_group.add_child(interface_group);
+                }
             }
 
-            if let Some(g) = set_group.as_mut() {
-                g.add_child(interface_group);
-            } else {
-                stage_group.add_child(interface_group);
+            if let Some(g) = set_group {
+                stage_group.add_child(g);
             }
         }
 
-        if let Some(g) = set_group {
-            stage_group.add_child(g);
-        }
+        type_group.add_child(stage_group);
     }
-
-    type_group.add_child(stage_group);
     type_group
 }
 
@@ -1722,9 +1855,16 @@ pub struct ImageAccessCase {
     /// `RESOURCE_FLAG_IMMUTABLE_SAMPLER` - the sampler is baked into the descriptor
     /// set layout instead of being written into the descriptor.
     is_immutable_sampler: bool,
+    /// `m_stageFlags` - see `BufferAccessCase::stage_flags`.
+    stage_flags: vk::ShaderStageFlags,
+    is_primary_cmd_buf: bool,
 }
 
 impl ImageAccessCase {
+    fn is_compute(&self) -> bool {
+        self.stage_flags == vk::ShaderStageFlags::COMPUTE
+    }
+
     fn manifest_descriptor_type(&self) -> &'static str {
         match self.descriptor_type {
             vk::DescriptorType::STORAGE_IMAGE => "storage_image",
@@ -1915,65 +2055,110 @@ impl TestInstance for ImageAccessInstance<'_> {
         }
 
         let pipeline_layout = make_pipeline_layout(device, &layout_handles)?;
-        let module = create_shader_module(device, p.program().programs.get("compute")?)?;
-        let pipeline = self.create_compute_pipeline(*pipeline_layout, *module)?;
+        let set_handles: Vec<vk::DescriptorSet> = sets.iter().map(|s| **s).collect();
+
+        // The graphics path renders the answers instead of writing them, so it leaves
+        // here with an image rather than a result buffer.
+        let rendered = if p.is_compute() {
+            None
+        } else {
+            let (vert, frag) = graphics_modules(device, &p.program().programs, p.stage_flags)?;
+            let bind = |device: &Device, cmd: vk::CommandBuffer| unsafe {
+                if p.descriptor_set_count == DescriptorSetCount::MultipleDiscontiguous {
+                    for set_ndx in 0..num_sets {
+                        device.cmd_bind_descriptor_sets(
+                            cmd,
+                            vk::PipelineBindPoint::GRAPHICS,
+                            *pipeline_layout,
+                            p.descriptor_set_count.set_ndx(set_ndx),
+                            &set_handles[set_ndx as usize..set_ndx as usize + 1],
+                            &[] as &[u32],
+                        );
+                    }
+                } else {
+                    device.cmd_bind_descriptor_sets(cmd, vk::PipelineBindPoint::GRAPHICS, *pipeline_layout, 0, &set_handles, &[] as &[u32]);
+                }
+            };
+            Some(render_quadrants(
+                device,
+                allocator,
+                queue,
+                queue_index,
+                *pipeline_layout,
+                *vert,
+                *frag,
+                p.is_primary_cmd_buf,
+                &bind,
+            )?)
+        };
+
+        let module = if p.is_compute() {
+            Some(create_shader_module(device, p.program().programs.get("compute")?)?)
+        } else {
+            None
+        };
+        let pipeline = match &module {
+            Some(m) => Some(self.create_compute_pipeline(*pipeline_layout, **m)?),
+            None => None,
+        };
 
         let command_pool = make_command_pool(device, queue_index)?;
         let command_buffer = allocate_command_buffer(device, *command_pool, vk::CommandBufferLevel::PRIMARY)?;
-        let set_handles: Vec<vk::DescriptorSet> = sets.iter().map(|s| **s).collect();
 
-        begin_command_buffer(device, *command_buffer)?;
-        unsafe {
-            device.cmd_bind_pipeline(*command_buffer, vk::PipelineBindPoint::COMPUTE, *pipeline);
-
-            // The discontiguous arrangement's sets are 0 and 2, so each binds at its
-            // own index rather than all of them in one call from index 0.
-            if p.descriptor_set_count == DescriptorSetCount::MultipleDiscontiguous {
-                for set_ndx in 0..num_sets {
-                    device.cmd_bind_descriptor_sets(
-                        *command_buffer,
-                        vk::PipelineBindPoint::COMPUTE,
-                        *pipeline_layout,
-                        p.descriptor_set_count.set_ndx(set_ndx),
-                        &set_handles[set_ndx as usize..set_ndx as usize + 1],
-                        &[] as &[u32],
-                    );
-                }
-            } else {
-                device.cmd_bind_descriptor_sets(*command_buffer, vk::PipelineBindPoint::COMPUTE, *pipeline_layout, 0, &set_handles, &[] as &[u32]);
-            }
-
-            device.cmd_dispatch(*command_buffer, 4, 1, 1);
-
-            let post = vk::BufferMemoryBarrier::builder()
-                .src_access_mask(vk::AccessFlags::SHADER_WRITE)
-                .dst_access_mask(vk::AccessFlags::HOST_READ)
-                .src_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
-                .dst_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
-                .buffer(result_buffer.get())
-                .offset(0)
-                .size(vk::WHOLE_SIZE)
-                .build();
-            device.cmd_pipeline_barrier(
-                *command_buffer,
-                vk::PipelineStageFlags::COMPUTE_SHADER,
-                vk::PipelineStageFlags::HOST,
-                vk::DependencyFlags::empty(),
-                &[] as &[vk::MemoryBarrier],
-                &[post],
-                &[] as &[vk::ImageMemoryBarrier],
-            );
-        }
-        end_command_buffer(device, *command_buffer)?;
-        submit_commands_and_wait(device, queue, *command_buffer)?;
-
-        invalidate_alloc(device, result_buffer.get_allocation())?;
         let mut results = [[0.0f32; 4]; 4];
-        unsafe {
-            let ptr = result_buffer.get_allocation().get_host_ptr().cast::<f32>();
-            for (i, quadrant) in results.iter_mut().enumerate() {
-                for (c, value) in quadrant.iter_mut().enumerate() {
-                    *value = ptr.add(i * 4 + c).read();
+        if let Some(pipeline) = &pipeline {
+            begin_command_buffer(device, *command_buffer)?;
+            unsafe {
+                device.cmd_bind_pipeline(*command_buffer, vk::PipelineBindPoint::COMPUTE, **pipeline);
+
+                // The discontiguous arrangement's sets are 0 and 2, so each binds at its
+                // own index rather than all of them in one call from index 0.
+                if p.descriptor_set_count == DescriptorSetCount::MultipleDiscontiguous {
+                    for set_ndx in 0..num_sets {
+                        device.cmd_bind_descriptor_sets(
+                            *command_buffer,
+                            vk::PipelineBindPoint::COMPUTE,
+                            *pipeline_layout,
+                            p.descriptor_set_count.set_ndx(set_ndx),
+                            &set_handles[set_ndx as usize..set_ndx as usize + 1],
+                            &[] as &[u32],
+                        );
+                    }
+                } else {
+                    device.cmd_bind_descriptor_sets(*command_buffer, vk::PipelineBindPoint::COMPUTE, *pipeline_layout, 0, &set_handles, &[] as &[u32]);
+                }
+
+                device.cmd_dispatch(*command_buffer, 4, 1, 1);
+
+                let post = vk::BufferMemoryBarrier::builder()
+                    .src_access_mask(vk::AccessFlags::SHADER_WRITE)
+                    .dst_access_mask(vk::AccessFlags::HOST_READ)
+                    .src_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+                    .dst_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+                    .buffer(result_buffer.get())
+                    .offset(0)
+                    .size(vk::WHOLE_SIZE)
+                    .build();
+                device.cmd_pipeline_barrier(
+                    *command_buffer,
+                    vk::PipelineStageFlags::COMPUTE_SHADER,
+                    vk::PipelineStageFlags::HOST,
+                    vk::DependencyFlags::empty(),
+                    &[] as &[vk::MemoryBarrier],
+                    &[post],
+                    &[] as &[vk::ImageMemoryBarrier],
+                );
+            }
+            end_command_buffer(device, *command_buffer)?;
+            submit_commands_and_wait(device, queue, *command_buffer)?;
+
+            invalidate_alloc(device, result_buffer.get_allocation())?;
+            unsafe {
+                let ptr = result_buffer.get_allocation().get_host_ptr().cast::<f32>();
+                for (i, quadrant) in results.iter_mut().enumerate() {
+                    for (c, value) in quadrant.iter_mut().enumerate() {
+                        *value = ptr.add(i * 4 + c).read();
+                    }
                 }
             }
         }
@@ -2005,6 +2190,18 @@ impl TestInstance for ImageAccessInstance<'_> {
                     *r /= num_sets as f32;
                 }
             }
+        }
+
+        // `ImageFetchRenderInstance::verifyResultImage` - the same four references,
+        // compared against the rendered image rather than a result buffer. `no_access`
+        // reads nothing, so the shader writes the fixed pair instead.
+        if let Some(pixels) = &rendered {
+            let quadrants = if p.stage_flags.is_empty() {
+                [COLORS[1], COLORS[0], COLORS[0], COLORS[1]]
+            } else {
+                references
+            };
+            return Ok(compare_quadrant_image(pixels, quadrants));
         }
 
         // A fetched value only went through a UNORM8 conversion, so a whole
@@ -2235,8 +2432,10 @@ impl ImageAccessInstance<'_> {
         let p = self.params;
         let mut builder = DescriptorSetLayoutBuilder::new();
         let mut binding = 0;
+        let stages = p.stage_flags;
 
-        if set_ndx == 0 {
+        // The result buffer exists only on the dispatch path.
+        if set_ndx == 0 && p.is_compute() {
             builder = builder.add_indexed_binding(vk::DescriptorType::STORAGE_BUFFER, vk::ShaderStageFlags::COMPUTE, binding, 1);
             binding += 1;
         }
@@ -2251,21 +2450,21 @@ impl ImageAccessInstance<'_> {
         let immutable = |ndx: usize| -> Option<&[vk::Sampler]> { p.is_immutable_sampler.then(|| &set_samplers[ndx..ndx + 1]) };
 
         let add = |builder: DescriptorSetLayoutBuilder, b: u32, samplers: Option<&[vk::Sampler]>, count: u32| match samplers {
-            Some(s) => builder.add_indexed_sampler_binding(p.descriptor_type, vk::ShaderStageFlags::COMPUTE, b, s),
-            None => builder.add_indexed_binding(p.descriptor_type, vk::ShaderStageFlags::COMPUTE, b, count),
+            Some(s) => builder.add_indexed_sampler_binding(p.descriptor_type, stages, b, s),
+            None => builder.add_indexed_binding(p.descriptor_type, stages, b, count),
         };
 
         builder = match p.shader_interface {
             ShaderInputInterface::SingleDescriptor => {
                 if is_separate_sampler {
-                    builder = builder.add_indexed_binding(vk::DescriptorType::SAMPLED_IMAGE, vk::ShaderStageFlags::COMPUTE, binding, 1);
+                    builder = builder.add_indexed_binding(vk::DescriptorType::SAMPLED_IMAGE, stages, binding, 1);
                     binding += 1;
                 }
                 add(builder, binding, immutable(0), 1)
             }
             ShaderInputInterface::MultipleContiguousDescriptors => {
                 if is_separate_sampler {
-                    builder = builder.add_indexed_binding(vk::DescriptorType::SAMPLED_IMAGE, vk::ShaderStageFlags::COMPUTE, binding, 1);
+                    builder = builder.add_indexed_binding(vk::DescriptorType::SAMPLED_IMAGE, stages, binding, 1);
                     binding += 1;
                 }
                 let builder = add(builder, binding, immutable(0), 1);
@@ -2276,20 +2475,20 @@ impl ImageAccessInstance<'_> {
                 // them, which is the whole point of the arrangement.
                 let mut builder = add(builder, binding, immutable(0), 1);
                 if is_separate_sampler {
-                    builder = builder.add_indexed_binding(vk::DescriptorType::SAMPLED_IMAGE, vk::ShaderStageFlags::COMPUTE, binding + 1, 1);
+                    builder = builder.add_indexed_binding(vk::DescriptorType::SAMPLED_IMAGE, stages, binding + 1, 1);
                 }
                 add(builder, binding + 2, immutable(1), 1)
             }
             ShaderInputInterface::MultipleArbitraryDescriptors => {
                 if is_separate_sampler {
-                    builder = builder.add_indexed_binding(vk::DescriptorType::SAMPLED_IMAGE, vk::ShaderStageFlags::COMPUTE, binding, 1);
+                    builder = builder.add_indexed_binding(vk::DescriptorType::SAMPLED_IMAGE, stages, binding, 1);
                 }
                 let builder = add(builder, arbitrary_binding_index(0), immutable(0), 1);
                 add(builder, arbitrary_binding_index(1), immutable(1), 1)
             }
             ShaderInputInterface::DescriptorArray => {
                 if is_separate_sampler {
-                    builder = builder.add_indexed_binding(vk::DescriptorType::SAMPLED_IMAGE, vk::ShaderStageFlags::COMPUTE, binding, 1);
+                    builder = builder.add_indexed_binding(vk::DescriptorType::SAMPLED_IMAGE, stages, binding, 1);
                     binding += 1;
                 }
                 add(builder, binding, p.is_immutable_sampler.then_some(&set_samplers[..]), 2)
@@ -2373,7 +2572,7 @@ impl ImageAccessInstance<'_> {
         let mut writes = Vec::new();
         let mut binding = 0;
 
-        if set_ndx == 0 {
+        if set_ndx == 0 && p.is_compute() {
             writes.push(
                 vk::WriteDescriptorSet::builder()
                     .dst_set(set)
@@ -2482,12 +2681,27 @@ const IMAGE_TYPES: [(&str, vk::ImageViewType, u32, u32); 20] = [
 /// `createShaderAccessImageTests`' "skip some image view variations to avoid
 /// unnecessary bloating": only the plain 2D view gets the arrangements that already
 /// multiply out, so the group does not become the product of every axis.
-fn image_case_exists(view_type: vk::ImageViewType, descriptor_set_count: DescriptorSetCount, shader_interface: ShaderInputInterface) -> bool {
-    view_type == vk::ImageViewType::_2D
-        || (!matches!(
-            shader_interface,
-            ShaderInputInterface::MultipleDiscontiguousDescriptors | ShaderInputInterface::MultipleArbitraryDescriptors
-        ) && descriptor_set_count != DescriptorSetCount::MultipleDiscontiguous)
+fn image_case_exists(
+    view_type: vk::ImageViewType,
+    descriptor_set_count: DescriptorSetCount,
+    shader_interface: ShaderInputInterface,
+    descriptor_type: vk::DescriptorType,
+    is_compute: bool,
+) -> bool {
+    if view_type == vk::ImageViewType::_2D {
+        return true;
+    }
+    if shader_interface == ShaderInputInterface::MultipleArbitraryDescriptors || descriptor_set_count == DescriptorSetCount::MultipleDiscontiguous {
+        return false;
+    }
+    // Upstream keeps the discontiguous arrangement on a non-2D view only for the
+    // separate sampler type, where it is about where the sampler sits relative to the
+    // texture rather than about the view - and a second rule takes it away again in a
+    // compute shader.
+    if shader_interface == ShaderInputInterface::MultipleDiscontiguousDescriptors {
+        return descriptor_type == vk::DescriptorType::SAMPLER && !is_compute;
+    }
+    true
 }
 
 /// `ImageSampleInstanceImages::createRefSampler` - the two the group alternates
@@ -2781,7 +2995,7 @@ impl BufferAccessInstance<'_> {
         ];
 
         let mut registry = RawUpdateRegistry::default();
-        if set_ndx == 0 {
+        if set_ndx == 0 && self.params.is_compute() {
             registry.add_write_object(vk::DescriptorBufferInfo {
                 buffer: result,
                 offset: 0,
@@ -2804,7 +3018,7 @@ impl BufferAccessInstance<'_> {
         let mut binding = 0;
         let mut object = 0;
 
-        if set_ndx == 0 {
+        if set_ndx == 0 && self.params.is_compute() {
             entries.push(create_template_binding(
                 binding,
                 0,
@@ -2868,7 +3082,7 @@ impl BufferAccessInstance<'_> {
         result: vk::Buffer,
     ) -> Result<(), TestError> {
         let mut registry = RawUpdateRegistry::default();
-        if set_ndx == 0 {
+        if set_ndx == 0 && self.params.is_compute() {
             registry.add_write_object(vk::DescriptorBufferInfo {
                 buffer: result,
                 offset: 0,
@@ -2932,7 +3146,7 @@ impl ImageAccessInstance<'_> {
         ];
 
         let mut registry = RawUpdateRegistry::default();
-        if set_ndx == 0 {
+        if set_ndx == 0 && p.is_compute() {
             registry.add_write_object(vk::DescriptorBufferInfo {
                 buffer: result,
                 offset: 0,
@@ -2953,7 +3167,7 @@ impl ImageAccessInstance<'_> {
         let mut binding = 0;
         let mut object = 0;
 
-        if set_ndx == 0 {
+        if set_ndx == 0 && p.is_compute() {
             entries.push(create_template_binding(
                 binding,
                 0,

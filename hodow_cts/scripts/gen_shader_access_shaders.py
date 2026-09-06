@@ -118,8 +118,14 @@ QUADRANT_GEN_VERTEX_POS = (
     "    result_position = vec4(float(quadOriginX + quadXcoord - 1), float(quadOriginY + quadYcoord - 1), 0.0, 1.0);\n"
 )
 
-# `genPerVertexBlock` emits nothing for an ES version, and every shader here is
-# `#version 310 es`, so the block is deliberately absent.
+# `genPerVertexBlock` emits nothing for an ES version. The buffer types are all
+# `#version 310 es` so the block is absent there, but the 1D image views drop to
+# desktop GLSL and do need it.
+PER_VERTEX_OUT = "out gl_PerVertex {\n    vec4  gl_Position;\n    float gl_PointSize;\n};\n"
+
+
+def per_vertex_block(version: str) -> str:
+    return "" if version.strip().endswith("es") else PER_VERTEX_OUT
 
 # `BufferDescriptorCase::genNoAccessSource` - the colours the descriptors would have
 # held, written without reading any of them.
@@ -131,7 +137,7 @@ NO_ACCESS_SOURCE = (
 )
 
 
-def graphics_vertex_shader(declarations: str, access: str, contributing: bool, extension: str = "") -> str:
+def graphics_vertex_shader(declarations: str, access: str, contributing: bool, extension: str = "", version: str = "#version 310 es\n") -> str:
     """`QuadrantRendederCase::genVertexSource`, the branch where the vertex stage is active.
 
     `contributing` is upstream's `!onlyVS`: when the fragment stage also reads a
@@ -140,11 +146,12 @@ def graphics_vertex_shader(declarations: str, access: str, contributing: bool, e
     """
     frag_color_prec = "mediump"
     return (
-        "#version 310 es\n"
+        version
         + extension
         + declarations
         + f"layout(location = 0) out {frag_color_prec} vec4 frag_color;\n"
         + ("layout(location = 1) flat out highp int frag_quadrant_id;\n" if contributing else "")
+        + per_vertex_block(version)
         + "void main (void)\n"
         "{\n"
         "    highp vec4 result_position;\n"
@@ -160,17 +167,18 @@ def graphics_vertex_shader(declarations: str, access: str, contributing: bool, e
     )
 
 
-def graphics_vertex_passthrough(extension: str = "") -> str:
+def graphics_vertex_passthrough(extension: str = "", version: str = "#version 310 es\n") -> str:
     """The same, for the branch where the vertex stage reads nothing.
 
     Upstream emits `genExtensionDeclarations` here too even though nothing in the shader
     needs them, so this is not one shader shared by every descriptor type.
     """
     return (
-        "#version 310 es\n"
+        version
         + extension
         + "layout(location = 1) flat out highp int frag_quadrant_id;\n"
-        "void main (void)\n"
+        + per_vertex_block(version)
+        + "void main (void)\n"
         "{\n"
         "    highp vec4 result_position;\n"
         "    highp int quadrant_id;\n"
@@ -181,7 +189,7 @@ def graphics_vertex_passthrough(extension: str = "") -> str:
     )
 
 
-def graphics_fragment_shader(declarations: str, access: str, contributing: bool, extension: str = "") -> str:
+def graphics_fragment_shader(declarations: str, access: str, contributing: bool, extension: str = "", version: str = "#version 310 es\n") -> str:
     """`QuadrantRendederCase::genFragmentSource`, the branch where the fragment stage is active.
 
     When it is only a contributor the two stages split the image: the fragment stage's
@@ -189,7 +197,7 @@ def graphics_fragment_shader(declarations: str, access: str, contributing: bool,
     a wrong binding in either stage shows up.
     """
     return (
-        "#version 310 es\n"
+        version
         + extension
         + declarations
         + ("layout(location = 0) in mediump vec4 frag_color;\n" if contributing else "")
@@ -212,10 +220,10 @@ def graphics_fragment_shader(declarations: str, access: str, contributing: bool,
     )
 
 
-def graphics_fragment_passthrough() -> str:
+def graphics_fragment_passthrough(version: str = "#version 310 es\n") -> str:
     return (
-        "#version 310 es\n"
-        "layout(location = 0) in mediump vec4 frag_color;\n"
+        version
+        + "layout(location = 0) in mediump vec4 frag_color;\n"
         "layout(location = 0) out mediump vec4 o_color;\n"
         "void main (void)\n"
         "{\n"
@@ -224,10 +232,10 @@ def graphics_fragment_passthrough() -> str:
     )
 
 
-def graphics_fragment_no_access() -> str:
+def graphics_fragment_no_access(version: str = "#version 310 es\n") -> str:
     return (
-        "#version 310 es\n"
-        "layout(location = 1) flat in highp int frag_quadrant_id;\n"
+        version
+        + "layout(location = 1) flat in highp int frag_quadrant_id;\n"
         "layout(location = 0) out mediump vec4 o_color;\n"
         "void main (void)\n"
         "{\n"
@@ -410,14 +418,14 @@ def fetch_coord_str(view_type: str, base_mip_level: int, base_array_slice: int, 
     return f"ivec3({x}, {y}, {z})"
 
 
-def image_declarations(view_type: str, set_count: str, interface: str) -> str:
+def image_declarations(view_type: str, set_count: str, interface: str, for_compute: bool = True) -> str:
     """`ImageDescriptorCase::genResourceDeclarations`, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE."""
     out = []
     sets = SET_NDX[set_count]
     dimension = image_dimension(view_type)
 
     for set_ndx, descriptor_set in enumerate(sets):
-        desc_binding = 1 - (0 if set_ndx == 0 else 1)
+        desc_binding = (1 - (0 if set_ndx == 0 else 1)) if for_compute else 0
         postfix = "" if len(sets) == 1 else str(set_ndx)
 
         def one(binding: int, name: str, array: str = "") -> None:
@@ -534,7 +542,7 @@ def sample_coord_str(view_type: str, base_mip_level: int, base_array_slice: int,
     return f"vec3(float({f(x)}), float({f(y)}), float({f(z)}))"
 
 
-def sampler_declarations(descriptor_type: str, view_type: str, set_count: str, interface: str) -> str:
+def sampler_declarations(descriptor_type: str, view_type: str, set_count: str, interface: str, for_compute: bool = True) -> str:
     """`ImageDescriptorCase::genResourceDeclarations` for VK_DESCRIPTOR_TYPE_SAMPLER
     and VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER."""
     out = []
@@ -542,7 +550,7 @@ def sampler_declarations(descriptor_type: str, view_type: str, set_count: str, i
     dimension = image_dimension(view_type)
 
     for set_ndx, descriptor_set in enumerate(sets):
-        desc_binding = 1 - (0 if set_ndx == 0 else 1)
+        desc_binding = (1 - (0 if set_ndx == 0 else 1)) if for_compute else 0
         postfix = "" if len(sets) == 1 else str(set_ndx)
 
         def texture(binding: int, name: str) -> None:
@@ -644,33 +652,42 @@ def sampler_compute_shader(descriptor_type: str, view_type: str, base_mip_level:
     )
 
 
-def image_case_exists(view_type: str, set_count: str, interface: str) -> bool:
+def image_case_exists(view_type: str, set_count: str, interface: str, descriptor_type: str = "storage_image", is_compute: bool = True) -> bool:
     """`createShaderAccessImageTests`' "skip some image view variations to avoid
     unnecessary bloating". Only the plain 2D view gets the arrangements that already
     multiply out, so the group does not become the product of every axis.
 
     Upstream keeps the discontiguous arrangement on every view for the separate
     sampler type - there it is about where the sampler sits relative to the texture,
-    not about the view - but a second rule takes it away again in a compute shader,
-    and the compute stage is all that is ported. So the rule is uniform here.
+    not about the view - but a second rule takes it away again in a compute shader.
+    So a non-2D separate-sampler case exists in a graphics stage and not in compute.
     """
     if view_type == "2d":
         return True
-    return interface not in ("multiple_discontiguous", "multiple_arbitrary") and set_count != "multiple_discontiguous"
+    if interface == "multiple_arbitrary" or set_count == "multiple_discontiguous":
+        return False
+    if interface == "multiple_discontiguous":
+        return descriptor_type == "sampler" and not is_compute
+    return True
 
 
-def emit_graphics_programs(name: str, declarations: str, access: str, extension: str = "") -> list[str]:
+def emit_graphics_programs(name: str, declarations: str, access: str, extension: str = "", version: str = "#version 310 es\n") -> list[str]:
     """The four stage-active combinations a graphics case needs, as manifest entries.
 
     `vertex`/`fragment` are the "this stage is the only reader" forms and `*_contrib`
     the ones used when both stages read, where each owns half the image.
     """
     variants = [
-        ("vert", graphics_vertex_shader(declarations, access, False, extension), "vert"),
-        ("vert_contrib", graphics_vertex_shader(declarations, access, True, extension), "vert"),
-        ("frag", graphics_fragment_shader(declarations, access, False, extension), "frag"),
-        ("frag_contrib", graphics_fragment_shader(declarations, access, True, extension), "frag"),
-        ("vert_passthrough", graphics_vertex_passthrough(extension), "vert"),
+        ("vert", graphics_vertex_shader(declarations, access, False, extension, version), "vert"),
+        ("vert_contrib", graphics_vertex_shader(declarations, access, True, extension, version), "vert"),
+        ("frag", graphics_fragment_shader(declarations, access, False, extension, version), "frag"),
+        ("frag_contrib", graphics_fragment_shader(declarations, access, True, extension, version), "frag"),
+        ("vert_passthrough", graphics_vertex_passthrough(extension, version), "vert"),
+        # The two shaders that read no descriptor still belong to the case: upstream's
+        # GLSL version is a property of the case, not of the shader, so a 1D image view
+        # gets desktop-GLSL pass-throughs while a 2D one gets ES ones.
+        ("frag_passthrough", graphics_fragment_passthrough(version), "frag"),
+        ("frag_no_access", graphics_fragment_no_access(version), "frag"),
     ]
     entries = []
     for suffix, source, stage in variants:
@@ -758,16 +775,35 @@ def main() -> int:
     for view_name, view_type, base_mip_level, base_array_slice in IMAGE_TYPES:
         for set_count in SET_NDX:
             for interface in INTERFACES:
-                if not image_case_exists(view_type, set_count, interface):
+                # A case may exist only in the graphics stages, in which case it has
+                # no compute program at all.
+                in_compute = image_case_exists(view_type, set_count, interface, "storage_image", True)
+                in_graphics = image_case_exists(view_type, set_count, interface, "storage_image", False)
+                if not in_compute and not in_graphics:
                     continue
                 name = f"storage_image_{view_name}_{set_count}_{interface}"
-                (SRC_DIR / f"{name}.comp").write_text(image_compute_shader(view_type, base_mip_level, base_array_slice, set_count, interface))
+                version = "#version 440\n" if view_type in ("1d", "1d_array") else "#version 310 es\n"
+                extension = "#extension GL_OES_texture_cube_map_array : require\n" if view_type == "cube_array" else ""
+                programs = []
+                if in_compute:
+                    (SRC_DIR / f"{name}.comp").write_text(image_compute_shader(view_type, base_mip_level, base_array_slice, set_count, interface))
+                    programs.append(f'    {{ name = "compute", template = "binding_model/generated/{name}.comp", stage = "comp" }},')
+                if in_graphics:
+                    programs += emit_graphics_programs(
+                        name,
+                        image_declarations(view_type, set_count, interface, for_compute=False),
+                        image_access(view_type, base_mip_level, base_array_slice, set_count, interface),
+                        extension,
+                        version,
+                    )
                 lines += [
                     "[[case]]",
                     f'name = "{name}"',
                     f'rust_const = "{name.upper()}"',
                     'rust_type = "ImageAccessProgram"',
-                    f'programs = [{{ name = "compute", template = "binding_model/generated/{name}.comp", stage = "comp" }}]',
+                    "programs = [",
+                    *programs,
+                    "]",
                     "[case.params]",
                     'descriptor_type = { type = "str", value = "storage_image" }',
                     f'view_name = {{ type = "str", value = "{view_name}" }}',
@@ -781,16 +817,33 @@ def main() -> int:
         for view_name, view_type, base_mip_level, base_array_slice in IMAGE_TYPES:
             for set_count in SET_NDX:
                 for interface in INTERFACES:
-                    if not image_case_exists(view_type, set_count, interface):
+                    in_compute = image_case_exists(view_type, set_count, interface, descriptor_type, True)
+                    in_graphics = image_case_exists(view_type, set_count, interface, descriptor_type, False)
+                    if not in_compute and not in_graphics:
                         continue
                     name = f"{descriptor_type}_{view_name}_{set_count}_{interface}"
-                    (SRC_DIR / f"{name}.comp").write_text(sampler_compute_shader(descriptor_type, view_type, base_mip_level, base_array_slice, set_count, interface))
+                    version = "#version 440\n" if view_type in ("1d", "1d_array") else "#version 310 es\n"
+                    extension = "#extension GL_OES_texture_cube_map_array : require\n" if view_type == "cube_array" else ""
+                    programs = []
+                    if in_compute:
+                        (SRC_DIR / f"{name}.comp").write_text(sampler_compute_shader(descriptor_type, view_type, base_mip_level, base_array_slice, set_count, interface))
+                        programs.append(f'    {{ name = "compute", template = "binding_model/generated/{name}.comp", stage = "comp" }},')
+                    if in_graphics:
+                        programs += emit_graphics_programs(
+                            name,
+                            sampler_declarations(descriptor_type, view_type, set_count, interface, for_compute=False),
+                            sampler_access(descriptor_type, view_type, base_mip_level, base_array_slice, set_count, interface),
+                            extension,
+                            version,
+                        )
                     lines += [
                         "[[case]]",
                         f'name = "{name}"',
                         f'rust_const = "{name.upper()}"',
                         'rust_type = "ImageAccessProgram"',
-                        f'programs = [{{ name = "compute", template = "binding_model/generated/{name}.comp", stage = "comp" }}]',
+                        "programs = [",
+                        *programs,
+                        "]",
                         "[case.params]",
                         f'descriptor_type = {{ type = "str", value = "{descriptor_type}" }}',
                         f'view_name = {{ type = "str", value = "{view_name}" }}',
@@ -799,25 +852,6 @@ def main() -> int:
                         "",
                     ]
                     count += 1
-
-    # The two shaders that do not depend on the descriptor at all: the fragment
-    # pass-through, and the fragment shader for the `no_access` cases where nothing reads
-    # a descriptor and the expected colours are written directly. The vertex pass-through
-    # is *not* here - upstream gives it the extension declarations too, so it varies.
-    (SRC_DIR / "quadrant_passthrough.frag").write_text(graphics_fragment_passthrough())
-    (SRC_DIR / "quadrant_no_access.frag").write_text(graphics_fragment_no_access())
-    lines += [
-        "[[case]]",
-        'name = "quadrant_common"',
-        'rust_const = "QUADRANT_COMMON"',
-        'rust_type = "QuadrantCommonProgram"',
-        "programs = [",
-        '    { name = "frag_passthrough", template = "binding_model/generated/quadrant_passthrough.frag", stage = "frag" },',
-        '    { name = "frag_no_access", template = "binding_model/generated/quadrant_no_access.frag", stage = "frag" },',
-        "]",
-        "",
-    ]
-    count += 1
 
     MANIFEST.write_text("\n".join(lines))
     print(f"wrote {MANIFEST.relative_to(REPO_DIR)} and {count} shaders in {SRC_DIR.relative_to(REPO_DIR)}")
