@@ -12,3 +12,4 @@ core.*
 
 # Scratch scripts and CTS run logs.
 tmp/
+TestResults.qpa

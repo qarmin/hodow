@@ -1400,6 +1400,26 @@ pub enum OperationName {
     ReadIndirectBufferDraw,
     ReadIndirectBufferDrawIndexed,
     ReadIndirectBufferDispatch,
+    // `s_copyOps` - two-resource operations, only ever used to chain a payload from
+    // one resource to the next. They are neither reads nor writes in the
+    // `s_writeOps`/`s_readOps` sense and appear in neither list.
+    CopyBuffer,
+    CopyImage,
+    CopyBlitImage,
+    CopySsboVertex,
+    CopySsboTessControl,
+    CopySsboTessEval,
+    CopySsboGeometry,
+    CopySsboFragment,
+    CopySsboCompute,
+    CopySsboComputeIndirect,
+    CopyImageVertex,
+    CopyImageTessControl,
+    CopyImageTessEval,
+    CopyImageGeometry,
+    CopyImageFragment,
+    CopyImageCompute,
+    CopyImageComputeIndirect,
 }
 
 impl OperationName {
@@ -1475,6 +1495,23 @@ impl OperationName {
             Self::ReadIndirectBufferDraw => "read_indirect_buffer_draw",
             Self::ReadIndirectBufferDrawIndexed => "read_indirect_buffer_draw_indexed",
             Self::ReadIndirectBufferDispatch => "read_indirect_buffer_dispatch",
+            Self::CopyBuffer => "copy_buffer",
+            Self::CopyImage => "copy_image",
+            Self::CopyBlitImage => "blit_image",
+            Self::CopySsboVertex => "copy_ssbo_vertex",
+            Self::CopySsboTessControl => "copy_ssbo_tess_control",
+            Self::CopySsboTessEval => "copy_ssbo_tess_eval",
+            Self::CopySsboGeometry => "copy_ssbo_geometry",
+            Self::CopySsboFragment => "copy_ssbo_fragment",
+            Self::CopySsboCompute => "copy_ssbo_compute",
+            Self::CopySsboComputeIndirect => "copy_ssbo_compute_indirect",
+            Self::CopyImageVertex => "copy_image_vertex",
+            Self::CopyImageTessControl => "copy_image_tess_control",
+            Self::CopyImageTessEval => "copy_image_tess_eval",
+            Self::CopyImageGeometry => "copy_image_geometry",
+            Self::CopyImageFragment => "copy_image_fragment",
+            Self::CopyImageCompute => "copy_image_compute",
+            Self::CopyImageComputeIndirect => "copy_image_compute_indirect",
         }
     }
 
@@ -1688,6 +1725,23 @@ impl OperationName {
             Self::WriteDraw | Self::WriteDrawIndexed | Self::WriteDrawIndirect | Self::WriteDrawIndexedIndirect => {
                 single_sampled_color_image && resource.image_type == vk::ImageType::_2D
             }
+            Self::CopyBuffer
+            | Self::CopySsboVertex
+            | Self::CopySsboTessControl
+            | Self::CopySsboTessEval
+            | Self::CopySsboGeometry
+            | Self::CopySsboFragment
+            | Self::CopySsboCompute
+            | Self::CopySsboComputeIndirect => resource.kind == ResourceType::Buffer,
+            Self::CopyImage
+            | Self::CopyBlitImage
+            | Self::CopyImageVertex
+            | Self::CopyImageTessControl
+            | Self::CopyImageTessEval
+            | Self::CopyImageGeometry
+            | Self::CopyImageFragment
+            | Self::CopyImageCompute
+            | Self::CopyImageComputeIndirect => single_sampled_color_image,
             // A 3D image cannot be a framebuffer attachment here.
             Self::WriteClearAttachments => resource.kind == ResourceType::Image && resource.image_type != vk::ImageType::_3D && resource.image_samples == vk::SampleCountFlags::_1,
             Self::WriteClearDepthStencilImage => {
@@ -4593,4 +4647,766 @@ impl Operation for IndirectBufferRead<'_> {
     fn set_data(&self, device: &Device, data: &[u8]) -> Result<(), TestError> {
         set_host_buffer_data(device, &self.host_buffer, INDIRECT_READ_BUFFER_SIZE, data)
     }
+}
+
+// ---------------------------------------------------------------------------------
+// `s_copyOps` - the two-resource operations
+// ---------------------------------------------------------------------------------
+//
+// Every operation above moves data between the host and *one* resource. These move it
+// from one resource to another, and exist only to be chained: the timeline-semaphore
+// tests build a sequence where iteration i's output resource is iteration i+1's input,
+// so a single payload is passed down a chain of operations each waiting on the last.
+// None of them has any data of its own, which is why `data` returns nothing.
+
+/// `CopyBuffer::CopyImplementation` - `vkCmdCopyBuffer` between the two resources.
+pub struct CopyBufferBetween {
+    in_buffer: BufferInfo,
+    out_buffer: BufferInfo,
+}
+
+impl CopyBufferBetween {
+    pub fn new(in_resource: &Resource<'_>, out_resource: &Resource<'_>) -> Self {
+        Self {
+            in_buffer: in_resource.buffer(),
+            out_buffer: out_resource.buffer(),
+        }
+    }
+}
+
+impl Operation for CopyBufferBetween {
+    fn record_commands(&self, device: &Device, _sync: SyncType, cmd_buffer: vk::CommandBuffer) {
+        let region = [vk::BufferCopy {
+            src_offset: 0,
+            dst_offset: 0,
+            size: self.in_buffer.size,
+        }];
+        unsafe { device.cmd_copy_buffer(cmd_buffer, self.in_buffer.handle, self.out_buffer.handle, &region) };
+    }
+
+    fn in_sync_info(&self, _sync: SyncType) -> SyncInfo {
+        SyncInfo {
+            stage_mask: vk::PipelineStageFlags2::ALL_TRANSFER,
+            access_mask: vk::AccessFlags2::TRANSFER_READ,
+            image_layout: vk::ImageLayout::UNDEFINED,
+        }
+    }
+
+    fn out_sync_info(&self, _sync: SyncType) -> SyncInfo {
+        SyncInfo {
+            stage_mask: vk::PipelineStageFlags2::ALL_TRANSFER,
+            access_mask: vk::AccessFlags2::TRANSFER_WRITE,
+            image_layout: vk::ImageLayout::UNDEFINED,
+        }
+    }
+
+    fn data(&self, _device: &Device) -> Result<Vec<u8>, TestError> {
+        Ok(Vec::new())
+    }
+}
+
+/// `CopyBlitResolveImage::{CopyCopy,BlitCopy}Implementation` - `vkCmdCopyImage` or
+/// `vkCmdBlitImage` between the two resources.
+pub struct CopyBlitImageBetween {
+    in_image: ImageInfo,
+    out_image: ImageInfo,
+    blit: bool,
+}
+
+impl CopyBlitImageBetween {
+    pub fn new(in_resource: &Resource<'_>, out_resource: &Resource<'_>, blit: bool) -> Self {
+        Self {
+            in_image: in_resource.image(),
+            out_image: out_resource.image(),
+            blit,
+        }
+    }
+}
+
+impl Operation for CopyBlitImageBetween {
+    fn record_commands(&self, device: &Device, sync: SyncType, cmd_buffer: vk::CommandBuffer) {
+        // The destination has never been touched, so it starts UNDEFINED and has to
+        // reach TRANSFER_DST here; the source's layout is the test's barrier to arrange.
+        let to_dst = make_image_memory_barrier2(
+            vk::PipelineStageFlags2::TOP_OF_PIPE,
+            vk::AccessFlags2::empty(),
+            vk::PipelineStageFlags2::ALL_TRANSFER,
+            vk::AccessFlags2::TRANSFER_WRITE,
+            vk::ImageLayout::UNDEFINED,
+            vk::ImageLayout::TRANSFER_DST_OPTIMAL,
+            self.out_image.handle,
+            self.out_image.subresource_range,
+        );
+        cmd_pipeline_barrier(device, sync, cmd_buffer, &[], &[to_dst]);
+
+        let zero = vk::Offset3D { x: 0, y: 0, z: 0 };
+        unsafe {
+            if self.blit {
+                let far = vk::Offset3D {
+                    x: self.in_image.extent.width as i32,
+                    y: self.in_image.extent.height as i32,
+                    z: self.in_image.extent.depth as i32,
+                };
+                let region = [vk::ImageBlit {
+                    src_subresource: self.in_image.subresource_layers,
+                    src_offsets: [zero, far],
+                    dst_subresource: self.out_image.subresource_layers,
+                    dst_offsets: [zero, far],
+                }];
+                device.cmd_blit_image(
+                    cmd_buffer,
+                    self.in_image.handle,
+                    vk::ImageLayout::TRANSFER_SRC_OPTIMAL,
+                    self.out_image.handle,
+                    vk::ImageLayout::TRANSFER_DST_OPTIMAL,
+                    &region,
+                    vk::Filter::NEAREST,
+                );
+            } else {
+                let region = [vk::ImageCopy {
+                    src_subresource: self.in_image.subresource_layers,
+                    src_offset: zero,
+                    dst_subresource: self.out_image.subresource_layers,
+                    dst_offset: zero,
+                    extent: self.in_image.extent,
+                }];
+                device.cmd_copy_image(
+                    cmd_buffer,
+                    self.in_image.handle,
+                    vk::ImageLayout::TRANSFER_SRC_OPTIMAL,
+                    self.out_image.handle,
+                    vk::ImageLayout::TRANSFER_DST_OPTIMAL,
+                    &region,
+                );
+            }
+        }
+    }
+
+    fn in_sync_info(&self, _sync: SyncType) -> SyncInfo {
+        SyncInfo {
+            stage_mask: vk::PipelineStageFlags2::ALL_TRANSFER,
+            access_mask: vk::AccessFlags2::TRANSFER_READ,
+            image_layout: vk::ImageLayout::TRANSFER_SRC_OPTIMAL,
+        }
+    }
+
+    fn out_sync_info(&self, _sync: SyncType) -> SyncInfo {
+        SyncInfo {
+            stage_mask: vk::PipelineStageFlags2::ALL_TRANSFER,
+            access_mask: vk::AccessFlags2::TRANSFER_WRITE,
+            image_layout: vk::ImageLayout::TRANSFER_DST_OPTIMAL,
+        }
+    }
+
+    fn data(&self, _device: &Device) -> Result<Vec<u8>, TestError> {
+        Ok(Vec::new())
+    }
+}
+
+/// The two-binding storage-buffer descriptor set the shader buffer copy uses.
+///
+/// Upstream declares binding 0 with the buffer type's descriptor type but always
+/// *writes* it as a storage buffer. Only the storage variants are ever built - the
+/// `s_copyOps` list has no uniform entry - so both are storage here.
+fn build_copy_descriptors<'a>(device: &'a Device, stage_flags: vk::ShaderStageFlags, in_buffer: &BufferInfo, out_buffer: &BufferInfo) -> Result<BufferDescriptors<'a>, TestError> {
+    use crate::vk::builder_util::{DescriptorPoolBuilder, DescriptorSetLayoutBuilder};
+    use crate::vk::obj_util::make_descriptor_set;
+
+    let layout = DescriptorSetLayoutBuilder::new()
+        .add_indexed_binding(vk::DescriptorType::STORAGE_BUFFER, stage_flags, 0, 1)
+        .add_indexed_binding(vk::DescriptorType::STORAGE_BUFFER, stage_flags, 1, 1)
+        .build(device)?;
+    let pool = DescriptorPoolBuilder::new()
+        .add_type(vk::DescriptorType::STORAGE_BUFFER, 2)
+        .build(device, vk::DescriptorPoolCreateFlags::FREE_DESCRIPTOR_SET, 1)?;
+    let set = make_descriptor_set(device, *pool, *layout)?;
+
+    let in_info = [vk::DescriptorBufferInfo {
+        buffer: in_buffer.handle,
+        offset: in_buffer.offset,
+        range: in_buffer.size,
+    }];
+    let out_info = [vk::DescriptorBufferInfo {
+        buffer: out_buffer.handle,
+        offset: out_buffer.offset,
+        range: out_buffer.size,
+    }];
+    let writes = [
+        vk::WriteDescriptorSet::builder()
+            .dst_set(*set)
+            .dst_binding(0)
+            .descriptor_type(vk::DescriptorType::STORAGE_BUFFER)
+            .buffer_info(&in_info)
+            .build(),
+        vk::WriteDescriptorSet::builder()
+            .dst_set(*set)
+            .dst_binding(1)
+            .descriptor_type(vk::DescriptorType::STORAGE_BUFFER)
+            .buffer_info(&out_info)
+            .build(),
+    ];
+    unsafe { device.update_descriptor_sets(&writes, &[] as &[vk::CopyDescriptorSet]) };
+
+    Ok(BufferDescriptors { layout, pool, set, view: None })
+}
+
+/// A `VkDispatchIndirectCommand` of one workgroup, for the `_indirect` variants.
+fn make_single_dispatch_indirect_buffer<'a>(device: &'a Device, allocator: &crate::vk::mem_util::SimpleAllocator) -> Result<BufferWithMemory<'a>, TestError> {
+    let size = std::mem::size_of::<vk::DispatchIndirectCommand>() as vk::DeviceSize;
+    let buffer = BufferWithMemory::new(
+        device,
+        allocator,
+        make_buffer_create_info(size, vk::BufferUsageFlags::INDIRECT_BUFFER),
+        MemoryRequirement::HOST_VISIBLE,
+    )?;
+    unsafe {
+        buffer
+            .get_allocation()
+            .get_host_ptr()
+            .cast::<vk::DispatchIndirectCommand>()
+            .write(vk::DispatchIndirectCommand { x: 1, y: 1, z: 1 });
+    }
+    flush_alloc(device, buffer.get_allocation())?;
+    Ok(buffer)
+}
+
+/// `ShaderAccess::BufferCopyImplementation` - a shader copies one resource buffer into
+/// another. The GLSL is the same passthrough the read and write operations use; only
+/// which buffers the two bindings point at differs, which is why this needs no shader
+/// of its own.
+pub struct BufferShaderCopy<'a> {
+    _descriptor_set_layout: crate::vk::ref_util::Unique<'a, vk::DescriptorSetLayout>,
+    descriptor_set: crate::vk::ref_util::UniqueDescriptorSet<'a>,
+    _descriptor_pool: crate::vk::ref_util::Unique<'a, vk::DescriptorPool>,
+    pipeline_layout: crate::vk::ref_util::Unique<'a, vk::PipelineLayout>,
+    pipeline: crate::vk::ref_util::Unique<'a, vk::Pipeline>,
+    indirect_buffer: Option<BufferWithMemory<'a>>,
+    /// `None` for a compute pipeline, which needs no render target.
+    target: Option<GraphicsTarget<'a>>,
+    stage_mask: vk::PipelineStageFlags2,
+    specialized_access: bool,
+}
+
+impl<'a> BufferShaderCopy<'a> {
+    pub fn new(
+        device: &'a Device,
+        allocator: &crate::vk::mem_util::SimpleAllocator,
+        in_resource: &Resource<'_>,
+        out_resource: &Resource<'_>,
+        kind: ShaderCopyKind,
+        specialized_access: bool,
+    ) -> Result<Self, TestError> {
+        use crate::vk::obj_util::{make_graphics_pipeline_staged, make_pipeline_layout};
+        use crate::vk::programs::create_shader_module;
+
+        let in_buffer = in_resource.buffer();
+        let out_buffer = out_resource.buffer();
+        let d = build_copy_descriptors(device, kind.shader_stage_flags(), &in_buffer, &out_buffer)?;
+        let pipeline_layout = make_pipeline_layout(device, &[*d.layout])?;
+
+        let (pipeline, target, indirect_buffer) = match kind {
+            ShaderCopyKind::Compute(dispatch_call) => {
+                let shader = find_buffer_shader(BufferType::Storage, AccessMode::Read, in_buffer.size as u32);
+                let module = create_shader_module(device, shader.programs.get("comp")?)?;
+                let stage = vk::PipelineShaderStageCreateInfo::builder()
+                    .stage(vk::ShaderStageFlags::COMPUTE)
+                    .module(*module)
+                    .name(c"main".to_bytes_with_nul())
+                    .build();
+                let create_info = vk::ComputePipelineCreateInfo::builder().stage(stage).layout(*pipeline_layout);
+                let handle = unsafe { device.create_compute_pipelines(vk::PipelineCache::null(), &[create_info], None) }
+                    .vk_check("vkCreateComputePipelines")?
+                    .0[0];
+                let indirect = if dispatch_call == DispatchCall::DispatchIndirect {
+                    Some(make_single_dispatch_indirect_buffer(device, allocator)?)
+                } else {
+                    None
+                };
+                (crate::vk::ref_util::Unique::new(device, handle), None, indirect)
+            }
+            ShaderCopyKind::Graphics(stage) => {
+                let shader = find_graphics_shader(BufferType::Storage, AccessMode::Read, stage, in_buffer.size as u32);
+                let (_modules, pipeline_stages) = graphics_pipeline_modules(device, &shader.programs, stage)?;
+                let target = GraphicsTarget::new(device, allocator)?;
+                let pipeline = make_graphics_pipeline_staged(
+                    device,
+                    *pipeline_layout,
+                    pipeline_stages,
+                    *target.render_pass,
+                    (GRAPHICS_TARGET_SIZE, GRAPHICS_TARGET_SIZE),
+                    stage.topology(),
+                    vk::SampleCountFlags::_1,
+                    None,
+                    1,
+                )?;
+                (pipeline, Some(target), None)
+            }
+        };
+
+        Ok(Self {
+            _descriptor_set_layout: d.layout,
+            descriptor_set: d.set,
+            _descriptor_pool: d.pool,
+            pipeline_layout,
+            pipeline,
+            indirect_buffer,
+            target,
+            stage_mask: kind.pipeline_stage(),
+            specialized_access,
+        })
+    }
+}
+
+impl Operation for BufferShaderCopy<'_> {
+    fn record_commands(&self, device: &Device, sync: SyncType, cmd_buffer: vk::CommandBuffer) {
+        record_copy_pipeline(
+            device,
+            sync,
+            cmd_buffer,
+            self.target.as_ref(),
+            *self.pipeline,
+            *self.pipeline_layout,
+            *self.descriptor_set,
+            self.indirect_buffer.as_ref(),
+        );
+    }
+
+    fn in_sync_info(&self, _sync: SyncType) -> SyncInfo {
+        SyncInfo {
+            stage_mask: self.stage_mask,
+            access_mask: if self.specialized_access {
+                vk::AccessFlags2::SHADER_STORAGE_READ
+            } else {
+                vk::AccessFlags2::SHADER_READ
+            },
+            image_layout: vk::ImageLayout::UNDEFINED,
+        }
+    }
+
+    fn out_sync_info(&self, _sync: SyncType) -> SyncInfo {
+        SyncInfo {
+            stage_mask: self.stage_mask,
+            access_mask: if self.specialized_access {
+                vk::AccessFlags2::SHADER_STORAGE_WRITE
+            } else {
+                vk::AccessFlags2::SHADER_WRITE
+            },
+            image_layout: vk::ImageLayout::UNDEFINED,
+        }
+    }
+
+    fn data(&self, _device: &Device) -> Result<Vec<u8>, TestError> {
+        Ok(Vec::new())
+    }
+}
+
+/// `ShaderAccess::CopyImageImplementation` - the image twin of `BufferShaderCopy`.
+pub struct ImageShaderCopy<'a> {
+    out_image: ImageInfo,
+    _src_view: crate::vk::ref_util::Unique<'a, vk::ImageView>,
+    _dst_view: crate::vk::ref_util::Unique<'a, vk::ImageView>,
+    _descriptor_set_layout: crate::vk::ref_util::Unique<'a, vk::DescriptorSetLayout>,
+    descriptor_set: crate::vk::ref_util::UniqueDescriptorSet<'a>,
+    _descriptor_pool: crate::vk::ref_util::Unique<'a, vk::DescriptorPool>,
+    pipeline_layout: crate::vk::ref_util::Unique<'a, vk::PipelineLayout>,
+    pipeline: crate::vk::ref_util::Unique<'a, vk::Pipeline>,
+    indirect_buffer: Option<BufferWithMemory<'a>>,
+    target: Option<GraphicsTarget<'a>>,
+    stage_mask: vk::PipelineStageFlags2,
+    specialized_access: bool,
+}
+
+impl<'a> ImageShaderCopy<'a> {
+    pub fn new(
+        device: &'a Device,
+        allocator: &crate::vk::mem_util::SimpleAllocator,
+        desc: &ResourceDescription,
+        in_resource: &Resource<'_>,
+        out_resource: &Resource<'_>,
+        kind: ShaderCopyKind,
+        specialized_access: bool,
+    ) -> Result<Self, TestError> {
+        use crate::vk::builder_util::{DescriptorPoolBuilder, DescriptorSetLayoutBuilder};
+        use crate::vk::image_util::make_image_view;
+        use crate::vk::obj_util::{make_descriptor_set, make_graphics_pipeline_staged, make_pipeline_layout};
+        use crate::vk::programs::create_shader_module;
+
+        let in_image = in_resource.image();
+        let out_image = out_resource.image();
+        let view_type = match in_image.image_type {
+            vk::ImageType::_1D => vk::ImageViewType::_1D,
+            vk::ImageType::_3D => vk::ImageViewType::_3D,
+            _ => vk::ImageViewType::_2D,
+        };
+        let src_view = make_image_view(device, in_image.handle, view_type, in_image.format, in_image.subresource_range)?;
+        let dst_view = make_image_view(device, out_image.handle, view_type, out_image.format, out_image.subresource_range)?;
+
+        let stage_flags = kind.shader_stage_flags();
+        let descriptor_set_layout = DescriptorSetLayoutBuilder::new()
+            .add_indexed_binding(vk::DescriptorType::STORAGE_IMAGE, stage_flags, 0, 1)
+            .add_indexed_binding(vk::DescriptorType::STORAGE_IMAGE, stage_flags, 1, 1)
+            .build(device)?;
+        let descriptor_pool = DescriptorPoolBuilder::new()
+            .add_type(vk::DescriptorType::STORAGE_IMAGE, 2)
+            .build(device, vk::DescriptorPoolCreateFlags::FREE_DESCRIPTOR_SET, 1)?;
+        let descriptor_set = make_descriptor_set(device, *descriptor_pool, *descriptor_set_layout)?;
+
+        let src_info = [vk::DescriptorImageInfo {
+            sampler: vk::Sampler::null(),
+            image_view: *src_view,
+            image_layout: vk::ImageLayout::GENERAL,
+        }];
+        let dst_info = [vk::DescriptorImageInfo {
+            sampler: vk::Sampler::null(),
+            image_view: *dst_view,
+            image_layout: vk::ImageLayout::GENERAL,
+        }];
+        let writes = [
+            vk::WriteDescriptorSet::builder()
+                .dst_set(*descriptor_set)
+                .dst_binding(0)
+                .descriptor_type(vk::DescriptorType::STORAGE_IMAGE)
+                .image_info(&src_info)
+                .build(),
+            vk::WriteDescriptorSet::builder()
+                .dst_set(*descriptor_set)
+                .dst_binding(1)
+                .descriptor_type(vk::DescriptorType::STORAGE_IMAGE)
+                .image_info(&dst_info)
+                .build(),
+        ];
+        unsafe { device.update_descriptor_sets(&writes, &[] as &[vk::CopyDescriptorSet]) };
+
+        let pipeline_layout = make_pipeline_layout(device, &[*descriptor_set_layout])?;
+        let (pipeline, target, indirect_buffer) = match kind {
+            ShaderCopyKind::Compute(dispatch_call) => {
+                let shader = find_image_shader(desc);
+                let module = create_shader_module(device, shader.programs.get("comp")?)?;
+                let stage = vk::PipelineShaderStageCreateInfo::builder()
+                    .stage(vk::ShaderStageFlags::COMPUTE)
+                    .module(*module)
+                    .name(c"main".to_bytes_with_nul())
+                    .build();
+                let create_info = vk::ComputePipelineCreateInfo::builder().stage(stage).layout(*pipeline_layout);
+                let handle = unsafe { device.create_compute_pipelines(vk::PipelineCache::null(), &[create_info], None) }
+                    .vk_check("vkCreateComputePipelines")?
+                    .0[0];
+                let indirect = if dispatch_call == DispatchCall::DispatchIndirect {
+                    Some(make_single_dispatch_indirect_buffer(device, allocator)?)
+                } else {
+                    None
+                };
+                (crate::vk::ref_util::Unique::new(device, handle), None, indirect)
+            }
+            ShaderCopyKind::Graphics(stage) => {
+                let shader = find_image_graphics_shader(desc, stage);
+                let (_modules, pipeline_stages) = graphics_pipeline_modules(device, &shader.programs, stage)?;
+                let target = GraphicsTarget::new(device, allocator)?;
+                let pipeline = make_graphics_pipeline_staged(
+                    device,
+                    *pipeline_layout,
+                    pipeline_stages,
+                    *target.render_pass,
+                    (GRAPHICS_TARGET_SIZE, GRAPHICS_TARGET_SIZE),
+                    stage.topology(),
+                    vk::SampleCountFlags::_1,
+                    None,
+                    1,
+                )?;
+                (pipeline, Some(target), None)
+            }
+        };
+
+        Ok(Self {
+            out_image,
+            _src_view: src_view,
+            _dst_view: dst_view,
+            _descriptor_set_layout: descriptor_set_layout,
+            descriptor_set,
+            _descriptor_pool: descriptor_pool,
+            pipeline_layout,
+            pipeline,
+            indirect_buffer,
+            target,
+            stage_mask: kind.pipeline_stage(),
+            specialized_access,
+        })
+    }
+}
+
+impl Operation for ImageShaderCopy<'_> {
+    fn record_commands(&self, device: &Device, sync: SyncType, cmd_buffer: vk::CommandBuffer) {
+        // The destination image has never been touched, so this operation brings it to
+        // GENERAL itself; the source is the previous operation's output and the test's
+        // barrier owns its layout.
+        let to_general = make_image_memory_barrier2(
+            vk::PipelineStageFlags2::TOP_OF_PIPE,
+            vk::AccessFlags2::empty(),
+            self.stage_mask,
+            vk::AccessFlags2::SHADER_WRITE,
+            vk::ImageLayout::UNDEFINED,
+            vk::ImageLayout::GENERAL,
+            self.out_image.handle,
+            self.out_image.subresource_range,
+        );
+        cmd_pipeline_barrier(device, sync, cmd_buffer, &[], &[to_general]);
+
+        record_copy_pipeline(
+            device,
+            sync,
+            cmd_buffer,
+            self.target.as_ref(),
+            *self.pipeline,
+            *self.pipeline_layout,
+            *self.descriptor_set,
+            self.indirect_buffer.as_ref(),
+        );
+    }
+
+    fn in_sync_info(&self, _sync: SyncType) -> SyncInfo {
+        SyncInfo {
+            stage_mask: self.stage_mask,
+            access_mask: if self.specialized_access {
+                vk::AccessFlags2::SHADER_STORAGE_READ
+            } else {
+                vk::AccessFlags2::SHADER_READ
+            },
+            image_layout: vk::ImageLayout::GENERAL,
+        }
+    }
+
+    fn out_sync_info(&self, _sync: SyncType) -> SyncInfo {
+        SyncInfo {
+            stage_mask: self.stage_mask,
+            access_mask: if self.specialized_access {
+                vk::AccessFlags2::SHADER_STORAGE_WRITE
+            } else {
+                vk::AccessFlags2::SHADER_WRITE
+            },
+            image_layout: vk::ImageLayout::GENERAL,
+        }
+    }
+
+    fn data(&self, _device: &Device) -> Result<Vec<u8>, TestError> {
+        Ok(Vec::new())
+    }
+}
+
+/// Which pipeline a shader copy runs on, and - for compute - how it is dispatched.
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum ShaderCopyKind {
+    Compute(DispatchCall),
+    Graphics(ShaderStage),
+}
+
+impl ShaderCopyKind {
+    fn shader_stage_flags(self) -> vk::ShaderStageFlags {
+        match self {
+            Self::Compute(_) => vk::ShaderStageFlags::COMPUTE,
+            Self::Graphics(stage) => stage.shader_stage_flags(),
+        }
+    }
+
+    fn pipeline_stage(self) -> vk::PipelineStageFlags2 {
+        match self {
+            Self::Compute(_) => vk::PipelineStageFlags2::COMPUTE_SHADER,
+            Self::Graphics(stage) => stage.pipeline_stage(),
+        }
+    }
+}
+
+/// `Pipeline::recordCommands` - the dispatch or the render pass and draw, shared by
+/// both shader copy operations.
+#[allow(clippy::too_many_arguments)]
+fn record_copy_pipeline(
+    device: &Device,
+    sync: SyncType,
+    cmd_buffer: vk::CommandBuffer,
+    target: Option<&GraphicsTarget<'_>>,
+    pipeline: vk::Pipeline,
+    pipeline_layout: vk::PipelineLayout,
+    descriptor_set: vk::DescriptorSet,
+    indirect_buffer: Option<&BufferWithMemory<'_>>,
+) {
+    let Some(target) = target else {
+        unsafe {
+            device.cmd_bind_pipeline(cmd_buffer, vk::PipelineBindPoint::COMPUTE, pipeline);
+            device.cmd_bind_descriptor_sets(cmd_buffer, vk::PipelineBindPoint::COMPUTE, pipeline_layout, 0, &[descriptor_set], &[] as &[u32]);
+            match indirect_buffer {
+                Some(indirect) => device.cmd_dispatch_indirect(cmd_buffer, indirect.get(), 0),
+                None => device.cmd_dispatch(cmd_buffer, 1, 1, 1),
+            }
+        }
+        return;
+    };
+
+    let to_attachment = make_image_memory_barrier2(
+        vk::PipelineStageFlags2::TOP_OF_PIPE,
+        vk::AccessFlags2::empty(),
+        vk::PipelineStageFlags2::COLOR_ATTACHMENT_OUTPUT,
+        vk::AccessFlags2::COLOR_ATTACHMENT_WRITE,
+        vk::ImageLayout::UNDEFINED,
+        vk::ImageLayout::COLOR_ATTACHMENT_OPTIMAL,
+        target.image_handle,
+        target.subresource_range,
+    );
+    cmd_pipeline_barrier(device, sync, cmd_buffer, &[], &[to_attachment]);
+
+    let clear = [vk::ClearValue {
+        color: vk::ClearColorValue { float32: [0.0, 0.0, 0.0, 1.0] },
+    }];
+    let begin = vk::RenderPassBeginInfo::builder()
+        .render_pass(*target.render_pass)
+        .framebuffer(*target.framebuffer)
+        .render_area(vk::Rect2D {
+            offset: vk::Offset2D { x: 0, y: 0 },
+            extent: vk::Extent2D {
+                width: GRAPHICS_TARGET_SIZE,
+                height: GRAPHICS_TARGET_SIZE,
+            },
+        })
+        .clear_values(&clear);
+
+    unsafe {
+        device.cmd_begin_render_pass(cmd_buffer, &begin, vk::SubpassContents::INLINE);
+        device.cmd_bind_pipeline(cmd_buffer, vk::PipelineBindPoint::GRAPHICS, pipeline);
+        device.cmd_bind_descriptor_sets(cmd_buffer, vk::PipelineBindPoint::GRAPHICS, pipeline_layout, 0, &[descriptor_set], &[] as &[u32]);
+        device.cmd_bind_vertex_buffers(cmd_buffer, 0, &[target.vertex_buffer.get()], &[0]);
+        device.cmd_draw(cmd_buffer, GRID_VERTICES.len() as u32, 1, 0, 0);
+        device.cmd_end_render_pass(cmd_buffer);
+    }
+}
+
+/// `s_copyOps` - the operations a timeline chain steps its payload through, in
+/// upstream's order. Which of them a chain actually uses is decided per resource by
+/// `supports_resource`.
+pub static COPY_OPS: &[OperationName] = &[
+    OperationName::CopyBuffer,
+    OperationName::CopyImage,
+    OperationName::CopyBlitImage,
+    OperationName::CopySsboVertex,
+    OperationName::CopySsboTessControl,
+    OperationName::CopySsboTessEval,
+    OperationName::CopySsboGeometry,
+    OperationName::CopySsboFragment,
+    OperationName::CopySsboCompute,
+    OperationName::CopySsboComputeIndirect,
+    OperationName::CopyImageVertex,
+    OperationName::CopyImageTessControl,
+    OperationName::CopyImageTessEval,
+    OperationName::CopyImageGeometry,
+    OperationName::CopyImageFragment,
+    OperationName::CopyImageCompute,
+    OperationName::CopyImageComputeIndirect,
+];
+
+impl OperationName {
+    /// How a copy operation runs, or `None` if it is not one of `s_copyOps`.
+    fn copy_kind(self) -> Option<CopyOperationKind> {
+        use ShaderCopyKind::{Compute, Graphics};
+        Some(match self {
+            Self::CopyBuffer => CopyOperationKind::TransferBuffer,
+            Self::CopyImage => CopyOperationKind::TransferImage { blit: false },
+            Self::CopyBlitImage => CopyOperationKind::TransferImage { blit: true },
+            Self::CopySsboVertex => CopyOperationKind::ShaderBuffer(Graphics(ShaderStage::Vertex)),
+            Self::CopySsboTessControl => CopyOperationKind::ShaderBuffer(Graphics(ShaderStage::TessellationControl)),
+            Self::CopySsboTessEval => CopyOperationKind::ShaderBuffer(Graphics(ShaderStage::TessellationEvaluation)),
+            Self::CopySsboGeometry => CopyOperationKind::ShaderBuffer(Graphics(ShaderStage::Geometry)),
+            Self::CopySsboFragment => CopyOperationKind::ShaderBuffer(Graphics(ShaderStage::Fragment)),
+            Self::CopySsboCompute => CopyOperationKind::ShaderBuffer(Compute(DispatchCall::Dispatch)),
+            Self::CopySsboComputeIndirect => CopyOperationKind::ShaderBuffer(Compute(DispatchCall::DispatchIndirect)),
+            Self::CopyImageVertex => CopyOperationKind::ShaderImage(Graphics(ShaderStage::Vertex)),
+            Self::CopyImageTessControl => CopyOperationKind::ShaderImage(Graphics(ShaderStage::TessellationControl)),
+            Self::CopyImageTessEval => CopyOperationKind::ShaderImage(Graphics(ShaderStage::TessellationEvaluation)),
+            Self::CopyImageGeometry => CopyOperationKind::ShaderImage(Graphics(ShaderStage::Geometry)),
+            Self::CopyImageFragment => CopyOperationKind::ShaderImage(Graphics(ShaderStage::Fragment)),
+            Self::CopyImageCompute => CopyOperationKind::ShaderImage(Compute(DispatchCall::Dispatch)),
+            Self::CopyImageComputeIndirect => CopyOperationKind::ShaderImage(Compute(DispatchCall::DispatchIndirect)),
+            _ => return None,
+        })
+    }
+
+    /// Whether this is one of `s_copyOps`.
+    pub fn is_copy(self) -> bool {
+        self.copy_kind().is_some()
+    }
+
+    /// `getInResourceUsageFlags` / `getOutResourceUsageFlags` for a copy operation.
+    /// Both ends are the same resource description, so one function covers both.
+    pub fn copy_resource_usage(self) -> (u32, u32) {
+        match self.copy_kind() {
+            Some(CopyOperationKind::TransferBuffer) => (vk::BufferUsageFlags::TRANSFER_SRC.bits(), vk::BufferUsageFlags::TRANSFER_DST.bits()),
+            Some(CopyOperationKind::TransferImage { .. }) => (vk::ImageUsageFlags::TRANSFER_SRC.bits(), vk::ImageUsageFlags::TRANSFER_DST.bits()),
+            Some(CopyOperationKind::ShaderBuffer(_)) => (vk::BufferUsageFlags::STORAGE_BUFFER.bits(), vk::BufferUsageFlags::STORAGE_BUFFER.bits()),
+            Some(CopyOperationKind::ShaderImage(_)) => (vk::ImageUsageFlags::STORAGE.bits(), vk::ImageUsageFlags::STORAGE.bits()),
+            None => (0, 0),
+        }
+    }
+
+    /// `getQueueFlags` for a copy operation.
+    pub fn copy_queue_flags(self, resource: &ResourceDescription) -> vk::QueueFlags {
+        match self.copy_kind() {
+            Some(CopyOperationKind::TransferBuffer) => vk::QueueFlags::TRANSFER,
+            Some(CopyOperationKind::TransferImage { blit }) => {
+                if blit || is_depth_stencil_format(resource.image_format) {
+                    vk::QueueFlags::GRAPHICS
+                } else {
+                    vk::QueueFlags::TRANSFER
+                }
+            }
+            Some(CopyOperationKind::ShaderBuffer(ShaderCopyKind::Compute(_)) | CopyOperationKind::ShaderImage(ShaderCopyKind::Compute(_))) => vk::QueueFlags::COMPUTE,
+            Some(_) => vk::QueueFlags::GRAPHICS,
+            None => vk::QueueFlags::empty(),
+        }
+    }
+
+    /// `checkSupport` for a copy operation: the blit needs the format's transfer
+    /// features, a shader stage needs the feature that lets it write.
+    pub fn copy_check_support(self, context: &crate::vkt::Context<'_>, resource: &ResourceDescription) -> Result<(), TestError> {
+        match self.copy_kind() {
+            Some(CopyOperationKind::TransferImage { blit: true }) => {
+                let props = unsafe {
+                    context
+                        .get_instance()
+                        .get_physical_device_format_properties(context.get_physical_device(), resource.image_format)
+                };
+                let needed = vk::FormatFeatureFlags::BLIT_SRC | vk::FormatFeatureFlags::BLIT_DST;
+                if !props.optimal_tiling_features.contains(needed) {
+                    return Err(TestError::NotSupported("Format does not support blitting".into()));
+                }
+            }
+            Some(CopyOperationKind::ShaderBuffer(ShaderCopyKind::Graphics(stage)) | CopyOperationKind::ShaderImage(ShaderCopyKind::Graphics(stage))) => {
+                stage.check_support(context)?;
+            }
+            _ => {}
+        }
+        Ok(())
+    }
+}
+
+#[derive(Clone, Copy)]
+enum CopyOperationKind {
+    TransferBuffer,
+    TransferImage { blit: bool },
+    ShaderBuffer(ShaderCopyKind),
+    ShaderImage(ShaderCopyKind),
+}
+
+/// `OperationSupport::build(context, inResource, outResource)`
+pub fn build_copy_operation<'a>(
+    device: &'a Device,
+    allocator: &crate::vk::mem_util::SimpleAllocator,
+    name: OperationName,
+    desc: &ResourceDescription,
+    in_resource: &Resource<'_>,
+    out_resource: &Resource<'_>,
+    specialized_access: bool,
+) -> Result<Box<dyn Operation + 'a>, TestError> {
+    let kind = name.copy_kind().ok_or_else(|| TestError::NotPorted(format!("{} is not a copy operation", name.as_str())))?;
+    Ok(match kind {
+        CopyOperationKind::TransferBuffer => Box::new(CopyBufferBetween::new(in_resource, out_resource)),
+        CopyOperationKind::TransferImage { blit } => Box::new(CopyBlitImageBetween::new(in_resource, out_resource, blit)),
+        CopyOperationKind::ShaderBuffer(shader_kind) => Box::new(BufferShaderCopy::new(device, allocator, in_resource, out_resource, shader_kind, specialized_access)?),
+        CopyOperationKind::ShaderImage(shader_kind) => Box::new(ImageShaderCopy::new(device, allocator, desc, in_resource, out_resource, shader_kind, specialized_access)?),
+    })
 }

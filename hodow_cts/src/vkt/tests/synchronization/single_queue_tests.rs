@@ -18,10 +18,10 @@
 use vulkanalia::prelude::v1_0::*;
 
 use super::operation::{
-    Operation, OperationName, READ_OPS, RESOURCES, Resource, ResourceDescription, ResourceType, SyncInfo, SyncType, WRITE_OPS, build_operation, cmd_pipeline_barrier,
-    first_difference, get_resource_name, make_buffer_memory_barrier2, make_image_memory_barrier2,
+    COPY_OPS, Operation, OperationName, READ_OPS, RESOURCES, Resource, ResourceDescription, ResourceType, SyncInfo, SyncType, WRITE_OPS, build_copy_operation, build_operation,
+    cmd_pipeline_barrier, first_difference, get_resource_name, make_buffer_memory_barrier2, make_image_memory_barrier2,
 };
-use crate::tcu::{self, TestError, TestStatus};
+use crate::tcu::{self, Random, TestError, TestStatus};
 use crate::vk::VkResultExt;
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer};
 use crate::vk::obj_util::make_command_pool;
@@ -34,6 +34,7 @@ use crate::vkt::{Context, TestCase, TestInstance};
 pub enum SyncPrimitive {
     Fence,
     BinarySemaphore,
+    TimelineSemaphore,
     Barrier,
     Event,
 }
@@ -43,6 +44,7 @@ impl SyncPrimitive {
         match self {
             Self::Fence => "fence",
             Self::BinarySemaphore => "binary_semaphore",
+            Self::TimelineSemaphore => "timeline_semaphore",
             Self::Barrier => "barrier",
             Self::Event => "event",
         }
@@ -74,6 +76,16 @@ impl TestCase for SyncTestCase {
     fn check_support(&self, context: &Context) -> Result<(), TestError> {
         if self.sync_type == SyncType::Synchronization2 {
             context.require_device_functionality("VK_KHR_synchronization2")?;
+        }
+        if self.primitive == SyncPrimitive::TimelineSemaphore {
+            context.require_device_functionality("VK_KHR_timeline_semaphore")?;
+            // Every copy operation the chain will step through has to be supported too,
+            // which is why a timeline case skips wherever any stage in the chain does.
+            for &copy_op in COPY_OPS {
+                if copy_op.supports_resource(&self.resource) {
+                    copy_op.copy_check_support(context, &self.resource)?;
+                }
+            }
         }
         if self.maintenance9 {
             context.require_device_functionality("VK_KHR_maintenance9")?;
@@ -137,6 +149,12 @@ impl TestInstance for SyncTestInstance<'_> {
             (self.context.get_universal_queue(), self.context.get_universal_queue_family_index())
         };
 
+        // The timeline primitive does not use one resource and two operations; it
+        // chains the payload through every copy operation the resource supports.
+        if p.primitive == SyncPrimitive::TimelineSemaphore {
+            return self.run_timeline_semaphore(device, allocator, queue, queue_index);
+        }
+
         // `BaseTestInstance` - the resource is created with the union of what the write
         // op will produce and the read op will consume.
         let usage = p.write_op.out_resource_usage(&p.resource) | p.read_op.in_resource_usage(&p.resource);
@@ -153,6 +171,7 @@ impl TestInstance for SyncTestInstance<'_> {
             SyncPrimitive::Fence => self.run_fence(device, queue, *command_pool, &resource, &*write_op, &*read_op, write_sync, read_sync)?,
             SyncPrimitive::BinarySemaphore => self.run_binary_semaphore(device, queue, *command_pool, &resource, &*write_op, &*read_op, write_sync, read_sync)?,
             SyncPrimitive::Event => self.run_event(device, queue, *command_pool, &resource, &*write_op, &*read_op, write_sync, read_sync)?,
+            SyncPrimitive::TimelineSemaphore => unreachable!("handled above"),
         }
 
         let expected = write_op.data(device)?;
@@ -180,6 +199,187 @@ impl TestInstance for SyncTestInstance<'_> {
 }
 
 impl SyncTestInstance<'_> {
+    /// `TimelineSemaphoreTestInstance` - the write operation, then every copy
+    /// operation the resource supports, then the read operation, each in its own submit
+    /// and each waiting on the timeline value its predecessor signals.
+    ///
+    /// The chain is what makes this different from the other primitives: the payload
+    /// has to survive being handed from one operation to the next through a fresh
+    /// resource each time, so a driver that lets any one link run early corrupts the
+    /// value that comes out the far end.
+    fn run_timeline_semaphore(&self, device: &'_ Device, allocator: &crate::vk::mem_util::SimpleAllocator, queue: vk::Queue, queue_index: u32) -> Result<TestStatus, TestError> {
+        let p = self.params;
+
+        // `m_opSupports` - the write operation, the supported copy operations, the read.
+        let mut op_names = vec![p.write_op];
+        op_names.extend(COPY_OPS.iter().copied().filter(|op| op.supports_resource(&p.resource)));
+        op_names.push(p.read_op);
+
+        // One resource between each neighbouring pair.
+        let mut resources = Vec::with_capacity(op_names.len() - 1);
+        for window in op_names.windows(2) {
+            let usage = out_usage(window[0], &p.resource) | in_usage(window[1], &p.resource);
+            resources.push(Resource::new(device, allocator, &p.resource, usage)?);
+        }
+
+        let mut ops: Vec<Box<dyn Operation + '_>> = Vec::with_capacity(op_names.len());
+        ops.push(build_operation(device, allocator, op_names[0], &p.resource, &resources[0], p.specialized_access)?);
+        for ndx in 1..op_names.len() - 1 {
+            ops.push(build_copy_operation(
+                device,
+                allocator,
+                op_names[ndx],
+                &p.resource,
+                &resources[ndx - 1],
+                &resources[ndx],
+                p.specialized_access,
+            )?);
+        }
+        let last = op_names.len() - 1;
+        ops.push(build_operation(
+            device,
+            allocator,
+            op_names[last],
+            &p.resource,
+            &resources[resources.len() - 1],
+            p.specialized_access,
+        )?);
+
+        let semaphore = create_timeline_semaphore(device)?;
+        let command_pool = make_command_pool(device, queue_index)?;
+
+        // The values are drawn one per operation from a single `de::Random(1234)`, and
+        // the draw order decides which submit waits on what.
+        let mut rng = Random::new(1234);
+        let mut increment = 0u64;
+        let mut values = Vec::with_capacity(ops.len());
+        for _ in 0..ops.len() {
+            increment += 1 + u64::from(rng.get_uint8());
+            values.push(increment);
+        }
+
+        let mut command_buffers = Vec::with_capacity(ops.len());
+        for _ in 0..ops.len() {
+            command_buffers.push(allocate_command_buffer(device, *command_pool)?);
+        }
+
+        for (ndx, op) in ops.iter().enumerate() {
+            let cmd = *command_buffers[ndx];
+            begin_command_buffer(device, cmd)?;
+
+            // Every operation but the first starts by taking over the resource its
+            // predecessor left behind.
+            if ndx > 0 {
+                let last_sync = ops[ndx - 1].out_sync_info(p.sync_type);
+                let current_sync = op.in_sync_info(p.sync_type);
+                self.record_transition(device, cmd, &resources[ndx - 1], last_sync, current_sync);
+            }
+
+            op.record_commands(device, p.sync_type, cmd);
+            end_command_buffer(device, cmd)?;
+        }
+
+        self.submit_timeline_chain(device, queue, *semaphore, &command_buffers, &values)?;
+        unsafe { device.queue_wait_idle(queue) }.vk_check("vkQueueWaitIdle")?;
+
+        let expected = ops[0].data(device)?;
+        let actual = ops[ops.len() - 1].data(device)?;
+
+        if p.resource.kind == ResourceType::IndirectBufferDraw
+            || p.resource.kind == ResourceType::IndirectBufferDrawIndexed
+            || p.resource.kind == ResourceType::IndirectBufferDispatch
+        {
+            let expected_value = u32::from_ne_bytes(expected[0..4].try_into().expect("at least 4 bytes"));
+            let actual_value = u32::from_ne_bytes(actual[0..4].try_into().expect("at least 4 bytes"));
+            if actual_value < expected_value {
+                return Ok(TestStatus::fail("Counter value is smaller than expected"));
+            }
+        } else if let Some(at) = first_difference(&expected, &actual) {
+            return Ok(TestStatus::fail(format!(
+                "Memory contents don't match: first difference at byte {at} of {}, expected {:#04x} got {:#04x}",
+                expected.len(),
+                expected[at],
+                actual[at],
+            )));
+        }
+
+        Ok(TestStatus::pass("OK"))
+    }
+
+    /// One submit per operation, chained on the timeline: operation i waits on the
+    /// value operation i-1 signals.
+    fn submit_timeline_chain(
+        &self,
+        device: &Device,
+        queue: vk::Queue,
+        semaphore: vk::Semaphore,
+        command_buffers: &[crate::vk::ref_util::UniqueCommandBuffer<'_>],
+        values: &[u64],
+    ) -> Result<(), TestError> {
+        if self.params.sync_type == SyncType::Synchronization2 {
+            use vulkanalia::vk::KhrSynchronization2ExtensionDeviceCommands;
+            let mut cmd_infos = Vec::with_capacity(command_buffers.len());
+            let mut waits = Vec::with_capacity(command_buffers.len());
+            let mut signals = Vec::with_capacity(command_buffers.len());
+            for (ndx, cmd) in command_buffers.iter().enumerate() {
+                cmd_infos.push(vk::CommandBufferSubmitInfo {
+                    s_type: vk::StructureType::COMMAND_BUFFER_SUBMIT_INFO,
+                    next: std::ptr::null(),
+                    command_buffer: **cmd,
+                    device_mask: 0,
+                });
+                let wait_value = if ndx == 0 { 0 } else { values[ndx - 1] };
+                waits.push(timeline_semaphore_submit_info(semaphore, wait_value, vk::PipelineStageFlags2::TOP_OF_PIPE));
+                signals.push(timeline_semaphore_submit_info(semaphore, values[ndx], vk::PipelineStageFlags2::BOTTOM_OF_PIPE));
+            }
+            let submits: Vec<vk::SubmitInfo2> = (0..command_buffers.len())
+                .map(|ndx| vk::SubmitInfo2 {
+                    s_type: vk::StructureType::SUBMIT_INFO_2,
+                    next: std::ptr::null(),
+                    flags: vk::SubmitFlags::empty(),
+                    wait_semaphore_info_count: u32::from(ndx != 0),
+                    wait_semaphore_infos: waits[ndx..].as_ptr(),
+                    command_buffer_info_count: 1,
+                    command_buffer_infos: cmd_infos[ndx..].as_ptr(),
+                    signal_semaphore_info_count: 1,
+                    signal_semaphore_infos: signals[ndx..].as_ptr(),
+                })
+                .collect();
+            unsafe { device.queue_submit2_khr(queue, &submits, vk::Fence::null()) }.vk_check("vkQueueSubmit2KHR")?;
+        } else {
+            let raw: Vec<vk::CommandBuffer> = command_buffers.iter().map(|c| **c).collect();
+            let semaphores = vec![semaphore; command_buffers.len()];
+            let stages = vec![vk::PipelineStageFlags::TOP_OF_PIPE; command_buffers.len()];
+            let wait_values: Vec<u64> = (0..command_buffers.len()).map(|ndx| if ndx == 0 { 0 } else { values[ndx - 1] }).collect();
+
+            let timeline_infos: Vec<vk::TimelineSemaphoreSubmitInfo> = (0..command_buffers.len())
+                .map(|ndx| vk::TimelineSemaphoreSubmitInfo {
+                    s_type: vk::StructureType::TIMELINE_SEMAPHORE_SUBMIT_INFO,
+                    next: std::ptr::null(),
+                    wait_semaphore_value_count: u32::from(ndx != 0),
+                    wait_semaphore_values: wait_values[ndx..].as_ptr(),
+                    signal_semaphore_value_count: 1,
+                    signal_semaphore_values: values[ndx..].as_ptr(),
+                })
+                .collect();
+            let submits: Vec<vk::SubmitInfo> = (0..command_buffers.len())
+                .map(|ndx| vk::SubmitInfo {
+                    s_type: vk::StructureType::SUBMIT_INFO,
+                    next: std::ptr::from_ref(&timeline_infos[ndx]).cast(),
+                    wait_semaphore_count: u32::from(ndx != 0),
+                    wait_semaphores: semaphores[ndx..].as_ptr(),
+                    wait_dst_stage_mask: stages[ndx..].as_ptr(),
+                    command_buffer_count: 1,
+                    command_buffers: raw[ndx..].as_ptr(),
+                    signal_semaphore_count: 1,
+                    signal_semaphores: semaphores[ndx..].as_ptr(),
+                })
+                .collect();
+            unsafe { device.queue_submit(queue, &submits, vk::Fence::null()) }.vk_check("vkQueueSubmit")?;
+        }
+        Ok(())
+    }
+
     /// The barrier the write and read are separated by, in whichever flavour the
     /// resource needs.
     #[allow(clippy::too_many_arguments)]
@@ -500,7 +700,13 @@ fn allocate_command_buffer(device: &Device, pool: vk::CommandPool) -> Result<cra
 pub fn create_single_queue_tests(sync_type: SyncType) -> tcu::TestCaseGroup {
     let mut group = tcu::TestCaseGroup::new("single_queue");
 
-    for primitive in [SyncPrimitive::Fence, SyncPrimitive::BinarySemaphore, SyncPrimitive::Barrier, SyncPrimitive::Event] {
+    for primitive in [
+        SyncPrimitive::Fence,
+        SyncPrimitive::BinarySemaphore,
+        SyncPrimitive::TimelineSemaphore,
+        SyncPrimitive::Barrier,
+        SyncPrimitive::Event,
+    ] {
         let mut primitive_group = tcu::TestCaseGroup::new(primitive.group_name());
 
         for &write_op in WRITE_OPS {
@@ -609,4 +815,33 @@ pub fn create_tests() -> Vec<tcu::TestCaseGroup> {
             group
         })
         .collect()
+}
+
+/// `getInResourceUsageFlags` for whichever kind of operation this is.
+fn in_usage(op: OperationName, resource: &ResourceDescription) -> u32 {
+    if op.is_copy() { op.copy_resource_usage().0 } else { op.in_resource_usage(resource) }
+}
+
+/// `getOutResourceUsageFlags` for whichever kind of operation this is.
+fn out_usage(op: OperationName, resource: &ResourceDescription) -> u32 {
+    if op.is_copy() { op.copy_resource_usage().1 } else { op.out_resource_usage(resource) }
+}
+
+fn timeline_semaphore_submit_info(semaphore: vk::Semaphore, value: u64, stage_mask: vk::PipelineStageFlags2) -> vk::SemaphoreSubmitInfo {
+    vk::SemaphoreSubmitInfo {
+        s_type: vk::StructureType::SEMAPHORE_SUBMIT_INFO,
+        next: std::ptr::null(),
+        semaphore,
+        value,
+        stage_mask,
+        device_index: 0,
+    }
+}
+
+/// `createSemaphoreType(VK_SEMAPHORE_TYPE_TIMELINE)`
+fn create_timeline_semaphore(device: &Device) -> Result<Unique<'_, vk::Semaphore>, TestError> {
+    let mut type_info = vk::SemaphoreTypeCreateInfo::builder().semaphore_type(vk::SemaphoreType::TIMELINE).initial_value(0);
+    let info = vk::SemaphoreCreateInfo::builder().push_next(&mut type_info);
+    let semaphore = unsafe { device.create_semaphore(&info, None) }.vk_check("vkCreateSemaphore")?;
+    Ok(Unique::new(device, semaphore))
 }
