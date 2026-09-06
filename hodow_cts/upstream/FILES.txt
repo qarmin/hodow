@@ -60,6 +60,9 @@ external/vulkancts/modules/vulkan/pipeline/vktPipelineImageUtil.cpp
 external/vulkancts/modules/vulkan/renderpass/vktRenderPassTests.cpp
 external/vulkancts/modules/vulkan/renderpass/vktRenderPassUnusedAttachmentTests.cpp
 external/vulkancts/modules/vulkan/renderpass/vktRenderPassUnusedClearAttachmentTests.cpp
+external/vulkancts/modules/vulkan/synchronization/vktSynchronizationBasicEventTests.cpp
+external/vulkancts/modules/vulkan/synchronization/vktSynchronizationBasicFenceTests.cpp
+external/vulkancts/modules/vulkan/synchronization/vktSynchronizationBasicSemaphoreTests.cpp
 external/vulkancts/modules/vulkan/synchronization/vktSynchronizationOperation.cpp
 external/vulkancts/modules/vulkan/synchronization/vktSynchronizationOperation.hpp
 external/vulkancts/modules/vulkan/synchronization/vktSynchronizationOperationMultiQueueTests.cpp
