@@ -96,3 +96,4 @@ external/vulkancts/modules/vulkan/renderpass/vktRenderPassDepthStencilResolveTes
 external/vulkancts/modules/vulkan/renderpass/vktRenderPassMultisampleResolveTests.cpp
 external/vulkancts/modules/vulkan/renderpass/vktRenderPassMultisampleTests.cpp
 external/vulkancts/modules/vulkan/renderpass/vktRenderPassSampleReadTests.cpp
+external/vulkancts/modules/vulkan/renderpass/vktDynamicRenderingDepthStencilResolveTests.cpp

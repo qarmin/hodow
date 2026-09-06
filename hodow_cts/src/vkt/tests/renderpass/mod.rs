@@ -10,6 +10,7 @@
 // Modifications: rewritten in Rust for hodow_cts.
 
 pub mod depth_stencil_resolve_tests;
+pub mod dynamic_rendering_depth_stencil_resolve_tests;
 pub mod multisample_resolve_tests;
 pub mod multisample_tests;
 pub mod render_pass_tests;
@@ -34,5 +35,48 @@ pub fn create_tests() -> TestCaseGroup {
         }
         tests.add_child(group);
     }
+    tests.add_child(create_dynamic_rendering_tests());
     tests
+}
+
+/// `createDynamicRenderingTests`.
+///
+/// Upstream builds four variants; the fourth (`graphics_pipeline_library`) never gets
+/// as far as `depth_stencil_resolve`, because `createRenderPassTestsInternal` returns
+/// early for a non-monolithic pipeline construction type - so with only that group
+/// ported, the variant would be empty and is left out.
+fn create_dynamic_rendering_tests() -> TestCaseGroup {
+    use dynamic_rendering_depth_stencil_resolve_tests::GroupParams;
+
+    let mut dynamic_rendering_group = TestCaseGroup::new("dynamic_rendering");
+    for (name, group_params) in [
+        (
+            "primary_cmd_buff",
+            GroupParams {
+                use_secondary_cmd_buffer: false,
+                secondary_cmd_buffer_completely_contains_dynamic_renderpass: false,
+            },
+        ),
+        (
+            "partial_secondary_cmd_buff",
+            GroupParams {
+                use_secondary_cmd_buffer: true,
+                secondary_cmd_buffer_completely_contains_dynamic_renderpass: false,
+            },
+        ),
+        (
+            "complete_secondary_cmd_buff",
+            GroupParams {
+                use_secondary_cmd_buffer: true,
+                secondary_cmd_buffer_completely_contains_dynamic_renderpass: true,
+            },
+        ),
+    ] {
+        let mut rendering_tests = TestCaseGroup::new(name);
+        rendering_tests.add_child(dynamic_rendering_depth_stencil_resolve_tests::create_dynamic_rendering_depth_stencil_resolve_tests(
+            group_params,
+        ));
+        dynamic_rendering_group.add_child(rendering_tests);
+    }
+    dynamic_rendering_group
 }
