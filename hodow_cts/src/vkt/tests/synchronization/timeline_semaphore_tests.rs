@@ -460,7 +460,14 @@ fn semaphore_submit_info(semaphore: vk::Semaphore, value: u64, stage_mask: vk::P
 
 /// `createSemaphoreType(VK_SEMAPHORE_TYPE_TIMELINE)`
 fn create_timeline_semaphore(device: &Device) -> Result<Unique<'_, vk::Semaphore>, TestError> {
-    let mut type_info = vk::SemaphoreTypeCreateInfo::builder().semaphore_type(vk::SemaphoreType::TIMELINE).initial_value(0);
+    create_timeline_semaphore_with_value(device, 0)
+}
+
+/// `createSemaphoreType(VK_SEMAPHORE_TYPE_TIMELINE, initialValue)`
+fn create_timeline_semaphore_with_value(device: &Device, initial_value: u64) -> Result<Unique<'_, vk::Semaphore>, TestError> {
+    let mut type_info = vk::SemaphoreTypeCreateInfo::builder()
+        .semaphore_type(vk::SemaphoreType::TIMELINE)
+        .initial_value(initial_value);
     let info = vk::SemaphoreCreateInfo::builder().push_next(&mut type_info);
     let semaphore = unsafe { device.create_semaphore(&info, None) }.vk_check("vkCreateSemaphore")?;
     Ok(Unique::new(device, semaphore))
@@ -477,6 +484,372 @@ fn wait_semaphore(device: &Device, semaphore: vk::Semaphore, value: u64) -> Resu
 fn signal_semaphore(device: &Device, semaphore: vk::Semaphore, value: u64) -> Result<(), TestError> {
     let info = vk::SemaphoreSignalInfo::builder().semaphore(semaphore).value(value);
     unsafe { device.signal_semaphore(&info) }.vk_check("vkSignalSemaphore")
+}
+
+// ---------------------------------------------------------------------------------
+// `WaitTests` - the timeline API on its own, with no operation behind it
+// ---------------------------------------------------------------------------------
+
+/// `WAIT_SEMAPHORE_COUNT` - upstream waits on a hundred at once, which is the point:
+/// `VK_SEMAPHORE_WAIT_ANY_BIT` has to return when *one* of them reaches its value.
+const WAIT_SEMAPHORE_COUNT: usize = 100;
+
+/// `deviceSignal` - signal a timeline value from a submit with no work in it.
+fn device_signal(device: &Device, queue: vk::Queue, sync: SyncType, semaphore: vk::Semaphore, value: u64, fence: vk::Fence) -> Result<(), TestError> {
+    if sync == SyncType::Synchronization2 {
+        use vulkanalia::vk::KhrSynchronization2ExtensionDeviceCommands;
+        let signal = [semaphore_submit_info(semaphore, value, vk::PipelineStageFlags2::BOTTOM_OF_PIPE)];
+        let submit = vk::SubmitInfo2 {
+            s_type: vk::StructureType::SUBMIT_INFO_2,
+            next: std::ptr::null(),
+            flags: vk::SubmitFlags::empty(),
+            wait_semaphore_info_count: 0,
+            wait_semaphore_infos: std::ptr::null(),
+            command_buffer_info_count: 0,
+            command_buffer_infos: std::ptr::null(),
+            signal_semaphore_info_count: 1,
+            signal_semaphore_infos: signal.as_ptr(),
+        };
+        unsafe { device.queue_submit2_khr(queue, &[submit], vk::Fence::null()) }.vk_check("vkQueueSubmit2KHR")?;
+    } else {
+        let semaphores = [semaphore];
+        let values = [value];
+        let mut timeline = vk::TimelineSemaphoreSubmitInfo::builder().signal_semaphore_values(&values);
+        let submit = vk::SubmitInfo::builder().signal_semaphores(&semaphores).push_next(&mut timeline);
+        unsafe { device.queue_submit(queue, &[submit], vk::Fence::null()) }.vk_check("vkQueueSubmit")?;
+    }
+
+    // Upstream follows the signalling submit with an empty one carrying the fence, so
+    // the host can tell when the queue has drained without waiting on the timeline.
+    if fence != vk::Fence::null() {
+        unsafe { device.queue_submit(queue, &[] as &[vk::SubmitInfo], fence) }.vk_check("vkQueueSubmit")?;
+        unsafe { device.wait_for_fences(&[fence], true, u64::MAX) }.vk_check("vkWaitForFences")?;
+    }
+    Ok(())
+}
+
+fn semaphore_counter_value(device: &Device, semaphore: vk::Semaphore) -> Result<u64, TestError> {
+    unsafe { device.get_semaphore_counter_value(semaphore) }.map_err(|e| TestError::ResourceError(format!("vkGetSemaphoreCounterValue failed: {e}")))
+}
+
+/// `vkWaitSemaphores` without treating `VK_TIMEOUT` as an error.
+fn wait_semaphores_status(device: &Device, semaphores: &[vk::Semaphore], values: &[u64], wait_any: bool, timeout: u64) -> Result<vk::SuccessCode, TestError> {
+    let flags = if wait_any { vk::SemaphoreWaitFlags::ANY } else { vk::SemaphoreWaitFlags::empty() };
+    let info = vk::SemaphoreWaitInfo::builder().flags(flags).semaphores(semaphores).values(values);
+    match unsafe { device.wait_semaphores(&info, timeout) } {
+        Ok(code) => Ok(code),
+        Err(e) => Err(TestError::ResourceError(format!("vkWaitSemaphores failed: {e}"))),
+    }
+}
+
+/// `WaitTestInstance` - a hundred semaphores, each with its own target value. With
+/// `waitAll` every one is signalled first; with wait-any only one randomly chosen
+/// semaphore is, and the wait still has to return immediately.
+fn timeline_wait(context: &Context<'_>, sync: SyncType, wait_all: bool, signal_from_device: bool) -> Result<TestStatus, TestError> {
+    let device = context.get_device();
+    let queue = context.get_universal_queue();
+    let fence = {
+        let info = vk::FenceCreateInfo::builder();
+        Unique::new(device, unsafe { device.create_fence(&info, None) }.vk_check("vkCreateFence")?)
+    };
+
+    let mut semaphores = Vec::with_capacity(WAIT_SEMAPHORE_COUNT);
+    for _ in 0..WAIT_SEMAPHORE_COUNT {
+        semaphores.push(create_timeline_semaphore(device)?);
+    }
+    let raw: Vec<vk::Semaphore> = semaphores.iter().map(|s| **s).collect();
+
+    let mut rng = Random::new(1234);
+    let values: Vec<u64> = (0..WAIT_SEMAPHORE_COUNT).map(|_| rng.get_int(1, 10000) as u64).collect();
+
+    if wait_all {
+        for (ndx, &semaphore) in raw.iter().enumerate() {
+            if signal_from_device {
+                device_signal(device, queue, sync, semaphore, values[ndx], *fence)?;
+                unsafe { device.reset_fences(&[*fence]) }.vk_check("vkResetFences")?;
+            } else {
+                signal_semaphore(device, semaphore, values[ndx])?;
+            }
+        }
+    } else {
+        let ndx = rng.get_int(0, WAIT_SEMAPHORE_COUNT as i32 - 1) as usize;
+        if signal_from_device {
+            device_signal(device, queue, sync, raw[ndx], values[ndx], *fence)?;
+        } else {
+            signal_semaphore(device, raw[ndx], values[ndx])?;
+        }
+    }
+
+    // Timeout zero: the wait has to be satisfied already, not merely eventually.
+    if wait_semaphores_status(device, &raw, &values, !wait_all, 0)? != vk::SuccessCode::SUCCESS {
+        return Ok(TestStatus::fail("Wait failed"));
+    }
+
+    unsafe { device.device_wait_idle() }.vk_check("vkDeviceWaitIdle")?;
+    Ok(TestStatus::pass("Wait success"))
+}
+
+/// `HostWaitBeforeSignalTestInstance` - twelve submits are queued, each waiting on the
+/// value its predecessor signals, and the whole chain is held up by one value only the
+/// host can produce. Waiting on any of those values before that must time out.
+fn timeline_host_wait_before_signal(context: &Context<'_>, sync: SyncType) -> Result<TestStatus, TestError> {
+    let device = context.get_device();
+    let queue = context.get_universal_queue();
+    let semaphore = create_timeline_semaphore(device)?;
+    let mut rng = Random::new(1234);
+
+    let mut values: Vec<u64> = vec![1 + rng.get_int(1, 10000) as u64];
+    for _ in 0..12 {
+        let next = values[values.len() - 1] + rng.get_int(1, 10000) as u64;
+        let wait_value = values[values.len() - 1];
+
+        if sync == SyncType::Synchronization2 {
+            use vulkanalia::vk::KhrSynchronization2ExtensionDeviceCommands;
+            let waits = [semaphore_submit_info(*semaphore, wait_value, vk::PipelineStageFlags2::TOP_OF_PIPE)];
+            let signals = [semaphore_submit_info(*semaphore, next, vk::PipelineStageFlags2::BOTTOM_OF_PIPE)];
+            let submit = vk::SubmitInfo2 {
+                s_type: vk::StructureType::SUBMIT_INFO_2,
+                next: std::ptr::null(),
+                flags: vk::SubmitFlags::empty(),
+                wait_semaphore_info_count: 1,
+                wait_semaphore_infos: waits.as_ptr(),
+                command_buffer_info_count: 0,
+                command_buffer_infos: std::ptr::null(),
+                signal_semaphore_info_count: 1,
+                signal_semaphore_infos: signals.as_ptr(),
+            };
+            unsafe { device.queue_submit2_khr(queue, &[submit], vk::Fence::null()) }.vk_check("vkQueueSubmit2KHR")?;
+        } else {
+            let semaphores = [*semaphore];
+            let wait_values = [wait_value];
+            let signal_values = [next];
+            let stages = [vk::PipelineStageFlags::TOP_OF_PIPE];
+            let mut timeline = vk::TimelineSemaphoreSubmitInfo::builder()
+                .wait_semaphore_values(&wait_values)
+                .signal_semaphore_values(&signal_values);
+            let submit = vk::SubmitInfo::builder()
+                .wait_semaphores(&semaphores)
+                .wait_dst_stage_mask(&stages)
+                .signal_semaphores(&semaphores)
+                .push_next(&mut timeline);
+            unsafe { device.queue_submit(queue, &[submit], vk::Fence::null()) }.vk_check("vkQueueSubmit")?;
+        }
+
+        values.push(next);
+    }
+
+    {
+        let pick = rng.get_int(0, values.len() as i32 - 1) as usize;
+        if wait_semaphores_status(device, &[*semaphore], &[values[pick]], false, 0)? != vk::SuccessCode::TIMEOUT {
+            return Ok(TestStatus::fail("Wait failed"));
+        }
+    }
+
+    signal_semaphore(device, *semaphore, values[0])?;
+
+    {
+        let last = values[values.len() - 1];
+        if wait_semaphores_status(device, &[*semaphore], &[last], false, u64::MAX)? != vk::SuccessCode::SUCCESS {
+            return Ok(TestStatus::fail("Wait failed"));
+        }
+    }
+
+    unsafe { device.device_wait_idle() }.vk_check("vkDeviceWaitIdle")?;
+    Ok(TestStatus::pass("Wait success"))
+}
+
+/// `PollTestInstance` - the same signals, observed through
+/// `vkGetSemaphoreCounterValue` instead of a wait. The counter must reach the value and
+/// must never overshoot it.
+fn timeline_poll(context: &Context<'_>, signal_from_device: bool) -> Result<TestStatus, TestError> {
+    let device = context.get_device();
+    let queue = context.get_universal_queue();
+    let fence = {
+        let info = vk::FenceCreateInfo::builder();
+        Unique::new(device, unsafe { device.create_fence(&info, None) }.vk_check("vkCreateFence")?)
+    };
+
+    let mut semaphores = Vec::with_capacity(WAIT_SEMAPHORE_COUNT);
+    for _ in 0..WAIT_SEMAPHORE_COUNT {
+        semaphores.push(create_timeline_semaphore(device)?);
+    }
+    let raw: Vec<vk::Semaphore> = semaphores.iter().map(|s| **s).collect();
+
+    let mut rng = Random::new(1234);
+    let values: Vec<u64> = (0..WAIT_SEMAPHORE_COUNT).map(|_| rng.get_int(1, 10000) as u64).collect();
+
+    for (ndx, &semaphore) in raw.iter().enumerate() {
+        if signal_from_device {
+            // Only the last signal carries the fence; upstream always uses the legacy
+            // submit path here regardless of the group.
+            let fence_handle = if ndx == raw.len() - 1 { *fence } else { vk::Fence::null() };
+            device_signal(device, queue, SyncType::Legacy, semaphore, values[ndx], fence_handle)?;
+        } else {
+            signal_semaphore(device, semaphore, values[ndx])?;
+        }
+    }
+
+    let last = raw[raw.len() - 1];
+    let target = values[values.len() - 1];
+    let start = std::time::Instant::now();
+    loop {
+        let value = semaphore_counter_value(device, last)?;
+        if value == target {
+            if signal_from_device {
+                unsafe { device.wait_for_fences(&[*fence], true, u64::MAX) }.vk_check("vkWaitForFences")?;
+            }
+            unsafe { device.device_wait_idle() }.vk_check("vkDeviceWaitIdle")?;
+            return Ok(TestStatus::pass("Poll on timeline value succeeded"));
+        }
+        if value > target {
+            return Ok(TestStatus::fail("Timeline value greater than expected"));
+        }
+        if start.elapsed() > std::time::Duration::from_secs(1) {
+            return Ok(TestStatus::fail("Timeline value polling timed out"));
+        }
+    }
+}
+
+/// `initialValueCase` - a timeline semaphore created with a non-zero initial value
+/// reports it immediately, and a wait for that value is satisfied without any signal.
+fn timeline_initial_value(context: &Context<'_>, sync: SyncType) -> Result<TestStatus, TestError> {
+    let device = context.get_device();
+    let queue = context.get_universal_queue();
+    let max_difference = max_timeline_semaphore_value_difference(context);
+    let mut rng = Random::new(1234);
+    let non_zero_value = 1 + rng.get_uint64() % (max_difference - 1);
+
+    let default_value = create_timeline_semaphore(device)?;
+    let initial_value = create_timeline_semaphore_with_value(device, non_zero_value)?;
+
+    if wait_semaphores_status(device, &[*default_value], &[0], false, 0)? != vk::SuccessCode::SUCCESS {
+        return Ok(TestStatus::fail("Wait zero initial value failed"));
+    }
+
+    // A submit that waits on the value the semaphore already has must not block.
+    if sync == SyncType::Synchronization2 {
+        use vulkanalia::vk::KhrSynchronization2ExtensionDeviceCommands;
+        let waits = [semaphore_submit_info(*default_value, 0, vk::PipelineStageFlags2::TOP_OF_PIPE)];
+        let submit = vk::SubmitInfo2 {
+            s_type: vk::StructureType::SUBMIT_INFO_2,
+            next: std::ptr::null(),
+            flags: vk::SubmitFlags::empty(),
+            wait_semaphore_info_count: 1,
+            wait_semaphore_infos: waits.as_ptr(),
+            command_buffer_info_count: 0,
+            command_buffer_infos: std::ptr::null(),
+            signal_semaphore_info_count: 0,
+            signal_semaphore_infos: std::ptr::null(),
+        };
+        unsafe { device.queue_submit2_khr(queue, &[submit], vk::Fence::null()) }.vk_check("vkQueueSubmit2KHR")?;
+    } else {
+        let semaphores = [*default_value];
+        let wait_values = [0u64];
+        let stages = [vk::PipelineStageFlags::TOP_OF_PIPE];
+        let mut timeline = vk::TimelineSemaphoreSubmitInfo::builder().wait_semaphore_values(&wait_values);
+        let submit = vk::SubmitInfo::builder().wait_semaphores(&semaphores).wait_dst_stage_mask(&stages).push_next(&mut timeline);
+        unsafe { device.queue_submit(queue, &[submit], vk::Fence::null()) }.vk_check("vkQueueSubmit")?;
+    }
+    unsafe { device.device_wait_idle() }.vk_check("vkDeviceWaitIdle")?;
+
+    if semaphore_counter_value(device, *default_value)? != 0 {
+        return Ok(TestStatus::fail("Invalid zero initial value"));
+    }
+
+    if wait_semaphores_status(device, &[*initial_value], &[non_zero_value], false, 0)? != vk::SuccessCode::SUCCESS {
+        return Ok(TestStatus::fail("Wait non zero initial value failed"));
+    }
+    if semaphore_counter_value(device, *initial_value)? != non_zero_value {
+        return Ok(TestStatus::fail("Invalid non zero initial value"));
+    }
+
+    if max_difference != u64::MAX {
+        let non_zero_max = max_difference + 1;
+        let max_value = create_timeline_semaphore_with_value(device, non_zero_max)?;
+        if wait_semaphores_status(device, &[*max_value], &[non_zero_max], false, 0)? != vk::SuccessCode::SUCCESS {
+            return Ok(TestStatus::fail("Wait max value failed"));
+        }
+        if semaphore_counter_value(device, *max_value)? != non_zero_max {
+            return Ok(TestStatus::fail("Invalid max value initial value"));
+        }
+    }
+
+    Ok(TestStatus::pass("Initial value correct"))
+}
+
+/// `getMaxTimelineSemaphoreValueDifference`
+fn max_timeline_semaphore_value_difference(context: &Context<'_>) -> u64 {
+    let mut timeline = vk::PhysicalDeviceTimelineSemaphoreProperties::default();
+    let mut properties = vk::PhysicalDeviceProperties2::builder().push_next(&mut timeline).build();
+    unsafe {
+        (context.get_instance().commands().get_physical_device_properties2)(context.get_physical_device(), &mut properties);
+    }
+    timeline.max_timeline_semaphore_value_difference
+}
+
+/// A `wait` or `misc` case: a plain function of the context and the synchronization
+/// type, with nothing to build.
+struct TimelineFunctionCase {
+    name: &'static str,
+    sync_type: SyncType,
+    run: fn(&Context<'_>, SyncType) -> Result<TestStatus, TestError>,
+}
+
+impl TestCase for TimelineFunctionCase {
+    fn name(&self) -> &str {
+        self.name
+    }
+
+    fn check_support(&self, context: &Context<'_>) -> Result<(), TestError> {
+        context.require_device_functionality("VK_KHR_timeline_semaphore")?;
+        if self.sync_type == SyncType::Synchronization2 {
+            context.require_device_functionality("VK_KHR_synchronization2")?;
+        }
+        Ok(())
+    }
+
+    fn programs(&self) -> BinaryCollection {
+        BinaryCollection::new(&[])
+    }
+
+    fn create_instance<'a>(&'a self, context: &'a Context<'a>) -> Box<dyn TestInstance + 'a> {
+        Box::new(TimelineFunctionInstance {
+            context,
+            sync_type: self.sync_type,
+            run: self.run,
+        })
+    }
+}
+
+struct TimelineFunctionInstance<'a> {
+    context: &'a Context<'a>,
+    sync_type: SyncType,
+    run: fn(&Context<'_>, SyncType) -> Result<TestStatus, TestError>,
+}
+
+impl TestInstance for TimelineFunctionInstance<'_> {
+    fn iterate(&mut self) -> Result<TestStatus, TestError> {
+        (self.run)(self.context, self.sync_type)
+    }
+}
+
+fn wait_all_signal_from_device(context: &Context<'_>, sync: SyncType) -> Result<TestStatus, TestError> {
+    timeline_wait(context, sync, true, true)
+}
+fn wait_one_signal_from_device(context: &Context<'_>, sync: SyncType) -> Result<TestStatus, TestError> {
+    timeline_wait(context, sync, false, true)
+}
+fn wait_all_signal_from_host(context: &Context<'_>, sync: SyncType) -> Result<TestStatus, TestError> {
+    timeline_wait(context, sync, true, false)
+}
+fn wait_one_signal_from_host(context: &Context<'_>, sync: SyncType) -> Result<TestStatus, TestError> {
+    timeline_wait(context, sync, false, false)
+}
+fn poll_signal_from_device(context: &Context<'_>, _sync: SyncType) -> Result<TestStatus, TestError> {
+    timeline_poll(context, true)
+}
+fn poll_signal_from_host(context: &Context<'_>, _sync: SyncType) -> Result<TestStatus, TestError> {
+    timeline_poll(context, false)
 }
 
 /// `DeviceHostTestsBase::initCommonTests`
@@ -509,6 +882,36 @@ pub fn create_timeline_semaphore_tests(sync_type: SyncType) -> tcu::TestCaseGrou
         }
     }
 
+    // `LegacyDeviceHostTests::init`'s misc group; upstream registers `initial_value`
+    // only under the legacy tree.
+    if sync_type == SyncType::Legacy {
+        let mut misc = tcu::TestCaseGroup::new("misc");
+        misc.add_child(Box::new(TimelineFunctionCase {
+            name: "initial_value",
+            sync_type,
+            run: timeline_initial_value,
+        }) as Box<dyn TestCase>);
+        device_host.add_child(misc);
+    }
+
     group.add_child(device_host);
+
+    let mut wait = tcu::TestCaseGroup::new("wait");
+    for (name, run) in [
+        (
+            "all_signal_from_device",
+            wait_all_signal_from_device as fn(&Context<'_>, SyncType) -> Result<TestStatus, TestError>,
+        ),
+        ("one_signal_from_device", wait_one_signal_from_device),
+        ("all_signal_from_host", wait_all_signal_from_host),
+        ("one_signal_from_host", wait_one_signal_from_host),
+        ("host_wait_before_signal", timeline_host_wait_before_signal),
+        ("poll_signal_from_device", poll_signal_from_device),
+        ("poll_signal_from_host", poll_signal_from_host),
+    ] {
+        wait.add_child(Box::new(TimelineFunctionCase { name, sync_type, run }) as Box<dyn TestCase>);
+    }
+    group.add_child(wait);
+
     group
 }
