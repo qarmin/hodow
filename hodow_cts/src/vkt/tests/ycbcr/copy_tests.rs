@@ -35,7 +35,7 @@ pub fn is_ycbcr_format(format: vk::Format) -> bool {
 /// `getPlanarFormatDescription().planes`. A format with no entry is single-plane, and
 /// its one plane copies as itself.
 pub fn planes_of(format: vk::Format) -> &'static [PlaneInfo] {
-    PLANE_COMPATIBLE_FORMATS.iter().find(|(f, _)| *f == format).map_or(&[][..], |(_, p)| *p)
+    PLANE_COMPATIBLE_FORMATS.iter().find(|(f, _)| *f == format).map_or(&[][..], |(_, info)| info.planes)
 }
 
 fn plane_formats(format: vk::Format) -> impl Iterator<Item = vk::Format> {

@@ -68,10 +68,18 @@ def read_planar_descriptions(text: str) -> dict[str, list[str]]:
     for i in range(1, len(chunks) - 1, 2):
         name = chunks[i]
         entry = chunks[i + 1]
-        planes_m = re.match(r"\s*\{\s*(\d+)\s*,\s*//\s*planes", entry)
+        # `{numPlanes, <channel flags>, blockWidth, blockHeight, { <plane rows> } }`.
+        # The chroma-subsampled single-plane formats are the ones with a block wider
+        # than one texel, which is why the block size cannot be assumed.
+        planes_m = re.match(
+            r"\s*\{\s*(\d+)\s*,\s*//\s*planes\s*\n\s*[^,]+,\s*\n\s*(\d+)\s*,\s*\n\s*(\d+)\s*,",
+            entry,
+        )
         if not planes_m:
             continue
         num_planes = int(planes_m.group(1))
+        block_width = int(planes_m.group(2))
+        block_height = int(planes_m.group(3))
         # The plane rows follow: element size, the width and height divisors that give
         # the plane's extent from the image's, and the format the plane copies as.
         rows = re.findall(
@@ -80,7 +88,7 @@ def read_planar_descriptions(text: str) -> dict[str, list[str]]:
         if len(rows) < num_planes:
             continue
         # An entry may be listed once per aliased name; first definition wins.
-        out.setdefault(name, [(int(a), int(b), int(c), d) for a, b, c, d in rows[:num_planes]])
+        out.setdefault(name, (block_width, block_height, [(int(a), int(b), int(c), d) for a, b, c, d in rows[:num_planes]]))
     return out
 
 
@@ -125,15 +133,25 @@ def main() -> int:
         "}",
         "",
         "/// `getYCbCrPlanarFormatDescription`, reduced to what the copy tests read.",
-        "pub static PLANE_COMPATIBLE_FORMATS: &[(vk::Format, &[PlaneInfo])] = &[",
+        "pub struct FormatInfo {",
+        "    /// `blockWidth` - wider than one texel for the subsampled single-plane formats.",
+        "    pub block_width: u32,",
+        "    /// `blockHeight`",
+        "    pub block_height: u32,",
+        "    pub planes: &'static [PlaneInfo],",
+        "}",
+        "",
+        "pub static PLANE_COMPATIBLE_FORMATS: &[(vk::Format, FormatInfo)] = &[",
     ]
-    for name, planes in sorted(planar.items()):
+    for name, (bw, bh, planes) in sorted(planar.items()):
         entries = ", ".join(
             f"PlaneInfo {{ element_size: {sz}, width_divisor: {w}, height_divisor: {h}, "
             f"compatible_format: vk::Format::{rust_name(f)} }}"
             for sz, w, h, f in planes
         )
-        lines.append(f"    (vk::Format::{rust_name(name)}, &[{entries}]),")
+        lines.append(
+            f"    (vk::Format::{rust_name(name)}, FormatInfo {{ block_width: {bw}, block_height: {bh}, planes: &[{entries}] }}),"
+        )
     lines += ["];", ""]
 
     lines.append("/// `formats::compatibleFormats*Bit` - the bit-width classes a copy may")

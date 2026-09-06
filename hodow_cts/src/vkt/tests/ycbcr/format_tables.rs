@@ -26,612 +26,772 @@ pub struct PlaneInfo {
 }
 
 /// `getYCbCrPlanarFormatDescription`, reduced to what the copy tests read.
-pub static PLANE_COMPATIBLE_FORMATS: &[(vk::Format, &[PlaneInfo])] = &[
+pub struct FormatInfo {
+    /// `blockWidth` - wider than one texel for the subsampled single-plane formats.
+    pub block_width: u32,
+    /// `blockHeight`
+    pub block_height: u32,
+    pub planes: &'static [PlaneInfo],
+}
+
+pub static PLANE_COMPATIBLE_FORMATS: &[(vk::Format, FormatInfo)] = &[
     (
         vk::Format::B10X6G10X6R10X6G10X6_422_UNORM_4PACK16,
-        &[PlaneInfo {
-            element_size: 8,
-            width_divisor: 1,
-            height_divisor: 1,
-            compatible_format: vk::Format::B10X6G10X6R10X6G10X6_422_UNORM_4PACK16,
-        }],
+        FormatInfo {
+            block_width: 2,
+            block_height: 1,
+            planes: &[PlaneInfo {
+                element_size: 8,
+                width_divisor: 1,
+                height_divisor: 1,
+                compatible_format: vk::Format::B10X6G10X6R10X6G10X6_422_UNORM_4PACK16,
+            }],
+        },
     ),
     (
         vk::Format::B12X4G12X4R12X4G12X4_422_UNORM_4PACK16,
-        &[PlaneInfo {
-            element_size: 8,
-            width_divisor: 1,
-            height_divisor: 1,
-            compatible_format: vk::Format::B12X4G12X4R12X4G12X4_422_UNORM_4PACK16,
-        }],
+        FormatInfo {
+            block_width: 2,
+            block_height: 1,
+            planes: &[PlaneInfo {
+                element_size: 8,
+                width_divisor: 1,
+                height_divisor: 1,
+                compatible_format: vk::Format::B12X4G12X4R12X4G12X4_422_UNORM_4PACK16,
+            }],
+        },
     ),
     (
         vk::Format::B16G16R16G16_422_UNORM,
-        &[PlaneInfo {
-            element_size: 8,
-            width_divisor: 1,
-            height_divisor: 1,
-            compatible_format: vk::Format::B16G16R16G16_422_UNORM,
-        }],
+        FormatInfo {
+            block_width: 2,
+            block_height: 1,
+            planes: &[PlaneInfo {
+                element_size: 8,
+                width_divisor: 1,
+                height_divisor: 1,
+                compatible_format: vk::Format::B16G16R16G16_422_UNORM,
+            }],
+        },
     ),
     (
         vk::Format::B8G8R8G8_422_UNORM,
-        &[PlaneInfo {
-            element_size: 4,
-            width_divisor: 1,
-            height_divisor: 1,
-            compatible_format: vk::Format::B8G8R8G8_422_UNORM,
-        }],
+        FormatInfo {
+            block_width: 2,
+            block_height: 1,
+            planes: &[PlaneInfo {
+                element_size: 4,
+                width_divisor: 1,
+                height_divisor: 1,
+                compatible_format: vk::Format::B8G8R8G8_422_UNORM,
+            }],
+        },
     ),
     (
         vk::Format::G10X6B10X6G10X6R10X6_422_UNORM_4PACK16,
-        &[PlaneInfo {
-            element_size: 8,
-            width_divisor: 1,
-            height_divisor: 1,
-            compatible_format: vk::Format::G10X6B10X6G10X6R10X6_422_UNORM_4PACK16,
-        }],
+        FormatInfo {
+            block_width: 2,
+            block_height: 1,
+            planes: &[PlaneInfo {
+                element_size: 8,
+                width_divisor: 1,
+                height_divisor: 1,
+                compatible_format: vk::Format::G10X6B10X6G10X6R10X6_422_UNORM_4PACK16,
+            }],
+        },
     ),
     (
         vk::Format::G10X6_B10X6R10X6_2PLANE_420_UNORM_3PACK16,
-        &[
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R10X6_UNORM_PACK16,
-            },
-            PlaneInfo {
-                element_size: 4,
-                width_divisor: 2,
-                height_divisor: 2,
-                compatible_format: vk::Format::R10X6G10X6_UNORM_2PACK16,
-            },
-        ],
+        FormatInfo {
+            block_width: 1,
+            block_height: 1,
+            planes: &[
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R10X6_UNORM_PACK16,
+                },
+                PlaneInfo {
+                    element_size: 4,
+                    width_divisor: 2,
+                    height_divisor: 2,
+                    compatible_format: vk::Format::R10X6G10X6_UNORM_2PACK16,
+                },
+            ],
+        },
     ),
     (
         vk::Format::G10X6_B10X6R10X6_2PLANE_422_UNORM_3PACK16,
-        &[
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R10X6_UNORM_PACK16,
-            },
-            PlaneInfo {
-                element_size: 4,
-                width_divisor: 2,
-                height_divisor: 1,
-                compatible_format: vk::Format::R10X6G10X6_UNORM_2PACK16,
-            },
-        ],
+        FormatInfo {
+            block_width: 1,
+            block_height: 1,
+            planes: &[
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R10X6_UNORM_PACK16,
+                },
+                PlaneInfo {
+                    element_size: 4,
+                    width_divisor: 2,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R10X6G10X6_UNORM_2PACK16,
+                },
+            ],
+        },
     ),
     (
         vk::Format::G10X6_B10X6R10X6_2PLANE_444_UNORM_3PACK16,
-        &[
-            PlaneInfo {
-                element_size: 2,
+        FormatInfo {
+            block_width: 1,
+            block_height: 1,
+            planes: &[
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R10X6_UNORM_PACK16,
+                },
+                PlaneInfo {
+                    element_size: 4,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R10X6G10X6_UNORM_2PACK16,
+                },
+            ],
+        },
+    ),
+    (
+        vk::Format::G10X6_B10X6_R10X6_3PLANE_420_UNORM_3PACK16,
+        FormatInfo {
+            block_width: 1,
+            block_height: 1,
+            planes: &[
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R10X6_UNORM_PACK16,
+                },
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 2,
+                    height_divisor: 2,
+                    compatible_format: vk::Format::R10X6_UNORM_PACK16,
+                },
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 2,
+                    height_divisor: 2,
+                    compatible_format: vk::Format::R10X6_UNORM_PACK16,
+                },
+            ],
+        },
+    ),
+    (
+        vk::Format::G10X6_B10X6_R10X6_3PLANE_422_UNORM_3PACK16,
+        FormatInfo {
+            block_width: 1,
+            block_height: 1,
+            planes: &[
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R10X6_UNORM_PACK16,
+                },
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 2,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R10X6_UNORM_PACK16,
+                },
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 2,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R10X6_UNORM_PACK16,
+                },
+            ],
+        },
+    ),
+    (
+        vk::Format::G10X6_B10X6_R10X6_3PLANE_444_UNORM_3PACK16,
+        FormatInfo {
+            block_width: 1,
+            block_height: 1,
+            planes: &[
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R10X6_UNORM_PACK16,
+                },
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R10X6_UNORM_PACK16,
+                },
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R10X6_UNORM_PACK16,
+                },
+            ],
+        },
+    ),
+    (
+        vk::Format::G12X4B12X4G12X4R12X4_422_UNORM_4PACK16,
+        FormatInfo {
+            block_width: 2,
+            block_height: 1,
+            planes: &[PlaneInfo {
+                element_size: 8,
                 width_divisor: 1,
                 height_divisor: 1,
-                compatible_format: vk::Format::R10X6_UNORM_PACK16,
-            },
-            PlaneInfo {
+                compatible_format: vk::Format::G12X4B12X4G12X4R12X4_422_UNORM_4PACK16,
+            }],
+        },
+    ),
+    (
+        vk::Format::G12X4_B12X4R12X4_2PLANE_420_UNORM_3PACK16,
+        FormatInfo {
+            block_width: 1,
+            block_height: 1,
+            planes: &[
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R12X4_UNORM_PACK16,
+                },
+                PlaneInfo {
+                    element_size: 4,
+                    width_divisor: 2,
+                    height_divisor: 2,
+                    compatible_format: vk::Format::R12X4G12X4_UNORM_2PACK16,
+                },
+            ],
+        },
+    ),
+    (
+        vk::Format::G12X4_B12X4R12X4_2PLANE_422_UNORM_3PACK16,
+        FormatInfo {
+            block_width: 1,
+            block_height: 1,
+            planes: &[
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R12X4_UNORM_PACK16,
+                },
+                PlaneInfo {
+                    element_size: 4,
+                    width_divisor: 2,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R12X4G12X4_UNORM_2PACK16,
+                },
+            ],
+        },
+    ),
+    (
+        vk::Format::G12X4_B12X4R12X4_2PLANE_444_UNORM_3PACK16,
+        FormatInfo {
+            block_width: 1,
+            block_height: 1,
+            planes: &[
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R12X4_UNORM_PACK16,
+                },
+                PlaneInfo {
+                    element_size: 4,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R12X4G12X4_UNORM_2PACK16,
+                },
+            ],
+        },
+    ),
+    (
+        vk::Format::G12X4_B12X4_R12X4_3PLANE_420_UNORM_3PACK16,
+        FormatInfo {
+            block_width: 1,
+            block_height: 1,
+            planes: &[
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R12X4_UNORM_PACK16,
+                },
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 2,
+                    height_divisor: 2,
+                    compatible_format: vk::Format::R12X4_UNORM_PACK16,
+                },
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 2,
+                    height_divisor: 2,
+                    compatible_format: vk::Format::R12X4_UNORM_PACK16,
+                },
+            ],
+        },
+    ),
+    (
+        vk::Format::G12X4_B12X4_R12X4_3PLANE_422_UNORM_3PACK16,
+        FormatInfo {
+            block_width: 1,
+            block_height: 1,
+            planes: &[
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R12X4_UNORM_PACK16,
+                },
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 2,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R12X4_UNORM_PACK16,
+                },
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 2,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R12X4_UNORM_PACK16,
+                },
+            ],
+        },
+    ),
+    (
+        vk::Format::G12X4_B12X4_R12X4_3PLANE_444_UNORM_3PACK16,
+        FormatInfo {
+            block_width: 1,
+            block_height: 1,
+            planes: &[
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R12X4_UNORM_PACK16,
+                },
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R12X4_UNORM_PACK16,
+                },
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R12X4_UNORM_PACK16,
+                },
+            ],
+        },
+    ),
+    (
+        vk::Format::G16B16G16R16_422_UNORM,
+        FormatInfo {
+            block_width: 2,
+            block_height: 1,
+            planes: &[PlaneInfo {
+                element_size: 8,
+                width_divisor: 1,
+                height_divisor: 1,
+                compatible_format: vk::Format::G16B16G16R16_422_UNORM,
+            }],
+        },
+    ),
+    (
+        vk::Format::G16_B16R16_2PLANE_420_UNORM,
+        FormatInfo {
+            block_width: 1,
+            block_height: 1,
+            planes: &[
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R16_UNORM,
+                },
+                PlaneInfo {
+                    element_size: 4,
+                    width_divisor: 2,
+                    height_divisor: 2,
+                    compatible_format: vk::Format::R16G16_UNORM,
+                },
+            ],
+        },
+    ),
+    (
+        vk::Format::G16_B16R16_2PLANE_422_UNORM,
+        FormatInfo {
+            block_width: 1,
+            block_height: 1,
+            planes: &[
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R16_UNORM,
+                },
+                PlaneInfo {
+                    element_size: 4,
+                    width_divisor: 2,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R16G16_UNORM,
+                },
+            ],
+        },
+    ),
+    (
+        vk::Format::G16_B16R16_2PLANE_444_UNORM,
+        FormatInfo {
+            block_width: 1,
+            block_height: 1,
+            planes: &[
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R16_UNORM,
+                },
+                PlaneInfo {
+                    element_size: 4,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R16G16_UNORM,
+                },
+            ],
+        },
+    ),
+    (
+        vk::Format::G16_B16_R16_3PLANE_420_UNORM,
+        FormatInfo {
+            block_width: 1,
+            block_height: 1,
+            planes: &[
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R16_UNORM,
+                },
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 2,
+                    height_divisor: 2,
+                    compatible_format: vk::Format::R16_UNORM,
+                },
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 2,
+                    height_divisor: 2,
+                    compatible_format: vk::Format::R16_UNORM,
+                },
+            ],
+        },
+    ),
+    (
+        vk::Format::G16_B16_R16_3PLANE_422_UNORM,
+        FormatInfo {
+            block_width: 1,
+            block_height: 1,
+            planes: &[
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R16_UNORM,
+                },
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 2,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R16_UNORM,
+                },
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 2,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R16_UNORM,
+                },
+            ],
+        },
+    ),
+    (
+        vk::Format::G16_B16_R16_3PLANE_444_UNORM,
+        FormatInfo {
+            block_width: 1,
+            block_height: 1,
+            planes: &[
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R16_UNORM,
+                },
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R16_UNORM,
+                },
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R16_UNORM,
+                },
+            ],
+        },
+    ),
+    (
+        vk::Format::G8B8G8R8_422_UNORM,
+        FormatInfo {
+            block_width: 2,
+            block_height: 1,
+            planes: &[PlaneInfo {
+                element_size: 4,
+                width_divisor: 1,
+                height_divisor: 1,
+                compatible_format: vk::Format::G8B8G8R8_422_UNORM,
+            }],
+        },
+    ),
+    (
+        vk::Format::G8_B8R8_2PLANE_420_UNORM,
+        FormatInfo {
+            block_width: 1,
+            block_height: 1,
+            planes: &[
+                PlaneInfo {
+                    element_size: 1,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R8_UNORM,
+                },
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 2,
+                    height_divisor: 2,
+                    compatible_format: vk::Format::R8G8_UNORM,
+                },
+            ],
+        },
+    ),
+    (
+        vk::Format::G8_B8R8_2PLANE_422_UNORM,
+        FormatInfo {
+            block_width: 1,
+            block_height: 1,
+            planes: &[
+                PlaneInfo {
+                    element_size: 1,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R8_UNORM,
+                },
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 2,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R8G8_UNORM,
+                },
+            ],
+        },
+    ),
+    (
+        vk::Format::G8_B8R8_2PLANE_444_UNORM,
+        FormatInfo {
+            block_width: 1,
+            block_height: 1,
+            planes: &[
+                PlaneInfo {
+                    element_size: 1,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R8_UNORM,
+                },
+                PlaneInfo {
+                    element_size: 2,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R8G8_UNORM,
+                },
+            ],
+        },
+    ),
+    (
+        vk::Format::G8_B8_R8_3PLANE_420_UNORM,
+        FormatInfo {
+            block_width: 1,
+            block_height: 1,
+            planes: &[
+                PlaneInfo {
+                    element_size: 1,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R8_UNORM,
+                },
+                PlaneInfo {
+                    element_size: 1,
+                    width_divisor: 2,
+                    height_divisor: 2,
+                    compatible_format: vk::Format::R8_UNORM,
+                },
+                PlaneInfo {
+                    element_size: 1,
+                    width_divisor: 2,
+                    height_divisor: 2,
+                    compatible_format: vk::Format::R8_UNORM,
+                },
+            ],
+        },
+    ),
+    (
+        vk::Format::G8_B8_R8_3PLANE_422_UNORM,
+        FormatInfo {
+            block_width: 1,
+            block_height: 1,
+            planes: &[
+                PlaneInfo {
+                    element_size: 1,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R8_UNORM,
+                },
+                PlaneInfo {
+                    element_size: 1,
+                    width_divisor: 2,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R8_UNORM,
+                },
+                PlaneInfo {
+                    element_size: 1,
+                    width_divisor: 2,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R8_UNORM,
+                },
+            ],
+        },
+    ),
+    (
+        vk::Format::G8_B8_R8_3PLANE_444_UNORM,
+        FormatInfo {
+            block_width: 1,
+            block_height: 1,
+            planes: &[
+                PlaneInfo {
+                    element_size: 1,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R8_UNORM,
+                },
+                PlaneInfo {
+                    element_size: 1,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R8_UNORM,
+                },
+                PlaneInfo {
+                    element_size: 1,
+                    width_divisor: 1,
+                    height_divisor: 1,
+                    compatible_format: vk::Format::R8_UNORM,
+                },
+            ],
+        },
+    ),
+    (
+        vk::Format::R10X6G10X6B10X6A10X6_UNORM_4PACK16,
+        FormatInfo {
+            block_width: 1,
+            block_height: 1,
+            planes: &[PlaneInfo {
+                element_size: 8,
+                width_divisor: 1,
+                height_divisor: 1,
+                compatible_format: vk::Format::R10X6G10X6B10X6A10X6_UNORM_4PACK16,
+            }],
+        },
+    ),
+    (
+        vk::Format::R10X6G10X6_UNORM_2PACK16,
+        FormatInfo {
+            block_width: 1,
+            block_height: 1,
+            planes: &[PlaneInfo {
                 element_size: 4,
                 width_divisor: 1,
                 height_divisor: 1,
                 compatible_format: vk::Format::R10X6G10X6_UNORM_2PACK16,
-            },
-        ],
-    ),
-    (
-        vk::Format::G10X6_B10X6_R10X6_3PLANE_420_UNORM_3PACK16,
-        &[
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R10X6_UNORM_PACK16,
-            },
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 2,
-                height_divisor: 2,
-                compatible_format: vk::Format::R10X6_UNORM_PACK16,
-            },
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 2,
-                height_divisor: 2,
-                compatible_format: vk::Format::R10X6_UNORM_PACK16,
-            },
-        ],
-    ),
-    (
-        vk::Format::G10X6_B10X6_R10X6_3PLANE_422_UNORM_3PACK16,
-        &[
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R10X6_UNORM_PACK16,
-            },
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 2,
-                height_divisor: 1,
-                compatible_format: vk::Format::R10X6_UNORM_PACK16,
-            },
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 2,
-                height_divisor: 1,
-                compatible_format: vk::Format::R10X6_UNORM_PACK16,
-            },
-        ],
-    ),
-    (
-        vk::Format::G10X6_B10X6_R10X6_3PLANE_444_UNORM_3PACK16,
-        &[
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R10X6_UNORM_PACK16,
-            },
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R10X6_UNORM_PACK16,
-            },
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R10X6_UNORM_PACK16,
-            },
-        ],
-    ),
-    (
-        vk::Format::G12X4B12X4G12X4R12X4_422_UNORM_4PACK16,
-        &[PlaneInfo {
-            element_size: 8,
-            width_divisor: 1,
-            height_divisor: 1,
-            compatible_format: vk::Format::G12X4B12X4G12X4R12X4_422_UNORM_4PACK16,
-        }],
-    ),
-    (
-        vk::Format::G12X4_B12X4R12X4_2PLANE_420_UNORM_3PACK16,
-        &[
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R12X4_UNORM_PACK16,
-            },
-            PlaneInfo {
-                element_size: 4,
-                width_divisor: 2,
-                height_divisor: 2,
-                compatible_format: vk::Format::R12X4G12X4_UNORM_2PACK16,
-            },
-        ],
-    ),
-    (
-        vk::Format::G12X4_B12X4R12X4_2PLANE_422_UNORM_3PACK16,
-        &[
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R12X4_UNORM_PACK16,
-            },
-            PlaneInfo {
-                element_size: 4,
-                width_divisor: 2,
-                height_divisor: 1,
-                compatible_format: vk::Format::R12X4G12X4_UNORM_2PACK16,
-            },
-        ],
-    ),
-    (
-        vk::Format::G12X4_B12X4R12X4_2PLANE_444_UNORM_3PACK16,
-        &[
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R12X4_UNORM_PACK16,
-            },
-            PlaneInfo {
-                element_size: 4,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R12X4G12X4_UNORM_2PACK16,
-            },
-        ],
-    ),
-    (
-        vk::Format::G12X4_B12X4_R12X4_3PLANE_420_UNORM_3PACK16,
-        &[
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R12X4_UNORM_PACK16,
-            },
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 2,
-                height_divisor: 2,
-                compatible_format: vk::Format::R12X4_UNORM_PACK16,
-            },
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 2,
-                height_divisor: 2,
-                compatible_format: vk::Format::R12X4_UNORM_PACK16,
-            },
-        ],
-    ),
-    (
-        vk::Format::G12X4_B12X4_R12X4_3PLANE_422_UNORM_3PACK16,
-        &[
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R12X4_UNORM_PACK16,
-            },
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 2,
-                height_divisor: 1,
-                compatible_format: vk::Format::R12X4_UNORM_PACK16,
-            },
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 2,
-                height_divisor: 1,
-                compatible_format: vk::Format::R12X4_UNORM_PACK16,
-            },
-        ],
-    ),
-    (
-        vk::Format::G12X4_B12X4_R12X4_3PLANE_444_UNORM_3PACK16,
-        &[
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R12X4_UNORM_PACK16,
-            },
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R12X4_UNORM_PACK16,
-            },
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R12X4_UNORM_PACK16,
-            },
-        ],
-    ),
-    (
-        vk::Format::G16B16G16R16_422_UNORM,
-        &[PlaneInfo {
-            element_size: 8,
-            width_divisor: 1,
-            height_divisor: 1,
-            compatible_format: vk::Format::G16B16G16R16_422_UNORM,
-        }],
-    ),
-    (
-        vk::Format::G16_B16R16_2PLANE_420_UNORM,
-        &[
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R16_UNORM,
-            },
-            PlaneInfo {
-                element_size: 4,
-                width_divisor: 2,
-                height_divisor: 2,
-                compatible_format: vk::Format::R16G16_UNORM,
-            },
-        ],
-    ),
-    (
-        vk::Format::G16_B16R16_2PLANE_422_UNORM,
-        &[
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R16_UNORM,
-            },
-            PlaneInfo {
-                element_size: 4,
-                width_divisor: 2,
-                height_divisor: 1,
-                compatible_format: vk::Format::R16G16_UNORM,
-            },
-        ],
-    ),
-    (
-        vk::Format::G16_B16R16_2PLANE_444_UNORM,
-        &[
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R16_UNORM,
-            },
-            PlaneInfo {
-                element_size: 4,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R16G16_UNORM,
-            },
-        ],
-    ),
-    (
-        vk::Format::G16_B16_R16_3PLANE_420_UNORM,
-        &[
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R16_UNORM,
-            },
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 2,
-                height_divisor: 2,
-                compatible_format: vk::Format::R16_UNORM,
-            },
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 2,
-                height_divisor: 2,
-                compatible_format: vk::Format::R16_UNORM,
-            },
-        ],
-    ),
-    (
-        vk::Format::G16_B16_R16_3PLANE_422_UNORM,
-        &[
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R16_UNORM,
-            },
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 2,
-                height_divisor: 1,
-                compatible_format: vk::Format::R16_UNORM,
-            },
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 2,
-                height_divisor: 1,
-                compatible_format: vk::Format::R16_UNORM,
-            },
-        ],
-    ),
-    (
-        vk::Format::G16_B16_R16_3PLANE_444_UNORM,
-        &[
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R16_UNORM,
-            },
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R16_UNORM,
-            },
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R16_UNORM,
-            },
-        ],
-    ),
-    (
-        vk::Format::G8B8G8R8_422_UNORM,
-        &[PlaneInfo {
-            element_size: 4,
-            width_divisor: 1,
-            height_divisor: 1,
-            compatible_format: vk::Format::G8B8G8R8_422_UNORM,
-        }],
-    ),
-    (
-        vk::Format::G8_B8R8_2PLANE_420_UNORM,
-        &[
-            PlaneInfo {
-                element_size: 1,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R8_UNORM,
-            },
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 2,
-                height_divisor: 2,
-                compatible_format: vk::Format::R8G8_UNORM,
-            },
-        ],
-    ),
-    (
-        vk::Format::G8_B8R8_2PLANE_422_UNORM,
-        &[
-            PlaneInfo {
-                element_size: 1,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R8_UNORM,
-            },
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 2,
-                height_divisor: 1,
-                compatible_format: vk::Format::R8G8_UNORM,
-            },
-        ],
-    ),
-    (
-        vk::Format::G8_B8R8_2PLANE_444_UNORM,
-        &[
-            PlaneInfo {
-                element_size: 1,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R8_UNORM,
-            },
-            PlaneInfo {
-                element_size: 2,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R8G8_UNORM,
-            },
-        ],
-    ),
-    (
-        vk::Format::G8_B8_R8_3PLANE_420_UNORM,
-        &[
-            PlaneInfo {
-                element_size: 1,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R8_UNORM,
-            },
-            PlaneInfo {
-                element_size: 1,
-                width_divisor: 2,
-                height_divisor: 2,
-                compatible_format: vk::Format::R8_UNORM,
-            },
-            PlaneInfo {
-                element_size: 1,
-                width_divisor: 2,
-                height_divisor: 2,
-                compatible_format: vk::Format::R8_UNORM,
-            },
-        ],
-    ),
-    (
-        vk::Format::G8_B8_R8_3PLANE_422_UNORM,
-        &[
-            PlaneInfo {
-                element_size: 1,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R8_UNORM,
-            },
-            PlaneInfo {
-                element_size: 1,
-                width_divisor: 2,
-                height_divisor: 1,
-                compatible_format: vk::Format::R8_UNORM,
-            },
-            PlaneInfo {
-                element_size: 1,
-                width_divisor: 2,
-                height_divisor: 1,
-                compatible_format: vk::Format::R8_UNORM,
-            },
-        ],
-    ),
-    (
-        vk::Format::G8_B8_R8_3PLANE_444_UNORM,
-        &[
-            PlaneInfo {
-                element_size: 1,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R8_UNORM,
-            },
-            PlaneInfo {
-                element_size: 1,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R8_UNORM,
-            },
-            PlaneInfo {
-                element_size: 1,
-                width_divisor: 1,
-                height_divisor: 1,
-                compatible_format: vk::Format::R8_UNORM,
-            },
-        ],
-    ),
-    (
-        vk::Format::R10X6G10X6B10X6A10X6_UNORM_4PACK16,
-        &[PlaneInfo {
-            element_size: 8,
-            width_divisor: 1,
-            height_divisor: 1,
-            compatible_format: vk::Format::R10X6G10X6B10X6A10X6_UNORM_4PACK16,
-        }],
-    ),
-    (
-        vk::Format::R10X6G10X6_UNORM_2PACK16,
-        &[PlaneInfo {
-            element_size: 4,
-            width_divisor: 1,
-            height_divisor: 1,
-            compatible_format: vk::Format::R10X6G10X6_UNORM_2PACK16,
-        }],
+            }],
+        },
     ),
     (
         vk::Format::R10X6_UNORM_PACK16,
-        &[PlaneInfo {
-            element_size: 2,
-            width_divisor: 1,
-            height_divisor: 1,
-            compatible_format: vk::Format::R10X6_UNORM_PACK16,
-        }],
+        FormatInfo {
+            block_width: 1,
+            block_height: 1,
+            planes: &[PlaneInfo {
+                element_size: 2,
+                width_divisor: 1,
+                height_divisor: 1,
+                compatible_format: vk::Format::R10X6_UNORM_PACK16,
+            }],
+        },
     ),
     (
         vk::Format::R12X4G12X4B12X4A12X4_UNORM_4PACK16,
-        &[PlaneInfo {
-            element_size: 8,
-            width_divisor: 1,
-            height_divisor: 1,
-            compatible_format: vk::Format::R12X4G12X4B12X4A12X4_UNORM_4PACK16,
-        }],
+        FormatInfo {
+            block_width: 1,
+            block_height: 1,
+            planes: &[PlaneInfo {
+                element_size: 8,
+                width_divisor: 1,
+                height_divisor: 1,
+                compatible_format: vk::Format::R12X4G12X4B12X4A12X4_UNORM_4PACK16,
+            }],
+        },
     ),
     (
         vk::Format::R12X4G12X4_UNORM_2PACK16,
-        &[PlaneInfo {
-            element_size: 4,
-            width_divisor: 1,
-            height_divisor: 1,
-            compatible_format: vk::Format::R12X4G12X4_UNORM_2PACK16,
-        }],
+        FormatInfo {
+            block_width: 1,
+            block_height: 1,
+            planes: &[PlaneInfo {
+                element_size: 4,
+                width_divisor: 1,
+                height_divisor: 1,
+                compatible_format: vk::Format::R12X4G12X4_UNORM_2PACK16,
+            }],
+        },
     ),
     (
         vk::Format::R12X4_UNORM_PACK16,
-        &[PlaneInfo {
-            element_size: 2,
-            width_divisor: 1,
-            height_divisor: 1,
-            compatible_format: vk::Format::R12X4_UNORM_PACK16,
-        }],
+        FormatInfo {
+            block_width: 1,
+            block_height: 1,
+            planes: &[PlaneInfo {
+                element_size: 2,
+                width_divisor: 1,
+                height_divisor: 1,
+                compatible_format: vk::Format::R12X4_UNORM_PACK16,
+            }],
+        },
     ),
 ];
 

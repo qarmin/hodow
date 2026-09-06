@@ -6,6 +6,7 @@ use crate::tcu::TestCaseGroup;
 
 pub mod copy_tests;
 pub mod format_tables;
+pub mod util;
 
 /// The `ycbcr` group.
 pub fn create_tests() -> TestCaseGroup {
