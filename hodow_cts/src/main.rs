@@ -10,7 +10,7 @@ use std::time::Duration;
 use clap::Parser;
 use hodow_cts::color;
 use hodow_cts::report::{CaseResult, JsonlWriter, Summary};
-use hodow_cts::runner::isolate::{EXIT_VULKAN_UNAVAILABLE, IsolateOptions, WORKER_ENV, run_isolated};
+use hodow_cts::runner::isolate::{EXIT_SETUP_ERROR, EXIT_VULKAN_UNAVAILABLE, IsolateOptions, WORKER_ENV, run_isolated};
 use hodow_cts::runner::{RunOptions, execute_selected, matches_filter};
 use hodow_cts::tcu::{FlatCase, TestResult};
 
@@ -299,12 +299,13 @@ fn run_as_worker(args: &Args) -> std::process::ExitCode {
             eprintln!("worker error: {e}");
             // A missing driver is an environment problem, not a crash caused by the
             // case that happened to be first. The parent needs to tell them apart.
-            if e.downcast_ref::<hodow_cts::vk::platform::PlatformError>()
-                .is_some_and(|p| matches!(p, hodow_cts::vk::platform::PlatformError::Unavailable(_)))
-            {
-                return std::process::ExitCode::from(EXIT_VULKAN_UNAVAILABLE as u8);
+            match e.downcast_ref::<hodow_cts::vk::platform::PlatformError>() {
+                Some(hodow_cts::vk::platform::PlatformError::Unavailable(_)) => std::process::ExitCode::from(EXIT_VULKAN_UNAVAILABLE as u8),
+                // Setting Vulkan up failed for some other reason - a requested layer
+                // that is not installed, say. Not this case's fault either.
+                Some(hodow_cts::vk::platform::PlatformError::InitError(_)) => std::process::ExitCode::from(EXIT_SETUP_ERROR as u8),
+                _ => std::process::ExitCode::FAILURE,
             }
-            std::process::ExitCode::FAILURE
         }
     }
 }

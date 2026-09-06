@@ -34,6 +34,12 @@ pub const WORKER_ENV: &str = "HODOW_CTS_WORKER";
 /// first for something it had nothing to do with.
 pub const EXIT_VULKAN_UNAVAILABLE: i32 = 2;
 
+/// A worker that could not set Vulkan up at all, for a reason other than a missing
+/// driver - `--validation` without the layer installed being the one that happens in
+/// practice. Same reasoning as above: it is an environment problem, and blaming the
+/// first case for it sends whoever reads the log looking in the wrong place.
+pub const EXIT_SETUP_ERROR: i32 = 3;
+
 pub struct IsolateOptions {
     pub batch_size: usize,
     pub case_timeout: Duration,
@@ -193,6 +199,12 @@ fn run_one_batch(exe: &Path, batch: &[String], options: &IsolateOptions) -> std:
             culprit: None,
             vulkan_unavailable: true,
         });
+    }
+
+    if matches!(status, WaitOutcome::Exited(EXIT_SETUP_ERROR)) && results.is_empty() {
+        // The worker has already explained itself on stderr; anything further from here
+        // would only bury it.
+        return Err(std::io::Error::other("worker could not initialise Vulkan - see the error above"));
     }
 
     let culprit = match status {
