@@ -34,6 +34,7 @@ pub fn create_test_hierarchy() -> tcu::TestCaseGroup {
     root.add_child(vkt::tests::memory::create_tests());
     root.add_child(vkt::tests::renderpass::create_tests());
     root.add_child(vkt::tests::transform_feedback::create_tests());
+    root.add_child(vkt::tests::ycbcr::create_tests());
     // Upstream registers these as two sibling top-level groups rather than one.
     for group in vkt::tests::synchronization::single_queue_tests::create_tests() {
         root.add_child(group);

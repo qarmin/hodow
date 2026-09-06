@@ -85,6 +85,17 @@ def case_name(enum_name: str) -> str:
     return re.sub(r"_(khr|ext)$", "", enum_name.lower())
 
 
+
+def is_ycbcr(name: str) -> bool:
+    """`vk::isYCbCrFormat` - the YCbCr formats are exactly those named for a plane
+    layout or a chroma subsampling, which upstream enumerates one by one. Matching on
+    the shape of the name reproduces that list without retyping it."""
+    n = name.upper()
+    if "_PLANE_" in n or "PLANE_" in n:
+        return True
+    return bool(re.search(r"^VK_FORMAT_G\d", n)) or "_422_" in n or "_420_" in n or "_444_" in n
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--cts-dir", type=Path, default=REPO_DIR / "tmp" / "VK-GL-CTS")
@@ -217,6 +228,20 @@ def main() -> int:
             lines.append(f'    BlitFormat {{ format: vk::Format::{rust_name(f)}, name: "{case_name(f)}" }},')
         lines.append("];")
         lines.append("")
+
+    # `formats::basicUnsignedFloatFormats` - what the ycbcr copy tests cross with
+    # themselves. Both plain and YCbCr formats are in here; which is which decides the
+    # image size and half of the support checks, so it is recorded alongside.
+    basic_formats = read_group(header_text, "basicUnsignedFloatFormats")
+    print(f"basicUnsignedFloatFormats: {len(basic_formats)} formats")
+    lines.append("/// `formats::basicUnsignedFloatFormats`, paired with the case name and")
+    lines.append("/// whether `isYCbCrFormat` holds for it.")
+    lines.append("pub static BASIC_UNSIGNED_FLOAT_FORMATS: &[(vk::Format, &str, bool)] = &[")
+    for f in basic_formats:
+        ycbcr = is_ycbcr(f)
+        lines.append(f'    (vk::Format::{rust_name(f)}, "{case_name(f)}", {str(ycbcr).lower()}),')
+    lines.append("];")
+    lines.append("")
 
     OUT.write_text("\n".join(lines))
     subprocess.run(["rustfmt", "--edition", "2024", str(OUT)], cwd=CRATE_DIR, check=False)
