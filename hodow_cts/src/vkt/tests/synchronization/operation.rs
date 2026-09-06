@@ -1338,6 +1338,7 @@ pub enum OperationName {
     ReadUboFragment,
     ReadUboTexelVertex,
     ReadUboTexelFragment,
+    ReadVertexInput,
 }
 
 impl OperationName {
@@ -1388,6 +1389,7 @@ impl OperationName {
             Self::ReadUboFragment => "read_ubo_fragment",
             Self::ReadUboTexelVertex => "read_ubo_texel_vertex",
             Self::ReadUboTexelFragment => "read_ubo_texel_fragment",
+            Self::ReadVertexInput => "read_vertex_input",
         }
     }
 
@@ -1512,6 +1514,9 @@ impl OperationName {
             | Self::ReadUboTexelVertex
             | Self::ReadUboTexelFragment => resource.kind == ResourceType::Buffer && resource.size[0] <= MAX_UBO_RANGE,
             Self::WriteUpdateBuffer => resource.kind == ResourceType::Buffer && resource.size[0] <= MAX_UPDATE_BUFFER_SIZE,
+            // `VertexInput::Support` asserts a plain or index buffer; the vertex draw
+            // mode takes the plain one.
+            Self::ReadVertexInput => resource.kind == ResourceType::Buffer,
             Self::WriteCopyImage | Self::WriteCopyBufferToImage | Self::ReadCopyImage | Self::ReadCopyImageToBuffer => {
                 resource.kind == ResourceType::Image && resource.image_samples == vk::SampleCountFlags::_1
             }
@@ -1590,6 +1595,9 @@ impl OperationName {
         if self.draw_call().is_some() || self == Self::WriteClearAttachments {
             return 0;
         }
+        if self == Self::ReadVertexInput {
+            return vk::BufferUsageFlags::VERTEX_BUFFER.bits();
+        }
         match self.buffer_shader_kind().map(|(t, _)| t).or(self.buffer_graphics_kind().map(|(t, _)| t)).map(|t| (t, ())) {
             Some((buffer_type, _)) if self.is_read() => match buffer_type {
                 BufferType::Uniform => vk::BufferUsageFlags::UNIFORM_BUFFER.bits(),
@@ -1608,6 +1616,9 @@ impl OperationName {
         }
         if self.draw_call().is_some() {
             return vk::ImageUsageFlags::COLOR_ATTACHMENT.bits();
+        }
+        if self == Self::ReadVertexInput {
+            return vk::BufferUsageFlags::VERTEX_BUFFER.bits();
         }
         if self == Self::WriteClearAttachments {
             return if resource.image_aspect == vk::ImageAspectFlags::COLOR {
@@ -1666,7 +1677,7 @@ impl OperationName {
                     let _ = stage;
                     return vk::QueueFlags::GRAPHICS;
                 }
-                if self.image_graphics_kind().is_some() || self.draw_call().is_some() || self == Self::WriteClearAttachments {
+                if self.image_graphics_kind().is_some() || self.draw_call().is_some() || self == Self::WriteClearAttachments || self == Self::ReadVertexInput {
                     return vk::QueueFlags::GRAPHICS;
                 }
                 if self.buffer_shader_kind().is_some() || self.image_shader_kind().is_some() {
@@ -1705,6 +1716,9 @@ pub fn build_operation<'a>(
     resource: &Resource<'_>,
     specialized_access: bool,
 ) -> Result<Box<dyn Operation + 'a>, TestError> {
+    if name == OperationName::ReadVertexInput {
+        return Ok(Box::new(VertexInputAccess::new(device, allocator, resource)?));
+    }
     if name == OperationName::WriteClearAttachments {
         return Ok(Box::new(ClearAttachments::new(device, resource)?));
     }
@@ -1821,6 +1835,7 @@ pub static READ_OPS: &[OperationName] = &[
     OperationName::ReadUboFragment,
     OperationName::ReadUboTexelVertex,
     OperationName::ReadUboTexelFragment,
+    OperationName::ReadVertexInput,
 ];
 
 /// `CopyImageToBuffer::WriteImplementation` - the resource is a buffer, written by
@@ -3725,5 +3740,192 @@ impl Operation for ClearAttachments<'_> {
 
     fn data(&self, _device: &Device) -> Result<Vec<u8>, TestError> {
         Ok(self.data.clone())
+    }
+}
+
+/// The manifest declares the vertex-input shaders with this. The fragment shader is
+/// shared; the vertex shader depends only on how many `uvec4` the resource holds.
+pub struct VertexInputShader {
+    pub name: &'static str,
+    pub buffer_size: u32,
+    pub programs: crate::vk::programs::BinaryCollection,
+}
+
+use crate::generated::shaders::synchronization_buffer::ALL_VERTEX_INPUT_SHADER;
+
+/// `VertexInput::Implementation` in `DRAW_MODE_VERTEX` - a read operation that consumes
+/// the resource buffer as vertex attributes.
+///
+/// This is the only ported read whose access is `VERTEX_ATTRIBUTE_READ` at the
+/// `VERTEX_INPUT` stage rather than a shader or transfer read, so it is the only one
+/// that makes the primitive order a write against the fixed-function vertex fetch. The
+/// vertex shader copies each attribute into an SSBO so the host can see what was read.
+pub struct VertexInputAccess<'a> {
+    buffer: BufferInfo,
+    output_buffer: BufferWithMemory<'a>,
+    _descriptor_set_layout: crate::vk::ref_util::Unique<'a, vk::DescriptorSetLayout>,
+    descriptor_set: crate::vk::ref_util::UniqueDescriptorSet<'a>,
+    _descriptor_pool: crate::vk::ref_util::Unique<'a, vk::DescriptorPool>,
+    pipeline_layout: crate::vk::ref_util::Unique<'a, vk::PipelineLayout>,
+    pipeline: crate::vk::ref_util::Unique<'a, vk::Pipeline>,
+    target: GraphicsTarget<'a>,
+}
+
+impl<'a> VertexInputAccess<'a> {
+    pub fn new(device: &'a Device, allocator: &crate::vk::mem_util::SimpleAllocator, resource: &Resource<'_>) -> Result<Self, TestError> {
+        use crate::vk::builder_util::{DescriptorPoolBuilder, DescriptorSetLayoutBuilder};
+        use crate::vk::obj_util::{make_descriptor_set, make_graphics_pipeline_full, make_pipeline_layout};
+        use crate::vk::programs::create_shader_module;
+
+        let buffer = resource.buffer();
+
+        let output_buffer = BufferWithMemory::new(
+            device,
+            allocator,
+            make_buffer_create_info(buffer.size, vk::BufferUsageFlags::STORAGE_BUFFER),
+            MemoryRequirement::HOST_VISIBLE,
+        )?;
+        unsafe {
+            std::slice::from_raw_parts_mut(output_buffer.get_allocation().get_host_ptr(), buffer.size as usize).fill(0);
+        }
+        flush_alloc(device, output_buffer.get_allocation())?;
+
+        let descriptor_set_layout = DescriptorSetLayoutBuilder::new()
+            .add_single_binding(vk::DescriptorType::STORAGE_BUFFER, vk::ShaderStageFlags::VERTEX)
+            .build(device)?;
+        let descriptor_pool = DescriptorPoolBuilder::new()
+            .add_type(vk::DescriptorType::STORAGE_BUFFER, 1)
+            .build(device, vk::DescriptorPoolCreateFlags::FREE_DESCRIPTOR_SET, 1)?;
+        let descriptor_set = make_descriptor_set(device, *descriptor_pool, *descriptor_set_layout)?;
+
+        let info = [vk::DescriptorBufferInfo {
+            buffer: output_buffer.get(),
+            offset: 0,
+            range: buffer.size,
+        }];
+        let write = vk::WriteDescriptorSet::builder()
+            .dst_set(*descriptor_set)
+            .dst_binding(0)
+            .descriptor_type(vk::DescriptorType::STORAGE_BUFFER)
+            .buffer_info(&info)
+            .build();
+        unsafe { device.update_descriptor_sets(&[write], &[] as &[vk::CopyDescriptorSet]) };
+
+        let shader = ALL_VERTEX_INPUT_SHADER
+            .iter()
+            .copied()
+            .find(|s| u64::from(s.buffer_size) == buffer.size)
+            .expect("the generator covers both resource buffer sizes");
+        let vert = create_shader_module(device, shader.programs.get("input_vert")?)?;
+        let frag = create_shader_module(device, shader.programs.get("input_frag")?)?;
+
+        let target = GraphicsTarget::new(device, allocator)?;
+        let pipeline_layout = make_pipeline_layout(device, &[*descriptor_set_layout])?;
+        let pipeline = make_graphics_pipeline_full(
+            device,
+            *pipeline_layout,
+            *vert,
+            *frag,
+            *target.render_pass,
+            (GRAPHICS_TARGET_SIZE, GRAPHICS_TARGET_SIZE),
+            vk::PrimitiveTopology::POINT_LIST,
+            vk::SampleCountFlags::_1,
+            None,
+            1,
+        )?;
+
+        Ok(Self {
+            buffer,
+            output_buffer,
+            _descriptor_set_layout: descriptor_set_layout,
+            descriptor_set,
+            _descriptor_pool: descriptor_pool,
+            pipeline_layout,
+            pipeline,
+            target,
+        })
+    }
+}
+
+impl Operation for VertexInputAccess<'_> {
+    fn record_commands(&self, device: &Device, sync: SyncType, cmd_buffer: vk::CommandBuffer) {
+        let to_attachment = make_image_memory_barrier2(
+            vk::PipelineStageFlags2::TOP_OF_PIPE,
+            vk::AccessFlags2::empty(),
+            vk::PipelineStageFlags2::COLOR_ATTACHMENT_OUTPUT,
+            vk::AccessFlags2::COLOR_ATTACHMENT_WRITE,
+            vk::ImageLayout::UNDEFINED,
+            vk::ImageLayout::COLOR_ATTACHMENT_OPTIMAL,
+            self.target.image_handle,
+            self.target.subresource_range,
+        );
+        cmd_pipeline_barrier(device, sync, cmd_buffer, &[], &[to_attachment]);
+
+        let clear = [vk::ClearValue {
+            color: vk::ClearColorValue { float32: [0.0, 0.0, 0.0, 1.0] },
+        }];
+        let begin = vk::RenderPassBeginInfo::builder()
+            .render_pass(*self.target.render_pass)
+            .framebuffer(*self.target.framebuffer)
+            .render_area(vk::Rect2D {
+                offset: vk::Offset2D { x: 0, y: 0 },
+                extent: vk::Extent2D {
+                    width: GRAPHICS_TARGET_SIZE,
+                    height: GRAPHICS_TARGET_SIZE,
+                },
+            })
+            .clear_values(&clear);
+
+        // One point per uvec4 in the resource, each writing the attribute it fetched.
+        let count = (self.buffer.size / 16) as u32;
+        unsafe {
+            device.cmd_begin_render_pass(cmd_buffer, &begin, vk::SubpassContents::INLINE);
+            device.cmd_bind_pipeline(cmd_buffer, vk::PipelineBindPoint::GRAPHICS, *self.pipeline);
+            device.cmd_bind_descriptor_sets(
+                cmd_buffer,
+                vk::PipelineBindPoint::GRAPHICS,
+                *self.pipeline_layout,
+                0,
+                &[*self.descriptor_set],
+                &[] as &[u32],
+            );
+            device.cmd_bind_vertex_buffers(cmd_buffer, 0, &[self.buffer.handle], &[0]);
+            device.cmd_draw(cmd_buffer, count, 1, 0, 0);
+            device.cmd_end_render_pass(cmd_buffer);
+        }
+
+        let to_host = make_buffer_memory_barrier2(
+            vk::PipelineStageFlags2::VERTEX_SHADER,
+            vk::AccessFlags2::SHADER_WRITE,
+            vk::PipelineStageFlags2::HOST,
+            vk::AccessFlags2::HOST_READ,
+            self.output_buffer.get(),
+            0,
+            self.buffer.size,
+        );
+        cmd_pipeline_barrier(device, sync, cmd_buffer, &[to_host], &[]);
+    }
+
+    fn in_sync_info(&self, sync: SyncType) -> SyncInfo {
+        // Under synchronization2 the fetch has its own stage; the legacy enum only has
+        // the combined VERTEX_INPUT.
+        let stage_mask = if sync == SyncType::Synchronization2 {
+            vk::PipelineStageFlags2::VERTEX_ATTRIBUTE_INPUT
+        } else {
+            vk::PipelineStageFlags2::VERTEX_INPUT
+        };
+        SyncInfo {
+            stage_mask,
+            access_mask: vk::AccessFlags2::VERTEX_ATTRIBUTE_READ,
+            image_layout: vk::ImageLayout::UNDEFINED,
+        }
+    }
+
+    fn out_sync_info(&self, _sync: SyncType) -> SyncInfo {
+        EMPTY_SYNC_INFO
+    }
+
+    fn data(&self, device: &Device) -> Result<Vec<u8>, TestError> {
+        host_buffer_data(device, &self.output_buffer, self.buffer.size)
     }
 }

@@ -480,3 +480,25 @@ programs = [
 ]
 [case.params]
 integer = { type = "bool", value = true }
+
+[[case]]
+name = "vertex_input_16384"
+rust_const = "VERTEX_INPUT_16384"
+rust_type = "VertexInputShader"
+programs = [
+    { name = "input_vert", template = "synchronization/generated/vertex_input_16384.vert", stage = "vert" },
+    { name = "input_frag", template = "synchronization/generated/input.frag", stage = "frag" },
+]
+[case.params]
+buffer_size = { type = "u32", value = 16384 }
+
+[[case]]
+name = "vertex_input_262144"
+rust_const = "VERTEX_INPUT_262144"
+rust_type = "VertexInputShader"
+programs = [
+    { name = "input_vert", template = "synchronization/generated/vertex_input_262144.vert", stage = "vert" },
+    { name = "input_frag", template = "synchronization/generated/input.frag", stage = "frag" },
+]
+[case.params]
+buffer_size = { type = "u32", value = 262144 }

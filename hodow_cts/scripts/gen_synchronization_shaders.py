@@ -334,6 +334,54 @@ def main() -> int:
         ]
         count += 1
 
+    # `VertexInput::Support::initPrograms`, the DRAW_MODE_VERTEX half. The resource is
+    # bound as the vertex buffer and the vertex shader copies each attribute into an
+    # SSBO the host reads back, so the shader depends only on how many uvec4 the
+    # resource holds.
+    input_frag = (
+        "#version 440\n"
+        "\n"
+        "layout(location = 0) out vec4 o_color;\n"
+        "\n"
+        "void main (void)\n"
+        "{\n"
+        "    o_color = vec4(1.0);\n"
+        "}\n"
+    )
+    (SRC_DIR / "input.frag").write_text(input_frag)
+
+    for size in BUFFER_SIZES:
+        num_vec_elements = size // 16
+        vert = (
+            "#version 440\n"
+            "layout(location = 0) in uvec4 v_in_data;\n"
+            "layout(set = 0, binding = 0, std140) writeonly buffer Output {\n"
+            f"    uvec4 data[{num_vec_elements}];\n"
+            "} b_out;\n"
+            "\n"
+            "void main (void)\n"
+            "{\n"
+            "    b_out.data[gl_VertexIndex] = v_in_data;\n"
+            "    gl_PointSize = 1.0f;\n"
+            "}\n"
+        )
+        name = f"vertex_input_{size}"
+        (SRC_DIR / f"{name}.vert").write_text(vert)
+        lines += [
+            "[[case]]",
+            f'name = "{name}"',
+            f'rust_const = "{name.upper()}"',
+            'rust_type = "VertexInputShader"',
+            "programs = [",
+            f'    {{ name = "input_vert", template = "synchronization/generated/{name}.vert", stage = "vert" }},',
+            '    { name = "input_frag", template = "synchronization/generated/input.frag", stage = "frag" },',
+            "]",
+            "[case.params]",
+            f'buffer_size = {{ type = "u32", value = {size} }}',
+            "",
+        ]
+        count += 1
+
     MANIFEST.write_text("\n".join(lines))
     print(f"wrote {MANIFEST.relative_to(REPO_DIR)} and {count} shaders in {SRC_DIR.relative_to(REPO_DIR)}")
     return 0
