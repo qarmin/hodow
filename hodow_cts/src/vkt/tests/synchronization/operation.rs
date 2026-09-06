@@ -1885,6 +1885,8 @@ impl OperationName {
                 | Self::WriteImageComputeIndirect
                 | Self::WriteClearColorImage
                 | Self::WriteClearDepthStencilImage
+                | Self::WriteIndirectBufferDispatch
+                | Self::ReadIndirectBufferDispatch
                 | Self::ReadCopyBuffer
                 | Self::ReadCopyBufferToImage
                 | Self::ReadCopyImageToBuffer
