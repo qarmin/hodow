@@ -18,8 +18,8 @@
 use vulkanalia::prelude::v1_0::*;
 
 use super::operation::{
-    COPY_OPS, Operation, OperationName, READ_OPS, RESOURCES, Resource, ResourceDescription, ResourceType, SyncInfo, SyncType, WRITE_OPS, build_copy_operation, build_operation,
-    cmd_pipeline_barrier, first_difference, get_resource_name, make_buffer_memory_barrier2, make_image_memory_barrier2,
+    COPY_OPS, Operation, OperationName, READ_OPS, RESOURCES, Resource, ResourceDescription, ResourceType, SyncInfo, SyncType, WRITE_OPS, buffer_resource, build_copy_operation,
+    build_operation, cmd_pipeline_barrier, first_difference, get_resource_name, image_resource, make_buffer_memory_barrier2, make_image_memory_barrier2,
 };
 use crate::tcu::{self, Random, TestError, TestStatus};
 use crate::vk::VkResultExt;
@@ -794,6 +794,360 @@ pub fn create_single_queue_tests(sync_type: SyncType) -> tcu::TestCaseGroup {
     group
 }
 
+/// `SyncEventsTestCase`
+///
+/// Two events, each carrying one write/read pair, set one after the other and then
+/// waited on together. One of the two may be a "nop" event: no work and an empty
+/// dependency, which checks that waiting on an event that carries nothing still
+/// behaves.
+struct SyncEventsTestCase {
+    name: String,
+    /// `None` when this event does no work at all.
+    events: [Option<EventPair>; 2],
+}
+
+#[derive(Clone, Copy)]
+struct EventPair {
+    resource: ResourceDescription,
+    write_op: OperationName,
+    read_op: OperationName,
+}
+
+impl TestCase for SyncEventsTestCase {
+    fn name(&self) -> &str {
+        &self.name
+    }
+
+    fn check_support(&self, context: &Context) -> Result<(), TestError> {
+        context.require_device_functionality("VK_KHR_synchronization2")?;
+
+        // Upstream checks only the image format here, never the operations' own
+        // `checkSupport`, so a case whose operation needs a feature the device lacks
+        // is attempted rather than skipped. Kept, because the verdicts have to match.
+        for pair in self.events.iter().flatten() {
+            if pair.resource.kind != ResourceType::Image {
+                continue;
+            }
+            let usage = pair.write_op.out_resource_usage(&pair.resource) | pair.read_op.in_resource_usage(&pair.resource);
+            let properties = unsafe {
+                context.get_instance().get_physical_device_image_format_properties(
+                    context.get_physical_device(),
+                    pair.resource.image_format,
+                    pair.resource.image_type,
+                    vk::ImageTiling::OPTIMAL,
+                    vk::ImageUsageFlags::from_bits_truncate(usage),
+                    vk::ImageCreateFlags::empty(),
+                )
+            };
+            match properties {
+                Err(_) => return Err(TestError::NotSupported("Image format is not supported".into())),
+                Ok(p) if !p.sample_counts.contains(pair.resource.image_samples) => {
+                    return Err(TestError::NotSupported("Requested sample count is not supported".into()));
+                }
+                Ok(_) => {}
+            }
+        }
+        Ok(())
+    }
+
+    fn programs(&self) -> BinaryCollection {
+        BinaryCollection::new(&[])
+    }
+
+    fn create_instance<'a>(&'a self, context: &'a Context<'a>) -> Box<dyn TestInstance + 'a> {
+        Box::new(SyncEventsTestInstance { context, params: self })
+    }
+}
+
+struct SyncEventsTestInstance<'a> {
+    context: &'a Context<'a>,
+    params: &'a SyncEventsTestCase,
+}
+
+impl TestInstance for SyncEventsTestInstance<'_> {
+    fn iterate(&mut self) -> Result<TestStatus, TestError> {
+        const SYNC: SyncType = SyncType::Synchronization2;
+        let device = self.context.get_device();
+        let allocator = self.context.get_default_allocator();
+        let queue = self.context.get_universal_queue();
+        let queue_index = self.context.get_universal_queue_family_index();
+
+        // Only the events that do work own a resource and a pair of operations; the
+        // nop event contributes nothing to these, which is why they are indexed
+        // separately from the events themselves.
+        let mut resources = Vec::new();
+        let mut write_ops: Vec<Box<dyn Operation + '_>> = Vec::new();
+        let mut read_ops: Vec<Box<dyn Operation + '_>> = Vec::new();
+        for pair in self.params.events.iter().flatten() {
+            let usage = pair.write_op.out_resource_usage(&pair.resource) | pair.read_op.in_resource_usage(&pair.resource);
+            resources.push(Resource::new(device, allocator, &pair.resource, usage)?);
+        }
+        for (ndx, pair) in self.params.events.iter().flatten().enumerate() {
+            write_ops.push(build_operation(device, allocator, pair.write_op, &pair.resource, &resources[ndx], false)?);
+            read_ops.push(build_operation(device, allocator, pair.read_op, &pair.resource, &resources[ndx], false)?);
+        }
+
+        let command_pool = make_command_pool(device, queue_index)?;
+        let cmd = allocate_command_buffer(device, *command_pool)?;
+        let events: Vec<_> = (0..2)
+            .map(|_| {
+                let event = unsafe { device.create_event(&vk::EventCreateInfo::builder(), None) }.vk_check("vkCreateEvent")?;
+                Ok::<_, TestError>(Unique::new(device, event))
+            })
+            .collect::<Result<_, _>>()?;
+
+        begin_command_buffer(device, *cmd)?;
+
+        // The barrier arrays have to outlive `vkCmdWaitEvents2`, which reads them again
+        // long after each `vkCmdSetEvent2` has copied nothing.
+        let mut buffer_barriers = Vec::new();
+        let mut image_barriers = Vec::new();
+        for (ops_idx, pair) in self.params.events.iter().flatten().enumerate() {
+            let write_sync = write_ops[ops_idx].out_sync_info(SYNC);
+            let read_sync = read_ops[ops_idx].in_sync_info(SYNC);
+            let resource = &resources[ops_idx];
+            if pair.resource.kind == ResourceType::Image {
+                let image = resource.image();
+                image_barriers.push((
+                    ops_idx,
+                    make_image_memory_barrier2(
+                        write_sync.stage_mask,
+                        write_sync.access_mask,
+                        read_sync.stage_mask,
+                        read_sync.access_mask,
+                        write_sync.image_layout,
+                        read_sync.image_layout,
+                        image.handle,
+                        image.subresource_range,
+                    ),
+                ));
+            } else {
+                let buffer = resource.buffer();
+                buffer_barriers.push((
+                    ops_idx,
+                    make_buffer_memory_barrier2(
+                        write_sync.stage_mask,
+                        write_sync.access_mask,
+                        read_sync.stage_mask,
+                        read_sync.access_mask,
+                        buffer.handle,
+                        buffer.offset,
+                        buffer.size,
+                    ),
+                ));
+            }
+        }
+
+        let mut dependency_infos = Vec::with_capacity(2);
+        // Not an index into `events`: a nop event consumes no operation, so this
+        // advances only for the events that do work.
+        let mut ops_idx = 0;
+        for pair in &self.params.events {
+            let Some(pair) = pair else {
+                dependency_infos.push(event_dependency_info(&[], &[]));
+                continue;
+            };
+            write_ops[ops_idx].record_commands(device, SYNC, *cmd);
+            let info = if pair.resource.kind == ResourceType::Image {
+                let barrier = &image_barriers.iter().find(|(i, _)| *i == ops_idx).expect("recorded above").1;
+                event_dependency_info(&[], std::slice::from_ref(barrier))
+            } else {
+                let barrier = &buffer_barriers.iter().find(|(i, _)| *i == ops_idx).expect("recorded above").1;
+                event_dependency_info(std::slice::from_ref(barrier), &[])
+            };
+            dependency_infos.push(info);
+            ops_idx += 1;
+        }
+
+        let event_handles: Vec<vk::Event> = events.iter().map(|e| **e).collect();
+        unsafe {
+            use vulkanalia::vk::KhrSynchronization2ExtensionDeviceCommands;
+            for (event_idx, handle) in event_handles.iter().enumerate() {
+                device.cmd_set_event2_khr(*cmd, *handle, &dependency_infos[event_idx]);
+            }
+            device.cmd_wait_events2_khr(*cmd, &event_handles, &dependency_infos);
+        }
+
+        for read_op in &read_ops {
+            read_op.record_commands(device, SYNC, *cmd);
+        }
+        end_command_buffer(device, *cmd)?;
+
+        // Keeps the barriers alive until the command buffer is fully recorded.
+        drop(buffer_barriers);
+        drop(image_barriers);
+
+        self.submit_and_wait(device, queue, *cmd)?;
+
+        for ndx in 0..write_ops.len() {
+            let expected = write_ops[ndx].data(device)?;
+            let actual = read_ops[ndx].data(device)?;
+
+            if resources[ndx].kind.is_indirect_buffer() {
+                let expected_value = u32::from_ne_bytes(expected[0..4].try_into().expect("at least 4 bytes"));
+                let actual_value = u32::from_ne_bytes(actual[0..4].try_into().expect("at least 4 bytes"));
+                if actual_value < expected_value {
+                    return Ok(TestStatus::fail("Counter value is smaller than expected"));
+                }
+            } else if let Some(at) = first_difference(&expected, &actual) {
+                return Ok(TestStatus::fail(format!(
+                    "Memory contents don't match: first difference at byte {at} of {}, expected {:#04x} got {:#04x}",
+                    expected.len(),
+                    expected[at],
+                    actual[at],
+                )));
+            }
+        }
+
+        Ok(TestStatus::pass("OK"))
+    }
+}
+
+impl SyncEventsTestInstance<'_> {
+    fn submit_and_wait(&self, device: &Device, queue: vk::Queue, cmd_buffer: vk::CommandBuffer) -> Result<(), TestError> {
+        use vulkanalia::vk::KhrSynchronization2ExtensionDeviceCommands;
+        let fence = unsafe { device.create_fence(&vk::FenceCreateInfo::builder(), None) }.vk_check("vkCreateFence")?;
+        let fence = Unique::new(device, fence);
+        let cmd_infos = [vk::CommandBufferSubmitInfo {
+            s_type: vk::StructureType::COMMAND_BUFFER_SUBMIT_INFO,
+            next: std::ptr::null(),
+            command_buffer: cmd_buffer,
+            device_mask: 0,
+        }];
+        let submit = vk::SubmitInfo2 {
+            s_type: vk::StructureType::SUBMIT_INFO_2,
+            next: std::ptr::null(),
+            flags: vk::SubmitFlags::empty(),
+            wait_semaphore_info_count: 0,
+            wait_semaphore_infos: std::ptr::null(),
+            command_buffer_info_count: 1,
+            command_buffer_infos: cmd_infos.as_ptr(),
+            signal_semaphore_info_count: 0,
+            signal_semaphore_infos: std::ptr::null(),
+        };
+        unsafe { device.queue_submit2_khr(queue, &[submit], *fence) }.vk_check("vkQueueSubmit2KHR")?;
+        unsafe { device.wait_for_fences(&[*fence], true, u64::MAX) }.vk_check("vkWaitForFences")?;
+        Ok(())
+    }
+}
+
+/// `makeCommonDependencyInfo(..., eventDependency = true)` - no BY_REGION, since an
+/// event dependency is not framebuffer-local.
+fn event_dependency_info(buffer_barriers: &[vk::BufferMemoryBarrier2], image_barriers: &[vk::ImageMemoryBarrier2]) -> vk::DependencyInfo {
+    vk::DependencyInfo {
+        s_type: vk::StructureType::DEPENDENCY_INFO,
+        next: std::ptr::null(),
+        dependency_flags: vk::DependencyFlags::empty(),
+        memory_barrier_count: 0,
+        memory_barriers: std::ptr::null(),
+        buffer_memory_barrier_count: buffer_barriers.len() as u32,
+        buffer_memory_barriers: buffer_barriers.as_ptr(),
+        image_memory_barrier_count: image_barriers.len() as u32,
+        image_memory_barriers: image_barriers.as_ptr(),
+    }
+}
+
+/// `createMultipleEventsTests` - a subset of the operations and resources, since every
+/// valid pair is then crossed with every other.
+const EVENT_WRITE_OPS: &[OperationName] = &[
+    OperationName::WriteFillBuffer,
+    OperationName::WriteCopyBufferToImage,
+    OperationName::WriteBlitImage,
+    OperationName::WriteSsboVertex,
+];
+
+const EVENT_READ_OPS: &[OperationName] = &[
+    OperationName::ReadCopyBufferToImage,
+    OperationName::ReadBlitImage,
+    OperationName::ReadUboFragment,
+    OperationName::ReadSsboVertex,
+];
+
+const EVENT_RESOURCES: &[ResourceDescription] = &[
+    buffer_resource(0x4000),
+    buffer_resource(0x40000),
+    image_resource(
+        [128, 128, 0],
+        vk::ImageType::_2D,
+        vk::Format::R8G8B8A8_UNORM,
+        vk::ImageAspectFlags::COLOR,
+        vk::SampleCountFlags::_1,
+    ),
+    image_resource(
+        [128, 128, 0],
+        vk::ImageType::_2D,
+        vk::Format::R32G32B32A32_SFLOAT,
+        vk::ImageAspectFlags::COLOR,
+        vk::SampleCountFlags::_1,
+    ),
+    image_resource(
+        [64, 64, 8],
+        vk::ImageType::_3D,
+        vk::Format::R32_SFLOAT,
+        vk::ImageAspectFlags::COLOR,
+        vk::SampleCountFlags::_1,
+    ),
+];
+
+fn create_multiple_events_tests() -> tcu::TestCaseGroup {
+    let mut group = tcu::TestCaseGroup::new("multi_events");
+
+    let mut op_sets = Vec::new();
+    for &write_op in EVENT_WRITE_OPS {
+        for &read_op in EVENT_READ_OPS {
+            for resource in EVENT_RESOURCES {
+                if write_op.supports_resource(resource) && read_op.supports_resource(resource) {
+                    op_sets.push(EventPair {
+                        resource: *resource,
+                        write_op,
+                        read_op,
+                    });
+                }
+            }
+        }
+    }
+
+    let pair_name = |p: &EventPair| format!("{}_{}", p.write_op.as_str(), p.read_op.as_str());
+
+    for first in &op_sets {
+        for second in &op_sets {
+            group.add_child(Box::new(SyncEventsTestCase {
+                name: format!(
+                    "{}__{}_res_{}_{}",
+                    pair_name(first),
+                    pair_name(second),
+                    get_resource_name(&first.resource),
+                    get_resource_name(&second.resource)
+                ),
+                events: [Some(*first), Some(*second)],
+            }) as Box<dyn TestCase>);
+        }
+    }
+
+    // One of the two events does no work and carries no dependency.
+    for pair in &op_sets {
+        for is_first_event_nop in [true, false] {
+            let (first_name, second_name) = if is_first_event_nop {
+                ("nop".to_owned(), pair_name(pair))
+            } else {
+                (pair_name(pair), "nop".to_owned())
+            };
+            let (first_res, second_res) = if is_first_event_nop {
+                ("none".to_owned(), get_resource_name(&pair.resource))
+            } else {
+                (get_resource_name(&pair.resource), "none".to_owned())
+            };
+            let events = if is_first_event_nop { [None, Some(*pair)] } else { [Some(*pair), None] };
+            group.add_child(Box::new(SyncEventsTestCase {
+                name: format!("{first_name}__{second_name}_res_{first_res}_{second_res}"),
+                events,
+            }) as Box<dyn TestCase>);
+        }
+    }
+
+    group
+}
+
 /// `resourceSupportsComputeQueue` - a depth or stencil image cannot be copied on a
 /// queue without graphics, so its cases have no compute-queue variant.
 fn resource_supports_compute_queue(resource: &ResourceDescription) -> bool {
@@ -807,7 +1161,13 @@ pub fn create_tests() -> Vec<tcu::TestCaseGroup> {
         .map(|(name, sync_type)| {
             let mut group = tcu::TestCaseGroup::new(name);
             let mut op = tcu::TestCaseGroup::new("op");
-            op.add_child(create_single_queue_tests(sync_type));
+            op.add_child({
+                let mut single = create_single_queue_tests(sync_type);
+                if sync_type == SyncType::Synchronization2 {
+                    single.add_child(create_multiple_events_tests());
+                }
+                single
+            });
             op.add_child(super::multi_queue_tests::create_multi_queue_tests(sync_type));
             group.add_child(op);
             group.add_child(super::timeline_semaphore_tests::create_timeline_semaphore_tests(sync_type));
