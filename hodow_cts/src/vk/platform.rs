@@ -154,15 +154,18 @@ extern "system" fn debug_callback(
     let data = unsafe { &*data };
     let message = unsafe { CStr::from_ptr(data.message) }.to_string_lossy();
 
-    // A performance warning is advice, not a spec violation - "vertex attribute not
-    // consumed by vertex shader" is one the quadrant shaders legitimately produce, and
-    // counting those as failures buries the messages that mean something. Still logged,
-    // just not fatal.
-    let performance_only = message_type.contains(vk::DebugUtilsMessageTypeFlagsEXT::PERFORMANCE) && !message_type.contains(vk::DebugUtilsMessageTypeFlagsEXT::VALIDATION);
+    // Only an ERROR fails the case, which is what upstream does too: deqp-vk run with
+    // --deqp-vk-validation=enable reports a clean pass on cases the layer warns about.
+    // The warnings are advice - "vertex attribute not consumed by vertex shader", "this
+    // write is unused" - and several are inherent to tests upstream wrote that way, so
+    // counting them buries the messages that do mean something. Still logged.
+    let _ = message_type;
 
-    if !performance_only && (severity.contains(vk::DebugUtilsMessageSeverityFlagsEXT::ERROR) || severity.contains(vk::DebugUtilsMessageSeverityFlagsEXT::WARNING)) {
+    if severity.contains(vk::DebugUtilsMessageSeverityFlagsEXT::ERROR) {
         VALIDATION_MESSAGES.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
         log::error!("validation: {message}");
+    } else if severity.contains(vk::DebugUtilsMessageSeverityFlagsEXT::WARNING) {
+        log::warn!("validation: {message}");
     } else {
         log::debug!("validation: {message}");
     }

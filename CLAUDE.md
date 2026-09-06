@@ -212,6 +212,16 @@ Full detail is in `hodow_cts/README.md`. The rules that are easy to break:
 - Add every ported upstream file to `hodow_cts/upstream/FILES.txt`; one that is missing silently
   stops being tracked for re-sync.
 
+The dev container ships lavapipe (`/usr/share/vulkan/icd.d/lvp_icd.json`, also symlinked
+`lavapipe.json`) and `VK_LAYER_KHRONOS_validation`, so `just cts-sw`/`cts-swr`/`cts-val` all
+work with no GPU. Lavapipe covers tessellation, geometry, push descriptors, maintenance6 and
+transform feedback (4 streams), which is most of what SwiftShader could not run. Add packages
+to the container by editing `~/.claude/skills/NOT_SKILL/Dockerfile` and asking for a rebuild.
+
+Only a validation **ERROR** fails a case; warnings are logged. That matches upstream - deqp-vk
+under `--deqp-vk-validation=enable` passes cases the layer warns about, and several of those
+warnings are inherent to how upstream wrote the test.
+
 `isolate.rs`'s `run_isolated`/`run_worker` filter the test list by the same `-t`/`-e`/`-s` state as the
 plain (non-isolated) run path (via `hodow_core::should_skip_test_or_feature`, using the `(name, feature,
 fn)` triples `all_tests()` now returns) - both the isolate parent and worker recompute the same filtered

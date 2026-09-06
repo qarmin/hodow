@@ -334,12 +334,22 @@ fn create_device_with_everything(instance: &Instance, physical_device: vk::Physi
     let mut vulkan_12_features = vk::PhysicalDeviceVulkan12Features::default();
     let mut zero_init_features = vk::PhysicalDeviceZeroInitializeWorkgroupMemoryFeatures::default();
     let mut wmel_features = vk::PhysicalDeviceWorkgroupMemoryExplicitLayoutFeaturesKHR::default();
+    // An extension being enabled does not enable the features it introduces: those have
+    // to be asked for by name here. Leaving one out means a test can create the objects
+    // its extension defines and then be told, correctly, that the feature is off - which
+    // a permissive driver may let pass and a strict one will not.
+    let mut xfb_features = vk::PhysicalDeviceTransformFeedbackFeaturesEXT::default();
+    let mut pgq_features = vk::PhysicalDevicePrimitivesGeneratedQueryFeaturesEXT::default();
+    let mut color_write_features = vk::PhysicalDeviceColorWriteEnableFeaturesEXT::default();
 
     let mut features2 = vk::PhysicalDeviceFeatures2::builder()
         .push_next(&mut vulkan_11_features)
         .push_next(&mut vulkan_12_features)
         .push_next(&mut zero_init_features)
-        .push_next(&mut wmel_features);
+        .push_next(&mut wmel_features)
+        .push_next(&mut xfb_features)
+        .push_next(&mut pgq_features)
+        .push_next(&mut color_write_features);
 
     unsafe { instance.get_physical_device_features2(physical_device, &mut features2) };
 
