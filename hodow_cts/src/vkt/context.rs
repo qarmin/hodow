@@ -273,6 +273,8 @@ fn promoted_to_core_version(extension: &str) -> Option<u32> {
         "VK_KHR_spirv_1_4" | "VK_KHR_shader_float16_int8" | "VK_KHR_8bit_storage" | "VK_KHR_16bit_storage" => vk::make_version(1, 2, 0),
         "VK_KHR_separate_depth_stencil_layouts" | "VK_KHR_create_renderpass2" => vk::make_version(1, 2, 0),
         "VK_KHR_zero_initialize_workgroup_memory" | "VK_KHR_shader_terminate_invocation" => vk::make_version(1, 3, 0),
+        "VK_KHR_depth_stencil_resolve" => vk::make_version(1, 2, 0),
+        "VK_KHR_dynamic_rendering" => vk::make_version(1, 3, 0),
         "VK_KHR_device_group" | "VK_KHR_storage_buffer_storage_class" | "VK_KHR_dedicated_allocation" => vk::make_version(1, 1, 0),
         "VK_KHR_copy_commands2" => vk::make_version(1, 3, 0),
         _ => return None,
@@ -341,6 +343,10 @@ fn create_device_with_everything(instance: &Instance, physical_device: vk::Physi
     let mut xfb_features = vk::PhysicalDeviceTransformFeedbackFeaturesEXT::default();
     let mut pgq_features = vk::PhysicalDevicePrimitivesGeneratedQueryFeaturesEXT::default();
     let mut color_write_features = vk::PhysicalDeviceColorWriteEnableFeaturesEXT::default();
+    // The individual struct rather than `VkPhysicalDeviceVulkan13Features`: chaining
+    // both is invalid (VUID-VkDeviceCreateInfo-pNext-06532), and nothing here needs the
+    // rest of 1.3. Without it `vkCmdBeginRendering` is used with the feature off.
+    let mut dynamic_rendering_features = vk::PhysicalDeviceDynamicRenderingFeatures::default();
 
     let mut features2 = vk::PhysicalDeviceFeatures2::builder()
         .push_next(&mut vulkan_11_features)
@@ -349,7 +355,8 @@ fn create_device_with_everything(instance: &Instance, physical_device: vk::Physi
         .push_next(&mut wmel_features)
         .push_next(&mut xfb_features)
         .push_next(&mut pgq_features)
-        .push_next(&mut color_write_features);
+        .push_next(&mut color_write_features)
+        .push_next(&mut dynamic_rendering_features);
 
     unsafe { instance.get_physical_device_features2(physical_device, &mut features2) };
 
