@@ -310,45 +310,40 @@ fn create_device_with_everything(instance: &Instance, physical_device: vk::Physi
         .map(|e| unsafe { CStr::from_ptr(e.extension_name.as_ptr()) }.to_string_lossy().into_owned())
         .collect();
 
-    // Enabling every available extension is the point here, but a few cannot be
-    // enabled on their own: `VK_KHR_swapchain` requires the `VK_KHR_surface` instance
-    // extension, which a headless run has no reason to ask for. Enabling it anyway is
-    // invalid (VUID-vkCreateDevice-ppEnabledExtensionNames-01387), and nothing in the
-    // suite presents to a surface.
-    const PRESENTATION_ONLY: [&str; 4] = ["VK_KHR_swapchain", "VK_KHR_display_swapchain", "VK_KHR_present_id", "VK_KHR_present_wait"];
+    // Enabling every available extension is the point here, but the presentation family
+    // cannot be: `VK_KHR_swapchain` needs the `VK_KHR_surface` *instance* extension,
+    // which a headless run has no reason to ask for, and a dozen more device extensions
+    // in turn need swapchain. Enabling any of them without their dependency is invalid
+    // (VUID-vkCreateDevice-ppEnabledExtensionNames-01387). Matched by substring rather
+    // than by name so a new one does not silently reintroduce the problem - nothing in
+    // the suite presents to a surface, so dropping the whole family costs no coverage.
+    let presentation_only = |n: &str| {
+        n.contains("swapchain") || n.contains("present") || n.contains("display") || n == "VK_EXT_hdr_metadata"
+    };
     let extension_names: Vec<CString> = available_extensions
         .iter()
-        .filter(|n| !PRESENTATION_ONLY.contains(&n.as_str()))
+        .filter(|n| !presentation_only(n))
         .filter_map(|n| CString::new(n.as_str()).ok())
         .collect();
     let extension_ptrs: Vec<*const i8> = extension_names.iter().map(|n| n.as_ptr()).collect();
 
+    // No `VkPhysicalDeviceShaderFloat16Int8Features` here: the same chain is used for
+    // the query and for vkCreateDevice, and creating with both it and
+    // `VkPhysicalDeviceVulkan12Features` is invalid because the two could disagree
+    // (VUID-VkDeviceCreateInfo-pNext-02830). The 1.2 struct already carries
+    // shaderFloat16/shaderInt8, and nothing here reads the older one.
     let mut vulkan_11_features = vk::PhysicalDeviceVulkan11Features::default();
     let mut vulkan_12_features = vk::PhysicalDeviceVulkan12Features::default();
-    let mut float16_int8_features = vk::PhysicalDeviceShaderFloat16Int8Features::default();
     let mut zero_init_features = vk::PhysicalDeviceZeroInitializeWorkgroupMemoryFeatures::default();
     let mut wmel_features = vk::PhysicalDeviceWorkgroupMemoryExplicitLayoutFeaturesKHR::default();
 
     let mut features2 = vk::PhysicalDeviceFeatures2::builder()
         .push_next(&mut vulkan_11_features)
         .push_next(&mut vulkan_12_features)
-        .push_next(&mut float16_int8_features)
         .push_next(&mut zero_init_features)
         .push_next(&mut wmel_features);
 
     unsafe { instance.get_physical_device_features2(physical_device, &mut features2) };
-
-    // Querying through both the promoted struct and the original is fine; *creating*
-    // with both is not, because the two could disagree
-    // (VUID-VkDeviceCreateInfo-pNext-02830). `VkPhysicalDeviceVulkan12Features` already
-    // carries shaderFloat16/shaderInt8, so the 1.1-era struct is dropped from the chain
-    // that goes to vkCreateDevice - the values it reported are in there already.
-    let mut features2 = vk::PhysicalDeviceFeatures2::builder()
-        .features(features2.features)
-        .push_next(&mut vulkan_11_features)
-        .push_next(&mut vulkan_12_features)
-        .push_next(&mut zero_init_features)
-        .push_next(&mut wmel_features);
 
     // `enabled_features` must stay unset: the core features travel inside the features2
     // chain instead, and Vulkan forbids providing both.

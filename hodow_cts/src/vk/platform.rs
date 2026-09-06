@@ -147,14 +147,23 @@ pub static VALIDATION_MESSAGES: std::sync::atomic::AtomicUsize = std::sync::atom
 
 extern "system" fn debug_callback(
     severity: vk::DebugUtilsMessageSeverityFlagsEXT,
-    _type: vk::DebugUtilsMessageTypeFlagsEXT,
+    message_type: vk::DebugUtilsMessageTypeFlagsEXT,
     data: *const vk::DebugUtilsMessengerCallbackDataEXT,
     _user: *mut std::ffi::c_void,
 ) -> vk::Bool32 {
     let data = unsafe { &*data };
     let message = unsafe { CStr::from_ptr(data.message) }.to_string_lossy();
 
-    if severity.contains(vk::DebugUtilsMessageSeverityFlagsEXT::ERROR) || severity.contains(vk::DebugUtilsMessageSeverityFlagsEXT::WARNING) {
+    // A performance warning is advice, not a spec violation - "vertex attribute not
+    // consumed by vertex shader" is one the quadrant shaders legitimately produce, and
+    // counting those as failures buries the messages that mean something. Still logged,
+    // just not fatal.
+    let performance_only = message_type.contains(vk::DebugUtilsMessageTypeFlagsEXT::PERFORMANCE)
+        && !message_type.contains(vk::DebugUtilsMessageTypeFlagsEXT::VALIDATION);
+
+    if !performance_only
+        && (severity.contains(vk::DebugUtilsMessageSeverityFlagsEXT::ERROR) || severity.contains(vk::DebugUtilsMessageSeverityFlagsEXT::WARNING))
+    {
         VALIDATION_MESSAGES.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
         log::error!("validation: {message}");
     } else {
