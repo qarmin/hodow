@@ -214,7 +214,10 @@ pub enum ResourceKind {
 /// `verifyDriverSupport` - the stage a case reads its descriptor in has to exist on the
 /// device at all. Both tessellation configurations build both tessellation shaders, so
 /// either one needs the feature.
-fn check_stage_support(context: &Context, stage_flags: vk::ShaderStageFlags) -> Result<(), TestError> {
+fn check_stage_support(context: &Context, stage_flags: vk::ShaderStageFlags, bind2: bool) -> Result<(), TestError> {
+    if bind2 {
+        context.require_device_functionality("VK_KHR_maintenance6")?;
+    }
     let features = context.get_device_features();
     let tessellation = stage_flags.intersects(vk::ShaderStageFlags::TESSELLATION_CONTROL | vk::ShaderStageFlags::TESSELLATION_EVALUATION);
     if tessellation && features.tessellation_shader != vk::TRUE {
@@ -570,6 +573,8 @@ pub struct BufferAccessCase {
     /// executes it from inside the render pass. Graphics only; there is no secondary
     /// variant of the dispatch path.
     is_primary_cmd_buf: bool,
+    /// `bind2` - bind through `vkCmdBindDescriptorSets2` instead.
+    bind2: bool,
 }
 
 impl BufferAccessCase {
@@ -601,7 +606,7 @@ impl TestCase for BufferAccessCase {
 
     fn check_support(&self, context: &Context) -> Result<(), TestError> {
         verify_update_method_support(context, self.update_method)?;
-        check_stage_support(context, self.stage_flags)?;
+        check_stage_support(context, self.stage_flags, self.bind2)?;
 
         // Two sets plus the gap the discontiguous variant leaves.
         let required_sets = match self.descriptor_set_count {
@@ -1076,7 +1081,7 @@ impl BufferAccessInstance<'_> {
 
         let (_modules, stages) = graphics_modules(device, &p.program().programs, p.stage_flags)?;
         let dynamic_offsets: Vec<u32> = if p.set_dynamic_offset { bind_time_offsets.clone() } else { Vec::new() };
-        let bind = |device: &Device, cmd: vk::CommandBuffer| unsafe {
+        let bind = |device: &Device, cmd: vk::CommandBuffer| {
             // The discontiguous arrangement's sets are 0 and 2, so each binds at its
             // own index and its dynamic offsets have to be sliced to match.
             if p.descriptor_set_count == DescriptorSetCount::MultipleDiscontiguous {
@@ -1087,18 +1092,31 @@ impl BufferAccessInstance<'_> {
                     } else {
                         &[]
                     };
-                    device.cmd_bind_descriptor_sets(
+                    bind_descriptor_sets(
+                        device,
                         cmd,
+                        p.stage_flags,
                         vk::PipelineBindPoint::GRAPHICS,
                         *pipeline_layout,
                         p.descriptor_set_count.set_ndx(set_ndx),
                         &set_handles[set_ndx as usize..set_ndx as usize + 1],
                         offsets,
+                        p.bind2,
                     );
                     ndx += num_resources as usize;
                 }
             } else {
-                device.cmd_bind_descriptor_sets(cmd, vk::PipelineBindPoint::GRAPHICS, *pipeline_layout, 0, &set_handles, &dynamic_offsets);
+                bind_descriptor_sets(
+                    device,
+                    cmd,
+                    p.stage_flags,
+                    vk::PipelineBindPoint::GRAPHICS,
+                    *pipeline_layout,
+                    0,
+                    &set_handles,
+                    &dynamic_offsets,
+                    p.bind2,
+                );
             }
         };
         let pixels = render_quadrants(device, allocator, queue, queue_index, *pipeline_layout, stages, p.is_primary_cmd_buf, &bind)?;
@@ -1385,23 +1403,27 @@ pub fn create_shader_access_tests() -> tcu::TestCaseGroup {
 
     for is_primary in [true, false] {
         let mut cmd_group = tcu::TestCaseGroup::new(if is_primary { "primary_cmd_buf" } else { "secondary_cmd_buf" });
-        let mut bind = tcu::TestCaseGroup::new("bind");
 
-        for update_method in [DescriptorUpdateMethod::Normal, DescriptorUpdateMethod::WithTemplate] {
-            let mut method_group = update_method.group_name().map(tcu::TestCaseGroup::new);
-            for type_group in create_descriptor_type_groups(update_method, is_primary) {
-                if let Some(g) = method_group.as_mut() {
-                    g.add_child(type_group);
-                } else {
-                    bind.add_child(type_group);
+        for bind2 in [false, true] {
+            let mut bind = tcu::TestCaseGroup::new(if bind2 { "bind2" } else { "bind" });
+
+            for update_method in [DescriptorUpdateMethod::Normal, DescriptorUpdateMethod::WithTemplate] {
+                let mut method_group = update_method.group_name().map(tcu::TestCaseGroup::new);
+                for type_group in create_descriptor_type_groups(update_method, is_primary, bind2) {
+                    if let Some(g) = method_group.as_mut() {
+                        g.add_child(type_group);
+                    } else {
+                        bind.add_child(type_group);
+                    }
+                }
+                if let Some(g) = method_group {
+                    bind.add_child(g);
                 }
             }
-            if let Some(g) = method_group {
-                bind.add_child(g);
-            }
+
+            cmd_group.add_child(bind);
         }
 
-        cmd_group.add_child(bind);
         group.add_child(cmd_group);
     }
 
@@ -1410,13 +1432,14 @@ pub fn create_shader_access_tests() -> tcu::TestCaseGroup {
 
 /// One group per descriptor type, in upstream's order - which puts the image types
 /// before the buffer ones.
-fn create_descriptor_type_groups(update_method: DescriptorUpdateMethod, is_primary: bool) -> Vec<tcu::TestCaseGroup> {
+fn create_descriptor_type_groups(update_method: DescriptorUpdateMethod, is_primary: bool, bind2: bool) -> Vec<tcu::TestCaseGroup> {
     let mut groups = vec![
-        create_image_group(update_method, is_primary, "sampler_mutable", vk::DescriptorType::SAMPLER, false),
-        create_image_group(update_method, is_primary, "sampler_immutable", vk::DescriptorType::SAMPLER, true),
+        create_image_group(update_method, is_primary, bind2, "sampler_mutable", vk::DescriptorType::SAMPLER, false),
+        create_image_group(update_method, is_primary, bind2, "sampler_immutable", vk::DescriptorType::SAMPLER, true),
         create_image_group(
             update_method,
             is_primary,
+            bind2,
             "combined_image_sampler_mutable",
             vk::DescriptorType::COMBINED_IMAGE_SAMPLER,
             false,
@@ -1424,11 +1447,12 @@ fn create_descriptor_type_groups(update_method: DescriptorUpdateMethod, is_prima
         create_image_group(
             update_method,
             is_primary,
+            bind2,
             "combined_image_sampler_immutable",
             vk::DescriptorType::COMBINED_IMAGE_SAMPLER,
             true,
         ),
-        create_image_group(update_method, is_primary, "storage_image", vk::DescriptorType::STORAGE_IMAGE, false),
+        create_image_group(update_method, is_primary, bind2, "storage_image", vk::DescriptorType::STORAGE_IMAGE, false),
     ];
 
     let descriptor_types = [
@@ -1484,6 +1508,7 @@ fn create_descriptor_type_groups(update_method: DescriptorUpdateMethod, is_prima
                                     dynamic_offset_non_zero,
                                     stage_flags,
                                     is_primary_cmd_buf: is_primary,
+                                    bind2,
                                 }) as Box<dyn TestCase>);
                             }
                         } else {
@@ -1499,6 +1524,7 @@ fn create_descriptor_type_groups(update_method: DescriptorUpdateMethod, is_prima
                                 dynamic_offset_non_zero: false,
                                 stage_flags,
                                 is_primary_cmd_buf: is_primary,
+                                bind2,
                             }) as Box<dyn TestCase>);
                         }
                     }
@@ -1540,11 +1566,62 @@ const SHADER_STAGES: [(&str, vk::ShaderStageFlags); 8] = [
     ),
 ];
 
+/// `existingStages` - the stages the pipeline has, as opposed to the ones that read a
+/// descriptor. `vkCmdBindDescriptorSets2` names these rather than the active ones.
+fn existing_stages(active: vk::ShaderStageFlags) -> vk::ShaderStageFlags {
+    if active == vk::ShaderStageFlags::COMPUTE {
+        return vk::ShaderStageFlags::COMPUTE;
+    }
+    let mut stages = vk::ShaderStageFlags::VERTEX | vk::ShaderStageFlags::FRAGMENT;
+    if active.intersects(vk::ShaderStageFlags::TESSELLATION_CONTROL | vk::ShaderStageFlags::TESSELLATION_EVALUATION) {
+        stages |= vk::ShaderStageFlags::TESSELLATION_CONTROL | vk::ShaderStageFlags::TESSELLATION_EVALUATION;
+    }
+    if active.contains(vk::ShaderStageFlags::GEOMETRY) {
+        stages |= vk::ShaderStageFlags::GEOMETRY;
+    }
+    stages
+}
+
+/// `bindDescriptorSets` - `bind2` routes the same arguments through
+/// `vkCmdBindDescriptorSets2`, which takes them in a struct and names the stages the
+/// pipeline has rather than the ones that read.
+#[allow(clippy::too_many_arguments)]
+fn bind_descriptor_sets(
+    device: &Device,
+    cmd: vk::CommandBuffer,
+    active_stages: vk::ShaderStageFlags,
+    bind_point: vk::PipelineBindPoint,
+    layout: vk::PipelineLayout,
+    first: u32,
+    sets: &[vk::DescriptorSet],
+    dynamic_offsets: &[u32],
+    bind2: bool,
+) {
+    if bind2 {
+        use vulkanalia::vk::KhrMaintenance6ExtensionDeviceCommands;
+        let info = vk::BindDescriptorSetsInfo {
+            s_type: vk::StructureType::BIND_DESCRIPTOR_SETS_INFO,
+            next: std::ptr::null(),
+            stage_flags: existing_stages(active_stages),
+            layout,
+            first_set: first,
+            descriptor_set_count: sets.len() as u32,
+            descriptor_sets: sets.as_ptr(),
+            dynamic_offset_count: dynamic_offsets.len() as u32,
+            dynamic_offsets: dynamic_offsets.as_ptr(),
+        };
+        unsafe { device.cmd_bind_descriptor_sets2_khr(cmd, &info) };
+    } else {
+        unsafe { device.cmd_bind_descriptor_sets(cmd, bind_point, layout, first, sets, dynamic_offsets) };
+    }
+}
+
 /// `createShaderAccessImageTests`, compute stage. The view type is the innermost
 /// level of the tree here, where the buffer types put their offset variants.
 fn create_image_group(
     update_method: DescriptorUpdateMethod,
     is_primary: bool,
+    bind2: bool,
     group_name: &str,
     descriptor_type: vk::DescriptorType,
     is_immutable_sampler: bool,
@@ -1585,6 +1662,7 @@ fn create_image_group(
                         is_immutable_sampler,
                         stage_flags,
                         is_primary_cmd_buf: is_primary,
+                        bind2,
                     }) as Box<dyn TestCase>);
                 }
 
@@ -1927,6 +2005,7 @@ pub struct ImageAccessCase {
     /// `m_stageFlags` - see `BufferAccessCase::stage_flags`.
     stage_flags: vk::ShaderStageFlags,
     is_primary_cmd_buf: bool,
+    bind2: bool,
 }
 
 impl ImageAccessCase {
@@ -1980,7 +2059,7 @@ impl TestCase for ImageAccessCase {
 
     fn check_support(&self, context: &Context) -> Result<(), TestError> {
         verify_update_method_support(context, self.update_method)?;
-        check_stage_support(context, self.stage_flags)?;
+        check_stage_support(context, self.stage_flags, self.bind2)?;
 
         // `verifyDriverSupport`, restricted to what the compute stage can reach.
         if self.view_type == vk::ImageViewType::CUBE_ARRAY && context.get_device_features().image_cube_array == vk::FALSE {
@@ -2133,20 +2212,23 @@ impl TestInstance for ImageAccessInstance<'_> {
             None
         } else {
             let (_modules, stages) = graphics_modules(device, &p.program().programs, p.stage_flags)?;
-            let bind = |device: &Device, cmd: vk::CommandBuffer| unsafe {
+            let bind = |device: &Device, cmd: vk::CommandBuffer| {
                 if p.descriptor_set_count == DescriptorSetCount::MultipleDiscontiguous {
                     for set_ndx in 0..num_sets {
-                        device.cmd_bind_descriptor_sets(
+                        bind_descriptor_sets(
+                            device,
                             cmd,
+                            p.stage_flags,
                             vk::PipelineBindPoint::GRAPHICS,
                             *pipeline_layout,
                             p.descriptor_set_count.set_ndx(set_ndx),
                             &set_handles[set_ndx as usize..set_ndx as usize + 1],
-                            &[] as &[u32],
+                            &[],
+                            p.bind2,
                         );
                     }
                 } else {
-                    device.cmd_bind_descriptor_sets(cmd, vk::PipelineBindPoint::GRAPHICS, *pipeline_layout, 0, &set_handles, &[] as &[u32]);
+                    bind_descriptor_sets(device, cmd, p.stage_flags, vk::PipelineBindPoint::GRAPHICS, *pipeline_layout, 0, &set_handles, &[], p.bind2);
                 }
             };
             Some(render_quadrants(
