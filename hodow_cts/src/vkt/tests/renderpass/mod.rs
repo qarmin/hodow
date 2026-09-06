@@ -10,6 +10,7 @@
 // Modifications: rewritten in Rust for hodow_cts.
 
 pub mod depth_stencil_resolve_tests;
+pub mod multisample_resolve_tests;
 pub mod render_pass_tests;
 pub mod unused_attachment_tests;
 pub mod unused_clear_attachment_tests;

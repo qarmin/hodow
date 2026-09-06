@@ -93,3 +93,4 @@ framework/delibs/decpp/deRandom.hpp
 external/vulkancts/modules/vulkan/transform_feedback/vktPrimitivesGeneratedQueryTests.cpp
 external/vulkancts/modules/vulkan/ycbcr/vktYCbCrCopyTests.cpp
 external/vulkancts/modules/vulkan/renderpass/vktRenderPassDepthStencilResolveTests.cpp
+external/vulkancts/modules/vulkan/renderpass/vktRenderPassMultisampleResolveTests.cpp
