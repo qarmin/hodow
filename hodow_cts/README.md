@@ -236,6 +236,16 @@ barrier changed nothing there and `cts-diff` was green. The lesson is not to dis
 cannot substitute for**, and a whole case family failing uniformly across every format
 is a port bug until proven otherwise.
 
+There is a third weakness, found the hard way. A port with undefined behaviour can
+pass `cts-diff` and crash on the very next run of the same binary: the two
+`basic.*.chain` cases built a `VkSubmitInfo` in an inner scope, so the arrays and the
+`pNext` struct it pointed at were dead by the time `vkQueueSubmit` read them. Whether
+that faults depends on what happens to be at those stack addresses, so one run agreed
+with upstream on all 23 cases and the next segfaulted on two of them. The rule that
+follows: a group is not done when `cts-diff` agrees once, it is done when a *full-suite*
+run also reports zero crashes - `cts-diff` runs a case list, and a crash there shows up
+as a missing result rather than a disagreement.
+
 Both are weakest where the driver reports a case as unsupported: the two binaries then
 agree without either having run the test. When a whole group comes back `NotSupported`
 the diff has said nothing about it, so check the verdict mix, not just the agreement

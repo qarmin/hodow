@@ -1,0 +1,23 @@
+#sessionInfo releaseName vulkan-cts-1.4.6.2-452-gcf7edb26d3be2d8763595ed08fdc41f3c1b1966f
+#sessionInfo releaseId 0xcf7edb26
+#sessionInfo targetName "Vulkan Headless"
+#sessionInfo logFormatVersion "0.3.4"
+#sessionInfo vendorID 0x1ae0
+#sessionInfo deviceID 0xc0de
+#sessionInfo deviceName SwiftShader Device (Subzero)
+#sessionInfo commandLineParameters "-n dEQP-VK.synchronization.basic.timeline_semaphore.chain"
+
+#beginSession
+
+#beginTestCaseResult dEQP-VK.synchronization.basic.timeline_semaphore.chain
+<?xml version="1.0" encoding="UTF-8"?>
+<TestCaseResult CasePath="dEQP-VK.synchronization.basic.timeline_semaphore.chain" Version="0.3.4" CaseType="SelfValidate">
+ <Number Name="TestDuration" Description="Test case duration in microseconds" Tag="Time" Unit="us">38797</Number>
+ <Result StatusCode="Pass">Basic semaphore chain test passed</Result>
+</TestCaseResult>
+
+#endTestCaseResult
+
+Run took 0.04 seconds
+
+#endSession

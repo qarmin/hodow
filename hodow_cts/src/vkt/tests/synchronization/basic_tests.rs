@@ -530,16 +530,14 @@ fn binary_semaphore_chain(context: &Context<'_>, _sync: SyncType) -> Result<Test
 
         let signal = [*semaphore];
         let stages = [vk::PipelineStageFlags::BOTTOM_OF_PIPE];
-        let submit = match previous {
-            Some(wait) => {
-                let waits = [wait];
-                vk::SubmitInfo::builder()
-                    .wait_semaphores(&waits)
-                    .wait_dst_stage_mask(&stages)
-                    .signal_semaphores(&signal)
-                    .build()
-            }
-            None => vk::SubmitInfo::builder().signal_semaphores(&signal).build(),
+        // `waits` has to outlive the submit: `VkSubmitInfo` only holds a pointer to it,
+        // so building the struct in an inner scope leaves that pointer dangling.
+        let waits = [previous.unwrap_or_else(vk::Semaphore::null)];
+        let builder = vk::SubmitInfo::builder().signal_semaphores(&signal);
+        let submit = if previous.is_some() {
+            builder.wait_semaphores(&waits).wait_dst_stage_mask(&stages)
+        } else {
+            builder
         };
         unsafe { device.queue_submit(queue, &[submit], vk::Fence::null()) }.vk_check("vkQueueSubmit")?;
 
@@ -573,21 +571,17 @@ fn timeline_semaphore_chain(context: &Context<'_>, _sync: SyncType) -> Result<Te
     for i in 0..BASIC_CHAIN_LENGTH {
         let signal_values = [i as u64 + 1];
         let wait_values = [i as u64];
+        // `timeline` has to stay alive across the submit: it is reached through
+        // `VkSubmitInfo::pNext`, which is a bare pointer.
+        let mut timeline = vk::TimelineSemaphoreSubmitInfo::builder().signal_semaphore_values(&signal_values);
+        if i > 0 {
+            timeline = timeline.wait_semaphore_values(&wait_values);
+        }
+        let builder = vk::SubmitInfo::builder().signal_semaphores(&semaphores).push_next(&mut timeline);
         let submit = if i == 0 {
-            let mut timeline = vk::TimelineSemaphoreSubmitInfo::builder().signal_semaphore_values(&signal_values);
-            let submit = vk::SubmitInfo::builder().signal_semaphores(&semaphores).push_next(&mut timeline);
-            unsafe { device.queue_submit(queue, &[submit], vk::Fence::null()) }.vk_check("vkQueueSubmit")?;
-            continue;
+            builder
         } else {
-            let mut timeline = vk::TimelineSemaphoreSubmitInfo::builder()
-                .wait_semaphore_values(&wait_values)
-                .signal_semaphore_values(&signal_values);
-            vk::SubmitInfo::builder()
-                .wait_semaphores(&semaphores)
-                .wait_dst_stage_mask(&stages)
-                .signal_semaphores(&semaphores)
-                .push_next(&mut timeline)
-                .build()
+            builder.wait_semaphores(&semaphores).wait_dst_stage_mask(&stages)
         };
         unsafe { device.queue_submit(queue, &[submit], vk::Fence::null()) }.vk_check("vkQueueSubmit")?;
     }
