@@ -21,7 +21,8 @@
 use vulkanalia::prelude::v1_0::*;
 
 use crate::generated::shaders::binding_model_shader_access::{ALL_BUFFER_ACCESS_PROGRAM, ALL_IMAGE_ACCESS_PROGRAM};
-use crate::tcu::pixel::TextureLevel;
+use crate::tcu::bilinear_image_compare::bilinear_compare;
+use crate::tcu::pixel::{ConstPixelBufferAccess, PixelBufferAccess, TextureLevel};
 use crate::tcu::texture::{ChannelOrder, ChannelType, TextureFormat};
 use crate::tcu::{self, TestError, TestStatus};
 use crate::vk::VkResultExt;
@@ -196,6 +197,9 @@ const ADDRESSABLE_SIZE: u32 = 256;
 const RESULT_DATA_SIZE: u64 = 4 * 4 * 4;
 
 /// The four colours the buffers are filled with, in upstream's order.
+/// `RENDER_SIZE` - the quadrant target is 128x128, so each quadrant is 64x64.
+const RENDER_SIZE: u32 = 128;
+
 const COLORS: [[f32; 4]; 4] = [
     [0.0, 1.0, 0.0, 1.0], // green
     [1.0, 1.0, 0.0, 1.0], // yellow
@@ -227,9 +231,19 @@ pub struct BufferAccessCase {
     set_dynamic_offset: bool,
     /// `dynamicOffsetNonZero` - and that offset is not zero.
     dynamic_offset_non_zero: bool,
+    /// `m_stageFlags` - which shader stages read the descriptor. `COMPUTE` takes the
+    /// dispatch path; anything else renders four quadrants and reads the image back.
+    /// Empty is upstream's `no_access`: the descriptors are bound and never read.
+    stage_flags: vk::ShaderStageFlags,
 }
 
 impl BufferAccessCase {
+    /// The compute path writes its answers to a result buffer; the graphics path has
+    /// none, which shifts every other binding down by one.
+    fn is_compute(&self) -> bool {
+        self.stage_flags == vk::ShaderStageFlags::COMPUTE
+    }
+
     fn program(&self) -> &'static BufferAccessProgram {
         let storage_type = if is_uniform_descriptor_type(self.descriptor_type) { "uniform" } else { "buffer" };
         let prefix = match self.resource_kind {
@@ -282,6 +296,9 @@ struct BufferAccessInstance<'a> {
 
 impl TestInstance for BufferAccessInstance<'_> {
     fn iterate(&mut self) -> Result<TestStatus, TestError> {
+        if !self.params.is_compute() {
+            return self.run_graphics();
+        }
         let p = self.params;
         let device = self.context.get_device();
         let allocator = self.context.get_default_allocator();
@@ -592,6 +609,437 @@ impl TestInstance for BufferAccessInstance<'_> {
 }
 
 impl BufferAccessInstance<'_> {
+    /// The source buffers every descriptor points at. Shared with the dispatch path,
+    /// which builds the same set before it creates its result buffer.
+    #[allow(clippy::type_complexity)]
+    fn create_source_resources(
+        &self,
+        num_src_buffers: u32,
+        num_resources: u32,
+        is_dynamic: bool,
+    ) -> Result<(Vec<BufferWithMemory<'_>>, Vec<Unique<'_, vk::BufferView>>, Vec<u32>, Vec<u32>, Vec<Vec<u8>>, u32), TestError> {
+        let p = self.params;
+        let device = self.context.get_device();
+        let allocator = self.context.get_default_allocator();
+        let mut buffers = Vec::new();
+        let mut buffer_views = Vec::new();
+        let mut view_offsets = Vec::new();
+        let mut bind_time_offsets = Vec::new();
+        let mut texel_sources: Vec<Vec<u8>> = Vec::new();
+
+        if p.resource_kind == ResourceKind::TexelBuffer {
+            let view_offset = self.texel_view_offset()?;
+            for buffer_ndx in 0..num_src_buffers {
+                let source = populate_texel_source(buffer_ndx);
+                let usage = if is_uniform_descriptor_type(p.descriptor_type) {
+                    vk::BufferUsageFlags::UNIFORM_TEXEL_BUFFER
+                } else {
+                    vk::BufferUsageFlags::STORAGE_TEXEL_BUFFER
+                };
+                let buffer = BufferWithMemory::new(device, allocator, make_buffer_create_info(TEXEL_BUFFER_SIZE as u64, usage), MemoryRequirement::HOST_VISIBLE)?;
+                unsafe { std::ptr::copy_nonoverlapping(source.as_ptr(), buffer.get_allocation().get_host_ptr(), source.len()) };
+                flush_alloc(device, buffer.get_allocation())?;
+                let info = vk::BufferViewCreateInfo::builder()
+                    .buffer(buffer.get())
+                    .format(vk::Format::R8G8B8A8_UNORM)
+                    .offset(u64::from(view_offset))
+                    .range(u64::from(TEXEL_VIEW_DATA_SIZE));
+                let view = unsafe { device.create_buffer_view(&info, None) }.vk_check("vkCreateBufferView")?;
+                buffer_views.push(Unique::new(device, view));
+                buffers.push(buffer);
+                view_offsets.push(0);
+                bind_time_offsets.push(0);
+                texel_sources.push(source);
+            }
+            return Ok((buffers, buffer_views, view_offsets, bind_time_offsets, texel_sources, view_offset / 4));
+        }
+
+        for buffer_ndx in 0..num_src_buffers {
+            let parity = (buffer_ndx % 2) as usize;
+            let bind_time_offset = if p.dynamic_offset_non_zero {
+                [DYNAMIC_OFFSET_VALUE_A, DYNAMIC_OFFSET_VALUE_B][parity]
+            } else {
+                0
+            };
+            let static_offset = if p.set_view_offset { [STATIC_OFFSET_VALUE_A, STATIC_OFFSET_VALUE_B][parity] } else { 0 };
+            let data_offset = if is_dynamic { bind_time_offset } else { 0 } + static_offset;
+            let buffer_size = data_offset + ADDRESSABLE_SIZE;
+            // `BufferRenderInstance::createSourceBuffer` indexes the colours by the
+            // *set*, not by the descriptor, so every buffer in a set holds the same
+            // pair. That is what lets the reference be one colour per half whichever
+            // descriptor within the set the shader reached.
+            let set_ndx = (buffer_ndx / num_resources) as usize;
+            let buffer = self.create_color_data_buffer(data_offset, buffer_size, COLORS[2 * (set_ndx % 2)], COLORS[2 * (set_ndx % 2) + 1])?;
+            bind_time_offsets.push(bind_time_offset);
+            view_offsets.push(static_offset);
+            buffers.push(buffer);
+        }
+        Ok((buffers, buffer_views, view_offsets, bind_time_offsets, texel_sources, 0))
+    }
+
+    /// `RenderInstanceShaders` - which of the generated programs each stage
+    /// configuration uses. The "contributing" pair is for the case where both stages
+    /// read a descriptor and each owns half the image.
+    fn graphics_shader_modules(&self) -> Result<(Unique<'_, vk::ShaderModule>, Unique<'_, vk::ShaderModule>), TestError> {
+        let device = self.context.get_device();
+        let program = self.params.program();
+        let common = &crate::generated::shaders::binding_model_shader_access::QUADRANT_COMMON;
+        let vertex = self.params.stage_flags.contains(vk::ShaderStageFlags::VERTEX);
+        let fragment = self.params.stage_flags.contains(vk::ShaderStageFlags::FRAGMENT);
+
+        let (vert, frag) = match (vertex, fragment) {
+            (true, true) => (program.programs.get("vert_contrib")?, program.programs.get("frag_contrib")?),
+            (true, false) => (program.programs.get("vert")?, common.programs.get("frag_passthrough")?),
+            (false, true) => (program.programs.get("vert_passthrough")?, program.programs.get("frag")?),
+            (false, false) => (program.programs.get("vert_passthrough")?, common.programs.get("frag_no_access")?),
+        };
+        Ok((create_shader_module(device, vert)?, create_shader_module(device, frag)?))
+    }
+
+    /// `SingleCmdRenderInstance::createPipeline` - no vertex input at all; the vertex
+    /// shader derives its position from `gl_VertexIndex`.
+    fn create_graphics_pipeline(
+        &self,
+        pipeline_layout: vk::PipelineLayout,
+        render_pass: vk::RenderPass,
+        vert: vk::ShaderModule,
+        frag: vk::ShaderModule,
+    ) -> Result<Unique<'_, vk::Pipeline>, TestError> {
+        crate::vk::obj_util::make_graphics_pipeline_full(
+            self.context.get_device(),
+            pipeline_layout,
+            vert,
+            frag,
+            render_pass,
+            (RENDER_SIZE, RENDER_SIZE),
+            vk::PrimitiveTopology::TRIANGLE_LIST,
+            vk::SampleCountFlags::_1,
+            None,
+            1,
+            None,
+        )
+    }
+
+    /// `BufferRenderInstance` / `SingleCmdRenderInstance` - the graphics counterpart of
+    /// the dispatch path.
+    ///
+    /// Instead of four workgroups writing a result buffer, one draw of 24 vertices
+    /// covers the target in four quadrants and each fragment ends up the colour of
+    /// whichever descriptor its quadrant reached. The answer is therefore the image,
+    /// and a wrong binding shows up as a quadrant of the wrong colour.
+    fn run_graphics(&self) -> Result<TestStatus, TestError> {
+        use crate::vk::obj_util::{make_framebuffer, make_render_pass};
+
+        let p = self.params;
+        let device = self.context.get_device();
+        let allocator = self.context.get_default_allocator();
+        let queue = self.context.get_universal_queue();
+        let queue_index = self.context.get_universal_queue_family_index();
+
+        let is_dynamic = is_dynamic_descriptor_type(p.descriptor_type);
+        let num_sets = p.descriptor_set_count.count();
+        let num_resources = p.shader_interface.num_resources();
+        let num_src_buffers = num_sets * num_resources;
+
+        let (buffers, buffer_views, view_offsets, bind_time_offsets, texel_sources, texel_view_offset_texels) =
+            self.create_source_resources(num_src_buffers, num_resources, is_dynamic)?;
+
+        let pool = self.create_descriptor_pool()?;
+        let mut set_layouts = Vec::new();
+        let mut layout_handles = Vec::new();
+        let mut sets = Vec::new();
+        for set_ndx in 0..num_sets {
+            let layout = self.create_descriptor_set_layout(set_ndx)?;
+            let set = make_descriptor_set(device, *pool, *layout)?;
+            let ndx0 = (set_ndx * num_resources) % num_src_buffers;
+            let ndx1 = (set_ndx * num_resources + 1) % num_src_buffers;
+            match p.resource_kind {
+                ResourceKind::Buffer => self.write_descriptor_set(
+                    *set,
+                    set_ndx,
+                    buffers[ndx0 as usize].get(),
+                    view_offsets[ndx0 as usize],
+                    buffers[ndx1 as usize].get(),
+                    view_offsets[ndx1 as usize],
+                    vk::Buffer::null(),
+                ),
+                ResourceKind::TexelBuffer => self.write_texel_descriptor_set(*set, set_ndx, *buffer_views[ndx0 as usize], *buffer_views[ndx1 as usize], vk::Buffer::null()),
+            }
+            layout_handles.push(*layout);
+            sets.push(set);
+            set_layouts.push(layout);
+        }
+        let set_handles: Vec<vk::DescriptorSet> = sets.iter().map(|s| **s).collect();
+
+        // The discontiguous arrangement leaves a gap at set 1, and a pipeline layout
+        // may not have a hole in it, so an empty layout fills the slot.
+        let mut all_layouts = layout_handles.clone();
+        let unused = if p.descriptor_set_count == DescriptorSetCount::MultipleDiscontiguous {
+            let unused = create_unused_layout(device, 0)?;
+            all_layouts = vec![layout_handles[0], *unused, layout_handles[1]];
+            Some(unused)
+        } else {
+            None
+        };
+        let pipeline_layout = make_pipeline_layout(device, &all_layouts)?;
+
+        let format = vk::Format::R8G8B8A8_UNORM;
+        let color_image = ImageWithMemory::new(
+            device,
+            allocator,
+            vk::ImageCreateInfo::builder()
+                .image_type(vk::ImageType::_2D)
+                .format(format)
+                .extent(vk::Extent3D {
+                    width: RENDER_SIZE,
+                    height: RENDER_SIZE,
+                    depth: 1,
+                })
+                .mip_levels(1)
+                .array_layers(1)
+                .samples(vk::SampleCountFlags::_1)
+                .tiling(vk::ImageTiling::OPTIMAL)
+                .usage(vk::ImageUsageFlags::COLOR_ATTACHMENT | vk::ImageUsageFlags::TRANSFER_SRC)
+                .sharing_mode(vk::SharingMode::EXCLUSIVE)
+                .initial_layout(vk::ImageLayout::UNDEFINED)
+                .build(),
+            MemoryRequirement::ANY,
+        )?;
+        let color_view = make_image_view(
+            device,
+            color_image.get(),
+            vk::ImageViewType::_2D,
+            format,
+            vk::ImageSubresourceRange {
+                aspect_mask: vk::ImageAspectFlags::COLOR,
+                base_mip_level: 0,
+                level_count: 1,
+                base_array_layer: 0,
+                layer_count: 1,
+            },
+        )?;
+        let render_pass = make_render_pass(device, format)?;
+        let framebuffer = make_framebuffer(device, *render_pass, &[*color_view], RENDER_SIZE, RENDER_SIZE, 1)?;
+
+        let (vert, frag) = self.graphics_shader_modules()?;
+        let pipeline = self.create_graphics_pipeline(*pipeline_layout, *render_pass, *vert, *frag)?;
+
+        let read_buffer = BufferWithMemory::new(
+            device,
+            allocator,
+            make_buffer_create_info(u64::from(RENDER_SIZE * RENDER_SIZE * 4), vk::BufferUsageFlags::TRANSFER_DST),
+            MemoryRequirement::HOST_VISIBLE,
+        )?;
+
+        let command_pool = make_command_pool(device, queue_index)?;
+        let command_buffer = allocate_command_buffer(device, *command_pool, vk::CommandBufferLevel::PRIMARY)?;
+        begin_command_buffer(device, *command_buffer)?;
+        unsafe {
+            let clear = [vk::ClearValue {
+                color: vk::ClearColorValue { float32: [0.0, 0.0, 0.0, 0.0] },
+            }];
+            let begin = vk::RenderPassBeginInfo::builder()
+                .render_pass(*render_pass)
+                .framebuffer(*framebuffer)
+                .render_area(vk::Rect2D {
+                    offset: vk::Offset2D { x: 0, y: 0 },
+                    extent: vk::Extent2D {
+                        width: RENDER_SIZE,
+                        height: RENDER_SIZE,
+                    },
+                })
+                .clear_values(&clear);
+            device.cmd_begin_render_pass(*command_buffer, &begin, vk::SubpassContents::INLINE);
+            device.cmd_bind_pipeline(*command_buffer, vk::PipelineBindPoint::GRAPHICS, *pipeline);
+
+            let dynamic_offsets: Vec<u32> = if p.set_dynamic_offset { bind_time_offsets.clone() } else { Vec::new() };
+            if p.descriptor_set_count == DescriptorSetCount::MultipleDiscontiguous {
+                let mut ndx = 0usize;
+                for set_ndx in 0..num_sets {
+                    let offsets: &[u32] = if p.set_dynamic_offset {
+                        &dynamic_offsets[ndx..ndx + num_resources as usize]
+                    } else {
+                        &[]
+                    };
+                    device.cmd_bind_descriptor_sets(
+                        *command_buffer,
+                        vk::PipelineBindPoint::GRAPHICS,
+                        *pipeline_layout,
+                        p.descriptor_set_count.set_ndx(set_ndx),
+                        &set_handles[set_ndx as usize..set_ndx as usize + 1],
+                        offsets,
+                    );
+                    ndx += num_resources as usize;
+                }
+            } else {
+                device.cmd_bind_descriptor_sets(*command_buffer, vk::PipelineBindPoint::GRAPHICS, *pipeline_layout, 0, &set_handles, &dynamic_offsets);
+            }
+
+            // Four quads, two triangles each.
+            device.cmd_draw(*command_buffer, 6 * 4, 1, 0, 0);
+            device.cmd_end_render_pass(*command_buffer);
+
+            let to_src = vk::ImageMemoryBarrier::builder()
+                .src_access_mask(vk::AccessFlags::COLOR_ATTACHMENT_WRITE)
+                .dst_access_mask(vk::AccessFlags::TRANSFER_READ)
+                .old_layout(vk::ImageLayout::COLOR_ATTACHMENT_OPTIMAL)
+                .new_layout(vk::ImageLayout::TRANSFER_SRC_OPTIMAL)
+                .src_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+                .dst_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+                .image(color_image.get())
+                .subresource_range(vk::ImageSubresourceRange {
+                    aspect_mask: vk::ImageAspectFlags::COLOR,
+                    base_mip_level: 0,
+                    level_count: 1,
+                    base_array_layer: 0,
+                    layer_count: 1,
+                })
+                .build();
+            device.cmd_pipeline_barrier(
+                *command_buffer,
+                vk::PipelineStageFlags::COLOR_ATTACHMENT_OUTPUT,
+                vk::PipelineStageFlags::TRANSFER,
+                vk::DependencyFlags::empty(),
+                &[] as &[vk::MemoryBarrier],
+                &[] as &[vk::BufferMemoryBarrier],
+                &[to_src],
+            );
+
+            let region = vk::BufferImageCopy::builder()
+                .buffer_offset(0)
+                .buffer_row_length(0)
+                .buffer_image_height(0)
+                .image_subresource(vk::ImageSubresourceLayers {
+                    aspect_mask: vk::ImageAspectFlags::COLOR,
+                    mip_level: 0,
+                    base_array_layer: 0,
+                    layer_count: 1,
+                })
+                .image_offset(vk::Offset3D { x: 0, y: 0, z: 0 })
+                .image_extent(vk::Extent3D {
+                    width: RENDER_SIZE,
+                    height: RENDER_SIZE,
+                    depth: 1,
+                })
+                .build();
+            device.cmd_copy_image_to_buffer(*command_buffer, color_image.get(), vk::ImageLayout::TRANSFER_SRC_OPTIMAL, read_buffer.get(), &[region]);
+
+            let to_host = vk::BufferMemoryBarrier::builder()
+                .src_access_mask(vk::AccessFlags::TRANSFER_WRITE)
+                .dst_access_mask(vk::AccessFlags::HOST_READ)
+                .src_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+                .dst_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+                .buffer(read_buffer.get())
+                .offset(0)
+                .size(vk::WHOLE_SIZE)
+                .build();
+            device.cmd_pipeline_barrier(
+                *command_buffer,
+                vk::PipelineStageFlags::TRANSFER,
+                vk::PipelineStageFlags::HOST,
+                vk::DependencyFlags::empty(),
+                &[] as &[vk::MemoryBarrier],
+                &[to_host],
+                &[] as &[vk::ImageMemoryBarrier],
+            );
+        }
+        end_command_buffer(device, *command_buffer)?;
+        submit_commands_and_wait(device, queue, *command_buffer)?;
+        invalidate_alloc(device, read_buffer.get_allocation())?;
+
+        drop(unused);
+        drop(set_layouts);
+
+        let pixels = unsafe { std::slice::from_raw_parts(read_buffer.get_allocation().get_host_ptr(), (RENDER_SIZE * RENDER_SIZE * 4) as usize) };
+        self.verify_rendered_quadrants(pixels, num_sets, num_resources, &texel_sources, texel_view_offset_texels)
+    }
+
+    /// `BufferRenderInstance::verifyResultImage` / `TexelBufferRenderInstance::verifyResultImage`
+    fn verify_rendered_quadrants(
+        &self,
+        pixels: &[u8],
+        num_sets: u32,
+        num_resources: u32,
+        texel_sources: &[Vec<u8>],
+        texel_view_offset_texels: u32,
+    ) -> Result<TestStatus, TestError> {
+        let format = TextureFormat::new(ChannelOrder::RGBA, ChannelType::UNORM_INT8);
+        let do_fetch = !self.params.stage_flags.is_empty();
+
+        // The two resource kinds disagree on both the colours and the order they land
+        // in. A plain buffer holds one pair per set, so two of the four quadrants share
+        // a colour; a texel buffer is fetched at a different point per quadrant, so all
+        // four differ.
+        let quadrants: [[f32; 4]; 4] = if self.params.resource_kind == ResourceKind::TexelBuffer {
+            if do_fetch {
+                let mut out = [[0.0f32; 4]; 4];
+                for (quadrant, sample) in out.iter_mut().enumerate() {
+                    for set_ndx in 0..num_sets {
+                        let value = fetch_texel_value(texel_sources, num_resources, texel_view_offset_texels, quadrant, set_ndx);
+                        for (r, v) in sample.iter_mut().zip(value) {
+                            *r += v;
+                        }
+                    }
+                    if num_sets > 1 {
+                        for r in sample.iter_mut() {
+                            *r /= num_sets as f32;
+                        }
+                    }
+                }
+                out
+            } else {
+                [COLORS[1], COLORS[0], COLORS[0], COLORS[1]]
+            }
+        } else {
+            let (sample0, sample1) = if do_fetch {
+                let mut s0 = [0.0f32; 4];
+                let mut s1 = [0.0f32; 4];
+                for set_ndx in 0..num_sets as usize {
+                    for c in 0..4 {
+                        s0[c] += COLORS[2 * (set_ndx % 2)][c];
+                        s1[c] += COLORS[2 * (set_ndx % 2) + 1][c];
+                    }
+                }
+                if num_sets > 1 {
+                    for c in 0..4 {
+                        s0[c] /= num_sets as f32;
+                        s1[c] /= num_sets as f32;
+                    }
+                }
+                (s0, s1)
+            } else {
+                (COLORS[0], COLORS[1])
+            };
+            // `drawQuadrantReferenceResult(dst, sample1, sample0, sample0, sample1)`
+            [sample1, sample0, sample0, sample1]
+        };
+
+        let mut reference = vec![0u8; (RENDER_SIZE * RENDER_SIZE * 4) as usize];
+        {
+            let mut access = PixelBufferAccess::new(format, [RENDER_SIZE, RENDER_SIZE, 1], &mut reference);
+            let half = RENDER_SIZE / 2;
+            for y in 0..RENDER_SIZE {
+                for x in 0..RENDER_SIZE {
+                    let colour = match (x < half, y < half) {
+                        (true, true) => quadrants[0],
+                        (false, true) => quadrants[1],
+                        (true, false) => quadrants[2],
+                        (false, false) => quadrants[3],
+                    };
+                    access.set_pixel(colour, x, y, 0);
+                }
+            }
+        }
+
+        let reference_access = ConstPixelBufferAccess::new(format, [RENDER_SIZE, RENDER_SIZE, 1], &reference);
+        let result_access = ConstPixelBufferAccess::new(format, [RENDER_SIZE, RENDER_SIZE, 1], pixels);
+        if bilinear_compare(&reference_access, &result_access, None, [1, 1, 1, 1]) {
+            Ok(TestStatus::pass("Pass"))
+        } else {
+            Ok(TestStatus::fail("Image verification failed"))
+        }
+    }
+
     /// `createColorDataBuffer` - two colours at `offset`, in a deliberately larger
     /// allocation so a wrong offset reads defined-but-wrong data rather than faulting.
     fn create_color_data_buffer(&self, offset: u32, buffer_size: u32, value1: [f32; 4], value2: [f32; 4]) -> Result<BufferWithMemory<'_>, TestError> {
@@ -622,24 +1070,33 @@ impl BufferAccessInstance<'_> {
         let mut builder = DescriptorSetLayoutBuilder::new();
         let mut binding = 0;
 
-        // The result buffer lives in set 0 only.
-        if set_ndx == 0 {
+        // The result buffer lives in set 0 only, and only on the compute path.
+        if set_ndx == 0 && p.is_compute() {
             builder = builder.add_indexed_binding(vk::DescriptorType::STORAGE_BUFFER, vk::ShaderStageFlags::COMPUTE, binding, 1);
             binding += 1;
         }
 
+        // `m_stageFlags` - empty for the `no_access` cases, which is legal and is the
+        // point: the descriptors are bound but no stage may read them.
+        let stages = p.stage_flags;
         builder = match p.shader_interface {
-            ShaderInputInterface::SingleDescriptor => builder.add_indexed_binding(p.descriptor_type, vk::ShaderStageFlags::COMPUTE, binding, 1),
-            ShaderInputInterface::MultipleContiguousDescriptors => builder
-                .add_indexed_binding(p.descriptor_type, vk::ShaderStageFlags::COMPUTE, binding, 1)
-                .add_indexed_binding(p.descriptor_type, vk::ShaderStageFlags::COMPUTE, binding + 1, 1),
-            ShaderInputInterface::MultipleDiscontiguousDescriptors => builder
-                .add_indexed_binding(p.descriptor_type, vk::ShaderStageFlags::COMPUTE, binding, 1)
-                .add_indexed_binding(p.descriptor_type, vk::ShaderStageFlags::COMPUTE, binding + 2, 1),
-            ShaderInputInterface::MultipleArbitraryDescriptors => builder
-                .add_indexed_binding(p.descriptor_type, vk::ShaderStageFlags::COMPUTE, arbitrary_binding_index(0), 1)
-                .add_indexed_binding(p.descriptor_type, vk::ShaderStageFlags::COMPUTE, arbitrary_binding_index(1), 1),
-            ShaderInputInterface::DescriptorArray => builder.add_indexed_binding(p.descriptor_type, vk::ShaderStageFlags::COMPUTE, binding, 2),
+            ShaderInputInterface::SingleDescriptor => builder.add_indexed_binding(p.descriptor_type, stages, binding, 1),
+            ShaderInputInterface::MultipleContiguousDescriptors => {
+                builder
+                    .add_indexed_binding(p.descriptor_type, stages, binding, 1)
+                    .add_indexed_binding(p.descriptor_type, stages, binding + 1, 1)
+            }
+            ShaderInputInterface::MultipleDiscontiguousDescriptors => {
+                builder
+                    .add_indexed_binding(p.descriptor_type, stages, binding, 1)
+                    .add_indexed_binding(p.descriptor_type, stages, binding + 2, 1)
+            }
+            ShaderInputInterface::MultipleArbitraryDescriptors => {
+                builder
+                    .add_indexed_binding(p.descriptor_type, stages, arbitrary_binding_index(0), 1)
+                    .add_indexed_binding(p.descriptor_type, stages, arbitrary_binding_index(1), 1)
+            }
+            ShaderInputInterface::DescriptorArray => builder.add_indexed_binding(p.descriptor_type, stages, binding, 2),
         };
 
         builder.build(self.context.get_device())
@@ -687,7 +1144,7 @@ impl BufferAccessInstance<'_> {
         let mut writes = Vec::new();
         let mut binding = 0;
 
-        if set_ndx == 0 {
+        if set_ndx == 0 && p.is_compute() {
             writes.push(
                 vk::WriteDescriptorSet::builder()
                     .dst_set(set)
@@ -813,74 +1270,93 @@ fn create_descriptor_type_groups(update_method: DescriptorUpdateMethod) -> Vec<t
     for (type_name, descriptor_type, resource_kind) in descriptor_types {
         let is_dynamic = is_dynamic_descriptor_type(descriptor_type);
         let mut type_group = tcu::TestCaseGroup::new(type_name);
-        let mut stage_group = tcu::TestCaseGroup::new("compute");
 
-        for (set_group_name, descriptor_set_count) in SET_COUNTS {
-            // The single-set arrangement has no group of its own; its interfaces sit
-            // directly under the stage.
-            let mut set_group = (!set_group_name.is_empty()).then(|| tcu::TestCaseGroup::new(set_group_name));
+        for (stage_name, stage_flags) in SHADER_STAGES {
+            let mut stage_group = tcu::TestCaseGroup::new(stage_name);
 
-            for shader_interface in INTERFACES {
-                let mut interface_group = tcu::TestCaseGroup::new(shader_interface.case_name());
+            for (set_group_name, descriptor_set_count) in SET_COUNTS {
+                // The single-set arrangement has no group of its own; its interfaces sit
+                // directly under the stage.
+                let mut set_group = (!set_group_name.is_empty()).then(|| tcu::TestCaseGroup::new(set_group_name));
 
-                for set_view_offset in [false, true] {
-                    // The texel buffer cases drop the "view" from the name: their
-                    // offset is on the buffer view rather than on the descriptor.
-                    let offset_name = match (resource_kind, set_view_offset) {
-                        (ResourceKind::TexelBuffer, false) => "offset_zero",
-                        (ResourceKind::TexelBuffer, true) => "offset_nonzero",
-                        (ResourceKind::Buffer, false) => "offset_view_zero",
-                        (ResourceKind::Buffer, true) => "offset_view_nonzero",
-                    };
+                for shader_interface in INTERFACES {
+                    let mut interface_group = tcu::TestCaseGroup::new(shader_interface.case_name());
 
-                    if is_dynamic {
-                        for dynamic_offset_non_zero in [false, true] {
-                            let dynamic_name = if dynamic_offset_non_zero { "dynamic_nonzero" } else { "dynamic_zero" };
+                    for set_view_offset in [false, true] {
+                        // The texel buffer cases drop the "view" from the name: their
+                        // offset is on the buffer view rather than on the descriptor.
+                        let offset_name = match (resource_kind, set_view_offset) {
+                            (ResourceKind::TexelBuffer, false) => "offset_zero",
+                            (ResourceKind::TexelBuffer, true) => "offset_nonzero",
+                            (ResourceKind::Buffer, false) => "offset_view_zero",
+                            (ResourceKind::Buffer, true) => "offset_view_nonzero",
+                        };
+
+                        if is_dynamic {
+                            for dynamic_offset_non_zero in [false, true] {
+                                let dynamic_name = if dynamic_offset_non_zero { "dynamic_nonzero" } else { "dynamic_zero" };
+                                interface_group.add_child(Box::new(BufferAccessCase {
+                                    name: format!("{offset_name}_{dynamic_name}"),
+                                    update_method,
+                                    resource_kind,
+                                    descriptor_type,
+                                    descriptor_set_count,
+                                    shader_interface,
+                                    set_view_offset,
+                                    set_dynamic_offset: true,
+                                    dynamic_offset_non_zero,
+                                    stage_flags,
+                                }) as Box<dyn TestCase>);
+                            }
+                        } else {
                             interface_group.add_child(Box::new(BufferAccessCase {
-                                name: format!("{offset_name}_{dynamic_name}"),
+                                name: offset_name.to_string(),
                                 update_method,
                                 resource_kind,
                                 descriptor_type,
                                 descriptor_set_count,
                                 shader_interface,
                                 set_view_offset,
-                                set_dynamic_offset: true,
-                                dynamic_offset_non_zero,
+                                set_dynamic_offset: false,
+                                dynamic_offset_non_zero: false,
+                                stage_flags,
                             }) as Box<dyn TestCase>);
                         }
+                    }
+
+                    if let Some(g) = set_group.as_mut() {
+                        g.add_child(interface_group);
                     } else {
-                        interface_group.add_child(Box::new(BufferAccessCase {
-                            name: offset_name.to_string(),
-                            update_method,
-                            resource_kind,
-                            descriptor_type,
-                            descriptor_set_count,
-                            shader_interface,
-                            set_view_offset,
-                            set_dynamic_offset: false,
-                            dynamic_offset_non_zero: false,
-                        }) as Box<dyn TestCase>);
+                        stage_group.add_child(interface_group);
                     }
                 }
 
-                if let Some(g) = set_group.as_mut() {
-                    g.add_child(interface_group);
-                } else {
-                    stage_group.add_child(interface_group);
+                if let Some(g) = set_group {
+                    stage_group.add_child(g);
                 }
             }
 
-            if let Some(g) = set_group {
-                stage_group.add_child(g);
-            }
+            type_group.add_child(stage_group);
         }
-
-        type_group.add_child(stage_group);
         groups.push(type_group);
     }
 
     groups
 }
+
+/// The stage configurations upstream registers, in its order. `no_access` binds the
+/// descriptors and reads none of them, which checks that merely binding a descriptor
+/// does not disturb the pipeline.
+const SHADER_STAGES: [(&str, vk::ShaderStageFlags); 5] = [
+    ("no_access", vk::ShaderStageFlags::empty()),
+    ("compute", vk::ShaderStageFlags::COMPUTE),
+    ("vertex", vk::ShaderStageFlags::VERTEX),
+    ("fragment", vk::ShaderStageFlags::FRAGMENT),
+    (
+        "vertex_fragment",
+        vk::ShaderStageFlags::from_bits_truncate(vk::ShaderStageFlags::VERTEX.bits() | vk::ShaderStageFlags::FRAGMENT.bits()),
+    ),
+];
 
 /// `createShaderAccessImageTests`, compute stage. The view type is the innermost
 /// level of the tree here, where the buffer types put their offset variants.
@@ -1026,7 +1502,7 @@ impl BufferAccessInstance<'_> {
         let mut writes = Vec::new();
         let mut binding = 0;
 
-        if set_ndx == 0 {
+        if set_ndx == 0 && p.is_compute() {
             writes.push(
                 vk::WriteDescriptorSet::builder()
                     .dst_set(set)
