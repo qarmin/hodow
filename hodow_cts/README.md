@@ -19,8 +19,8 @@ hand-picked, growing subset, currently:
 | `dEQP-VK.api.*` | 254201 of 267497 | `smoke`, `descriptor_set`, `external`, `use_after_copy`, the 3D-ASTC sources of `copy_and_blit.blit_image`, ... |
 | `dEQP-VK.memory.*` | 5472 of 6363 | `pipeline_barrier`, `requirements`, `external_memory_*`, `device_memory_report` |
 | `dEQP-VK.renderpasses.*` | 20348 of 80920 | `attachment`, `attachment_allocation`, `multisample_resolve`, `depth_stencil_resolve`, `dynamic_rendering` |
-| `dEQP-VK.synchronization2.*` | 10944 of 81617 | the geometry and tessellation operations, `timeline_semaphore.{one_to_n,wait_before_signal}`, `signal_order`, `cross_instance` |
-| `dEQP-VK.synchronization.*` | 7942 of 64872 | as above |
+| `dEQP-VK.synchronization2.*` | 21651 of 81617 | `timeline_semaphore.{one_to_n,wait_before_signal}`, `signal_order`, `cross_instance`, `implicit`, `none_stage` |
+| `dEQP-VK.synchronization.*` | 15252 of 64872 | as above |
 | `dEQP-VK.compute.*` | 4559 of 60811 | `cooperative_matrix`, the Amber-driven cases, `replicated_composites_*` |
 | `dEQP-VK.binding_model.*` | 1950 of 150279 | the graphics stages of `shader_access`, `descriptorset_random`, `mutable_descriptor` |
 
@@ -352,18 +352,17 @@ could be checked before any shader work), then buffer compute, image compute, th
 vertex and fragment stages, `multi_queue`, the draw and attachment-clear writes, and
 the vertex-input and indirect-buffer operations.
 
-34 of upstream's operations are ported. What bounds the rest of it, measured rather
-than assumed:
+**Every operation upstream has is ported** - 52 of them. What bounds the rest of the
+group, measured rather than assumed:
 
-- **The tessellation and geometry stage operations** are the whole remainder that
-  matters (14175 cases, and all twelve of the operations still missing are one of
-  those two stages). SwiftShader has neither, so both binaries report NotSupported and
-  `cts-diff` would say nothing about whether they were ported right. Worse, they cannot
-  even be checked at the shader level: `deqp-vk` skips them at `checkSupport` before it
-  builds any program, so `--deqp-log-shader-sources` emits nothing to compare against,
-  and `vk-build-programs` (which does build them) logs no GLSL and produces SPIR-V from
-  a different glslang than this crate's, so its output does not compare either. They
-  are absent rather than present-and-skipped.
+- **The tessellation and geometry stage operations are ported but cannot be verified
+  here.** SwiftShader has neither stage, so all 16275 of their cases report
+  NotSupported and `cts-diff` agreeing says nothing about them. They cannot even be
+  checked at the shader level: `deqp-vk` skips them at `checkSupport` before it builds
+  any program, so `--deqp-log-shader-sources` emits nothing to compare the generated
+  GLSL against, and `vk-build-programs` (which does build them) logs no GLSL and emits
+  SPIR-V from a different glslang than this crate's, so neither artifact compares.
+  `tmp/check_tess_geom.sh` runs them on a GPU that has both stages.
 - **`timeline_semaphore.{one_to_n,wait_before_signal}`** need the two-resource "copy"
   operation family (`s_copyOps`) that chains one resource into the next, and are 0%
   runnable here anyway: that chain pulls in every copy operation the resource supports,
