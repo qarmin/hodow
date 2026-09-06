@@ -284,6 +284,7 @@ pub fn make_graphics_pipeline_full<'a>(
         depth_stencil_state,
         color_attachment_count,
         vertex_attribute,
+        None,
     )
 }
 
@@ -316,6 +317,9 @@ pub fn make_graphics_pipeline_staged<'a>(
     depth_stencil_state: Option<&vk::PipelineDepthStencilStateCreateInfoBuilder>,
     color_attachment_count: usize,
     vertex_attribute: Option<(vk::Format, u32)>,
+    // `rendering` is the pNext upstream passes when the pipeline is used with dynamic
+    // rendering instead of a render pass; `render_pass` is null in that case.
+    rendering: Option<&mut vk::PipelineRenderingCreateInfoBuilder<'_>>,
 ) -> Result<Unique<'a, vk::Pipeline>, TestError> {
     let entry = c"main";
     let make_stage = |stage: vk::ShaderStageFlags, module: vk::ShaderModule| {
@@ -444,6 +448,9 @@ pub fn make_graphics_pipeline_staged<'a>(
 
     if has_tessellation {
         info = info.tessellation_state(&tessellation);
+    }
+    if let Some(rendering) = rendering {
+        info = info.push_next(rendering);
     }
 
     let pipelines = unsafe { device.create_graphics_pipelines(vk::PipelineCache::null(), &[info], None) }.vk_check("vkCreateGraphicsPipelines")?;

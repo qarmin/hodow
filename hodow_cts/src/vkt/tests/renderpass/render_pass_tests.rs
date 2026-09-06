@@ -2874,15 +2874,16 @@ pub fn create_render_pass_groups() -> Vec<tcu::TestCaseGroup> {
                     kind_group.add_child(super::sample_read_tests::create_sample_read_tests(render_pass_type));
                     kind_group.add_child(super::multisample_tests::create_multisample_tests(render_pass_type));
                     kind_group.add_child(super::unused_attachment_tests::create_unused_attachment_tests(render_pass_type));
-                    kind_group.add_child(super::multisample_resolve_tests::create_multisample_resolve_tests(super::group_params::GroupParams {
+                    let group_params = super::group_params::GroupParams {
                         rendering_type: match render_pass_type {
                             RenderPassType::Legacy => super::group_params::RenderingType::Legacy,
                             RenderPassType::RenderPass2 => super::group_params::RenderingType::RenderPass2,
                         },
                         use_secondary_cmd_buffer: false,
                         secondary_cmd_buffer_completely_contains_dynamic_renderpass: false,
-                    }));
-                    kind_group.add_child(super::unused_clear_attachment_tests::create_unused_clear_attachment_tests(render_pass_type));
+                    };
+                    kind_group.add_child(super::multisample_resolve_tests::create_multisample_resolve_tests(group_params));
+                    kind_group.add_child(super::unused_clear_attachment_tests::create_unused_clear_attachment_tests(group_params));
                 }
                 group.add_child(kind_group);
             }

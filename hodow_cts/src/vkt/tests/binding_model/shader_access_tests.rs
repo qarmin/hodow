@@ -605,6 +605,7 @@ fn make_quadrant_pipeline(
         None,
         1,
         None,
+        None,
     )
 }
 

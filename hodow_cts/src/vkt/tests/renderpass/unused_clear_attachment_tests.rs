@@ -30,11 +30,12 @@ use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_comma
 use crate::vk::image_util::{ImageWithMemory, make_image_view};
 use crate::vk::mem_util::{MemoryRequirement, invalidate_alloc};
 use crate::vk::obj_util::{
-    BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool, make_framebuffer, make_graphics_pipeline_full, make_pipeline_layout,
+    BufferWithMemory, GraphicsPipelineStages, allocate_command_buffer, make_buffer_create_info, make_command_pool, make_framebuffer, make_graphics_pipeline_staged,
+    make_pipeline_layout,
 };
 use crate::vk::programs::{BinaryCollection, create_shader_module};
-use crate::vk::ref_util::Unique;
-use crate::vkt::tests::renderpass::render_pass_tests::RenderPassType;
+use crate::vk::ref_util::{Unique, UniqueCommandBuffer};
+use crate::vkt::tests::renderpass::group_params::{GroupParams, RenderingType};
 use crate::vkt::{Context, TestCase, TestInstance};
 
 /// The manifest declares its cases with this: the two shaders plus the bit pattern the
@@ -139,7 +140,7 @@ struct TestParams {
     depth_stencil_type: DepthStencilType,
     depth_stencil_used: bool,
     depth_stencil_format: vk::Format,
-    render_pass_type: RenderPassType,
+    group_params: GroupParams,
 }
 
 pub struct UnusedClearAttachmentTest {
@@ -164,7 +165,11 @@ impl TestCase for UnusedClearAttachmentTest {
     }
 
     fn check_support(&self, context: &Context) -> Result<(), TestError> {
-        if self.params.render_pass_type == RenderPassType::RenderPass2 {
+        if self.params.group_params.rendering_type == RenderingType::DynamicRendering {
+            context.require_device_functionality("VK_KHR_dynamic_rendering")?;
+        }
+
+        if self.params.group_params.rendering_type == RenderingType::RenderPass2 {
             context.require_device_functionality("VK_KHR_create_renderpass2")?;
         }
 
@@ -295,12 +300,18 @@ impl TestInstance for UnusedClearAttachmentTestInstance<'_> {
         // and "the clear wrote the wrong image" are distinguishable afterwards.
         self.initialize_attachments(&color_images, depth_resources.as_ref().map(|(i, _)| i), ds_aspect, queue, queue_index)?;
 
-        let render_pass = self.create_render_pass()?;
+        // Neither a render pass nor a framebuffer is built for dynamic rendering.
+        let dynamic_rendering = p.group_params.rendering_type == RenderingType::DynamicRendering;
+        let render_pass = (!dynamic_rendering).then(|| self.create_render_pass()).transpose()?;
         let mut framebuffer_views: Vec<vk::ImageView> = color_views.iter().map(|v| **v).collect();
         if let Some((_, view)) = &depth_resources {
             framebuffer_views.push(**view);
         }
-        let framebuffer = make_framebuffer(device, *render_pass, &framebuffer_views, IMAGE_WIDTH, IMAGE_HEIGHT, 1)?;
+        let framebuffer = render_pass
+            .as_ref()
+            .map(|render_pass| make_framebuffer(device, **render_pass, &framebuffer_views, IMAGE_WIDTH, IMAGE_HEIGHT, 1))
+            .transpose()?;
+        let raw_render_pass = render_pass.as_deref().copied().unwrap_or_else(vk::RenderPass::null);
 
         let program = ALL_UNUSED_CLEAR_PROGRAM
             .iter()
@@ -310,18 +321,33 @@ impl TestInstance for UnusedClearAttachmentTestInstance<'_> {
         let vertex_module = create_shader_module(device, program.programs.get("vert_shader")?)?;
         let fragment_module = create_shader_module(device, program.programs.get("frag_shader")?)?;
         let pipeline_layout = make_pipeline_layout(device, &[])?;
-        let pipeline = make_graphics_pipeline_full(
+        let has_depth = matches!(p.depth_stencil_type, DepthStencilType::Both | DepthStencilType::DepthOnly);
+        let has_stencil = matches!(p.depth_stencil_type, DepthStencilType::Both | DepthStencilType::StencilOnly);
+        let color_attachment_formats = vec![FORMAT_COLOR; p.color_used.len()];
+        let mut rendering_create_info = vk::PipelineRenderingCreateInfo::builder()
+            .view_mask(0)
+            .color_attachment_formats(&color_attachment_formats)
+            .depth_attachment_format(if has_depth { p.depth_stencil_format } else { vk::Format::UNDEFINED })
+            .stencil_attachment_format(if has_stencil { p.depth_stencil_format } else { vk::Format::UNDEFINED });
+
+        let pipeline = make_graphics_pipeline_staged(
             device,
             *pipeline_layout,
-            *vertex_module,
-            *fragment_module,
-            *render_pass,
+            GraphicsPipelineStages {
+                vertex: *vertex_module,
+                fragment: *fragment_module,
+                tessellation_control: None,
+                tessellation_evaluation: None,
+                geometry: None,
+            },
+            raw_render_pass,
             (IMAGE_WIDTH, IMAGE_HEIGHT),
             vk::PrimitiveTopology::TRIANGLE_LIST,
             vk::SampleCountFlags::_1,
             None,
             p.color_used.len(),
             None,
+            dynamic_rendering.then_some(&mut rendering_create_info),
         )?;
 
         // `createCommandBuffer` - one clear naming every subpass slot, used or not.
@@ -358,16 +384,33 @@ impl TestInstance for UnusedClearAttachmentTestInstance<'_> {
             layer_count: 1,
         }];
 
-        begin_command_buffer(device, *command_buffer)?;
-        self.begin_render_pass(*command_buffer, *render_pass, *framebuffer);
-        unsafe {
-            device.cmd_bind_pipeline(*command_buffer, vk::PipelineBindPoint::GRAPHICS, *pipeline);
-            if !clear_attachments.is_empty() {
-                device.cmd_clear_attachments(*command_buffer, &clear_attachments, &clear_rect);
+        let _secondary = if dynamic_rendering {
+            self.record_dynamic_rendering(
+                *command_pool,
+                *command_buffer,
+                *pipeline,
+                &color_views,
+                depth_resources.as_ref().map(|(_, view)| **view),
+                &clear_attachments,
+                &clear_rect,
+            )?
+        } else {
+            begin_command_buffer(device, *command_buffer)?;
+            self.begin_render_pass(
+                *command_buffer,
+                raw_render_pass,
+                **framebuffer.as_ref().expect("a render pass was built, so a framebuffer was too"),
+            );
+            unsafe {
+                device.cmd_bind_pipeline(*command_buffer, vk::PipelineBindPoint::GRAPHICS, *pipeline);
+                if !clear_attachments.is_empty() {
+                    device.cmd_clear_attachments(*command_buffer, &clear_attachments, &clear_rect);
+                }
             }
-        }
-        self.end_render_pass(*command_buffer);
-        end_command_buffer(device, *command_buffer)?;
+            self.end_render_pass(*command_buffer);
+            end_command_buffer(device, *command_buffer)?;
+            None
+        };
         submit_commands_and_wait(device, queue, *command_buffer)?;
 
         // Read the attachments back and compare against what their subpass slot said.
@@ -610,7 +653,7 @@ impl UnusedClearAttachmentTestInstance<'_> {
             layout: vk::ImageLayout::DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
         };
 
-        if p.render_pass_type == RenderPassType::RenderPass2 {
+        if p.group_params.rendering_type == RenderingType::RenderPass2 {
             return self.create_render_pass2(&attachments, &color_references, &depth_reference);
         }
 
@@ -709,6 +752,157 @@ impl UnusedClearAttachmentTestInstance<'_> {
         Ok(Unique::new(device, handle))
     }
 
+    /// The dynamic-rendering half of `createCommandBuffer`. Returns the secondary
+    /// command buffer, which has to outlive the primary's submission.
+    #[allow(clippy::too_many_arguments)]
+    fn record_dynamic_rendering(
+        &self,
+        command_pool: vk::CommandPool,
+        command_buffer: vk::CommandBuffer,
+        pipeline: vk::Pipeline,
+        color_views: &[Unique<'_, vk::ImageView>],
+        depth_view: Option<vk::ImageView>,
+        clear_attachments: &[vk::ClearAttachment],
+        clear_rect: &[vk::ClearRect],
+    ) -> Result<Option<UniqueCommandBuffer<'_>>, TestError> {
+        use vulkanalia::vk::DeviceV1_3;
+
+        let p = self.params;
+        let device = self.context.get_device();
+
+        let render_area = vk::Rect2D {
+            offset: vk::Offset2D { x: 0, y: 0 },
+            extent: vk::Extent2D {
+                width: IMAGE_WIDTH,
+                height: IMAGE_HEIGHT,
+            },
+        };
+        let color_attachments: Vec<vk::RenderingAttachmentInfo> = color_views
+            .iter()
+            .zip(&p.color_used)
+            .map(|(view, used)| {
+                vk::RenderingAttachmentInfo::builder()
+                    .image_view(if *used { **view } else { vk::ImageView::null() })
+                    .image_layout(vk::ImageLayout::COLOR_ATTACHMENT_OPTIMAL)
+                    .resolve_mode(vk::ResolveModeFlags::NONE)
+                    .resolve_image_view(vk::ImageView::null())
+                    .resolve_image_layout(vk::ImageLayout::UNDEFINED)
+                    .load_op(vk::AttachmentLoadOp::LOAD)
+                    .store_op(vk::AttachmentStoreOp::STORE)
+                    .clear_value(vk::ClearValue {
+                        color: vk::ClearColorValue { float32: [1.0, 1.0, 1.0, 1.0] },
+                    })
+                    .build()
+            })
+            .collect();
+
+        let depth_attachment = vk::RenderingAttachmentInfo::builder()
+            .image_view(if p.depth_stencil_used {
+                depth_view.unwrap_or_else(vk::ImageView::null)
+            } else {
+                vk::ImageView::null()
+            })
+            .image_layout(vk::ImageLayout::DEPTH_STENCIL_ATTACHMENT_OPTIMAL)
+            .resolve_mode(vk::ResolveModeFlags::NONE)
+            .resolve_image_view(vk::ImageView::null())
+            .resolve_image_layout(vk::ImageLayout::UNDEFINED)
+            .load_op(vk::AttachmentLoadOp::LOAD)
+            .store_op(vk::AttachmentStoreOp::STORE)
+            .clear_value(vk::ClearValue {
+                depth_stencil: vk::ClearDepthStencilValue { depth: 0.0, stencil: 255 },
+            })
+            .build();
+
+        let has_depth = matches!(p.depth_stencil_type, DepthStencilType::Both | DepthStencilType::DepthOnly) && p.depth_stencil_used;
+        let has_stencil = matches!(p.depth_stencil_type, DepthStencilType::Both | DepthStencilType::StencilOnly) && p.depth_stencil_used;
+
+        // An unused colour slot is VK_FORMAT_UNDEFINED here, unlike the pipeline's
+        // rendering info, which names the format for every slot.
+        let color_attachment_formats: Vec<vk::Format> = p.color_used.iter().map(|used| if *used { FORMAT_COLOR } else { vk::Format::UNDEFINED }).collect();
+
+        let make_rendering_info = |flags: vk::RenderingFlags| {
+            let mut info = vk::RenderingInfo::builder()
+                .flags(flags)
+                .render_area(render_area)
+                .layer_count(1)
+                .view_mask(0)
+                .color_attachments(&color_attachments);
+            if has_depth {
+                info = info.depth_attachment(&depth_attachment);
+            }
+            if has_stencil {
+                info = info.stencil_attachment(&depth_attachment);
+            }
+            info
+        };
+
+        let completely_contains = p.group_params.secondary_cmd_buffer_completely_contains_dynamic_renderpass;
+
+        if p.group_params.use_secondary_cmd_buffer {
+            let sec_command_buffer = allocate_command_buffer(device, command_pool, vk::CommandBufferLevel::SECONDARY)?;
+
+            // record secondary command buffer
+            let mut inheritance_rendering_info = vk::CommandBufferInheritanceRenderingInfo::builder()
+                .flags(if completely_contains {
+                    vk::RenderingFlags::CONTENTS_SECONDARY_COMMAND_BUFFERS
+                } else {
+                    vk::RenderingFlags::empty()
+                })
+                .view_mask(0)
+                .color_attachment_formats(&color_attachment_formats)
+                .depth_attachment_format(if has_depth { p.depth_stencil_format } else { vk::Format::UNDEFINED })
+                .stencil_attachment_format(if has_stencil { p.depth_stencil_format } else { vk::Format::UNDEFINED })
+                .rasterization_samples(vk::SampleCountFlags::_1);
+            let inheritance_info = vk::CommandBufferInheritanceInfo::builder().push_next(&mut inheritance_rendering_info);
+            let mut usage_flags = vk::CommandBufferUsageFlags::ONE_TIME_SUBMIT;
+            if !completely_contains {
+                usage_flags |= vk::CommandBufferUsageFlags::RENDER_PASS_CONTINUE;
+            }
+            let begin_info = vk::CommandBufferBeginInfo::builder().flags(usage_flags).inheritance_info(&inheritance_info);
+            unsafe { device.begin_command_buffer(*sec_command_buffer, &begin_info) }.vk_check("vkBeginCommandBuffer")?;
+
+            if completely_contains {
+                unsafe { device.cmd_begin_rendering(*sec_command_buffer, &make_rendering_info(vk::RenderingFlags::empty())) };
+            }
+
+            unsafe {
+                device.cmd_bind_pipeline(*sec_command_buffer, vk::PipelineBindPoint::GRAPHICS, pipeline);
+                if !clear_attachments.is_empty() {
+                    device.cmd_clear_attachments(*sec_command_buffer, clear_attachments, clear_rect);
+                }
+            }
+
+            if completely_contains {
+                unsafe { device.cmd_end_rendering(*sec_command_buffer) };
+            }
+            end_command_buffer(device, *sec_command_buffer)?;
+
+            // record primary command buffer
+            begin_command_buffer(device, command_buffer)?;
+            if !completely_contains {
+                unsafe { device.cmd_begin_rendering(command_buffer, &make_rendering_info(vk::RenderingFlags::CONTENTS_SECONDARY_COMMAND_BUFFERS)) };
+            }
+            unsafe { device.cmd_execute_commands(command_buffer, &[*sec_command_buffer]) };
+            if !completely_contains {
+                unsafe { device.cmd_end_rendering(command_buffer) };
+            }
+            end_command_buffer(device, command_buffer)?;
+            Ok(Some(sec_command_buffer))
+        } else {
+            begin_command_buffer(device, command_buffer)?;
+            unsafe {
+                device.cmd_begin_rendering(command_buffer, &make_rendering_info(vk::RenderingFlags::empty()));
+                device.cmd_bind_pipeline(command_buffer, vk::PipelineBindPoint::GRAPHICS, pipeline);
+                if !clear_attachments.is_empty() {
+                    device.cmd_clear_attachments(command_buffer, clear_attachments, clear_rect);
+                }
+                device.cmd_end_rendering(command_buffer);
+            }
+            end_command_buffer(device, command_buffer)?;
+            Ok(None)
+        }
+    }
+
     fn begin_render_pass(&self, command_buffer: vk::CommandBuffer, render_pass: vk::RenderPass, framebuffer: vk::Framebuffer) {
         let device = self.context.get_device();
         let begin_info = vk::RenderPassBeginInfo::builder()
@@ -723,7 +917,7 @@ impl UnusedClearAttachmentTestInstance<'_> {
             })
             .build();
 
-        if self.params.render_pass_type == RenderPassType::RenderPass2 {
+        if self.params.group_params.rendering_type == RenderingType::RenderPass2 {
             use vulkanalia::vk::KhrCreateRenderpass2ExtensionDeviceCommands;
             let subpass_begin = vk::SubpassBeginInfo::builder().contents(vk::SubpassContents::INLINE);
             unsafe { device.cmd_begin_render_pass2_khr(command_buffer, &begin_info, &subpass_begin) };
@@ -734,7 +928,7 @@ impl UnusedClearAttachmentTestInstance<'_> {
 
     fn end_render_pass(&self, command_buffer: vk::CommandBuffer) {
         let device = self.context.get_device();
-        if self.params.render_pass_type == RenderPassType::RenderPass2 {
+        if self.params.group_params.rendering_type == RenderingType::RenderPass2 {
             use vulkanalia::vk::KhrCreateRenderpass2ExtensionDeviceCommands;
             let subpass_end = vk::SubpassEndInfo::builder();
             unsafe { device.cmd_end_render_pass2_khr(command_buffer, &subpass_end) };
@@ -764,6 +958,17 @@ impl UnusedClearAttachmentTestInstance<'_> {
         self.read_attachment(image, aspect_mask, pixel_size, vk::ImageLayout::DEPTH_STENCIL_ATTACHMENT_OPTIMAL, queue, queue_index)
     }
 
+    /// `readDepthAttachment`'s `barrierAspect`. A copy names one aspect, but the layout
+    /// transition applies to the whole image, so a combined format has to name both -
+    /// and a single-aspect one must not name the aspect it does not have.
+    fn barrier_aspect_mask(&self, copy_aspect: vk::ImageAspectFlags) -> vk::ImageAspectFlags {
+        if copy_aspect == vk::ImageAspectFlags::COLOR {
+            copy_aspect
+        } else {
+            format_aspect_mask(self.params.depth_stencil_format)
+        }
+    }
+
     /// One aspect of one attachment, copied to a host-visible buffer. The image is
     /// returned to its attachment layout so a second aspect can be read after it.
     fn read_attachment(
@@ -788,7 +993,7 @@ impl UnusedClearAttachmentTestInstance<'_> {
         let command_pool = make_command_pool(device, queue_index)?;
         let command_buffer = allocate_command_buffer(device, *command_pool, vk::CommandBufferLevel::PRIMARY)?;
         let range = vk::ImageSubresourceRange {
-            aspect_mask: format_aspect_mask_of(aspect_mask),
+            aspect_mask: self.barrier_aspect_mask(aspect_mask),
             base_mip_level: 0,
             level_count: 1,
             base_array_layer: 0,
@@ -875,16 +1080,6 @@ impl UnusedClearAttachmentTestInstance<'_> {
     }
 }
 
-/// A copy names one aspect, but a barrier on a combined depth/stencil image has to
-/// name both - the layout transition applies to the whole image.
-fn format_aspect_mask_of(copy_aspect: vk::ImageAspectFlags) -> vk::ImageAspectFlags {
-    if copy_aspect == vk::ImageAspectFlags::COLOR {
-        copy_aspect
-    } else {
-        vk::ImageAspectFlags::DEPTH | vk::ImageAspectFlags::STENCIL
-    }
-}
-
 /// `getUsed`
 fn used_name(value: bool) -> &'static str {
     if value { "used" } else { "unused" }
@@ -896,12 +1091,24 @@ fn comb_name(array: &[bool]) -> String {
 }
 
 /// `createRenderPassUnusedClearAttachmentTests`
-pub fn create_unused_clear_attachment_tests(render_pass_type: RenderPassType) -> tcu::TestCaseGroup {
+pub fn create_unused_clear_attachment_tests(group_params: GroupParams) -> tcu::TestCaseGroup {
     let mut group = tcu::TestCaseGroup::new("unused_clear_attachments");
 
     for ds_type in [DepthStencilType::None, DepthStencilType::DepthOnly, DepthStencilType::StencilOnly, DepthStencilType::Both] {
         for ds_format in ds_type.formats() {
             for depth_stencil_use in [false, true] {
+                // In dynamic rendering a secondary command buffer may not name a
+                // depth/stencil format when the primary's rendering info has no
+                // depth/stencil view (VUID-vkCmdExecuteCommands-pDepthAttachment-06774).
+                if group_params.rendering_type == RenderingType::DynamicRendering
+                    && ds_type != DepthStencilType::None
+                    && !depth_stencil_use
+                    && group_params.use_secondary_cmd_buffer
+                    && !group_params.secondary_cmd_buffer_completely_contains_dynamic_renderpass
+                {
+                    continue;
+                }
+
                 let ds_case = ds_type.name(ds_format);
 
                 // No colour attachments, a single one, and the maximum guaranteed.
@@ -920,7 +1127,7 @@ pub fn create_unused_clear_attachment_tests(render_pass_type: RenderPassType) ->
                                 depth_stencil_type: ds_type,
                                 depth_stencil_used: depth_stencil_use,
                                 depth_stencil_format: ds_format,
-                                render_pass_type,
+                                group_params,
                             },
                         }) as Box<dyn TestCase>);
                         continue;
@@ -941,7 +1148,7 @@ pub fn create_unused_clear_attachment_tests(render_pass_type: RenderPassType) ->
                                 depth_stencil_type: ds_type,
                                 depth_stencil_used: depth_stencil_use,
                                 depth_stencil_format: ds_format,
-                                render_pass_type,
+                                group_params,
                             },
                         }) as Box<dyn TestCase>);
                     }

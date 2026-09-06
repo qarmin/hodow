@@ -70,6 +70,7 @@ fn create_dynamic_rendering_tests() -> TestCaseGroup {
         // `multisample_resolve` is registered for dynamic rendering so far.
         let mut suballocation_test_group = TestCaseGroup::new("suballocation");
         suballocation_test_group.add_child(multisample_resolve_tests::create_multisample_resolve_tests(group_params));
+        suballocation_test_group.add_child(unused_clear_attachment_tests::create_unused_clear_attachment_tests(group_params));
         rendering_tests.add_child(suballocation_test_group);
 
         dynamic_rendering_group.add_child(rendering_tests);
