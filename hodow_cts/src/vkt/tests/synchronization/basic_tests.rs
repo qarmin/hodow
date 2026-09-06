@@ -507,6 +507,177 @@ fn binary_semaphore_one_queue(context: &Context<'_>, _sync: SyncType) -> Result<
     Ok(TestStatus::pass("Basic semaphore tests with one queue passed"))
 }
 
+/// `basicChainLength` - long enough that a driver which leaks or serialises per
+/// semaphore shows it.
+const BASIC_CHAIN_LENGTH: usize = 32768;
+
+/// `basicChainCase` - 32768 submits, each signalling a fresh binary semaphore and
+/// waiting on the previous one, then one submit with a fence at the end.
+///
+/// Nothing does any work; what is under test is that the driver can carry a chain of
+/// that many dependencies without dropping one or running out of whatever it tracks
+/// them with.
+fn binary_semaphore_chain(context: &Context<'_>, _sync: SyncType) -> Result<TestStatus, TestError> {
+    let device = context.get_device();
+    let queue = context.get_universal_queue();
+
+    let mut semaphores: Vec<Unique<'_, vk::Semaphore>> = Vec::with_capacity(BASIC_CHAIN_LENGTH);
+    let mut previous: Option<vk::Semaphore> = None;
+
+    for _ in 0..BASIC_CHAIN_LENGTH {
+        let semaphore = unsafe { device.create_semaphore(&vk::SemaphoreCreateInfo::builder(), None) }.vk_check("vkCreateSemaphore")?;
+        let semaphore = Unique::new(device, semaphore);
+
+        let signal = [*semaphore];
+        let stages = [vk::PipelineStageFlags::BOTTOM_OF_PIPE];
+        let submit = match previous {
+            Some(wait) => {
+                let waits = [wait];
+                vk::SubmitInfo::builder()
+                    .wait_semaphores(&waits)
+                    .wait_dst_stage_mask(&stages)
+                    .signal_semaphores(&signal)
+                    .build()
+            }
+            None => vk::SubmitInfo::builder().signal_semaphores(&signal).build(),
+        };
+        unsafe { device.queue_submit(queue, &[submit], vk::Fence::null()) }.vk_check("vkQueueSubmit")?;
+
+        previous = Some(*semaphore);
+        semaphores.push(semaphore);
+    }
+
+    let fence = make_fence(device, false)?;
+    let waits = [previous.expect("the chain has at least one link")];
+    let stages = [vk::PipelineStageFlags::BOTTOM_OF_PIPE];
+    let submit = vk::SubmitInfo::builder().wait_semaphores(&waits).wait_dst_stage_mask(&stages);
+    unsafe { device.queue_submit(queue, &[submit], *fence) }.vk_check("vkQueueSubmit")?;
+    unsafe { device.wait_for_fences(&[*fence], true, u64::MAX) }.vk_check("vkWaitForFences")?;
+
+    Ok(TestStatus::pass("Basic semaphore chain test passed"))
+}
+
+/// `basicChainTimelineCase` - the same chain on *one* timeline semaphore, each submit
+/// waiting on value i and signalling i+1.
+fn timeline_semaphore_chain(context: &Context<'_>, _sync: SyncType) -> Result<TestStatus, TestError> {
+    let device = context.get_device();
+    let queue = context.get_universal_queue();
+
+    let mut type_info = vk::SemaphoreTypeCreateInfo::builder().semaphore_type(vk::SemaphoreType::TIMELINE).initial_value(0);
+    let info = vk::SemaphoreCreateInfo::builder().push_next(&mut type_info);
+    let semaphore = unsafe { device.create_semaphore(&info, None) }.vk_check("vkCreateSemaphore")?;
+    let semaphore = Unique::new(device, semaphore);
+
+    let semaphores = [*semaphore];
+    let stages = [vk::PipelineStageFlags::BOTTOM_OF_PIPE];
+    for i in 0..BASIC_CHAIN_LENGTH {
+        let signal_values = [i as u64 + 1];
+        let wait_values = [i as u64];
+        let submit = if i == 0 {
+            let mut timeline = vk::TimelineSemaphoreSubmitInfo::builder().signal_semaphore_values(&signal_values);
+            let submit = vk::SubmitInfo::builder().signal_semaphores(&semaphores).push_next(&mut timeline);
+            unsafe { device.queue_submit(queue, &[submit], vk::Fence::null()) }.vk_check("vkQueueSubmit")?;
+            continue;
+        } else {
+            let mut timeline = vk::TimelineSemaphoreSubmitInfo::builder()
+                .wait_semaphore_values(&wait_values)
+                .signal_semaphore_values(&signal_values);
+            vk::SubmitInfo::builder()
+                .wait_semaphores(&semaphores)
+                .wait_dst_stage_mask(&stages)
+                .signal_semaphores(&semaphores)
+                .push_next(&mut timeline)
+                .build()
+        };
+        unsafe { device.queue_submit(queue, &[submit], vk::Fence::null()) }.vk_check("vkQueueSubmit")?;
+    }
+
+    let fence = make_fence(device, false)?;
+    let wait_values = [BASIC_CHAIN_LENGTH as u64];
+    let mut timeline = vk::TimelineSemaphoreSubmitInfo::builder().wait_semaphore_values(&wait_values);
+    let submit = vk::SubmitInfo::builder().wait_semaphores(&semaphores).wait_dst_stage_mask(&stages).push_next(&mut timeline);
+    unsafe { device.queue_submit(queue, &[submit], *fence) }.vk_check("vkQueueSubmit")?;
+    unsafe { device.wait_for_fences(&[*fence], true, u64::MAX) }.vk_check("vkWaitForFences")?;
+
+    Ok(TestStatus::pass("Basic semaphore chain test passed"))
+}
+
+/// `basicWaitForTimelineValueHelper` - signal one value from the host, then ask whether
+/// a wait for another is already satisfied, with a timeout of zero.
+fn wait_for_timeline_value(context: &Context<'_>, wait_any: bool, signal_value: u64, wait_value: u64) -> Result<TestStatus, TestError> {
+    use vulkanalia::vk::DeviceV1_2;
+
+    let device = context.get_device();
+    let mut type_info = vk::SemaphoreTypeCreateInfo::builder().semaphore_type(vk::SemaphoreType::TIMELINE).initial_value(0);
+    let info = vk::SemaphoreCreateInfo::builder().push_next(&mut type_info);
+    let semaphore = unsafe { device.create_semaphore(&info, None) }.vk_check("vkCreateSemaphore")?;
+    let semaphore = Unique::new(device, semaphore);
+
+    let signal = vk::SemaphoreSignalInfo::builder().semaphore(*semaphore).value(signal_value);
+    unsafe { device.signal_semaphore(&signal) }.vk_check("vkSignalSemaphore")?;
+
+    let flags = if wait_any { vk::SemaphoreWaitFlags::ANY } else { vk::SemaphoreWaitFlags::empty() };
+    let semaphores = [*semaphore];
+    let values = [wait_value];
+    let wait = vk::SemaphoreWaitInfo::builder().flags(flags).semaphores(&semaphores).values(&values);
+    let result = match unsafe { device.wait_semaphores(&wait, 0) } {
+        Ok(code) => code,
+        Err(e) => return Err(TestError::ResourceError(format!("vkWaitSemaphores failed: {e}"))),
+    };
+
+    if result == vk::SuccessCode::SUCCESS {
+        Ok(TestStatus::pass("Pass"))
+    } else {
+        Ok(TestStatus::fail("Fail"))
+    }
+}
+
+fn wait_for_any_current_value(context: &Context<'_>, _sync: SyncType) -> Result<TestStatus, TestError> {
+    wait_for_timeline_value(context, true, 1, 1)
+}
+fn wait_for_any_lesser_value(context: &Context<'_>, _sync: SyncType) -> Result<TestStatus, TestError> {
+    wait_for_timeline_value(context, true, 4, 1)
+}
+fn wait_for_all_current_value(context: &Context<'_>, _sync: SyncType) -> Result<TestStatus, TestError> {
+    wait_for_timeline_value(context, false, 1, 1)
+}
+fn wait_for_all_lesser_value(context: &Context<'_>, _sync: SyncType) -> Result<TestStatus, TestError> {
+    wait_for_timeline_value(context, false, 4, 1)
+}
+
+/// A case that needs `VK_KHR_timeline_semaphore`.
+struct TimelineCase {
+    name: &'static str,
+    sync_type: SyncType,
+    run: fn(&Context<'_>, SyncType) -> Result<TestStatus, TestError>,
+}
+
+impl TestCase for TimelineCase {
+    fn name(&self) -> &str {
+        self.name
+    }
+
+    fn check_support(&self, context: &Context<'_>) -> Result<(), TestError> {
+        context.require_device_functionality("VK_KHR_timeline_semaphore")?;
+        if self.sync_type == SyncType::Synchronization2 {
+            context.require_device_functionality("VK_KHR_synchronization2")?;
+        }
+        Ok(())
+    }
+
+    fn programs(&self) -> BinaryCollection {
+        BinaryCollection::new(&[])
+    }
+
+    fn create_instance<'a>(&'a self, context: &'a Context<'a>) -> Box<dyn TestInstance + 'a> {
+        Box::new(FunctionInstance {
+            context,
+            sync_type: self.sync_type,
+            run: self.run,
+        })
+    }
+}
+
 /// `createBasicFenceTests` / `createBasicEventTests` / `createBasicSemaphoreTests`,
 /// restricted to the cases that need no second queue and no video device.
 pub fn create_basic_tests(sync_type: SyncType) -> tcu::TestCaseGroup {
@@ -549,12 +720,36 @@ pub fn create_basic_tests(sync_type: SyncType) -> tcu::TestCaseGroup {
     group.add_child(event);
 
     let mut binary = tcu::TestCaseGroup::new("binary_semaphore");
-    binary.add_child(Box::new(FunctionCase {
-        name: "one_queue",
-        sync_type,
-        run: binary_semaphore_one_queue,
-    }) as Box<dyn TestCase>);
+    for (name, run) in [
+        ("one_queue", binary_semaphore_one_queue as fn(&Context<'_>, SyncType) -> Result<TestStatus, TestError>),
+        ("chain", binary_semaphore_chain),
+    ] {
+        binary.add_child(Box::new(FunctionCase { name, sync_type, run }) as Box<dyn TestCase>);
+    }
     group.add_child(binary);
+
+    let mut timeline = tcu::TestCaseGroup::new("timeline_semaphore");
+    timeline.add_child(Box::new(TimelineCase {
+        name: "chain",
+        sync_type,
+        run: timeline_semaphore_chain,
+    }) as Box<dyn TestCase>);
+    // Upstream does not repeat the wait-for-value cases under synchronization2: they
+    // touch no part of the API the two versions differ in.
+    if sync_type == SyncType::Legacy {
+        for (name, run) in [
+            (
+                "wait_for_any_current_value",
+                wait_for_any_current_value as fn(&Context<'_>, SyncType) -> Result<TestStatus, TestError>,
+            ),
+            ("wait_for_any_lesser_value", wait_for_any_lesser_value),
+            ("wait_for_all_current_value", wait_for_all_current_value),
+            ("wait_for_all_lesser_value", wait_for_all_lesser_value),
+        ] {
+            timeline.add_child(Box::new(TimelineCase { name, sync_type, run }) as Box<dyn TestCase>);
+        }
+    }
+    group.add_child(timeline);
 
     group
 }
