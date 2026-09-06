@@ -79,3 +79,56 @@ This project is not AI slop, although it does have a fairly narrow specializatio
 | CPU arm    |                          ❌ |
 | OpenGL     | ✅(only supported by glium) |
 | Vulkan     |                          ❌ |
+
+## TODO
+
+### Test x86_64 emulators with the CPU suite
+
+[box64](https://github.com/ptitSeb/box64) and [FEX-Emu](https://github.com/FEX-Emu/FEX) both
+translate x86_64 to ARM64, and getting SIMD semantics exactly right is the hard part of that job.
+The CPU suite is already the right shape to check it: ~19k generated tests over SSE through
+AVX-512, AES, SHA, GFNI and the rest, each asserting a concrete result captured from real
+hardware. Run the same binary under the emulator and any divergence from silicon is a
+translation bug.
+
+Two properties that make this work without changes:
+
+- Extensions are gated at run time with `is_x86_feature_detected!`, which reads the *emulator's*
+  CPUID - so the suite automatically runs exactly the instruction set the emulator claims to
+  support, and a wrong answer to a claimed instruction is a real finding.
+- A CPU-only build (`--no-default-features`) links nothing but libc/libm/libgcc, so there is no
+  graphics stack in the way.
+
+```bash
+# On x86_64: build the binary the emulator will run.
+cargo build --release -p hodow_cli --no-default-features
+
+# Copy target/release/hodow_cli to an ARM64 machine, then:
+box64 ./hodow_cli cpu --isolate      # or: FEXInterpreter ./hodow_cli cpu --isolate
+```
+
+`--isolate` matters here rather than being optional: an emulator meeting an instruction it does
+not implement raises SIGILL, and isolation attributes the crash to the specific test instead of
+ending the run.
+
+Worth doing first:
+
+- [ ] Run it under both and triage: wrong results (translation bugs) vs SIGILL (unimplemented) vs
+      CPUID claiming an extension the emulator does not actually implement.
+- [ ] Add a machine-readable result output. Today the CLI only prints a human summary, so
+      comparing a native run against an emulated one means diffing log text. A JSON or CSV of
+      `(test name, verdict, got, expected)` would make "native vs box64 vs FEX" a proper
+      three-way diff, which is the real workflow here.
+- [ ] Report anything found upstream - both projects take reproducible SIMD divergences, and a
+      failing test names the exact intrinsic and inputs.
+
+The same idea extends to the graphics side once there is more of it: both emulators also
+translate OpenGL and Vulkan calls, so `hodow_cli gpu` and `hodow_cli vulkan` running under them
+would exercise a path very little else covers.
+
+### Keep porting the Khronos CTS
+
+`hodow_cts` is a Rust rewrite of VK-GL-CTS, and the point is to keep widening it - Vulkan first,
+since that is what is started, then the OpenGL side. See `hodow_cts/README.md` for how to add a
+group and what has to be verified before one counts as done; `just cts-coverage` reports how much
+of upstream actually runs, with cases that are registered but not yet implemented excluded.
