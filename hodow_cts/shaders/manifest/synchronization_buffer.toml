@@ -1073,6 +1073,17 @@ programs = [
 buffer_size = { type = "u32", value = 262144 }
 
 [[case]]
+name = "index_input_20"
+rust_const = "INDEX_INPUT_20"
+rust_type = "VertexInputShader"
+programs = [
+    { name = "input_vert", template = "synchronization/generated/index_input_20.vert", stage = "vert" },
+    { name = "input_frag", template = "synchronization/generated/input.frag", stage = "frag" },
+]
+[case.params]
+buffer_size = { type = "u32", value = 20 }
+
+[[case]]
 name = "read_indirect_buffer"
 rust_const = "READ_INDIRECT_BUFFER"
 rust_type = "IndirectBufferShader"
@@ -1081,3 +1092,13 @@ programs = [
     { name = "read_ib_frag", template = "synchronization/generated/read_ib.frag", stage = "frag" },
     { name = "read_ib_comp", template = "synchronization/generated/read_ib.comp", stage = "comp" },
 ]
+
+[[case]]
+name = "ms_image"
+rust_const = "MS_IMAGE"
+rust_type = "MsImageShader"
+programs = [
+    { name = "comp", template = "synchronization/generated/ms_image.comp", stage = "comp" },
+]
+[case.params]
+image_width = { type = "u32", value = 64 }

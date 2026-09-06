@@ -321,6 +321,7 @@ impl TestInstance for UnusedClearAttachmentTestInstance<'_> {
             vk::SampleCountFlags::_1,
             None,
             p.color_used.len(),
+            None,
         )?;
 
         // `createCommandBuffer` - one clear naming every subpass slot, used or not.

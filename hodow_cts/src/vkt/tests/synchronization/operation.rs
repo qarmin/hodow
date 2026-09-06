@@ -375,6 +375,17 @@ pub fn fill_pattern(data: &mut [u8]) {
     }
 }
 
+/// `fillPattern(..., useIndexPattern = true)` - the ascending `uint32` run a vertex
+/// index buffer needs, since the prime pattern would index past the vertex buffer.
+pub fn fill_index_pattern(data: &mut [u8]) {
+    const INDEX_PATTERN: [u32; 5] = [0, 1, 2, 3, 4];
+    // Safety: u32 has no padding or invalid bit patterns, and u8 has alignment 1.
+    let bytes: &[u8] = unsafe { std::slice::from_raw_parts(INDEX_PATTERN.as_ptr().cast::<u8>(), std::mem::size_of_val(&INDEX_PATTERN)) };
+    for (i, byte) in data.iter_mut().enumerate() {
+        *byte = bytes[i % bytes.len()];
+    }
+}
+
 /// `getPixelBufferSize`
 pub fn get_pixel_buffer_size(format: vk::Format, extent: vk::Extent3D) -> Result<vk::DeviceSize, TestError> {
     let tcu_format = map_vk_format(format).ok_or_else(|| TestError::NotPorted(format!("{format:?}")))?;
@@ -708,24 +719,33 @@ pub struct FillUpdateBuffer {
     is_fill: bool,
 }
 
+/// `FillUpdateBuffer::BufferOp`
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum BufferOp {
+    Fill,
+    Update,
+    UpdateWithIndexPattern,
+}
+
 impl FillUpdateBuffer {
-    /// `FillUpdateBuffer::BUFFER_OP_FILL` / `BUFFER_OP_UPDATE`
-    pub fn new(resource: &Resource<'_>, is_fill: bool) -> Self {
+    pub fn new(resource: &Resource<'_>, buffer_op: BufferOp) -> Self {
         const FILL_VALUE: u32 = 0x13;
         let buffer = resource.buffer();
         let mut data = vec![0u8; buffer.size as usize];
-        if is_fill {
-            for chunk in data.as_chunks_mut::<4>().0 {
-                *chunk = FILL_VALUE.to_ne_bytes();
+        match buffer_op {
+            BufferOp::Fill => {
+                for chunk in data.as_chunks_mut::<4>().0 {
+                    *chunk = FILL_VALUE.to_ne_bytes();
+                }
             }
-        } else {
-            fill_pattern(&mut data);
+            BufferOp::Update => fill_pattern(&mut data),
+            BufferOp::UpdateWithIndexPattern => fill_index_pattern(&mut data),
         }
         Self {
             buffer,
             data,
             fill_value: FILL_VALUE,
-            is_fill,
+            is_fill: buffer_op == BufferOp::Fill,
         }
     }
 }
@@ -1364,6 +1384,8 @@ impl Operation for ClearImage {
 pub enum OperationName {
     WriteFillBuffer,
     WriteUpdateBuffer,
+    WriteUpdateIndexBuffer,
+    WriteImageComputeMultisample,
     WriteCopyBuffer,
     WriteCopyBufferToImage,
     WriteCopyImageToBuffer,
@@ -1428,6 +1450,7 @@ pub enum OperationName {
     ReadUboTexelTessEval,
     ReadUboTexelGeometry,
     ReadVertexInput,
+    ReadIndexInput,
     ReadIndirectBufferDraw,
     ReadIndirectBufferDrawIndexed,
     ReadIndirectBufferDispatch,
@@ -1459,6 +1482,8 @@ impl OperationName {
         match self {
             Self::WriteFillBuffer => "write_fill_buffer",
             Self::WriteUpdateBuffer => "write_update_buffer",
+            Self::WriteUpdateIndexBuffer => "write_update_index_buffer",
+            Self::WriteImageComputeMultisample => "write_image_compute_multisample",
             Self::WriteCopyBuffer => "write_copy_buffer",
             Self::WriteCopyBufferToImage => "write_copy_buffer_to_image",
             Self::WriteCopyImageToBuffer => "write_copy_image_to_buffer",
@@ -1523,6 +1548,7 @@ impl OperationName {
             Self::ReadUboTexelVertex => "read_ubo_texel_vertex",
             Self::ReadUboTexelFragment => "read_ubo_texel_fragment",
             Self::ReadVertexInput => "read_vertex_input",
+            Self::ReadIndexInput => "read_index_input",
             Self::ReadIndirectBufferDraw => "read_indirect_buffer_draw",
             Self::ReadIndirectBufferDrawIndexed => "read_indirect_buffer_draw_indexed",
             Self::ReadIndirectBufferDispatch => "read_indirect_buffer_dispatch",
@@ -1723,6 +1749,7 @@ impl OperationName {
             // `VertexInput::Support` asserts a plain or index buffer; the vertex draw
             // mode takes the plain one.
             Self::ReadVertexInput => resource.kind == ResourceType::Buffer,
+            Self::WriteUpdateIndexBuffer | Self::ReadIndexInput => resource.kind == ResourceType::IndexBuffer,
             // Each indirect operation only accepts the resource kind holding the
             // command it issues.
             Self::WriteIndirectBufferDraw | Self::ReadIndirectBufferDraw => resource.kind == ResourceType::IndirectBufferDraw,
@@ -1731,7 +1758,7 @@ impl OperationName {
             Self::WriteCopyImage | Self::WriteCopyBufferToImage | Self::ReadCopyImage | Self::ReadCopyImageToBuffer => {
                 resource.kind == ResourceType::Image && resource.image_samples == vk::SampleCountFlags::_1
             }
-            Self::ReadResolveImage => {
+            Self::ReadResolveImage | Self::WriteImageComputeMultisample => {
                 resource.kind == ResourceType::Image && resource.image_aspect == vk::ImageAspectFlags::COLOR && resource.image_samples != vk::SampleCountFlags::_1
             }
             Self::WriteBlitImage
@@ -1821,6 +1848,9 @@ impl OperationName {
     /// the same bit, which is why upstream carries the usage as a bare uint32 and
     /// does not have to know whether the resource is a buffer or an image here.
     pub fn in_resource_usage(self, resource: &ResourceDescription) -> u32 {
+        if self == Self::WriteImageComputeMultisample {
+            return 0;
+        }
         if self.image_shader_kind().is_some() || self.image_graphics_kind().is_some() {
             return vk::ImageUsageFlags::STORAGE.bits();
         }
@@ -1831,6 +1861,9 @@ impl OperationName {
         }
         if self == Self::ReadVertexInput {
             return vk::BufferUsageFlags::VERTEX_BUFFER.bits();
+        }
+        if self == Self::ReadIndexInput {
+            return vk::BufferUsageFlags::INDEX_BUFFER.bits();
         }
         if self.indirect_buffer_kind().is_some() {
             return if self.is_read() { vk::BufferUsageFlags::INDIRECT_BUFFER.bits() } else { 0 };
@@ -1848,13 +1881,16 @@ impl OperationName {
     }
 
     pub fn out_resource_usage(self, resource: &ResourceDescription) -> u32 {
+        if self == Self::WriteImageComputeMultisample {
+            return vk::ImageUsageFlags::STORAGE.bits();
+        }
         if self.image_shader_kind().is_some() || self.image_graphics_kind().is_some() {
             return vk::ImageUsageFlags::STORAGE.bits();
         }
         if self.draw_call().is_some() {
             return vk::ImageUsageFlags::COLOR_ATTACHMENT.bits();
         }
-        if self == Self::ReadVertexInput {
+        if self == Self::ReadVertexInput || self == Self::ReadIndexInput {
             return vk::BufferUsageFlags::VERTEX_BUFFER.bits();
         }
         if self.indirect_buffer_kind().is_some() {
@@ -1922,6 +1958,26 @@ impl OperationName {
         if let Some(stage) = self.image_graphics_kind() {
             stage.check_support(context)?;
         }
+        // `VertexInput::Support::checkSupport` - the vertex shader writes the SSBO the
+        // host reads back, so the case needs stores from the vertex pipeline.
+        if self == Self::ReadVertexInput || self == Self::ReadIndexInput {
+            ShaderStage::Vertex.check_support(context)?;
+        }
+        // `MSImageSupport::checkSupport`
+        if self == Self::WriteImageComputeMultisample {
+            if context.get_device_features().shader_storage_image_multisample != vk::TRUE {
+                return Err(TestError::NotSupported("Using multisample images as storage is not supported".into()));
+            }
+            // `requireStorageImageSupport`
+            let props = unsafe {
+                context
+                    .get_instance()
+                    .get_physical_device_format_properties(context.get_physical_device(), resource.image_format)
+            };
+            if !props.optimal_tiling_features.contains(vk::FormatFeatureFlags::STORAGE_IMAGE) {
+                return Err(TestError::NotSupported("Storage image format not supported".into()));
+            }
+        }
         Ok(())
     }
 
@@ -1936,7 +1992,8 @@ impl OperationName {
             // allowed on a transfer-only queue. maintenance1 is core in 1.1, so this is
             // the 1.0 branch; the check is kept because the queue pairs a case runs on
             // depend on it.
-            Self::WriteFillBuffer | Self::WriteUpdateBuffer => vk::QueueFlags::TRANSFER,
+            Self::WriteFillBuffer | Self::WriteUpdateBuffer | Self::WriteUpdateIndexBuffer => vk::QueueFlags::TRANSFER,
+            Self::WriteImageComputeMultisample => vk::QueueFlags::COMPUTE,
             Self::WriteClearColorImage => vk::QueueFlags::GRAPHICS | vk::QueueFlags::COMPUTE,
             Self::WriteClearDepthStencilImage => vk::QueueFlags::GRAPHICS,
             _ => {
@@ -1944,7 +2001,12 @@ impl OperationName {
                     let _ = stage;
                     return vk::QueueFlags::GRAPHICS;
                 }
-                if self.image_graphics_kind().is_some() || self.draw_call().is_some() || self == Self::WriteClearAttachments || self == Self::ReadVertexInput {
+                if self.image_graphics_kind().is_some()
+                    || self.draw_call().is_some()
+                    || self == Self::WriteClearAttachments
+                    || self == Self::ReadVertexInput
+                    || self == Self::ReadIndexInput
+                {
                     return vk::QueueFlags::GRAPHICS;
                 }
                 if let Some(kind) = self.indirect_buffer_kind() {
@@ -2003,7 +2065,13 @@ pub fn build_operation<'a>(
         };
     }
     if name == OperationName::ReadVertexInput {
-        return Ok(Box::new(VertexInputAccess::new(device, allocator, resource)?));
+        return Ok(Box::new(VertexInputAccess::new(device, allocator, resource, DrawMode::Vertex)?));
+    }
+    if name == OperationName::ReadIndexInput {
+        return Ok(Box::new(VertexInputAccess::new(device, allocator, resource, DrawMode::Indexed)?));
+    }
+    if name == OperationName::WriteImageComputeMultisample {
+        return Ok(Box::new(MsImageAccess::new(device, allocator, resource)?));
     }
     if name == OperationName::WriteClearAttachments {
         return Ok(Box::new(ClearAttachments::new(device, resource)?));
@@ -2052,8 +2120,9 @@ pub fn build_operation<'a>(
         )?));
     }
     Ok(match name {
-        OperationName::WriteFillBuffer => Box::new(FillUpdateBuffer::new(resource, true)),
-        OperationName::WriteUpdateBuffer => Box::new(FillUpdateBuffer::new(resource, false)),
+        OperationName::WriteFillBuffer => Box::new(FillUpdateBuffer::new(resource, BufferOp::Fill)),
+        OperationName::WriteUpdateBuffer => Box::new(FillUpdateBuffer::new(resource, BufferOp::Update)),
+        OperationName::WriteUpdateIndexBuffer => Box::new(FillUpdateBuffer::new(resource, BufferOp::UpdateWithIndexPattern)),
         OperationName::WriteCopyBuffer => Box::new(CopyBuffer::new(device, allocator, resource, AccessMode::Write)?),
         OperationName::ReadCopyBuffer => Box::new(CopyBuffer::new(device, allocator, resource, AccessMode::Read)?),
         OperationName::WriteCopyBufferToImage => Box::new(CopyBufferToImageWrite::new(device, allocator, resource)?),
@@ -2075,6 +2144,8 @@ pub fn build_operation<'a>(
 pub static WRITE_OPS: &[OperationName] = &[
     OperationName::WriteFillBuffer,
     OperationName::WriteUpdateBuffer,
+    OperationName::WriteUpdateIndexBuffer,
+    OperationName::WriteImageComputeMultisample,
     OperationName::WriteCopyBuffer,
     OperationName::WriteCopyBufferToImage,
     OperationName::WriteCopyImageToBuffer,
@@ -2143,6 +2214,7 @@ pub static READ_OPS: &[OperationName] = &[
     OperationName::ReadUboTexelGeometry,
     OperationName::ReadUboTexelFragment,
     OperationName::ReadVertexInput,
+    OperationName::ReadIndexInput,
     OperationName::ReadIndirectBufferDraw,
     OperationName::ReadIndirectBufferDrawIndexed,
     OperationName::ReadIndirectBufferDispatch,
@@ -3240,6 +3312,7 @@ impl<'a> BufferGraphicsAccess<'a> {
             vk::SampleCountFlags::_1,
             None,
             1,
+            None,
         )?;
 
         Ok(Self {
@@ -3492,6 +3565,7 @@ impl<'a> ImageGraphicsAccess<'a> {
             vk::SampleCountFlags::_1,
             None,
             1,
+            None,
         )?;
 
         Ok(Self {
@@ -3915,6 +3989,7 @@ impl<'a> DrawOperation<'a> {
             vk::SampleCountFlags::_1,
             None,
             1,
+            None,
         )?;
 
         // The draw covers the whole attachment with the clear colour, so the expected
@@ -4165,6 +4240,157 @@ impl Operation for ClearAttachments<'_> {
 
 /// The manifest declares the vertex-input shaders with this. The fragment shader is
 /// shared; the vertex shader depends only on how many `uvec4` the resource holds.
+/// The manifest declares the multisampled storage-image shader with this. One entry:
+/// `s_resources` has exactly one multisampled image.
+pub struct MsImageShader {
+    pub name: &'static str,
+    pub image_width: u32,
+    pub programs: crate::vk::programs::BinaryCollection,
+}
+
+use crate::generated::shaders::synchronization_buffer::ALL_MS_IMAGE_SHADER;
+
+/// `ShaderAccess::MSImageImplementation` - a compute shader fills every sample of a
+/// multisampled storage image from a host-visible buffer.
+///
+/// This is a write-only operation: nothing reads a multisampled image except
+/// `read_resolve_image`, which is why the two only ever appear as a pair.
+pub struct MsImageAccess<'a> {
+    image: ImageInfo,
+    host_buffer: BufferWithMemory<'a>,
+    host_buffer_size: vk::DeviceSize,
+    _image_view: crate::vk::ref_util::Unique<'a, vk::ImageView>,
+    _descriptor_set_layout: crate::vk::ref_util::Unique<'a, vk::DescriptorSetLayout>,
+    descriptor_set: crate::vk::ref_util::UniqueDescriptorSet<'a>,
+    _descriptor_pool: crate::vk::ref_util::Unique<'a, vk::DescriptorPool>,
+    pipeline_layout: crate::vk::ref_util::Unique<'a, vk::PipelineLayout>,
+    pipeline: crate::vk::ref_util::Unique<'a, vk::Pipeline>,
+}
+
+impl<'a> MsImageAccess<'a> {
+    pub fn new(device: &'a Device, allocator: &crate::vk::mem_util::SimpleAllocator, resource: &Resource<'_>) -> Result<Self, TestError> {
+        use crate::vk::builder_util::{DescriptorPoolBuilder, DescriptorSetLayoutBuilder};
+        use crate::vk::image_util::make_image_view;
+        use crate::vk::obj_util::{make_descriptor_set, make_pipeline_layout};
+        use crate::vk::programs::create_shader_module;
+        use crate::vk::ref_util::Unique;
+
+        let image = resource.image();
+        let host_buffer_size = get_pixel_buffer_size(image.format, image.extent)?;
+        let host_buffer = make_host_buffer(
+            device,
+            allocator,
+            host_buffer_size,
+            vk::BufferUsageFlags::TRANSFER_SRC | vk::BufferUsageFlags::STORAGE_BUFFER,
+            AccessMode::Write,
+        )?;
+
+        // The one multisampled resource is 2D, and `imageStore` into a `uimage2DMS`
+        // needs a matching view type.
+        let image_view = make_image_view(device, image.handle, vk::ImageViewType::_2D, image.format, image.subresource_range)?;
+
+        let descriptor_set_layout = DescriptorSetLayoutBuilder::new()
+            .add_single_binding(vk::DescriptorType::STORAGE_BUFFER, vk::ShaderStageFlags::COMPUTE)
+            .add_single_binding(vk::DescriptorType::STORAGE_IMAGE, vk::ShaderStageFlags::COMPUTE)
+            .build(device)?;
+        let descriptor_pool = DescriptorPoolBuilder::new()
+            .add_type(vk::DescriptorType::STORAGE_BUFFER, 1)
+            .add_type(vk::DescriptorType::STORAGE_IMAGE, 1)
+            .build(device, vk::DescriptorPoolCreateFlags::FREE_DESCRIPTOR_SET, 1)?;
+        let descriptor_set = make_descriptor_set(device, *descriptor_pool, *descriptor_set_layout)?;
+
+        let buffer_info = [vk::DescriptorBufferInfo {
+            buffer: host_buffer.get(),
+            offset: 0,
+            range: host_buffer_size,
+        }];
+        let image_info = [vk::DescriptorImageInfo {
+            sampler: vk::Sampler::null(),
+            image_view: *image_view,
+            image_layout: vk::ImageLayout::GENERAL,
+        }];
+        let writes = [
+            vk::WriteDescriptorSet::builder()
+                .dst_set(*descriptor_set)
+                .dst_binding(0)
+                .descriptor_type(vk::DescriptorType::STORAGE_BUFFER)
+                .buffer_info(&buffer_info)
+                .build(),
+            vk::WriteDescriptorSet::builder()
+                .dst_set(*descriptor_set)
+                .dst_binding(1)
+                .descriptor_type(vk::DescriptorType::STORAGE_IMAGE)
+                .image_info(&image_info)
+                .build(),
+        ];
+        unsafe { device.update_descriptor_sets(&writes, &[] as &[vk::CopyDescriptorSet]) };
+
+        let shader = ALL_MS_IMAGE_SHADER
+            .iter()
+            .copied()
+            .find(|s| s.image_width == image.extent.width)
+            .expect("the one multisampled resource");
+        let module = create_shader_module(device, shader.programs.get("comp")?)?;
+        let pipeline_layout = make_pipeline_layout(device, &[*descriptor_set_layout])?;
+        let stage = vk::PipelineShaderStageCreateInfo::builder()
+            .stage(vk::ShaderStageFlags::COMPUTE)
+            .module(*module)
+            .name(c"main".to_bytes_with_nul())
+            .build();
+        let create_info = vk::ComputePipelineCreateInfo::builder().stage(stage).layout(*pipeline_layout);
+        let handle = unsafe { device.create_compute_pipelines(vk::PipelineCache::null(), &[create_info], None) }
+            .vk_check("vkCreateComputePipelines")?
+            .0[0];
+        let pipeline = Unique::new(device, handle);
+
+        Ok(Self {
+            image,
+            host_buffer,
+            host_buffer_size,
+            _image_view: image_view,
+            _descriptor_set_layout: descriptor_set_layout,
+            descriptor_set,
+            _descriptor_pool: descriptor_pool,
+            pipeline_layout,
+            pipeline,
+        })
+    }
+}
+
+impl Operation for MsImageAccess<'_> {
+    fn record_commands(&self, device: &Device, sync: SyncType, cmd_buffer: vk::CommandBuffer) {
+        let to_general = make_image_memory_barrier2(
+            vk::PipelineStageFlags2::TOP_OF_PIPE,
+            vk::AccessFlags2::empty(),
+            vk::PipelineStageFlags2::COMPUTE_SHADER,
+            vk::AccessFlags2::SHADER_WRITE,
+            vk::ImageLayout::UNDEFINED,
+            vk::ImageLayout::GENERAL,
+            self.image.handle,
+            self.image.subresource_range,
+        );
+        cmd_pipeline_barrier(device, sync, cmd_buffer, &[], &[to_general]);
+
+        unsafe {
+            device.cmd_bind_pipeline(cmd_buffer, vk::PipelineBindPoint::COMPUTE, *self.pipeline);
+            device.cmd_bind_descriptor_sets(cmd_buffer, vk::PipelineBindPoint::COMPUTE, *self.pipeline_layout, 0, &[*self.descriptor_set], &[] as &[u32]);
+            device.cmd_dispatch(cmd_buffer, self.image.extent.width, self.image.extent.height, 1);
+        }
+    }
+
+    fn out_sync_info(&self, _sync: SyncType) -> SyncInfo {
+        SyncInfo {
+            stage_mask: vk::PipelineStageFlags2::COMPUTE_SHADER,
+            access_mask: vk::AccessFlags2::SHADER_WRITE,
+            image_layout: vk::ImageLayout::GENERAL,
+        }
+    }
+
+    fn data(&self, device: &Device) -> Result<Vec<u8>, TestError> {
+        host_buffer_data(device, &self.host_buffer, self.host_buffer_size)
+    }
+}
+
 pub struct VertexInputShader {
     pub name: &'static str,
     pub buffer_size: u32,
@@ -4180,8 +4406,19 @@ use crate::generated::shaders::synchronization_buffer::ALL_VERTEX_INPUT_SHADER;
 /// `VERTEX_INPUT` stage rather than a shader or transfer read, so it is the only one
 /// that makes the primitive order a write against the fixed-function vertex fetch. The
 /// vertex shader copies each attribute into an SSBO so the host can see what was read.
+/// `VertexInput::DrawMode`
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum DrawMode {
+    Vertex,
+    Indexed,
+}
+
 pub struct VertexInputAccess<'a> {
     buffer: BufferInfo,
+    draw_mode: DrawMode,
+    /// The vertex attributes for the indexed mode, where the resource is the index
+    /// buffer and so cannot also supply them.
+    input_buffer: Option<BufferWithMemory<'a>>,
     output_buffer: BufferWithMemory<'a>,
     _descriptor_set_layout: crate::vk::ref_util::Unique<'a, vk::DescriptorSetLayout>,
     descriptor_set: crate::vk::ref_util::UniqueDescriptorSet<'a>,
@@ -4192,12 +4429,28 @@ pub struct VertexInputAccess<'a> {
 }
 
 impl<'a> VertexInputAccess<'a> {
-    pub fn new(device: &'a Device, allocator: &crate::vk::mem_util::SimpleAllocator, resource: &Resource<'_>) -> Result<Self, TestError> {
+    pub fn new(device: &'a Device, allocator: &crate::vk::mem_util::SimpleAllocator, resource: &Resource<'_>, draw_mode: DrawMode) -> Result<Self, TestError> {
         use crate::vk::builder_util::{DescriptorPoolBuilder, DescriptorSetLayoutBuilder};
         use crate::vk::obj_util::{make_descriptor_set, make_graphics_pipeline_full, make_pipeline_layout};
         use crate::vk::programs::create_shader_module;
 
         let buffer = resource.buffer();
+
+        let input_buffer = if draw_mode == DrawMode::Indexed {
+            let input = BufferWithMemory::new(
+                device,
+                allocator,
+                make_buffer_create_info(buffer.size, vk::BufferUsageFlags::VERTEX_BUFFER),
+                MemoryRequirement::HOST_VISIBLE,
+            )?;
+            unsafe {
+                fill_index_pattern(std::slice::from_raw_parts_mut(input.get_allocation().get_host_ptr(), buffer.size as usize));
+            }
+            flush_alloc(device, input.get_allocation())?;
+            Some(input)
+        } else {
+            None
+        };
 
         let output_buffer = BufferWithMemory::new(
             device,
@@ -4231,11 +4484,13 @@ impl<'a> VertexInputAccess<'a> {
             .build();
         unsafe { device.update_descriptor_sets(&[write], &[] as &[vk::CopyDescriptorSet]) };
 
+        // Both modes are declared with the resource's size, and the index buffer is the
+        // only resource that is 20 bytes, so the size alone picks the right program.
         let shader = ALL_VERTEX_INPUT_SHADER
             .iter()
             .copied()
             .find(|s| u64::from(s.buffer_size) == buffer.size)
-            .expect("the generator covers both resource buffer sizes");
+            .expect("the generator covers every resource buffer size");
         let vert = create_shader_module(device, shader.programs.get("input_vert")?)?;
         let frag = create_shader_module(device, shader.programs.get("input_frag")?)?;
 
@@ -4252,10 +4507,19 @@ impl<'a> VertexInputAccess<'a> {
             vk::SampleCountFlags::_1,
             None,
             1,
+            // `setVertexInputSingleAttribute(attributeFormat, ...)`. In the indexed mode
+            // the attributes are bare uints, so the default uvec4 stride would make
+            // every vertex but the first fetch past the end of the input buffer.
+            match draw_mode {
+                DrawMode::Vertex => None,
+                DrawMode::Indexed => Some((vk::Format::R32_UINT, std::mem::size_of::<u32>() as u32)),
+            },
         )?;
 
         Ok(Self {
             buffer,
+            draw_mode,
+            input_buffer,
             output_buffer,
             _descriptor_set_layout: descriptor_set_layout,
             descriptor_set,
@@ -4296,8 +4560,6 @@ impl Operation for VertexInputAccess<'_> {
             })
             .clear_values(&clear);
 
-        // One point per uvec4 in the resource, each writing the attribute it fetched.
-        let count = (self.buffer.size / 16) as u32;
         unsafe {
             device.cmd_begin_render_pass(cmd_buffer, &begin, vk::SubpassContents::INLINE);
             device.cmd_bind_pipeline(cmd_buffer, vk::PipelineBindPoint::GRAPHICS, *self.pipeline);
@@ -4309,8 +4571,22 @@ impl Operation for VertexInputAccess<'_> {
                 &[*self.descriptor_set],
                 &[] as &[u32],
             );
-            device.cmd_bind_vertex_buffers(cmd_buffer, 0, &[self.buffer.handle], &[0]);
-            device.cmd_draw(cmd_buffer, count, 1, 0, 0);
+            match self.draw_mode {
+                // One point per uvec4 in the resource, each writing the attribute it fetched.
+                DrawMode::Vertex => {
+                    let count = (self.buffer.size / 16) as u32;
+                    device.cmd_bind_vertex_buffers(cmd_buffer, 0, &[self.buffer.handle], &[0]);
+                    device.cmd_draw(cmd_buffer, count, 1, 0, 0);
+                }
+                // One point per index, the attributes coming from the separate buffer.
+                DrawMode::Indexed => {
+                    let count = (self.buffer.size / 4) as u32;
+                    let input = self.input_buffer.as_ref().expect("the indexed mode allocates one");
+                    device.cmd_bind_vertex_buffers(cmd_buffer, 0, &[input.get()], &[0]);
+                    device.cmd_bind_index_buffer(cmd_buffer, self.buffer.handle, 0, vk::IndexType::UINT32);
+                    device.cmd_draw_indexed(cmd_buffer, count, 1, 0, 0, 0);
+                }
+            }
             device.cmd_end_render_pass(cmd_buffer);
         }
 
@@ -4327,16 +4603,25 @@ impl Operation for VertexInputAccess<'_> {
     }
 
     fn in_sync_info(&self, sync: SyncType) -> SyncInfo {
+        let indexed = self.draw_mode == DrawMode::Indexed;
         // Under synchronization2 the fetch has its own stage; the legacy enum only has
         // the combined VERTEX_INPUT.
         let stage_mask = if sync == SyncType::Synchronization2 {
-            vk::PipelineStageFlags2::VERTEX_ATTRIBUTE_INPUT
+            if indexed {
+                vk::PipelineStageFlags2::INDEX_INPUT
+            } else {
+                vk::PipelineStageFlags2::VERTEX_ATTRIBUTE_INPUT
+            }
         } else {
             vk::PipelineStageFlags2::VERTEX_INPUT
         };
         SyncInfo {
             stage_mask,
-            access_mask: vk::AccessFlags2::VERTEX_ATTRIBUTE_READ,
+            access_mask: if indexed {
+                vk::AccessFlags2::INDEX_READ
+            } else {
+                vk::AccessFlags2::VERTEX_ATTRIBUTE_READ
+            },
             image_layout: vk::ImageLayout::UNDEFINED,
         }
     }
@@ -4538,6 +4823,7 @@ impl<'a> IndirectBufferRead<'a> {
                 vk::SampleCountFlags::_1,
                 None,
                 1,
+                None,
             )?;
 
             // `VertexGrid`'s identity index buffer, for the indexed indirect draw.
@@ -4969,6 +5255,7 @@ impl<'a> BufferShaderCopy<'a> {
                     vk::SampleCountFlags::_1,
                     None,
                     1,
+                    None,
                 )?;
                 (pipeline, Some(target), None)
             }
@@ -5143,6 +5430,7 @@ impl<'a> ImageShaderCopy<'a> {
                     vk::SampleCountFlags::_1,
                     None,
                     1,
+                    None,
                 )?;
                 (pipeline, Some(target), None)
             }

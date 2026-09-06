@@ -23,6 +23,11 @@ MANIFEST = CRATE_DIR / "shaders" / "manifest" / "synchronization_buffer.toml"
 
 # `s_resources`' two buffer sizes, and `MAX_UBO_RANGE`.
 BUFFER_SIZES = [0x4000, 0x40000]
+# `s_resources`' index buffer: five uint32 indices.
+INDEX_BUFFER_SIZE = 4 * 5
+# `s_resources`' one multisampled image, the only resource `read_resolve_image` takes.
+MS_IMAGE_WIDTH = 64
+MS_IMAGE_SAMPLES = 4
 MAX_UBO_RANGE = 0x4000
 
 
@@ -486,6 +491,40 @@ def main() -> int:
         ]
         count += 1
 
+    # The DRAW_MODE_INDEXED half. Here the resource is the *index* buffer, a separate
+    # vertex buffer supplies the attributes, and both are plain uints - so this is a
+    # different shader, not another size of the one above.
+    index_elements = INDEX_BUFFER_SIZE // 4
+    vert = (
+        "#version 440\n"
+        "layout(location = 0) in uint v_in_data;\n"
+        "layout(set = 0, binding = 0, std430) writeonly buffer Output {\n"
+        f"    uint data[{index_elements}];\n"
+        "} b_out;\n"
+        "\n"
+        "void main (void)\n"
+        "{\n"
+        "    b_out.data[gl_VertexIndex] = v_in_data;\n"
+        "    gl_PointSize = 1.0f;\n"
+        "}\n"
+    )
+    name = f"index_input_{INDEX_BUFFER_SIZE}"
+    (SRC_DIR / f"{name}.vert").write_text(vert)
+    lines += [
+        "[[case]]",
+        f'name = "{name}"',
+        f'rust_const = "{name.upper()}"',
+        'rust_type = "VertexInputShader"',
+        "programs = [",
+        f'    {{ name = "input_vert", template = "synchronization/generated/{name}.vert", stage = "vert" }},',
+        '    { name = "input_frag", template = "synchronization/generated/input.frag", stage = "frag" },',
+        "]",
+        "[case.params]",
+        f'buffer_size = {{ type = "u32", value = {INDEX_BUFFER_SIZE} }}',
+        "",
+    ]
+    count += 1
+
     # `IndirectBuffer::ReadSupport::initPrograms`. The read runs an indirect draw or
     # dispatch whose command was written by the write operation, and each invocation
     # bumps a counter the host compares against what the command asked for.
@@ -539,6 +578,43 @@ def main() -> int:
         '    { name = "read_ib_frag", template = "synchronization/generated/read_ib.frag", stage = "frag" },',
         '    { name = "read_ib_comp", template = "synchronization/generated/read_ib.comp", stage = "comp" },',
         "]",
+        "",
+    ]
+    count += 1
+
+    # `ShaderAccess::MSImageSupport::initPrograms`. One compute invocation per texel
+    # copies a uint out of an SSBO into every sample of a multisampled storage image,
+    # which is the only way to fill one without a render pass. The single multisampled
+    # entry in `s_resources` is what fixes the width and the sample count.
+    ms_comp = (
+        "#version 440\n"
+        "\n"
+        "layout(local_size_x = 1) in;\n"
+        "layout(set = 0, binding = 0, std430) readonly buffer Input {\n"
+        "    uint data[];\n"
+        "} inData;\n"
+        "layout(set = 0, binding = 1, r32ui) writeonly uniform uimage2DMS msImage;\n"
+        "\n"
+        "void main (void)\n"
+        "{\n"
+        "  int  gx    = int(gl_GlobalInvocationID.x);\n"
+        "  int  gy    = int(gl_GlobalInvocationID.y);\n"
+        f"  uint value = inData.data[gy * {MS_IMAGE_WIDTH} + gx];\n"
+        f"  for (int sampleNdx = 0; sampleNdx < {MS_IMAGE_SAMPLES}; ++sampleNdx)\n"
+        "    imageStore(msImage, ivec2(gx, gy), sampleNdx, uvec4(value));\n"
+        "}\n"
+    )
+    (SRC_DIR / "ms_image.comp").write_text(ms_comp)
+    lines += [
+        "[[case]]",
+        'name = "ms_image"',
+        'rust_const = "MS_IMAGE"',
+        'rust_type = "MsImageShader"',
+        "programs = [",
+        '    { name = "comp", template = "synchronization/generated/ms_image.comp", stage = "comp" },',
+        "]",
+        "[case.params]",
+        f'image_width = {{ type = "u32", value = {MS_IMAGE_WIDTH} }}',
         "",
     ]
     count += 1

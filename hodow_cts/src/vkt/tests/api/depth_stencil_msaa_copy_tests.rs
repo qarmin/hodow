@@ -812,6 +812,7 @@ fn make_ds_fill_pipeline<'a>(
         samples,
         Some(&depth_stencil),
         0,
+        None,
     )
 }
 

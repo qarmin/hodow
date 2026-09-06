@@ -247,6 +247,7 @@ pub fn make_graphics_pipeline_with_samples<'a>(
         samples,
         None,
         1,
+        None,
     )
 }
 
@@ -264,6 +265,7 @@ pub fn make_graphics_pipeline_full<'a>(
     samples: vk::SampleCountFlags,
     depth_stencil_state: Option<&vk::PipelineDepthStencilStateCreateInfoBuilder>,
     color_attachment_count: usize,
+    vertex_attribute: Option<(vk::Format, u32)>,
 ) -> Result<Unique<'a, vk::Pipeline>, TestError> {
     make_graphics_pipeline_staged(
         device,
@@ -281,6 +283,7 @@ pub fn make_graphics_pipeline_full<'a>(
         samples,
         depth_stencil_state,
         color_attachment_count,
+        vertex_attribute,
     )
 }
 
@@ -312,6 +315,7 @@ pub fn make_graphics_pipeline_staged<'a>(
     samples: vk::SampleCountFlags,
     depth_stencil_state: Option<&vk::PipelineDepthStencilStateCreateInfoBuilder>,
     color_attachment_count: usize,
+    vertex_attribute: Option<(vk::Format, u32)>,
 ) -> Result<Unique<'a, vk::Pipeline>, TestError> {
     let entry = c"main";
     let make_stage = |stage: vk::ShaderStageFlags, module: vk::ShaderModule| {
@@ -337,16 +341,18 @@ pub fn make_graphics_pipeline_staged<'a>(
     let has_tessellation = modules.tessellation_control.is_some() && modules.tessellation_evaluation.is_some();
     let tessellation = vk::PipelineTessellationStateCreateInfo::builder().patch_control_points(3);
 
-    // The default vertex input: one binding of a tcu::Vec4 per vertex at location 0.
+    // `setVertexInputSingleAttribute` - one binding at location 0, a tcu::Vec4 per
+    // vertex unless the caller names a narrower attribute.
+    let (attribute_format, attribute_stride) = vertex_attribute.unwrap_or((vk::Format::R32G32B32A32_SFLOAT, std::mem::size_of::<[f32; 4]>() as u32));
     let bindings = [vk::VertexInputBindingDescription::builder()
         .binding(0)
-        .stride(std::mem::size_of::<[f32; 4]>() as u32)
+        .stride(attribute_stride)
         .input_rate(vk::VertexInputRate::VERTEX)
         .build()];
     let attributes = [vk::VertexInputAttributeDescription::builder()
         .location(0)
         .binding(0)
-        .format(vk::Format::R32G32B32A32_SFLOAT)
+        .format(attribute_format)
         .offset(0)
         .build()];
     let vertex_input = vk::PipelineVertexInputStateCreateInfo::builder()

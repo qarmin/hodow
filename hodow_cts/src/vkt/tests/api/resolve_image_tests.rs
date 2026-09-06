@@ -1150,6 +1150,7 @@ impl ResolveImageInstance<'_> {
             vk::SampleCountFlags::_1,
             None,
             0,
+            None,
         )?;
 
         let cmd_pool = make_command_pool(device, queue_family_index)?;

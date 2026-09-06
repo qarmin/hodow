@@ -1,0 +1,16 @@
+#version 440
+
+layout(local_size_x = 1) in;
+layout(set = 0, binding = 0, std430) readonly buffer Input {
+    uint data[];
+} inData;
+layout(set = 0, binding = 1, r32ui) writeonly uniform uimage2DMS msImage;
+
+void main (void)
+{
+  int  gx    = int(gl_GlobalInvocationID.x);
+  int  gy    = int(gl_GlobalInvocationID.y);
+  uint value = inData.data[gy * 64 + gx];
+  for (int sampleNdx = 0; sampleNdx < 4; ++sampleNdx)
+    imageStore(msImage, ivec2(gx, gy), sampleNdx, uvec4(value));
+}
