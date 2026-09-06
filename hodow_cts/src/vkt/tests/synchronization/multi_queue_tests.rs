@@ -15,17 +15,17 @@
 // and read on another has to be released by the first and acquired by the second, and a
 // driver that ignores either half hands the reader stale or undefined contents.
 //
-// Ported so far: the `fence` and `binary_semaphore` primitives. `timeline_semaphore`
-// needs the two-resource "copy" operation family (`s_copyOps`) that is not ported, and
-// `intermediate_barrier_use_all` needs VK_KHR_maintenance8 plus draw operations.
+// Ported so far: the `fence`, `binary_semaphore` and `timeline_semaphore` primitives,
+// the last of these chaining the payload across every queue in the system. The
+// `intermediate_barrier_use_all` group is not ported yet.
 
 use vulkanalia::prelude::v1_0::*;
 
 use super::operation::{
-    OperationName, READ_OPS, RESOURCES, Resource, ResourceDescription, ResourceType, SyncInfo, SyncType, WRITE_OPS, build_operation, first_difference, get_resource_name,
-    make_buffer_memory_barrier2, make_image_memory_barrier2,
+    COPY_OPS, Operation, OperationName, READ_OPS, RESOURCES, Resource, ResourceDescription, ResourceType, SyncInfo, SyncType, WRITE_OPS, build_copy_operation, build_operation,
+    first_difference, get_resource_name, make_buffer_memory_barrier2, make_image_memory_barrier2,
 };
-use crate::tcu::{self, TestError, TestStatus};
+use crate::tcu::{self, Random, TestError, TestStatus};
 use crate::vk::VkResultExt;
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer};
 use crate::vk::obj_util::{allocate_command_buffer, make_command_pool};
@@ -34,11 +34,12 @@ use crate::vk::ref_util::Unique;
 use crate::vkt::context::QueueFamilyQueues;
 use crate::vkt::{Context, TestCase, TestInstance};
 
-/// `SyncPrimitive`, restricted to the two the multi-queue group registers here.
+/// `SyncPrimitive`, restricted to the three the multi-queue group registers here.
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum SyncPrimitive {
     Fence,
     BinarySemaphore,
+    TimelineSemaphore,
 }
 
 impl SyncPrimitive {
@@ -46,6 +47,7 @@ impl SyncPrimitive {
         match self {
             Self::Fence => "fence",
             Self::BinarySemaphore => "binary_semaphore",
+            Self::TimelineSemaphore => "timeline_semaphore",
         }
     }
 }
@@ -110,6 +112,7 @@ pub struct MultiQueueTestCase {
     read_op: OperationName,
     sharing_mode: vk::SharingMode,
     maintenance9: bool,
+    use_all_stages: bool,
 }
 
 impl TestCase for MultiQueueTestCase {
@@ -150,6 +153,19 @@ impl TestCase for MultiQueueTestCase {
             }
         }
 
+        if self.primitive == SyncPrimitive::TimelineSemaphore {
+            context.require_device_functionality("VK_KHR_timeline_semaphore")?;
+            for &copy_op in COPY_OPS {
+                if copy_op.supports_resource(&self.resource) {
+                    copy_op.copy_check_support(context, &self.resource)?;
+                }
+            }
+        }
+
+        if self.use_all_stages {
+            context.require_device_functionality("VK_KHR_maintenance8")?;
+        }
+
         if self.maintenance9 {
             context.require_device_functionality("VK_KHR_maintenance9")?;
         }
@@ -181,7 +197,13 @@ impl TestInstance for MultiQueueTestInstance<'_> {
         let device = queues.device();
         let allocator = queues.allocator();
 
-        let pairs = get_queues_pairs(queues.families(), p.write_op.queue_flags(&p.resource), p.read_op.queue_flags(&p.resource), false);
+        // The timeline primitive builds a chain across every queue instead of pairing
+        // one write queue with one read queue.
+        if p.primitive == SyncPrimitive::TimelineSemaphore {
+            return self.run_timeline_semaphore(device, allocator, queues.families());
+        }
+
+        let pairs = get_queues_pairs(queues.families(), p.write_op.queue_flags(&p.resource), p.read_op.queue_flags(&p.resource), p.use_all_stages);
         // Only `BinarySemaphoreTestInstance` rejects an empty pair list.
         // `FenceTestInstance` does not check, so on a device with a single queue it
         // runs its loop zero times and passes vacuously. That is upstream's behaviour
@@ -237,6 +259,7 @@ impl TestInstance for MultiQueueTestInstance<'_> {
                 }
                 // `BinarySemaphoreTestInstance` - both submitted up front, ordered only
                 // by the semaphore.
+                SyncPrimitive::TimelineSemaphore => unreachable!("handled above"),
                 SyncPrimitive::BinarySemaphore => {
                     let semaphore = unsafe { device.create_semaphore(&vk::SemaphoreCreateInfo::builder(), None) }.vk_check("vkCreateSemaphore")?;
                     let semaphore = Unique::new(device, semaphore);
@@ -271,6 +294,224 @@ impl TestInstance for MultiQueueTestInstance<'_> {
 }
 
 impl MultiQueueTestInstance<'_> {
+    /// `TimelineSemaphoreTestInstance`
+    ///
+    /// A chain of copies that visits every queue in the system at least once, each link
+    /// waiting on the timeline value the previous one signals. Two things are under test
+    /// at once: that the timeline orders submissions made to *different* queues, and that
+    /// the ownership transfer between each pair of families actually hands the data over.
+    fn run_timeline_semaphore(&self, device: &'_ Device, allocator: &crate::vk::mem_util::SimpleAllocator, families: &[QueueFamilyQueues]) -> Result<TestStatus, TestError> {
+        let p = self.params;
+
+        let total_queues: usize = families.iter().map(|f| f.queues.len()).sum();
+        if total_queues < 2 {
+            return Err(TestError::NotSupported("Not enough queues".into()));
+        }
+
+        let max_queues = families.iter().map(|f| f.queues.len()).max().unwrap_or(0);
+        let queue_families: Vec<u32> = families.iter().map(|f| f.family_index).collect();
+
+        let mut op_names = vec![p.write_op];
+        let mut op_queues = vec![default_queue(families, p.write_op.queue_flags(&p.resource))?];
+
+        for queue_idx in 0..max_queues {
+            for family in families {
+                for &copy_op in COPY_OPS {
+                    if !copy_op.supports_resource(&p.resource) {
+                        continue;
+                    }
+                    if !check_queue_flags(family.flags, copy_op.copy_queue_flags(&p.resource)) {
+                        continue;
+                    }
+                    op_names.push(copy_op);
+                    op_queues.push(QueueRef {
+                        family: family.family_index,
+                        queue: family.queues[queue_idx % family.queues.len()],
+                    });
+                    break;
+                }
+            }
+        }
+
+        op_names.push(p.read_op);
+        op_queues.push(default_queue(families, p.read_op.queue_flags(&p.resource))?);
+
+        let mut resources = Vec::with_capacity(op_names.len() - 1);
+        for window in op_names.windows(2) {
+            let usage = out_usage(window[0], &p.resource) | in_usage(window[1], &p.resource);
+            resources.push(Resource::new_shared(device, allocator, &p.resource, usage, p.sharing_mode, &queue_families)?);
+        }
+
+        let mut ops: Vec<Box<dyn Operation + '_>> = Vec::with_capacity(op_names.len());
+        ops.push(build_operation(device, allocator, op_names[0], &p.resource, &resources[0], false)?);
+        for ndx in 1..op_names.len() - 1 {
+            ops.push(build_copy_operation(
+                device,
+                allocator,
+                op_names[ndx],
+                &p.resource,
+                &resources[ndx - 1],
+                &resources[ndx],
+                false,
+            )?);
+        }
+        let last = op_names.len() - 1;
+        ops.push(build_operation(device, allocator, op_names[last], &p.resource, &resources[resources.len() - 1], false)?);
+
+        let semaphore = create_timeline_semaphore(device)?;
+
+        let mut rng = Random::new(1234);
+        let mut values: Vec<u64> = Vec::with_capacity(ops.len());
+        for _ in 0..ops.len() {
+            let increment = 1 + u64::from(rng.get_uint8());
+            values.push(values.last().map_or(increment, |last| last + increment));
+        }
+
+        let command_pools: Vec<_> = families.iter().map(|f| make_command_pool(device, f.family_index)).collect::<Result<_, _>>()?;
+        let mut command_buffers = Vec::with_capacity(ops.len());
+        for queue in &op_queues {
+            let pool = &command_pools[families.iter().position(|f| f.family_index == queue.family).expect("queue came from this list")];
+            command_buffers.push(allocate_command_buffer(device, **pool, vk::CommandBufferLevel::PRIMARY)?);
+        }
+
+        for ndx in 0..ops.len() {
+            let cmd = *command_buffers[ndx];
+            begin_command_buffer(device, cmd)?;
+
+            // Acquire what the previous link released, then release to the next one. The
+            // two halves live in different command buffers on different queues, so each
+            // link records only its own side of each transfer.
+            if ndx > 0 {
+                let (write_family, read_family) = self.transfer_families(&resources[ndx - 1], op_queues[ndx - 1].family, op_queues[ndx].family);
+                self.create_barrier_multi_queue(
+                    device,
+                    cmd,
+                    ops[ndx - 1].out_sync_info(p.sync_type),
+                    ops[ndx].in_sync_info(p.sync_type),
+                    &resources[ndx - 1],
+                    write_family,
+                    read_family,
+                    true,
+                );
+            }
+
+            ops[ndx].record_commands(device, p.sync_type, cmd);
+
+            if ndx + 1 < ops.len() {
+                let (write_family, read_family) = self.transfer_families(&resources[ndx], op_queues[ndx].family, op_queues[ndx + 1].family);
+                self.create_barrier_multi_queue(
+                    device,
+                    cmd,
+                    ops[ndx].out_sync_info(p.sync_type),
+                    ops[ndx + 1].in_sync_info(p.sync_type),
+                    &resources[ndx],
+                    write_family,
+                    read_family,
+                    false,
+                );
+            }
+
+            end_command_buffer(device, cmd)?;
+
+            let wait_value = if ndx == 0 { 0 } else { values[ndx - 1] };
+            self.submit_timeline(device, op_queues[ndx].queue, *semaphore, cmd, ndx != 0, wait_value, values[ndx])?;
+        }
+
+        unsafe { device.queue_wait_idle(op_queues[op_queues.len() - 1].queue) }.vk_check("vkQueueWaitIdle")?;
+
+        let expected = ops[0].data(device)?;
+        let actual = ops[ops.len() - 1].data(device)?;
+
+        if p.resource.kind.is_indirect_buffer() {
+            let expected_value = u32::from_ne_bytes(expected[0..4].try_into().expect("at least 4 bytes"));
+            let actual_value = u32::from_ne_bytes(actual[0..4].try_into().expect("at least 4 bytes"));
+            if actual_value < expected_value {
+                return Ok(TestStatus::fail("Counter value is smaller than expected"));
+            }
+        } else if let Some(at) = first_difference(&expected, &actual) {
+            return Ok(TestStatus::fail(format!(
+                "Memory contents don't match: first difference at byte {at} of {}, expected {:#04x} got {:#04x}",
+                expected.len(),
+                expected[at],
+                actual[at],
+            )));
+        }
+
+        Ok(TestStatus::pass("OK"))
+    }
+
+    /// The family indices to put in the barrier: the real ones when the transfer is
+    /// required, `VK_QUEUE_FAMILY_IGNORED` on both sides when it is not.
+    fn transfer_families(&self, resource: &Resource<'_>, from: u32, to: u32) -> (u32, u32) {
+        if self.queue_family_ownership_transfer_required(resource, from, to) {
+            (from, to)
+        } else {
+            (vk::QUEUE_FAMILY_IGNORED, vk::QUEUE_FAMILY_IGNORED)
+        }
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    fn submit_timeline(
+        &self,
+        device: &Device,
+        queue: vk::Queue,
+        semaphore: vk::Semaphore,
+        cmd_buffer: vk::CommandBuffer,
+        wait: bool,
+        wait_value: u64,
+        signal_value: u64,
+    ) -> Result<(), TestError> {
+        if self.params.sync_type == SyncType::Synchronization2 {
+            use vulkanalia::vk::KhrSynchronization2ExtensionDeviceCommands;
+            let cmd_infos = [vk::CommandBufferSubmitInfo {
+                s_type: vk::StructureType::COMMAND_BUFFER_SUBMIT_INFO,
+                next: std::ptr::null(),
+                command_buffer: cmd_buffer,
+                device_mask: 0,
+            }];
+            let wait_info = [timeline_semaphore_submit_info(semaphore, wait_value, vk::PipelineStageFlags2::TOP_OF_PIPE)];
+            let signal_info = [timeline_semaphore_submit_info(semaphore, signal_value, vk::PipelineStageFlags2::BOTTOM_OF_PIPE)];
+            let submit = vk::SubmitInfo2 {
+                s_type: vk::StructureType::SUBMIT_INFO_2,
+                next: std::ptr::null(),
+                flags: vk::SubmitFlags::empty(),
+                wait_semaphore_info_count: u32::from(wait),
+                wait_semaphore_infos: wait_info.as_ptr(),
+                command_buffer_info_count: 1,
+                command_buffer_infos: cmd_infos.as_ptr(),
+                signal_semaphore_info_count: 1,
+                signal_semaphore_infos: signal_info.as_ptr(),
+            };
+            unsafe { device.queue_submit2_khr(queue, &[submit], vk::Fence::null()) }.vk_check("vkQueueSubmit2KHR")
+        } else {
+            let semaphores = [semaphore];
+            let stages = [vk::PipelineStageFlags::TOP_OF_PIPE];
+            let cmd_buffers = [cmd_buffer];
+            let wait_values = [wait_value];
+            let signal_values = [signal_value];
+            let timeline_info = vk::TimelineSemaphoreSubmitInfo {
+                s_type: vk::StructureType::TIMELINE_SEMAPHORE_SUBMIT_INFO,
+                next: std::ptr::null(),
+                wait_semaphore_value_count: u32::from(wait),
+                wait_semaphore_values: wait_values.as_ptr(),
+                signal_semaphore_value_count: 1,
+                signal_semaphore_values: signal_values.as_ptr(),
+            };
+            let submit = vk::SubmitInfo {
+                s_type: vk::StructureType::SUBMIT_INFO,
+                next: std::ptr::from_ref(&timeline_info).cast(),
+                wait_semaphore_count: u32::from(wait),
+                wait_semaphores: semaphores.as_ptr(),
+                wait_dst_stage_mask: stages.as_ptr(),
+                command_buffer_count: 1,
+                command_buffers: cmd_buffers.as_ptr(),
+                signal_semaphore_count: 1,
+                signal_semaphores: semaphores.as_ptr(),
+            };
+            unsafe { device.queue_submit(queue, &[submit], vk::Fence::null()) }.vk_check("vkQueueSubmit")
+        }
+    }
+
     /// `BaseTestInstance::queueFamilyOwnershipTransferRequired`
     fn queue_family_ownership_transfer_required(&self, resource: &Resource<'_>, qf1: u32, qf2: u32) -> bool {
         if !self.params.maintenance9 {
@@ -307,8 +548,7 @@ impl MultiQueueTestInstance<'_> {
         (ownership.optimal_image_transfer_to_queue_families & required) != required
     }
 
-    /// `createBarrierMultiQueue`, without the `useAllStages` branch: no registered case
-    /// sets it, since it needs VK_KHR_maintenance8's dependency flag.
+    /// `createBarrierMultiQueue`
     ///
     /// Returns the pipeline stage the semaphore is signalled or waited at.
     #[allow(clippy::too_many_arguments)]
@@ -323,21 +563,41 @@ impl MultiQueueTestInstance<'_> {
         read_family: u32,
         second_queue: bool,
     ) -> vk::PipelineStageFlags2 {
-        let pipeline_flags = if second_queue {
+        let mut pipeline_flags = if second_queue {
             vk::PipelineStageFlags2::TOP_OF_PIPE
         } else {
             vk::PipelineStageFlags2::BOTTOM_OF_PIPE
         };
         let sharing_mode = self.params.sharing_mode;
         let sync = self.params.sync_type;
+        let use_all_stages = self.params.use_all_stages;
+        let extra_flags = if use_all_stages {
+            vk::DependencyFlags::QUEUE_FAMILY_OWNERSHIP_TRANSFER_USE_ALL_STAGES_KHR
+        } else {
+            vk::DependencyFlags::empty()
+        };
 
         // The release half names the write's real stage and access and the acquire's
         // stage as a bare BOTTOM_OF_PIPE; the acquire half is the mirror image. Only
         // one of the two carries the access mask, which is what makes it an ownership
         // transfer rather than two independent barriers.
-        let src_stage = if second_queue { vk::PipelineStageFlags2::TOP_OF_PIPE } else { write_sync.stage_mask };
+        //
+        // `useAllStages` is the point of VK_KHR_maintenance8: both halves then name the
+        // *same* real stage, and the driver is told to apply the transfer across all of
+        // them rather than only the one the barrier mentions.
+        let src_stage = if second_queue {
+            if use_all_stages { read_sync.stage_mask } else { vk::PipelineStageFlags2::TOP_OF_PIPE }
+        } else {
+            write_sync.stage_mask
+        };
         let src_access = if second_queue { vk::AccessFlags2::empty() } else { write_sync.access_mask };
-        let dst_stage = if second_queue { read_sync.stage_mask } else { vk::PipelineStageFlags2::BOTTOM_OF_PIPE };
+        let dst_stage = if second_queue {
+            read_sync.stage_mask
+        } else if use_all_stages {
+            write_sync.stage_mask
+        } else {
+            vk::PipelineStageFlags2::BOTTOM_OF_PIPE
+        };
         let dst_access = if second_queue { read_sync.access_mask } else { vk::AccessFlags2::empty() };
 
         if resource.kind == ResourceType::Image {
@@ -353,12 +613,17 @@ impl MultiQueueTestInstance<'_> {
                 image.subresource_range,
             );
 
+            if use_all_stages {
+                debug_assert_eq!(barrier.src_stage_mask, barrier.dst_stage_mask);
+                pipeline_flags = barrier.src_stage_mask;
+            }
+
             if write_family != read_family && sharing_mode == vk::SharingMode::EXCLUSIVE {
                 barrier.src_queue_family_index = write_family;
                 barrier.dst_queue_family_index = read_family;
-                cmd_pipeline_barrier_images(device, sync, cmd_buffer, &[barrier]);
+                cmd_pipeline_barrier_images(device, sync, cmd_buffer, &[barrier], extra_flags);
             } else if !second_queue {
-                cmd_pipeline_barrier_images(device, sync, cmd_buffer, &[barrier]);
+                cmd_pipeline_barrier_images(device, sync, cmd_buffer, &[barrier], extra_flags);
             }
         } else {
             let buffer = resource.buffer();
@@ -367,8 +632,14 @@ impl MultiQueueTestInstance<'_> {
                 barrier.src_queue_family_index = write_family;
                 barrier.dst_queue_family_index = read_family;
             }
-            cmd_pipeline_barrier_buffers(device, sync, cmd_buffer, &[barrier]);
+            if use_all_stages {
+                debug_assert_eq!(barrier.src_stage_mask, barrier.dst_stage_mask);
+                pipeline_flags = barrier.src_stage_mask;
+            }
+            cmd_pipeline_barrier_buffers(device, sync, cmd_buffer, &[barrier], extra_flags);
         }
+
+        debug_assert!(!use_all_stages || (!pipeline_flags.is_empty() && pipeline_flags != vk::PipelineStageFlags2::ALL_COMMANDS));
 
         pipeline_flags
     }
@@ -461,19 +732,19 @@ fn semaphore_submit_info(semaphore: vk::Semaphore, stage_mask: vk::PipelineStage
     }
 }
 
-fn cmd_pipeline_barrier_images(device: &Device, sync: SyncType, cmd_buffer: vk::CommandBuffer, images: &[vk::ImageMemoryBarrier2]) {
-    super::operation::cmd_pipeline_barrier(device, sync, cmd_buffer, &[], images);
+fn cmd_pipeline_barrier_images(device: &Device, sync: SyncType, cmd_buffer: vk::CommandBuffer, images: &[vk::ImageMemoryBarrier2], flags: vk::DependencyFlags) {
+    super::operation::cmd_pipeline_barrier_with_flags(device, sync, cmd_buffer, &[], images, flags);
 }
 
-fn cmd_pipeline_barrier_buffers(device: &Device, sync: SyncType, cmd_buffer: vk::CommandBuffer, buffers: &[vk::BufferMemoryBarrier2]) {
-    super::operation::cmd_pipeline_barrier(device, sync, cmd_buffer, buffers, &[]);
+fn cmd_pipeline_barrier_buffers(device: &Device, sync: SyncType, cmd_buffer: vk::CommandBuffer, buffers: &[vk::BufferMemoryBarrier2], flags: vk::DependencyFlags) {
+    super::operation::cmd_pipeline_barrier_with_flags(device, sync, cmd_buffer, buffers, &[], flags);
 }
 
 /// `createSynchronizedOperationMultiQueueTests` -> `createTests`
 pub fn create_multi_queue_tests(sync_type: SyncType) -> tcu::TestCaseGroup {
     let mut group = tcu::TestCaseGroup::new("multi_queue");
 
-    for primitive in [SyncPrimitive::Fence, SyncPrimitive::BinarySemaphore] {
+    for primitive in [SyncPrimitive::Fence, SyncPrimitive::BinarySemaphore, SyncPrimitive::TimelineSemaphore] {
         let mut primitive_group = tcu::TestCaseGroup::new(primitive.group_name());
 
         for &write_op in WRITE_OPS {
@@ -484,36 +755,65 @@ pub fn create_multi_queue_tests(sync_type: SyncType) -> tcu::TestCaseGroup {
                 // `optionNdx` - the sharing mode the resource is declared with.
                 for sharing_mode in [vk::SharingMode::EXCLUSIVE, vk::SharingMode::CONCURRENT] {
                     for resource in RESOURCES {
-                        if !write_op.supports_resource(resource) || !read_op.supports_resource(resource) {
-                            continue;
-                        }
-                        let suffix = if sharing_mode == vk::SharingMode::CONCURRENT { "_concurrent" } else { "_exclusive" };
-                        let name = format!("{}{suffix}", get_resource_name(resource));
+                        for use_all_stages in [false, true] {
+                            if !write_op.supports_resource(resource) || !read_op.supports_resource(resource) {
+                                continue;
+                            }
+                            let suffix = if sharing_mode == vk::SharingMode::CONCURRENT { "_concurrent" } else { "_exclusive" };
+                            let mut name = format!("{}{suffix}", get_resource_name(resource));
 
-                        op_group.add_child(Box::new(MultiQueueTestCase {
-                            name: name.clone(),
-                            sync_type,
-                            primitive,
-                            resource: *resource,
-                            write_op,
-                            read_op,
-                            sharing_mode,
-                            maintenance9: false,
-                        }) as Box<dyn TestCase>);
+                            if use_all_stages {
+                                // These cases exist to exercise VK_KHR_maintenance8's
+                                // "apply the transfer at every stage" dependency flag,
+                                // so upstream keeps them to the combinations where that
+                                // flag has a defined meaning: a real ownership transfer
+                                // (exclusive sharing) recorded through synchronization2.
+                                if sync_type != SyncType::Synchronization2 {
+                                    continue;
+                                }
+                                if primitive != SyncPrimitive::BinarySemaphore {
+                                    continue;
+                                }
+                                if sharing_mode != vk::SharingMode::EXCLUSIVE {
+                                    continue;
+                                }
+                                if resource.kind != ResourceType::Image && resource.kind != ResourceType::Buffer {
+                                    continue;
+                                }
+                                // This OP has an invalid write pipeline stage for our use case.
+                                if write_op == OperationName::WriteClearAttachments {
+                                    continue;
+                                }
+                                name += "_use_all_stages";
+                            }
 
-                        if sharing_mode == vk::SharingMode::CONCURRENT {
                             op_group.add_child(Box::new(MultiQueueTestCase {
-                                name: format!("{name}_maintenance9"),
+                                name: name.clone(),
                                 sync_type,
                                 primitive,
                                 resource: *resource,
                                 write_op,
                                 read_op,
                                 sharing_mode,
-                                maintenance9: true,
+                                maintenance9: false,
+                                use_all_stages,
                             }) as Box<dyn TestCase>);
+
+                            if sharing_mode == vk::SharingMode::CONCURRENT {
+                                op_group.add_child(Box::new(MultiQueueTestCase {
+                                    name: format!("{name}_maintenance9"),
+                                    sync_type,
+                                    primitive,
+                                    resource: *resource,
+                                    write_op,
+                                    read_op,
+                                    sharing_mode,
+                                    maintenance9: true,
+                                    use_all_stages,
+                                }) as Box<dyn TestCase>);
+                            }
+                            empty = false;
                         }
-                        empty = false;
                     }
                 }
 
@@ -601,4 +901,53 @@ mod tests {
         assert!(pairs.iter().all(|p| p.family_index_write == 0));
         assert_eq!(pairs.iter().filter(|p| p.family_index_read == 1).count(), 1);
     }
+}
+
+/// `MultiQueues::Queue`
+#[derive(Clone, Copy)]
+struct QueueRef {
+    family: u32,
+    queue: vk::Queue,
+}
+
+/// `MultiQueues::getDefaultQueue` - the first family whose flags cover what the
+/// operation asks for.
+fn default_queue(families: &[QueueFamilyQueues], flags: vk::QueueFlags) -> Result<QueueRef, TestError> {
+    families
+        .iter()
+        .find(|f| check_queue_flags(f.flags, flags))
+        .map(|f| QueueRef {
+            family: f.family_index,
+            queue: f.queues[0],
+        })
+        .ok_or_else(|| TestError::NotSupported("Queue not found".into()))
+}
+
+/// `getInResourceUsageFlags` for whichever kind of operation this is.
+fn in_usage(op: OperationName, resource: &ResourceDescription) -> u32 {
+    if op.is_copy() { op.copy_resource_usage().0 } else { op.in_resource_usage(resource) }
+}
+
+/// `getOutResourceUsageFlags` for whichever kind of operation this is.
+fn out_usage(op: OperationName, resource: &ResourceDescription) -> u32 {
+    if op.is_copy() { op.copy_resource_usage().1 } else { op.out_resource_usage(resource) }
+}
+
+fn timeline_semaphore_submit_info(semaphore: vk::Semaphore, value: u64, stage_mask: vk::PipelineStageFlags2) -> vk::SemaphoreSubmitInfo {
+    vk::SemaphoreSubmitInfo {
+        s_type: vk::StructureType::SEMAPHORE_SUBMIT_INFO,
+        next: std::ptr::null(),
+        semaphore,
+        value,
+        stage_mask,
+        device_index: 0,
+    }
+}
+
+/// `createSemaphoreType(VK_SEMAPHORE_TYPE_TIMELINE)`
+fn create_timeline_semaphore(device: &Device) -> Result<Unique<'_, vk::Semaphore>, TestError> {
+    let mut type_info = vk::SemaphoreTypeCreateInfo::builder().semaphore_type(vk::SemaphoreType::TIMELINE).initial_value(0);
+    let info = vk::SemaphoreCreateInfo::builder().push_next(&mut type_info);
+    let semaphore = unsafe { device.create_semaphore(&info, None) }.vk_check("vkCreateSemaphore")?;
+    Ok(Unique::new(device, semaphore))
 }

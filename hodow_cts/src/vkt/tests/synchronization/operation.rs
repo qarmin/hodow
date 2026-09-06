@@ -277,6 +277,19 @@ pub struct Resource<'a> {
 
 impl<'a> Resource<'a> {
     pub fn new(device: &'a Device, allocator: &crate::vk::mem_util::SimpleAllocator, desc: &ResourceDescription, usage: u32) -> Result<Self, TestError> {
+        Self::new_shared(device, allocator, desc, usage, vk::SharingMode::EXCLUSIVE, &[])
+    }
+
+    /// The full constructor. Only the multi-queue timeline chain passes a sharing mode -
+    /// every other caller takes the defaults `Resource::Resource` declares.
+    pub fn new_shared(
+        device: &'a Device,
+        allocator: &crate::vk::mem_util::SimpleAllocator,
+        desc: &ResourceDescription,
+        usage: u32,
+        sharing_mode: vk::SharingMode,
+        queue_families: &[u32],
+    ) -> Result<Self, TestError> {
         if desc.kind == ResourceType::Image {
             let extent = vk::Extent3D {
                 width: desc.size[0] as u32,
@@ -292,7 +305,8 @@ impl<'a> Resource<'a> {
                 .samples(desc.image_samples)
                 .tiling(vk::ImageTiling::OPTIMAL)
                 .usage(vk::ImageUsageFlags::from_bits_truncate(usage))
-                .sharing_mode(vk::SharingMode::EXCLUSIVE)
+                .sharing_mode(sharing_mode)
+                .queue_family_indices(queue_families)
                 .initial_layout(vk::ImageLayout::UNDEFINED)
                 .build();
             let image = ImageWithMemory::new(device, allocator, info, MemoryRequirement::ANY)?;
@@ -324,12 +338,13 @@ impl<'a> Resource<'a> {
         }
 
         let size = desc.size[0] as vk::DeviceSize;
-        let buffer = BufferWithMemory::new(
-            device,
-            allocator,
-            make_buffer_create_info(size, vk::BufferUsageFlags::from_bits_truncate(usage)),
-            MemoryRequirement::ANY,
-        )?;
+        let mut buffer_info = make_buffer_create_info(size, vk::BufferUsageFlags::from_bits_truncate(usage));
+        buffer_info.sharing_mode = sharing_mode;
+        if !queue_families.is_empty() {
+            buffer_info.queue_family_index_count = queue_families.len() as u32;
+            buffer_info.queue_family_indices = queue_families.as_ptr();
+        }
+        let buffer = BufferWithMemory::new(device, allocator, buffer_info, MemoryRequirement::ANY)?;
         Ok(Self {
             kind: desc.kind,
             buffer_info: Some(BufferInfo {
@@ -512,12 +527,28 @@ pub fn cmd_pipeline_barrier(
     buffer_barriers: &[vk::BufferMemoryBarrier2],
     image_barriers: &[vk::ImageMemoryBarrier2],
 ) {
+    cmd_pipeline_barrier_with_flags(device, sync, cmd_buffer, buffer_barriers, image_barriers, vk::DependencyFlags::empty());
+}
+
+/// `makeCommonDependencyInfo` with a caller-chosen extra dependency flag, for the one
+/// case that needs `VK_DEPENDENCY_QUEUE_FAMILY_OWNERSHIP_TRANSFER_USE_ALL_STAGES_BIT_KHR`.
+///
+/// Only the synchronization2 path can carry it - `LegacySynchronizationWrapper` passes a
+/// flat 0 to `vkCmdPipelineBarrier` and drops whatever the dependency info asked for.
+pub fn cmd_pipeline_barrier_with_flags(
+    device: &Device,
+    sync: SyncType,
+    cmd_buffer: vk::CommandBuffer,
+    buffer_barriers: &[vk::BufferMemoryBarrier2],
+    image_barriers: &[vk::ImageMemoryBarrier2],
+    extra_flags: vk::DependencyFlags,
+) {
     if sync == SyncType::Synchronization2 {
         use vulkanalia::vk::KhrSynchronization2ExtensionDeviceCommands;
         let info = vk::DependencyInfo {
             s_type: vk::StructureType::DEPENDENCY_INFO,
             next: std::ptr::null(),
-            dependency_flags: vk::DependencyFlags::empty(),
+            dependency_flags: vk::DependencyFlags::BY_REGION | extra_flags,
             memory_barrier_count: 0,
             memory_barriers: std::ptr::null(),
             buffer_memory_barrier_count: buffer_barriers.len() as u32,
