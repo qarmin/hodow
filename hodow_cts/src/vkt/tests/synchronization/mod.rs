@@ -12,3 +12,4 @@
 pub mod multi_queue_tests;
 pub mod operation;
 pub mod single_queue_tests;
+pub mod timeline_semaphore_tests;

@@ -610,6 +610,18 @@ pub trait Operation {
         EMPTY_SYNC_INFO
     }
     fn data(&self, device: &Device) -> Result<Vec<u8>, TestError>;
+
+    /// `Operation::setData` - replace the payload the operation stages through its
+    /// host buffer, so a chain of operations can hand data from one to the next.
+    ///
+    /// Upstream asserts in the operations that have no host-side payload (a clear, a
+    /// draw, an indirect-buffer write: their data is computed rather than staged);
+    /// this reports it instead, so a test that reaches one gets a verdict rather than
+    /// a crash.
+    fn set_data(&self, device: &Device, data: &[u8]) -> Result<(), TestError> {
+        let _ = (device, data);
+        Err(TestError::NotPorted("operation has no host-side payload to set".to_string()))
+    }
 }
 
 /// `AccessMode`
@@ -626,6 +638,15 @@ fn host_buffer_data(device: &Device, buffer: &BufferWithMemory<'_>, size: vk::De
     let mut out = vec![0u8; size as usize];
     unsafe { std::ptr::copy_nonoverlapping(buffer.get_allocation().get_host_ptr(), out.as_mut_ptr(), out.len()) };
     Ok(out)
+}
+
+/// The write side of `host_buffer_data`, for `Operation::setData`.
+fn set_host_buffer_data(device: &Device, buffer: &BufferWithMemory<'_>, size: vk::DeviceSize, data: &[u8]) -> Result<(), TestError> {
+    if data.len() as vk::DeviceSize != size {
+        return Err(TestError::ResourceError(format!("setData size mismatch: {} bytes for a {size}-byte payload", data.len())));
+    }
+    unsafe { std::ptr::copy_nonoverlapping(data.as_ptr(), buffer.get_allocation().get_host_ptr(), data.len()) };
+    flush_alloc(device, buffer.get_allocation())
 }
 
 fn make_host_buffer<'a>(
@@ -786,6 +807,10 @@ impl Operation for CopyBuffer<'_> {
 
     fn data(&self, device: &Device) -> Result<Vec<u8>, TestError> {
         host_buffer_data(device, &self.host_buffer, self.buffer.size)
+    }
+
+    fn set_data(&self, device: &Device, data: &[u8]) -> Result<(), TestError> {
+        set_host_buffer_data(device, &self.host_buffer, self.buffer.size, data)
     }
 }
 
@@ -1033,6 +1058,10 @@ impl Operation for CopyBlitResolveImage<'_> {
     fn data(&self, device: &Device) -> Result<Vec<u8>, TestError> {
         host_buffer_data(device, &self.host_buffer, self.buffer_size)
     }
+
+    fn set_data(&self, device: &Device, data: &[u8]) -> Result<(), TestError> {
+        set_host_buffer_data(device, &self.host_buffer, self.buffer_size, data)
+    }
 }
 
 /// `CopyBufferToImage::WriteImplementation` - the resource is an image, filled from a
@@ -1085,6 +1114,10 @@ impl Operation for CopyBufferToImageWrite<'_> {
 
     fn data(&self, device: &Device) -> Result<Vec<u8>, TestError> {
         host_buffer_data(device, &self.host_buffer, self.buffer_size)
+    }
+
+    fn set_data(&self, device: &Device, data: &[u8]) -> Result<(), TestError> {
+        set_host_buffer_data(device, &self.host_buffer, self.buffer_size, data)
     }
 }
 
@@ -1200,6 +1233,10 @@ impl Operation for CopyBufferToImageRead<'_> {
 
     fn data(&self, device: &Device) -> Result<Vec<u8>, TestError> {
         host_buffer_data(device, &self.host_buffer, self.buffer.size)
+    }
+
+    fn set_data(&self, device: &Device, data: &[u8]) -> Result<(), TestError> {
+        set_host_buffer_data(device, &self.host_buffer, self.buffer.size, data)
     }
 }
 
@@ -1984,6 +2021,10 @@ impl Operation for CopyImageToBufferWrite<'_> {
     fn data(&self, device: &Device) -> Result<Vec<u8>, TestError> {
         host_buffer_data(device, &self.host_buffer, self.buffer.size)
     }
+
+    fn set_data(&self, device: &Device, data: &[u8]) -> Result<(), TestError> {
+        set_host_buffer_data(device, &self.host_buffer, self.buffer.size, data)
+    }
 }
 
 /// `CopyImageToBuffer::ReadImplementation` - the resource is an image, read straight
@@ -2034,6 +2075,10 @@ impl Operation for CopyImageToBufferRead<'_> {
 
     fn data(&self, device: &Device) -> Result<Vec<u8>, TestError> {
         host_buffer_data(device, &self.host_buffer, self.buffer_size)
+    }
+
+    fn set_data(&self, device: &Device, data: &[u8]) -> Result<(), TestError> {
+        set_host_buffer_data(device, &self.host_buffer, self.buffer_size, data)
     }
 }
 
@@ -2254,6 +2299,10 @@ impl Operation for BufferShaderAccess<'_> {
 
     fn data(&self, device: &Device) -> Result<Vec<u8>, TestError> {
         host_buffer_data(device, &self.host_buffer, self.buffer.size)
+    }
+
+    fn set_data(&self, device: &Device, data: &[u8]) -> Result<(), TestError> {
+        set_host_buffer_data(device, &self.host_buffer, self.buffer.size, data)
     }
 }
 
@@ -2701,6 +2750,10 @@ impl Operation for ImageShaderAccess<'_> {
     fn data(&self, device: &Device) -> Result<Vec<u8>, TestError> {
         host_buffer_data(device, &self.host_buffer, self.host_buffer_size)
     }
+
+    fn set_data(&self, device: &Device, data: &[u8]) -> Result<(), TestError> {
+        set_host_buffer_data(device, &self.host_buffer, self.host_buffer_size, data)
+    }
 }
 
 /// The manifest declares the graphics-stage buffer shaders with this.
@@ -2987,6 +3040,10 @@ impl Operation for BufferGraphicsAccess<'_> {
 
     fn data(&self, device: &Device) -> Result<Vec<u8>, TestError> {
         host_buffer_data(device, &self.host_buffer, self.buffer.size)
+    }
+
+    fn set_data(&self, device: &Device, data: &[u8]) -> Result<(), TestError> {
+        set_host_buffer_data(device, &self.host_buffer, self.buffer.size, data)
     }
 }
 
@@ -3323,6 +3380,10 @@ impl Operation for ImageGraphicsAccess<'_> {
 
     fn data(&self, device: &Device) -> Result<Vec<u8>, TestError> {
         host_buffer_data(device, &self.host_buffer, self.host_buffer_size)
+    }
+
+    fn set_data(&self, device: &Device, data: &[u8]) -> Result<(), TestError> {
+        set_host_buffer_data(device, &self.host_buffer, self.host_buffer_size, data)
     }
 }
 
@@ -3987,6 +4048,10 @@ impl Operation for VertexInputAccess<'_> {
     fn data(&self, device: &Device) -> Result<Vec<u8>, TestError> {
         host_buffer_data(device, &self.output_buffer, self.buffer.size)
     }
+
+    fn set_data(&self, device: &Device, data: &[u8]) -> Result<(), TestError> {
+        set_host_buffer_data(device, &self.output_buffer, self.buffer.size, data)
+    }
 }
 
 /// The manifest declares the indirect-buffer read shaders with this. One entry: the
@@ -4308,5 +4373,9 @@ impl Operation for IndirectBufferRead<'_> {
 
     fn data(&self, device: &Device) -> Result<Vec<u8>, TestError> {
         host_buffer_data(device, &self.host_buffer, INDIRECT_READ_BUFFER_SIZE)
+    }
+
+    fn set_data(&self, device: &Device, data: &[u8]) -> Result<(), TestError> {
+        set_host_buffer_data(device, &self.host_buffer, INDIRECT_READ_BUFFER_SIZE, data)
     }
 }

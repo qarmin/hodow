@@ -615,6 +615,7 @@ pub fn create_tests() -> Vec<tcu::TestCaseGroup> {
             op.add_child(create_single_queue_tests(sync_type));
             op.add_child(super::multi_queue_tests::create_multi_queue_tests(sync_type));
             group.add_child(op);
+            group.add_child(super::timeline_semaphore_tests::create_timeline_semaphore_tests(sync_type));
             group
         })
         .collect()
