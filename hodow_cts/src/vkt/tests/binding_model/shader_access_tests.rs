@@ -175,7 +175,11 @@ impl ShaderInputInterface {
 /// writes have to be built inside the recording rather than before it.
 #[derive(Clone, Copy)]
 enum DescriptorTarget {
-    Set(vk::DescriptorSet),
+    /// The layout travels with the set: a descriptor update template built against a
+    /// different one walks the update data with the wrong strides, which reads off the
+    /// end of the registry and writes garbage descriptors. That is a driver-side
+    /// segfault or a GPU hang, not a test failure, so it must not be representable.
+    Set { set: vk::DescriptorSet, layout: vk::DescriptorSetLayout },
     Push {
         cmd: vk::CommandBuffer,
         bind_point: vk::PipelineBindPoint,
@@ -189,14 +193,14 @@ impl DescriptorTarget {
     /// to be null there.
     fn set(self) -> vk::DescriptorSet {
         match self {
-            Self::Set(set) => set,
+            Self::Set { set, .. } => set,
             Self::Push { .. } => vk::DescriptorSet::null(),
         }
     }
 
     fn apply(self, device: &Device, writes: &[vk::WriteDescriptorSet]) {
         match self {
-            Self::Set(_) => unsafe { device.update_descriptor_sets(writes, &[] as &[vk::CopyDescriptorSet]) },
+            Self::Set { .. } => unsafe { device.update_descriptor_sets(writes, &[] as &[vk::CopyDescriptorSet]) },
             Self::Push { cmd, bind_point, layout, set_ndx } => {
                 use vulkanalia::vk::KhrPushDescriptorExtensionDeviceCommands;
                 unsafe { device.cmd_push_descriptor_set_khr(cmd, bind_point, layout, set_ndx, writes) };
@@ -792,7 +796,7 @@ impl TestInstance for BufferAccessInstance<'_> {
             // nothing is written here.
             if !p.update_method.is_push() {
                 self.write_descriptors(
-                    DescriptorTarget::Set(*set),
+                    DescriptorTarget::Set { set: *set, layout: *layout },
                     *layout,
                     vk::PipelineLayout::null(),
                     set_ndx,
@@ -1109,7 +1113,10 @@ impl BufferAccessInstance<'_> {
         if !is_push {
             for set_ndx in 0..num_sets {
                 self.write_descriptors(
-                    DescriptorTarget::Set(set_handles[set_ndx as usize]),
+                    DescriptorTarget::Set {
+                        set: set_handles[set_ndx as usize],
+                        layout: *set_layouts[set_ndx as usize],
+                    },
                     *set_layouts[set_ndx as usize],
                     *pipeline_layout,
                     set_ndx,
@@ -2310,11 +2317,28 @@ impl TestInstance for ImageAccessInstance<'_> {
         let mut layout_handles = Vec::new();
         let mut sets = Vec::new();
 
+        // The discontiguous arrangement puts an unused layout between the two real
+        // ones, so `set_layouts` is not indexable by set index - a descriptor update
+        // template built against the unused layout would walk the update data with the
+        // wrong strides.
+        // Kept as a pair so the two cannot drift: a descriptor update template built
+        // against a layout other than the one its target set was allocated from walks
+        // the update data with the wrong strides, which reads off the end of the
+        // registry and writes garbage descriptors.
+        let mut targets: Vec<(vk::DescriptorSet, vk::DescriptorSetLayout)> = Vec::new();
+
         for set_ndx in 0..num_sets {
             let layout = self.create_descriptor_set_layout(set_ndx, &sampler_handles)?;
-            if let Some(pool) = &pool {
-                sets.push(make_descriptor_set(device, **pool, *layout)?);
-            }
+            let set = match &pool {
+                Some(pool) => {
+                    let set = make_descriptor_set(device, **pool, *layout)?;
+                    let handle = *set;
+                    sets.push(set);
+                    handle
+                }
+                None => vk::DescriptorSet::null(),
+            };
+            targets.push((set, *layout));
             layout_handles.push(*layout);
             set_layouts.push(layout);
 
@@ -2335,10 +2359,11 @@ impl TestInstance for ImageAccessInstance<'_> {
             let stride = if p.descriptor_type == vk::DescriptorType::SAMPLER { 1 } else { num_resources };
             let ndx0 = (set_ndx * stride) as usize % image_views.len();
             let ndx1 = (set_ndx * stride + 1) as usize % image_views.len();
+            let (_, set_layout) = targets[set_ndx as usize];
             if p.update_method.uses_template() {
                 self.write_descriptor_set_with_template(
                     target,
-                    *set_layouts[set_ndx as usize],
+                    set_layout,
                     *pipeline_layout,
                     set_ndx,
                     *image_views[ndx0],
@@ -2353,8 +2378,8 @@ impl TestInstance for ImageAccessInstance<'_> {
         };
 
         if !is_push {
-            for set_ndx in 0..num_sets {
-                write_image_descriptors(DescriptorTarget::Set(set_handles[set_ndx as usize]), set_ndx)?;
+            for (set_ndx, &(set, layout)) in targets.iter().enumerate() {
+                write_image_descriptors(DescriptorTarget::Set { set, layout }, set_ndx as u32)?;
             }
         }
 
@@ -3261,10 +3286,18 @@ fn update_descriptor_set_with_template(
 
     let device = context.get_device();
     let set = target.set();
+    // The layout a plain template is built against must be the one its target set was
+    // allocated from, so it comes from the target rather than from a separate argument
+    // that could name a different set's layout. A push template names no set and keeps
+    // the layout it was handed.
+    let layout = match target {
+        DescriptorTarget::Set { layout, .. } => layout,
+        DescriptorTarget::Push { .. } => layout,
+    };
     // A push template names the pipeline layout and the bind point it will be pushed
     // at; a plain one names the descriptor set layout it will write through.
     let (template_type, bind_point) = match target {
-        DescriptorTarget::Set(_) => (vk::DescriptorUpdateTemplateType::DESCRIPTOR_SET, vk::PipelineBindPoint::COMPUTE),
+        DescriptorTarget::Set { .. } => (vk::DescriptorUpdateTemplateType::DESCRIPTOR_SET, vk::PipelineBindPoint::COMPUTE),
         DescriptorTarget::Push { bind_point, .. } => (vk::DescriptorUpdateTemplateType::PUSH_DESCRIPTORS, bind_point),
     };
     let mut info = vk::DescriptorUpdateTemplateCreateInfo::builder()
@@ -3289,7 +3322,7 @@ fn update_descriptor_set_with_template(
     // The template is consumed by the update and nothing refers to it afterwards, so
     // it is destroyed here rather than being tied to the instance's lifetime.
     match target {
-        DescriptorTarget::Set(_) => unsafe {
+        DescriptorTarget::Set { .. } => unsafe {
             if use_khr {
                 device.update_descriptor_set_with_template_khr(set, handle, registry.raw_pointer());
             } else {
@@ -3597,5 +3630,31 @@ impl ImageAccessInstance<'_> {
         }
 
         update_descriptor_set_with_template(self.context, &entries, layout, target, pipeline_layout, &registry)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// The discontiguous arrangement is the reason a descriptor set index may not be
+    /// used to index a pipeline-layout-shaped list: set 1 of two lives in slot 2, and
+    /// slot 1 holds an unused layout. Building a descriptor update template against
+    /// that unused layout makes the driver walk the update data with the wrong
+    /// strides - it reads off the end of the registry and writes garbage descriptors,
+    /// which shows up as a segfault inside the driver or a GPU hang rather than as a
+    /// test failure.
+    #[test]
+    fn discontiguous_set_index_is_not_a_layout_index() {
+        assert_eq!(DescriptorSetCount::MultipleDiscontiguous.set_ndx(0), 0);
+        assert_eq!(DescriptorSetCount::MultipleDiscontiguous.set_ndx(1), 2);
+        assert_eq!(DescriptorSetCount::MultipleDiscontiguous.count(), 2);
+
+        // The contiguous arrangements are the ones where the two indices coincide,
+        // which is why the hazard stayed invisible until a discontiguous case ran.
+        for ndx in 0..DescriptorSetCount::Multiple.count() {
+            assert_eq!(DescriptorSetCount::Multiple.set_ndx(ndx), ndx);
+        }
+        assert_eq!(DescriptorSetCount::Single.set_ndx(0), 0);
     }
 }
