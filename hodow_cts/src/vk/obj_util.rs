@@ -145,6 +145,50 @@ pub fn make_render_pass_with_samples(device: &Device, color_format: vk::Format, 
     Ok(Unique::new(device, render_pass))
 }
 
+/// `vk::makeRenderPass` in its general form: either a colour attachment or a
+/// depth/stencil one, with a chosen load op and final layout.
+///
+/// Upstream's overload takes both formats and uses `VK_FORMAT_UNDEFINED` to mean
+/// "no attachment of this kind"; the same convention is kept here so a call site
+/// lines up with the C++ it came from.
+pub fn make_render_pass_full(
+    device: &Device,
+    color_format: vk::Format,
+    depth_stencil_format: vk::Format,
+    load_op: vk::AttachmentLoadOp,
+    final_layout: vk::ImageLayout,
+) -> Result<Unique<'_, vk::RenderPass>, TestError> {
+    let has_color = color_format != vk::Format::UNDEFINED;
+    let format = if has_color { color_format } else { depth_stencil_format };
+    let attachment = vk::AttachmentDescription::builder()
+        .format(format)
+        .samples(vk::SampleCountFlags::_1)
+        .load_op(load_op)
+        .store_op(vk::AttachmentStoreOp::STORE)
+        .stencil_load_op(load_op)
+        .stencil_store_op(vk::AttachmentStoreOp::STORE)
+        .initial_layout(vk::ImageLayout::UNDEFINED)
+        .final_layout(final_layout);
+    let attachments = [attachment];
+
+    let reference = vk::AttachmentReference::builder().attachment(0).layout(final_layout);
+    let refs = [reference];
+    let subpass = if has_color {
+        vk::SubpassDescription::builder()
+            .pipeline_bind_point(vk::PipelineBindPoint::GRAPHICS)
+            .color_attachments(&refs)
+    } else {
+        vk::SubpassDescription::builder()
+            .pipeline_bind_point(vk::PipelineBindPoint::GRAPHICS)
+            .depth_stencil_attachment(&refs[0])
+    };
+    let subpasses = [subpass];
+
+    let info = vk::RenderPassCreateInfo::builder().attachments(&attachments).subpasses(&subpasses);
+    let render_pass = unsafe { device.create_render_pass(&info, None) }.vk_check("vkCreateRenderPass")?;
+    Ok(Unique::new(device, render_pass))
+}
+
 /// `vk::makePipelineLayout`
 pub fn make_pipeline_layout<'a>(device: &'a Device, set_layouts: &[vk::DescriptorSetLayout]) -> Result<Unique<'a, vk::PipelineLayout>, TestError> {
     let info = vk::PipelineLayoutCreateInfo::builder().set_layouts(set_layouts);

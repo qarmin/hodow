@@ -130,7 +130,7 @@ impl TestCase for MultiQueueTestCase {
         }
 
         if self.resource.kind == ResourceType::Image {
-            let usage = self.write_op.out_resource_usage() | self.read_op.in_resource_usage();
+            let usage = self.write_op.out_resource_usage(&self.resource) | self.read_op.in_resource_usage(&self.resource);
             let properties = unsafe {
                 instance.get_physical_device_image_format_properties(
                     context.get_physical_device(),
@@ -198,7 +198,7 @@ impl TestInstance for MultiQueueTestInstance<'_> {
         }
 
         for pair in &pairs {
-            let usage = p.write_op.out_resource_usage() | p.read_op.in_resource_usage();
+            let usage = p.write_op.out_resource_usage(&p.resource) | p.read_op.in_resource_usage(&p.resource);
             let resource = Resource::new(device, allocator, &p.resource, usage)?;
             let write_op = build_operation(device, allocator, p.write_op, &p.resource, &resource, false)?;
             let read_op = build_operation(device, allocator, p.read_op, &p.resource, &resource, false)?;
@@ -286,7 +286,7 @@ impl MultiQueueTestInstance<'_> {
             return true;
         }
 
-        let usage = self.params.write_op.out_resource_usage() | self.params.read_op.in_resource_usage();
+        let usage = self.params.write_op.out_resource_usage(&self.params.resource) | self.params.read_op.in_resource_usage(&self.params.resource);
         let attachment_usages = (vk::ImageUsageFlags::COLOR_ATTACHMENT
             | vk::ImageUsageFlags::DEPTH_STENCIL_ATTACHMENT
             | vk::ImageUsageFlags::TRANSIENT_ATTACHMENT

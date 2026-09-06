@@ -83,7 +83,7 @@ impl TestCase for SyncTestCase {
         }
 
         if self.resource.kind == ResourceType::Image {
-            let usage = self.write_op.out_resource_usage() | self.read_op.in_resource_usage();
+            let usage = self.write_op.out_resource_usage(&self.resource) | self.read_op.in_resource_usage(&self.resource);
             let properties = unsafe {
                 context.get_instance().get_physical_device_image_format_properties(
                     context.get_physical_device(),
@@ -150,7 +150,7 @@ impl TestInstance for SyncTestInstance<'_> {
 
         // `BaseTestInstance` - the resource is created with the union of what the write
         // op will produce and the read op will consume.
-        let usage = p.write_op.out_resource_usage() | p.read_op.in_resource_usage();
+        let usage = p.write_op.out_resource_usage(&p.resource) | p.read_op.in_resource_usage(&p.resource);
         let resource = Resource::new(device, allocator, &p.resource, usage)?;
         let write_op = build_operation(device, allocator, p.write_op, &p.resource, &resource, p.specialized_access)?;
         let read_op = build_operation(device, allocator, p.read_op, &p.resource, &resource, p.specialized_access)?;

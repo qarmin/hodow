@@ -1315,6 +1315,7 @@ pub enum OperationName {
     WriteDrawIndexed,
     WriteDrawIndirect,
     WriteDrawIndexedIndirect,
+    WriteClearAttachments,
     ReadCopyBuffer,
     ReadCopyBufferToImage,
     ReadCopyImageToBuffer,
@@ -1364,6 +1365,7 @@ impl OperationName {
             Self::WriteDrawIndexed => "write_draw_indexed",
             Self::WriteDrawIndirect => "write_draw_indirect",
             Self::WriteDrawIndexedIndirect => "write_draw_indexed_indirect",
+            Self::WriteClearAttachments => "write_clear_attachments",
             Self::ReadCopyBuffer => "read_copy_buffer",
             Self::ReadCopyBufferToImage => "read_copy_buffer_to_image",
             Self::ReadCopyImageToBuffer => "read_copy_image_to_buffer",
@@ -1532,6 +1534,8 @@ impl OperationName {
             Self::WriteDraw | Self::WriteDrawIndexed | Self::WriteDrawIndirect | Self::WriteDrawIndexedIndirect => {
                 single_sampled_color_image && resource.image_type == vk::ImageType::_2D
             }
+            // A 3D image cannot be a framebuffer attachment here.
+            Self::WriteClearAttachments => resource.kind == ResourceType::Image && resource.image_type != vk::ImageType::_3D && resource.image_samples == vk::SampleCountFlags::_1,
             Self::WriteClearDepthStencilImage => {
                 resource.kind == ResourceType::Image
                     && resource.image_aspect.intersects(vk::ImageAspectFlags::DEPTH | vk::ImageAspectFlags::STENCIL)
@@ -1577,12 +1581,13 @@ impl OperationName {
     /// `VK_BUFFER_USAGE_TRANSFER_SRC_BIT` and `VK_IMAGE_USAGE_TRANSFER_SRC_BIT` are
     /// the same bit, which is why upstream carries the usage as a bare uint32 and
     /// does not have to know whether the resource is a buffer or an image here.
-    pub fn in_resource_usage(self) -> u32 {
+    pub fn in_resource_usage(self, resource: &ResourceDescription) -> u32 {
         if self.image_shader_kind().is_some() || self.image_graphics_kind().is_some() {
             return vk::ImageUsageFlags::STORAGE.bits();
         }
-        // A draw writes the resource as a colour attachment and reads nothing.
-        if self.draw_call().is_some() {
+        let _ = resource;
+        // A draw or an attachment clear writes the resource and reads nothing.
+        if self.draw_call().is_some() || self == Self::WriteClearAttachments {
             return 0;
         }
         match self.buffer_shader_kind().map(|(t, _)| t).or(self.buffer_graphics_kind().map(|(t, _)| t)).map(|t| (t, ())) {
@@ -1597,12 +1602,19 @@ impl OperationName {
         }
     }
 
-    pub fn out_resource_usage(self) -> u32 {
+    pub fn out_resource_usage(self, resource: &ResourceDescription) -> u32 {
         if self.image_shader_kind().is_some() || self.image_graphics_kind().is_some() {
             return vk::ImageUsageFlags::STORAGE.bits();
         }
         if self.draw_call().is_some() {
             return vk::ImageUsageFlags::COLOR_ATTACHMENT.bits();
+        }
+        if self == Self::WriteClearAttachments {
+            return if resource.image_aspect == vk::ImageAspectFlags::COLOR {
+                vk::ImageUsageFlags::COLOR_ATTACHMENT.bits()
+            } else {
+                vk::ImageUsageFlags::DEPTH_STENCIL_ATTACHMENT.bits()
+            };
         }
         match self.buffer_shader_kind().map(|(t, _)| t).or(self.buffer_graphics_kind().map(|(t, _)| t)).map(|t| (t, ())) {
             // Upstream asks for the texel usage on the *read* side here, not the
@@ -1654,7 +1666,7 @@ impl OperationName {
                     let _ = stage;
                     return vk::QueueFlags::GRAPHICS;
                 }
-                if self.image_graphics_kind().is_some() || self.draw_call().is_some() {
+                if self.image_graphics_kind().is_some() || self.draw_call().is_some() || self == Self::WriteClearAttachments {
                     return vk::QueueFlags::GRAPHICS;
                 }
                 if self.buffer_shader_kind().is_some() || self.image_shader_kind().is_some() {
@@ -1693,6 +1705,9 @@ pub fn build_operation<'a>(
     resource: &Resource<'_>,
     specialized_access: bool,
 ) -> Result<Box<dyn Operation + 'a>, TestError> {
+    if name == OperationName::WriteClearAttachments {
+        return Ok(Box::new(ClearAttachments::new(device, resource)?));
+    }
     if let Some(draw_call) = name.draw_call() {
         return Ok(Box::new(DrawOperation::new(device, allocator, resource, draw_call)?));
     }
@@ -1779,6 +1794,7 @@ pub static WRITE_OPS: &[OperationName] = &[
     OperationName::WriteDrawIndirect,
     OperationName::WriteDrawIndexedIndirect,
     OperationName::WriteClearDepthStencilImage,
+    OperationName::WriteClearAttachments,
 ];
 
 /// `s_readOps`, restricted to the transfer operations.
@@ -3269,18 +3285,31 @@ mod tests {
         }
     }
 
+    /// A single-sampled 2D colour image, which every image operation supports.
+    fn color_image_2d() -> ResourceDescription {
+        ResourceDescription {
+            kind: ResourceType::Image,
+            size: [128, 128, 0, 0],
+            image_type: vk::ImageType::_2D,
+            image_format: vk::Format::R8G8B8A8_UNORM,
+            image_aspect: vk::ImageAspectFlags::COLOR,
+            image_samples: vk::SampleCountFlags::_1,
+        }
+    }
+
     /// An operation that touches the resource through a storage image has to say so,
     /// or the resource is created without `VK_IMAGE_USAGE_STORAGE_BIT` and the
     /// descriptor it binds is invalid. That was the second half of the same bug.
     #[test]
     fn shader_image_operations_ask_for_storage_usage() {
+        let image = color_image_2d();
         let storage = vk::ImageUsageFlags::STORAGE.bits();
         for op in WRITE_OPS.iter().chain(READ_OPS) {
             if op.image_shader_kind().is_none() && op.image_graphics_kind().is_none() {
                 continue;
             }
-            assert_eq!(op.in_resource_usage(), storage, "{} in_resource_usage", op.as_str());
-            assert_eq!(op.out_resource_usage(), storage, "{} out_resource_usage", op.as_str());
+            assert_eq!(op.in_resource_usage(&image), storage, "{} in_resource_usage", op.as_str());
+            assert_eq!(op.out_resource_usage(&image), storage, "{} out_resource_usage", op.as_str());
         }
     }
 
@@ -3288,14 +3317,7 @@ mod tests {
     /// compute-queue variants of the event cases are registered from this.
     #[test]
     fn graphics_stage_operations_need_a_graphics_queue() {
-        let image = ResourceDescription {
-            kind: ResourceType::Image,
-            size: [128, 128, 0, 0],
-            image_type: vk::ImageType::_2D,
-            image_format: vk::Format::R8G8B8A8_UNORM,
-            image_aspect: vk::ImageAspectFlags::COLOR,
-            image_samples: vk::SampleCountFlags::_1,
-        };
+        let image = color_image_2d();
         for op in WRITE_OPS.iter().chain(READ_OPS) {
             if op.image_graphics_kind().is_none() && op.buffer_graphics_kind().is_none() && op.draw_call().is_none() {
                 continue;
@@ -3552,5 +3574,156 @@ impl Operation for DrawOperation<'_> {
 
     fn data(&self, _device: &Device) -> Result<Vec<u8>, TestError> {
         Ok(self.expected_data.clone())
+    }
+}
+
+/// `ClearAttachments::Implementation` - a write operation that clears the resource
+/// image from inside a render pass with `vkCmdClearAttachments`.
+///
+/// Unlike `vkCmdClearColorImage`, which is a transfer, this is an attachment write:
+/// the primitive under test has to order a `COLOR_ATTACHMENT_WRITE` or a
+/// `DEPTH_STENCIL_ATTACHMENT_WRITE` against whatever reads the image afterwards.
+pub struct ClearAttachments<'a> {
+    image: ImageInfo,
+    data: Vec<u8>,
+    clear_value: vk::ClearValue,
+    _view: crate::vk::ref_util::Unique<'a, vk::ImageView>,
+    render_pass: crate::vk::ref_util::Unique<'a, vk::RenderPass>,
+    framebuffer: crate::vk::ref_util::Unique<'a, vk::Framebuffer>,
+}
+
+impl<'a> ClearAttachments<'a> {
+    pub fn new(device: &'a Device, resource: &Resource<'_>) -> Result<Self, TestError> {
+        use crate::vk::image_util::make_image_view;
+        use crate::vk::obj_util::{make_framebuffer, make_render_pass_full};
+
+        let image = resource.image();
+        let clear_value = make_clear_value(image.format);
+        let tcu_format = map_vk_format(image.format).ok_or_else(|| TestError::NotPorted(format!("{:?}", image.format)))?;
+
+        let size = get_pixel_buffer_size(image.format, image.extent)?;
+        let mut data = vec![0u8; size as usize];
+        {
+            let mut pixels = PixelBufferAccess::new(tcu_format, [image.extent.width, image.extent.height, image.extent.depth], &mut data);
+            clear_pixel_buffer(&mut pixels, &clear_value);
+        }
+
+        let view_type = match image.image_type {
+            vk::ImageType::_1D => vk::ImageViewType::_1D,
+            vk::ImageType::_3D => vk::ImageViewType::_3D,
+            _ => vk::ImageViewType::_2D,
+        };
+        let view = make_image_view(device, image.handle, view_type, image.format, image.subresource_range)?;
+
+        let is_color = image.subresource_range.aspect_mask == vk::ImageAspectFlags::COLOR;
+        let (color_format, ds_format, final_layout) = if is_color {
+            (image.format, vk::Format::UNDEFINED, vk::ImageLayout::COLOR_ATTACHMENT_OPTIMAL)
+        } else {
+            (vk::Format::UNDEFINED, image.format, vk::ImageLayout::DEPTH_STENCIL_ATTACHMENT_OPTIMAL)
+        };
+        let render_pass = make_render_pass_full(device, color_format, ds_format, vk::AttachmentLoadOp::DONT_CARE, final_layout)?;
+        let framebuffer = make_framebuffer(device, *render_pass, &[*view], image.extent.width, image.extent.height, 1)?;
+
+        Ok(Self {
+            image,
+            data,
+            clear_value,
+            _view: view,
+            render_pass,
+            framebuffer,
+        })
+    }
+
+    fn is_color(&self) -> bool {
+        self.image.subresource_range.aspect_mask == vk::ImageAspectFlags::COLOR
+    }
+}
+
+impl Operation for ClearAttachments<'_> {
+    fn record_commands(&self, device: &Device, _sync: SyncType, cmd_buffer: vk::CommandBuffer) {
+        // A depth/stencil attachment has to reach its attachment layout before the
+        // render pass begins; upstream emits this as a legacy barrier regardless of
+        // the synchronization type, and the layout it names is what the render pass
+        // declares as the initial layout for that case.
+        if !self.is_color() {
+            let barrier = vk::ImageMemoryBarrier::builder()
+                .src_access_mask(vk::AccessFlags::empty())
+                .dst_access_mask(vk::AccessFlags::DEPTH_STENCIL_ATTACHMENT_WRITE)
+                .old_layout(vk::ImageLayout::UNDEFINED)
+                .new_layout(vk::ImageLayout::DEPTH_STENCIL_ATTACHMENT_OPTIMAL)
+                .src_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+                .dst_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+                .image(self.image.handle)
+                .subresource_range(self.image.subresource_range)
+                .build();
+            unsafe {
+                device.cmd_pipeline_barrier(
+                    cmd_buffer,
+                    vk::PipelineStageFlags::HOST,
+                    vk::PipelineStageFlags::EARLY_FRAGMENT_TESTS | vk::PipelineStageFlags::LATE_FRAGMENT_TESTS,
+                    vk::DependencyFlags::empty(),
+                    &[] as &[vk::MemoryBarrier],
+                    &[] as &[vk::BufferMemoryBarrier],
+                    &[barrier],
+                );
+            }
+        }
+
+        let clear = [self.clear_value];
+        let begin = vk::RenderPassBeginInfo::builder()
+            .render_pass(*self.render_pass)
+            .framebuffer(*self.framebuffer)
+            .render_area(vk::Rect2D {
+                offset: vk::Offset2D { x: 0, y: 0 },
+                extent: vk::Extent2D {
+                    width: self.image.extent.width,
+                    height: self.image.extent.height,
+                },
+            })
+            .clear_values(&clear);
+
+        let attachment = [vk::ClearAttachment {
+            aspect_mask: self.image.subresource_range.aspect_mask,
+            color_attachment: 0,
+            clear_value: self.clear_value,
+        }];
+        let rect = [vk::ClearRect {
+            rect: vk::Rect2D {
+                offset: vk::Offset2D { x: 0, y: 0 },
+                extent: vk::Extent2D {
+                    width: self.image.extent.width,
+                    height: self.image.extent.height,
+                },
+            },
+            base_array_layer: 0,
+            layer_count: self.image.subresource_layers.layer_count,
+        }];
+
+        unsafe {
+            device.cmd_begin_render_pass(cmd_buffer, &begin, vk::SubpassContents::INLINE);
+            device.cmd_clear_attachments(cmd_buffer, &attachment, &rect);
+            device.cmd_end_render_pass(cmd_buffer);
+        }
+    }
+
+    fn in_sync_info(&self, _sync: SyncType) -> SyncInfo {
+        EMPTY_SYNC_INFO
+    }
+
+    fn out_sync_info(&self, _sync: SyncType) -> SyncInfo {
+        let (access_mask, image_layout) = if self.is_color() {
+            (vk::AccessFlags2::COLOR_ATTACHMENT_WRITE, vk::ImageLayout::COLOR_ATTACHMENT_OPTIMAL)
+        } else {
+            (vk::AccessFlags2::DEPTH_STENCIL_ATTACHMENT_WRITE, vk::ImageLayout::DEPTH_STENCIL_ATTACHMENT_OPTIMAL)
+        };
+        SyncInfo {
+            stage_mask: vk::PipelineStageFlags2::ALL_COMMANDS,
+            access_mask,
+            image_layout,
+        }
+    }
+
+    fn data(&self, _device: &Device) -> Result<Vec<u8>, TestError> {
+        Ok(self.data.clone())
     }
 }
