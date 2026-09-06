@@ -13,6 +13,7 @@ pub mod depth_stencil_resolve_tests;
 pub mod multisample_resolve_tests;
 pub mod multisample_tests;
 pub mod render_pass_tests;
+pub mod sample_read_tests;
 pub mod unused_attachment_tests;
 pub mod unused_clear_attachment_tests;
 

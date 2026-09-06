@@ -95,3 +95,4 @@ external/vulkancts/modules/vulkan/ycbcr/vktYCbCrCopyTests.cpp
 external/vulkancts/modules/vulkan/renderpass/vktRenderPassDepthStencilResolveTests.cpp
 external/vulkancts/modules/vulkan/renderpass/vktRenderPassMultisampleResolveTests.cpp
 external/vulkancts/modules/vulkan/renderpass/vktRenderPassMultisampleTests.cpp
+external/vulkancts/modules/vulkan/renderpass/vktRenderPassSampleReadTests.cpp
