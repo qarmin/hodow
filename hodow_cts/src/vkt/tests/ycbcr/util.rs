@@ -367,6 +367,8 @@ pub fn upload_image(
     }
 
     begin_command_buffer(device, *command_buffer)?;
+    // plane_ndx indexes the staging buffers and the plane metadata together, as upstream does.
+    #[allow(clippy::needless_range_loop)]
     for plane_ndx in 0..info.planes.len() {
         let aspect = aspect_for(&info, plane_ndx);
         let (w, h) = plane_extent(&info, data.size(), plane_ndx);
@@ -471,6 +473,8 @@ pub fn download_image(
     }
 
     begin_command_buffer(device, *command_buffer)?;
+    // plane_ndx indexes the staging buffers and the plane metadata together, as upstream does.
+    #[allow(clippy::needless_range_loop)]
     for plane_ndx in 0..info.planes.len() {
         let aspect = aspect_for(&info, plane_ndx);
         let (w, h) = plane_extent(&info, data.size(), plane_ndx);
@@ -522,6 +526,8 @@ pub fn download_image(
     end_command_buffer(device, *command_buffer)?;
     submit_commands_and_wait(device, queue, *command_buffer)?;
 
+    // plane_ndx indexes the staging buffers and the plane metadata together, as upstream does.
+    #[allow(clippy::needless_range_loop)]
     for plane_ndx in 0..info.planes.len() {
         invalidate_alloc(device, staging[plane_ndx].get_allocation())?;
         let len = data.plane(plane_ndx).len();
