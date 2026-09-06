@@ -502,3 +502,13 @@ programs = [
 ]
 [case.params]
 buffer_size = { type = "u32", value = 262144 }
+
+[[case]]
+name = "read_indirect_buffer"
+rust_const = "READ_INDIRECT_BUFFER"
+rust_type = "IndirectBufferShader"
+programs = [
+    { name = "read_ib_vert", template = "synchronization/generated/read_ib.vert", stage = "vert" },
+    { name = "read_ib_frag", template = "synchronization/generated/read_ib.frag", stage = "frag" },
+    { name = "read_ib_comp", template = "synchronization/generated/read_ib.comp", stage = "comp" },
+]

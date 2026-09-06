@@ -382,6 +382,63 @@ def main() -> int:
         ]
         count += 1
 
+    # `IndirectBuffer::ReadSupport::initPrograms`. The read runs an indirect draw or
+    # dispatch whose command was written by the write operation, and each invocation
+    # bumps a counter the host compares against what the command asked for.
+    ib_decl = "layout(set = 0, binding = 0, std140) coherent buffer Data {\n    uint value;\n} sb_out;\n"
+    ib_main = "    atomicAdd(sb_out.value, 1u);\n"
+
+    (SRC_DIR / "read_ib.vert").write_text(
+        "#version 440\n"
+        "\n"
+        "layout(location = 0) in vec4 v_in_position;\n"
+        "\n"
+        f"{PER_VERTEX_BLOCK};\n"
+        "\n"
+        + ib_decl
+        + "\n"
+        "void main (void)\n"
+        "{\n"
+        "    gl_Position = v_in_position;\n"
+        + ib_main
+        + "}\n"
+    )
+    (SRC_DIR / "read_ib.frag").write_text(
+        "#version 440\n"
+        "\n"
+        "layout(location = 0) out vec4 o_color;\n"
+        "\n"
+        "void main (void)\n"
+        "{\n"
+        "    o_color = vec4(1.0);\n"
+        "}\n"
+    )
+    (SRC_DIR / "read_ib.comp").write_text(
+        "#version 440\n"
+        "\n"
+        "layout(local_size_x = 1) in;\n"
+        "\n"
+        + ib_decl
+        + "\n"
+        "void main (void)\n"
+        "{\n"
+        + ib_main
+        + "}\n"
+    )
+    lines += [
+        "[[case]]",
+        'name = "read_indirect_buffer"',
+        'rust_const = "READ_INDIRECT_BUFFER"',
+        'rust_type = "IndirectBufferShader"',
+        "programs = [",
+        '    { name = "read_ib_vert", template = "synchronization/generated/read_ib.vert", stage = "vert" },',
+        '    { name = "read_ib_frag", template = "synchronization/generated/read_ib.frag", stage = "frag" },',
+        '    { name = "read_ib_comp", template = "synchronization/generated/read_ib.comp", stage = "comp" },',
+        "]",
+        "",
+    ]
+    count += 1
+
     MANIFEST.write_text("\n".join(lines))
     print(f"wrote {MANIFEST.relative_to(REPO_DIR)} and {count} shaders in {SRC_DIR.relative_to(REPO_DIR)}")
     return 0

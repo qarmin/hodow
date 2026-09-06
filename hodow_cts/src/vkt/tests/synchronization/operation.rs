@@ -1316,6 +1316,9 @@ pub enum OperationName {
     WriteDrawIndirect,
     WriteDrawIndexedIndirect,
     WriteClearAttachments,
+    WriteIndirectBufferDraw,
+    WriteIndirectBufferDrawIndexed,
+    WriteIndirectBufferDispatch,
     ReadCopyBuffer,
     ReadCopyBufferToImage,
     ReadCopyImageToBuffer,
@@ -1339,6 +1342,9 @@ pub enum OperationName {
     ReadUboTexelVertex,
     ReadUboTexelFragment,
     ReadVertexInput,
+    ReadIndirectBufferDraw,
+    ReadIndirectBufferDrawIndexed,
+    ReadIndirectBufferDispatch,
 }
 
 impl OperationName {
@@ -1367,6 +1373,9 @@ impl OperationName {
             Self::WriteDrawIndirect => "write_draw_indirect",
             Self::WriteDrawIndexedIndirect => "write_draw_indexed_indirect",
             Self::WriteClearAttachments => "write_clear_attachments",
+            Self::WriteIndirectBufferDraw => "write_indirect_buffer_draw",
+            Self::WriteIndirectBufferDrawIndexed => "write_indirect_buffer_draw_indexed",
+            Self::WriteIndirectBufferDispatch => "write_indirect_buffer_dispatch",
             Self::ReadCopyBuffer => "read_copy_buffer",
             Self::ReadCopyBufferToImage => "read_copy_buffer_to_image",
             Self::ReadCopyImageToBuffer => "read_copy_image_to_buffer",
@@ -1390,6 +1399,9 @@ impl OperationName {
             Self::ReadUboTexelVertex => "read_ubo_texel_vertex",
             Self::ReadUboTexelFragment => "read_ubo_texel_fragment",
             Self::ReadVertexInput => "read_vertex_input",
+            Self::ReadIndirectBufferDraw => "read_indirect_buffer_draw",
+            Self::ReadIndirectBufferDrawIndexed => "read_indirect_buffer_draw_indexed",
+            Self::ReadIndirectBufferDispatch => "read_indirect_buffer_dispatch",
         }
     }
 
@@ -1417,6 +1429,17 @@ impl OperationName {
             Self::ReadUboComputeIndirect => Some((BufferType::Uniform, DispatchCall::DispatchIndirect)),
             Self::ReadUboTexelCompute => Some((BufferType::UniformTexel, DispatchCall::Dispatch)),
             Self::ReadUboTexelComputeIndirect => Some((BufferType::UniformTexel, DispatchCall::DispatchIndirect)),
+            _ => None,
+        }
+    }
+
+    /// The indirect-buffer resource kind this operation acts on, or `None` if it is
+    /// not one of the indirect-buffer operations.
+    fn indirect_buffer_kind(self) -> Option<ResourceType> {
+        match self {
+            Self::WriteIndirectBufferDraw | Self::ReadIndirectBufferDraw => Some(ResourceType::IndirectBufferDraw),
+            Self::WriteIndirectBufferDrawIndexed | Self::ReadIndirectBufferDrawIndexed => Some(ResourceType::IndirectBufferDrawIndexed),
+            Self::WriteIndirectBufferDispatch | Self::ReadIndirectBufferDispatch => Some(ResourceType::IndirectBufferDispatch),
             _ => None,
         }
     }
@@ -1517,6 +1540,11 @@ impl OperationName {
             // `VertexInput::Support` asserts a plain or index buffer; the vertex draw
             // mode takes the plain one.
             Self::ReadVertexInput => resource.kind == ResourceType::Buffer,
+            // Each indirect operation only accepts the resource kind holding the
+            // command it issues.
+            Self::WriteIndirectBufferDraw | Self::ReadIndirectBufferDraw => resource.kind == ResourceType::IndirectBufferDraw,
+            Self::WriteIndirectBufferDrawIndexed | Self::ReadIndirectBufferDrawIndexed => resource.kind == ResourceType::IndirectBufferDrawIndexed,
+            Self::WriteIndirectBufferDispatch | Self::ReadIndirectBufferDispatch => resource.kind == ResourceType::IndirectBufferDispatch,
             Self::WriteCopyImage | Self::WriteCopyBufferToImage | Self::ReadCopyImage | Self::ReadCopyImageToBuffer => {
                 resource.kind == ResourceType::Image && resource.image_samples == vk::SampleCountFlags::_1
             }
@@ -1598,6 +1626,9 @@ impl OperationName {
         if self == Self::ReadVertexInput {
             return vk::BufferUsageFlags::VERTEX_BUFFER.bits();
         }
+        if self.indirect_buffer_kind().is_some() {
+            return if self.is_read() { vk::BufferUsageFlags::INDIRECT_BUFFER.bits() } else { 0 };
+        }
         match self.buffer_shader_kind().map(|(t, _)| t).or(self.buffer_graphics_kind().map(|(t, _)| t)).map(|t| (t, ())) {
             Some((buffer_type, _)) if self.is_read() => match buffer_type {
                 BufferType::Uniform => vk::BufferUsageFlags::UNIFORM_BUFFER.bits(),
@@ -1619,6 +1650,9 @@ impl OperationName {
         }
         if self == Self::ReadVertexInput {
             return vk::BufferUsageFlags::VERTEX_BUFFER.bits();
+        }
+        if self.indirect_buffer_kind().is_some() {
+            return if self.is_read() { 0 } else { vk::BufferUsageFlags::TRANSFER_DST.bits() };
         }
         if self == Self::WriteClearAttachments {
             return if resource.image_aspect == vk::ImageAspectFlags::COLOR {
@@ -1680,6 +1714,18 @@ impl OperationName {
                 if self.image_graphics_kind().is_some() || self.draw_call().is_some() || self == Self::WriteClearAttachments || self == Self::ReadVertexInput {
                     return vk::QueueFlags::GRAPHICS;
                 }
+                if let Some(kind) = self.indirect_buffer_kind() {
+                    // The write is a `vkCmdUpdateBuffer`; the read is whichever command
+                    // the buffer holds.
+                    if !self.is_read() {
+                        return vk::QueueFlags::TRANSFER;
+                    }
+                    return if kind == ResourceType::IndirectBufferDispatch {
+                        vk::QueueFlags::COMPUTE
+                    } else {
+                        vk::QueueFlags::GRAPHICS
+                    };
+                }
                 if self.buffer_shader_kind().is_some() || self.image_shader_kind().is_some() {
                     return vk::QueueFlags::COMPUTE;
                 }
@@ -1716,6 +1762,13 @@ pub fn build_operation<'a>(
     resource: &Resource<'_>,
     specialized_access: bool,
 ) -> Result<Box<dyn Operation + 'a>, TestError> {
+    if name.indirect_buffer_kind().is_some() {
+        return if name.is_read() {
+            Ok(Box::new(IndirectBufferRead::new(device, allocator, resource)?))
+        } else {
+            Ok(Box::new(IndirectBufferWrite::new(resource)?))
+        };
+    }
     if name == OperationName::ReadVertexInput {
         return Ok(Box::new(VertexInputAccess::new(device, allocator, resource)?));
     }
@@ -1809,6 +1862,9 @@ pub static WRITE_OPS: &[OperationName] = &[
     OperationName::WriteDrawIndexedIndirect,
     OperationName::WriteClearDepthStencilImage,
     OperationName::WriteClearAttachments,
+    OperationName::WriteIndirectBufferDraw,
+    OperationName::WriteIndirectBufferDrawIndexed,
+    OperationName::WriteIndirectBufferDispatch,
 ];
 
 /// `s_readOps`, restricted to the transfer operations.
@@ -1836,6 +1892,9 @@ pub static READ_OPS: &[OperationName] = &[
     OperationName::ReadUboTexelVertex,
     OperationName::ReadUboTexelFragment,
     OperationName::ReadVertexInput,
+    OperationName::ReadIndirectBufferDraw,
+    OperationName::ReadIndirectBufferDrawIndexed,
+    OperationName::ReadIndirectBufferDispatch,
 ];
 
 /// `CopyImageToBuffer::WriteImplementation` - the resource is a buffer, written by
@@ -3927,5 +3986,327 @@ impl Operation for VertexInputAccess<'_> {
 
     fn data(&self, device: &Device) -> Result<Vec<u8>, TestError> {
         host_buffer_data(device, &self.output_buffer, self.buffer.size)
+    }
+}
+
+/// The manifest declares the indirect-buffer read shaders with this. One entry: the
+/// counter shader is the same whatever command reads the buffer, so only the stage it
+/// runs in differs.
+pub struct IndirectBufferShader {
+    pub name: &'static str,
+    pub programs: crate::vk::programs::BinaryCollection,
+}
+
+use crate::generated::shaders::synchronization_buffer::ALL_INDIRECT_BUFFER_SHADER;
+
+/// `IndirectBuffer::WriteImplementation` - fills the resource with the indirect command
+/// a later `vkCmdDraw*Indirect`/`vkCmdDispatchIndirect` will consume.
+///
+/// Its `data()` is not the buffer contents but the number of shader invocations the
+/// command asks for, which is what the paired read operation counts. That is why this
+/// is the only ported pair whose two sides compare a derived value rather than bytes.
+pub struct IndirectBufferWrite {
+    buffer: BufferInfo,
+    indirect_data: Vec<u8>,
+    expected_value: u32,
+}
+
+impl IndirectBufferWrite {
+    pub fn new(resource: &Resource<'_>) -> Result<Self, TestError> {
+        let buffer = resource.buffer();
+        let (indirect_data, expected_value) = match resource.kind {
+            ResourceType::IndirectBufferDraw => {
+                let command = vk::DrawIndirectCommand {
+                    vertex_count: 6,
+                    instance_count: 1,
+                    first_vertex: 0,
+                    first_instance: 0,
+                };
+                (as_bytes(&command), 6)
+            }
+            ResourceType::IndirectBufferDrawIndexed => {
+                let command = vk::DrawIndexedIndirectCommand {
+                    index_count: 6,
+                    instance_count: 1,
+                    first_index: 0,
+                    vertex_offset: 0,
+                    first_instance: 0,
+                };
+                (as_bytes(&command), 6)
+            }
+            ResourceType::IndirectBufferDispatch => {
+                let command = vk::DispatchIndirectCommand { x: 7, y: 2, z: 1 };
+                (as_bytes(&command), 14)
+            }
+            _ => return Err(TestError::NotPorted("not an indirect buffer resource".to_string())),
+        };
+
+        Ok(Self {
+            buffer,
+            indirect_data,
+            expected_value,
+        })
+    }
+}
+
+fn as_bytes<T: Copy>(value: &T) -> Vec<u8> {
+    unsafe { std::slice::from_raw_parts((value as *const T).cast::<u8>(), std::mem::size_of::<T>()) }.to_vec()
+}
+
+impl Operation for IndirectBufferWrite {
+    fn record_commands(&self, device: &Device, _sync: SyncType, cmd_buffer: vk::CommandBuffer) {
+        unsafe {
+            device.cmd_update_buffer(cmd_buffer, self.buffer.handle, self.buffer.offset, &self.indirect_data);
+        }
+    }
+
+    fn in_sync_info(&self, _sync: SyncType) -> SyncInfo {
+        EMPTY_SYNC_INFO
+    }
+
+    fn out_sync_info(&self, _sync: SyncType) -> SyncInfo {
+        SyncInfo {
+            stage_mask: vk::PipelineStageFlags2::ALL_TRANSFER,
+            access_mask: vk::AccessFlags2::TRANSFER_WRITE,
+            image_layout: vk::ImageLayout::UNDEFINED,
+        }
+    }
+
+    fn data(&self, _device: &Device) -> Result<Vec<u8>, TestError> {
+        Ok(self.expected_value.to_ne_bytes().to_vec())
+    }
+}
+
+/// `IndirectBuffer::ReadImplementation` - runs the indirect draw or dispatch the write
+/// operation prepared, with a shader that counts its own invocations.
+///
+/// The comparison the test makes is `actual >= expected`, not equality: a draw may
+/// invoke the vertex shader more than once per vertex, so only the direction is
+/// meaningful. That is what `ResourceType::is_indirect_buffer` selects in the test
+/// instances.
+pub struct IndirectBufferRead<'a> {
+    buffer: BufferInfo,
+    host_buffer: BufferWithMemory<'a>,
+    _descriptor_set_layout: crate::vk::ref_util::Unique<'a, vk::DescriptorSetLayout>,
+    descriptor_set: crate::vk::ref_util::UniqueDescriptorSet<'a>,
+    _descriptor_pool: crate::vk::ref_util::Unique<'a, vk::DescriptorPool>,
+    pipeline_layout: crate::vk::ref_util::Unique<'a, vk::PipelineLayout>,
+    pipeline: crate::vk::ref_util::Unique<'a, vk::Pipeline>,
+    /// `None` for the dispatch resource, which needs no render target.
+    target: Option<GraphicsTarget<'a>>,
+    index_buffer: Option<BufferWithMemory<'a>>,
+    kind: ResourceType,
+}
+
+const INDIRECT_READ_BUFFER_SIZE: vk::DeviceSize = std::mem::size_of::<u32>() as vk::DeviceSize;
+
+impl<'a> IndirectBufferRead<'a> {
+    pub fn new(device: &'a Device, allocator: &crate::vk::mem_util::SimpleAllocator, resource: &Resource<'_>) -> Result<Self, TestError> {
+        use crate::vk::builder_util::{DescriptorPoolBuilder, DescriptorSetLayoutBuilder};
+        use crate::vk::obj_util::{make_descriptor_set, make_graphics_pipeline_full, make_pipeline_layout};
+        use crate::vk::programs::create_shader_module;
+
+        let buffer = resource.buffer();
+        let kind = resource.kind;
+        let is_dispatch = kind == ResourceType::IndirectBufferDispatch;
+        let stage_flags = if is_dispatch { vk::ShaderStageFlags::COMPUTE } else { vk::ShaderStageFlags::VERTEX };
+
+        let host_buffer = BufferWithMemory::new(
+            device,
+            allocator,
+            make_buffer_create_info(INDIRECT_READ_BUFFER_SIZE, vk::BufferUsageFlags::STORAGE_BUFFER),
+            MemoryRequirement::HOST_VISIBLE,
+        )?;
+        unsafe {
+            std::slice::from_raw_parts_mut(host_buffer.get_allocation().get_host_ptr(), INDIRECT_READ_BUFFER_SIZE as usize).fill(0);
+        }
+        flush_alloc(device, host_buffer.get_allocation())?;
+
+        let descriptor_set_layout = DescriptorSetLayoutBuilder::new()
+            .add_single_binding(vk::DescriptorType::STORAGE_BUFFER, stage_flags)
+            .build(device)?;
+        let descriptor_pool = DescriptorPoolBuilder::new()
+            .add_type(vk::DescriptorType::STORAGE_BUFFER, 1)
+            .build(device, vk::DescriptorPoolCreateFlags::FREE_DESCRIPTOR_SET, 1)?;
+        let descriptor_set = make_descriptor_set(device, *descriptor_pool, *descriptor_set_layout)?;
+
+        let info = [vk::DescriptorBufferInfo {
+            buffer: host_buffer.get(),
+            offset: 0,
+            range: INDIRECT_READ_BUFFER_SIZE,
+        }];
+        let write = vk::WriteDescriptorSet::builder()
+            .dst_set(*descriptor_set)
+            .dst_binding(0)
+            .descriptor_type(vk::DescriptorType::STORAGE_BUFFER)
+            .buffer_info(&info)
+            .build();
+        unsafe { device.update_descriptor_sets(&[write], &[] as &[vk::CopyDescriptorSet]) };
+
+        let shader = ALL_INDIRECT_BUFFER_SHADER.first().expect("the generator emits the one entry");
+        let pipeline_layout = make_pipeline_layout(device, &[*descriptor_set_layout])?;
+
+        let (pipeline, target, index_buffer) = if is_dispatch {
+            let module = create_shader_module(device, shader.programs.get("read_ib_comp")?)?;
+            let stage = vk::PipelineShaderStageCreateInfo::builder()
+                .stage(vk::ShaderStageFlags::COMPUTE)
+                .module(*module)
+                .name(c"main".to_bytes_with_nul())
+                .build();
+            let create_info = vk::ComputePipelineCreateInfo::builder().stage(stage).layout(*pipeline_layout);
+            let handle = unsafe { device.create_compute_pipelines(vk::PipelineCache::null(), &[create_info], None) }
+                .vk_check("vkCreateComputePipelines")?
+                .0[0];
+            (crate::vk::ref_util::Unique::new(device, handle), None, None)
+        } else {
+            let vert = create_shader_module(device, shader.programs.get("read_ib_vert")?)?;
+            let frag = create_shader_module(device, shader.programs.get("read_ib_frag")?)?;
+            let target = GraphicsTarget::new(device, allocator)?;
+            let pipeline = make_graphics_pipeline_full(
+                device,
+                *pipeline_layout,
+                *vert,
+                *frag,
+                *target.render_pass,
+                (GRAPHICS_TARGET_SIZE, GRAPHICS_TARGET_SIZE),
+                vk::PrimitiveTopology::TRIANGLE_LIST,
+                vk::SampleCountFlags::_1,
+                None,
+                1,
+            )?;
+
+            // `VertexGrid`'s identity index buffer, for the indexed indirect draw.
+            let index_buffer = if kind == ResourceType::IndirectBufferDrawIndexed {
+                let count = GRID_VERTICES.len();
+                let size = (std::mem::size_of::<u32>() * count) as vk::DeviceSize;
+                let index_buffer = BufferWithMemory::new(
+                    device,
+                    allocator,
+                    make_buffer_create_info(size, vk::BufferUsageFlags::INDEX_BUFFER),
+                    MemoryRequirement::HOST_VISIBLE,
+                )?;
+                unsafe {
+                    let ptr = index_buffer.get_allocation().get_host_ptr().cast::<u32>();
+                    for i in 0..count {
+                        ptr.add(i).write(i as u32);
+                    }
+                }
+                flush_alloc(device, index_buffer.get_allocation())?;
+                Some(index_buffer)
+            } else {
+                None
+            };
+
+            (pipeline, Some(target), index_buffer)
+        };
+
+        Ok(Self {
+            buffer,
+            host_buffer,
+            _descriptor_set_layout: descriptor_set_layout,
+            descriptor_set,
+            _descriptor_pool: descriptor_pool,
+            pipeline_layout,
+            pipeline,
+            target,
+            index_buffer,
+            kind,
+        })
+    }
+
+    fn pipeline_stage(&self) -> vk::PipelineStageFlags2 {
+        if self.kind == ResourceType::IndirectBufferDispatch {
+            vk::PipelineStageFlags2::COMPUTE_SHADER
+        } else {
+            vk::PipelineStageFlags2::VERTEX_SHADER
+        }
+    }
+}
+
+impl Operation for IndirectBufferRead<'_> {
+    fn record_commands(&self, device: &Device, sync: SyncType, cmd_buffer: vk::CommandBuffer) {
+        match &self.target {
+            None => unsafe {
+                device.cmd_bind_pipeline(cmd_buffer, vk::PipelineBindPoint::COMPUTE, *self.pipeline);
+                device.cmd_bind_descriptor_sets(cmd_buffer, vk::PipelineBindPoint::COMPUTE, *self.pipeline_layout, 0, &[*self.descriptor_set], &[] as &[u32]);
+                device.cmd_dispatch_indirect(cmd_buffer, self.buffer.handle, 0);
+            },
+            Some(target) => {
+                let to_attachment = make_image_memory_barrier2(
+                    vk::PipelineStageFlags2::TOP_OF_PIPE,
+                    vk::AccessFlags2::empty(),
+                    vk::PipelineStageFlags2::COLOR_ATTACHMENT_OUTPUT,
+                    vk::AccessFlags2::COLOR_ATTACHMENT_WRITE,
+                    vk::ImageLayout::UNDEFINED,
+                    vk::ImageLayout::COLOR_ATTACHMENT_OPTIMAL,
+                    target.image_handle,
+                    target.subresource_range,
+                );
+                cmd_pipeline_barrier(device, sync, cmd_buffer, &[], &[to_attachment]);
+
+                let clear = [vk::ClearValue {
+                    color: vk::ClearColorValue { float32: [0.0, 0.0, 0.0, 1.0] },
+                }];
+                let begin = vk::RenderPassBeginInfo::builder()
+                    .render_pass(*target.render_pass)
+                    .framebuffer(*target.framebuffer)
+                    .render_area(vk::Rect2D {
+                        offset: vk::Offset2D { x: 0, y: 0 },
+                        extent: vk::Extent2D {
+                            width: GRAPHICS_TARGET_SIZE,
+                            height: GRAPHICS_TARGET_SIZE,
+                        },
+                    })
+                    .clear_values(&clear);
+
+                unsafe {
+                    device.cmd_begin_render_pass(cmd_buffer, &begin, vk::SubpassContents::INLINE);
+                    device.cmd_bind_pipeline(cmd_buffer, vk::PipelineBindPoint::GRAPHICS, *self.pipeline);
+                    device.cmd_bind_descriptor_sets(
+                        cmd_buffer,
+                        vk::PipelineBindPoint::GRAPHICS,
+                        *self.pipeline_layout,
+                        0,
+                        &[*self.descriptor_set],
+                        &[] as &[u32],
+                    );
+                    device.cmd_bind_vertex_buffers(cmd_buffer, 0, &[target.vertex_buffer.get()], &[0]);
+                    if let Some(index_buffer) = &self.index_buffer {
+                        device.cmd_bind_index_buffer(cmd_buffer, index_buffer.get(), 0, vk::IndexType::UINT32);
+                        device.cmd_draw_indexed_indirect(cmd_buffer, self.buffer.handle, 0, 1, 0);
+                    } else {
+                        device.cmd_draw_indirect(cmd_buffer, self.buffer.handle, 0, 1, 0);
+                    }
+                    device.cmd_end_render_pass(cmd_buffer);
+                }
+            }
+        }
+
+        let to_host = make_buffer_memory_barrier2(
+            self.pipeline_stage(),
+            vk::AccessFlags2::SHADER_WRITE,
+            vk::PipelineStageFlags2::HOST,
+            vk::AccessFlags2::HOST_READ,
+            self.host_buffer.get(),
+            0,
+            INDIRECT_READ_BUFFER_SIZE,
+        );
+        cmd_pipeline_barrier(device, sync, cmd_buffer, &[to_host], &[]);
+    }
+
+    fn in_sync_info(&self, _sync: SyncType) -> SyncInfo {
+        SyncInfo {
+            stage_mask: vk::PipelineStageFlags2::DRAW_INDIRECT,
+            access_mask: vk::AccessFlags2::INDIRECT_COMMAND_READ,
+            image_layout: vk::ImageLayout::UNDEFINED,
+        }
+    }
+
+    fn out_sync_info(&self, _sync: SyncType) -> SyncInfo {
+        EMPTY_SYNC_INFO
+    }
+
+    fn data(&self, device: &Device) -> Result<Vec<u8>, TestError> {
+        host_buffer_data(device, &self.host_buffer, INDIRECT_READ_BUFFER_SIZE)
     }
 }
