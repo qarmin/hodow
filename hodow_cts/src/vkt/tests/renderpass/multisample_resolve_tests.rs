@@ -3,7 +3,7 @@
 // Ported from external/vulkancts/modules/vulkan/renderpass/
 // vktRenderPassMultisampleResolveTests.cpp
 
-use vulkanalia::vk::{self, HasBuilder};
+use vulkanalia::vk::{self, Handle, HasBuilder};
 
 use crate::tcu::pixel::{ConstPixelBufferAccess, get_texture_format_bit_depth, srgb_to_linear};
 use crate::tcu::texture::{ChannelOrder, ChannelType, TextureChannelClass};
@@ -63,11 +63,12 @@ impl TestCase for MultisampleResolveTestCase {
         &self.name
     }
 
-    /// The dynamic-rendering half of the tree is registered but has no instance yet:
-    /// `submitDynamicRendering` and the local-read attachment remapping the
-    /// max-attachments case needs are not ported.
+    /// The max-attachments case under dynamic rendering is registered but has no
+    /// instance yet: its second subpass reads the resolved attachments back as input
+    /// attachments, which needs the attachment remapping from
+    /// VK_KHR_dynamic_rendering_local_read.
     fn is_stub(&self) -> bool {
-        self.config.group_params.rendering_type == RenderingType::DynamicRendering
+        self.config.group_params.rendering_type == RenderingType::DynamicRendering && self.config.test_type == TestType::MaxAttachments
     }
 
     /// `checkSupport`
@@ -77,7 +78,11 @@ impl TestCase for MultisampleResolveTestCase {
         let c = &self.config;
 
         if self.is_stub() {
-            return Err(TestError::NotSupported("dynamic rendering instance is not ported yet".into()));
+            return Err(TestError::NotSupported("the dynamic rendering max-attachments instance is not ported yet".into()));
+        }
+
+        if c.group_params.rendering_type == RenderingType::DynamicRendering {
+            context.require_device_functionality("VK_KHR_dynamic_rendering")?;
         }
 
         if c.format == vk::Format::A8_UNORM {
@@ -654,7 +659,14 @@ impl MultisampleRenderPassTestInstance<'_> {
             .logic_op(vk::LogicOp::COPY)
             .attachments(&attachment_blend_states);
 
-        let info = vk::GraphicsPipelineCreateInfo::builder()
+        let attachment_formats = vec![c.format; c.attachment_count as usize];
+        let mut rendering_create_info = vk::PipelineRenderingCreateInfo::builder()
+            .view_mask(0)
+            .color_attachment_formats(&attachment_formats)
+            .depth_attachment_format(vk::Format::UNDEFINED)
+            .stencil_attachment_format(vk::Format::UNDEFINED);
+
+        let mut info = vk::GraphicsPipelineCreateInfo::builder()
             .stages(&stages)
             .vertex_input_state(&vertex_input_state)
             .input_assembly_state(&input_assembly)
@@ -666,6 +678,9 @@ impl MultisampleRenderPassTestInstance<'_> {
             .layout(pipeline_layout)
             .render_pass(render_pass)
             .subpass(0);
+        if c.group_params.rendering_type == RenderingType::DynamicRendering {
+            info = info.push_next(&mut rendering_create_info);
+        }
         let pipelines = unsafe { device.create_graphics_pipelines(vk::PipelineCache::default(), &[info], None) }.vk_check("vkCreateGraphicsPipelines")?;
         Ok(Unique::new(device, pipelines.0[0]))
     }
@@ -821,6 +836,236 @@ impl MultisampleRenderPassTestInstance<'_> {
 
         end_command_buffer(device, *command_buffer)?;
         submit_commands_and_wait(device, self.context.get_universal_queue(), *command_buffer)?;
+
+        for buffer in buffers {
+            invalidate_alloc(device, buffer.get_allocation())?;
+        }
+        Ok(())
+    }
+
+    /// `beginSecondaryCmdBuffer`
+    fn begin_secondary_cmd_buffer(&self, cmd_buffer: vk::CommandBuffer) -> Result<(), TestError> {
+        use vulkanalia::vk::DeviceV1_0;
+
+        let c = &self.config;
+        let device = self.context.get_device();
+        let formats = vec![c.format; c.attachment_count as usize];
+
+        let mut inheritance_rendering_info = vk::CommandBufferInheritanceRenderingInfo::builder()
+            .flags(vk::RenderingFlags::empty())
+            .view_mask(0)
+            .color_attachment_formats(&formats)
+            .depth_attachment_format(vk::Format::UNDEFINED)
+            .stencil_attachment_format(vk::Format::UNDEFINED)
+            .rasterization_samples(sample_count_bit(c.sample_count));
+        let buffer_inheritance_info = vk::CommandBufferInheritanceInfo::builder().push_next(&mut inheritance_rendering_info);
+
+        let mut usage_flags = vk::CommandBufferUsageFlags::ONE_TIME_SUBMIT;
+        if !c.group_params.secondary_cmd_buffer_completely_contains_dynamic_renderpass {
+            usage_flags |= vk::CommandBufferUsageFlags::RENDER_PASS_CONTINUE;
+        }
+
+        let info = vk::CommandBufferBeginInfo::builder().flags(usage_flags).inheritance_info(&buffer_inheritance_info);
+        unsafe { device.begin_command_buffer(cmd_buffer, &info) }.vk_check("vkBeginCommandBuffer")
+    }
+
+    /// `submitDynamicRendering`
+    #[allow(clippy::too_many_arguments)]
+    fn submit_dynamic_rendering(
+        &self,
+        command_pool: vk::CommandPool,
+        pipeline: vk::Pipeline,
+        pipeline_layout: vk::PipelineLayout,
+        multisample_images: &[ImageWithMemory<'_>],
+        multisample_image_views: &[Unique<'_, vk::ImageView>],
+        singlesample_images: &[ImageWithMemory<'_>],
+        singlesample_image_views: &[Unique<'_, vk::ImageView>],
+        buffers: &[BufferWithMemory<'_>],
+        sample_mask: u32,
+    ) -> Result<(), TestError> {
+        use vulkanalia::vk::{DeviceV1_0, DeviceV1_3};
+
+        let c = &self.config;
+        let device = self.context.get_device();
+        let render_level = self.render_level();
+        let cmd_buffer = allocate_command_buffer(device, command_pool, vk::CommandBufferLevel::PRIMARY)?;
+
+        // Memory barriers between previous copies and rendering
+        let singlesample_image_barriers: Vec<vk::ImageMemoryBarrier> = singlesample_images
+            .iter()
+            .map(|image| {
+                vk::ImageMemoryBarrier::builder()
+                    .src_access_mask(vk::AccessFlags::TRANSFER_READ)
+                    .dst_access_mask(vk::AccessFlags::COLOR_ATTACHMENT_WRITE)
+                    .old_layout(vk::ImageLayout::UNDEFINED)
+                    .new_layout(vk::ImageLayout::COLOR_ATTACHMENT_OPTIMAL)
+                    .src_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+                    .dst_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+                    .image(image.get())
+                    .subresource_range(vk::ImageSubresourceRange {
+                        aspect_mask: vk::ImageAspectFlags::COLOR,
+                        base_mip_level: render_level,
+                        level_count: 1,
+                        base_array_layer: 0,
+                        layer_count: self.total_layers(),
+                    })
+                    .build()
+            })
+            .collect();
+
+        // Memory barriers to set multisample image layout to COLOR_ATTACHMENT_OPTIMAL.
+        // The render pass path gets this from the attachment's initial layout instead.
+        let multisample_image_barriers: Vec<vk::ImageMemoryBarrier> = multisample_images
+            .iter()
+            .map(|image| {
+                vk::ImageMemoryBarrier::builder()
+                    .src_access_mask(vk::AccessFlags::empty())
+                    .dst_access_mask(vk::AccessFlags::COLOR_ATTACHMENT_WRITE)
+                    .old_layout(vk::ImageLayout::UNDEFINED)
+                    .new_layout(vk::ImageLayout::COLOR_ATTACHMENT_OPTIMAL)
+                    .src_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+                    .dst_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+                    .image(image.get())
+                    .subresource_range(vk::ImageSubresourceRange {
+                        aspect_mask: vk::ImageAspectFlags::COLOR,
+                        base_mip_level: 0,
+                        level_count: 1,
+                        base_array_layer: 0,
+                        layer_count: c.layer_count,
+                    })
+                    .build()
+            })
+            .collect();
+
+        // `isIntFormat || isUintFormat`: an integer format cannot be averaged, so those
+        // resolve sample zero instead.
+        let channel_class = map_vk_format(c.format).expect("multisample_resolve formats all map").channel_class();
+        let resolve_mode = match channel_class {
+            TextureChannelClass::SignedInteger | TextureChannelClass::UnsignedInteger => vk::ResolveModeFlags::SAMPLE_ZERO,
+            _ => vk::ResolveModeFlags::AVERAGE,
+        };
+        let color_attachments: Vec<vk::RenderingAttachmentInfo> = multisample_image_views
+            .iter()
+            .zip(singlesample_image_views)
+            .map(|(multisample_view, singlesample_view)| {
+                vk::RenderingAttachmentInfo::builder()
+                    .image_view(**multisample_view)
+                    .image_layout(vk::ImageLayout::COLOR_ATTACHMENT_OPTIMAL)
+                    .resolve_mode(resolve_mode)
+                    .resolve_image_view(**singlesample_view)
+                    .resolve_image_layout(vk::ImageLayout::COLOR_ATTACHMENT_OPTIMAL)
+                    .load_op(vk::AttachmentLoadOp::DONT_CARE)
+                    .store_op(vk::AttachmentStoreOp::DONT_CARE)
+                    .clear_value(vk::ClearValue {
+                        color: vk::ClearColorValue { float32: [0.0, 0.0, 0.0, 1.0] },
+                    })
+                    .build()
+            })
+            .collect();
+        let rendering_info = vk::RenderingInfo::builder()
+            .flags(vk::RenderingFlags::empty())
+            .render_area(vk::Rect2D {
+                offset: vk::Offset2D { x: 0, y: 0 },
+                extent: vk::Extent2D { width: c.width, height: c.height },
+            })
+            .layer_count(c.layer_count)
+            .view_mask(0)
+            .color_attachments(&color_attachments);
+
+        let pre_render_barriers = |cmd: vk::CommandBuffer| unsafe {
+            device.cmd_pipeline_barrier(
+                cmd,
+                vk::PipelineStageFlags::TRANSFER,
+                vk::PipelineStageFlags::COLOR_ATTACHMENT_OUTPUT,
+                vk::DependencyFlags::empty(),
+                &[] as &[vk::MemoryBarrier],
+                &[] as &[vk::BufferMemoryBarrier],
+                &singlesample_image_barriers,
+            );
+            device.cmd_pipeline_barrier(
+                cmd,
+                vk::PipelineStageFlags::TOP_OF_PIPE,
+                vk::PipelineStageFlags::COLOR_ATTACHMENT_OUTPUT,
+                vk::DependencyFlags::empty(),
+                &[] as &[vk::MemoryBarrier],
+                &[] as &[vk::BufferMemoryBarrier],
+                &multisample_image_barriers,
+            );
+        };
+
+        // Only the "complete secondary" variant records the rendering itself; the
+        // partial one has nothing to put in a secondary buffer here, because the whole
+        // render is one begin/endRendering pair.
+        let sec_cmd_buffer = if c.group_params.secondary_cmd_buffer_completely_contains_dynamic_renderpass {
+            let sec_cmd_buffer = allocate_command_buffer(device, command_pool, vk::CommandBufferLevel::SECONDARY)?;
+
+            // record secondary command buffer
+            self.begin_secondary_cmd_buffer(*sec_cmd_buffer)?;
+            unsafe { device.cmd_begin_rendering(*sec_cmd_buffer, &rendering_info) };
+            self.draw_commands(*sec_cmd_buffer, pipeline, pipeline_layout, sample_mask);
+            unsafe { device.cmd_end_rendering(*sec_cmd_buffer) };
+            end_command_buffer(device, *sec_cmd_buffer)?;
+
+            // record primary command buffer
+            begin_command_buffer(device, *cmd_buffer)?;
+            pre_render_barriers(*cmd_buffer);
+            unsafe { device.cmd_execute_commands(*cmd_buffer, &[*sec_cmd_buffer]) };
+            Some(sec_cmd_buffer)
+        } else {
+            begin_command_buffer(device, *cmd_buffer)?;
+            pre_render_barriers(*cmd_buffer);
+            unsafe {
+                device.cmd_begin_rendering(*cmd_buffer, &rendering_info);
+                self.draw_commands(*cmd_buffer, pipeline, pipeline_layout, sample_mask);
+                device.cmd_end_rendering(*cmd_buffer);
+            }
+            None
+        };
+
+        // Memory barriers to set single-sample image layout to TRANSFER_SRC_OPTIMAL
+        {
+            let barriers: Vec<vk::ImageMemoryBarrier> = singlesample_images
+                .iter()
+                .map(|image| {
+                    vk::ImageMemoryBarrier::builder()
+                        .src_access_mask(vk::AccessFlags::COLOR_ATTACHMENT_WRITE)
+                        .dst_access_mask(vk::AccessFlags::TRANSFER_READ)
+                        .old_layout(vk::ImageLayout::COLOR_ATTACHMENT_OPTIMAL)
+                        .new_layout(vk::ImageLayout::TRANSFER_SRC_OPTIMAL)
+                        .src_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+                        .dst_queue_family_index(vk::QUEUE_FAMILY_IGNORED)
+                        .image(image.get())
+                        .subresource_range(vk::ImageSubresourceRange {
+                            aspect_mask: vk::ImageAspectFlags::COLOR,
+                            base_mip_level: render_level,
+                            level_count: 1,
+                            base_array_layer: 0,
+                            layer_count: self.total_layers(),
+                        })
+                        .build()
+                })
+                .collect();
+            unsafe {
+                device.cmd_pipeline_barrier(
+                    *cmd_buffer,
+                    vk::PipelineStageFlags::COLOR_ATTACHMENT_OUTPUT,
+                    vk::PipelineStageFlags::TRANSFER,
+                    vk::DependencyFlags::empty(),
+                    &[] as &[vk::MemoryBarrier],
+                    &[] as &[vk::BufferMemoryBarrier],
+                    &barriers,
+                );
+            }
+        }
+
+        for (image, buffer) in singlesample_images.iter().zip(buffers) {
+            // assume that buffer(s) have enough memory to store desired amount of mipmaps
+            self.copy_image_to_buffer(*cmd_buffer, image.get(), buffer.get());
+        }
+
+        end_command_buffer(device, *cmd_buffer)?;
+        submit_commands_and_wait(device, self.context.get_universal_queue(), *cmd_buffer)?;
+        drop(sec_cmd_buffer);
 
         for buffer in buffers {
             invalidate_alloc(device, buffer.get_allocation())?;
@@ -1199,13 +1444,20 @@ impl TestInstance for MultisampleRenderPassTestInstance<'_> {
         )?;
         let singlesample_image_views = self.create_image_views(&singlesample_images, render_level, c.base_layer)?;
 
+        // `createRenderPassSwitch` builds nothing for dynamic rendering, and without a
+        // render pass there is no framebuffer either.
+        let dynamic_rendering = c.group_params.rendering_type == RenderingType::DynamicRendering;
         // The "normal" render pass has an unused resolve attachment when testing compatibility.
-        let render_pass = self.create_render_pass(!self.test_compatibility())?;
+        let render_pass = (!dynamic_rendering).then(|| self.create_render_pass(!self.test_compatibility())).transpose()?;
         // The compatible render pass is always created with a used resolve attachment.
         let render_pass_compatible = self.test_compatibility().then(|| self.create_render_pass(true)).transpose()?;
 
         let attachments: Vec<vk::ImageView> = multisample_image_views.iter().zip(&singlesample_image_views).flat_map(|(ms, ss)| [**ms, **ss]).collect();
-        let framebuffer = make_framebuffer(device, *render_pass, &attachments, c.width, c.height, c.layer_count)?;
+        let framebuffer = render_pass
+            .as_ref()
+            .map(|render_pass| make_framebuffer(device, **render_pass, &attachments, c.width, c.height, c.layer_count))
+            .transpose()?;
+        let raw_render_pass = render_pass.as_deref().copied().unwrap_or_else(vk::RenderPass::null);
 
         let render_pipeline_layout = self.create_render_pipeline_layout()?;
         let programs = self.context.get_binary_collection();
@@ -1216,7 +1468,7 @@ impl TestInstance for MultisampleRenderPassTestInstance<'_> {
             .map(|b| create_shader_module(device, b))
             .transpose()?;
         let frag = create_shader_module(device, programs.get(&self.fragment_shader_name())?)?;
-        let render_pipeline = self.create_render_pipeline(*render_pass, *render_pipeline_layout, *vert, geom.as_deref().copied(), *frag)?;
+        let render_pipeline = self.create_render_pipeline(raw_render_pass, *render_pipeline_layout, *vert, geom.as_deref().copied(), *frag)?;
 
         let buffers = self.create_buffers((1 << render_level) * c.width, (1 << render_level) * c.height, render_level + 1)?;
         let command_pool = make_command_pool(device, self.context.get_universal_queue_family_index())?;
@@ -1235,17 +1487,32 @@ impl TestInstance for MultisampleRenderPassTestInstance<'_> {
         let full_mask = (0x1u32 << c.sample_count) - 1;
 
         loop {
-            self.submit(
-                *command_pool,
-                *render_pass,
-                render_pass_compatible.as_deref().copied(),
-                *framebuffer,
-                *render_pipeline,
-                *render_pipeline_layout,
-                &singlesample_images,
-                &buffers,
-                state.sample_mask,
-            )?;
+            // `submitSwitch`
+            if dynamic_rendering {
+                self.submit_dynamic_rendering(
+                    *command_pool,
+                    *render_pipeline,
+                    *render_pipeline_layout,
+                    &multisample_images,
+                    &multisample_image_views,
+                    &singlesample_images,
+                    &singlesample_image_views,
+                    &buffers,
+                    state.sample_mask,
+                )?;
+            } else {
+                self.submit(
+                    *command_pool,
+                    raw_render_pass,
+                    render_pass_compatible.as_deref().copied(),
+                    **framebuffer.as_ref().expect("a render pass was built, so a framebuffer was too"),
+                    *render_pipeline,
+                    *render_pipeline_layout,
+                    &singlesample_images,
+                    &buffers,
+                    state.sample_mask,
+                )?;
+            }
 
             let bytes: Vec<&[u8]> = buffers
                 .iter()
