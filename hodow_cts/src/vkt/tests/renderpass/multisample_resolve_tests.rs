@@ -33,6 +33,14 @@ pub struct TestConfig {
     pub resolve_level: Option<u32>,
 }
 
+/// The program set every case shares. Which of its shaders a case uses follows from
+/// the layer count, the channel class and the attachment count, so one collection
+/// covers the whole group.
+pub struct MsResolvePrograms {
+    pub name: &'static str,
+    pub programs: crate::vk::programs::BinaryCollection,
+}
+
 struct MultisampleResolveTestCase {
     name: String,
     #[allow(dead_code)]
