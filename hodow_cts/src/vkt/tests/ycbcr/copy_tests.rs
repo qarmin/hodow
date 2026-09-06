@@ -347,7 +347,26 @@ impl TestInstance for CopyTestInstance<'_> {
 
         let mut rng = Random::new(build_seed(&config));
 
-        let copies = gen_copies(&mut rng, 10, &config);
+        // `single_plane_copy` names its own extent and copies the whole colour aspect
+        // in one go; every other group randomises ten per-plane copies.
+        let copies = match config.extent {
+            Some((width, height)) => {
+                let subresource = vk::ImageSubresourceLayers {
+                    aspect_mask: vk::ImageAspectFlags::COLOR,
+                    mip_level: 0,
+                    base_array_layer: 0,
+                    layer_count: 1,
+                };
+                vec![vk::ImageCopy {
+                    src_subresource: subresource,
+                    src_offset: vk::Offset3D { x: 0, y: 0, z: 0 },
+                    dst_subresource: subresource,
+                    dst_offset: vk::Offset3D { x: 0, y: 0, z: 0 },
+                    extent: vk::Extent3D { width, height, depth: 1 },
+                }]
+            }
+            None => gen_copies(&mut rng, 10, &config),
+        };
 
         let mut src_data = MultiPlaneImageData::new(config.src.format, config.src.size);
         let mut dst_data = MultiPlaneImageData::new(config.dst.format, config.dst.size);
@@ -616,4 +635,169 @@ impl TestInstance for CopyTestInstance<'_> {
 
         Ok(crate::tcu::TestStatus::pass("Pass"))
     }
+}
+
+/// `getFormatName(format).substr(10)` lowered, taken from the shared table so the
+/// names cannot drift from the ones the `copy` group already uses.
+fn format_name(format: vk::Format) -> &'static str {
+    BASIC_UNSIGNED_FLOAT_FORMATS
+        .iter()
+        .find(|(f, _, _)| *f == format)
+        .map(|(_, name, _)| *name)
+        .expect("every format these groups name is in the shared table")
+}
+
+/// `initYcbcrSinglePlanarCopyTests`
+pub fn create_single_planar_copy_tests() -> TestCaseGroup {
+    const TILINGS: [(&str, vk::ImageTiling); 2] = [("linear", vk::ImageTiling::LINEAR), ("optimal", vk::ImageTiling::OPTIMAL)];
+    /// (name, srcFormat, dstFormat, srcSize, dstSize, copyExtent)
+    type SinglePlanarConfig = (&'static str, vk::Format, vk::Format, (u32, u32), (u32, u32), (u32, u32));
+    const TEST_CONFIGS: [SinglePlanarConfig; 2] = [
+        (
+            "r8g8b8a8_to_g8b8g8r8_422",
+            vk::Format::R8G8B8A8_UNORM,
+            vk::Format::G8B8G8R8_422_UNORM,
+            (64, 64),
+            (64, 64),
+            (32, 64),
+        ),
+        (
+            "g8b8g8r8_422_to_r8g8b8a8",
+            vk::Format::G8B8G8R8_422_UNORM,
+            vk::Format::R8G8B8A8_UNORM,
+            (64, 64),
+            (64, 64),
+            (64, 64),
+        ),
+    ];
+
+    let mut group = TestCaseGroup::new("single_plane_copy");
+
+    for (src_tiling_name, src_tiling) in TILINGS {
+        let mut src_tiling_group = TestCaseGroup::new(src_tiling_name);
+        for (dst_tiling_name, dst_tiling) in TILINGS {
+            let mut dst_tiling_group = TestCaseGroup::new(dst_tiling_name);
+            for (name, src_format, dst_format, src_size, dst_size, copy_extent) in TEST_CONFIGS {
+                let config = TestConfig {
+                    src: ImageConfig {
+                        format: src_format,
+                        tiling: src_tiling,
+                        disjoint: false,
+                        size: src_size,
+                    },
+                    dst: ImageConfig {
+                        format: dst_format,
+                        tiling: dst_tiling,
+                        disjoint: false,
+                        size: dst_size,
+                    },
+                    intermediate_buffer: false,
+                    extent: Some(copy_extent),
+                };
+                dst_tiling_group.add_child(Box::new(CopyTestCase { name: name.to_owned(), config }) as Box<dyn crate::vkt::TestCase>);
+            }
+            src_tiling_group.add_child(dst_tiling_group);
+        }
+        group.add_child(src_tiling_group);
+    }
+
+    group
+}
+
+/// `initYcbcrDimensionsCopyTests`
+pub fn create_dimensions_copy_tests() -> TestCaseGroup {
+    const TEST_FORMATS: [vk::Format; 5] = [
+        // 8-bit
+        vk::Format::G8_B8_R8_3PLANE_420_UNORM,
+        // 10-bit
+        vk::Format::G10X6_B10X6_R10X6_3PLANE_420_UNORM_3PACK16,
+        // 12-bit
+        vk::Format::G12X4_B12X4_R12X4_3PLANE_420_UNORM_3PACK16,
+        // 16-bit
+        vk::Format::G16_B16_R16_3PLANE_420_UNORM,
+        // Non-ycbcr
+        vk::Format::R8G8B8A8_UNORM,
+    ];
+    const IMAGE_DIMENSIONS: [(u32, u32); 16] = [
+        // Wide: large pot x small pot
+        (4096, 4),
+        (8192, 4),
+        (16384, 4),
+        (32768, 4),
+        // Wide: large pot x small npot
+        (4096, 6),
+        (8192, 6),
+        (16384, 6),
+        (32768, 6),
+        // Tall: small pot x large pot
+        (4, 4096),
+        (4, 8192),
+        (4, 16384),
+        (4, 32768),
+        // Tall: small npot x large pot
+        (6, 4096),
+        (6, 8192),
+        (6, 16384),
+        (6, 32768),
+    ];
+    const TILINGS: [(&str, vk::ImageTiling); 2] = [("linear", vk::ImageTiling::LINEAR), ("optimal", vk::ImageTiling::OPTIMAL)];
+
+    let mut group = TestCaseGroup::new("copy_dimensions");
+
+    for (width, height) in IMAGE_DIMENSIONS {
+        let src_size = (width, height);
+        let dst_size = (width, height);
+        let mut dimension_group = TestCaseGroup::new(format!("src{}x{}_dst{}x{}", src_size.0, src_size.1, dst_size.0, dst_size.1));
+
+        for src_format in TEST_FORMATS {
+            let mut src_format_group = TestCaseGroup::new(format_name(src_format));
+
+            for dst_format in TEST_FORMATS {
+                if (!is_ycbcr_format(src_format) && !is_ycbcr_format(dst_format)) || !is_copy_compatible(src_format, dst_format) {
+                    continue;
+                }
+
+                let mut dst_format_group = TestCaseGroup::new(format_name(dst_format));
+
+                for (src_tiling_name, src_tiling) in TILINGS {
+                    for (dst_tiling_name, dst_tiling) in TILINGS {
+                        for src_disjoint in [false, true] {
+                            for dst_disjoint in [false, true] {
+                                let config = TestConfig {
+                                    src: ImageConfig {
+                                        format: src_format,
+                                        tiling: src_tiling,
+                                        disjoint: src_disjoint,
+                                        size: src_size,
+                                    },
+                                    dst: ImageConfig {
+                                        format: dst_format,
+                                        tiling: dst_tiling,
+                                        disjoint: dst_disjoint,
+                                        size: dst_size,
+                                    },
+                                    intermediate_buffer: false,
+                                    extent: None,
+                                };
+                                let name = format!(
+                                    "{src_tiling_name}{}{dst_tiling_name}{}",
+                                    if src_disjoint { "_disjoint_" } else { "_" },
+                                    if dst_disjoint { "_disjoint" } else { "" },
+                                );
+                                dst_format_group.add_child(Box::new(CopyTestCase { name, config }) as Box<dyn crate::vkt::TestCase>);
+                            }
+                        }
+                    }
+                }
+
+                src_format_group.add_child(dst_format_group);
+            }
+
+            dimension_group.add_child(src_format_group);
+        }
+
+        group.add_child(dimension_group);
+    }
+
+    group
 }

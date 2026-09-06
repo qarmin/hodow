@@ -12,5 +12,7 @@ pub mod util;
 pub fn create_tests() -> TestCaseGroup {
     let mut tests = TestCaseGroup::new("ycbcr");
     tests.add_child(copy_tests::create_copy_tests());
+    tests.add_child(copy_tests::create_single_planar_copy_tests());
+    tests.add_child(copy_tests::create_dimensions_copy_tests());
     tests
 }
