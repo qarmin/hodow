@@ -106,7 +106,7 @@ static DEVICE_HOST_READ_OPS: &[OperationName] = &[
 /// A buffer gets random bytes; an image is filled pixel by pixel so the values are
 /// representable in its format, since a copy through the image would otherwise quantise
 /// them and the comparison at the end would fail on the port rather than on the driver.
-fn randomize_data(out: &mut [u8], desc: &ResourceDescription) {
+pub fn randomize_data(out: &mut [u8], desc: &ResourceDescription) {
     let mut rng = Random::new(1234);
 
     if desc.kind != ResourceType::Image {
@@ -146,7 +146,7 @@ fn randomize_data(out: &mut [u8], desc: &ResourceDescription) {
 
 /// `deIntMaxValue32` - the largest value that fits in `bits`, clamped to `i32::MAX`
 /// because `de::Random::getInt` takes a signed range.
-fn int_max_value(bits: i32) -> i32 {
+pub fn int_max_value(bits: i32) -> i32 {
     if bits <= 0 {
         return 0;
     }
@@ -918,6 +918,12 @@ pub fn create_timeline_semaphore_tests(sync_type: SyncType) -> tcu::TestCaseGrou
         wait.add_child(Box::new(TimelineFunctionCase { name, sync_type, run }) as Box<dyn TestCase>);
     }
     group.add_child(wait);
+
+    // `WaitBeforeSignalTests` / `OneToNTests` - the two subgroups that spread the chain
+    // across every queue, so they live in their own module.
+    use super::timeline_queue_tests::{TimelineQueueKind, create_timeline_queue_tests};
+    group.add_child(create_timeline_queue_tests(TimelineQueueKind::WaitBeforeSignal, sync_type));
+    group.add_child(create_timeline_queue_tests(TimelineQueueKind::OneToN, sync_type));
 
     group
 }

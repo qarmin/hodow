@@ -2041,6 +2041,22 @@ impl OperationName {
         Ok(())
     }
 
+    /// `OperationSupport::getShaderStage` - `None` where upstream returns
+    /// `VK_SHADER_STAGE_FLAG_BITS_MAX_ENUM`, i.e. for every operation that is not a
+    /// shader access and so runs in no particular stage.
+    pub fn shader_stage(self) -> Option<vk::ShaderStageFlags> {
+        if let Some((_, stage)) = self.buffer_graphics_kind() {
+            return Some(stage.shader_stage_flags());
+        }
+        if let Some(stage) = self.image_graphics_kind() {
+            return Some(stage.shader_stage_flags());
+        }
+        if self.buffer_shader_kind().is_some() || self.image_shader_kind().is_some() {
+            return Some(vk::ShaderStageFlags::COMPUTE);
+        }
+        None
+    }
+
     /// `OperationSupport::getQueueFlags` - the queue capabilities the operation needs.
     ///
     /// A transfer of a depth or stencil aspect may need a format conversion, which the
@@ -5788,4 +5804,21 @@ pub fn build_copy_operation<'a>(
         CopyOperationKind::ShaderBuffer(shader_kind) => Box::new(BufferShaderCopy::new(device, allocator, in_resource, out_resource, shader_kind, specialized_access)?),
         CopyOperationKind::ShaderImage(shader_kind) => Box::new(ImageShaderCopy::new(device, allocator, desc, in_resource, out_resource, shader_kind, specialized_access)?),
     })
+}
+
+/// `isStageSupported` - whether a queue with these capabilities can run the stage at
+/// all. A stage the queue cannot run is not merely slow, it is invalid.
+pub fn is_stage_supported(stage: vk::ShaderStageFlags, queue_flags: vk::QueueFlags) -> bool {
+    let graphics_stages = vk::ShaderStageFlags::VERTEX
+        | vk::ShaderStageFlags::TESSELLATION_CONTROL
+        | vk::ShaderStageFlags::TESSELLATION_EVALUATION
+        | vk::ShaderStageFlags::GEOMETRY
+        | vk::ShaderStageFlags::FRAGMENT;
+    if graphics_stages.contains(stage) {
+        return queue_flags.contains(vk::QueueFlags::GRAPHICS);
+    }
+    if stage == vk::ShaderStageFlags::COMPUTE {
+        return queue_flags.contains(vk::QueueFlags::COMPUTE);
+    }
+    true
 }
