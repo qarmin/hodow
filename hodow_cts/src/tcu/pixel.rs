@@ -263,6 +263,112 @@ pub fn get_format_max_int_value(format: TextureFormat) -> [i32; 4] {
     }
 }
 
+/// `tcu::getFloatChannelValueRange`
+pub fn get_float_channel_value_range(type_: ChannelType) -> (f32, f32) {
+    use ChannelType::*;
+    match type_ {
+        // @generated:float_channel_value_range
+        SNORM_INT8 => (-1.0, 1.0),
+        SNORM_INT16 => (-1.0, 1.0),
+        SNORM_INT32 => (-1.0, 1.0),
+        SNORM_INT_1010102_REV => (-1.0, 1.0),
+        UNORM_INT8 => (0.0, 1.0),
+        UNORM_INT16 => (0.0, 1.0),
+        UNORM_INT24 => (0.0, 1.0),
+        UNORM_INT32 => (0.0, 1.0),
+        UNORM_BYTE_44 => (0.0, 1.0),
+        UNORM_SHORT_565 => (0.0, 1.0),
+        UNORM_SHORT_555 => (0.0, 1.0),
+        UNORM_SHORT_4444 => (0.0, 1.0),
+        UNORM_SHORT_5551 => (0.0, 1.0),
+        UNORM_SHORT_1555 => (0.0, 1.0),
+        UNORM_INT_101010 => (0.0, 1.0),
+        UNORM_INT_1010102_REV => (0.0, 1.0),
+        UNORM_SHORT_10 => (0.0, 1.0),
+        UNORM_SHORT_12 => (0.0, 1.0),
+        SIGNED_INT8 => (-128.0, 127.0),
+        SIGNED_INT16 => (-32768.0, 32767.0),
+        // Maximum exactly representable 31-bit integer: (2^24 - 1) * 2^7
+        SIGNED_INT32 => (-2147483520.0, 2147483520.0),
+        UNSIGNED_INT8 => (0.0, 255.0),
+        UNSIGNED_INT16 => (0.0, 65535.0),
+        UNSIGNED_INT24 => (0.0, 16777215.0),
+        // Maximum exactly representable 32-bit integer: (2^24 - 1) * 2^8
+        UNSIGNED_INT32 => (0.0, 4294967040.0),
+        HALF_FLOAT => (-1e3, 1e3),
+        FLOAT => (-1e5, 1e5),
+        FLOAT64 => (-1e5, 1e5),
+        UNSIGNED_INT_11F_11F_10F_REV => (0.0, 1e4),
+        UNSIGNED_INT_999_E5_REV => (0.0, 0.5e5),
+        UNSIGNED_BYTE_44 => (0.0, 15.0),
+        UNSIGNED_SHORT_4444 => (0.0, 15.0),
+        USCALED_INT8 => (0.0, 255.0),
+        USCALED_INT16 => (0.0, 65535.0),
+        SSCALED_INT8 => (-128.0, 127.0),
+        SSCALED_INT16 => (-32768.0, 32767.0),
+        USCALED_INT_1010102_REV => (0.0, 1023.0),
+        SSCALED_INT_1010102_REV => (-512.0, 511.0),
+        // upstream's `default: DE_ASSERT(false)`
+        _ => (0.0, 0.0),
+    }
+}
+
+/// `tcu::TextureFormatInfo`
+#[derive(Debug, Clone, Copy)]
+pub struct TextureFormatInfo {
+    pub value_min: [f32; 4],
+    pub value_max: [f32; 4],
+    pub look_up_scale: [f32; 4],
+    pub look_up_bias: [f32; 4],
+}
+
+/// `tcu::getTextureFormatInfo`
+pub fn get_texture_format_info(format: TextureFormat) -> TextureFormatInfo {
+    use ChannelOrder::{D, DS, RGBA};
+    use ChannelType::*;
+
+    let info = |value_min: [f32; 4], value_max: [f32; 4], look_up_scale: [f32; 4], look_up_bias: [f32; 4]| TextureFormatInfo {
+        value_min,
+        value_max,
+        look_up_scale,
+        look_up_bias,
+    };
+
+    // Special cases.
+    if format.type_ == UNSIGNED_INT_1010102_REV {
+        return info([0.0; 4], [1023.0, 1023.0, 1023.0, 3.0], [1.0 / 1023.0, 1.0 / 1023.0, 1.0 / 1023.0, 1.0 / 3.0], [0.0; 4]);
+    }
+    if format.type_ == SIGNED_INT_1010102_REV {
+        return info(
+            [-512.0, -512.0, -512.0, -2.0],
+            [511.0, 511.0, 511.0, 1.0],
+            [1.0 / 1023.0, 1.0 / 1023.0, 1.0 / 1023.0, 1.0 / 3.0],
+            [0.5; 4],
+        );
+    } else if format.order == D || format.order == DS {
+        // Depth / stencil formats.
+        return info([0.0; 4], [1.0, 1.0, 1.0, 255.0], [1.0; 4], [0.0; 4]);
+    } else if format.order == RGBA && format.type_ == UNORM_SHORT_5551 {
+        return info([0.0, 0.0, 0.0, 0.5], [1.0, 1.0, 1.0, 1.5], [1.0; 4], [0.0; 4]);
+    } else if format.type_ == UNSIGNED_SHORT_5551 {
+        return info([0.0; 4], [31.0, 31.0, 31.0, 1.0], [1.0 / 31.0, 1.0 / 31.0, 1.0 / 31.0, 1.0], [0.0; 4]);
+    } else if format.type_ == UNSIGNED_SHORT_565 {
+        return info([0.0; 4], [31.0, 63.0, 31.0, 0.0], [1.0 / 31.0, 1.0 / 63.0, 1.0 / 31.0, 1.0], [0.0; 4]);
+    }
+
+    let (c_min, c_max) = get_float_channel_value_range(format.type_);
+    let chn_mask = get_texture_format_channel_mask(format);
+    let scale = 1.0 / (c_max - c_min);
+    let bias = -c_min * scale;
+
+    info(
+        std::array::from_fn(|i| if chn_mask[i] { c_min } else { 0.0 }),
+        std::array::from_fn(|i| if chn_mask[i] { c_max } else { 0.0 }),
+        std::array::from_fn(|i| if chn_mask[i] { scale } else { 1.0 }),
+        std::array::from_fn(|i| if chn_mask[i] { bias } else { 0.0 }),
+    )
+}
+
 /// `tcu::hasDepthComponent`
 pub fn has_depth_component(order: ChannelOrder) -> bool {
     matches!(order, ChannelOrder::D | ChannelOrder::DS)
