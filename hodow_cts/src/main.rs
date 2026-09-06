@@ -55,6 +55,10 @@ struct Args {
     #[arg(long, default_value_t = 1)]
     device_id: usize,
 
+    /// List the cases that are registered but have no instance behind them yet.
+    #[arg(long)]
+    list_stubs: bool,
+
     /// Enable VK_LAYER_KHRONOS_validation and fail any case that produces a message.
     ///
     /// Off by default: the layer changes driver behaviour, so a run with it on is not
@@ -95,6 +99,13 @@ fn main() -> std::process::ExitCode {
 
     if args.list {
         for case in &selected {
+            println!("{}", case.full_name);
+        }
+        return std::process::ExitCode::SUCCESS;
+    }
+
+    if args.list_stubs {
+        for case in selected.iter().filter(|c| c.case.is_stub()) {
             println!("{}", case.full_name);
         }
         return std::process::ExitCode::SUCCESS;

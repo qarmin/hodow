@@ -59,6 +59,10 @@ heavily on AI-assisted code generation (see README.md "AI Usage").
 - `just cts-shaders` / `cts-diff` / `cts-drift` / `cts-sync` - regenerate SPIR-V, compare
   verdicts against upstream `deqp-vk`, report upstream drift, re-vendor upstream sources.
 - `just cts-coverage` - how many upstream cases are implemented, against three denominators.
+  It counts only cases that actually run: a case tree landed ahead of its instance is
+  reported separately as "registered without an instance". A stub declares itself by
+  overriding `TestCase::is_stub`, and `--list-stubs` prints them - without that, a tree
+  committed on its own silently inflates the headline percentage.
   Report this after every batch of newly ported tests; a single percentage is misleading,
   since against the whole suite it is negligible by construction while against the group
   being worked on it is the number that says whether that group is done.

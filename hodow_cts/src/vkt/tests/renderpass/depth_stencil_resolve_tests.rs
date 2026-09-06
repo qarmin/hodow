@@ -72,6 +72,10 @@ impl crate::vkt::TestCase for DepthStencilResolveTestCase {
     fn create_instance<'a>(&'a self, _context: &'a crate::vkt::Context<'a>) -> Box<dyn crate::vkt::TestInstance + 'a> {
         unreachable!("check_support rejects every case until the instance lands")
     }
+
+    fn is_stub(&self) -> bool {
+        true
+    }
 }
 
 struct FormatData {
@@ -300,8 +304,8 @@ pub fn create_tests() -> TestCaseGroup {
 
                                     // The format-compatibility variant is registered once, for the
                                     // smallest sample count and the first image size only.
-                                    if let Some(compatible) = alternative_format(format_data.format)
-                                        .filter(|_| sample_count_ndx == 0 && image_data_ndx == 0 && depth_mode != vk::ResolveModeFlags::NONE)
+                                    if let Some(compatible) =
+                                        alternative_format(format_data.format).filter(|_| sample_count_ndx == 0 && image_data_ndx == 0 && depth_mode != vk::ResolveModeFlags::NONE)
                                     {
                                         format_group.add_child(Box::new(DepthStencilResolveTestCase {
                                             name: format!("compatibility_{name}"),

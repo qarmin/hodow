@@ -27,6 +27,24 @@ REPO_DIR = CRATE_DIR.parent
 DEFAULT_MUSTPASS = REPO_DIR / "tmp" / "VK-GL-CTS" / "external" / "vulkancts" / "mustpass" / "main" / "vk-default"
 
 
+def stub_cases() -> set[str]:
+    """Cases that are registered but have no instance behind them.
+
+    A case tree is often landed before the test logic - it is the part that can be
+    checked against upstream on its own - but counting those as coverage would make the
+    headline number mean nothing.
+    """
+    out = subprocess.run(
+        ["cargo", "run", "-q", "-p", "hodow_cts", "--", "--list-stubs"],
+        capture_output=True,
+        text=True,
+        cwd=REPO_DIR,
+    )
+    if out.returncode != 0:
+        return set()
+    return {line.strip() for line in out.stdout.splitlines() if line.strip().startswith("dEQP-VK.")}
+
+
 def implemented_cases() -> list[str]:
     out = subprocess.run(
         ["cargo", "run", "-q", "-p", "hodow_cts", "--", "--list"],
@@ -65,13 +83,20 @@ def main() -> int:
         print("It comes with a VK-GL-CTS checkout; see hodow_cts/README.md.", file=sys.stderr)
         return 2
 
-    ours = implemented_cases()
+    registered = implemented_cases()
+    stubs = stub_cases()
+    # The headline number counts only cases that actually run. A registered case with
+    # no instance behind it is progress, but it is not coverage, and reporting the two
+    # as one figure is how a percentage stops meaning anything.
+    ours = [c for c in registered if c not in stubs]
     theirs = upstream_cases(args.mustpass)
     theirs_set = set(theirs)
 
     unknown = [c for c in ours if c not in theirs_set]
 
     print(f"implemented: {len(ours)}")
+    if stubs:
+        print(f"registered without an instance: {len(stubs)}  (not counted below)")
     print(f"upstream vk-default mustpass: {len(theirs)}")
     print()
     print(f"  of the whole suite:        {len(ours)}/{len(theirs)}  ({pct(len(ours), len(theirs))})")

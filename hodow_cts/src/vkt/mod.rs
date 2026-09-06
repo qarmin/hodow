@@ -41,6 +41,16 @@ pub trait TestCase: Send + Sync {
 
     /// `TestCase::createInstance`
     fn create_instance<'a>(&'a self, context: &'a Context<'a>) -> Box<dyn TestInstance + 'a>;
+
+    /// Whether this case is registered but has no instance behind it yet.
+    ///
+    /// A case tree is worth landing before the test logic - it is the error-prone part
+    /// and can be checked against upstream on its own - but a registered case that
+    /// runs nothing must not be counted as coverage. Overriding this is what keeps
+    /// `cts-coverage` honest; the default is that a case really runs.
+    fn is_stub(&self) -> bool {
+        false
+    }
 }
 
 /// `vkt::TestInstance` - the run-time half.
