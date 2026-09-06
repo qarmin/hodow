@@ -94,3 +94,4 @@ external/vulkancts/modules/vulkan/transform_feedback/vktPrimitivesGeneratedQuery
 external/vulkancts/modules/vulkan/ycbcr/vktYCbCrCopyTests.cpp
 external/vulkancts/modules/vulkan/renderpass/vktRenderPassDepthStencilResolveTests.cpp
 external/vulkancts/modules/vulkan/renderpass/vktRenderPassMultisampleResolveTests.cpp
+external/vulkancts/modules/vulkan/renderpass/vktRenderPassMultisampleTests.cpp
