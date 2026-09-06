@@ -73,7 +73,13 @@ impl DescriptorSetLayoutBuilder {
     }
 
     pub fn build(self, device: &Device) -> Result<Unique<'_, vk::DescriptorSetLayout>, TestError> {
-        let info = vk::DescriptorSetLayoutCreateInfo::builder().bindings(&self.bindings);
+        self.build_with_flags(device, vk::DescriptorSetLayoutCreateFlags::empty())
+    }
+
+    /// The same, for a layout that has to declare a flag - a push-descriptor layout
+    /// cannot have sets allocated from it, so the flag is not merely advisory.
+    pub fn build_with_flags(self, device: &Device, flags: vk::DescriptorSetLayoutCreateFlags) -> Result<Unique<'_, vk::DescriptorSetLayout>, TestError> {
+        let info = vk::DescriptorSetLayoutCreateInfo::builder().flags(flags).bindings(&self.bindings);
         let layout = unsafe { device.create_descriptor_set_layout(&info, None) }.vk_check("vkCreateDescriptorSetLayout")?;
         Ok(Unique::new(device, layout))
     }

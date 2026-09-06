@@ -98,13 +98,16 @@ impl DescriptorSetCount {
     }
 }
 
-/// `DescriptorUpdateMethod`, restricted to the two that need no extra extension on a
-/// 1.1 driver. `WITH_PUSH`/`WITH_PUSH_TEMPLATE` need VK_KHR_push_descriptor and are
-/// absent rather than present-and-skipped.
+/// `DescriptorUpdateMethod`.
+/// /// absent rather than present-and-skipped.
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum DescriptorUpdateMethod {
     Normal,
     WithTemplate,
+    /// The descriptors are written into the command buffer at bind time rather than
+    /// into a set, so no set is ever allocated.
+    WithPush,
+    WithPushTemplate,
 }
 
 impl DescriptorUpdateMethod {
@@ -114,7 +117,18 @@ impl DescriptorUpdateMethod {
         match self {
             Self::Normal => None,
             Self::WithTemplate => Some("with_template"),
+            Self::WithPush => Some("with_push"),
+            Self::WithPushTemplate => Some("with_push_template"),
         }
+    }
+
+    /// Whether the descriptors go into the command buffer instead of into a set.
+    fn is_push(self) -> bool {
+        matches!(self, Self::WithPush | Self::WithPushTemplate)
+    }
+
+    fn uses_template(self) -> bool {
+        matches!(self, Self::WithTemplate | Self::WithPushTemplate)
     }
 }
 
@@ -156,16 +170,54 @@ impl ShaderInputInterface {
 }
 
 /// `getArbitraryBindingIndex` - the largest binding values glslang accepts.
+/// Where a descriptor write lands. A push case has no set to write into: the
+/// descriptors go straight into the command buffer at bind time, which is why the
+/// writes have to be built inside the recording rather than before it.
+#[derive(Clone, Copy)]
+enum DescriptorTarget {
+    Set(vk::DescriptorSet),
+    Push {
+        cmd: vk::CommandBuffer,
+        bind_point: vk::PipelineBindPoint,
+        layout: vk::PipelineLayout,
+        set_ndx: u32,
+    },
+}
+
+impl DescriptorTarget {
+    /// The `dstSet` a write names. A pushed write ignores it, and the spec requires it
+    /// to be null there.
+    fn set(self) -> vk::DescriptorSet {
+        match self {
+            Self::Set(set) => set,
+            Self::Push { .. } => vk::DescriptorSet::null(),
+        }
+    }
+
+    fn apply(self, device: &Device, writes: &[vk::WriteDescriptorSet]) {
+        match self {
+            Self::Set(_) => unsafe { device.update_descriptor_sets(writes, &[] as &[vk::CopyDescriptorSet]) },
+            Self::Push { cmd, bind_point, layout, set_ndx } => {
+                use vulkanalia::vk::KhrPushDescriptorExtensionDeviceCommands;
+                unsafe { device.cmd_push_descriptor_set_khr(cmd, bind_point, layout, set_ndx, writes) };
+            }
+        }
+    }
+}
+
 fn arbitrary_binding_index(ndx: u32) -> u32 {
     [0x7FFE, 0xFFFE][ndx as usize]
 }
 
 /// `verifyDriverSupport`'s update-method half.
 fn verify_update_method_support(context: &Context, method: DescriptorUpdateMethod) -> Result<(), TestError> {
-    match method {
-        DescriptorUpdateMethod::Normal => Ok(()),
-        DescriptorUpdateMethod::WithTemplate => context.require_device_functionality("VK_KHR_descriptor_update_template"),
+    if method.uses_template() {
+        context.require_device_functionality("VK_KHR_descriptor_update_template")?;
     }
+    if method.is_push() {
+        context.require_device_functionality("VK_KHR_push_descriptor")?;
+    }
+    Ok(())
 }
 
 fn is_uniform_descriptor_type(t: vk::DescriptorType) -> bool {
@@ -736,34 +788,19 @@ impl TestInstance for BufferAccessInstance<'_> {
             let layout = self.create_descriptor_set_layout(set_ndx)?;
             let set = make_descriptor_set(device, *pool, *layout)?;
 
-            let ndx0 = (set_ndx * num_resources) % num_src_buffers;
-            let ndx1 = (set_ndx * num_resources + 1) % num_src_buffers;
-            match (p.resource_kind, p.update_method) {
-                (ResourceKind::Buffer, DescriptorUpdateMethod::Normal) => self.write_descriptor_set(
-                    *set,
-                    set_ndx,
-                    buffers[ndx0 as usize].get(),
-                    view_offsets[ndx0 as usize],
-                    buffers[ndx1 as usize].get(),
-                    view_offsets[ndx1 as usize],
-                    result_buffer.get(),
-                ),
-                (ResourceKind::Buffer, DescriptorUpdateMethod::WithTemplate) => self.write_descriptor_set_with_template(
-                    *set,
+            // A push case has no set and writes from inside the command buffer, so
+            // nothing is written here.
+            if !p.update_method.is_push() {
+                self.write_descriptors(
+                    DescriptorTarget::Set(*set),
                     *layout,
+                    vk::PipelineLayout::null(),
                     set_ndx,
-                    buffers[ndx0 as usize].get(),
-                    view_offsets[ndx0 as usize],
-                    buffers[ndx1 as usize].get(),
-                    view_offsets[ndx1 as usize],
+                    &buffers,
+                    &buffer_views,
+                    &view_offsets,
                     result_buffer.get(),
-                )?,
-                (ResourceKind::TexelBuffer, DescriptorUpdateMethod::Normal) => {
-                    self.write_texel_descriptor_set(*set, set_ndx, *buffer_views[ndx0 as usize], *buffer_views[ndx1 as usize], result_buffer.get())
-                }
-                (ResourceKind::TexelBuffer, DescriptorUpdateMethod::WithTemplate) => {
-                    self.write_texel_descriptor_set_with_template(*set, *layout, set_ndx, *buffer_views[ndx0 as usize], *buffer_views[ndx1 as usize], result_buffer.get())?
-                }
+                )?;
             }
 
             layout_handles.push(*layout);
@@ -1040,29 +1077,19 @@ impl BufferAccessInstance<'_> {
         let (buffers, buffer_views, view_offsets, bind_time_offsets, texel_sources, texel_view_offset_texels) =
             self.create_source_resources(num_src_buffers, num_resources, is_dynamic)?;
 
-        let pool = self.create_descriptor_pool()?;
+        // A push case allocates no sets at all: its layout is declared for push and the
+        // descriptors go into the command buffer at bind time.
+        let is_push = p.update_method.is_push();
+        let pool = (!is_push).then(|| self.create_descriptor_pool()).transpose()?;
         let mut set_layouts = Vec::new();
         let mut layout_handles = Vec::new();
         let mut sets = Vec::new();
         for set_ndx in 0..num_sets {
             let layout = self.create_descriptor_set_layout(set_ndx)?;
-            let set = make_descriptor_set(device, *pool, *layout)?;
-            let ndx0 = (set_ndx * num_resources) % num_src_buffers;
-            let ndx1 = (set_ndx * num_resources + 1) % num_src_buffers;
-            match p.resource_kind {
-                ResourceKind::Buffer => self.write_descriptor_set(
-                    *set,
-                    set_ndx,
-                    buffers[ndx0 as usize].get(),
-                    view_offsets[ndx0 as usize],
-                    buffers[ndx1 as usize].get(),
-                    view_offsets[ndx1 as usize],
-                    vk::Buffer::null(),
-                ),
-                ResourceKind::TexelBuffer => self.write_texel_descriptor_set(*set, set_ndx, *buffer_views[ndx0 as usize], *buffer_views[ndx1 as usize], vk::Buffer::null()),
+            if let Some(pool) = &pool {
+                sets.push(make_descriptor_set(device, **pool, *layout)?);
             }
             layout_handles.push(*layout);
-            sets.push(set);
             set_layouts.push(layout);
         }
         let set_handles: Vec<vk::DescriptorSet> = sets.iter().map(|s| **s).collect();
@@ -1079,9 +1106,44 @@ impl BufferAccessInstance<'_> {
         };
         let pipeline_layout = make_pipeline_layout(device, &all_layouts)?;
 
+        if !is_push {
+            for set_ndx in 0..num_sets {
+                self.write_descriptors(
+                    DescriptorTarget::Set(set_handles[set_ndx as usize]),
+                    *set_layouts[set_ndx as usize],
+                    *pipeline_layout,
+                    set_ndx,
+                    &buffers,
+                    &buffer_views,
+                    &view_offsets,
+                    vk::Buffer::null(),
+                )?;
+            }
+        }
+
         let (_modules, stages) = graphics_modules(device, &p.program().programs, p.stage_flags)?;
         let dynamic_offsets: Vec<u32> = if p.set_dynamic_offset { bind_time_offsets.clone() } else { Vec::new() };
         let bind = |device: &Device, cmd: vk::CommandBuffer| {
+            if is_push {
+                for set_ndx in 0..num_sets {
+                    let _ = self.write_descriptors(
+                        DescriptorTarget::Push {
+                            cmd,
+                            bind_point: vk::PipelineBindPoint::GRAPHICS,
+                            layout: *pipeline_layout,
+                            set_ndx: p.descriptor_set_count.set_ndx(set_ndx),
+                        },
+                        *set_layouts[set_ndx as usize],
+                        *pipeline_layout,
+                        set_ndx,
+                        &buffers,
+                        &buffer_views,
+                        &view_offsets,
+                        vk::Buffer::null(),
+                    );
+                }
+                return;
+            }
             // The discontiguous arrangement's sets are 0 and 2, so each binds at its
             // own index and its dynamic offsets have to be sliced to match.
             if p.descriptor_set_count == DescriptorSetCount::MultipleDiscontiguous {
@@ -1213,6 +1275,48 @@ impl BufferAccessInstance<'_> {
         }
     }
 
+    /// The descriptor writes for one set, however this case delivers them. A push case
+    /// calls this from inside the command buffer recording; every other case calls it
+    /// once during setup.
+    #[allow(clippy::too_many_arguments)]
+    fn write_descriptors(
+        &self,
+        target: DescriptorTarget,
+        layout: vk::DescriptorSetLayout,
+        pipeline_layout: vk::PipelineLayout,
+        set_ndx: u32,
+        buffers: &[BufferWithMemory<'_>],
+        buffer_views: &[Unique<'_, vk::BufferView>],
+        view_offsets: &[u32],
+        result: vk::Buffer,
+    ) -> Result<(), TestError> {
+        let p = self.params;
+        let num_resources = p.shader_interface.num_resources();
+        let num_src_buffers = p.descriptor_set_count.count() * num_resources;
+        let ndx0 = ((set_ndx * num_resources) % num_src_buffers) as usize;
+        let ndx1 = ((set_ndx * num_resources + 1) % num_src_buffers) as usize;
+
+        match (p.resource_kind, p.update_method.uses_template()) {
+            (ResourceKind::Buffer, false) => self.write_descriptor_set(target, set_ndx, buffers[ndx0].get(), view_offsets[ndx0], buffers[ndx1].get(), view_offsets[ndx1], result),
+            (ResourceKind::Buffer, true) => self.write_descriptor_set_with_template(
+                target,
+                layout,
+                pipeline_layout,
+                set_ndx,
+                buffers[ndx0].get(),
+                view_offsets[ndx0],
+                buffers[ndx1].get(),
+                view_offsets[ndx1],
+                result,
+            )?,
+            (ResourceKind::TexelBuffer, false) => self.write_texel_descriptor_set(target, set_ndx, *buffer_views[ndx0], *buffer_views[ndx1], result),
+            (ResourceKind::TexelBuffer, true) => {
+                self.write_texel_descriptor_set_with_template(target, layout, pipeline_layout, set_ndx, *buffer_views[ndx0], *buffer_views[ndx1], result)?
+            }
+        }
+        Ok(())
+    }
+
     /// `createColorDataBuffer` - two colours at `offset`, in a deliberately larger
     /// allocation so a wrong offset reads defined-but-wrong data rather than faulting.
     fn create_color_data_buffer(&self, offset: u32, buffer_size: u32, value1: [f32; 4], value2: [f32; 4]) -> Result<BufferWithMemory<'_>, TestError> {
@@ -1272,7 +1376,14 @@ impl BufferAccessInstance<'_> {
             ShaderInputInterface::DescriptorArray => builder.add_indexed_binding(p.descriptor_type, stages, binding, 2),
         };
 
-        builder.build(self.context.get_device())
+        // `VK_DESCRIPTOR_SET_LAYOUT_CREATE_PUSH_DESCRIPTOR_BIT_KHR` - a push layout is
+        // never allocated from, so the flag is load-bearing rather than advisory.
+        let flags = if p.update_method.is_push() {
+            vk::DescriptorSetLayoutCreateFlags::PUSH_DESCRIPTOR
+        } else {
+            vk::DescriptorSetLayoutCreateFlags::empty()
+        };
+        builder.build_with_flags(self.context.get_device(), flags)
     }
 
     /// `createDescriptorPool`
@@ -1291,7 +1402,8 @@ impl BufferAccessInstance<'_> {
 
     /// `writeDescriptorSet`
     #[allow(clippy::too_many_arguments)]
-    fn write_descriptor_set(&self, set: vk::DescriptorSet, set_ndx: u32, view_a: vk::Buffer, offset_a: u32, view_b: vk::Buffer, offset_b: u32, result: vk::Buffer) {
+    fn write_descriptor_set(&self, target: DescriptorTarget, set_ndx: u32, view_a: vk::Buffer, offset_a: u32, view_b: vk::Buffer, offset_b: u32, result: vk::Buffer) {
+        let set = target.set();
         let p = self.params;
         let device = self.context.get_device();
         let range = std::mem::size_of::<[f32; 8]>() as u64;
@@ -1355,7 +1467,7 @@ impl BufferAccessInstance<'_> {
             ShaderInputInterface::DescriptorArray => writes.push(single(binding, &buffer_infos)),
         }
 
-        unsafe { device.update_descriptor_sets(&writes, &[] as &[vk::CopyDescriptorSet]) };
+        target.apply(device, &writes);
     }
 
     fn create_compute_pipeline(&self, layout: vk::PipelineLayout, module: vk::ShaderModule) -> Result<Unique<'_, vk::Pipeline>, TestError> {
@@ -1407,7 +1519,12 @@ pub fn create_shader_access_tests() -> tcu::TestCaseGroup {
         for bind2 in [false, true] {
             let mut bind = tcu::TestCaseGroup::new(if bind2 { "bind2" } else { "bind" });
 
-            for update_method in [DescriptorUpdateMethod::Normal, DescriptorUpdateMethod::WithTemplate] {
+            for update_method in [
+                DescriptorUpdateMethod::Normal,
+                DescriptorUpdateMethod::WithTemplate,
+                DescriptorUpdateMethod::WithPush,
+                DescriptorUpdateMethod::WithPushTemplate,
+            ] {
                 let mut method_group = update_method.group_name().map(tcu::TestCaseGroup::new);
                 for type_group in create_descriptor_type_groups(update_method, is_primary, bind2) {
                     if let Some(g) = method_group.as_mut() {
@@ -1468,6 +1585,12 @@ fn create_descriptor_type_groups(update_method: DescriptorUpdateMethod, is_prima
         let is_dynamic = is_dynamic_descriptor_type(descriptor_type);
         let mut type_group = tcu::TestCaseGroup::new(type_name);
 
+        // "Can't support push descriptor sets with dynamic UBOs or SSBOs" - upstream
+        // drops the whole descriptor type rather than the individual cases.
+        if is_dynamic && update_method.is_push() {
+            continue;
+        }
+
         for (stage_name, stage_flags) in SHADER_STAGES {
             // There is no secondary variant of the dispatch path.
             if !is_primary && stage_flags == vk::ShaderStageFlags::COMPUTE {
@@ -1476,6 +1599,11 @@ fn create_descriptor_type_groups(update_method: DescriptorUpdateMethod, is_prima
             let mut stage_group = tcu::TestCaseGroup::new(stage_name);
 
             for (set_group_name, descriptor_set_count) in SET_COUNTS {
+                // Only one descriptor set layout may carry the push flag, so a push
+                // case has no multiple-set arrangements at all.
+                if update_method.is_push() && descriptor_set_count != DescriptorSetCount::Single {
+                    continue;
+                }
                 // The single-set arrangement has no group of its own; its interfaces sit
                 // directly under the stage.
                 let mut set_group = (!set_group_name.is_empty()).then(|| tcu::TestCaseGroup::new(set_group_name));
@@ -1635,6 +1763,10 @@ fn create_image_group(
         let mut stage_group = tcu::TestCaseGroup::new(stage_name);
 
         for (set_group_name, descriptor_set_count) in SET_COUNTS {
+            // Only one descriptor set layout may carry the push flag.
+            if update_method.is_push() && descriptor_set_count != DescriptorSetCount::Single {
+                continue;
+            }
             let mut set_group = (!set_group_name.is_empty()).then(|| tcu::TestCaseGroup::new(set_group_name));
 
             for shader_interface in INTERFACES {
@@ -1768,7 +1900,8 @@ impl BufferAccessInstance<'_> {
 
     /// `writeDescriptorSet` for the texel buffer types, which bind a `VkBufferView`
     /// rather than a buffer range.
-    fn write_texel_descriptor_set(&self, set: vk::DescriptorSet, set_ndx: u32, view_a: vk::BufferView, view_b: vk::BufferView, result: vk::Buffer) {
+    fn write_texel_descriptor_set(&self, target: DescriptorTarget, set_ndx: u32, view_a: vk::BufferView, view_b: vk::BufferView, result: vk::Buffer) {
+        let set = target.set();
         let p = self.params;
         let device = self.context.get_device();
 
@@ -1820,7 +1953,7 @@ impl BufferAccessInstance<'_> {
             ShaderInputInterface::DescriptorArray => writes.push(single(binding, &views)),
         }
 
-        unsafe { device.update_descriptor_sets(&writes, &[] as &[vk::CopyDescriptorSet]) };
+        target.apply(device, &writes);
     }
 }
 
@@ -2170,28 +2303,20 @@ impl TestInstance for ImageAccessInstance<'_> {
         }
         flush_alloc(device, result_buffer.get_allocation())?;
 
-        let pool = self.create_descriptor_pool()?;
+        // A push case allocates no sets: its layout is declared for push.
+        let is_push = p.update_method.is_push();
+        let pool = (!is_push).then(|| self.create_descriptor_pool()).transpose()?;
         let mut set_layouts = Vec::new();
         let mut layout_handles = Vec::new();
         let mut sets = Vec::new();
 
         for set_ndx in 0..num_sets {
             let layout = self.create_descriptor_set_layout(set_ndx, &sampler_handles)?;
-            let set = make_descriptor_set(device, *pool, *layout)?;
-
-            let stride = if p.descriptor_type == vk::DescriptorType::SAMPLER { 1 } else { num_resources };
-            let ndx0 = (set_ndx * stride) as usize % image_views.len();
-            let ndx1 = (set_ndx * stride + 1) as usize % image_views.len();
-            match p.update_method {
-                DescriptorUpdateMethod::Normal => self.write_descriptor_set(*set, set_ndx, *image_views[ndx0], *image_views[ndx1], &sampler_handles, result_buffer.get()),
-                DescriptorUpdateMethod::WithTemplate => {
-                    self.write_descriptor_set_with_template(*set, *layout, set_ndx, *image_views[ndx0], *image_views[ndx1], &sampler_handles, result_buffer.get())?
-                }
+            if let Some(pool) = &pool {
+                sets.push(make_descriptor_set(device, **pool, *layout)?);
             }
-
             layout_handles.push(*layout);
             set_layouts.push(layout);
-            sets.push(set);
 
             if set_ndx == 0 && p.descriptor_set_count == DescriptorSetCount::MultipleDiscontiguous {
                 let unused = create_unused_layout(
@@ -2206,6 +2331,33 @@ impl TestInstance for ImageAccessInstance<'_> {
         let pipeline_layout = make_pipeline_layout(device, &layout_handles)?;
         let set_handles: Vec<vk::DescriptorSet> = sets.iter().map(|s| **s).collect();
 
+        let write_image_descriptors = |target: DescriptorTarget, set_ndx: u32| -> Result<(), TestError> {
+            let stride = if p.descriptor_type == vk::DescriptorType::SAMPLER { 1 } else { num_resources };
+            let ndx0 = (set_ndx * stride) as usize % image_views.len();
+            let ndx1 = (set_ndx * stride + 1) as usize % image_views.len();
+            if p.update_method.uses_template() {
+                self.write_descriptor_set_with_template(
+                    target,
+                    *set_layouts[set_ndx as usize],
+                    *pipeline_layout,
+                    set_ndx,
+                    *image_views[ndx0],
+                    *image_views[ndx1],
+                    &sampler_handles,
+                    result_buffer.get(),
+                )?;
+            } else {
+                self.write_descriptor_set(target, set_ndx, *image_views[ndx0], *image_views[ndx1], &sampler_handles, result_buffer.get());
+            }
+            Ok(())
+        };
+
+        if !is_push {
+            for set_ndx in 0..num_sets {
+                write_image_descriptors(DescriptorTarget::Set(set_handles[set_ndx as usize]), set_ndx)?;
+            }
+        }
+
         // The graphics path renders the answers instead of writing them, so it leaves
         // here with an image rather than a result buffer.
         let rendered = if p.is_compute() {
@@ -2213,6 +2365,20 @@ impl TestInstance for ImageAccessInstance<'_> {
         } else {
             let (_modules, stages) = graphics_modules(device, &p.program().programs, p.stage_flags)?;
             let bind = |device: &Device, cmd: vk::CommandBuffer| {
+                if is_push {
+                    for set_ndx in 0..num_sets {
+                        let _ = write_image_descriptors(
+                            DescriptorTarget::Push {
+                                cmd,
+                                bind_point: vk::PipelineBindPoint::GRAPHICS,
+                                layout: *pipeline_layout,
+                                set_ndx: p.descriptor_set_count.set_ndx(set_ndx),
+                            },
+                            set_ndx,
+                        );
+                    }
+                    return;
+                }
                 if p.descriptor_set_count == DescriptorSetCount::MultipleDiscontiguous {
                     for set_ndx in 0..num_sets {
                         bind_descriptor_sets(
@@ -2646,7 +2812,14 @@ impl ImageAccessInstance<'_> {
             }
         };
 
-        builder.build(self.context.get_device())
+        // `VK_DESCRIPTOR_SET_LAYOUT_CREATE_PUSH_DESCRIPTOR_BIT_KHR` - a push layout is
+        // never allocated from, so the flag is load-bearing rather than advisory.
+        let flags = if p.update_method.is_push() {
+            vk::DescriptorSetLayoutCreateFlags::PUSH_DESCRIPTOR
+        } else {
+            vk::DescriptorSetLayoutCreateFlags::empty()
+        };
+        builder.build_with_flags(self.context.get_device(), flags)
     }
 
     /// `ImageFetchComputeInstance::createDescriptorPool` /
@@ -2672,7 +2845,8 @@ impl ImageAccessInstance<'_> {
     /// `ImageFetchComputeInstance::writeDescriptorSet`,
     /// `ImageSampleComputeInstance::writeSamplerDescriptorSet` and
     /// `writeImageSamplerDescriptorSet`.
-    fn write_descriptor_set(&self, set: vk::DescriptorSet, set_ndx: u32, view_a: vk::ImageView, view_b: vk::ImageView, samplers: &[vk::Sampler], result: vk::Buffer) {
+    fn write_descriptor_set(&self, target: DescriptorTarget, set_ndx: u32, view_a: vk::ImageView, view_b: vk::ImageView, samplers: &[vk::Sampler], result: vk::Buffer) {
+        let set = target.set();
         let p = self.params;
         let device = self.context.get_device();
         let layout = image_layout_for_descriptor_type(p.descriptor_type);
@@ -2785,7 +2959,7 @@ impl ImageAccessInstance<'_> {
             }
         }
 
-        unsafe { device.update_descriptor_sets(&writes, &[] as &[vk::CopyDescriptorSet]) };
+        target.apply(device, &writes);
     }
 
     fn create_compute_pipeline(&self, layout: vk::PipelineLayout, module: vk::ShaderModule) -> Result<Unique<'_, vk::Pipeline>, TestError> {
@@ -3079,17 +3253,28 @@ fn update_descriptor_set_with_template(
     context: &Context,
     entries: &[vk::DescriptorUpdateTemplateEntry],
     layout: vk::DescriptorSetLayout,
-    set: vk::DescriptorSet,
+    target: DescriptorTarget,
+    pipeline_layout: vk::PipelineLayout,
     registry: &RawUpdateRegistry,
 ) -> Result<(), TestError> {
     use vulkanalia::vk::{DeviceV1_1, KhrDescriptorUpdateTemplateExtensionDeviceCommands};
 
     let device = context.get_device();
-    let info = vk::DescriptorUpdateTemplateCreateInfo::builder()
+    let set = target.set();
+    // A push template names the pipeline layout and the bind point it will be pushed
+    // at; a plain one names the descriptor set layout it will write through.
+    let (template_type, bind_point) = match target {
+        DescriptorTarget::Set(_) => (vk::DescriptorUpdateTemplateType::DESCRIPTOR_SET, vk::PipelineBindPoint::COMPUTE),
+        DescriptorTarget::Push { bind_point, .. } => (vk::DescriptorUpdateTemplateType::PUSH_DESCRIPTORS, bind_point),
+    };
+    let mut info = vk::DescriptorUpdateTemplateCreateInfo::builder()
         .descriptor_update_entries(entries)
-        .template_type(vk::DescriptorUpdateTemplateType::DESCRIPTOR_SET)
+        .template_type(template_type)
         .descriptor_set_layout(layout)
-        .pipeline_bind_point(vk::PipelineBindPoint::COMPUTE);
+        .pipeline_bind_point(bind_point);
+    if let DescriptorTarget::Push { set_ndx, .. } = target {
+        info = info.pipeline_layout(pipeline_layout).set(set_ndx);
+    }
 
     let use_khr = context.get_device_extensions().iter().any(|e| e == "VK_KHR_descriptor_update_template");
     let handle = unsafe {
@@ -3103,12 +3288,29 @@ fn update_descriptor_set_with_template(
 
     // The template is consumed by the update and nothing refers to it afterwards, so
     // it is destroyed here rather than being tied to the instance's lifetime.
+    match target {
+        DescriptorTarget::Set(_) => unsafe {
+            if use_khr {
+                device.update_descriptor_set_with_template_khr(set, handle, registry.raw_pointer());
+            } else {
+                device.update_descriptor_set_with_template(set, handle, registry.raw_pointer());
+            }
+        },
+        DescriptorTarget::Push { cmd, set_ndx: push_set, .. } => unsafe {
+            vulkanalia::vk::KhrPushDescriptorExtensionDeviceCommands::cmd_push_descriptor_set_with_template_khr(
+                device,
+                cmd,
+                handle,
+                pipeline_layout,
+                push_set,
+                registry.raw_pointer(),
+            );
+        },
+    }
     unsafe {
         if use_khr {
-            device.update_descriptor_set_with_template_khr(set, handle, registry.raw_pointer());
             device.destroy_descriptor_update_template_khr(handle, None);
         } else {
-            device.update_descriptor_set_with_template(set, handle, registry.raw_pointer());
             device.destroy_descriptor_update_template(handle, None);
         }
     }
@@ -3122,8 +3324,9 @@ impl BufferAccessInstance<'_> {
     #[allow(clippy::too_many_arguments)]
     fn write_descriptor_set_with_template(
         &self,
-        set: vk::DescriptorSet,
+        target: DescriptorTarget,
         layout: vk::DescriptorSetLayout,
+        pipeline_layout: vk::PipelineLayout,
         set_ndx: u32,
         view_a: vk::Buffer,
         offset_a: u32,
@@ -3157,7 +3360,7 @@ impl BufferAccessInstance<'_> {
         registry.add_write_object(buffer_infos[1]);
 
         let entries = self.template_entries(set_ndx, &registry, std::mem::size_of::<vk::DescriptorBufferInfo>());
-        update_descriptor_set_with_template(self.context, &entries, layout, set, &registry)
+        update_descriptor_set_with_template(self.context, &entries, layout, target, pipeline_layout, &registry)
     }
 
     /// `writeDescriptorSetWithTemplate`'s switch, which is the same for the plain and
@@ -3223,10 +3426,12 @@ impl BufferAccessInstance<'_> {
     }
 
     /// `TexelBufferComputeInstance::writeDescriptorSetWithTemplate`
+    #[allow(clippy::too_many_arguments)]
     fn write_texel_descriptor_set_with_template(
         &self,
-        set: vk::DescriptorSet,
+        target: DescriptorTarget,
         layout: vk::DescriptorSetLayout,
+        pipeline_layout: vk::PipelineLayout,
         set_ndx: u32,
         view_a: vk::BufferView,
         view_b: vk::BufferView,
@@ -3244,7 +3449,7 @@ impl BufferAccessInstance<'_> {
         registry.add_write_object(view_b);
 
         let entries = self.template_entries(set_ndx, &registry, std::mem::size_of::<vk::BufferView>());
-        update_descriptor_set_with_template(self.context, &entries, layout, set, &registry)
+        update_descriptor_set_with_template(self.context, &entries, layout, target, pipeline_layout, &registry)
     }
 }
 
@@ -3256,8 +3461,9 @@ impl ImageAccessInstance<'_> {
     #[allow(clippy::too_many_arguments)]
     fn write_descriptor_set_with_template(
         &self,
-        set: vk::DescriptorSet,
+        target: DescriptorTarget,
         layout: vk::DescriptorSetLayout,
+        pipeline_layout: vk::PipelineLayout,
         set_ndx: u32,
         view_a: vk::ImageView,
         view_b: vk::ImageView,
@@ -3390,6 +3596,6 @@ impl ImageAccessInstance<'_> {
             }
         }
 
-        update_descriptor_set_with_template(self.context, &entries, layout, set, &registry)
+        update_descriptor_set_with_template(self.context, &entries, layout, target, pipeline_layout, &registry)
     }
 }
