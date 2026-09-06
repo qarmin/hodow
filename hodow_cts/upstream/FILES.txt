@@ -90,3 +90,4 @@ framework/common/tcuVector.hpp
 framework/delibs/debase/deRandom.c
 framework/delibs/debase/deRandom.h
 framework/delibs/decpp/deRandom.hpp
+external/vulkancts/modules/vulkan/transform_feedback/vktPrimitivesGeneratedQueryTests.cpp

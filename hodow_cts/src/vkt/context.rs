@@ -317,9 +317,7 @@ fn create_device_with_everything(instance: &Instance, physical_device: vk::Physi
     // (VUID-vkCreateDevice-ppEnabledExtensionNames-01387). Matched by substring rather
     // than by name so a new one does not silently reintroduce the problem - nothing in
     // the suite presents to a surface, so dropping the whole family costs no coverage.
-    let presentation_only = |n: &str| {
-        n.contains("swapchain") || n.contains("present") || n.contains("display") || n == "VK_EXT_hdr_metadata"
-    };
+    let presentation_only = |n: &str| n.contains("swapchain") || n.contains("present") || n.contains("display") || n == "VK_EXT_hdr_metadata";
     let extension_names: Vec<CString> = available_extensions
         .iter()
         .filter(|n| !presentation_only(n))
