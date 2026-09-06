@@ -369,12 +369,13 @@ than assumed:
   runnable here anyway: that chain pulls in every copy operation the resource supports,
   and the tessellation ones are unsupported. `device_host` and `wait` do not use the
   chain and are ported.
-- **`op.multi_queue`'s execution path is unverified here** even though its 4584 cases
-  are ported and agree with upstream: SwiftShader has a single queue family with a
-  single queue, so every case is either NotSupported or - for `fence`, which upstream
-  does not guard against an empty queue-pair list - a pass that ran nothing. The
-  queue-pairing logic is covered by unit tests over synthetic family layouts instead,
-  and `tmp/check_multi_queue.sh` runs the real thing on a GPU with several families.
+- **`op.multi_queue` cannot be verified on SwiftShader at all**, though it is ported and
+  passes: SwiftShader has a single queue family with a single queue, so every case is
+  either NotSupported or - for `fence`, which upstream does not guard against an empty
+  queue-pair list - a pass that ran nothing. The queue-pairing logic is covered by unit
+  tests over synthetic family layouts, and the group was validated on an AMD GPU with
+  three queue families instead: 8004 of 9240 cases ran, 0 failed, and `cts-diff` agreed
+  4620/4620 on each synchronization type. `tmp/check_multi_queue.sh` reproduces that.
 
 `renderpasses.*.attachment` is the cautionary one. Its render passes are generated
 from a seeded `de::Random`, so the shader is a function of a random sequence of
