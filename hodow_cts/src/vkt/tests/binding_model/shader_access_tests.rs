@@ -783,18 +783,21 @@ impl TestInstance for BufferAccessInstance<'_> {
         }
         flush_alloc(device, result_buffer.get_allocation())?;
 
-        let pool = self.create_descriptor_pool()?;
+        // A push case allocates no sets: its layout carries the push flag, which makes
+        // it invalid to allocate from.
+        let is_push = p.update_method.is_push();
+        let pool = (!is_push).then(|| self.create_descriptor_pool()).transpose()?;
         let mut set_layouts = Vec::new();
         let mut layout_handles = Vec::new();
         let mut sets = Vec::new();
 
         for set_ndx in 0..num_sets {
             let layout = self.create_descriptor_set_layout(set_ndx)?;
-            let set = make_descriptor_set(device, *pool, *layout)?;
 
             // A push case has no set and writes from inside the command buffer, so
             // nothing is written here.
-            if !p.update_method.is_push() {
+            if let Some(pool) = &pool {
+                let set = make_descriptor_set(device, **pool, *layout)?;
                 self.write_descriptors(
                     DescriptorTarget::Set { set: *set, layout: *layout },
                     *layout,
@@ -805,11 +808,11 @@ impl TestInstance for BufferAccessInstance<'_> {
                     &view_offsets,
                     result_buffer.get(),
                 )?;
+                sets.push(set);
             }
 
             layout_handles.push(*layout);
             set_layouts.push(layout);
-            sets.push(set);
 
             // A filler layout occupies the gap between sets 0 and 2. Upstream picks
             // its contents from a hash of the descriptor type, so it is sometimes
@@ -831,6 +834,9 @@ impl TestInstance for BufferAccessInstance<'_> {
 
         let set_handles: Vec<vk::DescriptorSet> = sets.iter().map(|s| **s).collect();
         let dynamic_offsets: Vec<u32> = if p.set_dynamic_offset { bind_time_offsets.clone() } else { Vec::new() };
+
+        // Outlives the submit below, which is when the recorded pushes actually run.
+        let mut pushed_templates = Vec::new();
 
         begin_command_buffer(device, *command_buffer)?;
         unsafe {
@@ -864,11 +870,36 @@ impl TestInstance for BufferAccessInstance<'_> {
 
             device.cmd_bind_pipeline(*command_buffer, vk::PipelineBindPoint::COMPUTE, *pipeline);
 
+            // A push case has no set to bind: the descriptors go into the command
+            // buffer here instead, and the dynamic types are excluded from the push
+            // methods entirely so there are never any offsets to hand over.
+            if is_push {
+                for set_ndx in 0..num_sets {
+                    pushed_templates.extend(self.write_descriptors(
+                        DescriptorTarget::Push {
+                            cmd: *command_buffer,
+                            bind_point: vk::PipelineBindPoint::COMPUTE,
+                            layout: *pipeline_layout,
+                            set_ndx: p.descriptor_set_count.set_ndx(set_ndx),
+                        },
+                        *set_layouts[set_ndx as usize],
+                        *pipeline_layout,
+                        set_ndx,
+                        &buffers,
+                        &buffer_views,
+                        &view_offsets,
+                        result_buffer.get(),
+                    )?);
+                }
+            }
+
             // The contiguous arrangements bind every set in one call from index 0. The
             // discontiguous one cannot: its sets are 0 and 2, so each binds at its own
             // index, and the dynamic offsets have to be sliced to match rather than
             // handed over whole.
-            if p.descriptor_set_count == DescriptorSetCount::MultipleDiscontiguous {
+            if is_push {
+                // Already pushed above; there is no set to bind.
+            } else if p.descriptor_set_count == DescriptorSetCount::MultipleDiscontiguous {
                 let mut dynamic_offset_ndx = 0usize;
                 for set_ndx in 0..num_sets {
                     let offsets: &[u32] = if p.set_dynamic_offset {
@@ -1130,10 +1161,13 @@ impl BufferAccessInstance<'_> {
 
         let (_modules, stages) = graphics_modules(device, &p.program().programs, p.stage_flags)?;
         let dynamic_offsets: Vec<u32> = if p.set_dynamic_offset { bind_time_offsets.clone() } else { Vec::new() };
+        // The pushes are recorded into the command buffer, so their templates have to
+        // outlive the draw; the cell is only because `bind` is a `Fn`.
+        let pushed_templates = std::cell::RefCell::new(Vec::new());
         let bind = |device: &Device, cmd: vk::CommandBuffer| {
             if is_push {
                 for set_ndx in 0..num_sets {
-                    let _ = self.write_descriptors(
+                    match self.write_descriptors(
                         DescriptorTarget::Push {
                             cmd,
                             bind_point: vk::PipelineBindPoint::GRAPHICS,
@@ -1147,7 +1181,10 @@ impl BufferAccessInstance<'_> {
                         &buffer_views,
                         &view_offsets,
                         vk::Buffer::null(),
-                    );
+                    ) {
+                        Ok(keep) => pushed_templates.borrow_mut().extend(keep),
+                        Err(e) => log::error!("recording a pushed descriptor set failed: {e:?}"),
+                    }
                 }
                 return;
             }
@@ -1296,15 +1333,18 @@ impl BufferAccessInstance<'_> {
         buffer_views: &[Unique<'_, vk::BufferView>],
         view_offsets: &[u32],
         result: vk::Buffer,
-    ) -> Result<(), TestError> {
+    ) -> Result<Option<TemplateKeepAlive<'_>>, TestError> {
         let p = self.params;
         let num_resources = p.shader_interface.num_resources();
         let num_src_buffers = p.descriptor_set_count.count() * num_resources;
         let ndx0 = ((set_ndx * num_resources) % num_src_buffers) as usize;
         let ndx1 = ((set_ndx * num_resources + 1) % num_src_buffers) as usize;
 
-        match (p.resource_kind, p.update_method.uses_template()) {
-            (ResourceKind::Buffer, false) => self.write_descriptor_set(target, set_ndx, buffers[ndx0].get(), view_offsets[ndx0], buffers[ndx1].get(), view_offsets[ndx1], result),
+        Ok(match (p.resource_kind, p.update_method.uses_template()) {
+            (ResourceKind::Buffer, false) => {
+                self.write_descriptor_set(target, set_ndx, buffers[ndx0].get(), view_offsets[ndx0], buffers[ndx1].get(), view_offsets[ndx1], result);
+                None
+            }
             (ResourceKind::Buffer, true) => self.write_descriptor_set_with_template(
                 target,
                 layout,
@@ -1316,12 +1356,14 @@ impl BufferAccessInstance<'_> {
                 view_offsets[ndx1],
                 result,
             )?,
-            (ResourceKind::TexelBuffer, false) => self.write_texel_descriptor_set(target, set_ndx, *buffer_views[ndx0], *buffer_views[ndx1], result),
+            (ResourceKind::TexelBuffer, false) => {
+                self.write_texel_descriptor_set(target, set_ndx, *buffer_views[ndx0], *buffer_views[ndx1], result);
+                None
+            }
             (ResourceKind::TexelBuffer, true) => {
                 self.write_texel_descriptor_set_with_template(target, layout, pipeline_layout, set_ndx, *buffer_views[ndx0], *buffer_views[ndx1], result)?
             }
-        }
-        Ok(())
+        })
     }
 
     /// `createColorDataBuffer` - two colours at `offset`, in a deliberately larger
@@ -2355,7 +2397,7 @@ impl TestInstance for ImageAccessInstance<'_> {
         let pipeline_layout = make_pipeline_layout(device, &layout_handles)?;
         let set_handles: Vec<vk::DescriptorSet> = sets.iter().map(|s| **s).collect();
 
-        let write_image_descriptors = |target: DescriptorTarget, set_ndx: u32| -> Result<(), TestError> {
+        let write_image_descriptors = |target: DescriptorTarget, set_ndx: u32| -> Result<Option<TemplateKeepAlive<'_>>, TestError> {
             let stride = if p.descriptor_type == vk::DescriptorType::SAMPLER { 1 } else { num_resources };
             let ndx0 = (set_ndx * stride) as usize % image_views.len();
             let ndx1 = (set_ndx * stride + 1) as usize % image_views.len();
@@ -2370,11 +2412,11 @@ impl TestInstance for ImageAccessInstance<'_> {
                     *image_views[ndx1],
                     &sampler_handles,
                     result_buffer.get(),
-                )?;
+                )
             } else {
                 self.write_descriptor_set(target, set_ndx, *image_views[ndx0], *image_views[ndx1], &sampler_handles, result_buffer.get());
+                Ok(None)
             }
-            Ok(())
         };
 
         if !is_push {
@@ -2389,10 +2431,12 @@ impl TestInstance for ImageAccessInstance<'_> {
             None
         } else {
             let (_modules, stages) = graphics_modules(device, &p.program().programs, p.stage_flags)?;
+            // Outlives the draw; the cell is only because `bind` is a `Fn`.
+            let pushed_templates = std::cell::RefCell::new(Vec::new());
             let bind = |device: &Device, cmd: vk::CommandBuffer| {
                 if is_push {
                     for set_ndx in 0..num_sets {
-                        let _ = write_image_descriptors(
+                        match write_image_descriptors(
                             DescriptorTarget::Push {
                                 cmd,
                                 bind_point: vk::PipelineBindPoint::GRAPHICS,
@@ -2400,7 +2444,10 @@ impl TestInstance for ImageAccessInstance<'_> {
                                 set_ndx: p.descriptor_set_count.set_ndx(set_ndx),
                             },
                             set_ndx,
-                        );
+                        ) {
+                            Ok(keep) => pushed_templates.borrow_mut().extend(keep),
+                            Err(e) => log::error!("recording a pushed descriptor set failed: {e:?}"),
+                        }
                     }
                     return;
                 }
@@ -2447,15 +2494,36 @@ impl TestInstance for ImageAccessInstance<'_> {
         let command_pool = make_command_pool(device, queue_index)?;
         let command_buffer = allocate_command_buffer(device, *command_pool, vk::CommandBufferLevel::PRIMARY)?;
 
+        // Outlives the submit below.
+        let mut pushed_templates = Vec::new();
+
         let mut results = [[0.0f32; 4]; 4];
         if let Some(pipeline) = &pipeline {
             begin_command_buffer(device, *command_buffer)?;
             unsafe {
                 device.cmd_bind_pipeline(*command_buffer, vk::PipelineBindPoint::COMPUTE, **pipeline);
 
+                // A push case has no set to bind: the descriptors go into the command
+                // buffer here instead.
+                if is_push {
+                    for set_ndx in 0..num_sets {
+                        pushed_templates.extend(write_image_descriptors(
+                            DescriptorTarget::Push {
+                                cmd: *command_buffer,
+                                bind_point: vk::PipelineBindPoint::COMPUTE,
+                                layout: *pipeline_layout,
+                                set_ndx: p.descriptor_set_count.set_ndx(set_ndx),
+                            },
+                            set_ndx,
+                        )?);
+                    }
+                }
+
                 // The discontiguous arrangement's sets are 0 and 2, so each binds at its
                 // own index rather than all of them in one call from index 0.
-                if p.descriptor_set_count == DescriptorSetCount::MultipleDiscontiguous {
+                if is_push {
+                    // Already pushed above.
+                } else if p.descriptor_set_count == DescriptorSetCount::MultipleDiscontiguous {
                     for set_ndx in 0..num_sets {
                         device.cmd_bind_descriptor_sets(
                             *command_buffer,
@@ -3274,14 +3342,38 @@ fn create_template_binding(
 /// The entry point is picked by whether the device still advertises the extension: a
 /// 1.0 driver only has the KHR name loaded, a 1.1+ driver that dropped the string only
 /// has the core one. `require_device_functionality` accepts both, so this has to too.
-fn update_descriptor_set_with_template(
-    context: &Context,
+/// `m_updateTemplates` + `m_updateRegistry` - a pushed template is referenced by the
+/// command buffer, not consumed when it is recorded, so both the template and the data
+/// it points at have to outlive submission. Upstream keeps them as instance members
+/// for exactly that reason; this is the same thing scoped to one call.
+struct TemplateKeepAlive<'a> {
+    device: &'a Device,
+    template: vk::DescriptorUpdateTemplate,
+    use_khr: bool,
+    _registry: RawUpdateRegistry,
+}
+
+impl Drop for TemplateKeepAlive<'_> {
+    fn drop(&mut self) {
+        use vulkanalia::vk::{DeviceV1_1, KhrDescriptorUpdateTemplateExtensionDeviceCommands};
+        unsafe {
+            if self.use_khr {
+                self.device.destroy_descriptor_update_template_khr(self.template, None);
+            } else {
+                self.device.destroy_descriptor_update_template(self.template, None);
+            }
+        }
+    }
+}
+
+fn update_descriptor_set_with_template<'a>(
+    context: &'a Context,
     entries: &[vk::DescriptorUpdateTemplateEntry],
     layout: vk::DescriptorSetLayout,
     target: DescriptorTarget,
     pipeline_layout: vk::PipelineLayout,
-    registry: &RawUpdateRegistry,
-) -> Result<(), TestError> {
+    registry: RawUpdateRegistry,
+) -> Result<Option<TemplateKeepAlive<'a>>, TestError> {
     use vulkanalia::vk::{DeviceV1_1, KhrDescriptorUpdateTemplateExtensionDeviceCommands};
 
     let device = context.get_device();
@@ -3322,32 +3414,42 @@ fn update_descriptor_set_with_template(
     // The template is consumed by the update and nothing refers to it afterwards, so
     // it is destroyed here rather than being tied to the instance's lifetime.
     match target {
-        DescriptorTarget::Set { .. } => unsafe {
-            if use_khr {
-                device.update_descriptor_set_with_template_khr(set, handle, registry.raw_pointer());
-            } else {
-                device.update_descriptor_set_with_template(set, handle, registry.raw_pointer());
+        // A plain update is done by the time the call returns, so nothing has to be
+        // kept: the template is destroyed here as before.
+        DescriptorTarget::Set { .. } => {
+            unsafe {
+                if use_khr {
+                    device.update_descriptor_set_with_template_khr(set, handle, registry.raw_pointer());
+                } else {
+                    device.update_descriptor_set_with_template(set, handle, registry.raw_pointer());
+                }
+                if use_khr {
+                    device.destroy_descriptor_update_template_khr(handle, None);
+                } else {
+                    device.destroy_descriptor_update_template(handle, None);
+                }
             }
-        },
-        DescriptorTarget::Push { cmd, set_ndx: push_set, .. } => unsafe {
-            vulkanalia::vk::KhrPushDescriptorExtensionDeviceCommands::cmd_push_descriptor_set_with_template_khr(
+            Ok(None)
+        }
+        DescriptorTarget::Push { cmd, set_ndx: push_set, .. } => {
+            unsafe {
+                vulkanalia::vk::KhrPushDescriptorExtensionDeviceCommands::cmd_push_descriptor_set_with_template_khr(
+                    device,
+                    cmd,
+                    handle,
+                    pipeline_layout,
+                    push_set,
+                    registry.raw_pointer(),
+                );
+            }
+            Ok(Some(TemplateKeepAlive {
                 device,
-                cmd,
-                handle,
-                pipeline_layout,
-                push_set,
-                registry.raw_pointer(),
-            );
-        },
-    }
-    unsafe {
-        if use_khr {
-            device.destroy_descriptor_update_template_khr(handle, None);
-        } else {
-            device.destroy_descriptor_update_template(handle, None);
+                template: handle,
+                use_khr,
+                _registry: registry,
+            }))
         }
     }
-    Ok(())
 }
 
 impl BufferAccessInstance<'_> {
@@ -3366,7 +3468,7 @@ impl BufferAccessInstance<'_> {
         view_b: vk::Buffer,
         offset_b: u32,
         result: vk::Buffer,
-    ) -> Result<(), TestError> {
+    ) -> Result<Option<TemplateKeepAlive<'_>>, TestError> {
         let range = std::mem::size_of::<[f32; 8]>() as u64;
         let buffer_infos = [
             vk::DescriptorBufferInfo {
@@ -3393,7 +3495,7 @@ impl BufferAccessInstance<'_> {
         registry.add_write_object(buffer_infos[1]);
 
         let entries = self.template_entries(set_ndx, &registry, std::mem::size_of::<vk::DescriptorBufferInfo>());
-        update_descriptor_set_with_template(self.context, &entries, layout, target, pipeline_layout, &registry)
+        update_descriptor_set_with_template(self.context, &entries, layout, target, pipeline_layout, registry)
     }
 
     /// `writeDescriptorSetWithTemplate`'s switch, which is the same for the plain and
@@ -3469,7 +3571,7 @@ impl BufferAccessInstance<'_> {
         view_a: vk::BufferView,
         view_b: vk::BufferView,
         result: vk::Buffer,
-    ) -> Result<(), TestError> {
+    ) -> Result<Option<TemplateKeepAlive<'_>>, TestError> {
         let mut registry = RawUpdateRegistry::default();
         if set_ndx == 0 && self.params.is_compute() {
             registry.add_write_object(vk::DescriptorBufferInfo {
@@ -3482,7 +3584,7 @@ impl BufferAccessInstance<'_> {
         registry.add_write_object(view_b);
 
         let entries = self.template_entries(set_ndx, &registry, std::mem::size_of::<vk::BufferView>());
-        update_descriptor_set_with_template(self.context, &entries, layout, target, pipeline_layout, &registry)
+        update_descriptor_set_with_template(self.context, &entries, layout, target, pipeline_layout, registry)
     }
 }
 
@@ -3502,7 +3604,7 @@ impl ImageAccessInstance<'_> {
         view_b: vk::ImageView,
         samplers: &[vk::Sampler],
         result: vk::Buffer,
-    ) -> Result<(), TestError> {
+    ) -> Result<Option<TemplateKeepAlive<'_>>, TestError> {
         let p = self.params;
         let image_layout = image_layout_for_descriptor_type(p.descriptor_type);
         let is_separate_sampler = p.descriptor_type == vk::DescriptorType::SAMPLER;
@@ -3629,7 +3731,7 @@ impl ImageAccessInstance<'_> {
             }
         }
 
-        update_descriptor_set_with_template(self.context, &entries, layout, target, pipeline_layout, &registry)
+        update_descriptor_set_with_template(self.context, &entries, layout, target, pipeline_layout, registry)
     }
 }
 
