@@ -10,6 +10,7 @@
 // Modifications: rewritten in Rust for hodow_cts.
 
 pub mod basic_tests;
+pub mod implicit_tests;
 pub mod multi_queue_tests;
 pub mod operation;
 pub mod signal_order_tests;
