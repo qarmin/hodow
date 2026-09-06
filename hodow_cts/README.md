@@ -19,8 +19,8 @@ hand-picked, growing subset, currently:
 | `dEQP-VK.api.*` | 254201 of 267497 | `smoke`, `descriptor_set`, `external`, `use_after_copy`, the 3D-ASTC sources of `copy_and_blit.blit_image`, ... |
 | `dEQP-VK.memory.*` | 5472 of 6363 | `pipeline_barrier`, `requirements`, `external_memory_*`, `device_memory_report` |
 | `dEQP-VK.renderpasses.*` | 20348 of 80920 | `attachment`, `attachment_allocation`, `multisample_resolve`, `depth_stencil_resolve`, `dynamic_rendering` |
-| `dEQP-VK.synchronization2.*` | 10918 of 81617 | the geometry and tessellation operations, `timeline_semaphore`, `signal_order`, `cross_instance` |
-| `dEQP-VK.synchronization.*` | 7908 of 64872 | as above |
+| `dEQP-VK.synchronization2.*` | 10944 of 81617 | the geometry and tessellation operations, `timeline_semaphore.{one_to_n,wait_before_signal}`, `signal_order`, `cross_instance` |
+| `dEQP-VK.synchronization.*` | 7942 of 64872 | as above |
 | `dEQP-VK.compute.*` | 4559 of 60811 | `cooperative_matrix`, the Amber-driven cases, `replicated_composites_*` |
 | `dEQP-VK.binding_model.*` | 1950 of 150279 | the graphics stages of `shader_access`, `descriptorset_random`, `mutable_descriptor` |
 
@@ -354,14 +354,11 @@ than assumed:
   and `vk-build-programs` (which does build them) logs no GLSL and produces SPIR-V from
   a different glslang than this crate's, so its output does not compare either. They
   are absent rather than present-and-skipped.
-- **`timeline_semaphore`** needs the two-resource "copy" operation family (`s_copyOps`)
-  that chains one resource into the next; `op.single_queue.timeline_semaphore` and
-  `timeline_semaphore.{one_to_n,wait_before_signal}` are 0% runnable here anyway,
-  because that chain pulls in every copy operation the resource supports and the
-  tessellation ones are unsupported. `timeline_semaphore.device_host` (3823) does *not*
-  use the chain and is about 50% runnable - it is the best remaining target in the
-  group, and its cost is `Operation::setData` on every write operation plus a host
-  thread signalling the semaphore while the queue runs.
+- **`timeline_semaphore.{one_to_n,wait_before_signal}`** need the two-resource "copy"
+  operation family (`s_copyOps`) that chains one resource into the next, and are 0%
+  runnable here anyway: that chain pulls in every copy operation the resource supports,
+  and the tessellation ones are unsupported. `device_host` and `wait` do not use the
+  chain and are ported.
 - **`op.multi_queue`'s execution path is unverified here** even though its 4584 cases
   are ported and agree with upstream: SwiftShader has a single queue family with a
   single queue, so every case is either NotSupported or - for `fence`, which upstream
