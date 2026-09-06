@@ -40,17 +40,18 @@ ARBITRARY_BINDINGS = [0x7FFE, 0xFFFE]
 INTERFACES = ["single_descriptor", "multiple_contiguous", "multiple_discontiguous", "multiple_arbitrary", "descriptor_array"]
 
 
-def resource_declarations(storage_type: str, set_count: str, interface: str) -> str:
-    """`BufferDescriptorCase::genResourceDeclarations`, compute stage.
+def resource_declarations(storage_type: str, set_count: str, interface: str, for_compute: bool = True) -> str:
+    """`BufferDescriptorCase::genResourceDeclarations`.
 
-    `numUsedBindings` is 1, and the result buffer occupies binding 0 of set 0 only,
-    which is why every set past the first shifts its bindings down by one.
+    In a compute case `numUsedBindings` is 1 and the result buffer occupies binding 0 of
+    set 0 only, which is why every set past the first shifts its bindings down by one. A
+    graphics case has no result buffer, so every binding starts at 0.
     """
     out = []
     sets = SET_NDX[set_count]
 
     for set_ndx, descriptor_set in enumerate(sets):
-        desc_binding = 1 - (0 if set_ndx == 0 else 1)
+        desc_binding = (1 - (0 if set_ndx == 0 else 1)) if for_compute else 0
         postfix = "" if len(sets) == 1 else str(set_ndx)
 
         def block(name: str, binding: int, instance: str, array: str = "") -> None:
@@ -104,6 +105,140 @@ def resource_access(set_count: str, interface: str) -> str:
     return "\n".join(out) + "\n"
 
 
+# `s_quadrantGenVertexPosSource` - six vertices per quadrant, four quadrants, so a
+# single non-indexed draw of 24 vertices covers the target in four blocks and
+# `quadrant_id` says which one a fragment belongs to.
+QUADRANT_GEN_VERTEX_POS = (
+    "    highp int quadPhase = gl_VertexIndex % 6;\n"
+    "    highp int quadXcoord = int(quadPhase == 1 || quadPhase == 4 || quadPhase == 5);\n"
+    "    highp int quadYcoord = int(quadPhase == 2 || quadPhase == 3 || quadPhase == 5);\n"
+    "    highp int quadOriginX = (gl_VertexIndex / 6) % 2;\n"
+    "    highp int quadOriginY = (gl_VertexIndex / 6) / 2;\n"
+    "    quadrant_id = gl_VertexIndex / 6;\n"
+    "    result_position = vec4(float(quadOriginX + quadXcoord - 1), float(quadOriginY + quadYcoord - 1), 0.0, 1.0);\n"
+)
+
+# `genPerVertexBlock` emits nothing for an ES version, and every shader here is
+# `#version 310 es`, so the block is deliberately absent.
+
+# `BufferDescriptorCase::genNoAccessSource` - the colours the descriptors would have
+# held, written without reading any of them.
+NO_ACCESS_SOURCE = (
+    "    if (quadrant_id == 1 || quadrant_id == 2)\n"
+    "        result_color = vec4(0.0, 1.0, 0.0, 1.0);\n"
+    "    else\n"
+    "        result_color = vec4(1.0, 1.0, 0.0, 1.0);\n"
+)
+
+
+def graphics_vertex_shader(declarations: str, access: str, contributing: bool, extension: str = "") -> str:
+    """`QuadrantRendederCase::genVertexSource`, the branch where the vertex stage is active.
+
+    `contributing` is upstream's `!onlyVS`: when the fragment stage also reads a
+    descriptor, the vertex stage has to pass the quadrant id along so the fragment
+    stage knows which half of the image it owns.
+    """
+    frag_color_prec = "mediump"
+    return (
+        "#version 310 es\n"
+        + extension
+        + declarations
+        + f"layout(location = 0) out {frag_color_prec} vec4 frag_color;\n"
+        + ("layout(location = 1) flat out highp int frag_quadrant_id;\n" if contributing else "")
+        + "void main (void)\n"
+        "{\n"
+        "    highp vec4 result_position;\n"
+        "    highp int quadrant_id;\n"
+        + QUADRANT_GEN_VERTEX_POS
+        + "    gl_Position = result_position;\n"
+        + ("\tfrag_quadrant_id = quadrant_id;\n" if contributing else "")
+        + "\n"
+        "    highp vec4 result_color;\n"
+        + access
+        + "    frag_color = result_color;\n"
+        "}\n"
+    )
+
+
+def graphics_vertex_passthrough(extension: str = "") -> str:
+    """The same, for the branch where the vertex stage reads nothing.
+
+    Upstream emits `genExtensionDeclarations` here too even though nothing in the shader
+    needs them, so this is not one shader shared by every descriptor type.
+    """
+    return (
+        "#version 310 es\n"
+        + extension
+        + "layout(location = 1) flat out highp int frag_quadrant_id;\n"
+        "void main (void)\n"
+        "{\n"
+        "    highp vec4 result_position;\n"
+        "    highp int quadrant_id;\n"
+        + QUADRANT_GEN_VERTEX_POS
+        + "    gl_Position = result_position;\n"
+        "    frag_quadrant_id = quadrant_id;\n"
+        "}\n"
+    )
+
+
+def graphics_fragment_shader(declarations: str, access: str, contributing: bool, extension: str = "") -> str:
+    """`QuadrantRendederCase::genFragmentSource`, the branch where the fragment stage is active.
+
+    When it is only a contributor the two stages split the image: the fragment stage's
+    own read wins in the first two quadrants and the vertex stage's in the other two, so
+    a wrong binding in either stage shows up.
+    """
+    return (
+        "#version 310 es\n"
+        + extension
+        + declarations
+        + ("layout(location = 0) in mediump vec4 frag_color;\n" if contributing else "")
+        + "layout(location = 1) flat in highp int frag_quadrant_id;\n"
+        "layout(location = 0) out mediump vec4 o_color;\n"
+        "void main (void)\n"
+        "{\n"
+        "    highp int quadrant_id = frag_quadrant_id;\n"
+        "    highp vec4 result_color;\n"
+        + access
+        + (
+            "    if (frag_quadrant_id < 2)\n"
+            "        o_color = result_color;\n"
+            "    else\n"
+            "        o_color = frag_color;\n"
+            if contributing
+            else "    o_color = result_color;\n"
+        )
+        + "}\n"
+    )
+
+
+def graphics_fragment_passthrough() -> str:
+    return (
+        "#version 310 es\n"
+        "layout(location = 0) in mediump vec4 frag_color;\n"
+        "layout(location = 0) out mediump vec4 o_color;\n"
+        "void main (void)\n"
+        "{\n"
+        "    o_color = frag_color;\n"
+        "}\n"
+    )
+
+
+def graphics_fragment_no_access() -> str:
+    return (
+        "#version 310 es\n"
+        "layout(location = 1) flat in highp int frag_quadrant_id;\n"
+        "layout(location = 0) out mediump vec4 o_color;\n"
+        "void main (void)\n"
+        "{\n"
+        "    highp int quadrant_id = frag_quadrant_id;\n"
+        "    highp vec4 result_color;\n"
+        + NO_ACCESS_SOURCE
+        + "    o_color = result_color;\n"
+        "}\n"
+    )
+
+
 def compute_shader(storage_type: str, set_count: str, interface: str) -> str:
     """`QuadrantRendederCase::genComputeSource`"""
     return (
@@ -128,15 +263,15 @@ def compute_shader(storage_type: str, set_count: str, interface: str) -> str:
 SAMPLE_POINTS = [6, 51, 42, 25]
 
 
-def texel_declarations(storage_type: str, set_count: str, interface: str) -> str:
-    """`TexelBufferDescriptorCase::genResourceDeclarations`, compute stage."""
+def texel_declarations(storage_type: str, set_count: str, interface: str, for_compute: bool = True) -> str:
+    """`TexelBufferDescriptorCase::genResourceDeclarations`."""
     out = []
     sets = SET_NDX[set_count]
     fmt = "" if storage_type == "uniform" else ", rgba8"
     decl = "textureBuffer " if storage_type == "uniform" else "readonly imageBuffer "
 
     for set_ndx, descriptor_set in enumerate(sets):
-        desc_binding = 1 - (0 if set_ndx == 0 else 1)
+        desc_binding = (1 - (0 if set_ndx == 0 else 1)) if for_compute else 0
         postfix = "" if len(sets) == 1 else str(set_ndx)
 
         def one(binding: int, name: str, array: str = "") -> None:
@@ -524,10 +659,31 @@ def image_case_exists(view_type: str, set_count: str, interface: str) -> bool:
     return interface not in ("multiple_discontiguous", "multiple_arbitrary") and set_count != "multiple_discontiguous"
 
 
+def emit_graphics_programs(name: str, declarations: str, access: str, extension: str = "") -> list[str]:
+    """The four stage-active combinations a graphics case needs, as manifest entries.
+
+    `vertex`/`fragment` are the "this stage is the only reader" forms and `*_contrib`
+    the ones used when both stages read, where each owns half the image.
+    """
+    variants = [
+        ("vert", graphics_vertex_shader(declarations, access, False, extension), "vert"),
+        ("vert_contrib", graphics_vertex_shader(declarations, access, True, extension), "vert"),
+        ("frag", graphics_fragment_shader(declarations, access, False, extension), "frag"),
+        ("frag_contrib", graphics_fragment_shader(declarations, access, True, extension), "frag"),
+        ("vert_passthrough", graphics_vertex_passthrough(extension), "vert"),
+    ]
+    entries = []
+    for suffix, source, stage in variants:
+        (SRC_DIR / f"{name}_{suffix}.{stage}").write_text(source)
+        entries.append(f'    {{ name = "{suffix}", template = "binding_model/generated/{name}_{suffix}.{stage}", stage = "{stage}" }},')
+    return entries
+
+
 def main() -> int:
     SRC_DIR.mkdir(parents=True, exist_ok=True)
-    for existing in SRC_DIR.glob("*.comp"):
-        existing.unlink()
+    for pattern in ("*.comp", "*.vert", "*.frag"):
+        for existing in SRC_DIR.glob(pattern):
+            existing.unlink()
 
     lines = [
         "# Shader manifest for dEQP-VK.binding_model.shader_access.*.{uniform,storage}_buffer*.compute.*",
@@ -549,12 +705,20 @@ def main() -> int:
             for interface in INTERFACES:
                 name = f"buffer_{storage_type}_{set_count}_{interface}"
                 (SRC_DIR / f"{name}.comp").write_text(compute_shader(storage_type, set_count, interface))
+                graphics = emit_graphics_programs(
+                    name,
+                    resource_declarations(storage_type, set_count, interface, for_compute=False),
+                    resource_access(set_count, interface),
+                )
                 lines += [
                     "[[case]]",
                     f'name = "{name}"',
                     f'rust_const = "{name.upper()}"',
                     'rust_type = "BufferAccessProgram"',
-                    f'programs = [{{ name = "compute", template = "binding_model/generated/{name}.comp", stage = "comp" }}]',
+                    "programs = [",
+                    f'    {{ name = "compute", template = "binding_model/generated/{name}.comp", stage = "comp" }},',
+                    *graphics,
+                    "]",
                     "[case.params]",
                     f'storage_type = {{ type = "str", value = "{storage_type}" }}',
                     f'set_count = {{ type = "str", value = "{set_count}" }}',
@@ -568,12 +732,21 @@ def main() -> int:
             for interface in INTERFACES:
                 name = f"texel_{storage_type}_{set_count}_{interface}"
                 (SRC_DIR / f"{name}.comp").write_text(texel_compute_shader(storage_type, set_count, interface))
+                graphics = emit_graphics_programs(
+                    name,
+                    texel_declarations(storage_type, set_count, interface, for_compute=False),
+                    texel_access(storage_type, set_count, interface),
+                    "#extension GL_EXT_texture_buffer : require\n",
+                )
                 lines += [
                     "[[case]]",
                     f'name = "{name}"',
                     f'rust_const = "{name.upper()}"',
                     'rust_type = "BufferAccessProgram"',
-                    f'programs = [{{ name = "compute", template = "binding_model/generated/{name}.comp", stage = "comp" }}]',
+                    "programs = [",
+                    f'    {{ name = "compute", template = "binding_model/generated/{name}.comp", stage = "comp" }},',
+                    *graphics,
+                    "]",
                     "[case.params]",
                     f'storage_type = {{ type = "str", value = "{storage_type}" }}',
                     f'set_count = {{ type = "str", value = "{set_count}" }}',
@@ -626,6 +799,25 @@ def main() -> int:
                         "",
                     ]
                     count += 1
+
+    # The two shaders that do not depend on the descriptor at all: the fragment
+    # pass-through, and the fragment shader for the `no_access` cases where nothing reads
+    # a descriptor and the expected colours are written directly. The vertex pass-through
+    # is *not* here - upstream gives it the extension declarations too, so it varies.
+    (SRC_DIR / "quadrant_passthrough.frag").write_text(graphics_fragment_passthrough())
+    (SRC_DIR / "quadrant_no_access.frag").write_text(graphics_fragment_no_access())
+    lines += [
+        "[[case]]",
+        'name = "quadrant_common"',
+        'rust_const = "QUADRANT_COMMON"',
+        'rust_type = "QuadrantCommonProgram"',
+        "programs = [",
+        '    { name = "frag_passthrough", template = "binding_model/generated/quadrant_passthrough.frag", stage = "frag" },',
+        '    { name = "frag_no_access", template = "binding_model/generated/quadrant_no_access.frag", stage = "frag" },',
+        "]",
+        "",
+    ]
+    count += 1
 
     MANIFEST.write_text("\n".join(lines))
     print(f"wrote {MANIFEST.relative_to(REPO_DIR)} and {count} shaders in {SRC_DIR.relative_to(REPO_DIR)}")

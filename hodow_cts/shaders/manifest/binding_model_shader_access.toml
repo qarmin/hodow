@@ -13,7 +13,14 @@ rust_module = "binding_model/shader_access_tests"
 name = "buffer_uniform_single_single_descriptor"
 rust_const = "BUFFER_UNIFORM_SINGLE_SINGLE_DESCRIPTOR"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/buffer_uniform_single_single_descriptor.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/buffer_uniform_single_single_descriptor.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/buffer_uniform_single_single_descriptor_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/buffer_uniform_single_single_descriptor_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/buffer_uniform_single_single_descriptor_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/buffer_uniform_single_single_descriptor_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/buffer_uniform_single_single_descriptor_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "uniform" }
 set_count = { type = "str", value = "single" }
@@ -23,7 +30,14 @@ shader_interface = { type = "str", value = "single_descriptor" }
 name = "buffer_uniform_single_multiple_contiguous"
 rust_const = "BUFFER_UNIFORM_SINGLE_MULTIPLE_CONTIGUOUS"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/buffer_uniform_single_multiple_contiguous.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/buffer_uniform_single_multiple_contiguous.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/buffer_uniform_single_multiple_contiguous_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/buffer_uniform_single_multiple_contiguous_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/buffer_uniform_single_multiple_contiguous_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/buffer_uniform_single_multiple_contiguous_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/buffer_uniform_single_multiple_contiguous_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "uniform" }
 set_count = { type = "str", value = "single" }
@@ -33,7 +47,14 @@ shader_interface = { type = "str", value = "multiple_contiguous" }
 name = "buffer_uniform_single_multiple_discontiguous"
 rust_const = "BUFFER_UNIFORM_SINGLE_MULTIPLE_DISCONTIGUOUS"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/buffer_uniform_single_multiple_discontiguous.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/buffer_uniform_single_multiple_discontiguous.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/buffer_uniform_single_multiple_discontiguous_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/buffer_uniform_single_multiple_discontiguous_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/buffer_uniform_single_multiple_discontiguous_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/buffer_uniform_single_multiple_discontiguous_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/buffer_uniform_single_multiple_discontiguous_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "uniform" }
 set_count = { type = "str", value = "single" }
@@ -43,7 +64,14 @@ shader_interface = { type = "str", value = "multiple_discontiguous" }
 name = "buffer_uniform_single_multiple_arbitrary"
 rust_const = "BUFFER_UNIFORM_SINGLE_MULTIPLE_ARBITRARY"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/buffer_uniform_single_multiple_arbitrary.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/buffer_uniform_single_multiple_arbitrary.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/buffer_uniform_single_multiple_arbitrary_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/buffer_uniform_single_multiple_arbitrary_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/buffer_uniform_single_multiple_arbitrary_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/buffer_uniform_single_multiple_arbitrary_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/buffer_uniform_single_multiple_arbitrary_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "uniform" }
 set_count = { type = "str", value = "single" }
@@ -53,7 +81,14 @@ shader_interface = { type = "str", value = "multiple_arbitrary" }
 name = "buffer_uniform_single_descriptor_array"
 rust_const = "BUFFER_UNIFORM_SINGLE_DESCRIPTOR_ARRAY"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/buffer_uniform_single_descriptor_array.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/buffer_uniform_single_descriptor_array.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/buffer_uniform_single_descriptor_array_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/buffer_uniform_single_descriptor_array_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/buffer_uniform_single_descriptor_array_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/buffer_uniform_single_descriptor_array_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/buffer_uniform_single_descriptor_array_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "uniform" }
 set_count = { type = "str", value = "single" }
@@ -63,7 +98,14 @@ shader_interface = { type = "str", value = "descriptor_array" }
 name = "buffer_uniform_multiple_single_descriptor"
 rust_const = "BUFFER_UNIFORM_MULTIPLE_SINGLE_DESCRIPTOR"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/buffer_uniform_multiple_single_descriptor.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/buffer_uniform_multiple_single_descriptor.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/buffer_uniform_multiple_single_descriptor_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/buffer_uniform_multiple_single_descriptor_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/buffer_uniform_multiple_single_descriptor_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/buffer_uniform_multiple_single_descriptor_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/buffer_uniform_multiple_single_descriptor_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "uniform" }
 set_count = { type = "str", value = "multiple" }
@@ -73,7 +115,14 @@ shader_interface = { type = "str", value = "single_descriptor" }
 name = "buffer_uniform_multiple_multiple_contiguous"
 rust_const = "BUFFER_UNIFORM_MULTIPLE_MULTIPLE_CONTIGUOUS"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/buffer_uniform_multiple_multiple_contiguous.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/buffer_uniform_multiple_multiple_contiguous.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/buffer_uniform_multiple_multiple_contiguous_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/buffer_uniform_multiple_multiple_contiguous_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/buffer_uniform_multiple_multiple_contiguous_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/buffer_uniform_multiple_multiple_contiguous_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/buffer_uniform_multiple_multiple_contiguous_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "uniform" }
 set_count = { type = "str", value = "multiple" }
@@ -83,7 +132,14 @@ shader_interface = { type = "str", value = "multiple_contiguous" }
 name = "buffer_uniform_multiple_multiple_discontiguous"
 rust_const = "BUFFER_UNIFORM_MULTIPLE_MULTIPLE_DISCONTIGUOUS"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/buffer_uniform_multiple_multiple_discontiguous.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/buffer_uniform_multiple_multiple_discontiguous.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/buffer_uniform_multiple_multiple_discontiguous_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/buffer_uniform_multiple_multiple_discontiguous_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/buffer_uniform_multiple_multiple_discontiguous_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/buffer_uniform_multiple_multiple_discontiguous_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/buffer_uniform_multiple_multiple_discontiguous_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "uniform" }
 set_count = { type = "str", value = "multiple" }
@@ -93,7 +149,14 @@ shader_interface = { type = "str", value = "multiple_discontiguous" }
 name = "buffer_uniform_multiple_multiple_arbitrary"
 rust_const = "BUFFER_UNIFORM_MULTIPLE_MULTIPLE_ARBITRARY"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/buffer_uniform_multiple_multiple_arbitrary.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/buffer_uniform_multiple_multiple_arbitrary.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/buffer_uniform_multiple_multiple_arbitrary_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/buffer_uniform_multiple_multiple_arbitrary_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/buffer_uniform_multiple_multiple_arbitrary_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/buffer_uniform_multiple_multiple_arbitrary_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/buffer_uniform_multiple_multiple_arbitrary_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "uniform" }
 set_count = { type = "str", value = "multiple" }
@@ -103,7 +166,14 @@ shader_interface = { type = "str", value = "multiple_arbitrary" }
 name = "buffer_uniform_multiple_descriptor_array"
 rust_const = "BUFFER_UNIFORM_MULTIPLE_DESCRIPTOR_ARRAY"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/buffer_uniform_multiple_descriptor_array.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/buffer_uniform_multiple_descriptor_array.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/buffer_uniform_multiple_descriptor_array_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/buffer_uniform_multiple_descriptor_array_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/buffer_uniform_multiple_descriptor_array_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/buffer_uniform_multiple_descriptor_array_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/buffer_uniform_multiple_descriptor_array_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "uniform" }
 set_count = { type = "str", value = "multiple" }
@@ -113,7 +183,14 @@ shader_interface = { type = "str", value = "descriptor_array" }
 name = "buffer_uniform_multiple_discontiguous_single_descriptor"
 rust_const = "BUFFER_UNIFORM_MULTIPLE_DISCONTIGUOUS_SINGLE_DESCRIPTOR"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_single_descriptor.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_single_descriptor.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_single_descriptor_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_single_descriptor_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_single_descriptor_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_single_descriptor_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_single_descriptor_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "uniform" }
 set_count = { type = "str", value = "multiple_discontiguous" }
@@ -123,7 +200,14 @@ shader_interface = { type = "str", value = "single_descriptor" }
 name = "buffer_uniform_multiple_discontiguous_multiple_contiguous"
 rust_const = "BUFFER_UNIFORM_MULTIPLE_DISCONTIGUOUS_MULTIPLE_CONTIGUOUS"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_multiple_contiguous.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_multiple_contiguous.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_multiple_contiguous_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_multiple_contiguous_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_multiple_contiguous_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_multiple_contiguous_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_multiple_contiguous_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "uniform" }
 set_count = { type = "str", value = "multiple_discontiguous" }
@@ -133,7 +217,14 @@ shader_interface = { type = "str", value = "multiple_contiguous" }
 name = "buffer_uniform_multiple_discontiguous_multiple_discontiguous"
 rust_const = "BUFFER_UNIFORM_MULTIPLE_DISCONTIGUOUS_MULTIPLE_DISCONTIGUOUS"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_multiple_discontiguous.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_multiple_discontiguous.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_multiple_discontiguous_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_multiple_discontiguous_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_multiple_discontiguous_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_multiple_discontiguous_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_multiple_discontiguous_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "uniform" }
 set_count = { type = "str", value = "multiple_discontiguous" }
@@ -143,7 +234,14 @@ shader_interface = { type = "str", value = "multiple_discontiguous" }
 name = "buffer_uniform_multiple_discontiguous_multiple_arbitrary"
 rust_const = "BUFFER_UNIFORM_MULTIPLE_DISCONTIGUOUS_MULTIPLE_ARBITRARY"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_multiple_arbitrary.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_multiple_arbitrary.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_multiple_arbitrary_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_multiple_arbitrary_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_multiple_arbitrary_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_multiple_arbitrary_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_multiple_arbitrary_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "uniform" }
 set_count = { type = "str", value = "multiple_discontiguous" }
@@ -153,7 +251,14 @@ shader_interface = { type = "str", value = "multiple_arbitrary" }
 name = "buffer_uniform_multiple_discontiguous_descriptor_array"
 rust_const = "BUFFER_UNIFORM_MULTIPLE_DISCONTIGUOUS_DESCRIPTOR_ARRAY"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_descriptor_array.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_descriptor_array.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_descriptor_array_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_descriptor_array_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_descriptor_array_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_descriptor_array_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/buffer_uniform_multiple_discontiguous_descriptor_array_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "uniform" }
 set_count = { type = "str", value = "multiple_discontiguous" }
@@ -163,7 +268,14 @@ shader_interface = { type = "str", value = "descriptor_array" }
 name = "buffer_buffer_single_single_descriptor"
 rust_const = "BUFFER_BUFFER_SINGLE_SINGLE_DESCRIPTOR"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/buffer_buffer_single_single_descriptor.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/buffer_buffer_single_single_descriptor.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/buffer_buffer_single_single_descriptor_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/buffer_buffer_single_single_descriptor_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/buffer_buffer_single_single_descriptor_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/buffer_buffer_single_single_descriptor_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/buffer_buffer_single_single_descriptor_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "buffer" }
 set_count = { type = "str", value = "single" }
@@ -173,7 +285,14 @@ shader_interface = { type = "str", value = "single_descriptor" }
 name = "buffer_buffer_single_multiple_contiguous"
 rust_const = "BUFFER_BUFFER_SINGLE_MULTIPLE_CONTIGUOUS"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/buffer_buffer_single_multiple_contiguous.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/buffer_buffer_single_multiple_contiguous.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/buffer_buffer_single_multiple_contiguous_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/buffer_buffer_single_multiple_contiguous_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/buffer_buffer_single_multiple_contiguous_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/buffer_buffer_single_multiple_contiguous_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/buffer_buffer_single_multiple_contiguous_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "buffer" }
 set_count = { type = "str", value = "single" }
@@ -183,7 +302,14 @@ shader_interface = { type = "str", value = "multiple_contiguous" }
 name = "buffer_buffer_single_multiple_discontiguous"
 rust_const = "BUFFER_BUFFER_SINGLE_MULTIPLE_DISCONTIGUOUS"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/buffer_buffer_single_multiple_discontiguous.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/buffer_buffer_single_multiple_discontiguous.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/buffer_buffer_single_multiple_discontiguous_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/buffer_buffer_single_multiple_discontiguous_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/buffer_buffer_single_multiple_discontiguous_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/buffer_buffer_single_multiple_discontiguous_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/buffer_buffer_single_multiple_discontiguous_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "buffer" }
 set_count = { type = "str", value = "single" }
@@ -193,7 +319,14 @@ shader_interface = { type = "str", value = "multiple_discontiguous" }
 name = "buffer_buffer_single_multiple_arbitrary"
 rust_const = "BUFFER_BUFFER_SINGLE_MULTIPLE_ARBITRARY"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/buffer_buffer_single_multiple_arbitrary.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/buffer_buffer_single_multiple_arbitrary.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/buffer_buffer_single_multiple_arbitrary_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/buffer_buffer_single_multiple_arbitrary_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/buffer_buffer_single_multiple_arbitrary_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/buffer_buffer_single_multiple_arbitrary_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/buffer_buffer_single_multiple_arbitrary_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "buffer" }
 set_count = { type = "str", value = "single" }
@@ -203,7 +336,14 @@ shader_interface = { type = "str", value = "multiple_arbitrary" }
 name = "buffer_buffer_single_descriptor_array"
 rust_const = "BUFFER_BUFFER_SINGLE_DESCRIPTOR_ARRAY"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/buffer_buffer_single_descriptor_array.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/buffer_buffer_single_descriptor_array.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/buffer_buffer_single_descriptor_array_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/buffer_buffer_single_descriptor_array_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/buffer_buffer_single_descriptor_array_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/buffer_buffer_single_descriptor_array_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/buffer_buffer_single_descriptor_array_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "buffer" }
 set_count = { type = "str", value = "single" }
@@ -213,7 +353,14 @@ shader_interface = { type = "str", value = "descriptor_array" }
 name = "buffer_buffer_multiple_single_descriptor"
 rust_const = "BUFFER_BUFFER_MULTIPLE_SINGLE_DESCRIPTOR"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/buffer_buffer_multiple_single_descriptor.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/buffer_buffer_multiple_single_descriptor.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/buffer_buffer_multiple_single_descriptor_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/buffer_buffer_multiple_single_descriptor_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/buffer_buffer_multiple_single_descriptor_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/buffer_buffer_multiple_single_descriptor_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/buffer_buffer_multiple_single_descriptor_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "buffer" }
 set_count = { type = "str", value = "multiple" }
@@ -223,7 +370,14 @@ shader_interface = { type = "str", value = "single_descriptor" }
 name = "buffer_buffer_multiple_multiple_contiguous"
 rust_const = "BUFFER_BUFFER_MULTIPLE_MULTIPLE_CONTIGUOUS"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/buffer_buffer_multiple_multiple_contiguous.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/buffer_buffer_multiple_multiple_contiguous.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/buffer_buffer_multiple_multiple_contiguous_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/buffer_buffer_multiple_multiple_contiguous_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/buffer_buffer_multiple_multiple_contiguous_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/buffer_buffer_multiple_multiple_contiguous_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/buffer_buffer_multiple_multiple_contiguous_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "buffer" }
 set_count = { type = "str", value = "multiple" }
@@ -233,7 +387,14 @@ shader_interface = { type = "str", value = "multiple_contiguous" }
 name = "buffer_buffer_multiple_multiple_discontiguous"
 rust_const = "BUFFER_BUFFER_MULTIPLE_MULTIPLE_DISCONTIGUOUS"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/buffer_buffer_multiple_multiple_discontiguous.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/buffer_buffer_multiple_multiple_discontiguous.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/buffer_buffer_multiple_multiple_discontiguous_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/buffer_buffer_multiple_multiple_discontiguous_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/buffer_buffer_multiple_multiple_discontiguous_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/buffer_buffer_multiple_multiple_discontiguous_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/buffer_buffer_multiple_multiple_discontiguous_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "buffer" }
 set_count = { type = "str", value = "multiple" }
@@ -243,7 +404,14 @@ shader_interface = { type = "str", value = "multiple_discontiguous" }
 name = "buffer_buffer_multiple_multiple_arbitrary"
 rust_const = "BUFFER_BUFFER_MULTIPLE_MULTIPLE_ARBITRARY"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/buffer_buffer_multiple_multiple_arbitrary.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/buffer_buffer_multiple_multiple_arbitrary.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/buffer_buffer_multiple_multiple_arbitrary_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/buffer_buffer_multiple_multiple_arbitrary_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/buffer_buffer_multiple_multiple_arbitrary_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/buffer_buffer_multiple_multiple_arbitrary_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/buffer_buffer_multiple_multiple_arbitrary_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "buffer" }
 set_count = { type = "str", value = "multiple" }
@@ -253,7 +421,14 @@ shader_interface = { type = "str", value = "multiple_arbitrary" }
 name = "buffer_buffer_multiple_descriptor_array"
 rust_const = "BUFFER_BUFFER_MULTIPLE_DESCRIPTOR_ARRAY"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/buffer_buffer_multiple_descriptor_array.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/buffer_buffer_multiple_descriptor_array.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/buffer_buffer_multiple_descriptor_array_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/buffer_buffer_multiple_descriptor_array_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/buffer_buffer_multiple_descriptor_array_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/buffer_buffer_multiple_descriptor_array_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/buffer_buffer_multiple_descriptor_array_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "buffer" }
 set_count = { type = "str", value = "multiple" }
@@ -263,7 +438,14 @@ shader_interface = { type = "str", value = "descriptor_array" }
 name = "buffer_buffer_multiple_discontiguous_single_descriptor"
 rust_const = "BUFFER_BUFFER_MULTIPLE_DISCONTIGUOUS_SINGLE_DESCRIPTOR"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_single_descriptor.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_single_descriptor.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_single_descriptor_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_single_descriptor_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_single_descriptor_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_single_descriptor_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_single_descriptor_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "buffer" }
 set_count = { type = "str", value = "multiple_discontiguous" }
@@ -273,7 +455,14 @@ shader_interface = { type = "str", value = "single_descriptor" }
 name = "buffer_buffer_multiple_discontiguous_multiple_contiguous"
 rust_const = "BUFFER_BUFFER_MULTIPLE_DISCONTIGUOUS_MULTIPLE_CONTIGUOUS"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_multiple_contiguous.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_multiple_contiguous.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_multiple_contiguous_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_multiple_contiguous_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_multiple_contiguous_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_multiple_contiguous_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_multiple_contiguous_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "buffer" }
 set_count = { type = "str", value = "multiple_discontiguous" }
@@ -283,7 +472,14 @@ shader_interface = { type = "str", value = "multiple_contiguous" }
 name = "buffer_buffer_multiple_discontiguous_multiple_discontiguous"
 rust_const = "BUFFER_BUFFER_MULTIPLE_DISCONTIGUOUS_MULTIPLE_DISCONTIGUOUS"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_multiple_discontiguous.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_multiple_discontiguous.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_multiple_discontiguous_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_multiple_discontiguous_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_multiple_discontiguous_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_multiple_discontiguous_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_multiple_discontiguous_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "buffer" }
 set_count = { type = "str", value = "multiple_discontiguous" }
@@ -293,7 +489,14 @@ shader_interface = { type = "str", value = "multiple_discontiguous" }
 name = "buffer_buffer_multiple_discontiguous_multiple_arbitrary"
 rust_const = "BUFFER_BUFFER_MULTIPLE_DISCONTIGUOUS_MULTIPLE_ARBITRARY"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_multiple_arbitrary.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_multiple_arbitrary.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_multiple_arbitrary_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_multiple_arbitrary_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_multiple_arbitrary_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_multiple_arbitrary_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_multiple_arbitrary_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "buffer" }
 set_count = { type = "str", value = "multiple_discontiguous" }
@@ -303,7 +506,14 @@ shader_interface = { type = "str", value = "multiple_arbitrary" }
 name = "buffer_buffer_multiple_discontiguous_descriptor_array"
 rust_const = "BUFFER_BUFFER_MULTIPLE_DISCONTIGUOUS_DESCRIPTOR_ARRAY"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_descriptor_array.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_descriptor_array.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_descriptor_array_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_descriptor_array_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_descriptor_array_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_descriptor_array_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/buffer_buffer_multiple_discontiguous_descriptor_array_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "buffer" }
 set_count = { type = "str", value = "multiple_discontiguous" }
@@ -313,7 +523,14 @@ shader_interface = { type = "str", value = "descriptor_array" }
 name = "texel_uniform_single_single_descriptor"
 rust_const = "TEXEL_UNIFORM_SINGLE_SINGLE_DESCRIPTOR"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/texel_uniform_single_single_descriptor.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/texel_uniform_single_single_descriptor.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/texel_uniform_single_single_descriptor_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/texel_uniform_single_single_descriptor_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/texel_uniform_single_single_descriptor_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/texel_uniform_single_single_descriptor_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/texel_uniform_single_single_descriptor_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "uniform" }
 set_count = { type = "str", value = "single" }
@@ -323,7 +540,14 @@ shader_interface = { type = "str", value = "single_descriptor" }
 name = "texel_uniform_single_multiple_contiguous"
 rust_const = "TEXEL_UNIFORM_SINGLE_MULTIPLE_CONTIGUOUS"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/texel_uniform_single_multiple_contiguous.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/texel_uniform_single_multiple_contiguous.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/texel_uniform_single_multiple_contiguous_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/texel_uniform_single_multiple_contiguous_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/texel_uniform_single_multiple_contiguous_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/texel_uniform_single_multiple_contiguous_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/texel_uniform_single_multiple_contiguous_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "uniform" }
 set_count = { type = "str", value = "single" }
@@ -333,7 +557,14 @@ shader_interface = { type = "str", value = "multiple_contiguous" }
 name = "texel_uniform_single_multiple_discontiguous"
 rust_const = "TEXEL_UNIFORM_SINGLE_MULTIPLE_DISCONTIGUOUS"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/texel_uniform_single_multiple_discontiguous.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/texel_uniform_single_multiple_discontiguous.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/texel_uniform_single_multiple_discontiguous_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/texel_uniform_single_multiple_discontiguous_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/texel_uniform_single_multiple_discontiguous_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/texel_uniform_single_multiple_discontiguous_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/texel_uniform_single_multiple_discontiguous_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "uniform" }
 set_count = { type = "str", value = "single" }
@@ -343,7 +574,14 @@ shader_interface = { type = "str", value = "multiple_discontiguous" }
 name = "texel_uniform_single_multiple_arbitrary"
 rust_const = "TEXEL_UNIFORM_SINGLE_MULTIPLE_ARBITRARY"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/texel_uniform_single_multiple_arbitrary.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/texel_uniform_single_multiple_arbitrary.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/texel_uniform_single_multiple_arbitrary_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/texel_uniform_single_multiple_arbitrary_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/texel_uniform_single_multiple_arbitrary_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/texel_uniform_single_multiple_arbitrary_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/texel_uniform_single_multiple_arbitrary_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "uniform" }
 set_count = { type = "str", value = "single" }
@@ -353,7 +591,14 @@ shader_interface = { type = "str", value = "multiple_arbitrary" }
 name = "texel_uniform_single_descriptor_array"
 rust_const = "TEXEL_UNIFORM_SINGLE_DESCRIPTOR_ARRAY"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/texel_uniform_single_descriptor_array.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/texel_uniform_single_descriptor_array.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/texel_uniform_single_descriptor_array_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/texel_uniform_single_descriptor_array_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/texel_uniform_single_descriptor_array_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/texel_uniform_single_descriptor_array_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/texel_uniform_single_descriptor_array_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "uniform" }
 set_count = { type = "str", value = "single" }
@@ -363,7 +608,14 @@ shader_interface = { type = "str", value = "descriptor_array" }
 name = "texel_uniform_multiple_single_descriptor"
 rust_const = "TEXEL_UNIFORM_MULTIPLE_SINGLE_DESCRIPTOR"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/texel_uniform_multiple_single_descriptor.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/texel_uniform_multiple_single_descriptor.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/texel_uniform_multiple_single_descriptor_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/texel_uniform_multiple_single_descriptor_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/texel_uniform_multiple_single_descriptor_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/texel_uniform_multiple_single_descriptor_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/texel_uniform_multiple_single_descriptor_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "uniform" }
 set_count = { type = "str", value = "multiple" }
@@ -373,7 +625,14 @@ shader_interface = { type = "str", value = "single_descriptor" }
 name = "texel_uniform_multiple_multiple_contiguous"
 rust_const = "TEXEL_UNIFORM_MULTIPLE_MULTIPLE_CONTIGUOUS"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/texel_uniform_multiple_multiple_contiguous.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/texel_uniform_multiple_multiple_contiguous.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/texel_uniform_multiple_multiple_contiguous_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/texel_uniform_multiple_multiple_contiguous_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/texel_uniform_multiple_multiple_contiguous_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/texel_uniform_multiple_multiple_contiguous_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/texel_uniform_multiple_multiple_contiguous_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "uniform" }
 set_count = { type = "str", value = "multiple" }
@@ -383,7 +642,14 @@ shader_interface = { type = "str", value = "multiple_contiguous" }
 name = "texel_uniform_multiple_multiple_discontiguous"
 rust_const = "TEXEL_UNIFORM_MULTIPLE_MULTIPLE_DISCONTIGUOUS"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/texel_uniform_multiple_multiple_discontiguous.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/texel_uniform_multiple_multiple_discontiguous.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/texel_uniform_multiple_multiple_discontiguous_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/texel_uniform_multiple_multiple_discontiguous_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/texel_uniform_multiple_multiple_discontiguous_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/texel_uniform_multiple_multiple_discontiguous_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/texel_uniform_multiple_multiple_discontiguous_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "uniform" }
 set_count = { type = "str", value = "multiple" }
@@ -393,7 +659,14 @@ shader_interface = { type = "str", value = "multiple_discontiguous" }
 name = "texel_uniform_multiple_multiple_arbitrary"
 rust_const = "TEXEL_UNIFORM_MULTIPLE_MULTIPLE_ARBITRARY"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/texel_uniform_multiple_multiple_arbitrary.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/texel_uniform_multiple_multiple_arbitrary.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/texel_uniform_multiple_multiple_arbitrary_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/texel_uniform_multiple_multiple_arbitrary_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/texel_uniform_multiple_multiple_arbitrary_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/texel_uniform_multiple_multiple_arbitrary_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/texel_uniform_multiple_multiple_arbitrary_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "uniform" }
 set_count = { type = "str", value = "multiple" }
@@ -403,7 +676,14 @@ shader_interface = { type = "str", value = "multiple_arbitrary" }
 name = "texel_uniform_multiple_descriptor_array"
 rust_const = "TEXEL_UNIFORM_MULTIPLE_DESCRIPTOR_ARRAY"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/texel_uniform_multiple_descriptor_array.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/texel_uniform_multiple_descriptor_array.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/texel_uniform_multiple_descriptor_array_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/texel_uniform_multiple_descriptor_array_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/texel_uniform_multiple_descriptor_array_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/texel_uniform_multiple_descriptor_array_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/texel_uniform_multiple_descriptor_array_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "uniform" }
 set_count = { type = "str", value = "multiple" }
@@ -413,7 +693,14 @@ shader_interface = { type = "str", value = "descriptor_array" }
 name = "texel_uniform_multiple_discontiguous_single_descriptor"
 rust_const = "TEXEL_UNIFORM_MULTIPLE_DISCONTIGUOUS_SINGLE_DESCRIPTOR"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/texel_uniform_multiple_discontiguous_single_descriptor.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/texel_uniform_multiple_discontiguous_single_descriptor.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/texel_uniform_multiple_discontiguous_single_descriptor_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/texel_uniform_multiple_discontiguous_single_descriptor_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/texel_uniform_multiple_discontiguous_single_descriptor_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/texel_uniform_multiple_discontiguous_single_descriptor_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/texel_uniform_multiple_discontiguous_single_descriptor_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "uniform" }
 set_count = { type = "str", value = "multiple_discontiguous" }
@@ -423,7 +710,14 @@ shader_interface = { type = "str", value = "single_descriptor" }
 name = "texel_uniform_multiple_discontiguous_multiple_contiguous"
 rust_const = "TEXEL_UNIFORM_MULTIPLE_DISCONTIGUOUS_MULTIPLE_CONTIGUOUS"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/texel_uniform_multiple_discontiguous_multiple_contiguous.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/texel_uniform_multiple_discontiguous_multiple_contiguous.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/texel_uniform_multiple_discontiguous_multiple_contiguous_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/texel_uniform_multiple_discontiguous_multiple_contiguous_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/texel_uniform_multiple_discontiguous_multiple_contiguous_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/texel_uniform_multiple_discontiguous_multiple_contiguous_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/texel_uniform_multiple_discontiguous_multiple_contiguous_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "uniform" }
 set_count = { type = "str", value = "multiple_discontiguous" }
@@ -433,7 +727,14 @@ shader_interface = { type = "str", value = "multiple_contiguous" }
 name = "texel_uniform_multiple_discontiguous_multiple_discontiguous"
 rust_const = "TEXEL_UNIFORM_MULTIPLE_DISCONTIGUOUS_MULTIPLE_DISCONTIGUOUS"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/texel_uniform_multiple_discontiguous_multiple_discontiguous.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/texel_uniform_multiple_discontiguous_multiple_discontiguous.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/texel_uniform_multiple_discontiguous_multiple_discontiguous_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/texel_uniform_multiple_discontiguous_multiple_discontiguous_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/texel_uniform_multiple_discontiguous_multiple_discontiguous_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/texel_uniform_multiple_discontiguous_multiple_discontiguous_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/texel_uniform_multiple_discontiguous_multiple_discontiguous_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "uniform" }
 set_count = { type = "str", value = "multiple_discontiguous" }
@@ -443,7 +744,14 @@ shader_interface = { type = "str", value = "multiple_discontiguous" }
 name = "texel_uniform_multiple_discontiguous_multiple_arbitrary"
 rust_const = "TEXEL_UNIFORM_MULTIPLE_DISCONTIGUOUS_MULTIPLE_ARBITRARY"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/texel_uniform_multiple_discontiguous_multiple_arbitrary.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/texel_uniform_multiple_discontiguous_multiple_arbitrary.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/texel_uniform_multiple_discontiguous_multiple_arbitrary_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/texel_uniform_multiple_discontiguous_multiple_arbitrary_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/texel_uniform_multiple_discontiguous_multiple_arbitrary_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/texel_uniform_multiple_discontiguous_multiple_arbitrary_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/texel_uniform_multiple_discontiguous_multiple_arbitrary_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "uniform" }
 set_count = { type = "str", value = "multiple_discontiguous" }
@@ -453,7 +761,14 @@ shader_interface = { type = "str", value = "multiple_arbitrary" }
 name = "texel_uniform_multiple_discontiguous_descriptor_array"
 rust_const = "TEXEL_UNIFORM_MULTIPLE_DISCONTIGUOUS_DESCRIPTOR_ARRAY"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/texel_uniform_multiple_discontiguous_descriptor_array.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/texel_uniform_multiple_discontiguous_descriptor_array.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/texel_uniform_multiple_discontiguous_descriptor_array_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/texel_uniform_multiple_discontiguous_descriptor_array_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/texel_uniform_multiple_discontiguous_descriptor_array_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/texel_uniform_multiple_discontiguous_descriptor_array_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/texel_uniform_multiple_discontiguous_descriptor_array_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "uniform" }
 set_count = { type = "str", value = "multiple_discontiguous" }
@@ -463,7 +778,14 @@ shader_interface = { type = "str", value = "descriptor_array" }
 name = "texel_buffer_single_single_descriptor"
 rust_const = "TEXEL_BUFFER_SINGLE_SINGLE_DESCRIPTOR"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/texel_buffer_single_single_descriptor.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/texel_buffer_single_single_descriptor.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/texel_buffer_single_single_descriptor_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/texel_buffer_single_single_descriptor_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/texel_buffer_single_single_descriptor_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/texel_buffer_single_single_descriptor_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/texel_buffer_single_single_descriptor_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "buffer" }
 set_count = { type = "str", value = "single" }
@@ -473,7 +795,14 @@ shader_interface = { type = "str", value = "single_descriptor" }
 name = "texel_buffer_single_multiple_contiguous"
 rust_const = "TEXEL_BUFFER_SINGLE_MULTIPLE_CONTIGUOUS"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/texel_buffer_single_multiple_contiguous.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/texel_buffer_single_multiple_contiguous.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/texel_buffer_single_multiple_contiguous_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/texel_buffer_single_multiple_contiguous_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/texel_buffer_single_multiple_contiguous_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/texel_buffer_single_multiple_contiguous_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/texel_buffer_single_multiple_contiguous_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "buffer" }
 set_count = { type = "str", value = "single" }
@@ -483,7 +812,14 @@ shader_interface = { type = "str", value = "multiple_contiguous" }
 name = "texel_buffer_single_multiple_discontiguous"
 rust_const = "TEXEL_BUFFER_SINGLE_MULTIPLE_DISCONTIGUOUS"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/texel_buffer_single_multiple_discontiguous.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/texel_buffer_single_multiple_discontiguous.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/texel_buffer_single_multiple_discontiguous_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/texel_buffer_single_multiple_discontiguous_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/texel_buffer_single_multiple_discontiguous_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/texel_buffer_single_multiple_discontiguous_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/texel_buffer_single_multiple_discontiguous_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "buffer" }
 set_count = { type = "str", value = "single" }
@@ -493,7 +829,14 @@ shader_interface = { type = "str", value = "multiple_discontiguous" }
 name = "texel_buffer_single_multiple_arbitrary"
 rust_const = "TEXEL_BUFFER_SINGLE_MULTIPLE_ARBITRARY"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/texel_buffer_single_multiple_arbitrary.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/texel_buffer_single_multiple_arbitrary.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/texel_buffer_single_multiple_arbitrary_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/texel_buffer_single_multiple_arbitrary_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/texel_buffer_single_multiple_arbitrary_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/texel_buffer_single_multiple_arbitrary_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/texel_buffer_single_multiple_arbitrary_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "buffer" }
 set_count = { type = "str", value = "single" }
@@ -503,7 +846,14 @@ shader_interface = { type = "str", value = "multiple_arbitrary" }
 name = "texel_buffer_single_descriptor_array"
 rust_const = "TEXEL_BUFFER_SINGLE_DESCRIPTOR_ARRAY"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/texel_buffer_single_descriptor_array.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/texel_buffer_single_descriptor_array.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/texel_buffer_single_descriptor_array_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/texel_buffer_single_descriptor_array_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/texel_buffer_single_descriptor_array_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/texel_buffer_single_descriptor_array_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/texel_buffer_single_descriptor_array_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "buffer" }
 set_count = { type = "str", value = "single" }
@@ -513,7 +863,14 @@ shader_interface = { type = "str", value = "descriptor_array" }
 name = "texel_buffer_multiple_single_descriptor"
 rust_const = "TEXEL_BUFFER_MULTIPLE_SINGLE_DESCRIPTOR"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/texel_buffer_multiple_single_descriptor.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/texel_buffer_multiple_single_descriptor.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/texel_buffer_multiple_single_descriptor_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/texel_buffer_multiple_single_descriptor_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/texel_buffer_multiple_single_descriptor_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/texel_buffer_multiple_single_descriptor_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/texel_buffer_multiple_single_descriptor_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "buffer" }
 set_count = { type = "str", value = "multiple" }
@@ -523,7 +880,14 @@ shader_interface = { type = "str", value = "single_descriptor" }
 name = "texel_buffer_multiple_multiple_contiguous"
 rust_const = "TEXEL_BUFFER_MULTIPLE_MULTIPLE_CONTIGUOUS"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/texel_buffer_multiple_multiple_contiguous.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/texel_buffer_multiple_multiple_contiguous.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/texel_buffer_multiple_multiple_contiguous_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/texel_buffer_multiple_multiple_contiguous_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/texel_buffer_multiple_multiple_contiguous_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/texel_buffer_multiple_multiple_contiguous_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/texel_buffer_multiple_multiple_contiguous_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "buffer" }
 set_count = { type = "str", value = "multiple" }
@@ -533,7 +897,14 @@ shader_interface = { type = "str", value = "multiple_contiguous" }
 name = "texel_buffer_multiple_multiple_discontiguous"
 rust_const = "TEXEL_BUFFER_MULTIPLE_MULTIPLE_DISCONTIGUOUS"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/texel_buffer_multiple_multiple_discontiguous.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/texel_buffer_multiple_multiple_discontiguous.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/texel_buffer_multiple_multiple_discontiguous_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/texel_buffer_multiple_multiple_discontiguous_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/texel_buffer_multiple_multiple_discontiguous_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/texel_buffer_multiple_multiple_discontiguous_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/texel_buffer_multiple_multiple_discontiguous_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "buffer" }
 set_count = { type = "str", value = "multiple" }
@@ -543,7 +914,14 @@ shader_interface = { type = "str", value = "multiple_discontiguous" }
 name = "texel_buffer_multiple_multiple_arbitrary"
 rust_const = "TEXEL_BUFFER_MULTIPLE_MULTIPLE_ARBITRARY"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/texel_buffer_multiple_multiple_arbitrary.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/texel_buffer_multiple_multiple_arbitrary.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/texel_buffer_multiple_multiple_arbitrary_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/texel_buffer_multiple_multiple_arbitrary_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/texel_buffer_multiple_multiple_arbitrary_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/texel_buffer_multiple_multiple_arbitrary_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/texel_buffer_multiple_multiple_arbitrary_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "buffer" }
 set_count = { type = "str", value = "multiple" }
@@ -553,7 +931,14 @@ shader_interface = { type = "str", value = "multiple_arbitrary" }
 name = "texel_buffer_multiple_descriptor_array"
 rust_const = "TEXEL_BUFFER_MULTIPLE_DESCRIPTOR_ARRAY"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/texel_buffer_multiple_descriptor_array.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/texel_buffer_multiple_descriptor_array.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/texel_buffer_multiple_descriptor_array_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/texel_buffer_multiple_descriptor_array_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/texel_buffer_multiple_descriptor_array_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/texel_buffer_multiple_descriptor_array_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/texel_buffer_multiple_descriptor_array_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "buffer" }
 set_count = { type = "str", value = "multiple" }
@@ -563,7 +948,14 @@ shader_interface = { type = "str", value = "descriptor_array" }
 name = "texel_buffer_multiple_discontiguous_single_descriptor"
 rust_const = "TEXEL_BUFFER_MULTIPLE_DISCONTIGUOUS_SINGLE_DESCRIPTOR"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/texel_buffer_multiple_discontiguous_single_descriptor.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/texel_buffer_multiple_discontiguous_single_descriptor.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/texel_buffer_multiple_discontiguous_single_descriptor_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/texel_buffer_multiple_discontiguous_single_descriptor_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/texel_buffer_multiple_discontiguous_single_descriptor_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/texel_buffer_multiple_discontiguous_single_descriptor_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/texel_buffer_multiple_discontiguous_single_descriptor_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "buffer" }
 set_count = { type = "str", value = "multiple_discontiguous" }
@@ -573,7 +965,14 @@ shader_interface = { type = "str", value = "single_descriptor" }
 name = "texel_buffer_multiple_discontiguous_multiple_contiguous"
 rust_const = "TEXEL_BUFFER_MULTIPLE_DISCONTIGUOUS_MULTIPLE_CONTIGUOUS"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/texel_buffer_multiple_discontiguous_multiple_contiguous.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/texel_buffer_multiple_discontiguous_multiple_contiguous.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/texel_buffer_multiple_discontiguous_multiple_contiguous_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/texel_buffer_multiple_discontiguous_multiple_contiguous_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/texel_buffer_multiple_discontiguous_multiple_contiguous_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/texel_buffer_multiple_discontiguous_multiple_contiguous_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/texel_buffer_multiple_discontiguous_multiple_contiguous_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "buffer" }
 set_count = { type = "str", value = "multiple_discontiguous" }
@@ -583,7 +982,14 @@ shader_interface = { type = "str", value = "multiple_contiguous" }
 name = "texel_buffer_multiple_discontiguous_multiple_discontiguous"
 rust_const = "TEXEL_BUFFER_MULTIPLE_DISCONTIGUOUS_MULTIPLE_DISCONTIGUOUS"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/texel_buffer_multiple_discontiguous_multiple_discontiguous.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/texel_buffer_multiple_discontiguous_multiple_discontiguous.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/texel_buffer_multiple_discontiguous_multiple_discontiguous_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/texel_buffer_multiple_discontiguous_multiple_discontiguous_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/texel_buffer_multiple_discontiguous_multiple_discontiguous_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/texel_buffer_multiple_discontiguous_multiple_discontiguous_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/texel_buffer_multiple_discontiguous_multiple_discontiguous_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "buffer" }
 set_count = { type = "str", value = "multiple_discontiguous" }
@@ -593,7 +999,14 @@ shader_interface = { type = "str", value = "multiple_discontiguous" }
 name = "texel_buffer_multiple_discontiguous_multiple_arbitrary"
 rust_const = "TEXEL_BUFFER_MULTIPLE_DISCONTIGUOUS_MULTIPLE_ARBITRARY"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/texel_buffer_multiple_discontiguous_multiple_arbitrary.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/texel_buffer_multiple_discontiguous_multiple_arbitrary.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/texel_buffer_multiple_discontiguous_multiple_arbitrary_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/texel_buffer_multiple_discontiguous_multiple_arbitrary_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/texel_buffer_multiple_discontiguous_multiple_arbitrary_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/texel_buffer_multiple_discontiguous_multiple_arbitrary_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/texel_buffer_multiple_discontiguous_multiple_arbitrary_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "buffer" }
 set_count = { type = "str", value = "multiple_discontiguous" }
@@ -603,7 +1016,14 @@ shader_interface = { type = "str", value = "multiple_arbitrary" }
 name = "texel_buffer_multiple_discontiguous_descriptor_array"
 rust_const = "TEXEL_BUFFER_MULTIPLE_DISCONTIGUOUS_DESCRIPTOR_ARRAY"
 rust_type = "BufferAccessProgram"
-programs = [{ name = "compute", template = "binding_model/generated/texel_buffer_multiple_discontiguous_descriptor_array.comp", stage = "comp" }]
+programs = [
+    { name = "compute", template = "binding_model/generated/texel_buffer_multiple_discontiguous_descriptor_array.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/generated/texel_buffer_multiple_discontiguous_descriptor_array_vert.vert", stage = "vert" },
+    { name = "vert_contrib", template = "binding_model/generated/texel_buffer_multiple_discontiguous_descriptor_array_vert_contrib.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/generated/texel_buffer_multiple_discontiguous_descriptor_array_frag.frag", stage = "frag" },
+    { name = "frag_contrib", template = "binding_model/generated/texel_buffer_multiple_discontiguous_descriptor_array_frag_contrib.frag", stage = "frag" },
+    { name = "vert_passthrough", template = "binding_model/generated/texel_buffer_multiple_discontiguous_descriptor_array_vert_passthrough.vert", stage = "vert" },
+]
 [case.params]
 storage_type = { type = "str", value = "buffer" }
 set_count = { type = "str", value = "multiple_discontiguous" }
@@ -5459,3 +5879,12 @@ descriptor_type = { type = "str", value = "combined_image_sampler" }
 view_name = { type = "str", value = "cube_array_base_slice" }
 set_count = { type = "str", value = "multiple" }
 shader_interface = { type = "str", value = "descriptor_array" }
+
+[[case]]
+name = "quadrant_common"
+rust_const = "QUADRANT_COMMON"
+rust_type = "QuadrantCommonProgram"
+programs = [
+    { name = "frag_passthrough", template = "binding_model/generated/quadrant_passthrough.frag", stage = "frag" },
+    { name = "frag_no_access", template = "binding_model/generated/quadrant_no_access.frag", stage = "frag" },
+]

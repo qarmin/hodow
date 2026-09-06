@@ -44,6 +44,15 @@ pub struct BufferAccessProgram {
     pub programs: BinaryCollection,
 }
 
+/// The manifest declares the two stage-independent graphics shaders with this: the
+/// fragment pass-through used when only the vertex stage reads a descriptor, and the
+/// fragment shader for the `no_access` cases, which writes the colours the descriptors
+/// would have held without reading any of them.
+pub struct QuadrantCommonProgram {
+    pub name: &'static str,
+    pub programs: BinaryCollection,
+}
+
 /// The manifest declares the storage image cases with this. Unlike the buffer types,
 /// which share a shader across every view, an image case bakes its fetch coordinates
 /// into the GLSL, so there is one program per case and `view_name` identifies it.
