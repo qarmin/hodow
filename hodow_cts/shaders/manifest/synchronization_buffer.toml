@@ -236,6 +236,288 @@ stage = { type = "str", value = "fragment" }
 buffer_size = { type = "u32", value = 16384 }
 
 [[case]]
+name = "write_ssbo_tess_control_buffer_16384"
+rust_const = "WRITE_SSBO_TESS_CONTROL_BUFFER_16384"
+rust_type = "BufferGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/write_ssbo_tess_control_buffer_16384.vert", stage = "vert" },
+    { name = "tesc", template = "synchronization/generated/write_ssbo_tess_control_buffer_16384.tesc", stage = "tesc" },
+    { name = "tese", template = "synchronization/generated/write_ssbo_tess_control_buffer_16384.tese", stage = "tese" },
+    { name = "frag", template = "synchronization/generated/write_ssbo_tess_control_buffer_16384.frag", stage = "frag" },
+]
+[case.params]
+buffer_type = { type = "str", value = "ssbo" }
+mode = { type = "str", value = "write" }
+stage = { type = "str", value = "tess_control" }
+buffer_size = { type = "u32", value = 16384 }
+
+[[case]]
+name = "write_ssbo_tess_control_buffer_262144"
+rust_const = "WRITE_SSBO_TESS_CONTROL_BUFFER_262144"
+rust_type = "BufferGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/write_ssbo_tess_control_buffer_262144.vert", stage = "vert" },
+    { name = "tesc", template = "synchronization/generated/write_ssbo_tess_control_buffer_262144.tesc", stage = "tesc" },
+    { name = "tese", template = "synchronization/generated/write_ssbo_tess_control_buffer_262144.tese", stage = "tese" },
+    { name = "frag", template = "synchronization/generated/write_ssbo_tess_control_buffer_262144.frag", stage = "frag" },
+]
+[case.params]
+buffer_type = { type = "str", value = "ssbo" }
+mode = { type = "str", value = "write" }
+stage = { type = "str", value = "tess_control" }
+buffer_size = { type = "u32", value = 262144 }
+
+[[case]]
+name = "read_ssbo_tess_control_buffer_16384"
+rust_const = "READ_SSBO_TESS_CONTROL_BUFFER_16384"
+rust_type = "BufferGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/read_ssbo_tess_control_buffer_16384.vert", stage = "vert" },
+    { name = "tesc", template = "synchronization/generated/read_ssbo_tess_control_buffer_16384.tesc", stage = "tesc" },
+    { name = "tese", template = "synchronization/generated/read_ssbo_tess_control_buffer_16384.tese", stage = "tese" },
+    { name = "frag", template = "synchronization/generated/read_ssbo_tess_control_buffer_16384.frag", stage = "frag" },
+]
+[case.params]
+buffer_type = { type = "str", value = "ssbo" }
+mode = { type = "str", value = "read" }
+stage = { type = "str", value = "tess_control" }
+buffer_size = { type = "u32", value = 16384 }
+
+[[case]]
+name = "read_ssbo_tess_control_buffer_262144"
+rust_const = "READ_SSBO_TESS_CONTROL_BUFFER_262144"
+rust_type = "BufferGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/read_ssbo_tess_control_buffer_262144.vert", stage = "vert" },
+    { name = "tesc", template = "synchronization/generated/read_ssbo_tess_control_buffer_262144.tesc", stage = "tesc" },
+    { name = "tese", template = "synchronization/generated/read_ssbo_tess_control_buffer_262144.tese", stage = "tese" },
+    { name = "frag", template = "synchronization/generated/read_ssbo_tess_control_buffer_262144.frag", stage = "frag" },
+]
+[case.params]
+buffer_type = { type = "str", value = "ssbo" }
+mode = { type = "str", value = "read" }
+stage = { type = "str", value = "tess_control" }
+buffer_size = { type = "u32", value = 262144 }
+
+[[case]]
+name = "read_ubo_tess_control_buffer_16384"
+rust_const = "READ_UBO_TESS_CONTROL_BUFFER_16384"
+rust_type = "BufferGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/read_ubo_tess_control_buffer_16384.vert", stage = "vert" },
+    { name = "tesc", template = "synchronization/generated/read_ubo_tess_control_buffer_16384.tesc", stage = "tesc" },
+    { name = "tese", template = "synchronization/generated/read_ubo_tess_control_buffer_16384.tese", stage = "tese" },
+    { name = "frag", template = "synchronization/generated/read_ubo_tess_control_buffer_16384.frag", stage = "frag" },
+]
+[case.params]
+buffer_type = { type = "str", value = "ubo" }
+mode = { type = "str", value = "read" }
+stage = { type = "str", value = "tess_control" }
+buffer_size = { type = "u32", value = 16384 }
+
+[[case]]
+name = "read_ubo_texel_tess_control_buffer_16384"
+rust_const = "READ_UBO_TEXEL_TESS_CONTROL_BUFFER_16384"
+rust_type = "BufferGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/read_ubo_texel_tess_control_buffer_16384.vert", stage = "vert" },
+    { name = "tesc", template = "synchronization/generated/read_ubo_texel_tess_control_buffer_16384.tesc", stage = "tesc" },
+    { name = "tese", template = "synchronization/generated/read_ubo_texel_tess_control_buffer_16384.tese", stage = "tese" },
+    { name = "frag", template = "synchronization/generated/read_ubo_texel_tess_control_buffer_16384.frag", stage = "frag" },
+]
+[case.params]
+buffer_type = { type = "str", value = "ubo_texel" }
+mode = { type = "str", value = "read" }
+stage = { type = "str", value = "tess_control" }
+buffer_size = { type = "u32", value = 16384 }
+
+[[case]]
+name = "write_ssbo_tess_eval_buffer_16384"
+rust_const = "WRITE_SSBO_TESS_EVAL_BUFFER_16384"
+rust_type = "BufferGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/write_ssbo_tess_eval_buffer_16384.vert", stage = "vert" },
+    { name = "tesc", template = "synchronization/generated/write_ssbo_tess_eval_buffer_16384.tesc", stage = "tesc" },
+    { name = "tese", template = "synchronization/generated/write_ssbo_tess_eval_buffer_16384.tese", stage = "tese" },
+    { name = "frag", template = "synchronization/generated/write_ssbo_tess_eval_buffer_16384.frag", stage = "frag" },
+]
+[case.params]
+buffer_type = { type = "str", value = "ssbo" }
+mode = { type = "str", value = "write" }
+stage = { type = "str", value = "tess_eval" }
+buffer_size = { type = "u32", value = 16384 }
+
+[[case]]
+name = "write_ssbo_tess_eval_buffer_262144"
+rust_const = "WRITE_SSBO_TESS_EVAL_BUFFER_262144"
+rust_type = "BufferGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/write_ssbo_tess_eval_buffer_262144.vert", stage = "vert" },
+    { name = "tesc", template = "synchronization/generated/write_ssbo_tess_eval_buffer_262144.tesc", stage = "tesc" },
+    { name = "tese", template = "synchronization/generated/write_ssbo_tess_eval_buffer_262144.tese", stage = "tese" },
+    { name = "frag", template = "synchronization/generated/write_ssbo_tess_eval_buffer_262144.frag", stage = "frag" },
+]
+[case.params]
+buffer_type = { type = "str", value = "ssbo" }
+mode = { type = "str", value = "write" }
+stage = { type = "str", value = "tess_eval" }
+buffer_size = { type = "u32", value = 262144 }
+
+[[case]]
+name = "read_ssbo_tess_eval_buffer_16384"
+rust_const = "READ_SSBO_TESS_EVAL_BUFFER_16384"
+rust_type = "BufferGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/read_ssbo_tess_eval_buffer_16384.vert", stage = "vert" },
+    { name = "tesc", template = "synchronization/generated/read_ssbo_tess_eval_buffer_16384.tesc", stage = "tesc" },
+    { name = "tese", template = "synchronization/generated/read_ssbo_tess_eval_buffer_16384.tese", stage = "tese" },
+    { name = "frag", template = "synchronization/generated/read_ssbo_tess_eval_buffer_16384.frag", stage = "frag" },
+]
+[case.params]
+buffer_type = { type = "str", value = "ssbo" }
+mode = { type = "str", value = "read" }
+stage = { type = "str", value = "tess_eval" }
+buffer_size = { type = "u32", value = 16384 }
+
+[[case]]
+name = "read_ssbo_tess_eval_buffer_262144"
+rust_const = "READ_SSBO_TESS_EVAL_BUFFER_262144"
+rust_type = "BufferGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/read_ssbo_tess_eval_buffer_262144.vert", stage = "vert" },
+    { name = "tesc", template = "synchronization/generated/read_ssbo_tess_eval_buffer_262144.tesc", stage = "tesc" },
+    { name = "tese", template = "synchronization/generated/read_ssbo_tess_eval_buffer_262144.tese", stage = "tese" },
+    { name = "frag", template = "synchronization/generated/read_ssbo_tess_eval_buffer_262144.frag", stage = "frag" },
+]
+[case.params]
+buffer_type = { type = "str", value = "ssbo" }
+mode = { type = "str", value = "read" }
+stage = { type = "str", value = "tess_eval" }
+buffer_size = { type = "u32", value = 262144 }
+
+[[case]]
+name = "read_ubo_tess_eval_buffer_16384"
+rust_const = "READ_UBO_TESS_EVAL_BUFFER_16384"
+rust_type = "BufferGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/read_ubo_tess_eval_buffer_16384.vert", stage = "vert" },
+    { name = "tesc", template = "synchronization/generated/read_ubo_tess_eval_buffer_16384.tesc", stage = "tesc" },
+    { name = "tese", template = "synchronization/generated/read_ubo_tess_eval_buffer_16384.tese", stage = "tese" },
+    { name = "frag", template = "synchronization/generated/read_ubo_tess_eval_buffer_16384.frag", stage = "frag" },
+]
+[case.params]
+buffer_type = { type = "str", value = "ubo" }
+mode = { type = "str", value = "read" }
+stage = { type = "str", value = "tess_eval" }
+buffer_size = { type = "u32", value = 16384 }
+
+[[case]]
+name = "read_ubo_texel_tess_eval_buffer_16384"
+rust_const = "READ_UBO_TEXEL_TESS_EVAL_BUFFER_16384"
+rust_type = "BufferGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/read_ubo_texel_tess_eval_buffer_16384.vert", stage = "vert" },
+    { name = "tesc", template = "synchronization/generated/read_ubo_texel_tess_eval_buffer_16384.tesc", stage = "tesc" },
+    { name = "tese", template = "synchronization/generated/read_ubo_texel_tess_eval_buffer_16384.tese", stage = "tese" },
+    { name = "frag", template = "synchronization/generated/read_ubo_texel_tess_eval_buffer_16384.frag", stage = "frag" },
+]
+[case.params]
+buffer_type = { type = "str", value = "ubo_texel" }
+mode = { type = "str", value = "read" }
+stage = { type = "str", value = "tess_eval" }
+buffer_size = { type = "u32", value = 16384 }
+
+[[case]]
+name = "write_ssbo_geometry_buffer_16384"
+rust_const = "WRITE_SSBO_GEOMETRY_BUFFER_16384"
+rust_type = "BufferGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/write_ssbo_geometry_buffer_16384.vert", stage = "vert" },
+    { name = "geom", template = "synchronization/generated/write_ssbo_geometry_buffer_16384.geom", stage = "geom" },
+    { name = "frag", template = "synchronization/generated/write_ssbo_geometry_buffer_16384.frag", stage = "frag" },
+]
+[case.params]
+buffer_type = { type = "str", value = "ssbo" }
+mode = { type = "str", value = "write" }
+stage = { type = "str", value = "geometry" }
+buffer_size = { type = "u32", value = 16384 }
+
+[[case]]
+name = "write_ssbo_geometry_buffer_262144"
+rust_const = "WRITE_SSBO_GEOMETRY_BUFFER_262144"
+rust_type = "BufferGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/write_ssbo_geometry_buffer_262144.vert", stage = "vert" },
+    { name = "geom", template = "synchronization/generated/write_ssbo_geometry_buffer_262144.geom", stage = "geom" },
+    { name = "frag", template = "synchronization/generated/write_ssbo_geometry_buffer_262144.frag", stage = "frag" },
+]
+[case.params]
+buffer_type = { type = "str", value = "ssbo" }
+mode = { type = "str", value = "write" }
+stage = { type = "str", value = "geometry" }
+buffer_size = { type = "u32", value = 262144 }
+
+[[case]]
+name = "read_ssbo_geometry_buffer_16384"
+rust_const = "READ_SSBO_GEOMETRY_BUFFER_16384"
+rust_type = "BufferGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/read_ssbo_geometry_buffer_16384.vert", stage = "vert" },
+    { name = "geom", template = "synchronization/generated/read_ssbo_geometry_buffer_16384.geom", stage = "geom" },
+    { name = "frag", template = "synchronization/generated/read_ssbo_geometry_buffer_16384.frag", stage = "frag" },
+]
+[case.params]
+buffer_type = { type = "str", value = "ssbo" }
+mode = { type = "str", value = "read" }
+stage = { type = "str", value = "geometry" }
+buffer_size = { type = "u32", value = 16384 }
+
+[[case]]
+name = "read_ssbo_geometry_buffer_262144"
+rust_const = "READ_SSBO_GEOMETRY_BUFFER_262144"
+rust_type = "BufferGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/read_ssbo_geometry_buffer_262144.vert", stage = "vert" },
+    { name = "geom", template = "synchronization/generated/read_ssbo_geometry_buffer_262144.geom", stage = "geom" },
+    { name = "frag", template = "synchronization/generated/read_ssbo_geometry_buffer_262144.frag", stage = "frag" },
+]
+[case.params]
+buffer_type = { type = "str", value = "ssbo" }
+mode = { type = "str", value = "read" }
+stage = { type = "str", value = "geometry" }
+buffer_size = { type = "u32", value = 262144 }
+
+[[case]]
+name = "read_ubo_geometry_buffer_16384"
+rust_const = "READ_UBO_GEOMETRY_BUFFER_16384"
+rust_type = "BufferGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/read_ubo_geometry_buffer_16384.vert", stage = "vert" },
+    { name = "geom", template = "synchronization/generated/read_ubo_geometry_buffer_16384.geom", stage = "geom" },
+    { name = "frag", template = "synchronization/generated/read_ubo_geometry_buffer_16384.frag", stage = "frag" },
+]
+[case.params]
+buffer_type = { type = "str", value = "ubo" }
+mode = { type = "str", value = "read" }
+stage = { type = "str", value = "geometry" }
+buffer_size = { type = "u32", value = 16384 }
+
+[[case]]
+name = "read_ubo_texel_geometry_buffer_16384"
+rust_const = "READ_UBO_TEXEL_GEOMETRY_BUFFER_16384"
+rust_type = "BufferGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/read_ubo_texel_geometry_buffer_16384.vert", stage = "vert" },
+    { name = "geom", template = "synchronization/generated/read_ubo_texel_geometry_buffer_16384.geom", stage = "geom" },
+    { name = "frag", template = "synchronization/generated/read_ubo_texel_geometry_buffer_16384.frag", stage = "frag" },
+]
+[case.params]
+buffer_type = { type = "str", value = "ubo_texel" }
+mode = { type = "str", value = "read" }
+stage = { type = "str", value = "geometry" }
+buffer_size = { type = "u32", value = 16384 }
+
+[[case]]
 name = "image_image_128_r32_uint"
 rust_const = "IMAGE_IMAGE_128_R32_UINT"
 rust_type = "ImageAccessShader"
@@ -316,6 +598,47 @@ resource_name = { type = "str", value = "image_128_r32_uint" }
 stage = { type = "str", value = "fragment" }
 
 [[case]]
+name = "image_image_128_r32_uint_tess_control"
+rust_const = "IMAGE_IMAGE_128_R32_UINT_TESS_CONTROL"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_128_r32_uint_tess_control.vert", stage = "vert" },
+    { name = "tesc", template = "synchronization/generated/image_image_128_r32_uint_tess_control.tesc", stage = "tesc" },
+    { name = "tese", template = "synchronization/generated/image_image_128_r32_uint_tess_control.tese", stage = "tese" },
+    { name = "frag", template = "synchronization/generated/image_image_128_r32_uint_tess_control.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_128_r32_uint" }
+stage = { type = "str", value = "tess_control" }
+
+[[case]]
+name = "image_image_128_r32_uint_tess_eval"
+rust_const = "IMAGE_IMAGE_128_R32_UINT_TESS_EVAL"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_128_r32_uint_tess_eval.vert", stage = "vert" },
+    { name = "tesc", template = "synchronization/generated/image_image_128_r32_uint_tess_eval.tesc", stage = "tesc" },
+    { name = "tese", template = "synchronization/generated/image_image_128_r32_uint_tess_eval.tese", stage = "tese" },
+    { name = "frag", template = "synchronization/generated/image_image_128_r32_uint_tess_eval.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_128_r32_uint" }
+stage = { type = "str", value = "tess_eval" }
+
+[[case]]
+name = "image_image_128_r32_uint_geometry"
+rust_const = "IMAGE_IMAGE_128_R32_UINT_GEOMETRY"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_128_r32_uint_geometry.vert", stage = "vert" },
+    { name = "geom", template = "synchronization/generated/image_image_128_r32_uint_geometry.geom", stage = "geom" },
+    { name = "frag", template = "synchronization/generated/image_image_128_r32_uint_geometry.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_128_r32_uint" }
+stage = { type = "str", value = "geometry" }
+
+[[case]]
 name = "image_image_128x128_r8_unorm_vertex"
 rust_const = "IMAGE_IMAGE_128X128_R8_UNORM_VERTEX"
 rust_type = "ImageGraphicsShader"
@@ -338,6 +661,47 @@ programs = [
 [case.params]
 resource_name = { type = "str", value = "image_128x128_r8_unorm" }
 stage = { type = "str", value = "fragment" }
+
+[[case]]
+name = "image_image_128x128_r8_unorm_tess_control"
+rust_const = "IMAGE_IMAGE_128X128_R8_UNORM_TESS_CONTROL"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_128x128_r8_unorm_tess_control.vert", stage = "vert" },
+    { name = "tesc", template = "synchronization/generated/image_image_128x128_r8_unorm_tess_control.tesc", stage = "tesc" },
+    { name = "tese", template = "synchronization/generated/image_image_128x128_r8_unorm_tess_control.tese", stage = "tese" },
+    { name = "frag", template = "synchronization/generated/image_image_128x128_r8_unorm_tess_control.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_128x128_r8_unorm" }
+stage = { type = "str", value = "tess_control" }
+
+[[case]]
+name = "image_image_128x128_r8_unorm_tess_eval"
+rust_const = "IMAGE_IMAGE_128X128_R8_UNORM_TESS_EVAL"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_128x128_r8_unorm_tess_eval.vert", stage = "vert" },
+    { name = "tesc", template = "synchronization/generated/image_image_128x128_r8_unorm_tess_eval.tesc", stage = "tesc" },
+    { name = "tese", template = "synchronization/generated/image_image_128x128_r8_unorm_tess_eval.tese", stage = "tese" },
+    { name = "frag", template = "synchronization/generated/image_image_128x128_r8_unorm_tess_eval.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_128x128_r8_unorm" }
+stage = { type = "str", value = "tess_eval" }
+
+[[case]]
+name = "image_image_128x128_r8_unorm_geometry"
+rust_const = "IMAGE_IMAGE_128X128_R8_UNORM_GEOMETRY"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_128x128_r8_unorm_geometry.vert", stage = "vert" },
+    { name = "geom", template = "synchronization/generated/image_image_128x128_r8_unorm_geometry.geom", stage = "geom" },
+    { name = "frag", template = "synchronization/generated/image_image_128x128_r8_unorm_geometry.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_128x128_r8_unorm" }
+stage = { type = "str", value = "geometry" }
 
 [[case]]
 name = "image_image_128x128_r16_uint_vertex"
@@ -364,6 +728,47 @@ resource_name = { type = "str", value = "image_128x128_r16_uint" }
 stage = { type = "str", value = "fragment" }
 
 [[case]]
+name = "image_image_128x128_r16_uint_tess_control"
+rust_const = "IMAGE_IMAGE_128X128_R16_UINT_TESS_CONTROL"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_128x128_r16_uint_tess_control.vert", stage = "vert" },
+    { name = "tesc", template = "synchronization/generated/image_image_128x128_r16_uint_tess_control.tesc", stage = "tesc" },
+    { name = "tese", template = "synchronization/generated/image_image_128x128_r16_uint_tess_control.tese", stage = "tese" },
+    { name = "frag", template = "synchronization/generated/image_image_128x128_r16_uint_tess_control.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_128x128_r16_uint" }
+stage = { type = "str", value = "tess_control" }
+
+[[case]]
+name = "image_image_128x128_r16_uint_tess_eval"
+rust_const = "IMAGE_IMAGE_128X128_R16_UINT_TESS_EVAL"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_128x128_r16_uint_tess_eval.vert", stage = "vert" },
+    { name = "tesc", template = "synchronization/generated/image_image_128x128_r16_uint_tess_eval.tesc", stage = "tesc" },
+    { name = "tese", template = "synchronization/generated/image_image_128x128_r16_uint_tess_eval.tese", stage = "tese" },
+    { name = "frag", template = "synchronization/generated/image_image_128x128_r16_uint_tess_eval.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_128x128_r16_uint" }
+stage = { type = "str", value = "tess_eval" }
+
+[[case]]
+name = "image_image_128x128_r16_uint_geometry"
+rust_const = "IMAGE_IMAGE_128X128_R16_UINT_GEOMETRY"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_128x128_r16_uint_geometry.vert", stage = "vert" },
+    { name = "geom", template = "synchronization/generated/image_image_128x128_r16_uint_geometry.geom", stage = "geom" },
+    { name = "frag", template = "synchronization/generated/image_image_128x128_r16_uint_geometry.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_128x128_r16_uint" }
+stage = { type = "str", value = "geometry" }
+
+[[case]]
 name = "image_image_128x128_r8g8b8a8_unorm_vertex"
 rust_const = "IMAGE_IMAGE_128X128_R8G8B8A8_UNORM_VERTEX"
 rust_type = "ImageGraphicsShader"
@@ -386,6 +791,47 @@ programs = [
 [case.params]
 resource_name = { type = "str", value = "image_128x128_r8g8b8a8_unorm" }
 stage = { type = "str", value = "fragment" }
+
+[[case]]
+name = "image_image_128x128_r8g8b8a8_unorm_tess_control"
+rust_const = "IMAGE_IMAGE_128X128_R8G8B8A8_UNORM_TESS_CONTROL"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_128x128_r8g8b8a8_unorm_tess_control.vert", stage = "vert" },
+    { name = "tesc", template = "synchronization/generated/image_image_128x128_r8g8b8a8_unorm_tess_control.tesc", stage = "tesc" },
+    { name = "tese", template = "synchronization/generated/image_image_128x128_r8g8b8a8_unorm_tess_control.tese", stage = "tese" },
+    { name = "frag", template = "synchronization/generated/image_image_128x128_r8g8b8a8_unorm_tess_control.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_128x128_r8g8b8a8_unorm" }
+stage = { type = "str", value = "tess_control" }
+
+[[case]]
+name = "image_image_128x128_r8g8b8a8_unorm_tess_eval"
+rust_const = "IMAGE_IMAGE_128X128_R8G8B8A8_UNORM_TESS_EVAL"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_128x128_r8g8b8a8_unorm_tess_eval.vert", stage = "vert" },
+    { name = "tesc", template = "synchronization/generated/image_image_128x128_r8g8b8a8_unorm_tess_eval.tesc", stage = "tesc" },
+    { name = "tese", template = "synchronization/generated/image_image_128x128_r8g8b8a8_unorm_tess_eval.tese", stage = "tese" },
+    { name = "frag", template = "synchronization/generated/image_image_128x128_r8g8b8a8_unorm_tess_eval.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_128x128_r8g8b8a8_unorm" }
+stage = { type = "str", value = "tess_eval" }
+
+[[case]]
+name = "image_image_128x128_r8g8b8a8_unorm_geometry"
+rust_const = "IMAGE_IMAGE_128X128_R8G8B8A8_UNORM_GEOMETRY"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_128x128_r8g8b8a8_unorm_geometry.vert", stage = "vert" },
+    { name = "geom", template = "synchronization/generated/image_image_128x128_r8g8b8a8_unorm_geometry.geom", stage = "geom" },
+    { name = "frag", template = "synchronization/generated/image_image_128x128_r8g8b8a8_unorm_geometry.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_128x128_r8g8b8a8_unorm" }
+stage = { type = "str", value = "geometry" }
 
 [[case]]
 name = "image_image_128x128_r16g16b16a16_uint_vertex"
@@ -412,6 +858,47 @@ resource_name = { type = "str", value = "image_128x128_r16g16b16a16_uint" }
 stage = { type = "str", value = "fragment" }
 
 [[case]]
+name = "image_image_128x128_r16g16b16a16_uint_tess_control"
+rust_const = "IMAGE_IMAGE_128X128_R16G16B16A16_UINT_TESS_CONTROL"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_128x128_r16g16b16a16_uint_tess_control.vert", stage = "vert" },
+    { name = "tesc", template = "synchronization/generated/image_image_128x128_r16g16b16a16_uint_tess_control.tesc", stage = "tesc" },
+    { name = "tese", template = "synchronization/generated/image_image_128x128_r16g16b16a16_uint_tess_control.tese", stage = "tese" },
+    { name = "frag", template = "synchronization/generated/image_image_128x128_r16g16b16a16_uint_tess_control.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_128x128_r16g16b16a16_uint" }
+stage = { type = "str", value = "tess_control" }
+
+[[case]]
+name = "image_image_128x128_r16g16b16a16_uint_tess_eval"
+rust_const = "IMAGE_IMAGE_128X128_R16G16B16A16_UINT_TESS_EVAL"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_128x128_r16g16b16a16_uint_tess_eval.vert", stage = "vert" },
+    { name = "tesc", template = "synchronization/generated/image_image_128x128_r16g16b16a16_uint_tess_eval.tesc", stage = "tesc" },
+    { name = "tese", template = "synchronization/generated/image_image_128x128_r16g16b16a16_uint_tess_eval.tese", stage = "tese" },
+    { name = "frag", template = "synchronization/generated/image_image_128x128_r16g16b16a16_uint_tess_eval.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_128x128_r16g16b16a16_uint" }
+stage = { type = "str", value = "tess_eval" }
+
+[[case]]
+name = "image_image_128x128_r16g16b16a16_uint_geometry"
+rust_const = "IMAGE_IMAGE_128X128_R16G16B16A16_UINT_GEOMETRY"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_128x128_r16g16b16a16_uint_geometry.vert", stage = "vert" },
+    { name = "geom", template = "synchronization/generated/image_image_128x128_r16g16b16a16_uint_geometry.geom", stage = "geom" },
+    { name = "frag", template = "synchronization/generated/image_image_128x128_r16g16b16a16_uint_geometry.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_128x128_r16g16b16a16_uint" }
+stage = { type = "str", value = "geometry" }
+
+[[case]]
 name = "image_image_128x128_r32g32b32a32_sfloat_vertex"
 rust_const = "IMAGE_IMAGE_128X128_R32G32B32A32_SFLOAT_VERTEX"
 rust_type = "ImageGraphicsShader"
@@ -436,6 +923,47 @@ resource_name = { type = "str", value = "image_128x128_r32g32b32a32_sfloat" }
 stage = { type = "str", value = "fragment" }
 
 [[case]]
+name = "image_image_128x128_r32g32b32a32_sfloat_tess_control"
+rust_const = "IMAGE_IMAGE_128X128_R32G32B32A32_SFLOAT_TESS_CONTROL"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_128x128_r32g32b32a32_sfloat_tess_control.vert", stage = "vert" },
+    { name = "tesc", template = "synchronization/generated/image_image_128x128_r32g32b32a32_sfloat_tess_control.tesc", stage = "tesc" },
+    { name = "tese", template = "synchronization/generated/image_image_128x128_r32g32b32a32_sfloat_tess_control.tese", stage = "tese" },
+    { name = "frag", template = "synchronization/generated/image_image_128x128_r32g32b32a32_sfloat_tess_control.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_128x128_r32g32b32a32_sfloat" }
+stage = { type = "str", value = "tess_control" }
+
+[[case]]
+name = "image_image_128x128_r32g32b32a32_sfloat_tess_eval"
+rust_const = "IMAGE_IMAGE_128X128_R32G32B32A32_SFLOAT_TESS_EVAL"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_128x128_r32g32b32a32_sfloat_tess_eval.vert", stage = "vert" },
+    { name = "tesc", template = "synchronization/generated/image_image_128x128_r32g32b32a32_sfloat_tess_eval.tesc", stage = "tesc" },
+    { name = "tese", template = "synchronization/generated/image_image_128x128_r32g32b32a32_sfloat_tess_eval.tese", stage = "tese" },
+    { name = "frag", template = "synchronization/generated/image_image_128x128_r32g32b32a32_sfloat_tess_eval.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_128x128_r32g32b32a32_sfloat" }
+stage = { type = "str", value = "tess_eval" }
+
+[[case]]
+name = "image_image_128x128_r32g32b32a32_sfloat_geometry"
+rust_const = "IMAGE_IMAGE_128X128_R32G32B32A32_SFLOAT_GEOMETRY"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_128x128_r32g32b32a32_sfloat_geometry.vert", stage = "vert" },
+    { name = "geom", template = "synchronization/generated/image_image_128x128_r32g32b32a32_sfloat_geometry.geom", stage = "geom" },
+    { name = "frag", template = "synchronization/generated/image_image_128x128_r32g32b32a32_sfloat_geometry.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_128x128_r32g32b32a32_sfloat" }
+stage = { type = "str", value = "geometry" }
+
+[[case]]
 name = "image_image_64x64x8_r32_sfloat_vertex"
 rust_const = "IMAGE_IMAGE_64X64X8_R32_SFLOAT_VERTEX"
 rust_type = "ImageGraphicsShader"
@@ -458,6 +986,47 @@ programs = [
 [case.params]
 resource_name = { type = "str", value = "image_64x64x8_r32_sfloat" }
 stage = { type = "str", value = "fragment" }
+
+[[case]]
+name = "image_image_64x64x8_r32_sfloat_tess_control"
+rust_const = "IMAGE_IMAGE_64X64X8_R32_SFLOAT_TESS_CONTROL"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_64x64x8_r32_sfloat_tess_control.vert", stage = "vert" },
+    { name = "tesc", template = "synchronization/generated/image_image_64x64x8_r32_sfloat_tess_control.tesc", stage = "tesc" },
+    { name = "tese", template = "synchronization/generated/image_image_64x64x8_r32_sfloat_tess_control.tese", stage = "tese" },
+    { name = "frag", template = "synchronization/generated/image_image_64x64x8_r32_sfloat_tess_control.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_64x64x8_r32_sfloat" }
+stage = { type = "str", value = "tess_control" }
+
+[[case]]
+name = "image_image_64x64x8_r32_sfloat_tess_eval"
+rust_const = "IMAGE_IMAGE_64X64X8_R32_SFLOAT_TESS_EVAL"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_64x64x8_r32_sfloat_tess_eval.vert", stage = "vert" },
+    { name = "tesc", template = "synchronization/generated/image_image_64x64x8_r32_sfloat_tess_eval.tesc", stage = "tesc" },
+    { name = "tese", template = "synchronization/generated/image_image_64x64x8_r32_sfloat_tess_eval.tese", stage = "tese" },
+    { name = "frag", template = "synchronization/generated/image_image_64x64x8_r32_sfloat_tess_eval.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_64x64x8_r32_sfloat" }
+stage = { type = "str", value = "tess_eval" }
+
+[[case]]
+name = "image_image_64x64x8_r32_sfloat_geometry"
+rust_const = "IMAGE_IMAGE_64X64X8_R32_SFLOAT_GEOMETRY"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_64x64x8_r32_sfloat_geometry.vert", stage = "vert" },
+    { name = "geom", template = "synchronization/generated/image_image_64x64x8_r32_sfloat_geometry.geom", stage = "geom" },
+    { name = "frag", template = "synchronization/generated/image_image_64x64x8_r32_sfloat_geometry.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_64x64x8_r32_sfloat" }
+stage = { type = "str", value = "geometry" }
 
 [[case]]
 name = "draw_float"

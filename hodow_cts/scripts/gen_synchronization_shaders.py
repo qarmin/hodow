@@ -136,45 +136,143 @@ def image_compute_shader(image_format: str, image_type: str, size: tuple[int, in
     )
 
 
-# `s_perVertexBlock`
-PER_VERTEX_BLOCK = "out gl_PerVertex {\n    vec4 gl_Position;\n}"
+# `s_perVertexBlock` - the block body only; upstream prefixes `in` or `out` at each
+# use site, and so does every use below.
+PER_VERTEX_BLOCK = "gl_PerVertex {\n    vec4 gl_Position;\n}"
 
 
-def graphics_shaders(decl: str, copy: str, stage: str) -> tuple[str, str]:
-    """`initPassthroughPrograms` for a graphics stage: the vertex and fragment shaders
-    it emits, with the payload in whichever of the two the operation names."""
-    vert = (
-        "#version 440\n"
-        "\n"
-        "layout(location = 0) in vec4 v_in_position;\n"
-        "\n"
-        f"{PER_VERTEX_BLOCK};\n"
-        "\n"
-        + (decl + "\n" if stage == "vertex" else "")
-        + "void main (void)\n"
-        "{\n"
-        "    gl_Position = v_in_position;\n"
-        + (copy if stage == "vertex" else "")
-        + "}\n"
-    )
-    frag = (
-        "#version 440\n"
-        "\n"
-        "layout(location = 0) out vec4 o_color;\n"
-        "\n"
-        + (decl + "\n" if stage == "fragment" else "")
-        + "void main (void)\n"
-        "{\n"
-        "    o_color = vec4(1.0);\n"
-        + ("\n" + copy if stage == "fragment" else "")
-        + "}\n"
-    )
-    return vert, frag
+# `getRequiredStages`: naming a tessellation stage pulls in both of them, and every
+# graphics stage needs a vertex and a fragment shader to have a pipeline at all.
+def required_stages(stage: str) -> list[str]:
+    stages = ["vert"]
+    if stage in ("tess_control", "tess_eval"):
+        stages += ["tesc", "tese"]
+    if stage == "geometry":
+        stages.append("geom")
+    stages.append("frag")
+    return stages
+
+
+def graphics_shaders(decl: str, copy: str, stage: str) -> dict[str, str]:
+    """`initPassthroughPrograms` for a graphics stage.
+
+    Every stage the pipeline needs gets a shader; the one the operation names also
+    gets the declarations and the copy loop. The others are pure passthrough, which is
+    why a tessellation-evaluation operation still has to carry a control shader.
+    """
+    out: dict[str, str] = {}
+    for name in required_stages(stage):
+        if name == "vert":
+            out[name] = (
+                "#version 440\n"
+                "\n"
+                "layout(location = 0) in vec4 v_in_position;\n"
+                "\n"
+                f"out {PER_VERTEX_BLOCK};\n"
+                "\n"
+                + (decl + "\n" if stage == "vertex" else "")
+                + "void main (void)\n"
+                "{\n"
+                "    gl_Position = v_in_position;\n"
+                + (copy if stage == "vertex" else "")
+                + "}\n"
+            )
+        elif name == "tesc":
+            out[name] = (
+                "#version 440\n"
+                "\n"
+                "layout(vertices = 3) out;\n"
+                "\n"
+                f"in {PER_VERTEX_BLOCK} gl_in[gl_MaxPatchVertices];\n"
+                "\n"
+                f"out {PER_VERTEX_BLOCK} gl_out[];\n"
+                "\n"
+                + (decl + "\n" if stage == "tess_control" else "")
+                + "void main (void)\n"
+                "{\n"
+                "    gl_TessLevelInner[0] = 1.0;\n"
+                "    gl_TessLevelInner[1] = 1.0;\n"
+                "\n"
+                "    gl_TessLevelOuter[0] = 1.0;\n"
+                "    gl_TessLevelOuter[1] = 1.0;\n"
+                "    gl_TessLevelOuter[2] = 1.0;\n"
+                "    gl_TessLevelOuter[3] = 1.0;\n"
+                "\n"
+                "    gl_out[gl_InvocationID].gl_Position = gl_in[gl_InvocationID].gl_Position;\n"
+                + ("\n" + copy if stage == "tess_control" else "")
+                + "}\n"
+            )
+        elif name == "tese":
+            out[name] = (
+                "#version 440\n"
+                "\n"
+                "layout(triangles, equal_spacing, ccw) in;\n"
+                "\n"
+                f"in {PER_VERTEX_BLOCK} gl_in[gl_MaxPatchVertices];\n"
+                "\n"
+                f"out {PER_VERTEX_BLOCK};\n"
+                "\n"
+                + (decl + "\n" if stage == "tess_eval" else "")
+                + "void main (void)\n"
+                "{\n"
+                "    vec3 px = gl_TessCoord.x * gl_in[0].gl_Position.xyz;\n"
+                "    vec3 py = gl_TessCoord.y * gl_in[1].gl_Position.xyz;\n"
+                "    vec3 pz = gl_TessCoord.z * gl_in[2].gl_Position.xyz;\n"
+                "    gl_Position = vec4(px + py + pz, 1.0);\n"
+                + (copy if stage == "tess_eval" else "")
+                + "}\n"
+            )
+        elif name == "geom":
+            out[name] = (
+                "#version 440\n"
+                "\n"
+                "layout(triangles) in;\n"
+                "layout(triangle_strip, max_vertices = 3) out;\n"
+                "\n"
+                f"in {PER_VERTEX_BLOCK} gl_in[];\n"
+                "\n"
+                f"out {PER_VERTEX_BLOCK};\n"
+                "\n"
+                + (decl + "\n" if stage == "geometry" else "")
+                + "void main (void)\n"
+                "{\n"
+                "    gl_Position = gl_in[0].gl_Position;\n"
+                "    EmitVertex();\n"
+                "\n"
+                "    gl_Position = gl_in[1].gl_Position;\n"
+                "    EmitVertex();\n"
+                "\n"
+                "    gl_Position = gl_in[2].gl_Position;\n"
+                "    EmitVertex();\n"
+                + ("\n" + copy if stage == "geometry" else "")
+                + "}\n"
+            )
+        else:
+            out[name] = (
+                "#version 440\n"
+                "\n"
+                "layout(location = 0) out vec4 o_color;\n"
+                "\n"
+                + (decl + "\n" if stage == "fragment" else "")
+                + "void main (void)\n"
+                "{\n"
+                "    o_color = vec4(1.0);\n"
+                + ("\n" + copy if stage == "fragment" else "")
+                + "}\n"
+            )
+    return out
+
+
+# The extension every generated shader file uses for a stage, and the stage name
+# `compile_shaders.py` passes to glslang.
+STAGE_EXT = {"vert": "vert", "tesc": "tesc", "tese": "tese", "geom": "geom", "frag": "frag"}
+
+GRAPHICS_STAGES = ("vertex", "fragment", "tess_control", "tess_eval", "geometry")
 
 
 def main() -> int:
     SRC_DIR.mkdir(parents=True, exist_ok=True)
-    for pattern in ("*.comp", "*.vert", "*.frag"):
+    for pattern in ("*.comp", "*.vert", "*.frag", "*.tesc", "*.tese", "*.geom"):
         for existing in SRC_DIR.glob(pattern):
             existing.unlink()
 
@@ -217,7 +315,7 @@ def main() -> int:
     # The graphics stages SwiftShader can actually run. Tessellation and geometry are
     # left out deliberately: both sides report NotSupported for them here, so a
     # differential run would say nothing about whether they were ported correctly.
-    for stage in ("vertex", "fragment"):
+    for stage in GRAPHICS_STAGES:
         for buffer_type, mode in variants:
             for size in BUFFER_SIZES:
                 if buffer_type.startswith("ubo") and size > MAX_UBO_RANGE:
@@ -225,18 +323,21 @@ def main() -> int:
                 num = size // 16
                 decl = declarations(buffer_type, mode, num)
                 copy = copy_source(buffer_type, num)
-                vert, frag = graphics_shaders(decl, copy, stage)
+                shaders = graphics_shaders(decl, copy, stage)
                 name = f"{mode}_{buffer_type}_{stage}_buffer_{size}"
-                (SRC_DIR / f"{name}.vert").write_text(vert)
-                (SRC_DIR / f"{name}.frag").write_text(frag)
+                programs = []
+                for shader_stage, source in shaders.items():
+                    (SRC_DIR / f"{name}.{shader_stage}").write_text(source)
+                    programs.append(
+                        f'    {{ name = "{shader_stage}", template = "synchronization/generated/{name}.{shader_stage}", stage = "{shader_stage}" }},'
+                    )
                 lines += [
                     "[[case]]",
                     f'name = "{name}"',
                     f'rust_const = "{name.upper()}"',
                     'rust_type = "BufferGraphicsShader"',
                     "programs = [",
-                    f'    {{ name = "vert", template = "synchronization/generated/{name}.vert", stage = "vert" }},',
-                    f'    {{ name = "frag", template = "synchronization/generated/{name}.frag", stage = "frag" }},',
+                    *programs,
                     "]",
                     "[case.params]",
                     f'buffer_type = {{ type = "str", value = "{buffer_type}" }}',
@@ -268,19 +369,22 @@ def main() -> int:
     for resource_name, image_format, image_type, size in IMAGE_RESOURCES:
         decl = image_declarations(image_format, image_type)
         copy = image_copy_source(image_type, size)
-        for stage in ("vertex", "fragment"):
-            vert, frag = graphics_shaders(decl, copy, stage)
+        for stage in GRAPHICS_STAGES:
+            shaders = graphics_shaders(decl, copy, stage)
             name = f"image_{resource_name}_{stage}"
-            (SRC_DIR / f"{name}.vert").write_text(vert)
-            (SRC_DIR / f"{name}.frag").write_text(frag)
+            programs = []
+            for shader_stage, source in shaders.items():
+                (SRC_DIR / f"{name}.{shader_stage}").write_text(source)
+                programs.append(
+                    f'    {{ name = "{shader_stage}", template = "synchronization/generated/{name}.{shader_stage}", stage = "{shader_stage}" }},'
+                )
             lines += [
                 "[[case]]",
                 f'name = "{name}"',
                 f'rust_const = "{name.upper()}"',
                 'rust_type = "ImageGraphicsShader"',
                 "programs = [",
-                f'    {{ name = "vert", template = "synchronization/generated/{name}.vert", stage = "vert" }},',
-                f'    {{ name = "frag", template = "synchronization/generated/{name}.frag", stage = "frag" }},',
+                *programs,
                 "]",
                 "[case.params]",
                 f'resource_name = {{ type = "str", value = "{resource_name}" }}',
@@ -297,7 +401,7 @@ def main() -> int:
         "\n"
         "layout(location = 0) in vec4 v_in_position;\n"
         "\n"
-        f"{PER_VERTEX_BLOCK};\n"
+        f"out {PER_VERTEX_BLOCK};\n"
         "\n"
         "void main (void)\n"
         "{\n"
@@ -393,7 +497,7 @@ def main() -> int:
         "\n"
         "layout(location = 0) in vec4 v_in_position;\n"
         "\n"
-        f"{PER_VERTEX_BLOCK};\n"
+        f"out {PER_VERTEX_BLOCK};\n"
         "\n"
         + ib_decl
         + "\n"

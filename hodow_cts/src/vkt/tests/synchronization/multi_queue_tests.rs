@@ -154,14 +154,8 @@ impl TestCase for MultiQueueTestCase {
             context.require_device_functionality("VK_KHR_maintenance9")?;
         }
 
-        // `OperationSupport::checkSupport` for both halves.
-        if self.write_op.needs_blit_format_support() || self.read_op.needs_blit_format_support() {
-            let props = unsafe { instance.get_physical_device_format_properties(context.get_physical_device(), self.resource.image_format) };
-            let needed = vk::FormatFeatureFlags::BLIT_SRC | vk::FormatFeatureFlags::BLIT_DST;
-            if !props.optimal_tiling_features.contains(needed) {
-                return Err(TestError::NotSupported("Format does not support blitting".into()));
-            }
-        }
+        self.write_op.check_support(context, &self.resource)?;
+        self.read_op.check_support(context, &self.resource)?;
 
         Ok(())
     }

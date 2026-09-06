@@ -40,7 +40,7 @@ TEMPLATE_DIR = CRATE_DIR / "shaders" / "src"
 EXPANDED_DIR = CRATE_DIR / "shaders" / "expanded"
 GENERATED = CRATE_DIR / "src" / "generated" / "shaders.rs"
 
-STAGE_TO_GLSLANG = {"comp": "comp", "vert": "vert", "frag": "frag"}
+STAGE_TO_GLSLANG = {"comp": "comp", "vert": "vert", "frag": "frag", "tesc": "tesc", "tese": "tese", "geom": "geom"}
 
 SUBST_RE = re.compile(r"\$\{([^}]+)\}")
 

@@ -1346,8 +1346,14 @@ pub enum OperationName {
     WriteImageComputeIndirect,
     WriteSsboVertex,
     WriteSsboFragment,
+    WriteSsboTessControl,
+    WriteSsboTessEval,
+    WriteSsboGeometry,
     WriteImageVertex,
     WriteImageFragment,
+    WriteImageTessControl,
+    WriteImageTessEval,
+    WriteImageGeometry,
     WriteDraw,
     WriteDrawIndexed,
     WriteDrawIndirect,
@@ -1372,12 +1378,24 @@ pub enum OperationName {
     ReadImageComputeIndirect,
     ReadSsboVertex,
     ReadSsboFragment,
+    ReadSsboTessControl,
+    ReadSsboTessEval,
+    ReadSsboGeometry,
     ReadImageVertex,
     ReadImageFragment,
+    ReadImageTessControl,
+    ReadImageTessEval,
+    ReadImageGeometry,
     ReadUboVertex,
     ReadUboFragment,
+    ReadUboTessControl,
+    ReadUboTessEval,
+    ReadUboGeometry,
     ReadUboTexelVertex,
     ReadUboTexelFragment,
+    ReadUboTexelTessControl,
+    ReadUboTexelTessEval,
+    ReadUboTexelGeometry,
     ReadVertexInput,
     ReadIndirectBufferDraw,
     ReadIndirectBufferDrawIndexed,
@@ -1404,7 +1422,13 @@ impl OperationName {
             Self::WriteSsboVertex => "write_ssbo_vertex",
             Self::WriteSsboFragment => "write_ssbo_fragment",
             Self::WriteImageVertex => "write_image_vertex",
+            Self::WriteSsboTessControl => "write_ssbo_tess_control",
+            Self::WriteSsboTessEval => "write_ssbo_tess_eval",
+            Self::WriteSsboGeometry => "write_ssbo_geometry",
             Self::WriteImageFragment => "write_image_fragment",
+            Self::WriteImageTessControl => "write_image_tess_control",
+            Self::WriteImageTessEval => "write_image_tess_eval",
+            Self::WriteImageGeometry => "write_image_geometry",
             Self::WriteDraw => "write_draw",
             Self::WriteDrawIndexed => "write_draw_indexed",
             Self::WriteDrawIndirect => "write_draw_indirect",
@@ -1430,7 +1454,19 @@ impl OperationName {
             Self::ReadSsboVertex => "read_ssbo_vertex",
             Self::ReadSsboFragment => "read_ssbo_fragment",
             Self::ReadImageVertex => "read_image_vertex",
+            Self::ReadSsboTessControl => "read_ssbo_tess_control",
+            Self::ReadSsboTessEval => "read_ssbo_tess_eval",
+            Self::ReadSsboGeometry => "read_ssbo_geometry",
             Self::ReadImageFragment => "read_image_fragment",
+            Self::ReadImageTessControl => "read_image_tess_control",
+            Self::ReadImageTessEval => "read_image_tess_eval",
+            Self::ReadImageGeometry => "read_image_geometry",
+            Self::ReadUboTessControl => "read_ubo_tess_control",
+            Self::ReadUboTessEval => "read_ubo_tess_eval",
+            Self::ReadUboGeometry => "read_ubo_geometry",
+            Self::ReadUboTexelTessControl => "read_ubo_texel_tess_control",
+            Self::ReadUboTexelTessEval => "read_ubo_texel_tess_eval",
+            Self::ReadUboTexelGeometry => "read_ubo_texel_geometry",
             Self::ReadUboVertex => "read_ubo_vertex",
             Self::ReadUboFragment => "read_ubo_fragment",
             Self::ReadUboTexelVertex => "read_ubo_texel_vertex",
@@ -1448,10 +1484,19 @@ impl OperationName {
         match self {
             Self::WriteSsboVertex | Self::ReadSsboVertex => Some((BufferType::Storage, ShaderStage::Vertex)),
             Self::WriteSsboFragment | Self::ReadSsboFragment => Some((BufferType::Storage, ShaderStage::Fragment)),
+            Self::WriteSsboTessControl | Self::ReadSsboTessControl => Some((BufferType::Storage, ShaderStage::TessellationControl)),
+            Self::WriteSsboTessEval | Self::ReadSsboTessEval => Some((BufferType::Storage, ShaderStage::TessellationEvaluation)),
+            Self::WriteSsboGeometry | Self::ReadSsboGeometry => Some((BufferType::Storage, ShaderStage::Geometry)),
             Self::ReadUboVertex => Some((BufferType::Uniform, ShaderStage::Vertex)),
             Self::ReadUboFragment => Some((BufferType::Uniform, ShaderStage::Fragment)),
+            Self::ReadUboTessControl => Some((BufferType::Uniform, ShaderStage::TessellationControl)),
+            Self::ReadUboTessEval => Some((BufferType::Uniform, ShaderStage::TessellationEvaluation)),
+            Self::ReadUboGeometry => Some((BufferType::Uniform, ShaderStage::Geometry)),
             Self::ReadUboTexelVertex => Some((BufferType::UniformTexel, ShaderStage::Vertex)),
             Self::ReadUboTexelFragment => Some((BufferType::UniformTexel, ShaderStage::Fragment)),
+            Self::ReadUboTexelTessControl => Some((BufferType::UniformTexel, ShaderStage::TessellationControl)),
+            Self::ReadUboTexelTessEval => Some((BufferType::UniformTexel, ShaderStage::TessellationEvaluation)),
+            Self::ReadUboTexelGeometry => Some((BufferType::UniformTexel, ShaderStage::Geometry)),
             _ => None,
         }
     }
@@ -1498,6 +1543,9 @@ impl OperationName {
         match self {
             Self::WriteImageVertex | Self::ReadImageVertex => Some(ShaderStage::Vertex),
             Self::WriteImageFragment | Self::ReadImageFragment => Some(ShaderStage::Fragment),
+            Self::WriteImageTessControl | Self::ReadImageTessControl => Some(ShaderStage::TessellationControl),
+            Self::WriteImageTessEval | Self::ReadImageTessEval => Some(ShaderStage::TessellationEvaluation),
+            Self::WriteImageGeometry | Self::ReadImageGeometry => Some(ShaderStage::Geometry),
             _ => None,
         }
     }
@@ -1539,8 +1587,26 @@ impl OperationName {
                 | Self::ReadUboTexelFragment
                 | Self::WriteImageVertex
                 | Self::WriteImageFragment
+                | Self::WriteImageTessControl
+                | Self::WriteImageTessEval
+                | Self::WriteImageGeometry
                 | Self::ReadImageVertex
                 | Self::ReadImageFragment
+                | Self::ReadImageTessControl
+                | Self::ReadImageTessEval
+                | Self::ReadImageGeometry
+                | Self::WriteSsboTessControl
+                | Self::WriteSsboTessEval
+                | Self::WriteSsboGeometry
+                | Self::ReadSsboTessControl
+                | Self::ReadSsboTessEval
+                | Self::ReadSsboGeometry
+                | Self::ReadUboTessControl
+                | Self::ReadUboTessEval
+                | Self::ReadUboGeometry
+                | Self::ReadUboTexelTessControl
+                | Self::ReadUboTexelTessEval
+                | Self::ReadUboTexelGeometry
         )
     }
 
@@ -1561,8 +1627,14 @@ impl OperationName {
             | Self::ReadSsboComputeIndirect
             | Self::WriteSsboVertex
             | Self::WriteSsboFragment
+            | Self::WriteSsboTessControl
+            | Self::WriteSsboTessEval
+            | Self::WriteSsboGeometry
             | Self::ReadSsboVertex
-            | Self::ReadSsboFragment => resource.kind == ResourceType::Buffer,
+            | Self::ReadSsboFragment
+            | Self::ReadSsboTessControl
+            | Self::ReadSsboTessEval
+            | Self::ReadSsboGeometry => resource.kind == ResourceType::Buffer,
             // The uniform kinds, texel included, are capped by the guaranteed
             // maxUniformBufferRange.
             Self::ReadUboCompute
@@ -1571,8 +1643,14 @@ impl OperationName {
             | Self::ReadUboTexelComputeIndirect
             | Self::ReadUboVertex
             | Self::ReadUboFragment
+            | Self::ReadUboTessControl
+            | Self::ReadUboTessEval
+            | Self::ReadUboGeometry
             | Self::ReadUboTexelVertex
-            | Self::ReadUboTexelFragment => resource.kind == ResourceType::Buffer && resource.size[0] <= MAX_UBO_RANGE,
+            | Self::ReadUboTexelFragment
+            | Self::ReadUboTexelTessControl
+            | Self::ReadUboTexelTessEval
+            | Self::ReadUboTexelGeometry => resource.kind == ResourceType::Buffer && resource.size[0] <= MAX_UBO_RANGE,
             Self::WriteUpdateBuffer => resource.kind == ResourceType::Buffer && resource.size[0] <= MAX_UPDATE_BUFFER_SIZE,
             // `VertexInput::Support` asserts a plain or index buffer; the vertex draw
             // mode takes the plain one.
@@ -1597,8 +1675,14 @@ impl OperationName {
             | Self::ReadImageComputeIndirect
             | Self::WriteImageVertex
             | Self::WriteImageFragment
+            | Self::WriteImageTessControl
+            | Self::WriteImageTessEval
+            | Self::WriteImageGeometry
             | Self::ReadImageVertex
-            | Self::ReadImageFragment => single_sampled_color_image,
+            | Self::ReadImageFragment
+            | Self::ReadImageTessControl
+            | Self::ReadImageTessEval
+            | Self::ReadImageGeometry => single_sampled_color_image,
             // `Draw::Support` asserts a 2D colour image; a 1D or 3D resource cannot
             // be a colour attachment here.
             Self::WriteDraw | Self::WriteDrawIndexed | Self::WriteDrawIndirect | Self::WriteDrawIndexedIndirect => {
@@ -1727,6 +1811,33 @@ impl OperationName {
     /// format to advertise the transfer features it filters with.
     pub fn needs_blit_format_support(self) -> bool {
         matches!(self, Self::WriteBlitImage | Self::ReadBlitImage)
+    }
+
+    /// `OperationSupport::checkSupport` for the whole operation.
+    ///
+    /// A blit needs the format's transfer features; a shader-stage operation needs the
+    /// device feature that lets that stage write a storage buffer or image, and the
+    /// tessellation or geometry feature when it runs there.
+    pub fn check_support(self, context: &crate::vkt::Context<'_>, resource: &ResourceDescription) -> Result<(), TestError> {
+        if self.needs_blit_format_support() {
+            let props = unsafe {
+                context
+                    .get_instance()
+                    .get_physical_device_format_properties(context.get_physical_device(), resource.image_format)
+            };
+            let needed = vk::FormatFeatureFlags::BLIT_SRC | vk::FormatFeatureFlags::BLIT_DST;
+            if !props.optimal_tiling_features.contains(needed) {
+                return Err(TestError::NotSupported("Format does not support blitting".into()));
+            }
+        }
+
+        if let Some((_, stage)) = self.buffer_graphics_kind() {
+            stage.check_support(context)?;
+        }
+        if let Some(stage) = self.image_graphics_kind() {
+            stage.check_support(context)?;
+        }
+        Ok(())
     }
 
     /// `OperationSupport::getQueueFlags` - the queue capabilities the operation needs.
@@ -1889,8 +2000,14 @@ pub static WRITE_OPS: &[OperationName] = &[
     OperationName::WriteImageCompute,
     OperationName::WriteImageComputeIndirect,
     OperationName::WriteSsboVertex,
+    OperationName::WriteSsboTessControl,
+    OperationName::WriteSsboTessEval,
+    OperationName::WriteSsboGeometry,
     OperationName::WriteSsboFragment,
     OperationName::WriteImageVertex,
+    OperationName::WriteImageTessControl,
+    OperationName::WriteImageTessEval,
+    OperationName::WriteImageGeometry,
     OperationName::WriteImageFragment,
     OperationName::WriteClearColorImage,
     OperationName::WriteDraw,
@@ -1921,12 +2038,24 @@ pub static READ_OPS: &[OperationName] = &[
     OperationName::ReadImageCompute,
     OperationName::ReadImageComputeIndirect,
     OperationName::ReadSsboVertex,
+    OperationName::ReadSsboTessControl,
+    OperationName::ReadSsboTessEval,
+    OperationName::ReadSsboGeometry,
     OperationName::ReadSsboFragment,
     OperationName::ReadImageVertex,
+    OperationName::ReadImageTessControl,
+    OperationName::ReadImageTessEval,
+    OperationName::ReadImageGeometry,
     OperationName::ReadImageFragment,
     OperationName::ReadUboVertex,
+    OperationName::ReadUboTessControl,
+    OperationName::ReadUboTessEval,
+    OperationName::ReadUboGeometry,
     OperationName::ReadUboFragment,
     OperationName::ReadUboTexelVertex,
+    OperationName::ReadUboTexelTessControl,
+    OperationName::ReadUboTexelTessEval,
+    OperationName::ReadUboTexelGeometry,
     OperationName::ReadUboTexelFragment,
     OperationName::ReadVertexInput,
     OperationName::ReadIndirectBufferDraw,
@@ -2768,12 +2897,14 @@ pub struct BufferGraphicsShader {
 
 use crate::generated::shaders::synchronization_buffer::ALL_BUFFER_GRAPHICS_SHADER;
 
-/// `VkShaderStageFlagBits`, restricted to the two graphics stages that can be verified
-/// here. Tessellation and geometry are absent rather than present-and-skipped.
+/// `VkShaderStageFlagBits`, restricted to the graphics stages the operations use.
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum ShaderStage {
     Vertex,
     Fragment,
+    TessellationControl,
+    TessellationEvaluation,
+    Geometry,
 }
 
 impl ShaderStage {
@@ -2781,6 +2912,9 @@ impl ShaderStage {
         match self {
             Self::Vertex => "vertex",
             Self::Fragment => "fragment",
+            Self::TessellationControl => "tess_control",
+            Self::TessellationEvaluation => "tess_eval",
+            Self::Geometry => "geometry",
         }
     }
 
@@ -2789,8 +2923,101 @@ impl ShaderStage {
         match self {
             Self::Vertex => vk::PipelineStageFlags2::VERTEX_SHADER,
             Self::Fragment => vk::PipelineStageFlags2::FRAGMENT_SHADER,
+            Self::TessellationControl => vk::PipelineStageFlags2::TESSELLATION_CONTROL_SHADER,
+            Self::TessellationEvaluation => vk::PipelineStageFlags2::TESSELLATION_EVALUATION_SHADER,
+            Self::Geometry => vk::PipelineStageFlags2::GEOMETRY_SHADER,
         }
     }
+
+    fn shader_stage_flags(self) -> vk::ShaderStageFlags {
+        match self {
+            Self::Vertex => vk::ShaderStageFlags::VERTEX,
+            Self::Fragment => vk::ShaderStageFlags::FRAGMENT,
+            Self::TessellationControl => vk::ShaderStageFlags::TESSELLATION_CONTROL,
+            Self::TessellationEvaluation => vk::ShaderStageFlags::TESSELLATION_EVALUATION,
+            Self::Geometry => vk::ShaderStageFlags::GEOMETRY,
+        }
+    }
+
+    /// `getRequiredStages` - naming either tessellation stage pulls in both, since a
+    /// pipeline cannot have one without the other.
+    fn uses_tessellation(self) -> bool {
+        matches!(self, Self::TessellationControl | Self::TessellationEvaluation)
+    }
+
+    fn uses_geometry(self) -> bool {
+        self == Self::Geometry
+    }
+
+    /// A tessellated pipeline is fed patches, not triangles.
+    fn topology(self) -> vk::PrimitiveTopology {
+        if self.uses_tessellation() {
+            vk::PrimitiveTopology::PATCH_LIST
+        } else {
+            vk::PrimitiveTopology::TRIANGLE_LIST
+        }
+    }
+
+    /// `requireFeaturesForSSBOAccess` - the device features this stage needs before a
+    /// shader running in it may write a storage buffer or image.
+    pub fn check_support(self, context: &crate::vkt::Context<'_>) -> Result<(), TestError> {
+        let features = context.get_device_features();
+        match self {
+            Self::Vertex | Self::TessellationControl | Self::TessellationEvaluation | Self::Geometry if features.vertex_pipeline_stores_and_atomics != vk::TRUE => {
+                return Err(TestError::NotSupported("vertexPipelineStoresAndAtomics not supported".into()));
+            }
+            Self::Fragment if features.fragment_stores_and_atomics != vk::TRUE => {
+                return Err(TestError::NotSupported("fragmentStoresAndAtomics not supported".into()));
+            }
+            _ => {}
+        }
+        if self.uses_tessellation() && features.tessellation_shader != vk::TRUE {
+            return Err(TestError::NotSupported("tessellationShader not supported".into()));
+        }
+        if self.uses_geometry() && features.geometry_shader != vk::TRUE {
+            return Err(TestError::NotSupported("geometryShader not supported".into()));
+        }
+        Ok(())
+    }
+}
+
+/// The modules a graphics-stage operation's pipeline needs, loaded from whichever of
+/// the generated programs the stage requires.
+fn graphics_pipeline_modules<'a>(
+    device: &'a Device,
+    programs: &crate::vk::programs::BinaryCollection,
+    stage: ShaderStage,
+) -> Result<(Vec<crate::vk::ref_util::Unique<'a, vk::ShaderModule>>, crate::vk::obj_util::GraphicsPipelineStages), TestError> {
+    use crate::vk::programs::create_shader_module;
+
+    let mut owned = Vec::new();
+    let vertex = create_shader_module(device, programs.get("vert")?)?;
+    let fragment = create_shader_module(device, programs.get("frag")?)?;
+    let mut stages = crate::vk::obj_util::GraphicsPipelineStages {
+        vertex: *vertex,
+        fragment: *fragment,
+        tessellation_control: None,
+        tessellation_evaluation: None,
+        geometry: None,
+    };
+    owned.push(vertex);
+    owned.push(fragment);
+
+    if stage.uses_tessellation() {
+        let tesc = create_shader_module(device, programs.get("tesc")?)?;
+        let tese = create_shader_module(device, programs.get("tese")?)?;
+        stages.tessellation_control = Some(*tesc);
+        stages.tessellation_evaluation = Some(*tese);
+        owned.push(tesc);
+        owned.push(tese);
+    }
+    if stage.uses_geometry() {
+        let geom = create_shader_module(device, programs.get("geom")?)?;
+        stages.geometry = Some(*geom);
+        owned.push(geom);
+    }
+
+    Ok((owned, stages))
 }
 
 /// `VertexGrid` - two triangles covering the whole 16x16 target, so a fragment-stage
@@ -2907,30 +3134,24 @@ impl<'a> BufferGraphicsAccess<'a> {
         stage: ShaderStage,
         specialized_access: bool,
     ) -> Result<Self, TestError> {
-        use crate::vk::obj_util::{make_graphics_pipeline_full, make_pipeline_layout};
-        use crate::vk::programs::create_shader_module;
+        use crate::vk::obj_util::{make_graphics_pipeline_staged, make_pipeline_layout};
 
         let buffer = resource.buffer();
         let host_buffer = make_host_buffer(device, allocator, buffer.size, vk::BufferUsageFlags::STORAGE_BUFFER, mode)?;
-        let stage_flags = match stage {
-            ShaderStage::Vertex => vk::ShaderStageFlags::VERTEX,
-            ShaderStage::Fragment => vk::ShaderStageFlags::FRAGMENT,
-        };
+        let stage_flags = stage.shader_stage_flags();
         let d = build_buffer_descriptors(device, &buffer, &host_buffer, buffer_type, mode, stage_flags)?;
 
         let shader = find_graphics_shader(buffer_type, mode, stage, buffer.size as u32);
-        let vert = create_shader_module(device, shader.programs.get("vert")?)?;
-        let frag = create_shader_module(device, shader.programs.get("frag")?)?;
+        let (_modules, pipeline_stages) = graphics_pipeline_modules(device, &shader.programs, stage)?;
         let target = GraphicsTarget::new(device, allocator)?;
         let pipeline_layout = make_pipeline_layout(device, &[*d.layout])?;
-        let pipeline = make_graphics_pipeline_full(
+        let pipeline = make_graphics_pipeline_staged(
             device,
             *pipeline_layout,
-            *vert,
-            *frag,
+            pipeline_stages,
             *target.render_pass,
             (GRAPHICS_TARGET_SIZE, GRAPHICS_TARGET_SIZE),
-            vk::PrimitiveTopology::TRIANGLE_LIST,
+            stage.topology(),
             vk::SampleCountFlags::_1,
             None,
             1,
@@ -3096,8 +3317,7 @@ impl<'a> ImageGraphicsAccess<'a> {
     ) -> Result<Self, TestError> {
         use crate::vk::builder_util::{DescriptorPoolBuilder, DescriptorSetLayoutBuilder};
         use crate::vk::image_util::make_image_view;
-        use crate::vk::obj_util::{make_descriptor_set, make_graphics_pipeline_full, make_pipeline_layout};
-        use crate::vk::programs::create_shader_module;
+        use crate::vk::obj_util::{make_descriptor_set, make_graphics_pipeline_staged, make_pipeline_layout};
 
         let image = resource.image();
         let host_buffer_size = get_pixel_buffer_size(image.format, image.extent)?;
@@ -3137,10 +3357,7 @@ impl<'a> ImageGraphicsAccess<'a> {
         let src_view = make_image_view(device, src_image, view_type, image.format, image.subresource_range)?;
         let dst_view = make_image_view(device, dst_image, view_type, image.format, image.subresource_range)?;
 
-        let stage_flags = match stage {
-            ShaderStage::Vertex => vk::ShaderStageFlags::VERTEX,
-            ShaderStage::Fragment => vk::ShaderStageFlags::FRAGMENT,
-        };
+        let stage_flags = stage.shader_stage_flags();
         let descriptor_set_layout = DescriptorSetLayoutBuilder::new()
             .add_indexed_binding(vk::DescriptorType::STORAGE_IMAGE, stage_flags, 0, 1)
             .add_indexed_binding(vk::DescriptorType::STORAGE_IMAGE, stage_flags, 1, 1)
@@ -3177,18 +3394,16 @@ impl<'a> ImageGraphicsAccess<'a> {
         unsafe { device.update_descriptor_sets(&writes, &[] as &[vk::CopyDescriptorSet]) };
 
         let shader = find_image_graphics_shader(desc, stage);
-        let vert = create_shader_module(device, shader.programs.get("vert")?)?;
-        let frag = create_shader_module(device, shader.programs.get("frag")?)?;
+        let (_modules, pipeline_stages) = graphics_pipeline_modules(device, &shader.programs, stage)?;
         let target = GraphicsTarget::new(device, allocator)?;
         let pipeline_layout = make_pipeline_layout(device, &[*descriptor_set_layout])?;
-        let pipeline = make_graphics_pipeline_full(
+        let pipeline = make_graphics_pipeline_staged(
             device,
             *pipeline_layout,
-            *vert,
-            *frag,
+            pipeline_stages,
             *target.render_pass,
             (GRAPHICS_TARGET_SIZE, GRAPHICS_TARGET_SIZE),
-            vk::PrimitiveTopology::TRIANGLE_LIST,
+            stage.topology(),
             vk::SampleCountFlags::_1,
             None,
             1,

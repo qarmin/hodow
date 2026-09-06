@@ -265,19 +265,77 @@ pub fn make_graphics_pipeline_full<'a>(
     depth_stencil_state: Option<&vk::PipelineDepthStencilStateCreateInfoBuilder>,
     color_attachment_count: usize,
 ) -> Result<Unique<'a, vk::Pipeline>, TestError> {
+    make_graphics_pipeline_staged(
+        device,
+        pipeline_layout,
+        GraphicsPipelineStages {
+            vertex: vertex_shader_module,
+            fragment: fragment_shader_module,
+            tessellation_control: None,
+            tessellation_evaluation: None,
+            geometry: None,
+        },
+        render_pass,
+        render_size,
+        topology,
+        samples,
+        depth_stencil_state,
+        color_attachment_count,
+    )
+}
+
+/// The shader modules a graphics pipeline is built from. Vertex and fragment are
+/// always present; the rest are the optional stages a synchronization operation may
+/// run its payload in.
+#[derive(Clone, Copy)]
+pub struct GraphicsPipelineStages {
+    pub vertex: vk::ShaderModule,
+    pub fragment: vk::ShaderModule,
+    pub tessellation_control: Option<vk::ShaderModule>,
+    pub tessellation_evaluation: Option<vk::ShaderModule>,
+    pub geometry: Option<vk::ShaderModule>,
+}
+
+/// `make_graphics_pipeline_full` with the tessellation and geometry stages available.
+///
+/// A pipeline with tessellation needs a patch-control-point count and a `PATCH_LIST`
+/// topology; passing the two tessellation modules is what selects that here, so a
+/// caller cannot get one without the other.
+#[allow(clippy::too_many_arguments)]
+pub fn make_graphics_pipeline_staged<'a>(
+    device: &'a Device,
+    pipeline_layout: vk::PipelineLayout,
+    modules: GraphicsPipelineStages,
+    render_pass: vk::RenderPass,
+    render_size: (u32, u32),
+    topology: vk::PrimitiveTopology,
+    samples: vk::SampleCountFlags,
+    depth_stencil_state: Option<&vk::PipelineDepthStencilStateCreateInfoBuilder>,
+    color_attachment_count: usize,
+) -> Result<Unique<'a, vk::Pipeline>, TestError> {
     let entry = c"main";
-    let stages = [
+    let make_stage = |stage: vk::ShaderStageFlags, module: vk::ShaderModule| {
         vk::PipelineShaderStageCreateInfo::builder()
-            .stage(vk::ShaderStageFlags::VERTEX)
-            .module(vertex_shader_module)
+            .stage(stage)
+            .module(module)
             .name(entry.to_bytes_with_nul())
-            .build(),
-        vk::PipelineShaderStageCreateInfo::builder()
-            .stage(vk::ShaderStageFlags::FRAGMENT)
-            .module(fragment_shader_module)
-            .name(entry.to_bytes_with_nul())
-            .build(),
+            .build()
+    };
+    let mut stages = vec![
+        make_stage(vk::ShaderStageFlags::VERTEX, modules.vertex),
+        make_stage(vk::ShaderStageFlags::FRAGMENT, modules.fragment),
     ];
+    if let Some(module) = modules.tessellation_control {
+        stages.push(make_stage(vk::ShaderStageFlags::TESSELLATION_CONTROL, module));
+    }
+    if let Some(module) = modules.tessellation_evaluation {
+        stages.push(make_stage(vk::ShaderStageFlags::TESSELLATION_EVALUATION, module));
+    }
+    if let Some(module) = modules.geometry {
+        stages.push(make_stage(vk::ShaderStageFlags::GEOMETRY, module));
+    }
+    let has_tessellation = modules.tessellation_control.is_some() && modules.tessellation_evaluation.is_some();
+    let tessellation = vk::PipelineTessellationStateCreateInfo::builder().patch_control_points(3);
 
     // The default vertex input: one binding of a tcu::Vec4 per vertex at location 0.
     let bindings = [vk::VertexInputBindingDescription::builder()
@@ -365,7 +423,7 @@ pub fn make_graphics_pipeline_full<'a>(
         .attachments(&blend_attachments)
         .blend_constants([0.0; 4]);
 
-    let info = vk::GraphicsPipelineCreateInfo::builder()
+    let mut info = vk::GraphicsPipelineCreateInfo::builder()
         .stages(&stages)
         .vertex_input_state(&vertex_input)
         .input_assembly_state(&input_assembly)
@@ -377,6 +435,10 @@ pub fn make_graphics_pipeline_full<'a>(
         .layout(pipeline_layout)
         .render_pass(render_pass)
         .subpass(0);
+
+    if has_tessellation {
+        info = info.tessellation_state(&tessellation);
+    }
 
     let pipelines = unsafe { device.create_graphics_pipelines(vk::PipelineCache::null(), &[info], None) }.vk_check("vkCreateGraphicsPipelines")?;
     Ok(Unique::new(device, pipelines.0[0]))
