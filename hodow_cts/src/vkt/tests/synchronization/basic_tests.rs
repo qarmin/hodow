@@ -340,7 +340,9 @@ fn device_set_reset_event(context: &Context<'_>, sync: SyncType) -> Result<TestS
             let dependency = vk::DependencyInfo::builder().memory_barriers(&barriers);
             device.cmd_set_event2_khr(*cmd, *event, &dependency);
         } else {
-            device.cmd_set_event(*cmd, *event, vk::PipelineStageFlags::BOTTOM_OF_PIPE);
+            // `LegacySynchronizationWrapper::cmdSetEvent` takes the stage from the
+            // dependency info's first memory barrier, which is TOP_OF_PIPE here.
+            device.cmd_set_event(*cmd, *event, vk::PipelineStageFlags::TOP_OF_PIPE);
         }
     }
     end_command_buffer(device, *cmd)?;
@@ -368,6 +370,102 @@ fn device_set_reset_event(context: &Context<'_>, sync: SyncType) -> Result<TestS
     }
 
     Ok(TestStatus::pass("Device set and reset event tests pass"))
+}
+
+/// `cmdSetEvent` with an empty dependency info, in whichever version the case wants.
+///
+/// The legacy wrapper takes its stage mask from the dependency info's first barrier and
+/// falls back to TOP_OF_PIPE when there is none, which is the case here.
+fn cmd_set_event_empty(device: &Device, sync: SyncType, cmd_buffer: vk::CommandBuffer, event: vk::Event) {
+    unsafe {
+        if sync == SyncType::Synchronization2 {
+            use vulkanalia::vk::KhrSynchronization2ExtensionDeviceCommands;
+            let dependency = vk::DependencyInfo::builder();
+            device.cmd_set_event2_khr(cmd_buffer, event, &dependency);
+        } else {
+            device.cmd_set_event(cmd_buffer, event, vk::PipelineStageFlags::TOP_OF_PIPE);
+        }
+    }
+}
+
+/// `cmdWaitEvents` with an empty dependency info. The legacy fallback is
+/// TOP_OF_PIPE -> ALL_COMMANDS, again from the wrapper.
+fn cmd_wait_event_empty(device: &Device, sync: SyncType, cmd_buffer: vk::CommandBuffer, event: vk::Event) {
+    unsafe {
+        if sync == SyncType::Synchronization2 {
+            use vulkanalia::vk::KhrSynchronization2ExtensionDeviceCommands;
+            let dependency = vk::DependencyInfo::builder();
+            device.cmd_wait_events2_khr(cmd_buffer, &[event], &[dependency]);
+        } else {
+            device.cmd_wait_events(
+                cmd_buffer,
+                &[event],
+                vk::PipelineStageFlags::TOP_OF_PIPE,
+                vk::PipelineStageFlags::ALL_COMMANDS,
+                &[] as &[vk::MemoryBarrier],
+                &[] as &[vk::BufferMemoryBarrier],
+                &[] as &[vk::ImageMemoryBarrier],
+            );
+        }
+    }
+}
+
+/// `singleSubmissionCase` - the set and the wait are two command buffers in *one*
+/// submit, so the event has to order them without a queue boundary between them.
+fn single_submit_multi_command_buffer(context: &Context<'_>, sync: SyncType) -> Result<TestStatus, TestError> {
+    let device = context.get_device();
+    let queue = context.get_universal_queue();
+    let pool = make_command_pool(device, context.get_universal_queue_family_index())?;
+    let event = make_event(device)?;
+    let fence = make_fence(device, false)?;
+
+    let set_cmd = allocate_command_buffer(device, *pool, vk::CommandBufferLevel::PRIMARY)?;
+    begin_command_buffer(device, *set_cmd)?;
+    cmd_set_event_empty(device, sync, *set_cmd, *event);
+    end_command_buffer(device, *set_cmd)?;
+
+    let wait_cmd = allocate_command_buffer(device, *pool, vk::CommandBufferLevel::PRIMARY)?;
+    begin_command_buffer(device, *wait_cmd)?;
+    cmd_wait_event_empty(device, sync, *wait_cmd, *event);
+    end_command_buffer(device, *wait_cmd)?;
+
+    let buffers = [*set_cmd, *wait_cmd];
+    let info = vk::SubmitInfo::builder().command_buffers(&buffers);
+    unsafe { device.queue_submit(queue, &[info], *fence) }.vk_check("vkQueueSubmit")?;
+
+    if wait_for_fences(device, &[*fence], true, LONG_FENCE_WAIT)? != vk::SuccessCode::SUCCESS {
+        return Ok(TestStatus::fail("Queue should end execution"));
+    }
+    Ok(TestStatus::pass("Wait and set even on device single submission tests pass"))
+}
+
+/// `multiSubmissionCase` - the same two command buffers in two separate submits, so the
+/// wait is queued before the set has necessarily run.
+fn multi_submit_multi_command_buffer(context: &Context<'_>, sync: SyncType) -> Result<TestStatus, TestError> {
+    let device = context.get_device();
+    let queue = context.get_universal_queue();
+    let pool = make_command_pool(device, context.get_universal_queue_family_index())?;
+    let event = make_event(device)?;
+    let set_fence = make_fence(device, false)?;
+    let wait_fence = make_fence(device, false)?;
+
+    let set_cmd = allocate_command_buffer(device, *pool, vk::CommandBufferLevel::PRIMARY)?;
+    begin_command_buffer(device, *set_cmd)?;
+    cmd_set_event_empty(device, sync, *set_cmd, *event);
+    end_command_buffer(device, *set_cmd)?;
+
+    let wait_cmd = allocate_command_buffer(device, *pool, vk::CommandBufferLevel::PRIMARY)?;
+    begin_command_buffer(device, *wait_cmd)?;
+    cmd_wait_event_empty(device, sync, *wait_cmd, *event);
+    end_command_buffer(device, *wait_cmd)?;
+
+    submit(device, queue, *set_cmd, *set_fence)?;
+    submit(device, queue, *wait_cmd, *wait_fence)?;
+
+    if wait_for_fences(device, &[*set_fence, *wait_fence], true, LONG_FENCE_WAIT)? != vk::SuccessCode::SUCCESS {
+        return Ok(TestStatus::fail("Queue should end execution"));
+    }
+    Ok(TestStatus::pass("Wait and set even on device multi submission tests pass"))
 }
 
 fn submit_and_wait(device: &Device, queue: vk::Queue, cmd_buffer: vk::CommandBuffer) -> Result<(), TestError> {
@@ -441,11 +539,13 @@ pub fn create_basic_tests(sync_type: SyncType) -> tcu::TestCaseGroup {
             run: host_set_reset_event,
         }) as Box<dyn TestCase>);
     }
-    event.add_child(Box::new(FunctionCase {
-        name: "device_set_reset",
-        sync_type,
-        run: device_set_reset_event,
-    }) as Box<dyn TestCase>);
+    for (name, run) in [
+        ("device_set_reset", device_set_reset_event as fn(&Context<'_>, SyncType) -> Result<TestStatus, TestError>),
+        ("single_submit_multi_command_buffer", single_submit_multi_command_buffer),
+        ("multi_submit_multi_command_buffer", multi_submit_multi_command_buffer),
+    ] {
+        event.add_child(Box::new(FunctionCase { name, sync_type, run }) as Box<dyn TestCase>);
+    }
     group.add_child(event);
 
     let mut binary = tcu::TestCaseGroup::new("binary_semaphore");
