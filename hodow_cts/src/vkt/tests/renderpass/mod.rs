@@ -11,12 +11,15 @@
 
 pub mod depth_stencil_resolve_tests;
 pub mod dynamic_rendering_depth_stencil_resolve_tests;
+pub mod group_params;
 pub mod multisample_resolve_tests;
 pub mod multisample_tests;
 pub mod render_pass_tests;
 pub mod sample_read_tests;
 pub mod unused_attachment_tests;
 pub mod unused_clear_attachment_tests;
+
+use group_params::{GroupParams, RenderingType};
 
 use crate::tcu::TestCaseGroup;
 
@@ -46,36 +49,29 @@ pub fn create_tests() -> TestCaseGroup {
 /// early for a non-monolithic pipeline construction type - so with only that group
 /// ported, the variant would be empty and is left out.
 fn create_dynamic_rendering_tests() -> TestCaseGroup {
-    use dynamic_rendering_depth_stencil_resolve_tests::GroupParams;
-
     let mut dynamic_rendering_group = TestCaseGroup::new("dynamic_rendering");
-    for (name, group_params) in [
-        (
-            "primary_cmd_buff",
-            GroupParams {
-                use_secondary_cmd_buffer: false,
-                secondary_cmd_buffer_completely_contains_dynamic_renderpass: false,
-            },
-        ),
-        (
-            "partial_secondary_cmd_buff",
-            GroupParams {
-                use_secondary_cmd_buffer: true,
-                secondary_cmd_buffer_completely_contains_dynamic_renderpass: false,
-            },
-        ),
-        (
-            "complete_secondary_cmd_buff",
-            GroupParams {
-                use_secondary_cmd_buffer: true,
-                secondary_cmd_buffer_completely_contains_dynamic_renderpass: true,
-            },
-        ),
+    for (name, use_secondary_cmd_buffer, completely_contains) in [
+        ("primary_cmd_buff", false, false),
+        ("partial_secondary_cmd_buff", true, false),
+        ("complete_secondary_cmd_buff", true, true),
     ] {
+        let group_params = GroupParams {
+            rendering_type: RenderingType::DynamicRendering,
+            use_secondary_cmd_buffer,
+            secondary_cmd_buffer_completely_contains_dynamic_renderpass: completely_contains,
+        };
+
         let mut rendering_tests = TestCaseGroup::new(name);
         rendering_tests.add_child(dynamic_rendering_depth_stencil_resolve_tests::create_dynamic_rendering_depth_stencil_resolve_tests(
             group_params,
         ));
+
+        // `suballocationTestGroup`: upstream adds several groups here, of which only
+        // `multisample_resolve` is registered for dynamic rendering so far.
+        let mut suballocation_test_group = TestCaseGroup::new("suballocation");
+        suballocation_test_group.add_child(multisample_resolve_tests::create_multisample_resolve_tests(group_params));
+        rendering_tests.add_child(suballocation_test_group);
+
         dynamic_rendering_group.add_child(rendering_tests);
     }
     dynamic_rendering_group

@@ -19,17 +19,8 @@ use crate::vk::mem_util::{MemoryRequirement, invalidate_alloc};
 use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool};
 use crate::vk::programs::{BinaryCollection, create_shader_module};
 use crate::vk::{Unique, VkResultExt};
+use crate::vkt::tests::renderpass::group_params::GroupParams;
 use crate::vkt::{Context, TestCase, TestInstance};
-
-/// `GroupParams`, narrowed to the two flags this group reads. The fourth
-/// `dynamic_rendering` variant upstream registers - `graphics_pipeline_library` - never
-/// reaches this file: `createRenderPassTestsInternal` returns before adding it for any
-/// non-monolithic pipeline construction type.
-#[derive(Clone, Copy, PartialEq, Eq)]
-pub struct GroupParams {
-    pub use_secondary_cmd_buffer: bool,
-    pub secondary_cmd_buffer_completely_contains_dynamic_renderpass: bool,
-}
 
 /// `VerifyBuffer`
 #[derive(Clone, Copy, PartialEq, Eq)]

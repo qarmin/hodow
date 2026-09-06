@@ -17,7 +17,7 @@ use crate::vk::obj_util::{
 };
 use crate::vk::programs::{BinaryCollection, create_shader_module};
 use crate::vk::ref_util::{Unique, UniqueDescriptorSet};
-use crate::vkt::tests::renderpass::render_pass_tests::RenderPassType;
+use crate::vkt::tests::renderpass::group_params::{GroupParams, RenderingType};
 use crate::vkt::{Context, TestCase, TestInstance};
 
 /// `TestType`
@@ -39,7 +39,7 @@ pub struct TestConfig {
     pub attachment_count: u32,
     pub width: u32,
     pub height: u32,
-    pub render_pass_type: RenderPassType,
+    pub group_params: GroupParams,
     /// `TestConfig2::resolveLevel` - the mip level the resolve target is taken at.
     /// `None` is the plain `TestConfig` the other two instances take.
     pub resolve_level: Option<u32>,
@@ -63,11 +63,22 @@ impl TestCase for MultisampleResolveTestCase {
         &self.name
     }
 
+    /// The dynamic-rendering half of the tree is registered but has no instance yet:
+    /// `submitDynamicRendering` and the local-read attachment remapping the
+    /// max-attachments case needs are not ported.
+    fn is_stub(&self) -> bool {
+        self.config.group_params.rendering_type == RenderingType::DynamicRendering
+    }
+
     /// `checkSupport`
     fn check_support(&self, context: &Context<'_>) -> Result<(), TestError> {
         use vulkanalia::vk::InstanceV1_0;
 
         let c = &self.config;
+
+        if self.is_stub() {
+            return Err(TestError::NotSupported("dynamic rendering instance is not ported yet".into()));
+        }
 
         if c.format == vk::Format::A8_UNORM {
             context.require_device_functionality("VK_KHR_maintenance5")?;
@@ -77,7 +88,7 @@ impl TestCase for MultisampleResolveTestCase {
             return Err(TestError::NotSupported("geometryShader not supported".into()));
         }
 
-        if c.render_pass_type == RenderPassType::RenderPass2 {
+        if c.group_params.rendering_type == RenderingType::RenderPass2 {
             context.require_device_functionality("VK_KHR_create_renderpass2")?;
         }
 
@@ -486,7 +497,7 @@ impl MultisampleRenderPassTestInstance<'_> {
             });
         }
 
-        let handle = if c.render_pass_type == RenderPassType::RenderPass2 {
+        let handle = if c.group_params.rendering_type == RenderingType::RenderPass2 {
             use vulkanalia::vk::KhrCreateRenderpass2ExtensionDeviceCommands;
 
             let attachments2: Vec<vk::AttachmentDescription2> = attachments
@@ -747,7 +758,7 @@ impl MultisampleRenderPassTestInstance<'_> {
                 extent: vk::Extent2D { width: c.width, height: c.height },
             });
 
-        if c.render_pass_type == RenderPassType::RenderPass2 {
+        if c.group_params.rendering_type == RenderingType::RenderPass2 {
             use vulkanalia::vk::KhrCreateRenderpass2ExtensionDeviceCommands;
             let subpass_begin_info = vk::SubpassBeginInfo::builder().contents(vk::SubpassContents::INLINE);
             unsafe { device.cmd_begin_render_pass2_khr(*command_buffer, &begin_info, &subpass_begin_info) };
@@ -757,7 +768,7 @@ impl MultisampleRenderPassTestInstance<'_> {
 
         self.draw_commands(*command_buffer, pipeline, pipeline_layout, sample_mask);
 
-        if c.render_pass_type == RenderPassType::RenderPass2 {
+        if c.group_params.rendering_type == RenderingType::RenderPass2 {
             use vulkanalia::vk::KhrCreateRenderpass2ExtensionDeviceCommands;
             let subpass_end_info = vk::SubpassEndInfo::builder();
             unsafe { device.cmd_end_render_pass2_khr(*command_buffer, &subpass_end_info) };
@@ -1411,7 +1422,7 @@ impl MaxAttachmenstsRenderPassTestInstance<'_> {
             }
         }
 
-        let handle = if c.render_pass_type == RenderPassType::RenderPass2 {
+        let handle = if c.group_params.rendering_type == RenderingType::RenderPass2 {
             use vulkanalia::vk::KhrCreateRenderpass2ExtensionDeviceCommands;
 
             let attachments2: Vec<vk::AttachmentDescription2> = attachments.iter().map(to_attachment_description2).collect();
@@ -1661,7 +1672,7 @@ impl MaxAttachmenstsRenderPassTestInstance<'_> {
                 offset: vk::Offset2D { x: 0, y: 0 },
                 extent: vk::Extent2D { width: c.width, height: c.height },
             });
-        let render_pass2 = c.render_pass_type == RenderPassType::RenderPass2;
+        let render_pass2 = c.group_params.rendering_type == RenderingType::RenderPass2;
 
         if render_pass2 {
             use vulkanalia::vk::KhrCreateRenderpass2ExtensionDeviceCommands;
@@ -2018,7 +2029,7 @@ const RESOLVE_LEVELS: [u32; 3] = [2, 3, 4];
 
 /// `initTests`. Single-layer cases sit directly under `multisample_resolve`; the
 /// layered ones get a `layers_N` level of their own.
-pub fn create_multisample_resolve_tests(render_pass_type: RenderPassType) -> TestCaseGroup {
+pub fn create_multisample_resolve_tests(group_params: GroupParams) -> TestCaseGroup {
     let mut group = TestCaseGroup::new("multisample_resolve");
 
     for layer_count in LAYER_COUNTS {
@@ -2033,6 +2044,12 @@ pub fn create_multisample_resolve_tests(render_pass_type: RenderPassType) -> Tes
                     continue;
                 }
 
+                // Reduce number of tests for dynamic rendering cases where secondary
+                // command buffer is used
+                if group_params.use_secondary_cmd_buffer && (sample_count > 2 || layer_count > 3) {
+                    continue;
+                }
+
                 let test_name = format!("samples_{sample_count}");
                 let test_config = TestConfig {
                     test_type: TestType::Resolve,
@@ -2043,7 +2060,7 @@ pub fn create_multisample_resolve_tests(render_pass_type: RenderPassType) -> Tes
                     attachment_count: 4,
                     width: 32,
                     height: 32,
-                    render_pass_type,
+                    group_params,
                     resolve_level: None,
                 };
 
@@ -2061,13 +2078,19 @@ pub fn create_multisample_resolve_tests(render_pass_type: RenderPassType) -> Tes
                             ..test_config
                         },
                     );
+
+                    // Reduce number of tests for dynamic rendering cases where secondary
+                    // command buffer is used
+                    if group_params.use_secondary_cmd_buffer {
+                        break;
+                    }
                 }
 
                 // `MaxAttachmenstsRenderPassTest` is meant to test extreme cases where
                 // applications might consume all available on-chip memory. The maximal
                 // attachment count is not known when the shaders are built, so every
                 // power-of-two count up to the limit gets its own case.
-                if layer_count == 1 {
+                if layer_count == 1 && group_params.use_secondary_cmd_buffer == group_params.secondary_cmd_buffer_completely_contains_dynamic_renderpass {
                     for power in 2..5 {
                         let attachment_count = 1 << power;
                         add(
@@ -2080,14 +2103,16 @@ pub fn create_multisample_resolve_tests(render_pass_type: RenderPassType) -> Tes
                         );
                     }
 
-                    add(
-                        format!("compatibility_{test_name}"),
-                        TestConfig {
-                            test_type: TestType::Compatibility,
-                            attachment_count: 1,
-                            ..test_config
-                        },
-                    );
+                    if group_params.rendering_type != RenderingType::DynamicRendering {
+                        add(
+                            format!("compatibility_{test_name}"),
+                            TestConfig {
+                                test_type: TestType::Compatibility,
+                                attachment_count: 1,
+                                ..test_config
+                            },
+                        );
+                    }
                 }
             }
 
