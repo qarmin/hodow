@@ -156,7 +156,7 @@ pub static RESOURCES: &[ResourceDescription] = &[
     image_resource([64, 64, 0], vk::ImageType::_2D, vk::Format::R32_UINT, vk::ImageAspectFlags::COLOR, vk::SampleCountFlags::_4),
 ];
 
-const fn buffer_resource(size: i32) -> ResourceDescription {
+pub const fn buffer_resource(size: i32) -> ResourceDescription {
     ResourceDescription {
         kind: ResourceType::Buffer,
         size: [size, 0, 0, 0],
@@ -169,7 +169,7 @@ const fn buffer_resource(size: i32) -> ResourceDescription {
     }
 }
 
-const fn indirect_resource(kind: ResourceType, size: i32) -> ResourceDescription {
+pub const fn indirect_resource(kind: ResourceType, size: i32) -> ResourceDescription {
     ResourceDescription {
         kind,
         size: [size, 0, 0, 0],
@@ -182,7 +182,7 @@ const fn indirect_resource(kind: ResourceType, size: i32) -> ResourceDescription
     }
 }
 
-const fn image_resource(
+pub const fn image_resource(
     size: [i32; 3],
     image_type: vk::ImageType,
     image_format: vk::Format,
@@ -522,6 +522,64 @@ pub fn make_image_memory_barrier2(
         dst_queue_family_index: vk::QUEUE_FAMILY_IGNORED,
         image,
         subresource_range,
+    }
+}
+
+/// `makeMemoryBarrier2`
+pub fn make_memory_barrier2(
+    src_stage_mask: vk::PipelineStageFlags2,
+    src_access_mask: vk::AccessFlags2,
+    dst_stage_mask: vk::PipelineStageFlags2,
+    dst_access_mask: vk::AccessFlags2,
+) -> vk::MemoryBarrier2 {
+    vk::MemoryBarrier2 {
+        s_type: vk::StructureType::MEMORY_BARRIER_2,
+        next: std::ptr::null(),
+        src_stage_mask,
+        src_access_mask,
+        dst_stage_mask,
+        dst_access_mask,
+    }
+}
+
+/// `recordSimpleBarrier` - a plain execution and memory dependency from one operation's
+/// stage to the next one's, with no resource named.
+pub fn record_simple_barrier(device: &Device, sync: SyncType, cmd_buffer: vk::CommandBuffer, write_sync: SyncInfo, read_sync: SyncInfo) {
+    let barrier = make_memory_barrier2(write_sync.stage_mask, write_sync.access_mask, read_sync.stage_mask, read_sync.access_mask);
+    if sync == SyncType::Synchronization2 {
+        use vulkanalia::vk::KhrSynchronization2ExtensionDeviceCommands;
+        let barriers = [barrier];
+        let info = vk::DependencyInfo {
+            s_type: vk::StructureType::DEPENDENCY_INFO,
+            next: std::ptr::null(),
+            dependency_flags: vk::DependencyFlags::BY_REGION,
+            memory_barrier_count: 1,
+            memory_barriers: barriers.as_ptr(),
+            buffer_memory_barrier_count: 0,
+            buffer_memory_barriers: std::ptr::null(),
+            image_memory_barrier_count: 0,
+            image_memory_barriers: std::ptr::null(),
+        };
+        unsafe { device.cmd_pipeline_barrier2_khr(cmd_buffer, &info) };
+        return;
+    }
+
+    let legacy = [vk::MemoryBarrier {
+        s_type: vk::StructureType::MEMORY_BARRIER,
+        next: std::ptr::null(),
+        src_access_mask: truncate_access(barrier.src_access_mask),
+        dst_access_mask: truncate_access(barrier.dst_access_mask),
+    }];
+    unsafe {
+        device.cmd_pipeline_barrier(
+            cmd_buffer,
+            truncate_stage(barrier.src_stage_mask),
+            truncate_stage(barrier.dst_stage_mask),
+            vk::DependencyFlags::empty(),
+            &legacy,
+            &[] as &[vk::BufferMemoryBarrier],
+            &[] as &[vk::ImageMemoryBarrier],
+        );
     }
 }
 

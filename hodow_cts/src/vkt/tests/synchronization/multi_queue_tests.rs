@@ -22,8 +22,8 @@
 use vulkanalia::prelude::v1_0::*;
 
 use super::operation::{
-    COPY_OPS, Operation, OperationName, READ_OPS, RESOURCES, Resource, ResourceDescription, ResourceType, SyncInfo, SyncType, WRITE_OPS, build_copy_operation, build_operation,
-    first_difference, get_resource_name, make_buffer_memory_barrier2, make_image_memory_barrier2,
+    COPY_OPS, Operation, OperationName, READ_OPS, RESOURCES, Resource, ResourceDescription, ResourceType, SyncInfo, SyncType, WRITE_OPS, buffer_resource, build_copy_operation,
+    build_operation, first_difference, get_resource_name, image_resource, indirect_resource, make_buffer_memory_barrier2, make_image_memory_barrier2, record_simple_barrier,
 };
 use crate::tcu::{self, Random, TestError, TestStatus};
 use crate::vk::VkResultExt;
@@ -49,6 +49,25 @@ impl SyncPrimitive {
             Self::BinarySemaphore => "binary_semaphore",
             Self::TimelineSemaphore => "timeline_semaphore",
         }
+    }
+}
+
+/// `BaseTestCase::checkImageResourceSupport`
+fn check_image_resource_support(context: &Context, resource: &ResourceDescription, usage: u32) -> Result<(), TestError> {
+    let properties = unsafe {
+        context.get_instance().get_physical_device_image_format_properties(
+            context.get_physical_device(),
+            resource.image_format,
+            resource.image_type,
+            vk::ImageTiling::OPTIMAL,
+            vk::ImageUsageFlags::from_bits_truncate(usage),
+            vk::ImageCreateFlags::empty(),
+        )
+    };
+    match properties {
+        Err(_) => Err(TestError::NotSupported("Image format is not supported".into())),
+        Ok(p) if !p.sample_counts.contains(resource.image_samples) => Err(TestError::NotSupported("Requested sample count is not supported".into())),
+        Ok(_) => Ok(()),
     }
 }
 
@@ -113,6 +132,9 @@ pub struct MultiQueueTestCase {
     sharing_mode: vk::SharingMode,
     maintenance9: bool,
     use_all_stages: bool,
+    /// `IntermediateBarrierCase`'s two extra operations. Present together or not at
+    /// all, and only for that group.
+    extra_ops: Option<(OperationName, OperationName)>,
 }
 
 impl TestCase for MultiQueueTestCase {
@@ -134,23 +156,7 @@ impl TestCase for MultiQueueTestCase {
 
         if self.resource.kind == ResourceType::Image {
             let usage = self.write_op.out_resource_usage(&self.resource) | self.read_op.in_resource_usage(&self.resource);
-            let properties = unsafe {
-                instance.get_physical_device_image_format_properties(
-                    context.get_physical_device(),
-                    self.resource.image_format,
-                    self.resource.image_type,
-                    vk::ImageTiling::OPTIMAL,
-                    vk::ImageUsageFlags::from_bits_truncate(usage),
-                    vk::ImageCreateFlags::empty(),
-                )
-            };
-            match properties {
-                Err(_) => return Err(TestError::NotSupported("Image format is not supported".into())),
-                Ok(p) if !p.sample_counts.contains(self.resource.image_samples) => {
-                    return Err(TestError::NotSupported("Requested sample count is not supported".into()));
-                }
-                Ok(_) => {}
-            }
+            check_image_resource_support(context, &self.resource, usage)?;
         }
 
         if self.primitive == SyncPrimitive::TimelineSemaphore {
@@ -164,6 +170,17 @@ impl TestCase for MultiQueueTestCase {
 
         if self.use_all_stages {
             context.require_device_functionality("VK_KHR_maintenance8")?;
+        }
+
+        if let Some((extra_read_op, extra_write_op)) = self.extra_ops {
+            // Each extra operation gets its own resource, so each needs the image
+            // format checked against its own usage, not the shared one.
+            if self.resource.kind == ResourceType::Image {
+                check_image_resource_support(context, &self.resource, extra_read_op.in_resource_usage(&self.resource))?;
+                check_image_resource_support(context, &self.resource, extra_write_op.out_resource_usage(&self.resource))?;
+            }
+            extra_read_op.check_support(context, &self.resource)?;
+            extra_write_op.check_support(context, &self.resource)?;
         }
 
         if self.maintenance9 {
@@ -201,6 +218,10 @@ impl TestInstance for MultiQueueTestInstance<'_> {
         // one write queue with one read queue.
         if p.primitive == SyncPrimitive::TimelineSemaphore {
             return self.run_timeline_semaphore(device, allocator, queues.families());
+        }
+
+        if let Some((extra_read_op, extra_write_op)) = p.extra_ops {
+            return self.run_intermediate_barrier(device, allocator, queues.families(), extra_read_op, extra_write_op);
         }
 
         let pairs = get_queues_pairs(queues.families(), p.write_op.queue_flags(&p.resource), p.read_op.queue_flags(&p.resource), p.use_all_stages);
@@ -294,6 +315,142 @@ impl TestInstance for MultiQueueTestInstance<'_> {
 }
 
 impl MultiQueueTestInstance<'_> {
+    /// `IntermediateBarrierInstance`
+    ///
+    /// The ownership transfer is still write-queue to read-queue, but each side has an
+    /// unrelated operation wedged in between the transfer and the semaphore: the write
+    /// queue reads a throwaway resource *after* releasing, and the read queue writes a
+    /// different throwaway resource *before* acquiring. The semaphore is therefore
+    /// signalled later and waited earlier than the transfer itself, which is what makes
+    /// maintenance8's "apply the transfer at every stage" flag necessary rather than
+    /// merely allowed - without it the transfer would not be covered by the semaphore.
+    fn run_intermediate_barrier(
+        &self,
+        device: &'_ Device,
+        allocator: &crate::vk::mem_util::SimpleAllocator,
+        families: &[QueueFamilyQueues],
+        extra_read_op_name: OperationName,
+        extra_write_op_name: OperationName,
+    ) -> Result<TestStatus, TestError> {
+        let p = self.params;
+
+        let queue_flags_write = p.write_op.queue_flags(&p.resource) | extra_read_op_name.queue_flags(&p.resource);
+        let queue_flags_read = p.read_op.queue_flags(&p.resource) | extra_write_op_name.queue_flags(&p.resource);
+        let pairs = get_queues_pairs(families, queue_flags_write, queue_flags_read, p.use_all_stages);
+        if pairs.is_empty() {
+            return Err(TestError::NotSupported("No suitable queue pairs found".into()));
+        }
+
+        for pair in &pairs {
+            let usage = p.write_op.out_resource_usage(&p.resource) | p.read_op.in_resource_usage(&p.resource);
+            let resource = Resource::new(device, allocator, &p.resource, usage)?;
+            let extra_read_resource = Resource::new(device, allocator, &p.resource, extra_read_op_name.in_resource_usage(&p.resource))?;
+            let extra_write_resource = Resource::new(device, allocator, &p.resource, extra_write_op_name.out_resource_usage(&p.resource))?;
+
+            let write_op = build_operation(device, allocator, p.write_op, &p.resource, &resource, false)?;
+            let read_op = build_operation(device, allocator, p.read_op, &p.resource, &resource, false)?;
+            let extra_read_op = build_operation(device, allocator, extra_read_op_name, &p.resource, &extra_read_resource, false)?;
+            let extra_write_op = build_operation(device, allocator, extra_write_op_name, &p.resource, &extra_write_resource, false)?;
+
+            let write_pool = make_command_pool(device, pair.family_index_write)?;
+            let read_pool = make_command_pool(device, pair.family_index_read)?;
+            let write_cmd = allocate_command_buffer(device, *write_pool, vk::CommandBufferLevel::PRIMARY)?;
+            let read_cmd = allocate_command_buffer(device, *read_pool, vk::CommandBufferLevel::PRIMARY)?;
+
+            let write_sync = write_op.out_sync_info(p.sync_type);
+            let read_sync = read_op.in_sync_info(p.sync_type);
+            let extra_read_sync = extra_read_op.in_sync_info(p.sync_type);
+            let extra_write_sync = extra_write_op.out_sync_info(p.sync_type);
+
+            // The two throwaway images are never written by the operation that reads
+            // them, so nothing else would ever move them out of UNDEFINED.
+            if p.resource.kind == ResourceType::Image {
+                self.transition_extra_images(device, *write_pool, pair, &[&extra_read_resource, &extra_write_resource])?;
+            }
+
+            let perform_qfot = self.queue_family_ownership_transfer_required(&resource, pair.family_index_write, pair.family_index_read);
+            let (barrier_write_family, barrier_read_family) = if perform_qfot {
+                (pair.family_index_write, pair.family_index_read)
+            } else {
+                (vk::QUEUE_FAMILY_IGNORED, vk::QUEUE_FAMILY_IGNORED)
+            };
+
+            begin_command_buffer(device, *write_cmd)?;
+            write_op.record_commands(device, p.sync_type, *write_cmd);
+            self.create_barrier_multi_queue(device, *write_cmd, write_sync, read_sync, &resource, barrier_write_family, barrier_read_family, false);
+            record_simple_barrier(device, p.sync_type, *write_cmd, write_sync, extra_read_sync);
+            extra_read_op.record_commands(device, p.sync_type, *write_cmd);
+            end_command_buffer(device, *write_cmd)?;
+
+            begin_command_buffer(device, *read_cmd)?;
+            extra_write_op.record_commands(device, p.sync_type, *read_cmd);
+            record_simple_barrier(device, p.sync_type, *read_cmd, extra_write_sync, read_sync);
+            self.create_barrier_multi_queue(device, *read_cmd, write_sync, read_sync, &resource, barrier_write_family, barrier_read_family, true);
+            read_op.record_commands(device, p.sync_type, *read_cmd);
+            end_command_buffer(device, *read_cmd)?;
+
+            let semaphore = unsafe { device.create_semaphore(&vk::SemaphoreCreateInfo::builder(), None) }.vk_check("vkCreateSemaphore")?;
+            let semaphore = Unique::new(device, semaphore);
+
+            // Signalled late, at the extra read's stage; waited early, at the extra
+            // write's. Neither is the stage the ownership transfer names.
+            self.submit(device, pair.queue_write, *write_cmd, &[], &[*semaphore], extra_read_sync.stage_mask)?;
+            self.submit(device, pair.queue_read, *read_cmd, &[*semaphore], &[], extra_write_sync.stage_mask)?;
+            unsafe { device.queue_wait_idle(pair.queue_write) }.vk_check("vkQueueWaitIdle")?;
+            unsafe { device.queue_wait_idle(pair.queue_read) }.vk_check("vkQueueWaitIdle")?;
+
+            let expected = write_op.data(device)?;
+            let actual = read_op.data(device)?;
+
+            if resource.kind.is_indirect_buffer() {
+                let expected_value = u32::from_ne_bytes(expected[0..4].try_into().expect("at least 4 bytes"));
+                let actual_value = u32::from_ne_bytes(actual[0..4].try_into().expect("at least 4 bytes"));
+                if actual_value < expected_value {
+                    return Ok(TestStatus::fail("Counter value is smaller than expected"));
+                }
+            } else if let Some(at) = first_difference(&expected, &actual) {
+                return Ok(TestStatus::fail(format!(
+                    "Memory contents don't match: first difference at byte {at} of {}, expected {:#04x} got {:#04x}",
+                    expected.len(),
+                    expected[at],
+                    actual[at],
+                )));
+            }
+        }
+
+        Ok(TestStatus::pass("OK"))
+    }
+
+    /// Move the two throwaway images to GENERAL up front, on the write queue, waiting
+    /// for it before anything else is submitted.
+    fn transition_extra_images(&self, device: &Device, pool: vk::CommandPool, pair: &QueuePair, resources: &[&Resource<'_>]) -> Result<(), TestError> {
+        let cmd = allocate_command_buffer(device, pool, vk::CommandBufferLevel::PRIMARY)?;
+        let barriers: Vec<vk::ImageMemoryBarrier2> = resources
+            .iter()
+            .map(|r| {
+                let image = r.image();
+                let mut barrier = make_image_memory_barrier2(
+                    vk::PipelineStageFlags2::TOP_OF_PIPE,
+                    vk::AccessFlags2::empty(),
+                    vk::PipelineStageFlags2::BOTTOM_OF_PIPE,
+                    vk::AccessFlags2::empty(),
+                    vk::ImageLayout::UNDEFINED,
+                    vk::ImageLayout::GENERAL,
+                    image.handle,
+                    image.subresource_range,
+                );
+                barrier.src_queue_family_index = pair.family_index_write;
+                barrier.dst_queue_family_index = pair.family_index_write;
+                barrier
+            })
+            .collect();
+
+        begin_command_buffer(device, *cmd)?;
+        cmd_pipeline_barrier_images(device, self.params.sync_type, *cmd, &barriers, vk::DependencyFlags::empty());
+        end_command_buffer(device, *cmd)?;
+        self.submit_and_wait(device, pair.queue_write, *cmd, &[], &[], vk::PipelineStageFlags2::TOP_OF_PIPE)
+    }
+
     /// `TimelineSemaphoreTestInstance`
     ///
     /// A chain of copies that visits every queue in the system at least once, each link
@@ -797,6 +954,7 @@ pub fn create_multi_queue_tests(sync_type: SyncType) -> tcu::TestCaseGroup {
                                 sharing_mode,
                                 maintenance9: false,
                                 use_all_stages,
+                                extra_ops: None,
                             }) as Box<dyn TestCase>);
 
                             if sharing_mode == vk::SharingMode::CONCURRENT {
@@ -810,6 +968,7 @@ pub fn create_multi_queue_tests(sync_type: SyncType) -> tcu::TestCaseGroup {
                                     sharing_mode,
                                     maintenance9: true,
                                     use_all_stages,
+                                    extra_ops: None,
                                 }) as Box<dyn TestCase>);
                             }
                             empty = false;
@@ -824,6 +983,106 @@ pub fn create_multi_queue_tests(sync_type: SyncType) -> tcu::TestCaseGroup {
         }
 
         group.add_child(primitive_group);
+    }
+
+    if sync_type == SyncType::Synchronization2 {
+        group.add_child(create_intermediate_barrier_tests());
+    }
+
+    group
+}
+
+/// `intermediate_barrier_use_all` - a subset of operations and resources, to avoid a
+/// combinatorial explosion.
+const EXTRA_WRITE_STAGES: &[OperationName] = &[
+    OperationName::WriteFillBuffer,
+    OperationName::WriteBlitImage,
+    OperationName::WriteSsboFragment,
+    OperationName::WriteSsboCompute,
+    OperationName::WriteImageVertex,
+    OperationName::WriteImageFragment,
+    OperationName::WriteClearColorImage,
+    OperationName::WriteDrawIndexed,
+];
+
+const EXTRA_READ_STAGES: &[OperationName] = &[
+    OperationName::ReadCopyBuffer,
+    OperationName::ReadUboVertex,
+    OperationName::ReadUboFragment,
+    OperationName::ReadUboCompute,
+    OperationName::ReadImageFragment,
+    OperationName::ReadImageCompute,
+    OperationName::ReadIndirectBufferDispatch,
+    OperationName::ReadVertexInput,
+    OperationName::ReadIndexInput,
+];
+
+/// `resourceDescriptions` - the six this group uses. Spelled out rather than indexed
+/// into `RESOURCES`, because upstream spells them out too and a reordering there must
+/// not silently change which cases exist here.
+const INTERMEDIATE_BARRIER_RESOURCES: &[ResourceDescription] = &[
+    buffer_resource(0x4000),
+    image_resource(
+        [128, 128, 0],
+        vk::ImageType::_2D,
+        vk::Format::R8G8B8A8_UNORM,
+        vk::ImageAspectFlags::COLOR,
+        vk::SampleCountFlags::_1,
+    ),
+    indirect_resource(ResourceType::IndirectBufferDraw, 16),
+    indirect_resource(ResourceType::IndirectBufferDrawIndexed, 20),
+    indirect_resource(ResourceType::IndirectBufferDispatch, 12),
+    indirect_resource(ResourceType::IndexBuffer, 4 * 5),
+];
+
+fn create_intermediate_barrier_tests() -> tcu::TestCaseGroup {
+    let mut group = tcu::TestCaseGroup::new("intermediate_barrier_use_all");
+
+    for resource in INTERMEDIATE_BARRIER_RESOURCES {
+        for &write_op in WRITE_OPS {
+            if !write_op.supports_resource(resource) {
+                continue;
+            }
+            for &read_op in READ_OPS {
+                if !read_op.supports_resource(resource) {
+                    continue;
+                }
+                let mut op_group = tcu::TestCaseGroup::new(format!("{}_{}_{}", write_op.as_str(), read_op.as_str(), get_resource_name(resource)));
+                let mut empty = true;
+
+                for &extra_read_op in EXTRA_READ_STAGES {
+                    if extra_read_op == read_op || !extra_read_op.supports_resource(resource) {
+                        continue;
+                    }
+                    for &extra_write_op in EXTRA_WRITE_STAGES {
+                        if extra_write_op == write_op || !extra_write_op.supports_resource(resource) {
+                            continue;
+                        }
+                        let name = format!("{}_{}", extra_read_op.as_str(), extra_write_op.as_str());
+                        for maintenance9 in [false, true] {
+                            let name = if maintenance9 { format!("{name}_maintenance9") } else { name.clone() };
+                            op_group.add_child(Box::new(MultiQueueTestCase {
+                                name,
+                                sync_type: SyncType::Synchronization2,
+                                primitive: SyncPrimitive::BinarySemaphore,
+                                resource: *resource,
+                                write_op,
+                                read_op,
+                                sharing_mode: vk::SharingMode::EXCLUSIVE,
+                                maintenance9,
+                                use_all_stages: true,
+                                extra_ops: Some((extra_read_op, extra_write_op)),
+                            }) as Box<dyn TestCase>);
+                        }
+                        empty = false;
+                    }
+                }
+
+                if !empty {
+                    group.add_child(op_group);
+                }
+            }
+        }
     }
 
     group
