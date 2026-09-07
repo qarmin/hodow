@@ -66,6 +66,44 @@ pub(super) fn test_x86_rtm_xabort() -> Result<(), String> {
     Ok(())
 }
 
+pub(super) fn test_x86_rtm_xabort_imm_0() -> Result<(), String> {
+    unsafe {
+        _xabort::<0>();
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                _xabort::<0>();
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_rtm_xabort_imm_1() -> Result<(), String> {
+    unsafe {
+        _xabort::<1>();
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                _xabort::<1>();
+            }
+        }
+    }
+    Ok(())
+}
+
 pub(super) fn test_x86_rtm_xtest() -> Result<(), String> {
     unsafe {
         let result = _xtest();

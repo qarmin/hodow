@@ -9,6 +9,11 @@ winit
 glutin
 ___*
 core.*
+*.core
+
+/box64_repro/target/
+/box64_repro/.box64/
+/box64_repro/.fex/
 
 # Scratch scripts and CTS run logs.
 tmp/

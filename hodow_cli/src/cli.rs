@@ -103,6 +103,13 @@ pub struct CpuArgs {
     #[arg(long = "worker-start", value_name = "INDEX", hide = true)]
     pub worker_start: Option<usize>,
 
+    /// Write a machine-readable per-test report to this path (only with --isolate).
+    /// Format is picked from the extension: `.csv` for CSV, anything else for JSON.
+    /// Each record is (name, feature, verdict, got, expected, message) - meant for diffing
+    /// a native run against one under an emulator (box64, FEX-Emu, ...).
+    #[arg(long = "report", value_name = "PATH")]
+    pub report: Option<std::path::PathBuf>,
+
     /// Submit this as a job to a running `hodow_cli serve` instead of running it locally
     /// (e.g. --submit-to http://localhost:7878).
     #[cfg(feature = "serve")]

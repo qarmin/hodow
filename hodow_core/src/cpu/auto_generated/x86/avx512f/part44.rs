@@ -2372,10 +2372,290 @@ pub(super) fn test_x86_avx512f_mm512_reduce_and_epi32() -> Result<(), String> {
     Ok(())
 }
 
+pub(super) fn test_x86_avx512f_mm512_reduce_and_epi32_normal2() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_reduce_and_epi32(create__m512i_from_i32_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_reduce_and_epi32(create__m512i_from_i32_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_reduce_and_epi32(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_reduce_and_epi32_normal3() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_reduce_and_epi32(create__m512i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_reduce_and_epi32(create__m512i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_reduce_and_epi32(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_reduce_and_epi32_boundary_min() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_reduce_and_epi32(create__m512i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]));
+        check_int_equality(result as i32, -2147483648).map_err(|e| format!("{e} | call: _mm512_reduce_and_epi32(create__m512i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_reduce_and_epi32(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_reduce_and_epi32_boundary_max() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_reduce_and_epi32(create__m512i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]));
+        check_int_equality(result as i32, 2147483647).map_err(|e| format!("{e} | call: _mm512_reduce_and_epi32(create__m512i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_reduce_and_epi32(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_reduce_and_epi32_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_reduce_and_epi32(create__m512i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_reduce_and_epi32(create__m512i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_reduce_and_epi32(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_reduce_and_epi32_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_reduce_and_epi32(create__m512i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]));
+        check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm512_reduce_and_epi32(create__m512i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_reduce_and_epi32(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_reduce_and_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_reduce_and_epi32(create__m512i_from_i32_array([i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_reduce_and_epi32(create__m512i_from_i32_array([i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_reduce_and_epi32(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_and_epi32() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_and_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
         check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm512_mask_reduce_and_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_mask_reduce_and_epi32(create_random__mmask16(), create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_reduce_and_epi32_normal2() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_mask_reduce_and_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_mask_reduce_and_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_mask_reduce_and_epi32(create_random__mmask16(), create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_reduce_and_epi32_normal3() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_mask_reduce_and_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]));
+        check_int_equality(result as i32, 4).map_err(|e| format!("{e} | call: _mm512_mask_reduce_and_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_mask_reduce_and_epi32(create_random__mmask16(), create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_reduce_and_epi32_boundary_min() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_mask_reduce_and_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]));
+        check_int_equality(result as i32, -2147483648).map_err(|e| format!("{e} | call: _mm512_mask_reduce_and_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_mask_reduce_and_epi32(create_random__mmask16(), create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_reduce_and_epi32_boundary_max() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_mask_reduce_and_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]));
+        check_int_equality(result as i32, 2147483647).map_err(|e| format!("{e} | call: _mm512_mask_reduce_and_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_mask_reduce_and_epi32(create_random__mmask16(), create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_reduce_and_epi32_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_mask_reduce_and_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_mask_reduce_and_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_mask_reduce_and_epi32(create_random__mmask16(), create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_reduce_and_epi32_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_mask_reduce_and_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]));
+        check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm512_mask_reduce_and_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_mask_reduce_and_epi32(create_random__mmask16(), create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_reduce_and_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_mask_reduce_and_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_mask_reduce_and_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2412,10 +2692,290 @@ pub(super) fn test_x86_avx512f_mm512_reduce_and_epi64() -> Result<(), String> {
     Ok(())
 }
 
+pub(super) fn test_x86_avx512f_mm512_reduce_and_epi64_normal2() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_reduce_and_epi64(create__m512i_from([0, -1, 2, -3, 4, -5, 6, -7]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_reduce_and_epi64(create__m512i_from([0, -1, 2, -3, 4, -5, 6, -7]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_reduce_and_epi64(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_reduce_and_epi64_normal3() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_reduce_and_epi64(create__m512i_from([100, 200, 300, 400, 500, 600, 700, 800]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_reduce_and_epi64(create__m512i_from([100, 200, 300, 400, 500, 600, 700, 800]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_reduce_and_epi64(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_reduce_and_epi64_boundary_min() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_reduce_and_epi64(create__m512i_from([i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_reduce_and_epi64(create__m512i_from([i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_reduce_and_epi64(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_reduce_and_epi64_boundary_max() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_reduce_and_epi64(create__m512i_from([i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX]));
+        check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm512_reduce_and_epi64(create__m512i_from([i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_reduce_and_epi64(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_reduce_and_epi64_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_reduce_and_epi64(create__m512i_from([0, 0, 0, 0, 0, 0, 0, 0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_reduce_and_epi64(create__m512i_from([0, 0, 0, 0, 0, 0, 0, 0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_reduce_and_epi64(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_reduce_and_epi64_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_reduce_and_epi64(create__m512i_from([-1, -1, -1, -1, -1, -1, -1, -1]));
+        check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm512_reduce_and_epi64(create__m512i_from([-1, -1, -1, -1, -1, -1, -1, -1]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_reduce_and_epi64(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_reduce_and_epi64_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_reduce_and_epi64(create__m512i_from([i64::MIN, i64::MAX, 0, -1, i64::MIN, i64::MAX, 0, -1]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_reduce_and_epi64(create__m512i_from([i64::MIN, i64::MAX, 0, -1, i64::MIN, i64::MAX, 0, -1]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_reduce_and_epi64(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_and_epi64() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_and_epi64(create__mmask8_from(0b01010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
         check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm512_mask_reduce_and_epi64(create__mmask8_from(0b01010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_mask_reduce_and_epi64(create_random__mmask8(), create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_reduce_and_epi64_normal2() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_mask_reduce_and_epi64(create__mmask8_from(0b01010101), create__m512i_from([0, -1, 2, -3, 4, -5, 6, -7]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_mask_reduce_and_epi64(create__mmask8_from(0b01010101), create__m512i_from([0, -1, 2, -3, 4, -5, 6, -7]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_mask_reduce_and_epi64(create_random__mmask8(), create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_reduce_and_epi64_normal3() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_mask_reduce_and_epi64(create__mmask8_from(0b01010101), create__m512i_from([100, 200, 300, 400, 500, 600, 700, 800]));
+        check_int_equality(result as i32, 36).map_err(|e| format!("{e} | call: _mm512_mask_reduce_and_epi64(create__mmask8_from(0b01010101), create__m512i_from([100, 200, 300, 400, 500, 600, 700, 800]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_mask_reduce_and_epi64(create_random__mmask8(), create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_reduce_and_epi64_boundary_min() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_mask_reduce_and_epi64(create__mmask8_from(0b01010101), create__m512i_from([i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_mask_reduce_and_epi64(create__mmask8_from(0b01010101), create__m512i_from([i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_mask_reduce_and_epi64(create_random__mmask8(), create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_reduce_and_epi64_boundary_max() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_mask_reduce_and_epi64(create__mmask8_from(0b01010101), create__m512i_from([i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX]));
+        check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm512_mask_reduce_and_epi64(create__mmask8_from(0b01010101), create__m512i_from([i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_mask_reduce_and_epi64(create_random__mmask8(), create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_reduce_and_epi64_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_mask_reduce_and_epi64(create__mmask8_from(0b01010101), create__m512i_from([0, 0, 0, 0, 0, 0, 0, 0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_mask_reduce_and_epi64(create__mmask8_from(0b01010101), create__m512i_from([0, 0, 0, 0, 0, 0, 0, 0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_mask_reduce_and_epi64(create_random__mmask8(), create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_reduce_and_epi64_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_mask_reduce_and_epi64(create__mmask8_from(0b01010101), create__m512i_from([-1, -1, -1, -1, -1, -1, -1, -1]));
+        check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm512_mask_reduce_and_epi64(create__mmask8_from(0b01010101), create__m512i_from([-1, -1, -1, -1, -1, -1, -1, -1]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_mask_reduce_and_epi64(create_random__mmask8(), create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_reduce_and_epi64_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_mask_reduce_and_epi64(create__mmask8_from(0b01010101), create__m512i_from([i64::MIN, i64::MAX, 0, -1, i64::MIN, i64::MAX, 0, -1]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_mask_reduce_and_epi64(create__mmask8_from(0b01010101), create__m512i_from([i64::MIN, i64::MAX, 0, -1, i64::MIN, i64::MAX, 0, -1]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2452,10 +3012,290 @@ pub(super) fn test_x86_avx512f_mm512_reduce_or_epi32() -> Result<(), String> {
     Ok(())
 }
 
+pub(super) fn test_x86_avx512f_mm512_reduce_or_epi32_normal2() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_reduce_or_epi32(create__m512i_from_i32_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]));
+        check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm512_reduce_or_epi32(create__m512i_from_i32_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_reduce_or_epi32(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_reduce_or_epi32_normal3() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_reduce_or_epi32(create__m512i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]));
+        check_int_equality(result as i32, 2044).map_err(|e| format!("{e} | call: _mm512_reduce_or_epi32(create__m512i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_reduce_or_epi32(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_reduce_or_epi32_boundary_min() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_reduce_or_epi32(create__m512i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]));
+        check_int_equality(result as i32, -2147483648).map_err(|e| format!("{e} | call: _mm512_reduce_or_epi32(create__m512i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_reduce_or_epi32(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_reduce_or_epi32_boundary_max() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_reduce_or_epi32(create__m512i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]));
+        check_int_equality(result as i32, 2147483647).map_err(|e| format!("{e} | call: _mm512_reduce_or_epi32(create__m512i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_reduce_or_epi32(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_reduce_or_epi32_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_reduce_or_epi32(create__m512i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_reduce_or_epi32(create__m512i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_reduce_or_epi32(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_reduce_or_epi32_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_reduce_or_epi32(create__m512i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]));
+        check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm512_reduce_or_epi32(create__m512i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_reduce_or_epi32(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_reduce_or_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_reduce_or_epi32(create__m512i_from_i32_array([i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1]));
+        check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm512_reduce_or_epi32(create__m512i_from_i32_array([i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_reduce_or_epi32(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_or_epi32() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_or_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
         check_int_equality(result as i32, 15).map_err(|e| format!("{e} | call: _mm512_mask_reduce_or_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_mask_reduce_or_epi32(create_random__mmask16(), create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_reduce_or_epi32_normal2() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_mask_reduce_or_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]));
+        check_int_equality(result as i32, 6).map_err(|e| format!("{e} | call: _mm512_mask_reduce_or_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_mask_reduce_or_epi32(create_random__mmask16(), create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_reduce_or_epi32_normal3() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_mask_reduce_or_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]));
+        check_int_equality(result as i32, 2044).map_err(|e| format!("{e} | call: _mm512_mask_reduce_or_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_mask_reduce_or_epi32(create_random__mmask16(), create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_reduce_or_epi32_boundary_min() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_mask_reduce_or_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]));
+        check_int_equality(result as i32, -2147483648).map_err(|e| format!("{e} | call: _mm512_mask_reduce_or_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_mask_reduce_or_epi32(create_random__mmask16(), create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_reduce_or_epi32_boundary_max() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_mask_reduce_or_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]));
+        check_int_equality(result as i32, 2147483647).map_err(|e| format!("{e} | call: _mm512_mask_reduce_or_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_mask_reduce_or_epi32(create_random__mmask16(), create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_reduce_or_epi32_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_mask_reduce_or_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_mask_reduce_or_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_mask_reduce_or_epi32(create_random__mmask16(), create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_reduce_or_epi32_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_mask_reduce_or_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]));
+        check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm512_mask_reduce_or_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_mask_reduce_or_epi32(create_random__mmask16(), create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_reduce_or_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_mask_reduce_or_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1]));
+        check_int_equality(result as i32, -2147483648).map_err(|e| format!("{e} | call: _mm512_mask_reduce_or_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2492,6 +3332,146 @@ pub(super) fn test_x86_avx512f_mm512_reduce_or_epi64() -> Result<(), String> {
     Ok(())
 }
 
+pub(super) fn test_x86_avx512f_mm512_reduce_or_epi64_normal2() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_reduce_or_epi64(create__m512i_from([0, -1, 2, -3, 4, -5, 6, -7]));
+        check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm512_reduce_or_epi64(create__m512i_from([0, -1, 2, -3, 4, -5, 6, -7]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_reduce_or_epi64(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_reduce_or_epi64_normal3() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_reduce_or_epi64(create__m512i_from([100, 200, 300, 400, 500, 600, 700, 800]));
+        check_int_equality(result as i32, 1020).map_err(|e| format!("{e} | call: _mm512_reduce_or_epi64(create__m512i_from([100, 200, 300, 400, 500, 600, 700, 800]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_reduce_or_epi64(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_reduce_or_epi64_boundary_min() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_reduce_or_epi64(create__m512i_from([i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_reduce_or_epi64(create__m512i_from([i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_reduce_or_epi64(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_reduce_or_epi64_boundary_max() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_reduce_or_epi64(create__m512i_from([i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX]));
+        check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm512_reduce_or_epi64(create__m512i_from([i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_reduce_or_epi64(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_reduce_or_epi64_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_reduce_or_epi64(create__m512i_from([0, 0, 0, 0, 0, 0, 0, 0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_reduce_or_epi64(create__m512i_from([0, 0, 0, 0, 0, 0, 0, 0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_reduce_or_epi64(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_reduce_or_epi64_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_reduce_or_epi64(create__m512i_from([-1, -1, -1, -1, -1, -1, -1, -1]));
+        check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm512_reduce_or_epi64(create__m512i_from([-1, -1, -1, -1, -1, -1, -1, -1]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_reduce_or_epi64(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_reduce_or_epi64_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_reduce_or_epi64(create__m512i_from([i64::MIN, i64::MAX, 0, -1, i64::MIN, i64::MAX, 0, -1]));
+        check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm512_reduce_or_epi64(create__m512i_from([i64::MIN, i64::MAX, 0, -1, i64::MIN, i64::MAX, 0, -1]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_reduce_or_epi64(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_or_epi64() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_or_epi64(create__mmask8_from(0b01010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
@@ -2512,10 +3492,150 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_or_epi64() -> Result<(), String
     Ok(())
 }
 
+pub(super) fn test_x86_avx512f_mm512_mask_reduce_or_epi64_normal2() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_mask_reduce_or_epi64(create__mmask8_from(0b01010101), create__m512i_from([0, -1, 2, -3, 4, -5, 6, -7]));
+        check_int_equality(result as i32, 6).map_err(|e| format!("{e} | call: _mm512_mask_reduce_or_epi64(create__mmask8_from(0b01010101), create__m512i_from([0, -1, 2, -3, 4, -5, 6, -7]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_mask_reduce_or_epi64(create_random__mmask8(), create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_reduce_or_epi64_normal3() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_mask_reduce_or_epi64(create__mmask8_from(0b01010101), create__m512i_from([100, 200, 300, 400, 500, 600, 700, 800]));
+        check_int_equality(result as i32, 1020).map_err(|e| format!("{e} | call: _mm512_mask_reduce_or_epi64(create__mmask8_from(0b01010101), create__m512i_from([100, 200, 300, 400, 500, 600, 700, 800]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_mask_reduce_or_epi64(create_random__mmask8(), create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_reduce_or_epi64_boundary_min() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_mask_reduce_or_epi64(create__mmask8_from(0b01010101), create__m512i_from([i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_mask_reduce_or_epi64(create__mmask8_from(0b01010101), create__m512i_from([i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_mask_reduce_or_epi64(create_random__mmask8(), create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_reduce_or_epi64_boundary_max() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_mask_reduce_or_epi64(create__mmask8_from(0b01010101), create__m512i_from([i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX]));
+        check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm512_mask_reduce_or_epi64(create__mmask8_from(0b01010101), create__m512i_from([i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_mask_reduce_or_epi64(create_random__mmask8(), create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_reduce_or_epi64_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_mask_reduce_or_epi64(create__mmask8_from(0b01010101), create__m512i_from([0, 0, 0, 0, 0, 0, 0, 0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_mask_reduce_or_epi64(create__mmask8_from(0b01010101), create__m512i_from([0, 0, 0, 0, 0, 0, 0, 0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_mask_reduce_or_epi64(create_random__mmask8(), create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_reduce_or_epi64_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_mask_reduce_or_epi64(create__mmask8_from(0b01010101), create__m512i_from([-1, -1, -1, -1, -1, -1, -1, -1]));
+        check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm512_mask_reduce_or_epi64(create__mmask8_from(0b01010101), create__m512i_from([-1, -1, -1, -1, -1, -1, -1, -1]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_mask_reduce_or_epi64(create_random__mmask8(), create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_reduce_or_epi64_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let result = _mm512_mask_reduce_or_epi64(create__mmask8_from(0b01010101), create__m512i_from([i64::MIN, i64::MAX, 0, -1, i64::MIN, i64::MAX, 0, -1]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_mask_reduce_or_epi64(create__mmask8_from(0b01010101), create__m512i_from([i64::MIN, i64::MAX, 0, -1, i64::MIN, i64::MAX, 0, -1]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_mask_reduce_or_epi64(create_random__mmask8(), create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
 pub(super) fn test_x86_avx512f_mm512_undefined_pd() -> Result<(), String> {
     unsafe {
         let result = unpack__m512d_to_f64_array(_mm512_undefined_pd());
-        check_float_array_equality(&result, &[0.0f64; 8]).map_err(|e| format!("{e} | call: _mm512_undefined_pd()"))?;
+        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm512_undefined_pd()"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2535,7 +3655,7 @@ pub(super) fn test_x86_avx512f_mm512_undefined_pd() -> Result<(), String> {
 pub(super) fn test_x86_avx512f_mm512_undefined_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m512_to_f32_array(_mm512_undefined_ps());
-        check_float_array_equality(&result, &[0.0f32; 16]).map_err(|e| format!("{e} | call: _mm512_undefined_ps()"))?;
+        check_float_array_equality(&result, &[0.0; 16]).map_err(|e| format!("{e} | call: _mm512_undefined_ps()"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2555,7 +3675,7 @@ pub(super) fn test_x86_avx512f_mm512_undefined_ps() -> Result<(), String> {
 pub(super) fn test_x86_avx512f_mm512_undefined_epi32() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i32_array(_mm512_undefined_epi32());
-        check_array_equality(&result, &[0i32; 16]).map_err(|e| format!("{e} | call: _mm512_undefined_epi32()"))?;
+        check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm512_undefined_epi32()"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2575,7 +3695,7 @@ pub(super) fn test_x86_avx512f_mm512_undefined_epi32() -> Result<(), String> {
 pub(super) fn test_x86_avx512f_mm512_undefined() -> Result<(), String> {
     unsafe {
         let result = unpack__m512_to_f32_array(_mm512_undefined());
-        check_float_array_equality(&result, &[0.0f32; 16]).map_err(|e| format!("{e} | call: _mm512_undefined()"))?;
+        check_float_array_equality(&result, &[0.0; 16]).map_err(|e| format!("{e} | call: _mm512_undefined()"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2641,6 +3761,97 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtepi32_storeu_epi16() -> Result<(), 
     Ok(())
 }
 
+pub(super) fn test_x86_avx512f_mm512_mask_cvtepi32_storeu_epi16_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]);
+        _mm512_mask_cvtepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtepi32_storeu_epi16_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000, 3100, 3200]);
+        _mm512_mask_cvtepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtepi32_storeu_epi16_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]);
+        _mm512_mask_cvtepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtepi32_storeu_epi16_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]);
+        _mm512_mask_cvtepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtepi32_storeu_epi16_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        _mm512_mask_cvtepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtepi32_storeu_epi16_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]);
+        _mm512_mask_cvtepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtepi32_storeu_epi16_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]);
+        _mm512_mask_cvtepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
 pub(super) fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi16() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
@@ -2649,6 +3860,97 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi16() -> Result<(), 
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
         let a = create__m256i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9]);
+        _mm256_mask_cvtepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi16_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]);
+        _mm256_mask_cvtepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi16_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]);
+        _mm256_mask_cvtepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi16_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]);
+        _mm256_mask_cvtepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi16_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]);
+        _mm256_mask_cvtepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi16_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        _mm256_mask_cvtepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi16_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]);
+        _mm256_mask_cvtepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi16_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]);
         _mm256_mask_cvtepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -2667,6 +3969,97 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi16() -> Result<(), Str
     Ok(())
 }
 
+pub(super) fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi16_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7]);
+        _mm_mask_cvtepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi16_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800]);
+        _mm_mask_cvtepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi16_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]);
+        _mm_mask_cvtepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi16_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]);
+        _mm_mask_cvtepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi16_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]);
+        _mm_mask_cvtepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi16_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]);
+        _mm_mask_cvtepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi16_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]);
+        _mm_mask_cvtepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
 pub(super) fn test_x86_avx512f_mm512_mask_cvtsepi32_storeu_epi16() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
@@ -2675,6 +4068,97 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtsepi32_storeu_epi16() -> Result<(),
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask16_from(0b0101010101010101);
         let a = create__m512i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]);
+        _mm512_mask_cvtsepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtsepi32_storeu_epi16_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]);
+        _mm512_mask_cvtsepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtsepi32_storeu_epi16_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000, 3100, 3200]);
+        _mm512_mask_cvtsepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtsepi32_storeu_epi16_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]);
+        _mm512_mask_cvtsepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtsepi32_storeu_epi16_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]);
+        _mm512_mask_cvtsepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtsepi32_storeu_epi16_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        _mm512_mask_cvtsepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtsepi32_storeu_epi16_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]);
+        _mm512_mask_cvtsepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtsepi32_storeu_epi16_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]);
         _mm512_mask_cvtsepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -2693,6 +4177,97 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi16() -> Result<(),
     Ok(())
 }
 
+pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi16_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]);
+        _mm256_mask_cvtsepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi16_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]);
+        _mm256_mask_cvtsepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi16_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]);
+        _mm256_mask_cvtsepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi16_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]);
+        _mm256_mask_cvtsepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi16_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        _mm256_mask_cvtsepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi16_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]);
+        _mm256_mask_cvtsepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi16_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]);
+        _mm256_mask_cvtsepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
 pub(super) fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi16() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
@@ -2701,6 +4276,97 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi16() -> Result<(), St
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
         let a = create__m128i_from_i32_array([2, 3, 4, 5]);
+        _mm_mask_cvtsepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi16_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7]);
+        _mm_mask_cvtsepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi16_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800]);
+        _mm_mask_cvtsepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi16_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]);
+        _mm_mask_cvtsepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi16_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]);
+        _mm_mask_cvtsepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi16_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]);
+        _mm_mask_cvtsepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi16_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]);
+        _mm_mask_cvtsepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi16_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]);
         _mm_mask_cvtsepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -2719,6 +4385,97 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtusepi32_storeu_epi16() -> Result<()
     Ok(())
 }
 
+pub(super) fn test_x86_avx512f_mm512_mask_cvtusepi32_storeu_epi16_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]);
+        _mm512_mask_cvtusepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtusepi32_storeu_epi16_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000, 3100, 3200]);
+        _mm512_mask_cvtusepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtusepi32_storeu_epi16_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]);
+        _mm512_mask_cvtusepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtusepi32_storeu_epi16_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]);
+        _mm512_mask_cvtusepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtusepi32_storeu_epi16_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        _mm512_mask_cvtusepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtusepi32_storeu_epi16_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]);
+        _mm512_mask_cvtusepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtusepi32_storeu_epi16_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]);
+        _mm512_mask_cvtusepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
 pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi16() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
@@ -2727,6 +4484,97 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi16() -> Result<()
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
         let a = create__m256i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9]);
+        _mm256_mask_cvtusepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi16_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]);
+        _mm256_mask_cvtusepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi16_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]);
+        _mm256_mask_cvtusepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi16_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]);
+        _mm256_mask_cvtusepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi16_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]);
+        _mm256_mask_cvtusepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi16_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        _mm256_mask_cvtusepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi16_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]);
+        _mm256_mask_cvtusepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi16_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]);
         _mm256_mask_cvtusepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -2745,6 +4593,97 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi16() -> Result<(), S
     Ok(())
 }
 
+pub(super) fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi16_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7]);
+        _mm_mask_cvtusepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi16_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800]);
+        _mm_mask_cvtusepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi16_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]);
+        _mm_mask_cvtusepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi16_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]);
+        _mm_mask_cvtusepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi16_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]);
+        _mm_mask_cvtusepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi16_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]);
+        _mm_mask_cvtusepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi16_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]);
+        _mm_mask_cvtusepi32_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
 pub(super) fn test_x86_avx512f_mm512_mask_cvtepi32_storeu_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
@@ -2753,6 +4692,97 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtepi32_storeu_epi8() -> Result<(), S
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask16_from(0b0101010101010101);
         let a = create__m512i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]);
+        _mm512_mask_cvtepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtepi32_storeu_epi8_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]);
+        _mm512_mask_cvtepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtepi32_storeu_epi8_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64, -92, 8, 108, -48, 52, -104, -4, 96, -60, 40, -116, -16, 84, -72, 28, -128, -28, 72, -84, 16, 116, -40, 60, -96, 4, 104, -52, 48, -108, -8, 92, -64, 36, -120, -20, 80, -76, 24, 124, -32, 68, -88, 12, 112, -44, 56, -100, 0]);
+        _mm512_mask_cvtepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtepi32_storeu_epi8_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]);
+        _mm512_mask_cvtepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtepi32_storeu_epi8_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]);
+        _mm512_mask_cvtepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtepi32_storeu_epi8_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        _mm512_mask_cvtepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtepi32_storeu_epi8_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]);
+        _mm512_mask_cvtepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtepi32_storeu_epi8_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]);
         _mm512_mask_cvtepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -2771,6 +4801,97 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi8() -> Result<(), S
     Ok(())
 }
 
+pub(super) fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi8_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]);
+        _mm256_mask_cvtepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi8_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64, -92, 8, 108, -48, 52, -104, -4, 96, -60, 40, -116, -16, 84, -72, 28, -128]);
+        _mm256_mask_cvtepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi8_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]);
+        _mm256_mask_cvtepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi8_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]);
+        _mm256_mask_cvtepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi8_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        _mm256_mask_cvtepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi8_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]);
+        _mm256_mask_cvtepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi8_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]);
+        _mm256_mask_cvtepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
 pub(super) fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
@@ -2779,6 +4900,97 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi8() -> Result<(), Stri
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
         let a = create__m128i_from_i32_array([2, 3, 4, 5]);
+        _mm_mask_cvtepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi8_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]);
+        _mm_mask_cvtepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi8_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64]);
+        _mm_mask_cvtepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi8_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]);
+        _mm_mask_cvtepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi8_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]);
+        _mm_mask_cvtepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi8_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        _mm_mask_cvtepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi8_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]);
+        _mm_mask_cvtepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi8_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]);
         _mm_mask_cvtepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -2797,6 +5009,97 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtsepi32_storeu_epi8() -> Result<(), 
     Ok(())
 }
 
+pub(super) fn test_x86_avx512f_mm512_mask_cvtsepi32_storeu_epi8_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]);
+        _mm512_mask_cvtsepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtsepi32_storeu_epi8_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64, -92, 8, 108, -48, 52, -104, -4, 96, -60, 40, -116, -16, 84, -72, 28, -128, -28, 72, -84, 16, 116, -40, 60, -96, 4, 104, -52, 48, -108, -8, 92, -64, 36, -120, -20, 80, -76, 24, 124, -32, 68, -88, 12, 112, -44, 56, -100, 0]);
+        _mm512_mask_cvtsepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtsepi32_storeu_epi8_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]);
+        _mm512_mask_cvtsepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtsepi32_storeu_epi8_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]);
+        _mm512_mask_cvtsepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtsepi32_storeu_epi8_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        _mm512_mask_cvtsepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtsepi32_storeu_epi8_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]);
+        _mm512_mask_cvtsepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtsepi32_storeu_epi8_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]);
+        _mm512_mask_cvtsepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
 pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
@@ -2805,6 +5108,97 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi8() -> Result<(), 
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
         let a = create__m256i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9]);
+        _mm256_mask_cvtsepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi8_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]);
+        _mm256_mask_cvtsepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi8_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64, -92, 8, 108, -48, 52, -104, -4, 96, -60, 40, -116, -16, 84, -72, 28, -128]);
+        _mm256_mask_cvtsepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi8_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]);
+        _mm256_mask_cvtsepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi8_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]);
+        _mm256_mask_cvtsepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi8_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        _mm256_mask_cvtsepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi8_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]);
+        _mm256_mask_cvtsepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi8_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]);
         _mm256_mask_cvtsepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -2823,6 +5217,97 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi8() -> Result<(), Str
     Ok(())
 }
 
+pub(super) fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi8_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]);
+        _mm_mask_cvtsepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi8_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64]);
+        _mm_mask_cvtsepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi8_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]);
+        _mm_mask_cvtsepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi8_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]);
+        _mm_mask_cvtsepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi8_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        _mm_mask_cvtsepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi8_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]);
+        _mm_mask_cvtsepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi8_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]);
+        _mm_mask_cvtsepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
 pub(super) fn test_x86_avx512f_mm512_mask_cvtusepi32_storeu_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
@@ -2831,6 +5316,97 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtusepi32_storeu_epi8() -> Result<(),
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask16_from(0b0101010101010101);
         let a = create__m512i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]);
+        _mm512_mask_cvtusepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtusepi32_storeu_epi8_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]);
+        _mm512_mask_cvtusepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtusepi32_storeu_epi8_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64, -92, 8, 108, -48, 52, -104, -4, 96, -60, 40, -116, -16, 84, -72, 28, -128, -28, 72, -84, 16, 116, -40, 60, -96, 4, 104, -52, 48, -108, -8, 92, -64, 36, -120, -20, 80, -76, 24, 124, -32, 68, -88, 12, 112, -44, 56, -100, 0]);
+        _mm512_mask_cvtusepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtusepi32_storeu_epi8_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]);
+        _mm512_mask_cvtusepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtusepi32_storeu_epi8_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]);
+        _mm512_mask_cvtusepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtusepi32_storeu_epi8_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        _mm512_mask_cvtusepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtusepi32_storeu_epi8_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]);
+        _mm512_mask_cvtusepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtusepi32_storeu_epi8_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let a = create__m512i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]);
         _mm512_mask_cvtusepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -2849,6 +5425,97 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi8() -> Result<(),
     Ok(())
 }
 
+pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi8_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]);
+        _mm256_mask_cvtusepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi8_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64, -92, 8, 108, -48, 52, -104, -4, 96, -60, 40, -116, -16, 84, -72, 28, -128]);
+        _mm256_mask_cvtusepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi8_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]);
+        _mm256_mask_cvtusepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi8_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]);
+        _mm256_mask_cvtusepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi8_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        _mm256_mask_cvtusepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi8_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]);
+        _mm256_mask_cvtusepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi8_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]);
+        _mm256_mask_cvtusepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
 pub(super) fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
@@ -2857,6 +5524,97 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi8() -> Result<(), St
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
         let a = create__m128i_from_i32_array([2, 3, 4, 5]);
+        _mm_mask_cvtusepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi8_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]);
+        _mm_mask_cvtusepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi8_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64]);
+        _mm_mask_cvtusepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi8_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]);
+        _mm_mask_cvtusepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi8_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]);
+        _mm_mask_cvtusepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi8_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        _mm_mask_cvtusepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi8_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]);
+        _mm_mask_cvtusepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi8_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]);
         _mm_mask_cvtusepi32_storeu_epi8(ptr_mem_addr.0.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -2875,6 +5633,97 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtepi64_storeu_epi16() -> Result<(), 
     Ok(())
 }
 
+pub(super) fn test_x86_avx512f_mm512_mask_cvtepi64_storeu_epi16_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m512i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]);
+        _mm512_mask_cvtepi64_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtepi64_storeu_epi16_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m512i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000, 3100, 3200]);
+        _mm512_mask_cvtepi64_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtepi64_storeu_epi16_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m512i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]);
+        _mm512_mask_cvtepi64_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtepi64_storeu_epi16_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m512i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]);
+        _mm512_mask_cvtepi64_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtepi64_storeu_epi16_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m512i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        _mm512_mask_cvtepi64_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtepi64_storeu_epi16_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m512i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]);
+        _mm512_mask_cvtepi64_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_cvtepi64_storeu_epi16_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m512i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]);
+        _mm512_mask_cvtepi64_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
 pub(super) fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi16() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
@@ -2883,6 +5732,97 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi16() -> Result<(), 
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
         let a = create__m256i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9]);
+        _mm256_mask_cvtepi64_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi16_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]);
+        _mm256_mask_cvtepi64_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi16_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]);
+        _mm256_mask_cvtepi64_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi16_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]);
+        _mm256_mask_cvtepi64_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi16_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]);
+        _mm256_mask_cvtepi64_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi16_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        _mm256_mask_cvtepi64_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi16_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]);
+        _mm256_mask_cvtepi64_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi16_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]);
         _mm256_mask_cvtepi64_storeu_epi16(ptr_mem_addr.0.as_mut_ptr(), k, a);
     }
     Ok(())

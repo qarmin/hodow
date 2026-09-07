@@ -14,6 +14,8 @@ impl ExtensionTest for TBM {
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
             (&test_x86_tbm_bextri_u32, "test_x86_tbm_bextri_u32"),
+            (&test_x86_tbm_bextri_u32_imm_0, "test_x86_tbm_bextri_u32_imm_0"),
+            (&test_x86_tbm_bextri_u32_imm_1, "test_x86_tbm_bextri_u32_imm_1"),
             (&test_x86_tbm_blcfill_u32, "test_x86_tbm_blcfill_u32"),
             (&test_x86_tbm_blci_u32, "test_x86_tbm_blci_u32"),
             (&test_x86_tbm_blcic_u32, "test_x86_tbm_blcic_u32"),

@@ -104,18 +104,29 @@ Two properties that make this work without changes:
 cargo build --release -p hodow_cli --no-default-features
 
 # Copy target/release/hodow_cli to an ARM64 machine, then:
-box64 ./hodow_cli cpu --isolate      # or: FEXInterpreter ./hodow_cli cpu --isolate
+box64 ./hodow_cli cpu --isolate --report box64-results.json
+# or: FEXInterpreter ./hodow_cli cpu --isolate --report fex-results.json
+
+# For comparison, on the native x86_64 machine:
+./hodow_cli cpu --isolate --report native-results.json
 ```
 
 `--isolate` matters here rather than being optional: an emulator meeting an instruction it does
 not implement raises SIGILL, and isolation attributes the crash to the specific test instead of
 ending the run.
 
+`--report <path>` (only meaningful together with `--isolate`) writes one record per test -
+`name`, `feature`, `verdict` (`pass`/`fail`/`panic`/`timeout`/`crashed`), and, for a `fail`
+verdict, `got`/`expected` (split back out of the `"Got {a:?}, expected {b:?}"` message every
+`common::check_*` helper produces) plus the raw `message`. JSON by default, CSV if the path ends
+in `.csv`. That turns "native vs box64 vs FEX" into a real diff over `name`+`verdict` (and `got`
+for a `fail`) instead of diffing human-readable log text.
+
 Worth doing first:
 
 - [ ] Run it under both and triage: wrong results (translation bugs) vs SIGILL (unimplemented) vs
       CPUID claiming an extension the emulator does not actually implement.
-- [ ] Add a machine-readable result output. Today the CLI only prints a human summary, so
+- [x] Add a machine-readable result output. Today the CLI only prints a human summary, so
       comparing a native run against an emulated one means diffing log text. A JSON or CSV of
       `(test name, verdict, got, expected)` would make "native vs box64 vs FEX" a proper
       three-way diff, which is the real workflow here.

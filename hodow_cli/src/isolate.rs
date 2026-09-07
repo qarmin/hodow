@@ -16,12 +16,14 @@
 //! worker starting just after it, so a single bad instruction never aborts the whole run.
 
 use std::io::{BufRead, BufReader, Write};
+use std::path::Path;
 use std::process::{Command, Stdio};
 use std::sync::mpsc;
 use std::thread;
 use std::time::Duration;
 
-use log::info;
+use log::{error, info};
+use serde::Serialize;
 
 use crate::cli::CpuArgs;
 
@@ -47,6 +49,17 @@ fn filtered_tests() -> Vec<(&'static str, &'static hodow_core::TestFunction)> {
         .into_iter()
         .filter(|(name, feature, _)| !hodow_core::should_skip_test_or_feature(name, feature))
         .map(|(name, _feature, f)| (name, f))
+        .collect()
+}
+
+/// The feature each entry of `filtered_tests()`/`run_isolated_core`'s `names` belongs to, in
+/// the same order - kept as a separate pass (rather than widening `filtered_tests()`'s return
+/// type) so `run_isolated_core`'s signature, shared with the server executor, doesn't change.
+fn filtered_features() -> Vec<&'static str> {
+    hodow_core::all_tests()
+        .into_iter()
+        .filter(|(name, feature, _)| !hodow_core::should_skip_test_or_feature(name, feature))
+        .map(|(_name, feature, _)| feature)
         .collect()
 }
 
@@ -89,6 +102,12 @@ pub fn run_isolated(args: &CpuArgs) {
     let Some((names, outcome)) = run_isolated_core(args, |_, _, _| {}) else {
         return;
     };
+    if let Some(path) = &args.report {
+        match write_report(path, &names, &outcome) {
+            Ok(()) => info!("Wrote machine-readable report to {}", path.display()),
+            Err(e) => error!("Failed to write report to {}: {e}", path.display()),
+        }
+    }
     print_report(&names, &outcome);
 }
 
@@ -283,5 +302,124 @@ fn print_report(names: &[&'static str], outcome: &[Outcome]) {
 
     if fail + panic + timeout + crashed > 0 {
         std::process::exit(1);
+    }
+}
+
+#[derive(Serialize)]
+struct ReportRecord {
+    name: String,
+    feature: String,
+    verdict: &'static str,
+    got: Option<String>,
+    expected: Option<String>,
+    message: Option<String>,
+}
+
+/// Every `common::check_*` helper formats a mismatch as `"Got {a:?}, expected {b:?}..."`, so
+/// this splits that prefix back out into separate fields instead of leaving callers to diff
+/// the whole message (which also carries call-site/context text that differs run to run).
+fn split_got_expected(msg: &str) -> (Option<String>, Option<String>) {
+    let Some(rest) = msg.strip_prefix("Got ") else {
+        return (None, None);
+    };
+    let Some(sep) = rest.find(", expected ") else {
+        return (None, None);
+    };
+    let got = rest[..sep].to_string();
+    let after = &rest[sep + ", expected ".len()..];
+    let end = after.find(" (").or_else(|| after.find(" | call:")).unwrap_or(after.len());
+    (Some(got), Some(after[..end].to_string()))
+}
+
+fn build_records(names: &[&'static str], outcome: &[Outcome]) -> Vec<ReportRecord> {
+    let features = filtered_features();
+    names
+        .iter()
+        .zip(features)
+        .zip(outcome)
+        .map(|((name, feature), o)| {
+            let (verdict, message) = match o {
+                Outcome::Pass => ("pass", None),
+                Outcome::Fail(msg) => ("fail", Some(msg.clone())),
+                Outcome::Panic => ("panic", None),
+                Outcome::Timeout => ("timeout", None),
+                Outcome::Crashed => ("crashed", None),
+                Outcome::Pending => ("pending", None),
+            };
+            let (got, expected) = message.as_deref().map(split_got_expected).unwrap_or((None, None));
+            ReportRecord {
+                name: name.to_string(),
+                feature: feature.to_string(),
+                verdict,
+                got,
+                expected,
+                message,
+            }
+        })
+        .collect()
+}
+
+fn csv_field(s: &str) -> String {
+    if s.contains(',') || s.contains('"') || s.contains('\n') {
+        format!("\"{}\"", s.replace('"', "\"\""))
+    } else {
+        s.to_string()
+    }
+}
+
+fn write_report(path: &Path, names: &[&'static str], outcome: &[Outcome]) -> std::io::Result<()> {
+    let records = build_records(names, outcome);
+    let is_csv = path.extension().and_then(|e| e.to_str()).is_some_and(|e| e.eq_ignore_ascii_case("csv"));
+
+    let out = if is_csv {
+        let mut s = String::from("name,feature,verdict,got,expected,message\n");
+        for r in &records {
+            let fields = [
+                r.name.as_str(),
+                r.feature.as_str(),
+                r.verdict,
+                r.got.as_deref().unwrap_or(""),
+                r.expected.as_deref().unwrap_or(""),
+                r.message.as_deref().unwrap_or(""),
+            ];
+            s.push_str(&fields.map(csv_field).join(","));
+            s.push('\n');
+        }
+        s
+    } else {
+        serde_json::to_string_pretty(&records).map_err(std::io::Error::other)?
+    };
+
+    std::fs::write(path, out)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::split_got_expected;
+
+    #[test]
+    fn parses_plain_got_expected() {
+        assert_eq!(split_got_expected("Got 3, expected 1"), (Some("3".into()), Some("1".into())));
+    }
+
+    #[test]
+    fn parses_got_expected_with_call_suffix() {
+        assert_eq!(
+            split_got_expected("Got 3, expected 1 | call: _mm_cvtsd_si64(create__m128d_from([1.0, 2.0]))"),
+            (Some("3".into()), Some("1".into()))
+        );
+    }
+
+    #[test]
+    fn parses_got_expected_with_paren_suffix() {
+        assert_eq!(
+            split_got_expected("Got [1.0, 2.0], expected [1.0, 3.0] (Difference is too big)"),
+            (Some("[1.0, 2.0]".into()), Some("[1.0, 3.0]".into()))
+        );
+    }
+
+    #[test]
+    fn non_matching_message_returns_none() {
+        assert_eq!(split_got_expected("some other error"), (None, None));
     }
 }

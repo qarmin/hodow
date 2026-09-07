@@ -88,6 +88,7 @@ fn run_cpu_job(state: &AppState, id: JobId, spec: &super::model::CpuJobSpec) -> 
         stress: false,
         stress_secs: None,
         worker_start: None,
+        report: None,
         submit_to: None,
     };
 

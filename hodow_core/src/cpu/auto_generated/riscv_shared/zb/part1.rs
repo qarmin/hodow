@@ -1,8 +1,6 @@
 use std::arch::riscv64::*;
 
 #[allow(unused_imports)]
-use crate::cpu::common::arm::*;
-#[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
 pub(super) fn test_riscv_shared_zb_orc_b() -> Result<(), String> {
@@ -17,7 +15,7 @@ pub(super) fn test_riscv_shared_zb_orc_b() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = orc_b(rand::random::<usize>());
+                let _ = orc_b(rand::random::<u64>() as usize);
             }
         }
     }
@@ -36,7 +34,7 @@ pub(super) fn test_riscv_shared_zb_clmul() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = clmul(rand::random::<usize>(), rand::random::<usize>());
+                let _ = clmul(rand::random::<u64>() as usize, rand::random::<u64>() as usize);
             }
         }
     }
@@ -55,7 +53,7 @@ pub(super) fn test_riscv_shared_zb_clmulh() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = clmulh(rand::random::<usize>(), rand::random::<usize>());
+                let _ = clmulh(rand::random::<u64>() as usize, rand::random::<u64>() as usize);
             }
         }
     }
@@ -74,7 +72,7 @@ pub(super) fn test_riscv_shared_zb_clmulr() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = clmulr(rand::random::<usize>(), rand::random::<usize>());
+                let _ = clmulr(rand::random::<u64>() as usize, rand::random::<u64>() as usize);
             }
         }
     }

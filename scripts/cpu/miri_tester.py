@@ -9,6 +9,15 @@ Exits 0 if no errors found, 1 otherwise.
 
 Output format in miri_errors.txt (one line per error):
     test_mm_load_ps -> Undefined Behavior: memory access failed: ...
+
+Usage:
+    python3 scripts/cpu/miri_tester.py [--batch-size N] [--threads N] [-d|--debug]
+
+THREADS_NUMBER defaults to 24 (this project's dev machine's core count), but each
+parallel `cargo-miri run` is its own process with its own interpreter state - RAM-bound,
+not just CPU-bound. Confirmed OOM-killing every one of them at once on a 29 GB host;
+pass --threads with a smaller number on a smaller machine rather than editing the
+constant (e.g. --threads 4).
 """
 
 import re
@@ -292,7 +301,7 @@ def test_batch(
 
 
 def main() -> int:
-    global DEBUG, BATCH_SIZE
+    global DEBUG, BATCH_SIZE, THREADS_NUMBER
 
     # Use current working directory (repo root) so script is invoked as
     # `python3 scripts/cpu/miri_tester.py` from repository root.
@@ -319,6 +328,16 @@ def main() -> int:
                 args.pop(idx)
             except ValueError:
                 print("Warning: Invalid --batch-size value, using default (50)")
+
+    if "--threads" in args:
+        idx = args.index("--threads")
+        if idx + 1 < len(args):
+            try:
+                THREADS_NUMBER = int(args[idx + 1])
+                args.pop(idx)
+                args.pop(idx)
+            except ValueError:
+                print("Warning: Invalid --threads value, using default (24)")
 
     print(f"Using batch size: {BATCH_SIZE}")
     if THREADS_NUMBER > 1:

@@ -72,3 +72,23 @@ _xsetbv
 # Privileged (supervisor-only) - faults in user mode.
 _xsaves
 _xsaves64
+
+# aarch64 MTE: generic over a bare type parameter T (not just the OFFSET const generic),
+# e.g. `__arm_mte_increment_tag<const OFFSET: i64, T>(src: *const T)` - the generator has
+# no substitution for a free (non-sealed-trait-bounded) type parameter, so it emits a call
+# missing the required ::<OFFSET, T> second argument. Also genuinely hardware-dependent:
+# MTE is an optional ARMv8.5 extension real ARM64 chips may not implement.
+__arm_mte_create_random_tag
+__arm_mte_increment_tag
+__arm_mte_ptrdiff
+
+# arm/neon.rs's entire current signature set (extract_signatures.py, likely confused by a
+# doc comment or macro template mentioning the poly64 name next to the real function) -
+# stdarch only ever defines the _s64/_u64 (signed/unsigned) forms of these four shift-
+# insert intrinsics, never a _p64 (poly64) one. Confirmed against
+# arm_shared/neon/generated.rs directly: grep it for "fn vsli_n_p64" (or vsliq_n_p64/
+# vsri_n_p64/vsriq_n_p64) and compare to "fn vsli_n_s64" et al, both actually there.
+vsli_n_p64
+vsliq_n_p64
+vsri_n_p64
+vsriq_n_p64

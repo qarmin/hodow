@@ -10,8 +10,8 @@ use crate::cpu::common::{check_array_equality, check_float_array_equality, check
 
 pub(super) fn test_x86_avx512f_mm512_setr4_epi64() -> Result<(), String> {
     unsafe {
-        let result = unpack__m512i_to_i32_array(_mm512_setr4_epi64(1i64, 2i64, 3i64, 4i64));
-        check_array_equality(&result, &[1, 0, 2, 0, 3, 0, 4, 0, 1, 0, 2, 0, 3, 0, 4, 0]).map_err(|e| format!("{e} | call: _mm512_setr4_epi64(1i64, 2i64, 3i64, 4i64)"))?;
+        let result = unpack__m512i_to_i64_array(_mm512_setr4_epi64(1i64, 2i64, 3i64, 4i64));
+        check_array_equality(&result, &[1, 2, 3, 4, 1, 2, 3, 4]).map_err(|e| format!("{e} | call: _mm512_setr4_epi64(1i64, 2i64, 3i64, 4i64)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {

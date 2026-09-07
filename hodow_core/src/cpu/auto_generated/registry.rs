@@ -10,11 +10,11 @@ pub fn count_available_features() -> usize {
 
     #[cfg(target_arch = "aarch64")]
     {
-        if false /* no runtime detection available */ {
+        if std::arch::is_aarch64_feature_detected!("mte") {
             count += 1;
         }
 
-        if false /* no runtime detection available */ {
+        if true /* baseline ISA, not an optional feature - see BASELINE_ALWAYS_TRUE_FEATURES */ {
             count += 1;
         }
 
@@ -22,8 +22,7 @@ pub fn count_available_features() -> usize {
 
     #[cfg(target_arch = "arm")]
     {
-        #[cfg(target_feature = "neon")]
-        if false /* feature detection not yet implemented */ {
+        if std::arch::is_arm_feature_detected!("neon") {
             count += 1;
         }
 
@@ -71,7 +70,7 @@ pub fn count_available_features() -> usize {
 
     #[cfg(target_arch = "riscv32")]
     {
-        if false /* no runtime detection available */ {
+        if std::arch::is_riscv_feature_detected!("zk") {
             count += 1;
         }
 
@@ -79,7 +78,7 @@ pub fn count_available_features() -> usize {
 
     #[cfg(target_arch = "riscv64")]
     {
-        if false /* no runtime detection available */ {
+        if std::arch::is_riscv_feature_detected!("zk") {
             count += 1;
         }
 
@@ -87,7 +86,7 @@ pub fn count_available_features() -> usize {
 
     #[cfg(any(target_arch = "riscv32", target_arch = "riscv64"))]
     {
-        if false /* no runtime detection available */ {
+        if std::arch::is_riscv_feature_detected!("p") {
             count += 1;
         }
 
@@ -95,7 +94,7 @@ pub fn count_available_features() -> usize {
             count += 1;
         }
 
-        if false /* no runtime detection available */ {
+        if std::arch::is_riscv_feature_detected!("zk") {
             count += 1;
         }
 
@@ -459,18 +458,17 @@ pub fn available_modes() -> Vec<String> {
 
     #[cfg(target_arch = "aarch64")]
     {
-        if false /* no runtime detection available */ {
+        if std::arch::is_aarch64_feature_detected!("mte") {
             modes.insert(format!("{}:{}", "aarch64", "mte"));
         }
-        if false /* no runtime detection available */ {
+        if true /* baseline ISA, not an optional feature - see BASELINE_ALWAYS_TRUE_FEATURES */ {
             modes.insert(format!("{}:{}", "aarch64", "prefetch"));
         }
     }
 
     #[cfg(target_arch = "arm")]
     {
-        #[cfg(target_feature = "neon")]
-        if false /* feature detection not yet implemented */ {
+        if std::arch::is_arm_feature_detected!("neon") {
             modes.insert(format!("{}:{}", "arm", "neon"));
         }
     }
@@ -512,27 +510,27 @@ pub fn available_modes() -> Vec<String> {
 
     #[cfg(target_arch = "riscv32")]
     {
-        if false /* no runtime detection available */ {
+        if std::arch::is_riscv_feature_detected!("zk") {
             modes.insert(format!("{}:{}", "riscv32", "zk"));
         }
     }
 
     #[cfg(target_arch = "riscv64")]
     {
-        if false /* no runtime detection available */ {
+        if std::arch::is_riscv_feature_detected!("zk") {
             modes.insert(format!("{}:{}", "riscv64", "zk"));
         }
     }
 
     #[cfg(any(target_arch = "riscv32", target_arch = "riscv64"))]
     {
-        if false /* no runtime detection available */ {
+        if std::arch::is_riscv_feature_detected!("p") {
             modes.insert(format!("{}:{}", "riscv", "p"));
         }
         if false /* no runtime detection available */ {
             modes.insert(format!("{}:{}", "riscv", "zb"));
         }
-        if false /* no runtime detection available */ {
+        if std::arch::is_riscv_feature_detected!("zk") {
             modes.insert(format!("{}:{}", "riscv", "zk"));
         }
     }
@@ -828,7 +826,7 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
 
     #[cfg(target_arch = "aarch64")]
     {
-            if false /* no runtime detection available */ && !should_skip_feature("mte") {
+            if std::arch::is_aarch64_feature_detected!("mte") && !should_skip_feature("mte") {
                     if should_stop() {
                         return Ok(TestStatistics { features, was_cancelled: true });
                     }
@@ -847,7 +845,7 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                     completed_features += 1;
             }
 
-            if false /* no runtime detection available */ && !should_skip_feature("prefetch") {
+            if true /* baseline ISA, not an optional feature - see BASELINE_ALWAYS_TRUE_FEATURES */ && !should_skip_feature("prefetch") {
                     if should_stop() {
                         return Ok(TestStatistics { features, was_cancelled: true });
                     }
@@ -870,9 +868,7 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
 
     #[cfg(target_arch = "arm")]
     {
-        #[cfg(target_feature = "neon")]
-        {
-            if false /* feature detection not yet implemented */ && !should_skip_feature("neon") {
+            if std::arch::is_arm_feature_detected!("neon") && !should_skip_feature("neon") {
                     if should_stop() {
                         return Ok(TestStatistics { features, was_cancelled: true });
                     }
@@ -890,7 +886,6 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                     });
                     completed_features += 1;
             }
-        }
 
     }
 
@@ -1011,7 +1006,7 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
 
     #[cfg(target_arch = "riscv32")]
     {
-            if false /* no runtime detection available */ && !should_skip_feature("zk") {
+            if std::arch::is_riscv_feature_detected!("zk") && !should_skip_feature("zk") {
                     if should_stop() {
                         return Ok(TestStatistics { features, was_cancelled: true });
                     }
@@ -1034,7 +1029,7 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
 
     #[cfg(target_arch = "riscv64")]
     {
-            if false /* no runtime detection available */ && !should_skip_feature("zk") {
+            if std::arch::is_riscv_feature_detected!("zk") && !should_skip_feature("zk") {
                     if should_stop() {
                         return Ok(TestStatistics { features, was_cancelled: true });
                     }
@@ -1057,7 +1052,7 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
 
     #[cfg(any(target_arch = "riscv32", target_arch = "riscv64"))]
     {
-            if false /* no runtime detection available */ && !should_skip_feature("p") {
+            if std::arch::is_riscv_feature_detected!("p") && !should_skip_feature("p") {
                     if should_stop() {
                         return Ok(TestStatistics { features, was_cancelled: true });
                     }
@@ -1095,7 +1090,7 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                     completed_features += 1;
             }
 
-            if false /* no runtime detection available */ && !should_skip_feature("zk") {
+            if std::arch::is_riscv_feature_detected!("zk") && !should_skip_feature("zk") {
                     if should_stop() {
                         return Ok(TestStatistics { features, was_cancelled: true });
                     }
@@ -2636,7 +2631,6 @@ pub fn list_all_functions() -> Vec<String> {
 
     #[cfg(target_arch = "arm")]
     {
-        #[cfg(target_feature = "neon")]
         {
             for (_, name) in crate::cpu::auto_generated::arm::neon::NEON::get_tests() {
                 functions.push(name.to_string());
@@ -3235,13 +3229,13 @@ pub fn all_tests() -> Vec<(&'static str, &'static str, &'static TestFunction)> {
 
     #[cfg(target_arch = "aarch64")]
     {
-        if false /* no runtime detection available */ {
+        if std::arch::is_aarch64_feature_detected!("mte") {
             for &(f, n) in crate::cpu::auto_generated::aarch64::mte::MTE::get_tests() {
                 tests.push((n, "mte", f));
             }
         }
 
-        if false /* no runtime detection available */ {
+        if true /* baseline ISA, not an optional feature - see BASELINE_ALWAYS_TRUE_FEATURES */ {
             for &(f, n) in crate::cpu::auto_generated::aarch64::prefetch::PREFETCH::get_tests() {
                 tests.push((n, "prefetch", f));
             }
@@ -3251,8 +3245,7 @@ pub fn all_tests() -> Vec<(&'static str, &'static str, &'static TestFunction)> {
 
     #[cfg(target_arch = "arm")]
     {
-        #[cfg(target_feature = "neon")]
-        if false /* feature detection not yet implemented */ {
+        if std::arch::is_arm_feature_detected!("neon") {
             for &(f, n) in crate::cpu::auto_generated::arm::neon::NEON::get_tests() {
                 tests.push((n, "neon", f));
             }
@@ -3312,7 +3305,7 @@ pub fn all_tests() -> Vec<(&'static str, &'static str, &'static TestFunction)> {
 
     #[cfg(target_arch = "riscv32")]
     {
-        if false /* no runtime detection available */ {
+        if std::arch::is_riscv_feature_detected!("zk") {
             for &(f, n) in crate::cpu::auto_generated::riscv32::zk::ZK::get_tests() {
                 tests.push((n, "zk", f));
             }
@@ -3322,7 +3315,7 @@ pub fn all_tests() -> Vec<(&'static str, &'static str, &'static TestFunction)> {
 
     #[cfg(target_arch = "riscv64")]
     {
-        if false /* no runtime detection available */ {
+        if std::arch::is_riscv_feature_detected!("zk") {
             for &(f, n) in crate::cpu::auto_generated::riscv64::zk::ZK::get_tests() {
                 tests.push((n, "zk", f));
             }
@@ -3332,7 +3325,7 @@ pub fn all_tests() -> Vec<(&'static str, &'static str, &'static TestFunction)> {
 
     #[cfg(any(target_arch = "riscv32", target_arch = "riscv64"))]
     {
-        if false /* no runtime detection available */ {
+        if std::arch::is_riscv_feature_detected!("p") {
             for &(f, n) in crate::cpu::auto_generated::riscv_shared::p::P::get_tests() {
                 tests.push((n, "p", f));
             }
@@ -3344,7 +3337,7 @@ pub fn all_tests() -> Vec<(&'static str, &'static str, &'static TestFunction)> {
             }
         }
 
-        if false /* no runtime detection available */ {
+        if std::arch::is_riscv_feature_detected!("zk") {
             for &(f, n) in crate::cpu::auto_generated::riscv_shared::zk::ZK::get_tests() {
                 tests.push((n, "zk", f));
             }

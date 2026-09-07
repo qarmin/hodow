@@ -1,8 +1,6 @@
 use std::arch::riscv64::*;
 
 #[allow(unused_imports)]
-use crate::cpu::common::arm::*;
-#[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
 pub(super) fn test_riscv_shared_zk_xperm8() -> Result<(), String> {
@@ -17,7 +15,7 @@ pub(super) fn test_riscv_shared_zk_xperm8() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = xperm8(rand::random::<usize>(), rand::random::<usize>());
+                let _ = xperm8(rand::random::<u64>() as usize, rand::random::<u64>() as usize);
             }
         }
     }
@@ -36,7 +34,7 @@ pub(super) fn test_riscv_shared_zk_xperm4() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = xperm4(rand::random::<usize>(), rand::random::<usize>());
+                let _ = xperm4(rand::random::<u64>() as usize, rand::random::<u64>() as usize);
             }
         }
     }

@@ -16,9 +16,14 @@ FUNCTIONS_FILE = Path("scripts/cpu/excluded_functions.txt")
 # run fine on real hardware. They are generated and executed natively, but skipped when
 # the test binary is run under Miri via a `cfg!(miri)` guard.
 MIRI_ONLY_FILE = Path("scripts/cpu/miri_only_functions.txt")
+# Functions kept out of pilot-scope value-axis scenario expansion because a vector-typed
+# parameter is really a control field, not a value - see the file's own header comment.
+UB_ON_VALUE_SCENARIOS_FILE = Path("scripts/cpu/ub_on_value_scenarios.txt")
 
 # Populated from MIRI_ONLY_FILE in main().
 MIRI_SKIP_FUNCTIONS: set[str] = set()
+# Populated from UB_ON_VALUE_SCENARIOS_FILE in main().
+UB_ON_VALUE_SCENARIOS: set[str] = set()
 
 
 # Ignored functions - that will not be tested
@@ -78,24 +83,32 @@ UNSUPPORTED_FEATURES = {
     "cpuid",    # Not a real target feature
     "rdtsc",    # Not a real target feature
     "test",     # Not a real target feature
-    "hints",    # ARM hints, no detection available
-    "sat",      # ARM saturation, no detection available
-    "dsp",      # ARM DSP, no detection available
-    "simd32",   # ARM SIMD32, no detection available
-    "mte",      # ARM MTE, no detection available
-    "prefetch", # Architecture-specific, no generic detection
+    "hints",    # ARM hints - the *intrinsics* need unstable stdarch_arm_hints (SKIP_EXTENSIONS),
+                # not just detection; revisit together if that's ever added
+    "sat",      # ARM saturation - same, needs unstable stdarch_arm_sat (SKIP_EXTENSIONS)
+    "dsp",      # ARM DSP - same, needs unstable stdarch_arm_neon_intrinsics (SKIP_EXTENSIONS)
+    "simd32",   # ARM SIMD32 - same, needs unstable stdarch_arm_neon_intrinsics (SKIP_EXTENSIONS)
     "packed",   # NVPTX specific
     "msa",      # MIPS MSA
     "altivec",  # PowerPC
     "vsx",      # PowerPC
     "vector",   # s390x
-    "zk",       # RISC-V
-    "zb",       # RISC-V
-    "p",        # RISC-V
+    "zb",       # RISC-V - "zb" isn't a real is_riscv_feature_detected! string (it's split into
+                # zba/zbb/zbc/zbs sub-extensions there); left unmapped rather than guessing which
     "simd128",  # WASM
     "relaxed_simd", # WASM
     "atomic",   # WASM
     "memory",   # WASM
+}
+
+# Features with no is_<arch>_feature_detected! string at all (confirmed by compile-probing
+# every candidate name), because they aren't an optional CPU capability to begin with - the
+# instructions are mandatory baseline ISA on every target Rust actually supports for that
+# architecture. Detected as always-true instead of routing through UNSUPPORTED_FEATURES'
+# always-false, so their (already-generated) tests actually run rather than being silently
+# skipped forever.
+BASELINE_ALWAYS_TRUE_FEATURES = {
+    "prefetch",  # aarch64: PRFM is base AArch64 ISA, not a detectable optional feature
 }
 
 # Extensions that should be completely skipped (not generated at all)
@@ -135,7 +148,10 @@ RANDOM_CREATORS: dict[str, str] = {
     "u64":   "rand::random::<u64>()",
     "f32":   "rand::random::<f32>()",
     "f64":   "rand::random::<f64>()",
-    "usize": "rand::random::<usize>()",
+    # rand 0.10's blanket `Distribution` impl deliberately excludes usize/isize (platform-
+    # width-dependent, so not portable) - go through a fixed-width type instead. Fuzzing
+    # only wants "some pseudorandom value", so the truncation on a 32-bit target is harmless.
+    "usize": "rand::random::<u64>() as usize",
     "bool":  "rand::random::<bool>()",
     "u128":  "rand::random::<u128>()",
     "Ordering": "core::sync::atomic::Ordering::Relaxed",
@@ -270,35 +286,49 @@ INT_RETURNS = {
 
 
 # ---------------------------------------------------------------------------
-# Multi-scenario expansion (x86/x86_64 arithmetic/shift/compare/blend).
+# Multi-scenario expansion (every x86/x86_64 function, except gather/scatter).
 #
 # Every function used to get exactly one deterministic scenario (ascending
 # 1,2,3,4... via seq_init) and const-generic/immediate params were pinned to a
-# single fixed value (const_val, almost always 0). That means shift/compare/
-# blend intrinsics barely exercised real behavior beyond "doesn't crash", and
-# nothing checked overflow/NaN/boundary behavior. This section adds, for
-# every x86/x86_64 function whose name matches PILOT_NAME_REGEX (started as a
-# narrow SSE2/AVX2-only pilot, now widened to the whole ISA - see git history
-# for the pilot-scoped version), several additional named scenarios per
-# function: normal-but-different-shaped inputs, boundary values (uniform-per-
-# lane and mixed-per-lane), an asymmetric MIN/MAX pair between the first two
-# operands, and immediate-value variants — as an axis independent from the
-# value axis.
+# single fixed value (const_val, almost always 0). That means most intrinsics
+# barely exercised real behavior beyond "doesn't crash", and nothing checked
+# overflow/NaN/boundary behavior. This section adds, for every in-scope
+# function, several additional named scenarios: normal-but-different-shaped
+# inputs, boundary values (uniform-per-lane and mixed-per-lane), an asymmetric
+# MIN/MAX pair between the first two operands, and immediate-value variants -
+# as an axis independent from the value axis. A function with no vector-typed
+# parameter (_build_value_scenarios' `widthed` list empty - RDRAND, XSAVE,
+# XGETBV, ...) or no single const generic (_build_immediate_scenarios) simply
+# gets no extra scenarios either way, pilot-scope or not.
 #
-# Widening further to non-arithmetic categories (shuffle/permute/insert,
-# gather/scatter, ...) is a PILOT_NAME_REGEX change, or drop the name filter
-# entirely for `in_pilot_scope` to always return True on x86/x86_64.
+# Started as a narrow SSE2/AVX2-only pilot, then a PILOT_NAME_REGEX matching
+# arithmetic/shift/compare/blend/min/max by name, now every x86/x86_64
+# function - see git history for both earlier versions - except gather/
+# scatter, which stay excluded on purpose: their vector-typed parameter isn't
+# a value to vary, it's an index multiplied by a scale and added to a base
+# pointer (e.g. `_mm_i32gather_epi32::<SCALE>(slice: *const i32, offsets:
+# __m128i)`), so a boundary_max/allones override would turn it into a genuine
+# out-of-bounds memory read - the one category _build_value_scenarios can't
+# tell apart from a normal SIMD value parameter by type alone. Gather/scatter
+# keep their current single, fixed, safely-in-bounds-offset scenario.
+# Shuffle/permute/insert are fine to include - their vector "index" arguments
+# are in-register lane selectors, masked by hardware, never a memory address,
+# regardless of how extreme the value is.
 # ---------------------------------------------------------------------------
-
-PILOT_NAME_REGEX = re.compile(
-    r"_adds?_|_subs?_|_mul|_madd|_avg_|_sad_|_abs_|_sign_|"
-    r"_sll|_srl|_sra|_shift|_bslli|_bsrli|"
-    r"_cmp|_comi|_ucomi|_blend|_min_|_max_"
-)
 
 
 def in_pilot_scope(arch: str, ext: str, func_name: str) -> bool:
-    return arch in ("x86", "x86_64") and bool(PILOT_NAME_REGEX.search(func_name))
+    # gather/scatter: excluded by substring, not by UB_ON_VALUE_SCENARIOS_FILE entry -
+    # there are ~120 of them and the reason is identical for all (see the file's header
+    # comment). Everything else that would assemble an invalid/undefined argument
+    # combination from an "extreme value" override goes in that file instead, one
+    # function per line with its own reason - expected to grow well past this handful.
+    return (
+        arch in ("x86", "x86_64")
+        and "gather" not in func_name.lower()
+        and "scatter" not in func_name.lower()
+        and func_name not in UB_ON_VALUE_SCENARIOS
+    )
 
 
 # Function-name suffix → actual per-lane element type. __m128i/__m256i/__m512i
@@ -973,6 +1003,15 @@ def _build_value_scenarios(sig: dict) -> list[tuple[str, dict[str, str]]]:
         return []
 
     elem = sig_elem_type(sig)
+    # sig_elem_type detects elem from the function *name* (e.g. a "_pd" suffix means
+    # f64), which can disagree with a widthed param's actual register type when that
+    # param isn't really a value to vary - a mask argument like `_mm_maskload_pd`'s
+    # `mask: __m128i` next to an f64-suffixed name, for instance. Drop any param whose
+    # (ptype, elem) pair WIDTH_AWARE_VEC_INFO has no entry for, rather than KeyError.
+    widthed = [w for w in widthed if (w[2], elem) in WIDTH_AWARE_VEC_INFO]
+    if not widthed:
+        return []
+
     scenarios: list[tuple[str, dict[str, str]]] = []
 
     def overrides_for(lane_fn) -> dict[str, str]:
@@ -1085,25 +1124,27 @@ def get_arch_import(arch: str) -> str:
     return f"use {module}::*;"
 
 
-def get_common_helper(arch: str) -> str:
-    """Return the path to common helper module for architecture."""
+def get_common_helper(arch: str) -> str | None:
+    """Return the path to the common helper module for architecture, or None if it doesn't
+    have one yet (hodow_core/src/cpu/common.rs only declares `x86`, cfg-gated to x86/x86_64,
+    and `arm`, cfg-gated to arm/aarch64 - riscv*/mips/powerpc/... have no module to import at
+    all, not even a generic fallback one, since `common::arm` is only *present* on an
+    arm/aarch64 build in the first place)."""
     if arch in ("x86", "x86_64"):
         return "crate::cpu::common::x86"
     elif arch in ("arm", "aarch64", "arm_shared"):
         return "crate::cpu::common::arm"
-    # For other architectures, use a fallback (they'll need helpers created)
-    return "crate::cpu::common::arm"  # Generic fallback
+    return None
 
 
 def gen_part(funcs: list[dict], arch: str, ext: str, expected_values: dict[str, str] | None = None) -> str:
     arch_import = get_arch_import(arch)
     common_helper = get_common_helper(arch)
 
-    header = [
-        arch_import,
-        "",
-        "#[allow(unused_imports)]",
-        f"use {common_helper}::*;",
+    header = [arch_import, ""]
+    if common_helper is not None:
+        header += ["#[allow(unused_imports)]", f"use {common_helper}::*;"]
+    header += [
         "#[allow(unused_imports)]",
         "use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};",
         "",
@@ -1178,16 +1219,29 @@ def emit_arch_cfg(lines: list[str], arch_cfg: str | None, indent: str = "") -> N
         lines.append(f"{indent}#[cfg({arch_cfg})]")
 
 
-def gen_mod_rs_for_arch(exts: list[tuple[str, str]]) -> str:
-    """Generate mod.rs for a single architecture directory."""
+def gen_mod_rs_for_arch(arch: str, exts: list[tuple[str, str]]) -> str:
+    """Generate mod.rs for a single architecture directory.
+
+    The `#[cfg(target_feature = ...)]` gate is x86/x86_64-only on purpose: there, it means
+    "only include this extension's code at all if the crate itself was built with that
+    target feature" (e.g. `-C target-feature=+avx512f`, same as `target-cpu=native` -
+    every x86 test also has its own runtime `is_x86_feature_detected!` check, so this is a
+    second, coarser, opt-in gate on top, not a correctness requirement). For every other
+    architecture this project generates for, the feature name either isn't a real
+    `-C target-feature` string at all (aarch64's "prefetch" - PRFM is baseline ISA, not an
+    optional target feature; see BASELINE_ALWAYS_TRUE_FEATURES) or would just mean "nobody
+    ever passes `-C target-feature=+X` for this architecture in practice", either way
+    permanently and silently compiling the extension's module out - runtime-only detection
+    (get_feature_detect_fn) is both correct and sufficient there, so this gate is skipped."""
+    x86_only = arch in ("x86", "x86_64")
     lines = []
     for ext, feature in exts:
         # Only add cfg if feature is supported
-        if feature and feature not in UNSUPPORTED_FEATURES:
+        if x86_only and feature and feature not in UNSUPPORTED_FEATURES:
             lines.append(f"#[cfg(target_feature = \"{feature}\")]")
         lines.append(f"pub mod {ext};")
         # Add blank line only if we added cfg
-        if feature and feature not in UNSUPPORTED_FEATURES:
+        if x86_only and feature and feature not in UNSUPPORTED_FEATURES:
             lines.append("")
     return "\n".join(lines)
 
@@ -1216,8 +1270,23 @@ def get_feature_detect_fn(arch: str, feature: str) -> str:
     if feature in UNSUPPORTED_FEATURES:
         return "false /* no runtime detection available */"
 
+    if feature in BASELINE_ALWAYS_TRUE_FEATURES:
+        return "true /* baseline ISA, not an optional feature - see BASELINE_ALWAYS_TRUE_FEATURES */"
+
     if arch in ("x86", "x86_64"):
         return f'std::arch::is_x86_feature_detected!("{feature}")'
+    if arch == "aarch64":
+        # Stable since well before this project's MSRV - no unstable feature gate needed,
+        # unlike the MTE/prefetch *intrinsics* themselves (see lib.rs's cfg_attr).
+        return f'std::arch::is_aarch64_feature_detected!("{feature}")'
+    if arch == "arm":
+        # Unstable (stdarch_arm_feature_detection) - see lib.rs's cfg_attr; this is only the
+        # detection macro, separate from stdarch_arm_neon_intrinsics/_hints/_sat gating the
+        # intrinsics of dsp/hints/sat/simd32 themselves (SKIP_EXTENSIONS, not reached here).
+        return f'std::arch::is_arm_feature_detected!("{feature}")'
+    if arch in ("riscv32", "riscv64", "riscv_shared"):
+        # Unstable (stdarch_riscv_feature_detection) - see lib.rs's cfg_attr.
+        return f'std::arch::is_riscv_feature_detected!("{feature}")'
     # For other architectures, we'll need to add detection when available
     # For now, return a placeholder that always returns false
     return "false /* feature detection not yet implemented */"
@@ -1253,7 +1322,7 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
 
             feature = ext_to_feature(ext)
             # Only add cfg if feature is supported
-            if feature not in UNSUPPORTED_FEATURES:
+            if arch in ("x86", "x86_64") and feature not in UNSUPPORTED_FEATURES:
                 lines.append(f"        #[cfg(target_feature = \"{feature}\")]")
             detect_fn = get_feature_detect_fn(arch, feature)
             lines.append(f"        if {detect_fn} {{")
@@ -1293,7 +1362,7 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
 
             feature = ext_to_feature(ext)
             # Only add cfg if feature is supported
-            if feature not in UNSUPPORTED_FEATURES:
+            if arch in ("x86", "x86_64") and feature not in UNSUPPORTED_FEATURES:
                 lines.append(f"        #[cfg(target_feature = \"{feature}\")]")
             detect_fn = get_feature_detect_fn(arch, feature)
             lines.append(f"        if {detect_fn} {{")
@@ -1334,7 +1403,7 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
             struct = ext_to_struct(ext)
 
             # Only add cfg if feature is supported
-            if feature not in UNSUPPORTED_FEATURES:
+            if arch in ("x86", "x86_64") and feature not in UNSUPPORTED_FEATURES:
                 lines.append(f"        #[cfg(target_feature = \"{feature}\")]")
                 lines.append("        {")
 
@@ -1358,7 +1427,7 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
             lines.append("                    completed_features += 1;")
             lines.append("            }")
             # Close the cfg block if we opened it
-            if feature not in UNSUPPORTED_FEATURES:
+            if arch in ("x86", "x86_64") and feature not in UNSUPPORTED_FEATURES:
                 lines.append("        }")
             lines.append("")
 
@@ -1395,7 +1464,7 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
             struct = ext_to_struct(ext)
 
             # Only add cfg if feature is supported
-            if feature not in UNSUPPORTED_FEATURES:
+            if arch in ("x86", "x86_64") and feature not in UNSUPPORTED_FEATURES:
                 lines.append(f"        #[cfg(target_feature = \"{feature}\")]")
             lines.append("        {")
             lines.append(f"            for (_, name) in crate::cpu::auto_generated::{arch}::{ext}::{struct}::get_tests() {{")
@@ -1435,7 +1504,7 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
             feature = ext_to_feature(ext)
             struct = ext_to_struct(ext)
 
-            if feature not in UNSUPPORTED_FEATURES:
+            if arch in ("x86", "x86_64") and feature not in UNSUPPORTED_FEATURES:
                 lines.append(f"        #[cfg(target_feature = \"{feature}\")]")
             detect_fn = get_feature_detect_fn(arch, feature)
             lines.append(f"        if {detect_fn} {{")
@@ -1457,12 +1526,16 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
 
 
 def main() -> None:
-    global IGNORED_FUNCTIONS, MIRI_SKIP_FUNCTIONS
+    global IGNORED_FUNCTIONS, MIRI_SKIP_FUNCTIONS, UB_ON_VALUE_SCENARIOS
     base = Path.cwd()
 
     if MIRI_ONLY_FILE.exists():
         with open(MIRI_ONLY_FILE) as f:
             MIRI_SKIP_FUNCTIONS = {line.strip() for line in f if line.strip() and not line.startswith("#")}
+
+    if UB_ON_VALUE_SCENARIOS_FILE.exists():
+        with open(UB_ON_VALUE_SCENARIOS_FILE) as f:
+            UB_ON_VALUE_SCENARIOS = {line.strip() for line in f if line.strip() and not line.startswith("#")}
 
     if FUNCTIONS_FILE.exists():
         with open(FUNCTIONS_FILE) as f:
@@ -1548,7 +1621,7 @@ def main() -> None:
                              no_fuzz_count, skipped_count))
 
         # Generate arch-specific mod.rs
-        (arch_out / "mod.rs").write_text(gen_mod_rs_for_arch(generated_exts))
+        (arch_out / "mod.rs").write_text(gen_mod_rs_for_arch(arch, generated_exts))
         generated_archs.add(arch)
 
     # Generate root mod.rs

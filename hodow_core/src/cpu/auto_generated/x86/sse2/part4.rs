@@ -2688,10 +2688,290 @@ pub(super) fn test_x86_sse2_mm_cvtsd_si32() -> Result<(), String> {
     Ok(())
 }
 
+pub(super) fn test_x86_sse2_mm_cvtsd_si32_normal2() -> Result<(), String> {
+    unsafe {
+        let result = _mm_cvtsd_si32(create__m128d_from([0.0f64, -1.0f64]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_cvtsd_si32(create__m128d_from([0.0f64, -1.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvtsd_si32(create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtsd_si32_normal3() -> Result<(), String> {
+    unsafe {
+        let result = _mm_cvtsd_si32(create__m128d_from([100.0f64, 200.0f64]));
+        check_int_equality(result as i32, 100).map_err(|e| format!("{e} | call: _mm_cvtsd_si32(create__m128d_from([100.0f64, 200.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvtsd_si32(create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtsd_si32_boundary_min() -> Result<(), String> {
+    unsafe {
+        let result = _mm_cvtsd_si32(create__m128d_from([f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, -2147483648).map_err(|e| format!("{e} | call: _mm_cvtsd_si32(create__m128d_from([f64::MIN, f64::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvtsd_si32(create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtsd_si32_boundary_max() -> Result<(), String> {
+    unsafe {
+        let result = _mm_cvtsd_si32(create__m128d_from([f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, -2147483648).map_err(|e| format!("{e} | call: _mm_cvtsd_si32(create__m128d_from([f64::MAX, f64::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvtsd_si32(create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtsd_si32_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let result = _mm_cvtsd_si32(create__m128d_from([0.0, 0.0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_cvtsd_si32(create__m128d_from([0.0, 0.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvtsd_si32(create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtsd_si32_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let result = _mm_cvtsd_si32(create__m128d_from([f64::NAN, f64::NAN]));
+        check_int_equality(result as i32, -2147483648).map_err(|e| format!("{e} | call: _mm_cvtsd_si32(create__m128d_from([f64::NAN, f64::NAN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvtsd_si32(create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtsd_si32_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let result = _mm_cvtsd_si32(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]));
+        check_int_equality(result as i32, -2147483648).map_err(|e| format!("{e} | call: _mm_cvtsd_si32(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvtsd_si32(create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
 pub(super) fn test_x86_sse2_mm_cvtsd_ss() -> Result<(), String> {
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_cvtsd_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128d_from([5.0, 6.0])));
         check_float_array_equality(&result, &[5.0, 2.0, 3.0, 4.0]).map_err(|e| format!("{e} | call: _mm_cvtsd_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128d_from([5.0, 6.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvtsd_ss(create_random__m128(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtsd_ss_normal2() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_cvtsd_ss(create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]), create__m128d_from([1.0, 2.0])));
+        check_float_array_equality(&result, &[1.0, -1.0, 2.0, -3.0]).map_err(|e| format!("{e} | call: _mm_cvtsd_ss(create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]), create__m128d_from([1.0, 2.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvtsd_ss(create_random__m128(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtsd_ss_normal3() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_cvtsd_ss(create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]), create__m128d_from([1.0, 2.0])));
+        check_float_array_equality(&result, &[1.0, 200.0, 300.0, 400.0]).map_err(|e| format!("{e} | call: _mm_cvtsd_ss(create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]), create__m128d_from([1.0, 2.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvtsd_ss(create_random__m128(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtsd_ss_boundary_min() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_cvtsd_ss(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128d_from([1.0, 2.0])));
+        check_float_array_equality(&result, &[1.0, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm_cvtsd_ss(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128d_from([1.0, 2.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvtsd_ss(create_random__m128(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtsd_ss_boundary_max() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_cvtsd_ss(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128d_from([1.0, 2.0])));
+        check_float_array_equality(&result, &[1.0, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm_cvtsd_ss(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128d_from([1.0, 2.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvtsd_ss(create_random__m128(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtsd_ss_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_cvtsd_ss(create__m128_from([0.0, 0.0, 0.0, 0.0]), create__m128d_from([1.0, 2.0])));
+        check_float_array_equality(&result, &[1.0, 0.0, 0.0, 0.0]).map_err(|e| format!("{e} | call: _mm_cvtsd_ss(create__m128_from([0.0, 0.0, 0.0, 0.0]), create__m128d_from([1.0, 2.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvtsd_ss(create_random__m128(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtsd_ss_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_cvtsd_ss(create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m128d_from([1.0, 2.0])));
+        check_float_array_equality(&result, &[1.0, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm_cvtsd_ss(create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m128d_from([1.0, 2.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvtsd_ss(create_random__m128(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtsd_ss_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_cvtsd_ss(create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m128d_from([1.0, 2.0])));
+        check_float_array_equality(&result, &[1.0, -f32::INFINITY, -0.0, 5.877472e-39]).map_err(|e| format!("{e} | call: _mm_cvtsd_ss(create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m128d_from([1.0, 2.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2727,10 +3007,283 @@ pub(super) fn test_x86_sse2_mm_cvtsd_f64() -> Result<(), String> {
     Ok(())
 }
 
+pub(super) fn test_x86_sse2_mm_cvtsd_f64_normal2() -> Result<(), String> {
+    unsafe {
+        let _result = _mm_cvtsd_f64(create__m128d_from([0.0f64, -1.0f64]));
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvtsd_f64(create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtsd_f64_normal3() -> Result<(), String> {
+    unsafe {
+        let _result = _mm_cvtsd_f64(create__m128d_from([100.0f64, 200.0f64]));
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvtsd_f64(create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtsd_f64_boundary_min() -> Result<(), String> {
+    unsafe {
+        let _result = _mm_cvtsd_f64(create__m128d_from([f64::MIN, f64::MIN]));
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvtsd_f64(create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtsd_f64_boundary_max() -> Result<(), String> {
+    unsafe {
+        let _result = _mm_cvtsd_f64(create__m128d_from([f64::MAX, f64::MAX]));
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvtsd_f64(create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtsd_f64_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let _result = _mm_cvtsd_f64(create__m128d_from([0.0, 0.0]));
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvtsd_f64(create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtsd_f64_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let _result = _mm_cvtsd_f64(create__m128d_from([f64::NAN, f64::NAN]));
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvtsd_f64(create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtsd_f64_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let _result = _mm_cvtsd_f64(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]));
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvtsd_f64(create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
 pub(super) fn test_x86_sse2_mm_cvtss_sd() -> Result<(), String> {
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_cvtss_sd(create__m128d_from([1.0, 2.0]), create__m128_from([3.0, 4.0, 5.0, 6.0])));
         check_float_array_equality(&result, &[3.0, 2.0]).map_err(|e| format!("{e} | call: _mm_cvtss_sd(create__m128d_from([1.0, 2.0]), create__m128_from([3.0, 4.0, 5.0, 6.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvtss_sd(create_random__m128d(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtss_sd_normal2() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_cvtss_sd(create__m128d_from([0.0f64, -1.0f64]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        check_float_array_equality(&result, &[1.0, -1.0]).map_err(|e| format!("{e} | call: _mm_cvtss_sd(create__m128d_from([0.0f64, -1.0f64]), create__m128_from([1.0, 2.0, 3.0, 4.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvtss_sd(create_random__m128d(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtss_sd_normal3() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_cvtss_sd(create__m128d_from([100.0f64, 200.0f64]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        check_float_array_equality(&result, &[1.0, 200.0]).map_err(|e| format!("{e} | call: _mm_cvtss_sd(create__m128d_from([100.0f64, 200.0f64]), create__m128_from([1.0, 2.0, 3.0, 4.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvtss_sd(create_random__m128d(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtss_sd_boundary_min() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_cvtss_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        check_float_array_equality(&result, &[1.0, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_cvtss_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128_from([1.0, 2.0, 3.0, 4.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvtss_sd(create_random__m128d(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtss_sd_boundary_max() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_cvtss_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        check_float_array_equality(&result, &[1.0, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_cvtss_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128_from([1.0, 2.0, 3.0, 4.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvtss_sd(create_random__m128d(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtss_sd_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_cvtss_sd(create__m128d_from([0.0, 0.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        check_float_array_equality(&result, &[1.0, 0.0]).map_err(|e| format!("{e} | call: _mm_cvtss_sd(create__m128d_from([0.0, 0.0]), create__m128_from([1.0, 2.0, 3.0, 4.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvtss_sd(create_random__m128d(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtss_sd_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_cvtss_sd(create__m128d_from([f64::NAN, f64::NAN]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        check_float_array_equality(&result, &[1.0, f64::NAN]).map_err(|e| format!("{e} | call: _mm_cvtss_sd(create__m128d_from([f64::NAN, f64::NAN]), create__m128_from([1.0, 2.0, 3.0, 4.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvtss_sd(create_random__m128d(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtss_sd_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_cvtss_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        check_float_array_equality(&result, &[1.0, -f64::INFINITY]).map_err(|e| format!("{e} | call: _mm_cvtss_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128_from([1.0, 2.0, 3.0, 4.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2771,6 +3324,146 @@ pub(super) fn test_x86_sse2_mm_cvttsd_si32() -> Result<(), String> {
     unsafe {
         let result = _mm_cvttsd_si32(create__m128d_from([1.0, 2.0]));
         check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_cvttsd_si32(create__m128d_from([1.0, 2.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvttsd_si32(create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvttsd_si32_normal2() -> Result<(), String> {
+    unsafe {
+        let result = _mm_cvttsd_si32(create__m128d_from([0.0f64, -1.0f64]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_cvttsd_si32(create__m128d_from([0.0f64, -1.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvttsd_si32(create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvttsd_si32_normal3() -> Result<(), String> {
+    unsafe {
+        let result = _mm_cvttsd_si32(create__m128d_from([100.0f64, 200.0f64]));
+        check_int_equality(result as i32, 100).map_err(|e| format!("{e} | call: _mm_cvttsd_si32(create__m128d_from([100.0f64, 200.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvttsd_si32(create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvttsd_si32_boundary_min() -> Result<(), String> {
+    unsafe {
+        let result = _mm_cvttsd_si32(create__m128d_from([f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, -2147483648).map_err(|e| format!("{e} | call: _mm_cvttsd_si32(create__m128d_from([f64::MIN, f64::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvttsd_si32(create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvttsd_si32_boundary_max() -> Result<(), String> {
+    unsafe {
+        let result = _mm_cvttsd_si32(create__m128d_from([f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, -2147483648).map_err(|e| format!("{e} | call: _mm_cvttsd_si32(create__m128d_from([f64::MAX, f64::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvttsd_si32(create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvttsd_si32_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let result = _mm_cvttsd_si32(create__m128d_from([0.0, 0.0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_cvttsd_si32(create__m128d_from([0.0, 0.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvttsd_si32(create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvttsd_si32_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let result = _mm_cvttsd_si32(create__m128d_from([f64::NAN, f64::NAN]));
+        check_int_equality(result as i32, -2147483648).map_err(|e| format!("{e} | call: _mm_cvttsd_si32(create__m128d_from([f64::NAN, f64::NAN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvttsd_si32(create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvttsd_si32_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let result = _mm_cvttsd_si32(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]));
+        check_int_equality(result as i32, -2147483648).map_err(|e| format!("{e} | call: _mm_cvttsd_si32(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2910,7 +3603,7 @@ pub(super) fn test_x86_sse2_mm_setr_pd() -> Result<(), String> {
 pub(super) fn test_x86_sse2_mm_setzero_pd() -> Result<(), String> {
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_setzero_pd());
-        check_float_array_equality(&result, &[0.0f64; 2]).map_err(|e| format!("{e} | call: _mm_setzero_pd()"))?;
+        check_float_array_equality(&result, &[0.0; 2]).map_err(|e| format!("{e} | call: _mm_setzero_pd()"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2931,6 +3624,146 @@ pub(super) fn test_x86_sse2_mm_movemask_pd() -> Result<(), String> {
     unsafe {
         let result = _mm_movemask_pd(create__m128d_from([1.0, 2.0]));
         check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_movemask_pd(create__m128d_from([1.0, 2.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_movemask_pd(create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_movemask_pd_normal2() -> Result<(), String> {
+    unsafe {
+        let result = _mm_movemask_pd(create__m128d_from([0.0f64, -1.0f64]));
+        check_int_equality(result as i32, 2).map_err(|e| format!("{e} | call: _mm_movemask_pd(create__m128d_from([0.0f64, -1.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_movemask_pd(create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_movemask_pd_normal3() -> Result<(), String> {
+    unsafe {
+        let result = _mm_movemask_pd(create__m128d_from([100.0f64, 200.0f64]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_movemask_pd(create__m128d_from([100.0f64, 200.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_movemask_pd(create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_movemask_pd_boundary_min() -> Result<(), String> {
+    unsafe {
+        let result = _mm_movemask_pd(create__m128d_from([f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 3).map_err(|e| format!("{e} | call: _mm_movemask_pd(create__m128d_from([f64::MIN, f64::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_movemask_pd(create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_movemask_pd_boundary_max() -> Result<(), String> {
+    unsafe {
+        let result = _mm_movemask_pd(create__m128d_from([f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_movemask_pd(create__m128d_from([f64::MAX, f64::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_movemask_pd(create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_movemask_pd_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let result = _mm_movemask_pd(create__m128d_from([0.0, 0.0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_movemask_pd(create__m128d_from([0.0, 0.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_movemask_pd(create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_movemask_pd_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let result = _mm_movemask_pd(create__m128d_from([f64::NAN, f64::NAN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_movemask_pd(create__m128d_from([f64::NAN, f64::NAN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_movemask_pd(create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_movemask_pd_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let result = _mm_movemask_pd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]));
+        check_int_equality(result as i32, 2).map_err(|e| format!("{e} | call: _mm_movemask_pd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2978,12 +3811,152 @@ pub(super) fn test_x86_sse2_mm_loadh_pd() -> Result<(), String> {
     Ok(())
 }
 
+pub(super) fn test_x86_sse2_mm_loadh_pd_normal2() -> Result<(), String> {
+    unsafe {
+        let a = create__m128d_from([0.0f64, -1.0f64]);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_loadh_pd(a, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[0.0, 1.0]).map_err(|e| format!("{e} | call: _mm_loadh_pd(a, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_loadh_pd_normal3() -> Result<(), String> {
+    unsafe {
+        let a = create__m128d_from([100.0f64, 200.0f64]);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_loadh_pd(a, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[100.0, 1.0]).map_err(|e| format!("{e} | call: _mm_loadh_pd(a, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_loadh_pd_boundary_min() -> Result<(), String> {
+    unsafe {
+        let a = create__m128d_from([f64::MIN, f64::MIN]);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_loadh_pd(a, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[-1.7976931348623157e308, 1.0]).map_err(|e| format!("{e} | call: _mm_loadh_pd(a, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_loadh_pd_boundary_max() -> Result<(), String> {
+    unsafe {
+        let a = create__m128d_from([f64::MAX, f64::MAX]);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_loadh_pd(a, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.7976931348623157e308, 1.0]).map_err(|e| format!("{e} | call: _mm_loadh_pd(a, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_loadh_pd_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let a = create__m128d_from([0.0, 0.0]);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_loadh_pd(a, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[0.0, 1.0]).map_err(|e| format!("{e} | call: _mm_loadh_pd(a, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_loadh_pd_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let a = create__m128d_from([f64::NAN, f64::NAN]);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_loadh_pd(a, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[f64::NAN, 1.0]).map_err(|e| format!("{e} | call: _mm_loadh_pd(a, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_loadh_pd_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let a = create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_loadh_pd(a, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[f64::INFINITY, 1.0]).map_err(|e| format!("{e} | call: _mm_loadh_pd(a, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
 pub(super) fn test_x86_sse2_mm_loadl_pd() -> Result<(), String> {
     unsafe {
         let a = create__m128d_from([1.0, 2.0]);
         let ptr_mem_addr = crate::cpu::common::Aligned64([3.0f64; 8]);
         let result = unpack__m128d_to_f64_array(_mm_loadl_pd(a, ptr_mem_addr.0.as_ptr()));
         check_float_array_equality(&result, &[3.0, 2.0]).map_err(|e| format!("{e} | call: _mm_loadl_pd(a, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_loadl_pd_normal2() -> Result<(), String> {
+    unsafe {
+        let a = create__m128d_from([0.0f64, -1.0f64]);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_loadl_pd(a, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, -1.0]).map_err(|e| format!("{e} | call: _mm_loadl_pd(a, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_loadl_pd_normal3() -> Result<(), String> {
+    unsafe {
+        let a = create__m128d_from([100.0f64, 200.0f64]);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_loadl_pd(a, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 200.0]).map_err(|e| format!("{e} | call: _mm_loadl_pd(a, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_loadl_pd_boundary_min() -> Result<(), String> {
+    unsafe {
+        let a = create__m128d_from([f64::MIN, f64::MIN]);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_loadl_pd(a, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_loadl_pd(a, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_loadl_pd_boundary_max() -> Result<(), String> {
+    unsafe {
+        let a = create__m128d_from([f64::MAX, f64::MAX]);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_loadl_pd(a, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_loadl_pd(a, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_loadl_pd_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let a = create__m128d_from([0.0, 0.0]);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_loadl_pd(a, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 0.0]).map_err(|e| format!("{e} | call: _mm_loadl_pd(a, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_loadl_pd_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let a = create__m128d_from([f64::NAN, f64::NAN]);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_loadl_pd(a, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, f64::NAN]).map_err(|e| format!("{e} | call: _mm_loadl_pd(a, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_loadl_pd_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let a = create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_loadl_pd(a, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, -f64::INFINITY]).map_err(|e| format!("{e} | call: _mm_loadl_pd(a, ptr_mem_addr.0.as_ptr())"))?;
     }
     Ok(())
 }
@@ -3000,10 +3973,157 @@ pub(super) fn test_x86_sse2_mm_stream_pd() -> Result<(), String> {
     Ok(())
 }
 
+pub(super) fn test_x86_sse2_mm_stream_pd_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([0.0f64, -1.0f64]);
+        _mm_stream_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_stream_pd_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([100.0f64, 200.0f64]);
+        _mm_stream_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_stream_pd_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::MIN, f64::MIN]);
+        _mm_stream_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_stream_pd_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::MAX, f64::MAX]);
+        _mm_stream_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_stream_pd_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([0.0, 0.0]);
+        _mm_stream_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_stream_pd_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::NAN, f64::NAN]);
+        _mm_stream_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_stream_pd_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]);
+        _mm_stream_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
 pub(super) fn test_x86_sse2_mm_store_sd() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
         let a = create__m128d_from([2.0, 3.0]);
+        _mm_store_sd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_store_sd_normal2() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([0.0f64, -1.0f64]);
+        _mm_store_sd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_store_sd_normal3() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([100.0f64, 200.0f64]);
+        _mm_store_sd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_store_sd_boundary_min() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::MIN, f64::MIN]);
+        _mm_store_sd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_store_sd_boundary_max() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::MAX, f64::MAX]);
+        _mm_store_sd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_store_sd_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([0.0, 0.0]);
+        _mm_store_sd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_store_sd_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::NAN, f64::NAN]);
+        _mm_store_sd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_store_sd_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]);
         _mm_store_sd(ptr_mem_addr.0.as_mut_ptr(), a);
     }
     Ok(())
@@ -3021,6 +4141,90 @@ pub(super) fn test_x86_sse2_mm_store_pd() -> Result<(), String> {
     Ok(())
 }
 
+pub(super) fn test_x86_sse2_mm_store_pd_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([0.0f64, -1.0f64]);
+        _mm_store_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_store_pd_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([100.0f64, 200.0f64]);
+        _mm_store_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_store_pd_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::MIN, f64::MIN]);
+        _mm_store_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_store_pd_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::MAX, f64::MAX]);
+        _mm_store_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_store_pd_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([0.0, 0.0]);
+        _mm_store_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_store_pd_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::NAN, f64::NAN]);
+        _mm_store_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_store_pd_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]);
+        _mm_store_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
 pub(super) fn test_x86_sse2_mm_storeu_pd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
@@ -3028,6 +4232,90 @@ pub(super) fn test_x86_sse2_mm_storeu_pd() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
         let a = create__m128d_from([2.0, 3.0]);
+        _mm_storeu_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeu_pd_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([0.0f64, -1.0f64]);
+        _mm_storeu_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeu_pd_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([100.0f64, 200.0f64]);
+        _mm_storeu_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeu_pd_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::MIN, f64::MIN]);
+        _mm_storeu_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeu_pd_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::MAX, f64::MAX]);
+        _mm_storeu_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeu_pd_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([0.0, 0.0]);
+        _mm_storeu_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeu_pd_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::NAN, f64::NAN]);
+        _mm_storeu_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeu_pd_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]);
         _mm_storeu_pd(ptr_mem_addr.0.as_mut_ptr(), a);
     }
     Ok(())
@@ -3045,6 +4333,90 @@ pub(super) fn test_x86_sse2_mm_storeu_si16() -> Result<(), String> {
     Ok(())
 }
 
+pub(super) fn test_x86_sse2_mm_storeu_si16_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 64]);
+        let a = create__m128i_from_i32_array([0, -1, 2, -3]);
+        _mm_storeu_si16(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeu_si16_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 64]);
+        let a = create__m128i_from_i32_array([100, 200, 300, 400]);
+        _mm_storeu_si16(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeu_si16_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 64]);
+        let a = create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]);
+        _mm_storeu_si16(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeu_si16_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 64]);
+        let a = create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]);
+        _mm_storeu_si16(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeu_si16_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 64]);
+        let a = create__m128i_from_i32_array([0, 0, 0, 0]);
+        _mm_storeu_si16(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeu_si16_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 64]);
+        let a = create__m128i_from_i32_array([-1, -1, -1, -1]);
+        _mm_storeu_si16(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeu_si16_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 64]);
+        let a = create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]);
+        _mm_storeu_si16(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
 pub(super) fn test_x86_sse2_mm_storeu_si32() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
@@ -3052,6 +4424,90 @@ pub(super) fn test_x86_sse2_mm_storeu_si32() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 64]);
         let a = create__m128i_from_i32_array([2, 3, 4, 5]);
+        _mm_storeu_si32(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeu_si32_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 64]);
+        let a = create__m128i_from_i32_array([0, -1, 2, -3]);
+        _mm_storeu_si32(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeu_si32_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 64]);
+        let a = create__m128i_from_i32_array([100, 200, 300, 400]);
+        _mm_storeu_si32(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeu_si32_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 64]);
+        let a = create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]);
+        _mm_storeu_si32(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeu_si32_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 64]);
+        let a = create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]);
+        _mm_storeu_si32(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeu_si32_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 64]);
+        let a = create__m128i_from_i32_array([0, 0, 0, 0]);
+        _mm_storeu_si32(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeu_si32_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 64]);
+        let a = create__m128i_from_i32_array([-1, -1, -1, -1]);
+        _mm_storeu_si32(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeu_si32_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 64]);
+        let a = create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]);
         _mm_storeu_si32(ptr_mem_addr.0.as_mut_ptr(), a);
     }
     Ok(())
@@ -3069,6 +4525,90 @@ pub(super) fn test_x86_sse2_mm_storeu_si64() -> Result<(), String> {
     Ok(())
 }
 
+pub(super) fn test_x86_sse2_mm_storeu_si64_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 64]);
+        let a = create__m128i_from_i32_array([0, -1, 2, -3]);
+        _mm_storeu_si64(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeu_si64_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 64]);
+        let a = create__m128i_from_i32_array([100, 200, 300, 400]);
+        _mm_storeu_si64(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeu_si64_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 64]);
+        let a = create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]);
+        _mm_storeu_si64(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeu_si64_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 64]);
+        let a = create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]);
+        _mm_storeu_si64(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeu_si64_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 64]);
+        let a = create__m128i_from_i32_array([0, 0, 0, 0]);
+        _mm_storeu_si64(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeu_si64_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 64]);
+        let a = create__m128i_from_i32_array([-1, -1, -1, -1]);
+        _mm_storeu_si64(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeu_si64_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 64]);
+        let a = create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]);
+        _mm_storeu_si64(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
 pub(super) fn test_x86_sse2_mm_store1_pd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
@@ -3076,6 +4616,90 @@ pub(super) fn test_x86_sse2_mm_store1_pd() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
         let a = create__m128d_from([2.0, 3.0]);
+        _mm_store1_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_store1_pd_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([0.0f64, -1.0f64]);
+        _mm_store1_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_store1_pd_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([100.0f64, 200.0f64]);
+        _mm_store1_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_store1_pd_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::MIN, f64::MIN]);
+        _mm_store1_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_store1_pd_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::MAX, f64::MAX]);
+        _mm_store1_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_store1_pd_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([0.0, 0.0]);
+        _mm_store1_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_store1_pd_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::NAN, f64::NAN]);
+        _mm_store1_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_store1_pd_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]);
         _mm_store1_pd(ptr_mem_addr.0.as_mut_ptr(), a);
     }
     Ok(())
@@ -3093,6 +4717,90 @@ pub(super) fn test_x86_sse2_mm_store_pd1() -> Result<(), String> {
     Ok(())
 }
 
+pub(super) fn test_x86_sse2_mm_store_pd1_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([0.0f64, -1.0f64]);
+        _mm_store_pd1(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_store_pd1_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([100.0f64, 200.0f64]);
+        _mm_store_pd1(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_store_pd1_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::MIN, f64::MIN]);
+        _mm_store_pd1(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_store_pd1_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::MAX, f64::MAX]);
+        _mm_store_pd1(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_store_pd1_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([0.0, 0.0]);
+        _mm_store_pd1(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_store_pd1_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::NAN, f64::NAN]);
+        _mm_store_pd1(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_store_pd1_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]);
+        _mm_store_pd1(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
 pub(super) fn test_x86_sse2_mm_storer_pd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
@@ -3100,6 +4808,90 @@ pub(super) fn test_x86_sse2_mm_storer_pd() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
         let a = create__m128d_from([2.0, 3.0]);
+        _mm_storer_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storer_pd_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([0.0f64, -1.0f64]);
+        _mm_storer_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storer_pd_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([100.0f64, 200.0f64]);
+        _mm_storer_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storer_pd_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::MIN, f64::MIN]);
+        _mm_storer_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storer_pd_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::MAX, f64::MAX]);
+        _mm_storer_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storer_pd_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([0.0, 0.0]);
+        _mm_storer_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storer_pd_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::NAN, f64::NAN]);
+        _mm_storer_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storer_pd_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]);
         _mm_storer_pd(ptr_mem_addr.0.as_mut_ptr(), a);
     }
     Ok(())
@@ -3114,10 +4906,136 @@ pub(super) fn test_x86_sse2_mm_storeh_pd() -> Result<(), String> {
     Ok(())
 }
 
+pub(super) fn test_x86_sse2_mm_storeh_pd_normal2() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([0.0f64, -1.0f64]);
+        _mm_storeh_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeh_pd_normal3() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([100.0f64, 200.0f64]);
+        _mm_storeh_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeh_pd_boundary_min() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::MIN, f64::MIN]);
+        _mm_storeh_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeh_pd_boundary_max() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::MAX, f64::MAX]);
+        _mm_storeh_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeh_pd_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([0.0, 0.0]);
+        _mm_storeh_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeh_pd_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::NAN, f64::NAN]);
+        _mm_storeh_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storeh_pd_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]);
+        _mm_storeh_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
 pub(super) fn test_x86_sse2_mm_storel_pd() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
         let a = create__m128d_from([2.0, 3.0]);
+        _mm_storel_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storel_pd_normal2() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([0.0f64, -1.0f64]);
+        _mm_storel_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storel_pd_normal3() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([100.0f64, 200.0f64]);
+        _mm_storel_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storel_pd_boundary_min() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::MIN, f64::MIN]);
+        _mm_storel_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storel_pd_boundary_max() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::MAX, f64::MAX]);
+        _mm_storel_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storel_pd_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([0.0, 0.0]);
+        _mm_storel_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storel_pd_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::NAN, f64::NAN]);
+        _mm_storel_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_storel_pd_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]);
         _mm_storel_pd(ptr_mem_addr.0.as_mut_ptr(), a);
     }
     Ok(())

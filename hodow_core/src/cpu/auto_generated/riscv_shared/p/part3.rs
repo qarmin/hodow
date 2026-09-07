@@ -1,8 +1,6 @@
 use std::arch::riscv64::*;
 
 #[allow(unused_imports)]
-use crate::cpu::common::arm::*;
-#[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
 pub(super) fn test_riscv_shared_p_smaqasu() -> Result<(), String> {
@@ -17,7 +15,7 @@ pub(super) fn test_riscv_shared_p_smaqasu() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = smaqasu(rand::random::<usize>(), rand::random::<usize>(), rand::random::<usize>());
+                let _ = smaqasu(rand::random::<u64>() as usize, rand::random::<u64>() as usize, rand::random::<u64>() as usize);
             }
         }
     }
@@ -36,7 +34,7 @@ pub(super) fn test_riscv_shared_p_kaddh() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = kaddh(rand::random::<usize>(), rand::random::<usize>());
+                let _ = kaddh(rand::random::<u64>() as usize, rand::random::<u64>() as usize);
             }
         }
     }
@@ -55,7 +53,7 @@ pub(super) fn test_riscv_shared_p_ksubh() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = ksubh(rand::random::<usize>(), rand::random::<usize>());
+                let _ = ksubh(rand::random::<u64>() as usize, rand::random::<u64>() as usize);
             }
         }
     }
@@ -74,7 +72,7 @@ pub(super) fn test_riscv_shared_p_ukaddh() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = ukaddh(rand::random::<usize>(), rand::random::<usize>());
+                let _ = ukaddh(rand::random::<u64>() as usize, rand::random::<u64>() as usize);
             }
         }
     }
@@ -93,7 +91,7 @@ pub(super) fn test_riscv_shared_p_uksubh() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = uksubh(rand::random::<usize>(), rand::random::<usize>());
+                let _ = uksubh(rand::random::<u64>() as usize, rand::random::<u64>() as usize);
             }
         }
     }

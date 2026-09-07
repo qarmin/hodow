@@ -1,0 +1,179 @@
+# Standalone repro harness for box64 (github.com/ptitSeb/box64) SIMD-emulation
+# divergences found while running hodow_cli's CPU suite under it. Each numbered case
+# in src/main.rs is the minimal call that reproduces one divergence, run one case per
+# process (never batched - several are expected to SIGILL/SIGSEGV, and that must
+# never take another case down or hide behind a shared exit code).
+#
+# `just setup` once, then `just matrix` for the full table.
+
+BOX64_DIR := justfile_directory() / ".box64"
+CASES := "16"
+
+# Installs what the full matrix needs (qemu-user, the aarch64/riscv64 cross-compilers)
+# and builds box64 three ways into .box64/ (gitignored; re-running just skips whatever
+# already exists). The x86_64 build gets box64's plain C interpreter (no dynarec at
+# all - it only exists on this host as a fallback, not the real translation path);
+# the aarch64/riscv64 builds get their real ARM_DYNAREC/RV64_DYNAREC JIT backends,
+# which is the code path box64/FEX actually ship on real hardware and the one worth
+# testing. qemu-aarch64/qemu-riscv64 (already in `qemu-user`) then run those
+# cross-built binaries under CPU emulation, since this host is neither.
+setup:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    need_apt=()
+    dpkg -s qemu-user >/dev/null 2>&1 || need_apt+=(qemu-user)
+    command -v aarch64-linux-gnu-gcc >/dev/null 2>&1 || need_apt+=(gcc-aarch64-linux-gnu g++-aarch64-linux-gnu)
+    command -v riscv64-linux-gnu-gcc >/dev/null 2>&1 || need_apt+=(gcc-riscv64-linux-gnu g++-riscv64-linux-gnu)
+    if [ "${#need_apt[@]}" -gt 0 ]; then
+        echo "installing: ${need_apt[*]}"
+        sudo apt-get update
+        sudo apt-get install -y --no-install-recommends "${need_apt[@]}"
+    fi
+
+    mkdir -p "{{BOX64_DIR}}"
+    if [ ! -d "{{BOX64_DIR}}/src" ]; then
+        git clone --depth 1 https://github.com/ptitSeb/box64 "{{BOX64_DIR}}/src"
+    fi
+
+    build() {
+        local dir="$1"; shift
+        if [ -x "{{BOX64_DIR}}/$dir/box64" ]; then
+            echo "$dir: already built, skipping (rm -rf {{BOX64_DIR}}/$dir to force a rebuild)"
+            return
+        fi
+        cmake -S "{{BOX64_DIR}}/src" -B "{{BOX64_DIR}}/$dir" -DCMAKE_BUILD_TYPE=RelWithDebInfo "$@"
+        cmake --build "{{BOX64_DIR}}/$dir" -j"$(nproc)"
+    }
+
+    # x86_64: no cross-compiler needed, box64 configures itself for its interpreter-only
+    # fallback when CMAKE_SYSTEM_PROCESSOR (defaulted from the host) is x86_64.
+    build build-x86
+
+    build build-aarch64 \
+        -DARM64=1 -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ \
+        -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_PROCESSOR=aarch64
+
+    build build-riscv64 \
+        -DRV64=1 -DCMAKE_C_COMPILER=riscv64-linux-gnu-gcc -DCMAKE_CXX_COMPILER=riscv64-linux-gnu-g++ \
+        -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_PROCESSOR=riscv64
+
+    echo "setup done:"
+    file "{{BOX64_DIR}}"/build-*/box64
+
+# Builds the repro binary. Always plain x86_64 - it is the "guest" program box64
+# translates; box64 itself is what varies between targets, never this.
+build:
+    cargo build --release
+
+# Runs every case once, prefixed by $1 (may be empty for a plain native run), and
+# prints one line per case: PASS, FAIL (wrong value, see the message), or a bare
+# signal name for anything that killed the process outright (SIGILL/SIGSEGV/...).
+# Looks up each case's short name from --list rather than parsing it back out of the
+# PASS/FAIL line, since case descriptions now contain colons of their own.
+_run prefix *extra_args: build
+    #!/usr/bin/env bash
+    set -u
+    names=$(./target/release/box64_repro --list | sed -E 's/^ *[0-9]+: ([a-zA-Z0-9_]+).*/\1/')
+    i=0
+    while read -r name; do
+        i=$((i + 1))
+        out=$({{prefix}} ./target/release/box64_repro "$i" {{extra_args}} 2>&1)
+        code=$?
+        if [ "$code" -eq 0 ]; then
+            detail="pass"
+        elif [ "$code" -eq 1 ]; then
+            detail=$(echo "$out" | grep -oE 'Got .*' | head -1)
+        elif [ "$code" -ge 129 ] && [ "$code" -le 192 ]; then
+            # Linux signals top out at 64 (128+64=192) - only this range is a real
+            # "the process was killed by a signal" outcome.
+            sig=$((code - 128))
+            detail="SIG$(kill -l "$sig" 2>/dev/null || echo "$sig")"
+        else
+            # Not a real signal - box64/qemu itself failed before running the case
+            # (wrong -L sysroot, box64 binary missing, ...). Environment problem,
+            # not a per-instruction finding; show its own stderr, not a fake SIGnnn.
+            detail="exit($code): $out"
+        fi
+        printf '[%2d] %-18s %s\n' "$i" "$name" "$detail"
+    done <<< "$names"
+
+# Ground truth: every case run with no emulation at all.
+run-native: build
+    @just _run ""
+
+# box64's x86_64-host interpreter fallback (no dynarec - only relevant as a second
+# data point, never what box64 actually ships on real ARM/RISC-V hardware).
+run-box64-x86: build
+    @just _run "{{BOX64_DIR}}/build-x86/box64"
+
+# box64's real ARM64 dynarec (ARM_DYNAREC=ON), run under CPU emulation since this
+# host isn't aarch64. The sysroot is asked from the cross-compiler itself
+# (-print-file-name=crt1.o, then strip /lib/crt1.o) rather than hardcoded, since a
+# hardcoded /usr/aarch64-linux-gnu is a Debian/Ubuntu-ism that doesn't hold on every
+# distro - a wrong path here makes qemu fail before it even loads box64, on every
+# single case, indistinguishably from a real crash unless _run's classification
+# below is also careful about it (see the comment there).
+run-box64-aarch64: build
+    #!/usr/bin/env bash
+    set -euo pipefail
+    sysroot=$(realpath "$(aarch64-linux-gnu-gcc -print-file-name=crt1.o)")
+    sysroot=$(dirname "$(dirname "$sysroot")")
+    just _run "qemu-aarch64 -L $sysroot {{BOX64_DIR}}/build-aarch64/box64"
+
+# box64's real RISC-V64 dynarec (RV64_DYNAREC=ON), run under CPU emulation since
+# this host isn't riscv64. Same sysroot-detection note as run-box64-aarch64.
+run-box64-riscv64: build
+    #!/usr/bin/env bash
+    set -euo pipefail
+    sysroot=$(realpath "$(riscv64-linux-gnu-gcc -print-file-name=crt1.o)")
+    sysroot=$(dirname "$(dirname "$sysroot")")
+    just _run "qemu-riscv64 -L $sysroot {{BOX64_DIR}}/build-riscv64/box64"
+
+# The actual point of this repo: one table, all four targets, all sixteen cases.
+matrix: build
+    #!/usr/bin/env bash
+    set -u
+    sysroot_a=$(realpath "$(aarch64-linux-gnu-gcc -print-file-name=crt1.o)"); sysroot_a=$(dirname "$(dirname "$sysroot_a")")
+    sysroot_r=$(realpath "$(riscv64-linux-gnu-gcc -print-file-name=crt1.o)"); sysroot_r=$(dirname "$(dirname "$sysroot_r")")
+    declare -A prefix=(
+        [native]=""
+        [box64-x86]="{{BOX64_DIR}}/build-x86/box64"
+        [box64-aarch64]="qemu-aarch64 -L $sysroot_a {{BOX64_DIR}}/build-aarch64/box64"
+        [box64-riscv64]="qemu-riscv64 -L $sysroot_r {{BOX64_DIR}}/build-riscv64/box64"
+    )
+    targets=(native box64-x86 box64-aarch64 box64-riscv64)
+
+    printf '%-18s' "case"
+    for t in "${targets[@]}"; do printf '%-16s' "$t"; done
+    printf '\n'
+
+    for i in $(seq 1 {{CASES}}); do
+        name=$(./target/release/box64_repro --list | sed -n "${i}p" | sed -E 's/^ *[0-9]+: ([a-zA-Z0-9_]+).*/\1/')
+        printf '%-18s' "$name"
+        for t in "${targets[@]}"; do
+            out=$(${prefix[$t]} ./target/release/box64_repro "$i" 2>&1)
+            code=$?
+            if [ "$code" -eq 0 ]; then
+                cell="pass"
+            elif [ "$code" -eq 1 ]; then
+                cell=$(echo "$out" | grep -oE 'Got [^,]+' | head -1)
+                cell="fail(${cell#Got })"
+            elif [ "$code" -ge 129 ] && [ "$code" -le 192 ]; then
+                # Linux signals top out at 64 (128+64=192) - only this range is a
+                # real "the process was killed by a signal" outcome.
+                sig=$((code - 128))
+                cell="SIG$(kill -l "$sig" 2>/dev/null || echo "$sig")"
+            else
+                # Not a real signal - box64/qemu itself failed before running the
+                # case (wrong -L sysroot, box64 binary missing, ...). This is an
+                # environment problem, not a per-instruction finding; the tail of
+                # its own stderr says why.
+                cell="exit($code):$(echo "$out" | tail -1 | cut -c1-40)"
+            fi
+            printf '%-16s' "$cell"
+        done
+        printf '\n'
+    done
+
+clean:
+    rm -rf "{{BOX64_DIR}}" target
