@@ -11,12 +11,12 @@
 // function and the registration is a table of them; see the note in
 // `gles2/functional/negative_api/buffer.rs`.
 //
-// **20 of upstream's 103 cases are here** - `activetexture`, `bindtexture`, the nine
-// non-ASTC `compressedteximage2d_*` cases and all nine `copyteximage2d_*` ones, i.e.
-// the start of the file in upstream's order. Still to come:
+// **27 of upstream's 103 cases are here** - `activetexture`, `bindtexture`, the nine
+// non-ASTC `compressedteximage2d_*` cases and all of `copyteximage2d_*` and
+// `copytexsubimage2d_*`, i.e. the start of the file in upstream's order. Still to come:
 // `compressedteximage2d_invalid_astc_target` (and its 3D and texstorage3d siblings),
 // which need `tcu::mapGLCompressedTexFormat` / `getBlockPixelSize` / `getBlockSize` -
-// none of which is ported - and then `copytexsubimage2d_*` onwards.
+// none of which is ported - and then `deletetextures` onwards.
 //
 // Upstream's `isES` branches are resolved here: `ApiType` in this port is ES-only by
 // construction (see `Api::gl_api_type`), so only the ES branch is written.
@@ -580,7 +580,218 @@ fn copyteximage2d_incomplete_framebuffer(case: &mut ApiCase<'_>) {
     }
 }
 
-/// `NegativeTextureApiTests::init`, restricted to the 20 ported cases.
+// glCopyTexSubImage2D
+
+/// The 2D texture with a 16x16 RGBA level 0 that most `copytexsubimage2d_*` cases set
+/// up, and which they delete again at the end.
+fn gen_2d_texture_16x16(case: &mut ApiCase<'_>) -> GLuint {
+    let gl = case.gl();
+    let mut texture: GLuint = 0;
+    // SAFETY: the name is the caller's to delete; the level is left with unspecified
+    // contents, as upstream's null pointer asks for.
+    unsafe {
+        gl.gen_textures(1, &mut texture);
+        gl.bind_texture(glw::GL_TEXTURE_2D, texture);
+        gl.tex_image_2d(
+            glw::GL_TEXTURE_2D,
+            0,
+            glw::GL_RGBA as GLint,
+            16,
+            16,
+            0,
+            glw::GL_RGBA,
+            glw::GL_UNSIGNED_BYTE,
+            std::ptr::null(),
+        );
+    }
+    texture
+}
+
+/// The 2D + cube-map pair the two `copytexsubimage2d_*level` cases set up, each with a
+/// 16x16 RGBA level 0.
+fn gen_2d_and_cube_textures_16x16(case: &mut ApiCase<'_>) -> [GLuint; 2] {
+    let gl = case.gl();
+    let mut textures = [0u32; 2];
+    // SAFETY: as above, for two names.
+    unsafe {
+        gl.gen_textures(2, textures.as_mut_ptr());
+        gl.bind_texture(glw::GL_TEXTURE_2D, textures[0]);
+        gl.tex_image_2d(
+            glw::GL_TEXTURE_2D,
+            0,
+            glw::GL_RGBA as GLint,
+            16,
+            16,
+            0,
+            glw::GL_RGBA,
+            glw::GL_UNSIGNED_BYTE,
+            std::ptr::null(),
+        );
+        gl.bind_texture(glw::GL_TEXTURE_CUBE_MAP, textures[1]);
+        for target in CUBE_FACE_TEX_TARGETS {
+            gl.tex_image_2d(target, 0, glw::GL_RGBA as GLint, 16, 16, 0, glw::GL_RGBA, glw::GL_UNSIGNED_BYTE, std::ptr::null());
+        }
+    }
+    textures
+}
+
+fn copytexsubimage2d_invalid_target(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    let texture = gen_2d_texture_16x16(case);
+
+    case.section("GL_INVALID_ENUM is generated if target is invalid.");
+    // SAFETY: a current context; a copy takes no client pointer.
+    unsafe { gl.copy_tex_sub_image_2d(0, 0, 0, 0, 0, 0, 4, 4) };
+    case.expect_error(glw::GL_INVALID_ENUM);
+
+    // SAFETY: the name is this case's own.
+    unsafe { gl.delete_textures(1, &texture) };
+}
+
+fn copytexsubimage2d_neg_level(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    let textures = gen_2d_and_cube_textures_16x16(case);
+
+    case.section("GL_INVALID_VALUE is generated if level is less than 0.");
+    // SAFETY: as above.
+    unsafe {
+        gl.copy_tex_sub_image_2d(glw::GL_TEXTURE_2D, -1, 0, 0, 0, 0, 4, 4);
+        case.expect_error(glw::GL_INVALID_VALUE);
+        for target in CUBE_FACE_TEX_TARGETS {
+            gl.copy_tex_sub_image_2d(target, -1, 0, 0, 0, 0, 4, 4);
+            case.expect_error(glw::GL_INVALID_VALUE);
+        }
+    }
+
+    // SAFETY: both names are this case's own.
+    unsafe { gl.delete_textures(2, textures.as_ptr()) };
+}
+
+fn copytexsubimage2d_max_level(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    let textures = gen_2d_and_cube_textures_16x16(case);
+
+    case.section("GL_INVALID_VALUE is generated if level is greater than log_2(GL_MAX_TEXTURE_SIZE) for 2D texture targets.");
+    let log2_max_texture_size = de_log2_floor32(case.get_int(glw::GL_MAX_TEXTURE_SIZE)) + 1;
+    // SAFETY: as above.
+    unsafe { gl.copy_tex_sub_image_2d(glw::GL_TEXTURE_2D, log2_max_texture_size, 0, 0, 0, 0, 4, 4) };
+    case.expect_error(glw::GL_INVALID_VALUE);
+
+    case.section("GL_INVALID_VALUE is generated if level is greater than log_2(GL_MAX_CUBE_MAP_SIZE) for cubemap targets.");
+    let log2_max_cubemap_size = de_log2_floor32(case.get_int(glw::GL_MAX_CUBE_MAP_TEXTURE_SIZE)) + 1;
+    // SAFETY: as above.
+    unsafe {
+        for target in CUBE_FACE_TEX_TARGETS {
+            gl.copy_tex_sub_image_2d(target, log2_max_cubemap_size, 0, 0, 0, 0, 4, 4);
+            case.expect_error(glw::GL_INVALID_VALUE);
+        }
+    }
+
+    // SAFETY: both names are this case's own.
+    unsafe { gl.delete_textures(2, textures.as_ptr()) };
+}
+
+fn copytexsubimage2d_neg_offset(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    let texture = gen_2d_texture_16x16(case);
+
+    case.section("GL_INVALID_VALUE is generated if xoffset < 0 or yoffset < 0.");
+    // SAFETY: as above.
+    unsafe {
+        gl.copy_tex_sub_image_2d(glw::GL_TEXTURE_2D, 0, -1, 0, 0, 0, 4, 4);
+        case.expect_error(glw::GL_INVALID_VALUE);
+        gl.copy_tex_sub_image_2d(glw::GL_TEXTURE_2D, 0, 0, -1, 0, 0, 4, 4);
+        case.expect_error(glw::GL_INVALID_VALUE);
+        gl.copy_tex_sub_image_2d(glw::GL_TEXTURE_2D, 0, -1, -1, 0, 0, 4, 4);
+        case.expect_error(glw::GL_INVALID_VALUE);
+    }
+
+    // SAFETY: the name is this case's own.
+    unsafe { gl.delete_textures(1, &texture) };
+}
+
+fn copytexsubimage2d_invalid_offset(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    let texture = gen_2d_texture_16x16(case);
+
+    case.section("GL_INVALID_VALUE is generated if xoffset + width > texture_width or yoffset + height > texture_height.");
+    // SAFETY: as above.
+    unsafe {
+        gl.copy_tex_sub_image_2d(glw::GL_TEXTURE_2D, 0, 14, 0, 0, 0, 4, 4);
+        case.expect_error(glw::GL_INVALID_VALUE);
+        gl.copy_tex_sub_image_2d(glw::GL_TEXTURE_2D, 0, 0, 14, 0, 0, 4, 4);
+        case.expect_error(glw::GL_INVALID_VALUE);
+        gl.copy_tex_sub_image_2d(glw::GL_TEXTURE_2D, 0, 14, 14, 0, 0, 4, 4);
+        case.expect_error(glw::GL_INVALID_VALUE);
+    }
+
+    // SAFETY: the name is this case's own.
+    unsafe { gl.delete_textures(1, &texture) };
+}
+
+fn copytexsubimage2d_neg_width_height(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    let texture = gen_2d_texture_16x16(case);
+
+    case.section("GL_INVALID_VALUE is generated if width or height is less than 0.");
+    // SAFETY: as above.
+    unsafe {
+        gl.copy_tex_sub_image_2d(glw::GL_TEXTURE_2D, 0, 0, 0, 0, 0, -1, 0);
+        case.expect_error(glw::GL_INVALID_VALUE);
+        gl.copy_tex_sub_image_2d(glw::GL_TEXTURE_2D, 0, 0, 0, 0, 0, 0, -1);
+        case.expect_error(glw::GL_INVALID_VALUE);
+        gl.copy_tex_sub_image_2d(glw::GL_TEXTURE_2D, 0, 0, 0, 0, 0, -1, -1);
+        case.expect_error(glw::GL_INVALID_VALUE);
+    }
+
+    // SAFETY: the name is this case's own.
+    unsafe { gl.delete_textures(1, &texture) };
+}
+
+fn copytexsubimage2d_incomplete_framebuffer(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    case.section("GL_INVALID_FRAMEBUFFER_OPERATION is generated if the currently bound framebuffer is not framebuffer complete.");
+    let mut texture = [0u32; 2];
+    let mut fbo: GLuint = 0;
+    // SAFETY: every name is this case's own; each level is left with unspecified
+    // contents, as upstream's null pointer asks for.
+    unsafe {
+        gl.gen_textures(2, texture.as_mut_ptr());
+        gl.bind_texture(glw::GL_TEXTURE_2D, texture[0]);
+        gl.tex_image_2d(glw::GL_TEXTURE_2D, 0, glw::GL_RGBA as GLint, 4, 4, 0, glw::GL_RGBA, glw::GL_UNSIGNED_BYTE, std::ptr::null());
+        gl.bind_texture(glw::GL_TEXTURE_CUBE_MAP, texture[1]);
+        for target in CUBE_FACE_TEX_TARGETS {
+            gl.tex_image_2d(target, 0, glw::GL_RGBA as GLint, 4, 4, 0, glw::GL_RGBA, glw::GL_UNSIGNED_BYTE, std::ptr::null());
+        }
+    }
+    case.expect_error(glw::GL_NO_ERROR);
+    // SAFETY: the framebuffer is this case's own and is left with no attachment on
+    // purpose.
+    unsafe {
+        gl.gen_framebuffers(1, &mut fbo);
+        gl.bind_framebuffer(glw::GL_FRAMEBUFFER, fbo);
+        gl.check_framebuffer_status(glw::GL_FRAMEBUFFER);
+    }
+    case.expect_error(glw::GL_NO_ERROR);
+    // SAFETY: a copy takes no client pointer.
+    unsafe {
+        gl.copy_tex_sub_image_2d(glw::GL_TEXTURE_2D, 0, 0, 0, 0, 0, 0, 0);
+        case.expect_error(glw::GL_INVALID_FRAMEBUFFER_OPERATION);
+        for target in CUBE_FACE_TEX_TARGETS {
+            gl.copy_tex_sub_image_2d(target, 0, 0, 0, 0, 0, 0, 0);
+            case.expect_error(glw::GL_INVALID_FRAMEBUFFER_OPERATION);
+        }
+    }
+
+    // SAFETY: every name is this case's own.
+    unsafe {
+        gl.bind_framebuffer(glw::GL_FRAMEBUFFER, 0);
+        gl.delete_framebuffers(1, &fbo);
+        gl.delete_textures(2, texture.as_ptr());
+    }
+}
+
+/// `NegativeTextureApiTests::init`, restricted to the 27 ported cases.
 pub fn create_tests() -> TestCaseGroup {
     let mut group = TestCaseGroup::new("texture");
     let cases: &[(&'static str, ApiCaseFn)] = &[
@@ -604,6 +815,13 @@ pub fn create_tests() -> TestCaseGroup {
         ("copyteximage2d_max_width_height", copyteximage2d_max_width_height),
         ("copyteximage2d_invalid_border", copyteximage2d_invalid_border),
         ("copyteximage2d_incomplete_framebuffer", copyteximage2d_incomplete_framebuffer),
+        ("copytexsubimage2d_invalid_target", copytexsubimage2d_invalid_target),
+        ("copytexsubimage2d_neg_level", copytexsubimage2d_neg_level),
+        ("copytexsubimage2d_max_level", copytexsubimage2d_max_level),
+        ("copytexsubimage2d_neg_offset", copytexsubimage2d_neg_offset),
+        ("copytexsubimage2d_invalid_offset", copytexsubimage2d_invalid_offset),
+        ("copytexsubimage2d_neg_width_height", copytexsubimage2d_neg_width_height),
+        ("copytexsubimage2d_incomplete_framebuffer", copytexsubimage2d_incomplete_framebuffer),
     ];
     add_api_cases(&mut group, cases);
     group
