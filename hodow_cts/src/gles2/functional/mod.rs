@@ -15,6 +15,8 @@ pub mod clip_control_tests;
 pub mod color_clear_test;
 pub mod depth_stencil_clear_tests;
 pub mod implementation_limit_tests;
+pub mod light_amount_test;
+pub mod multisampled_render_to_texture_tests;
 pub mod negative_api;
 pub mod prerequisite_tests;
 pub mod state_query;
@@ -31,6 +33,8 @@ pub fn create_tests() -> TestCaseGroup {
     group.add_child(color_clear_test::create_tests());
     group.add_child(depth_stencil_clear_tests::create_tests());
     group.add_child(buffer_write_tests::create_tests());
+    group.add_child(light_amount_test::create_tests());
+    group.add_child(multisampled_render_to_texture_tests::create_tests());
     group.add_child(negative_api::create_tests());
     group.add_child(state_query::create_tests());
     group
