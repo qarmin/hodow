@@ -662,6 +662,16 @@ Do not push API-specific knowledge back down into `tcu`/`runner`.
 - Buffer offsets and strides in a GLES test come from `glu::get_program_interface_*`, i.e.
   from the driver's own answers, never from an assumed std430 layout - a conformant driver
   may legally choose a different one.
+- **The GL render target must be asked for as d24s8, on both sides.** EGL sorts configs
+  with *fewer* depth/stencil bits first, so requesting a colour buffer alone reliably
+  yields a target with no depth and no stencil - which makes every case that clears or
+  tests them report NotSupported. `eglu::choose_config` asks for depth 24 + stencil 8 and
+  falls back to colour-only only if the driver has no such config. Upstream's surfaceless
+  target has the same problem in a worse form: it builds `tcu::RenderTarget` from the
+  *requested* config rather than the chosen one, so every unspecified channel stays
+  `DONT_CARE` (-1) and `deqp-gles2` fails `color_clear`/`depth_stencil_clear` on its own -
+  hence `--deqp-gl-config-name=rgba8888d24s8ms0` in `diff_vs_deqp.py`. Anything reading
+  `tcu::RenderTarget`'s bit depths needs both halves of this.
 - **Each GL root runs on a context of exactly its own version** (`Api::gl_api_type`,
   `RenderContext::create`), and only that version's entry points are loaded. Not "at
   least": `glUniformMatrix*fv` with `transpose = GL_TRUE` is an error in ES 2.0 and legal
