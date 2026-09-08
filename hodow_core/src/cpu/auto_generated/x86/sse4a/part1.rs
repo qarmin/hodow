@@ -8,7 +8,8 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_x86_sse4a_mm_extract_si64() -> Result<(), String> {
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_extract_si64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -31,7 +32,12 @@ pub(super) fn test_x86_sse4a_mm_extract_si64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_extracti_si64() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_extract_si64() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_extract_si64_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_extracti_si64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -54,7 +60,12 @@ pub(super) fn test_x86_sse4a_mm_extracti_si64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_extracti_si64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_extracti_si64() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_extracti_si64_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_extracti_si64_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -77,7 +88,12 @@ pub(super) fn test_x86_sse4a_mm_extracti_si64_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_extracti_si64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_extracti_si64_normal2() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_extracti_si64_normal2_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_extracti_si64_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -100,7 +116,12 @@ pub(super) fn test_x86_sse4a_mm_extracti_si64_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_extracti_si64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_extracti_si64_normal3() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_extracti_si64_normal3_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_extracti_si64_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -123,7 +144,12 @@ pub(super) fn test_x86_sse4a_mm_extracti_si64_boundary_min() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_extracti_si64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_extracti_si64_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_extracti_si64_boundary_min_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_extracti_si64_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -146,7 +172,12 @@ pub(super) fn test_x86_sse4a_mm_extracti_si64_boundary_max() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_extracti_si64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_extracti_si64_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_extracti_si64_boundary_max_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_extracti_si64_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -169,7 +200,12 @@ pub(super) fn test_x86_sse4a_mm_extracti_si64_boundary_zero() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_extracti_si64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_extracti_si64_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_extracti_si64_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_extracti_si64_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -192,7 +228,12 @@ pub(super) fn test_x86_sse4a_mm_extracti_si64_boundary_allones() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_extracti_si64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_extracti_si64_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_extracti_si64_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_extracti_si64_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -215,7 +256,12 @@ pub(super) fn test_x86_sse4a_mm_extracti_si64_boundary_mixed() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_insert_si64() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_extracti_si64_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_extracti_si64_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_insert_si64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -238,7 +284,12 @@ pub(super) fn test_x86_sse4a_mm_insert_si64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_inserti_si64() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_insert_si64() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_insert_si64_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_inserti_si64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -261,7 +312,12 @@ pub(super) fn test_x86_sse4a_mm_inserti_si64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_inserti_si64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_inserti_si64() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_inserti_si64_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_inserti_si64_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -284,7 +340,12 @@ pub(super) fn test_x86_sse4a_mm_inserti_si64_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_inserti_si64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_inserti_si64_normal2() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_inserti_si64_normal2_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_inserti_si64_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -307,7 +368,12 @@ pub(super) fn test_x86_sse4a_mm_inserti_si64_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_inserti_si64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_inserti_si64_normal3() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_inserti_si64_normal3_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_inserti_si64_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -330,7 +396,12 @@ pub(super) fn test_x86_sse4a_mm_inserti_si64_boundary_min() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_inserti_si64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_inserti_si64_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_inserti_si64_boundary_min_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_inserti_si64_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -353,7 +424,12 @@ pub(super) fn test_x86_sse4a_mm_inserti_si64_boundary_max() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_inserti_si64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_inserti_si64_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_inserti_si64_boundary_max_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_inserti_si64_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -376,7 +452,12 @@ pub(super) fn test_x86_sse4a_mm_inserti_si64_boundary_zero() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_inserti_si64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_inserti_si64_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_inserti_si64_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_inserti_si64_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -399,7 +480,12 @@ pub(super) fn test_x86_sse4a_mm_inserti_si64_boundary_allones() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_inserti_si64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_inserti_si64_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_inserti_si64_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_inserti_si64_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -422,7 +508,12 @@ pub(super) fn test_x86_sse4a_mm_inserti_si64_boundary_mixed() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_inserti_si64_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_inserti_si64_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_inserti_si64_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_inserti_si64_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -445,7 +536,12 @@ pub(super) fn test_x86_sse4a_mm_inserti_si64_asym_min_max() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_inserti_si64_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_inserti_si64_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_inserti_si64_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_inserti_si64_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -468,7 +564,12 @@ pub(super) fn test_x86_sse4a_mm_inserti_si64_asym_max_min() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_stream_sd() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_inserti_si64_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_inserti_si64_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_stream_sd_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -480,7 +581,12 @@ pub(super) fn test_x86_sse4a_mm_stream_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_stream_sd_normal2() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_stream_sd() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_stream_sd_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_stream_sd_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -492,7 +598,12 @@ pub(super) fn test_x86_sse4a_mm_stream_sd_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_stream_sd_normal3() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_stream_sd_normal2() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_stream_sd_normal2_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_stream_sd_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -504,7 +615,12 @@ pub(super) fn test_x86_sse4a_mm_stream_sd_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_stream_sd_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_stream_sd_normal3() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_stream_sd_normal3_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_stream_sd_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -516,7 +632,12 @@ pub(super) fn test_x86_sse4a_mm_stream_sd_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_stream_sd_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_stream_sd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_stream_sd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_stream_sd_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -528,7 +649,12 @@ pub(super) fn test_x86_sse4a_mm_stream_sd_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_stream_sd_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_stream_sd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_stream_sd_boundary_max_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_stream_sd_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -540,7 +666,12 @@ pub(super) fn test_x86_sse4a_mm_stream_sd_boundary_zero() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_stream_sd_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_stream_sd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_stream_sd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_stream_sd_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -552,7 +683,12 @@ pub(super) fn test_x86_sse4a_mm_stream_sd_boundary_allones() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_stream_sd_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_stream_sd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_stream_sd_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_stream_sd_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -564,7 +700,12 @@ pub(super) fn test_x86_sse4a_mm_stream_sd_boundary_mixed() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_stream_ss() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_stream_sd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_stream_sd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_stream_ss_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -576,7 +717,12 @@ pub(super) fn test_x86_sse4a_mm_stream_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_stream_ss_normal2() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_stream_ss() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_stream_ss_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_stream_ss_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -588,7 +734,12 @@ pub(super) fn test_x86_sse4a_mm_stream_ss_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_stream_ss_normal3() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_stream_ss_normal2() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_stream_ss_normal2_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_stream_ss_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -600,7 +751,12 @@ pub(super) fn test_x86_sse4a_mm_stream_ss_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_stream_ss_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_stream_ss_normal3() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_stream_ss_normal3_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_stream_ss_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -612,7 +768,12 @@ pub(super) fn test_x86_sse4a_mm_stream_ss_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_stream_ss_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_stream_ss_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_stream_ss_boundary_min_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_stream_ss_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -624,7 +785,12 @@ pub(super) fn test_x86_sse4a_mm_stream_ss_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_stream_ss_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_stream_ss_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_stream_ss_boundary_max_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_stream_ss_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -636,7 +802,12 @@ pub(super) fn test_x86_sse4a_mm_stream_ss_boundary_zero() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_stream_ss_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_stream_ss_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_stream_ss_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_stream_ss_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -648,7 +819,12 @@ pub(super) fn test_x86_sse4a_mm_stream_ss_boundary_allones() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_x86_sse4a_mm_stream_ss_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_stream_ss_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_stream_ss_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "sse4a")]
+fn test_x86_sse4a_mm_stream_ss_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -658,4 +834,8 @@ pub(super) fn test_x86_sse4a_mm_stream_ss_boundary_mixed() -> Result<(), String>
         _mm_stream_ss(ptr_p.0.as_mut_ptr(), a);
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse4a_mm_stream_ss_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_sse4a_mm_stream_ss_boundary_mixed_impl() }
 }

@@ -8,7 +8,8 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask() -> Result<(), String> {
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -31,7 +32,12 @@ pub(super) fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -54,7 +60,12 @@ pub(super) fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_normal2() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -77,7 +88,12 @@ pub(super) fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_normal3() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -100,7 +116,12 @@ pub(super) fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_boundary_min() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -123,7 +144,12 @@ pub(super) fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_boundary_max() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -146,7 +172,12 @@ pub(super) fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_boundary_zero() 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -169,7 +200,12 @@ pub(super) fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_boundary_allones
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -192,7 +228,12 @@ pub(super) fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_boundary_mixed()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -215,7 +256,12 @@ pub(super) fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_asym_min_max() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -238,7 +284,12 @@ pub(super) fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_asym_max_min() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -261,7 +312,12 @@ pub(super) fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -284,7 +340,12 @@ pub(super) fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_normal2() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -307,7 +368,12 @@ pub(super) fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_normal3() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -330,7 +396,12 @@ pub(super) fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_boundary_mi
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -353,7 +424,12 @@ pub(super) fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_boundary_ma
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -376,7 +452,12 @@ pub(super) fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_boundary_ze
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -399,7 +480,12 @@ pub(super) fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_boundary_al
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -422,7 +508,12 @@ pub(super) fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_boundary_mi
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -445,7 +536,12 @@ pub(super) fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_asym_min_ma
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -468,7 +564,12 @@ pub(super) fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_asym_max_mi
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -491,7 +592,12 @@ pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -514,7 +620,12 @@ pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_normal2() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -537,7 +648,12 @@ pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_normal3() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -560,7 +676,12 @@ pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_min() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -583,7 +704,12 @@ pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_max() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -606,7 +732,12 @@ pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_zero() 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -629,7 +760,12 @@ pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_allones
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -652,7 +788,12 @@ pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_mixed()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -675,7 +816,12 @@ pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_asym_min_max() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -698,7 +844,12 @@ pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_asym_max_min() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -721,7 +872,12 @@ pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -744,7 +900,12 @@ pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_normal2() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -767,7 +928,12 @@ pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_normal3() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -790,7 +956,12 @@ pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_mi
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -813,7 +984,12 @@ pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_ma
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -836,7 +1012,12 @@ pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_ze
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -859,7 +1040,12 @@ pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_al
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -882,7 +1068,12 @@ pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_mi
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -905,7 +1096,12 @@ pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_asym_min_ma
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -928,7 +1124,12 @@ pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_asym_max_mi
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -951,7 +1152,12 @@ pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -974,7 +1180,12 @@ pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_normal2() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -997,7 +1208,12 @@ pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_normal3() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1020,7 +1236,12 @@ pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_min() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1043,7 +1264,12 @@ pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_max() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1066,7 +1292,12 @@ pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_zero() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1089,7 +1320,12 @@ pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_allones() 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1112,7 +1348,12 @@ pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_mixed() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1135,7 +1376,12 @@ pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_asym_min_max() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1158,7 +1404,12 @@ pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_asym_max_min() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1181,7 +1432,12 @@ pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1204,7 +1460,12 @@ pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_normal2() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1227,7 +1488,12 @@ pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_normal3() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1250,7 +1516,12 @@ pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_min()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1273,7 +1544,12 @@ pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_max()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1296,7 +1572,12 @@ pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_zero(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1319,7 +1600,12 @@ pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_allon
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1342,7 +1628,12 @@ pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_mixed
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1365,7 +1656,12 @@ pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_asym_min_max()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bitalg")]
+fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1386,4 +1682,8 @@ pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_asym_max_min()
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_asym_max_min_impl() }
 }

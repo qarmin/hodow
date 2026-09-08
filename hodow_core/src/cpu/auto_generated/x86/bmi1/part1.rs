@@ -8,7 +8,8 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_x86_bmi1_bextr_u32() -> Result<(), String> {
+#[target_feature(enable = "bmi1")]
+fn test_x86_bmi1_bextr_u32_impl() -> Result<(), String> {
     unsafe {
         let result = _bextr_u32(1u32, 2u32, 3u32);
         check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _bextr_u32(1u32, 2u32, 3u32)"))?;
@@ -28,7 +29,12 @@ pub(super) fn test_x86_bmi1_bextr_u32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_bmi1_bextr2_u32() -> Result<(), String> {
+pub(super) fn test_x86_bmi1_bextr_u32() -> Result<(), String> {
+    unsafe { test_x86_bmi1_bextr_u32_impl() }
+}
+
+#[target_feature(enable = "bmi1")]
+fn test_x86_bmi1_bextr2_u32_impl() -> Result<(), String> {
     unsafe {
         let result = _bextr2_u32(1u32, 2u32);
         check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _bextr2_u32(1u32, 2u32)"))?;
@@ -46,4 +52,8 @@ pub(super) fn test_x86_bmi1_bextr2_u32() -> Result<(), String> {
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_bmi1_bextr2_u32() -> Result<(), String> {
+    unsafe { test_x86_bmi1_bextr2_u32_impl() }
 }

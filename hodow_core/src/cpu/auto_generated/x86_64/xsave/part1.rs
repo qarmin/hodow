@@ -5,7 +5,8 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_x86_64_xsave_xsave64() -> Result<(), String> {
+#[target_feature(enable = "xsave")]
+fn test_x86_64_xsave_xsave64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -17,7 +18,12 @@ pub(super) fn test_x86_64_xsave_xsave64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_64_xsave_xsaveopt64() -> Result<(), String> {
+pub(super) fn test_x86_64_xsave_xsave64() -> Result<(), String> {
+    unsafe { test_x86_64_xsave_xsave64_impl() }
+}
+
+#[target_feature(enable = "xsave")]
+fn test_x86_64_xsave_xsaveopt64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -29,7 +35,12 @@ pub(super) fn test_x86_64_xsave_xsaveopt64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_64_xsave_xsavec64() -> Result<(), String> {
+pub(super) fn test_x86_64_xsave_xsaveopt64() -> Result<(), String> {
+    unsafe { test_x86_64_xsave_xsaveopt64_impl() }
+}
+
+#[target_feature(enable = "xsave")]
+fn test_x86_64_xsave_xsavec64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -39,4 +50,8 @@ pub(super) fn test_x86_64_xsave_xsavec64() -> Result<(), String> {
         _xsavec64(ptr_mem_addr.0.as_mut_ptr(), save_mask);
     }
     Ok(())
+}
+
+pub(super) fn test_x86_64_xsave_xsavec64() -> Result<(), String> {
+    unsafe { test_x86_64_xsave_xsavec64_impl() }
 }

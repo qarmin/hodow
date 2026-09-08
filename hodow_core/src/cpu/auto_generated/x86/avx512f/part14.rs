@@ -8,7 +8,8 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi32() -> Result<(), String> {
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -31,7 +32,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi32() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi32_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -54,7 +60,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi32_normal2() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi32_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_epi32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_epi32_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -77,7 +88,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi32_normal3() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi32_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_epi32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -100,7 +116,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi32_boundary_min() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi32_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_epi32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_epi32_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -123,7 +144,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi32_boundary_max() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi32_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_epi32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -146,7 +172,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi32_boundary_zero() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi32_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_epi32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_epi32_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -169,7 +200,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi32_boundary_allones() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi32_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_epi32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -192,7 +228,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi32_boundary_mixed() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_epi32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -215,7 +256,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -238,7 +284,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32_normal2() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_epi32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_epi32_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -261,7 +312,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32_normal3() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_epi32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -284,7 +340,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32_boundary_min() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_epi32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_epi32_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -307,7 +368,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32_boundary_max() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_epi32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -330,7 +396,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32_boundary_zero() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_epi32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_epi32_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -353,7 +424,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32_boundary_allones() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_epi32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -376,7 +452,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32_boundary_mixed() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_epi32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_epi32_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -399,7 +480,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32_asym_min_max() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_epi32_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_epi32_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -422,7 +508,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32_asym_max_min() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_epi32_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -445,7 +536,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi32() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi32_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -468,7 +564,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi32_normal2() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi32_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_epi32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_epi32_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -491,7 +592,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi32_normal3() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi32_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_epi32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -514,7 +620,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi32_boundary_min() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi32_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_epi32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_epi32_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -537,7 +648,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi32_boundary_max() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi32_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_epi32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -560,7 +676,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi32_boundary_zero() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi32_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_epi32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_epi32_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -583,7 +704,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi32_boundary_allones() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi32_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_epi32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -606,7 +732,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi32_boundary_mixed() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_epi32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -629,7 +760,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_epi32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_epi32_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -652,7 +788,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_epi32_normal2() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_epi32_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_epi32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_epi32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_epi32_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -675,7 +816,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_epi32_normal3() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_epi32_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_epi32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_epi32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -698,7 +844,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_epi32_boundary_min() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_epi32_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_epi32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_epi32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_epi32_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -721,7 +872,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_epi32_boundary_max() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_epi32_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_epi32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_epi32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -744,7 +900,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_epi32_boundary_zero() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_epi32_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_epi32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_epi32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_epi32_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -767,7 +928,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_epi32_boundary_allones() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_epi32_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_epi32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_epi32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -790,7 +956,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_epi32_boundary_mixed() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_epi32_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_epi32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_epi32_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -813,7 +984,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_epi32_asym_min_max() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_epi32_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_epi32_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_epi32_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_epi32_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -836,7 +1012,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_epi32_asym_max_min() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_epi32_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_epi32_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -859,7 +1040,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_epi32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_epi32_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -882,7 +1068,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_epi32_normal2() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_epi32_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_epi32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_epi32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_epi32_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -905,7 +1096,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_epi32_normal3() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_epi32_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_epi32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_epi32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -928,7 +1124,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_epi32_boundary_min() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_epi32_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_epi32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_epi32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_epi32_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -951,7 +1152,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_epi32_boundary_max() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_epi32_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_epi32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_epi32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -974,7 +1180,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_epi32_boundary_zero() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_epi32_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_epi32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_epi32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_epi32_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -997,7 +1208,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_epi32_boundary_allones() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_epi32_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_epi32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_epi32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1020,7 +1236,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_epi32_boundary_mixed() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compress_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_epi32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compress_epi64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1043,7 +1264,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compress_epi64() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compress_epi64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compress_epi64() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compress_epi64_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compress_epi64_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1066,7 +1292,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compress_epi64_normal2() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compress_epi64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compress_epi64_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compress_epi64_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compress_epi64_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1089,7 +1320,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compress_epi64_normal3() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compress_epi64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compress_epi64_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compress_epi64_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compress_epi64_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1112,7 +1348,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compress_epi64_boundary_min() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compress_epi64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compress_epi64_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compress_epi64_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compress_epi64_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1135,7 +1376,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compress_epi64_boundary_max() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compress_epi64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compress_epi64_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compress_epi64_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compress_epi64_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1158,7 +1404,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compress_epi64_boundary_zero() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compress_epi64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compress_epi64_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compress_epi64_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compress_epi64_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1181,7 +1432,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compress_epi64_boundary_allones() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compress_epi64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compress_epi64_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compress_epi64_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compress_epi64_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1204,7 +1460,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compress_epi64_boundary_mixed() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compress_epi64_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compress_epi64_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compress_epi64_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compress_epi64_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1227,7 +1488,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compress_epi64_asym_min_max() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compress_epi64_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compress_epi64_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compress_epi64_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compress_epi64_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1250,7 +1516,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compress_epi64_asym_max_min() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compress_epi64_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compress_epi64_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_epi64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1273,7 +1544,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi64() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi64() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_epi64_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_epi64_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1296,7 +1572,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi64_normal2() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi64_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_epi64_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_epi64_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1319,7 +1600,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi64_normal3() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi64_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_epi64_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_epi64_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1342,7 +1628,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi64_boundary_min() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi64_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_epi64_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_epi64_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1365,7 +1656,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi64_boundary_max() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi64_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_epi64_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_epi64_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1388,7 +1684,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi64_boundary_zero() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi64_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_epi64_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_epi64_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1411,7 +1712,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi64_boundary_allones() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi64_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_epi64_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_epi64_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1434,7 +1740,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi64_boundary_mixed() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_epi64_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_epi64_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_epi64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1457,7 +1768,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_epi64_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_epi64_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1480,7 +1796,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64_normal2() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_epi64_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_epi64_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1503,7 +1824,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64_normal3() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_epi64_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_epi64_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1526,7 +1852,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64_boundary_min() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_epi64_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_epi64_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1549,7 +1880,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64_boundary_max() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_epi64_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_epi64_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1572,7 +1908,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64_boundary_zero() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_epi64_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_epi64_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1595,7 +1936,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64_boundary_allones() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_epi64_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_epi64_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1618,7 +1964,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64_boundary_mixed() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_epi64_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_epi64_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1641,7 +1992,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64_asym_min_max() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_epi64_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_epi64_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1664,7 +2020,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64_asym_max_min() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_epi64_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_epi64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1687,7 +2048,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi64() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi64() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_epi64_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_epi64_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1710,7 +2076,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi64_normal2() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi64_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_epi64_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_epi64_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1733,7 +2104,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi64_normal3() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi64_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_epi64_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_epi64_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1756,7 +2132,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi64_boundary_min() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi64_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_epi64_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_epi64_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1779,7 +2160,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi64_boundary_max() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi64_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_epi64_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_epi64_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1802,7 +2188,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi64_boundary_zero() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi64_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_epi64_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_epi64_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1825,7 +2216,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi64_boundary_allones() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi64_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_epi64_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_epi64_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1848,7 +2244,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi64_boundary_mixed() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi64_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_epi64_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_epi64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1871,7 +2272,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_epi64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_epi64() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_epi64_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_epi64_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1894,7 +2300,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_epi64_normal2() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_epi64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_epi64_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_epi64_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_epi64_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1917,7 +2328,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_epi64_normal3() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_epi64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_epi64_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_epi64_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_epi64_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1940,7 +2356,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_epi64_boundary_min() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_epi64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_epi64_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_epi64_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_epi64_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1963,7 +2384,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_epi64_boundary_max() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_epi64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_epi64_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_epi64_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_epi64_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1986,7 +2412,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_epi64_boundary_zero() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_epi64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_epi64_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_epi64_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_epi64_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2009,7 +2440,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_epi64_boundary_allones() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_epi64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_epi64_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_epi64_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_epi64_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2032,7 +2468,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_epi64_boundary_mixed() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_epi64_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_epi64_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_epi64_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_epi64_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2055,7 +2496,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_epi64_asym_min_max() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_epi64_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_epi64_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_epi64_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_epi64_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2078,7 +2524,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_epi64_asym_max_min() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_epi64_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_epi64_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_epi64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2101,7 +2552,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_epi64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_epi64() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_epi64_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_epi64_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2124,7 +2580,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_epi64_normal2() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_epi64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_epi64_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_epi64_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_epi64_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2147,7 +2608,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_epi64_normal3() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_epi64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_epi64_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_epi64_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_epi64_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2170,7 +2636,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_epi64_boundary_min() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_epi64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_epi64_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_epi64_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_epi64_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2193,7 +2664,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_epi64_boundary_max() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_epi64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_epi64_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_epi64_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_epi64_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2216,7 +2692,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_epi64_boundary_zero() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_epi64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_epi64_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_epi64_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_epi64_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2239,7 +2720,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_epi64_boundary_allones() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_epi64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_epi64_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_epi64_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_epi64_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2262,7 +2748,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_epi64_boundary_mixed() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compress_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_epi64_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_epi64_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compress_ps_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2285,7 +2776,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compress_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compress_ps_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compress_ps() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compress_ps_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compress_ps_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2308,7 +2804,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compress_ps_normal2() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compress_ps_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compress_ps_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compress_ps_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compress_ps_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2331,7 +2832,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compress_ps_normal3() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compress_ps_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compress_ps_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compress_ps_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compress_ps_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2354,7 +2860,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compress_ps_boundary_min() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compress_ps_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compress_ps_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compress_ps_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compress_ps_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2377,7 +2888,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compress_ps_boundary_max() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compress_ps_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compress_ps_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compress_ps_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compress_ps_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2400,7 +2916,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compress_ps_boundary_zero() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compress_ps_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compress_ps_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compress_ps_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compress_ps_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2423,7 +2944,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compress_ps_boundary_allones() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compress_ps_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compress_ps_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compress_ps_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compress_ps_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2446,7 +2972,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compress_ps_boundary_mixed() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compress_ps_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compress_ps_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compress_ps_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compress_ps_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2469,7 +3000,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compress_ps_asym_min_max() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compress_ps_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compress_ps_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compress_ps_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compress_ps_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2492,7 +3028,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compress_ps_asym_max_min() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compress_ps_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compress_ps_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_ps_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2515,7 +3056,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_ps_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_ps() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_ps_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_ps_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2538,7 +3084,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_ps_normal2() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_ps_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_ps_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_ps_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_ps_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2561,7 +3112,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_ps_normal3() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_ps_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_ps_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_ps_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_ps_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2584,7 +3140,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_ps_boundary_min() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_ps_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_ps_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_ps_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_ps_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2607,7 +3168,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_ps_boundary_max() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_ps_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_ps_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_ps_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_ps_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2630,7 +3196,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_ps_boundary_zero() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_ps_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_ps_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_ps_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_ps_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2653,7 +3224,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_ps_boundary_allones() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_ps_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_ps_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_ps_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_ps_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2676,7 +3252,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_ps_boundary_mixed() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_ps_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_ps_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_ps_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2699,7 +3280,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_ps_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_ps() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_ps_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_ps_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2722,7 +3308,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_ps_normal2() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_ps_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_ps_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_ps_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_ps_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2745,7 +3336,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_ps_normal3() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_ps_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_ps_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_ps_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_ps_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2768,7 +3364,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_ps_boundary_min() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_ps_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_ps_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_ps_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_ps_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2791,7 +3392,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_ps_boundary_max() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_ps_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_ps_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_ps_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_ps_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2814,7 +3420,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_ps_boundary_zero() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_ps_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_ps_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_ps_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_ps_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2837,7 +3448,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_ps_boundary_allones() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_ps_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_ps_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_ps_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_ps_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2860,7 +3476,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_ps_boundary_mixed() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_ps_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_ps_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_ps_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_ps_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2883,7 +3504,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_ps_asym_min_max() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_ps_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_ps_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_ps_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_ps_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2906,7 +3532,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_ps_asym_max_min() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_ps_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_ps_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_ps_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2929,7 +3560,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_ps_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_ps() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_ps_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_ps_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2952,7 +3588,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_ps_normal2() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_ps_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_ps_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_ps_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_ps_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2975,7 +3616,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_ps_normal3() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_ps_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_ps_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_ps_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_ps_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2998,7 +3644,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_ps_boundary_min() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_ps_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_ps_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_ps_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_ps_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3021,7 +3672,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_ps_boundary_max() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_ps_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_ps_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_ps_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_ps_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3044,7 +3700,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_ps_boundary_zero() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_ps_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_ps_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_ps_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_ps_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3067,7 +3728,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_ps_boundary_allones() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_ps_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_ps_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_ps_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_ps_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3090,7 +3756,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_ps_boundary_mixed() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_ps_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_ps_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_ps_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3113,7 +3784,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_ps_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_ps() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_ps_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_ps_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3136,7 +3812,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_ps_normal2() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_ps_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_ps_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_ps_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_ps_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3159,7 +3840,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_ps_normal3() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_ps_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_ps_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_ps_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_ps_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3182,7 +3868,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_ps_boundary_min() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_ps_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_ps_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_ps_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_ps_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3205,7 +3896,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_ps_boundary_max() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_ps_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_ps_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_ps_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_ps_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3228,7 +3924,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_ps_boundary_zero() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_ps_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_ps_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_ps_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_ps_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3251,7 +3952,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_ps_boundary_allones() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_ps_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_ps_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_ps_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_ps_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3274,7 +3980,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_ps_boundary_mixed() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_ps_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_ps_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_ps_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_ps_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3297,7 +4008,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_ps_asym_min_max() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_ps_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_ps_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_ps_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_ps_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3320,7 +4036,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_ps_asym_max_min() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_ps_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_ps_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_ps_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3343,7 +4064,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_ps_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_ps() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_ps_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_ps_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3366,7 +4092,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_ps_normal2() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_ps_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_ps_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_ps_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_ps_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3389,7 +4120,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_ps_normal3() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_ps_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_ps_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_ps_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_ps_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3412,7 +4148,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_ps_boundary_min() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_ps_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_ps_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_ps_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_ps_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3435,7 +4176,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_ps_boundary_max() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_ps_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_ps_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_ps_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_ps_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3458,7 +4204,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_ps_boundary_zero() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_ps_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_ps_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_ps_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_ps_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3481,7 +4232,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_ps_boundary_allones() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_ps_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_ps_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_ps_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_ps_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3504,7 +4260,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_ps_boundary_mixed() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compress_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_ps_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_ps_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compress_pd_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3527,7 +4288,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compress_pd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compress_pd_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compress_pd() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compress_pd_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compress_pd_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3550,7 +4316,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compress_pd_normal2() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compress_pd_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compress_pd_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compress_pd_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compress_pd_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3573,7 +4344,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compress_pd_normal3() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compress_pd_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compress_pd_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compress_pd_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compress_pd_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3596,7 +4372,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compress_pd_boundary_min() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compress_pd_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compress_pd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compress_pd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compress_pd_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3619,7 +4400,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compress_pd_boundary_max() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compress_pd_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compress_pd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compress_pd_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compress_pd_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3642,7 +4428,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compress_pd_boundary_zero() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compress_pd_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compress_pd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compress_pd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compress_pd_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3665,7 +4456,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compress_pd_boundary_allones() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compress_pd_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compress_pd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compress_pd_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compress_pd_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3688,7 +4484,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compress_pd_boundary_mixed() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compress_pd_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compress_pd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compress_pd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compress_pd_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3711,7 +4512,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compress_pd_asym_min_max() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compress_pd_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compress_pd_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compress_pd_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compress_pd_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3734,7 +4540,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compress_pd_asym_max_min() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compress_pd_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compress_pd_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_pd_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3757,7 +4568,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_pd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_pd_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_pd() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_pd_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_pd_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3780,7 +4596,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_pd_normal2() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_pd_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_pd_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_pd_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_pd_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3803,7 +4624,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_pd_normal3() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_pd_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_pd_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_pd_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_pd_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3826,7 +4652,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_pd_boundary_min() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_pd_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_pd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_pd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_pd_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3849,7 +4680,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_pd_boundary_max() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_pd_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_pd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_pd_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_pd_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3872,7 +4708,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_pd_boundary_zero() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_pd_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_pd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_pd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_pd_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3895,7 +4736,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_pd_boundary_allones() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_compress_pd_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_pd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_pd_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_compress_pd_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3918,7 +4764,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_compress_pd_boundary_mixed() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_compress_pd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_compress_pd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_pd_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3941,7 +4792,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_pd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_pd_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_pd() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_pd_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_pd_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3964,7 +4820,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_pd_normal2() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_pd_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_pd_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_pd_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_pd_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3987,7 +4848,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_pd_normal3() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_pd_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_pd_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_pd_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_pd_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4010,7 +4876,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_pd_boundary_min() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_pd_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_pd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_pd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_pd_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4033,7 +4904,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_pd_boundary_max() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_pd_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_pd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_pd_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_pd_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4056,7 +4932,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_pd_boundary_zero() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_pd_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_pd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_pd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_pd_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4079,7 +4960,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_pd_boundary_allones() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_pd_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_pd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_pd_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_pd_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4102,7 +4988,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_pd_boundary_mixed() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_pd_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_pd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_pd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_pd_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4125,7 +5016,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_pd_asym_min_max() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compress_pd_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_pd_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_pd_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compress_pd_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4148,7 +5044,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_pd_asym_max_min() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compress_pd_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compress_pd_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_pd_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4171,7 +5072,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_pd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_pd_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_pd() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_pd_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_pd_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4194,7 +5100,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_pd_normal2() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_pd_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_pd_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_pd_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_pd_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4217,7 +5128,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_pd_normal3() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_pd_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_pd_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_pd_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_pd_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4240,7 +5156,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_pd_boundary_min() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_pd_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_pd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_pd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_pd_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4263,7 +5184,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_pd_boundary_max() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_pd_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_pd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_pd_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_pd_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4286,7 +5212,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_pd_boundary_zero() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_pd_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_pd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_pd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_pd_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4309,7 +5240,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_pd_boundary_allones() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_compress_pd_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_pd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_pd_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_compress_pd_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4332,7 +5268,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_pd_boundary_mixed() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_compress_pd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_compress_pd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_pd_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4355,7 +5296,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_pd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_pd_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_pd() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_pd_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_pd_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4378,7 +5324,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_pd_normal2() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_pd_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_pd_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_pd_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_pd_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4401,7 +5352,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_pd_normal3() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_pd_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_pd_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_pd_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_pd_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4424,7 +5380,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_pd_boundary_min() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_pd_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_pd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_pd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_pd_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4447,7 +5408,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_pd_boundary_max() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_pd_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_pd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_pd_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_pd_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4470,7 +5436,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_pd_boundary_zero() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_pd_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_pd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_pd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_pd_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4493,7 +5464,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_pd_boundary_allones() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_pd_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_pd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_pd_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_pd_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4516,7 +5492,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_pd_boundary_mixed() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_pd_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_pd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_pd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_pd_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4539,7 +5520,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_pd_asym_min_max() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compress_pd_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_pd_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_pd_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compress_pd_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4562,7 +5548,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_pd_asym_max_min() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compress_pd_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compress_pd_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_pd_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4585,7 +5576,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_pd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_pd_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_pd() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_pd_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_pd_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4608,7 +5604,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_pd_normal2() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_pd_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_pd_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_pd_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_pd_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4631,7 +5632,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_pd_normal3() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_pd_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_pd_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_pd_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_pd_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4654,7 +5660,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_pd_boundary_min() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_pd_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_pd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_pd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_pd_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4677,7 +5688,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_pd_boundary_max() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_pd_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_pd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_pd_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_pd_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4700,7 +5716,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_pd_boundary_zero() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_pd_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_pd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_pd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_pd_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4723,7 +5744,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_pd_boundary_allones() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_compress_pd_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_pd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_pd_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_compress_pd_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4746,7 +5772,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_pd_boundary_mixed() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_compress_pd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_compress_pd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4759,7 +5790,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi32() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi32_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4772,7 +5808,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi32_normal2() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi32_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_epi32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_epi32_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4785,7 +5826,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi32_normal3() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi32_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_epi32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4798,7 +5844,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi32_boundary_min() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi32_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_epi32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_epi32_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4811,7 +5862,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi32_boundary_max() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi32_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_epi32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4824,7 +5880,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi32_boundary_zero() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi32_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_epi32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_epi32_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4837,7 +5898,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi32_boundary_allones(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi32_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_epi32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4850,7 +5916,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi32_boundary_mixed() 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_epi32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4863,7 +5934,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi32() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4876,7 +5952,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_normal2() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_epi32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4889,7 +5970,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_normal3() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_epi32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4902,7 +5988,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_min() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4915,7 +6006,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_max() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4928,7 +6024,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_zero() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4941,7 +6042,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_allones(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4954,7 +6060,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_mixed() 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4967,7 +6078,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi32() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi32_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4980,7 +6096,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi32_normal2() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi32_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_epi32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_epi32_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4993,7 +6114,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi32_normal3() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_epi32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5006,7 +6132,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_min() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5019,7 +6150,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_max() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5032,7 +6168,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_zero() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5045,7 +6186,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_allones() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5058,7 +6204,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_mixed() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_epi64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5071,7 +6222,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi64() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi64() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_epi64_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_epi64_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5084,7 +6240,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi64_normal2() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi64_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_epi64_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_epi64_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5097,7 +6258,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi64_normal3() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi64_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_epi64_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_epi64_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5110,7 +6276,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi64_boundary_min() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi64_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_epi64_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_epi64_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5123,7 +6294,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi64_boundary_max() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi64_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_epi64_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_epi64_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5136,7 +6312,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi64_boundary_zero() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi64_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_epi64_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_epi64_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5149,7 +6330,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi64_boundary_allones(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi64_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_epi64_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_epi64_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5162,7 +6348,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi64_boundary_mixed() 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_epi64_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_epi64_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5175,7 +6366,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi64() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi64() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_epi64_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5188,7 +6384,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_normal2() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_epi64_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5201,7 +6402,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_normal3() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_epi64_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5214,7 +6420,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_min() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5227,7 +6438,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_max() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5240,7 +6456,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_zero() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5253,7 +6474,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_allones(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5266,7 +6492,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_mixed() 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_epi64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5279,7 +6510,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi64() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi64() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_epi64_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_epi64_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5292,7 +6528,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi64_normal2() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi64_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_epi64_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_epi64_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5305,7 +6546,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi64_normal3() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi64_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_epi64_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5318,7 +6564,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_min() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5331,7 +6582,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_max() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5344,7 +6600,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_zero() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5357,7 +6618,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_allones() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5370,7 +6636,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_mixed() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_ps_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5383,7 +6654,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_ps() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_ps_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_ps() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_ps_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_ps_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5396,7 +6672,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_ps_normal2() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_ps_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_ps_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_ps_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_ps_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5409,7 +6690,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_ps_normal3() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_ps_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_ps_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_ps_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_ps_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5422,7 +6708,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_ps_boundary_min() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_ps_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_ps_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_ps_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_ps_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5435,7 +6726,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_ps_boundary_max() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_ps_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_ps_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_ps_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_ps_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5448,7 +6744,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_ps_boundary_zero() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_ps_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_ps_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_ps_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_ps_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5461,7 +6762,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_ps_boundary_allones() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_ps_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_ps_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_ps_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_ps_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5474,7 +6780,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_ps_boundary_mixed() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_ps_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_ps_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_ps_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5487,7 +6798,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_ps() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_ps_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_ps() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_ps_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_ps_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5500,7 +6816,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_ps_normal2() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_ps_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_ps_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_ps_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_ps_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5513,7 +6834,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_ps_normal3() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_ps_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_ps_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5526,7 +6852,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_min() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5539,7 +6870,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_max() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5552,7 +6888,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_zero() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5565,7 +6906,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_allones() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5578,7 +6924,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_mixed() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_ps_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5591,7 +6942,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_ps() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_ps_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_ps() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_ps_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_ps_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5604,7 +6960,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_ps_normal2() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_ps_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_ps_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_ps_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_ps_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5617,7 +6978,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_ps_normal3() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_ps_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_ps_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5630,7 +6996,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_min() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5643,7 +7014,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_max() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5656,7 +7032,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_zero() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5669,7 +7050,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_allones() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5682,7 +7068,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_mixed() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_pd_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5695,7 +7086,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_pd() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_pd_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_pd() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_pd_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_pd_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5708,7 +7104,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_pd_normal2() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_pd_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_pd_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_pd_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_pd_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5721,7 +7122,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_pd_normal3() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_pd_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_pd_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_pd_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_pd_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5734,7 +7140,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_pd_boundary_min() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_pd_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_pd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_pd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_pd_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5747,7 +7158,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_pd_boundary_max() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_pd_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_pd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_pd_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_pd_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5760,7 +7176,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_pd_boundary_zero() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_pd_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_pd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_pd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_pd_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5773,7 +7194,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_pd_boundary_allones() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_pd_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_pd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_pd_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_compressstoreu_pd_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5786,7 +7212,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_pd_boundary_mixed() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_compressstoreu_pd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_compressstoreu_pd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_pd_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5799,7 +7230,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_pd() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_pd_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_pd() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_pd_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_pd_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5812,7 +7248,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_pd_normal2() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_pd_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_pd_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_pd_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_pd_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5825,7 +7266,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_pd_normal3() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_pd_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_pd_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5838,7 +7284,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_min() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5851,7 +7302,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_max() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5864,7 +7320,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_zero() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5877,7 +7338,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_allones() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5890,7 +7356,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_mixed() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_pd_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5903,7 +7374,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_pd() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_pd_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_pd() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_pd_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_pd_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5916,7 +7392,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_pd_normal2() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_pd_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_pd_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_pd_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_pd_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5929,7 +7410,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_pd_normal3() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_pd_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_pd_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5942,7 +7428,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_min() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5955,7 +7446,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_max() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5968,7 +7464,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_zero() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5981,7 +7482,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_allones() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5994,7 +7500,12 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_mixed() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_expand_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expand_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6017,7 +7528,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_expand_epi32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_expand_epi32_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_expand_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expand_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expand_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6040,7 +7556,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_expand_epi32_normal2() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_expand_epi32_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_expand_epi32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expand_epi32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expand_epi32_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6063,7 +7584,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_expand_epi32_normal3() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_expand_epi32_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_expand_epi32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expand_epi32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expand_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6086,7 +7612,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_expand_epi32_boundary_min() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_expand_epi32_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_expand_epi32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expand_epi32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expand_epi32_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6109,7 +7640,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_expand_epi32_boundary_max() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_expand_epi32_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_expand_epi32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expand_epi32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expand_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6132,7 +7668,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_expand_epi32_boundary_zero() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_expand_epi32_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_expand_epi32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expand_epi32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expand_epi32_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6155,7 +7696,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_expand_epi32_boundary_allones() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_expand_epi32_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_expand_epi32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expand_epi32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expand_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6178,7 +7724,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_expand_epi32_boundary_mixed() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_expand_epi32_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_expand_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expand_epi32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expand_epi32_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6201,7 +7752,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_expand_epi32_asym_min_max() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_expand_epi32_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_expand_epi32_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expand_epi32_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expand_epi32_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6224,7 +7780,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_expand_epi32_asym_max_min() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_expand_epi32_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expand_epi32_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_expand_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6247,7 +7808,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi32() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi32_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_expand_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_expand_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6270,7 +7836,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi32_normal2() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi32_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_expand_epi32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_expand_epi32_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6293,7 +7864,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi32_normal3() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi32_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_expand_epi32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_expand_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6316,7 +7892,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi32_boundary_min() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi32_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_expand_epi32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_expand_epi32_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6339,7 +7920,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi32_boundary_max() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi32_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_expand_epi32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_expand_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6362,7 +7948,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi32_boundary_zero() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi32_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_expand_epi32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_expand_epi32_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6385,7 +7976,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi32_boundary_allones() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi32_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_expand_epi32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_expand_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6408,7 +8004,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi32_boundary_mixed() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_expand_epi32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expand_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6431,7 +8032,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expand_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expand_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6454,7 +8060,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32_normal2() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expand_epi32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expand_epi32_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6477,7 +8088,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32_normal3() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expand_epi32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expand_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6500,7 +8116,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32_boundary_min() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expand_epi32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expand_epi32_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6523,7 +8144,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32_boundary_max() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expand_epi32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expand_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6546,7 +8172,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32_boundary_zero() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expand_epi32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expand_epi32_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6569,7 +8200,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32_boundary_allones() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expand_epi32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expand_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6592,7 +8228,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32_boundary_mixed() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expand_epi32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expand_epi32_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6615,7 +8256,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32_asym_min_max() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expand_epi32_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expand_epi32_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6638,7 +8284,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32_asym_max_min() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expand_epi32_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_expand_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6661,7 +8312,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi32() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi32_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_expand_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_expand_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6684,7 +8340,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi32_normal2() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi32_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_expand_epi32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_expand_epi32_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6707,7 +8368,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi32_normal3() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi32_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_expand_epi32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_expand_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6730,7 +8396,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi32_boundary_min() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi32_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_expand_epi32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_expand_epi32_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6753,7 +8424,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi32_boundary_max() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi32_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_expand_epi32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_expand_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6776,7 +8452,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi32_boundary_zero() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi32_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_expand_epi32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_expand_epi32_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6799,7 +8480,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi32_boundary_allones() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi32_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_expand_epi32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_expand_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6822,7 +8508,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi32_boundary_mixed() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_expand_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_expand_epi32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expand_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6845,7 +8536,12 @@ pub(super) fn test_x86_avx512f_mm_mask_expand_epi32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_expand_epi32_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_expand_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expand_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expand_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6868,7 +8564,12 @@ pub(super) fn test_x86_avx512f_mm_mask_expand_epi32_normal2() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_expand_epi32_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_expand_epi32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expand_epi32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expand_epi32_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6891,7 +8592,12 @@ pub(super) fn test_x86_avx512f_mm_mask_expand_epi32_normal3() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_expand_epi32_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_expand_epi32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expand_epi32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expand_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6914,7 +8620,12 @@ pub(super) fn test_x86_avx512f_mm_mask_expand_epi32_boundary_min() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_expand_epi32_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_expand_epi32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expand_epi32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expand_epi32_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6937,7 +8648,12 @@ pub(super) fn test_x86_avx512f_mm_mask_expand_epi32_boundary_max() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_expand_epi32_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_expand_epi32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expand_epi32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expand_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6960,7 +8676,12 @@ pub(super) fn test_x86_avx512f_mm_mask_expand_epi32_boundary_zero() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_expand_epi32_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_expand_epi32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expand_epi32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expand_epi32_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6983,7 +8704,12 @@ pub(super) fn test_x86_avx512f_mm_mask_expand_epi32_boundary_allones() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_expand_epi32_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_expand_epi32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expand_epi32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expand_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7006,7 +8732,12 @@ pub(super) fn test_x86_avx512f_mm_mask_expand_epi32_boundary_mixed() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_expand_epi32_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_expand_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expand_epi32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expand_epi32_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7029,7 +8760,12 @@ pub(super) fn test_x86_avx512f_mm_mask_expand_epi32_asym_min_max() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_expand_epi32_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_expand_epi32_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expand_epi32_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expand_epi32_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7052,7 +8788,12 @@ pub(super) fn test_x86_avx512f_mm_mask_expand_epi32_asym_max_min() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_expand_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_expand_epi32_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expand_epi32_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_expand_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7075,7 +8816,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_expand_epi32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_expand_epi32_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_expand_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_expand_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_expand_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7098,7 +8844,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_expand_epi32_normal2() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_expand_epi32_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_expand_epi32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_expand_epi32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_expand_epi32_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7121,7 +8872,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_expand_epi32_normal3() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_expand_epi32_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_expand_epi32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_expand_epi32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_expand_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7144,7 +8900,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_expand_epi32_boundary_min() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_expand_epi32_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_expand_epi32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_expand_epi32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_expand_epi32_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7167,7 +8928,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_expand_epi32_boundary_max() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_expand_epi32_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_expand_epi32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_expand_epi32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_expand_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7190,7 +8956,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_expand_epi32_boundary_zero() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_expand_epi32_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_expand_epi32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_expand_epi32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_expand_epi32_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7213,7 +8984,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_expand_epi32_boundary_allones() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_expand_epi32_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_expand_epi32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_expand_epi32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_expand_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7236,7 +9012,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_expand_epi32_boundary_mixed() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_expand_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_expand_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_expand_epi32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expand_epi64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7259,7 +9040,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_expand_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_expand_epi64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_expand_epi64() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expand_epi64_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expand_epi64_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7282,7 +9068,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_expand_epi64_normal2() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_expand_epi64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_expand_epi64_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expand_epi64_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expand_epi64_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7305,7 +9096,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_expand_epi64_normal3() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_expand_epi64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_expand_epi64_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expand_epi64_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expand_epi64_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7328,7 +9124,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_expand_epi64_boundary_min() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_expand_epi64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_expand_epi64_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expand_epi64_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expand_epi64_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7351,7 +9152,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_expand_epi64_boundary_max() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_expand_epi64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_expand_epi64_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expand_epi64_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expand_epi64_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7374,7 +9180,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_expand_epi64_boundary_zero() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_expand_epi64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_expand_epi64_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expand_epi64_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expand_epi64_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7397,7 +9208,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_expand_epi64_boundary_allones() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_expand_epi64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_expand_epi64_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expand_epi64_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expand_epi64_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7420,7 +9236,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_expand_epi64_boundary_mixed() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_expand_epi64_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_expand_epi64_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expand_epi64_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expand_epi64_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7443,7 +9264,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_expand_epi64_asym_min_max() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_expand_epi64_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_expand_epi64_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expand_epi64_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expand_epi64_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7466,7 +9292,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_expand_epi64_asym_max_min() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_expand_epi64_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expand_epi64_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_expand_epi64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7489,7 +9320,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi64() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi64() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_expand_epi64_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_expand_epi64_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7512,7 +9348,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi64_normal2() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi64_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_expand_epi64_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_expand_epi64_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7535,7 +9376,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi64_normal3() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi64_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_expand_epi64_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_expand_epi64_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7558,7 +9404,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi64_boundary_min() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi64_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_expand_epi64_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_expand_epi64_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7581,7 +9432,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi64_boundary_max() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi64_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_expand_epi64_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_expand_epi64_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7604,7 +9460,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi64_boundary_zero() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi64_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_expand_epi64_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_expand_epi64_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7627,7 +9488,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi64_boundary_allones() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi64_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_expand_epi64_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_expand_epi64_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7650,7 +9516,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi64_boundary_mixed() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_expand_epi64_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_expand_epi64_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expand_epi64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7673,7 +9544,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expand_epi64_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expand_epi64_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7696,7 +9572,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64_normal2() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expand_epi64_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expand_epi64_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7719,7 +9600,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64_normal3() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expand_epi64_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expand_epi64_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7742,7 +9628,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64_boundary_min() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expand_epi64_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expand_epi64_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7765,7 +9656,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64_boundary_max() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expand_epi64_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expand_epi64_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7788,7 +9684,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64_boundary_zero() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expand_epi64_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expand_epi64_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7811,7 +9712,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64_boundary_allones() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expand_epi64_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expand_epi64_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7834,7 +9740,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64_boundary_mixed() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expand_epi64_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expand_epi64_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7857,7 +9768,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64_asym_min_max() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expand_epi64_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expand_epi64_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7880,7 +9796,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64_asym_max_min() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expand_epi64_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_expand_epi64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7903,7 +9824,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi64() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi64() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_expand_epi64_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_expand_epi64_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7926,7 +9852,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi64_normal2() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi64_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_expand_epi64_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_expand_epi64_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7949,7 +9880,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi64_normal3() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi64_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_expand_epi64_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_expand_epi64_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7972,7 +9908,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi64_boundary_min() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi64_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_expand_epi64_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_expand_epi64_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7995,7 +9936,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi64_boundary_max() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi64_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_expand_epi64_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_expand_epi64_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8018,7 +9964,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi64_boundary_zero() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi64_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_expand_epi64_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_expand_epi64_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8041,7 +9992,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi64_boundary_allones() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi64_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_expand_epi64_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_expand_epi64_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8064,7 +10020,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi64_boundary_mixed() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_expand_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi64_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_expand_epi64_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expand_epi64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8087,7 +10048,12 @@ pub(super) fn test_x86_avx512f_mm_mask_expand_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_expand_epi64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_expand_epi64() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expand_epi64_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expand_epi64_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8110,7 +10076,12 @@ pub(super) fn test_x86_avx512f_mm_mask_expand_epi64_normal2() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_expand_epi64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_expand_epi64_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expand_epi64_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expand_epi64_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8133,7 +10104,12 @@ pub(super) fn test_x86_avx512f_mm_mask_expand_epi64_normal3() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_expand_epi64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_expand_epi64_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expand_epi64_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expand_epi64_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8156,7 +10132,12 @@ pub(super) fn test_x86_avx512f_mm_mask_expand_epi64_boundary_min() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_expand_epi64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_expand_epi64_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expand_epi64_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expand_epi64_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8179,7 +10160,12 @@ pub(super) fn test_x86_avx512f_mm_mask_expand_epi64_boundary_max() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_expand_epi64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_expand_epi64_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expand_epi64_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expand_epi64_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8202,7 +10188,12 @@ pub(super) fn test_x86_avx512f_mm_mask_expand_epi64_boundary_zero() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_expand_epi64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_expand_epi64_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expand_epi64_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expand_epi64_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8225,7 +10216,12 @@ pub(super) fn test_x86_avx512f_mm_mask_expand_epi64_boundary_allones() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_expand_epi64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_expand_epi64_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expand_epi64_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expand_epi64_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8248,7 +10244,12 @@ pub(super) fn test_x86_avx512f_mm_mask_expand_epi64_boundary_mixed() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_expand_epi64_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_expand_epi64_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expand_epi64_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expand_epi64_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8271,7 +10272,12 @@ pub(super) fn test_x86_avx512f_mm_mask_expand_epi64_asym_min_max() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_expand_epi64_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_expand_epi64_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expand_epi64_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expand_epi64_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8294,7 +10300,12 @@ pub(super) fn test_x86_avx512f_mm_mask_expand_epi64_asym_max_min() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_expand_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_expand_epi64_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expand_epi64_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_expand_epi64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8317,7 +10328,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_expand_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_expand_epi64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_expand_epi64() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_expand_epi64_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_expand_epi64_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8340,7 +10356,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_expand_epi64_normal2() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_expand_epi64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_expand_epi64_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_expand_epi64_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_expand_epi64_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8363,7 +10384,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_expand_epi64_normal3() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_expand_epi64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_expand_epi64_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_expand_epi64_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_expand_epi64_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8386,7 +10412,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_expand_epi64_boundary_min() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_expand_epi64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_expand_epi64_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_expand_epi64_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_expand_epi64_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8409,7 +10440,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_expand_epi64_boundary_max() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_expand_epi64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_expand_epi64_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_expand_epi64_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_expand_epi64_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8432,7 +10468,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_expand_epi64_boundary_zero() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_expand_epi64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_expand_epi64_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_expand_epi64_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_expand_epi64_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8455,7 +10496,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_expand_epi64_boundary_allones() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_expand_epi64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_expand_epi64_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_expand_epi64_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_expand_epi64_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8478,7 +10524,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_expand_epi64_boundary_mixed() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_expand_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_expand_epi64_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_expand_epi64_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expand_ps_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8501,7 +10552,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_expand_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_expand_ps_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_expand_ps() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expand_ps_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expand_ps_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8524,7 +10580,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_expand_ps_normal2() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_expand_ps_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_expand_ps_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expand_ps_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expand_ps_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8547,7 +10608,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_expand_ps_normal3() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_expand_ps_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_expand_ps_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expand_ps_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expand_ps_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8570,7 +10636,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_expand_ps_boundary_min() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_expand_ps_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_expand_ps_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expand_ps_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expand_ps_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8593,7 +10664,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_expand_ps_boundary_max() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_expand_ps_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_expand_ps_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expand_ps_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expand_ps_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8616,7 +10692,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_expand_ps_boundary_zero() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_expand_ps_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_expand_ps_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expand_ps_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expand_ps_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8639,7 +10720,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_expand_ps_boundary_allones() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_expand_ps_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_expand_ps_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expand_ps_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expand_ps_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8662,7 +10748,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_expand_ps_boundary_mixed() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_expand_ps_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_expand_ps_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expand_ps_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expand_ps_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8685,7 +10776,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_expand_ps_asym_min_max() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_expand_ps_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_expand_ps_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expand_ps_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expand_ps_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8708,7 +10804,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_expand_ps_asym_max_min() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_expand_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_expand_ps_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expand_ps_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_expand_ps_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8731,7 +10832,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_expand_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_expand_ps_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_expand_ps() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_expand_ps_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_expand_ps_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8754,7 +10860,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_expand_ps_normal2() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_expand_ps_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_expand_ps_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_expand_ps_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_expand_ps_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8777,7 +10888,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_expand_ps_normal3() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_expand_ps_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_expand_ps_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_expand_ps_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_expand_ps_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8800,7 +10916,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_expand_ps_boundary_min() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_expand_ps_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_expand_ps_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_expand_ps_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_expand_ps_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8823,7 +10944,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_expand_ps_boundary_max() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_expand_ps_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_expand_ps_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_expand_ps_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_expand_ps_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8846,7 +10972,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_expand_ps_boundary_zero() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_expand_ps_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_expand_ps_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_expand_ps_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_expand_ps_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8869,7 +11000,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_expand_ps_boundary_allones() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_expand_ps_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_expand_ps_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_expand_ps_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_expand_ps_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8892,7 +11028,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_expand_ps_boundary_mixed() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_expand_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_expand_ps_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_expand_ps_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expand_ps_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8915,7 +11056,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_expand_ps_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_expand_ps() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expand_ps_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expand_ps_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8938,7 +11084,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_ps_normal2() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_expand_ps_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_expand_ps_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expand_ps_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expand_ps_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8961,7 +11112,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_ps_normal3() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_expand_ps_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_expand_ps_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expand_ps_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expand_ps_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8984,7 +11140,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_ps_boundary_min() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_expand_ps_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_expand_ps_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expand_ps_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expand_ps_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9007,7 +11168,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_ps_boundary_max() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_expand_ps_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_expand_ps_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expand_ps_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expand_ps_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9030,7 +11196,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_ps_boundary_zero() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_expand_ps_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_expand_ps_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expand_ps_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expand_ps_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9053,7 +11224,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_ps_boundary_allones() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_expand_ps_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_expand_ps_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expand_ps_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expand_ps_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9076,7 +11252,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_ps_boundary_mixed() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_expand_ps_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_expand_ps_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expand_ps_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expand_ps_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9099,7 +11280,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_ps_asym_min_max() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_expand_ps_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_expand_ps_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expand_ps_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expand_ps_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9120,4 +11306,8 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_ps_asym_max_min() -> Result<(),
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expand_ps_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expand_ps_asym_max_min_impl() }
 }

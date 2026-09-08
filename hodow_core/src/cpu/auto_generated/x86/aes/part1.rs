@@ -8,7 +8,8 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_x86_aes_mm_aesdec_si128() -> Result<(), String> {
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesdec_si128_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesdec_si128(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
         check_array_equality(&result, &[1368450936, -1051610849, -1800699586, -912388816]).map_err(|e| format!("{e} | call: _mm_aesdec_si128(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
@@ -28,7 +29,12 @@ pub(super) fn test_x86_aes_mm_aesdec_si128() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesdec_si128_normal2() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesdec_si128() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesdec_si128_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesdec_si128_normal2_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesdec_si128(create__m128i_from_i32_array([0, -1, 2, -3]), create__m128i_from_i32_array([10, 9, 12, 7])));
         check_array_equality(&result, &[587997958, 203623466, -1341145013, 1052935713]).map_err(|e| format!("{e} | call: _mm_aesdec_si128(create__m128i_from_i32_array([0, -1, 2, -3]), create__m128i_from_i32_array([10, 9, 12, 7]))"))?;
@@ -48,7 +54,12 @@ pub(super) fn test_x86_aes_mm_aesdec_si128_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesdec_si128_normal3() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesdec_si128_normal2() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesdec_si128_normal2_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesdec_si128_normal3_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesdec_si128(create__m128i_from_i32_array([100, 200, 300, 400]), create__m128i_from_i32_array([110, 210, 310, 410])));
         check_array_equality(&result, &[1137052007, 894036133, -494746748, -1117470177]).map_err(|e| format!("{e} | call: _mm_aesdec_si128(create__m128i_from_i32_array([100, 200, 300, 400]), create__m128i_from_i32_array([110, 210, 310, 410]))"))?;
@@ -68,7 +79,12 @@ pub(super) fn test_x86_aes_mm_aesdec_si128_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesdec_si128_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesdec_si128_normal3() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesdec_si128_normal3_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesdec_si128_boundary_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesdec_si128(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN])));
         check_array_equality(&result, &[-729289641, -729289641, -729289641, -729289641]).map_err(|e| format!("{e} | call: _mm_aesdec_si128(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]))"))?;
@@ -88,7 +104,12 @@ pub(super) fn test_x86_aes_mm_aesdec_si128_boundary_min() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesdec_si128_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesdec_si128_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesdec_si128_boundary_min_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesdec_si128_boundary_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesdec_si128(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
         check_array_equality(&result, &[-972522460, -972522460, -972522460, -972522460]).map_err(|e| format!("{e} | call: _mm_aesdec_si128(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
@@ -108,7 +129,12 @@ pub(super) fn test_x86_aes_mm_aesdec_si128_boundary_max() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesdec_si128_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesdec_si128_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesdec_si128_boundary_max_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesdec_si128_boundary_zero_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesdec_si128(create__m128i_from_i32_array([0, 0, 0, 0]), create__m128i_from_i32_array([0, 0, 0, 0])));
         check_array_equality(&result, &[1381126738, 1381126738, 1381126738, 1381126738]).map_err(|e| format!("{e} | call: _mm_aesdec_si128(create__m128i_from_i32_array([0, 0, 0, 0]), create__m128i_from_i32_array([0, 0, 0, 0]))"))?;
@@ -128,7 +154,12 @@ pub(super) fn test_x86_aes_mm_aesdec_si128_boundary_zero() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesdec_si128_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesdec_si128_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesdec_si128_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesdec_si128_boundary_allones_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesdec_si128(create__m128i_from_i32_array([-1, -1, -1, -1]), create__m128i_from_i32_array([-1, -1, -1, -1])));
         check_array_equality(&result, &[-2105376126, -2105376126, -2105376126, -2105376126]).map_err(|e| format!("{e} | call: _mm_aesdec_si128(create__m128i_from_i32_array([-1, -1, -1, -1]), create__m128i_from_i32_array([-1, -1, -1, -1]))"))?;
@@ -148,7 +179,12 @@ pub(super) fn test_x86_aes_mm_aesdec_si128_boundary_allones() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesdec_si128_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesdec_si128_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesdec_si128_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesdec_si128_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesdec_si128(create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]), create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1])));
         check_array_equality(&result, &[1736891818, 1943860188, 587997964, -183939623]).map_err(|e| format!("{e} | call: _mm_aesdec_si128(create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]), create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]))"))?;
@@ -168,7 +204,12 @@ pub(super) fn test_x86_aes_mm_aesdec_si128_boundary_mixed() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesdec_si128_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesdec_si128_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesdec_si128_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesdec_si128_asym_min_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesdec_si128(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
         check_array_equality(&result, &[729289640, 729289640, 729289640, 729289640]).map_err(|e| format!("{e} | call: _mm_aesdec_si128(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
@@ -188,7 +229,12 @@ pub(super) fn test_x86_aes_mm_aesdec_si128_asym_min_max() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesdec_si128_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesdec_si128_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesdec_si128_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesdec_si128_asym_max_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesdec_si128(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN])));
         check_array_equality(&result, &[972522459, 972522459, 972522459, 972522459]).map_err(|e| format!("{e} | call: _mm_aesdec_si128(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]))"))?;
@@ -208,7 +254,12 @@ pub(super) fn test_x86_aes_mm_aesdec_si128_asym_max_min() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesdeclast_si128() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesdec_si128_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesdec_si128_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesdeclast_si128_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesdeclast_si128(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
         check_array_equality(&result, &[1381126668, 1381126764, 1381126866, 1381126712]).map_err(|e| format!("{e} | call: _mm_aesdeclast_si128(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
@@ -228,7 +279,12 @@ pub(super) fn test_x86_aes_mm_aesdeclast_si128() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesdeclast_si128_normal2() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesdeclast_si128() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesdeclast_si128_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesdeclast_si128_normal2_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesdeclast_si128(create__m128i_from_i32_array([0, -1, 2, -3]), create__m128i_from_i32_array([10, 9, 12, 7])));
         check_array_equality(&result, &[2102558040, 1383944820, 2102558054, 1383944742]).map_err(|e| format!("{e} | call: _mm_aesdeclast_si128(create__m128i_from_i32_array([0, -1, 2, -3]), create__m128i_from_i32_array([10, 9, 12, 7]))"))?;
@@ -248,7 +304,12 @@ pub(super) fn test_x86_aes_mm_aesdeclast_si128_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesdeclast_si128_normal3() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesdeclast_si128_normal2() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesdeclast_si128_normal2_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesdeclast_si128_normal3_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesdeclast_si128(create__m128i_from_i32_array([100, 200, 300, 400]), create__m128i_from_i32_array([110, 210, 310, 410])));
         check_array_equality(&result, &[1381108194, 1381126755, 1381127028, 1381107724]).map_err(|e| format!("{e} | call: _mm_aesdeclast_si128(create__m128i_from_i32_array([100, 200, 300, 400]), create__m128i_from_i32_array([110, 210, 310, 410]))"))?;
@@ -268,7 +329,12 @@ pub(super) fn test_x86_aes_mm_aesdeclast_si128_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesdeclast_si128_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesdeclast_si128_normal3() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesdeclast_si128_normal3_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesdeclast_si128_boundary_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesdeclast_si128(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN])));
         check_array_equality(&result, &[-1169010094, -1169010094, -1169010094, -1169010094]).map_err(|e| format!("{e} | call: _mm_aesdeclast_si128(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]))"))?;
@@ -288,7 +354,12 @@ pub(super) fn test_x86_aes_mm_aesdeclast_si128_boundary_min() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesdeclast_si128_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesdeclast_si128_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesdeclast_si128_boundary_min_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesdeclast_si128_boundary_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesdeclast_si128(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
         check_array_equality(&result, &[344097410, 344097410, 344097410, 344097410]).map_err(|e| format!("{e} | call: _mm_aesdeclast_si128(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
@@ -308,7 +379,12 @@ pub(super) fn test_x86_aes_mm_aesdeclast_si128_boundary_max() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesdeclast_si128_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesdeclast_si128_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesdeclast_si128_boundary_max_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesdeclast_si128_boundary_zero_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesdeclast_si128(create__m128i_from_i32_array([0, 0, 0, 0]), create__m128i_from_i32_array([0, 0, 0, 0])));
         check_array_equality(&result, &[1381126738, 1381126738, 1381126738, 1381126738]).map_err(|e| format!("{e} | call: _mm_aesdeclast_si128(create__m128i_from_i32_array([0, 0, 0, 0]), create__m128i_from_i32_array([0, 0, 0, 0]))"))?;
@@ -328,7 +404,12 @@ pub(super) fn test_x86_aes_mm_aesdeclast_si128_boundary_zero() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesdeclast_si128_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesdeclast_si128_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesdeclast_si128_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesdeclast_si128_boundary_allones_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesdeclast_si128(create__m128i_from_i32_array([-1, -1, -1, -1]), create__m128i_from_i32_array([-1, -1, -1, -1])));
         check_array_equality(&result, &[-2105376126, -2105376126, -2105376126, -2105376126]).map_err(|e| format!("{e} | call: _mm_aesdeclast_si128(create__m128i_from_i32_array([-1, -1, -1, -1]), create__m128i_from_i32_array([-1, -1, -1, -1]))"))?;
@@ -348,7 +429,12 @@ pub(super) fn test_x86_aes_mm_aesdeclast_si128_boundary_allones() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesdeclast_si128_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesdeclast_si128_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesdeclast_si128_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesdeclast_si128_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesdeclast_si128(create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]), create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1])));
         check_array_equality(&result, &[-346915502, 763538818, 2102558034, -981291646]).map_err(|e| format!("{e} | call: _mm_aesdeclast_si128(create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]), create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]))"))?;
@@ -368,7 +454,12 @@ pub(super) fn test_x86_aes_mm_aesdeclast_si128_boundary_mixed() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesdeclast_si128_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesdeclast_si128_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesdeclast_si128_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesdeclast_si128_asym_min_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesdeclast_si128(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
         check_array_equality(&result, &[1169010093, 1169010093, 1169010093, 1169010093]).map_err(|e| format!("{e} | call: _mm_aesdeclast_si128(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
@@ -388,7 +479,12 @@ pub(super) fn test_x86_aes_mm_aesdeclast_si128_asym_min_max() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesdeclast_si128_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesdeclast_si128_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesdeclast_si128_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesdeclast_si128_asym_max_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesdeclast_si128(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN])));
         check_array_equality(&result, &[-344097411, -344097411, -344097411, -344097411]).map_err(|e| format!("{e} | call: _mm_aesdeclast_si128(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]))"))?;
@@ -408,7 +504,12 @@ pub(super) fn test_x86_aes_mm_aesdeclast_si128_asym_max_min() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesenc_si128() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesdeclast_si128_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesdeclast_si128_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesenc_si128_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesenc_si128(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
         check_array_equality(&result, &[1115454552, 1601664845, 1266383700, -873270702]).map_err(|e| format!("{e} | call: _mm_aesenc_si128(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
@@ -428,7 +529,12 @@ pub(super) fn test_x86_aes_mm_aesenc_si128() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesenc_si128_normal2() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesenc_si128() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesenc_si128_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesenc_si128_normal2_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesenc_si128(create__m128i_from_i32_array([0, -1, 2, -3]), create__m128i_from_i32_array([10, 9, 12, 7])));
         check_array_equality(&result, &[-58065789, -1979938315, -1063393107, 1337903999]).map_err(|e| format!("{e} | call: _mm_aesenc_si128(create__m128i_from_i32_array([0, -1, 2, -3]), create__m128i_from_i32_array([10, 9, 12, 7]))"))?;
@@ -448,7 +554,12 @@ pub(super) fn test_x86_aes_mm_aesenc_si128_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesenc_si128_normal3() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesenc_si128_normal2() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesenc_si128_normal2_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesenc_si128_normal3_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesenc_si128(create__m128i_from_i32_array([100, 200, 300, 400]), create__m128i_from_i32_array([110, 210, 310, 410])));
         check_array_equality(&result, &[54739789, -84420963, 1248742992, 1717592575]).map_err(|e| format!("{e} | call: _mm_aesenc_si128(create__m128i_from_i32_array([100, 200, 300, 400]), create__m128i_from_i32_array([110, 210, 310, 410]))"))?;
@@ -468,7 +579,12 @@ pub(super) fn test_x86_aes_mm_aesenc_si128_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesenc_si128_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesenc_si128_normal3() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesenc_si128_normal3_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesenc_si128_boundary_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesenc_si128(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN])));
         check_array_equality(&result, &[-1534407219, -1534407219, -1534407219, -1534407219]).map_err(|e| format!("{e} | call: _mm_aesenc_si128(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]))"))?;
@@ -488,7 +604,12 @@ pub(super) fn test_x86_aes_mm_aesenc_si128_boundary_min() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesenc_si128_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesenc_si128_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesenc_si128_boundary_min_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesenc_si128_boundary_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesenc_si128(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
         check_array_equality(&result, &[-88199891, -88199891, -88199891, -88199891]).map_err(|e| format!("{e} | call: _mm_aesenc_si128(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
@@ -508,7 +629,12 @@ pub(super) fn test_x86_aes_mm_aesenc_si128_boundary_max() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesenc_si128_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesenc_si128_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesenc_si128_boundary_max_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesenc_si128_boundary_zero_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesenc_si128(create__m128i_from_i32_array([0, 0, 0, 0]), create__m128i_from_i32_array([0, 0, 0, 0])));
         check_array_equality(&result, &[1667457891, 1667457891, 1667457891, 1667457891]).map_err(|e| format!("{e} | call: _mm_aesenc_si128(create__m128i_from_i32_array([0, 0, 0, 0]), create__m128i_from_i32_array([0, 0, 0, 0]))"))?;
@@ -528,7 +654,12 @@ pub(super) fn test_x86_aes_mm_aesenc_si128_boundary_zero() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesenc_si128_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesenc_si128_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesenc_si128_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesenc_si128_boundary_allones_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesenc_si128(create__m128i_from_i32_array([-1, -1, -1, -1]), create__m128i_from_i32_array([-1, -1, -1, -1])));
         check_array_equality(&result, &[-370546199, -370546199, -370546199, -370546199]).map_err(|e| format!("{e} | call: _mm_aesenc_si128(create__m128i_from_i32_array([-1, -1, -1, -1]), create__m128i_from_i32_array([-1, -1, -1, -1]))"))?;
@@ -548,7 +679,12 @@ pub(super) fn test_x86_aes_mm_aesenc_si128_boundary_allones() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesenc_si128_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesenc_si128_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesenc_si128_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesenc_si128_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesenc_si128(create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]), create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1])));
         check_array_equality(&result, &[2089417865, -1310009171, 1876834381, 1979938307]).map_err(|e| format!("{e} | call: _mm_aesenc_si128(create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]), create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]))"))?;
@@ -568,7 +704,12 @@ pub(super) fn test_x86_aes_mm_aesenc_si128_boundary_mixed() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesenc_si128_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesenc_si128_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesenc_si128_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesenc_si128_asym_min_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesenc_si128(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
         check_array_equality(&result, &[1534407218, 1534407218, 1534407218, 1534407218]).map_err(|e| format!("{e} | call: _mm_aesenc_si128(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
@@ -588,7 +729,12 @@ pub(super) fn test_x86_aes_mm_aesenc_si128_asym_min_max() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesenc_si128_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesenc_si128_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesenc_si128_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesenc_si128_asym_max_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesenc_si128(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN])));
         check_array_equality(&result, &[88199890, 88199890, 88199890, 88199890]).map_err(|e| format!("{e} | call: _mm_aesenc_si128(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]))"))?;
@@ -608,7 +754,12 @@ pub(super) fn test_x86_aes_mm_aesenc_si128_asym_max_min() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesenclast_si128() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesenc_si128_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesenc_si128_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesenclast_si128_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesenclast_si128(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
         check_array_equality(&result, &[1667457913, 1667457905, 1667457916, 1667458042]).map_err(|e| format!("{e} | call: _mm_aesenclast_si128(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
@@ -628,7 +779,12 @@ pub(super) fn test_x86_aes_mm_aesenclast_si128() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesenclast_si128_normal2() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesenclast_si128() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesenclast_si128_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesenclast_si128_normal2_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesenclast_si128(create__m128i_from_i32_array([0, -1, 2, -3]), create__m128i_from_i32_array([10, 9, 12, 7])));
         check_array_equality(&result, &[375592553, 1662411551, 375592571, 1662411603]).map_err(|e| format!("{e} | call: _mm_aesenclast_si128(create__m128i_from_i32_array([0, -1, 2, -3]), create__m128i_from_i32_array([10, 9, 12, 7]))"))?;
@@ -648,7 +804,12 @@ pub(super) fn test_x86_aes_mm_aesenclast_si128_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesenclast_si128_normal3() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesenclast_si128_normal2() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesenclast_si128_normal2_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesenclast_si128_normal3_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesenclast_si128(create__m128i_from_i32_array([100, 200, 300, 400]), create__m128i_from_i32_array([110, 210, 310, 410])));
         check_array_equality(&result, &[1667457837, 1667464250, 1667464519, 1667457786]).map_err(|e| format!("{e} | call: _mm_aesenclast_si128(create__m128i_from_i32_array([100, 200, 300, 400]), create__m128i_from_i32_array([110, 210, 310, 410]))"))?;
@@ -668,7 +829,12 @@ pub(super) fn test_x86_aes_mm_aesenclast_si128_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesenclast_si128_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesenclast_si128_normal3() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesenclast_si128_normal3_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesenclast_si128_boundary_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesenclast_si128(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN])));
         check_array_equality(&result, &[1298359139, 1298359139, 1298359139, 1298359139]).map_err(|e| format!("{e} | call: _mm_aesenclast_si128(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]))"))?;
@@ -688,7 +854,12 @@ pub(super) fn test_x86_aes_mm_aesenclast_si128_boundary_min() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesenclast_si128_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesenclast_si128_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesenclast_si128_boundary_min_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesenclast_si128_boundary_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesenclast_si128(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
         check_array_equality(&result, &[-1377179159, -1377179159, -1377179159, -1377179159]).map_err(|e| format!("{e} | call: _mm_aesenclast_si128(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
@@ -708,7 +879,12 @@ pub(super) fn test_x86_aes_mm_aesenclast_si128_boundary_max() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesenclast_si128_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesenclast_si128_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesenclast_si128_boundary_max_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesenclast_si128_boundary_zero_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesenclast_si128(create__m128i_from_i32_array([0, 0, 0, 0]), create__m128i_from_i32_array([0, 0, 0, 0])));
         check_array_equality(&result, &[1667457891, 1667457891, 1667457891, 1667457891]).map_err(|e| format!("{e} | call: _mm_aesenclast_si128(create__m128i_from_i32_array([0, 0, 0, 0]), create__m128i_from_i32_array([0, 0, 0, 0]))"))?;
@@ -728,7 +904,12 @@ pub(super) fn test_x86_aes_mm_aesenclast_si128_boundary_zero() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesenclast_si128_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesenclast_si128_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesenclast_si128_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesenclast_si128_boundary_allones_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesenclast_si128(create__m128i_from_i32_array([-1, -1, -1, -1]), create__m128i_from_i32_array([-1, -1, -1, -1])));
         check_array_equality(&result, &[-370546199, -370546199, -370546199, -370546199]).map_err(|e| format!("{e} | call: _mm_aesenclast_si128(create__m128i_from_i32_array([-1, -1, -1, -1]), create__m128i_from_i32_array([-1, -1, -1, -1]))"))?;
@@ -748,7 +929,12 @@ pub(super) fn test_x86_aes_mm_aesenclast_si128_boundary_allones() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesenclast_si128_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesenclast_si128_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesenclast_si128_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesenclast_si128_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesenclast_si128(create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]), create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1])));
         check_array_equality(&result, &[-1771891101, -1293312791, -765258141, -1662411543]).map_err(|e| format!("{e} | call: _mm_aesenclast_si128(create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]), create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]))"))?;
@@ -768,7 +954,12 @@ pub(super) fn test_x86_aes_mm_aesenclast_si128_boundary_mixed() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesenclast_si128_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesenclast_si128_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesenclast_si128_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesenclast_si128_asym_min_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesenclast_si128(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
         check_array_equality(&result, &[-1298359140, -1298359140, -1298359140, -1298359140]).map_err(|e| format!("{e} | call: _mm_aesenclast_si128(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
@@ -788,7 +979,12 @@ pub(super) fn test_x86_aes_mm_aesenclast_si128_asym_min_max() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesenclast_si128_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesenclast_si128_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesenclast_si128_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesenclast_si128_asym_max_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesenclast_si128(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN])));
         check_array_equality(&result, &[1377179158, 1377179158, 1377179158, 1377179158]).map_err(|e| format!("{e} | call: _mm_aesenclast_si128(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]))"))?;
@@ -808,7 +1004,12 @@ pub(super) fn test_x86_aes_mm_aesenclast_si128_asym_max_min() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesimc_si128() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesenclast_si128_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesenclast_si128_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesimc_si128_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesimc_si128(create__m128i_from_i32_array([1, 2, 3, 4])));
         check_array_equality(&result, &[185403662, 370807324, 488053522, 741614648]).map_err(|e| format!("{e} | call: _mm_aesimc_si128(create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -828,7 +1029,12 @@ pub(super) fn test_x86_aes_mm_aesimc_si128() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesimc_si128_normal2() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesimc_si128() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesimc_si128_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesimc_si128_normal2_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesimc_si128(create__m128i_from_i32_array([0, -1, 2, -3])));
         check_array_equality(&result, &[0, -1, 370807324, -370807325]).map_err(|e| format!("{e} | call: _mm_aesimc_si128(create__m128i_from_i32_array([0, -1, 2, -3]))"))?;
@@ -848,7 +1054,12 @@ pub(super) fn test_x86_aes_mm_aesimc_si128_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesimc_si128_normal3() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesimc_si128_normal2() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesimc_si128_normal2_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesimc_si128_normal3_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesimc_si128(create__m128i_from_i32_array([100, 200, 300, 400])));
         check_array_equality(&result, &[-1578997426, 1507840668, 49174936, 1241739946]).map_err(|e| format!("{e} | call: _mm_aesimc_si128(create__m128i_from_i32_array([100, 200, 300, 400]))"))?;
@@ -868,7 +1079,12 @@ pub(super) fn test_x86_aes_mm_aesimc_si128_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesimc_si128_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesimc_si128_normal3() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesimc_si128_normal3_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesimc_si128_boundary_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesimc_si128(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN])));
         check_array_equality(&result, &[1106762476, 1106762476, 1106762476, 1106762476]).map_err(|e| format!("{e} | call: _mm_aesimc_si128(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]))"))?;
@@ -888,7 +1104,12 @@ pub(super) fn test_x86_aes_mm_aesimc_si128_boundary_min() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesimc_si128_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesimc_si128_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesimc_si128_boundary_min_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesimc_si128_boundary_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesimc_si128(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
         check_array_equality(&result, &[-1106762477, -1106762477, -1106762477, -1106762477]).map_err(|e| format!("{e} | call: _mm_aesimc_si128(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
@@ -908,7 +1129,12 @@ pub(super) fn test_x86_aes_mm_aesimc_si128_boundary_max() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesimc_si128_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesimc_si128_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesimc_si128_boundary_max_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesimc_si128_boundary_zero_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesimc_si128(create__m128i_from_i32_array([0, 0, 0, 0])));
         check_array_equality(&result, &[0; 4]).map_err(|e| format!("{e} | call: _mm_aesimc_si128(create__m128i_from_i32_array([0, 0, 0, 0]))"))?;
@@ -928,7 +1154,12 @@ pub(super) fn test_x86_aes_mm_aesimc_si128_boundary_zero() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesimc_si128_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesimc_si128_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesimc_si128_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesimc_si128_boundary_allones_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesimc_si128(create__m128i_from_i32_array([-1, -1, -1, -1])));
         check_array_equality(&result, &[-1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_aesimc_si128(create__m128i_from_i32_array([-1, -1, -1, -1]))"))?;
@@ -948,7 +1179,12 @@ pub(super) fn test_x86_aes_mm_aesimc_si128_boundary_allones() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aesimc_si128_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesimc_si128_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesimc_si128_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aesimc_si128_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aesimc_si128(create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1])));
         check_array_equality(&result, &[1106762476, -1106762477, 0, -1]).map_err(|e| format!("{e} | call: _mm_aesimc_si128(create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]))"))?;
@@ -968,7 +1204,12 @@ pub(super) fn test_x86_aes_mm_aesimc_si128_boundary_mixed() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aeskeygenassist_si128() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aesimc_si128_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aesimc_si128_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aeskeygenassist_si128_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -991,7 +1232,12 @@ pub(super) fn test_x86_aes_mm_aeskeygenassist_si128() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aeskeygenassist_si128_normal2() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aeskeygenassist_si128() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aeskeygenassist_si128_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aeskeygenassist_si128_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1014,7 +1260,12 @@ pub(super) fn test_x86_aes_mm_aeskeygenassist_si128_normal2() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aeskeygenassist_si128_normal3() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aeskeygenassist_si128_normal2() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aeskeygenassist_si128_normal2_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aeskeygenassist_si128_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1037,7 +1288,12 @@ pub(super) fn test_x86_aes_mm_aeskeygenassist_si128_normal3() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aeskeygenassist_si128_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aeskeygenassist_si128_normal3() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aeskeygenassist_si128_normal3_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aeskeygenassist_si128_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1060,7 +1316,12 @@ pub(super) fn test_x86_aes_mm_aeskeygenassist_si128_boundary_min() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aeskeygenassist_si128_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aeskeygenassist_si128_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aeskeygenassist_si128_boundary_min_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aeskeygenassist_si128_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1083,7 +1344,12 @@ pub(super) fn test_x86_aes_mm_aeskeygenassist_si128_boundary_max() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aeskeygenassist_si128_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aeskeygenassist_si128_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aeskeygenassist_si128_boundary_max_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aeskeygenassist_si128_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1106,7 +1372,12 @@ pub(super) fn test_x86_aes_mm_aeskeygenassist_si128_boundary_zero() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aeskeygenassist_si128_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aeskeygenassist_si128_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aeskeygenassist_si128_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aeskeygenassist_si128_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1129,7 +1400,12 @@ pub(super) fn test_x86_aes_mm_aeskeygenassist_si128_boundary_allones() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aeskeygenassist_si128_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aeskeygenassist_si128_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aeskeygenassist_si128_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aeskeygenassist_si128_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1152,7 +1428,12 @@ pub(super) fn test_x86_aes_mm_aeskeygenassist_si128_boundary_mixed() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aeskeygenassist_si128_imm_0() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aeskeygenassist_si128_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aeskeygenassist_si128_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aeskeygenassist_si128_imm_0_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1175,7 +1456,12 @@ pub(super) fn test_x86_aes_mm_aeskeygenassist_si128_imm_0() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_x86_aes_mm_aeskeygenassist_si128_imm_1() -> Result<(), String> {
+pub(super) fn test_x86_aes_mm_aeskeygenassist_si128_imm_0() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aeskeygenassist_si128_imm_0_impl() }
+}
+
+#[target_feature(enable = "aes")]
+fn test_x86_aes_mm_aeskeygenassist_si128_imm_1_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1196,4 +1482,8 @@ pub(super) fn test_x86_aes_mm_aeskeygenassist_si128_imm_1() -> Result<(), String
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_aes_mm_aeskeygenassist_si128_imm_1() -> Result<(), String> {
+    unsafe { test_x86_aes_mm_aeskeygenassist_si128_imm_1_impl() }
 }

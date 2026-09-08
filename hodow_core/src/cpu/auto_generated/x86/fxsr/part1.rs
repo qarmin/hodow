@@ -8,7 +8,8 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_x86_fxsr_fxsave() -> Result<(), String> {
+#[target_feature(enable = "fxsr")]
+fn test_x86_fxsr_fxsave_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -17,4 +18,8 @@ pub(super) fn test_x86_fxsr_fxsave() -> Result<(), String> {
         _fxsave(ptr_mem_addr.0.as_mut_ptr());
     }
     Ok(())
+}
+
+pub(super) fn test_x86_fxsr_fxsave() -> Result<(), String> {
+    unsafe { test_x86_fxsr_fxsave_impl() }
 }

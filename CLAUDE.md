@@ -24,7 +24,7 @@ heavily on AI-assisted code generation (see README.md "AI Usage").
 
 ## Commands (via `just`, see `justfile`)
 
-- `just check` - quick `cargo check` on `hodow_cli` with `target-cpu=native`.
+- `just check` - quick `cargo check` on `hodow_cli`.
 - `just cpu` / `just gpu` / `just vulkan` / `just gui` - run each subsystem (debug). `*r` suffix (`gpur`, ...)
   = release. `*a` suffix (`gpua`, `sanitizer`, `guia`) = build under `-Zsanitizer=address`.
 - `just stress` - CPU stress test across all cores (release).
@@ -86,6 +86,34 @@ Feature flags: `gpu` (OpenGL path, includes `winit`/`glutin`/`glow`), `vulkan` (
 regeneration must stay idempotent/diff-clean. To change generated test behavior, edit the generator (or one
 of the exclusion lists below) and re-run it.
 
+### The binary is portable - no `-C target-cpu=native` anywhere
+
+Every generated test is emitted as a `#[target_feature(enable = "<ext>")] fn test_..._impl()` plus a
+plain safe `pub(super) fn test_...()` that only calls it through one `unsafe` block
+(`target_feature_attr`/`emit_test_fn` in `generate_tests.py` - the same split SVE already needed,
+because a `#[target_feature]` function does not implement `Fn` and so cannot be stored as the
+registry's `&'static dyn Fn() -> Result<..>`). Consequences, all of them load-bearing:
+
+- **Every extension is compiled in unconditionally.** There are no `#[cfg(target_feature = "...")]`
+  gates left in `auto_generated/` - not on the `pub mod`, not in `registry.rs`. What runs is decided
+  only by `get_feature_detect_fn`'s runtime check. One binary built anywhere tests whatever the
+  machine it lands on actually has; `just install-all` produces exactly that.
+- **Do not "fix" this by enabling the extensions crate-wide** (`-C target-cpu=native`, or a
+  `-C target-feature=+avx512f,...` list). That lets LLVM emit those instructions anywhere in the
+  crate, including code reached before any detection runs, and it re-arms the
+  `cfg!(target_feature)` short-circuit inside `is_x86_feature_detected!` (see the Key Locker note).
+- **`cmpxchg16b` is the one exception**, enabled crate-wide via `.cargo/config.toml` - stdarch's
+  intrinsic forwards to a generic in `core` that carries no target feature, so at `opt-level = 0`
+  it becomes an `__atomic_compare_exchange_16` libcall libgcc does not provide and the debug build
+  fails to link. That file explains it; note `RUSTFLAGS` in the environment *replaces* config
+  rustflags, so the three sanitizer recipes repeat the flag by hand.
+- **`rtm` (TSX) is in `SKIP_EXTENSIONS`** - `#[target_feature(enable = "rtm")]` and the intrinsics
+  are both unstable, and the x86 build must stay stable-compatible for plain `cargo install`.
+- Verified by running one debug binary under `qemu-x86_64 -cpu {Nehalem,SandyBridge,Haswell}`: it
+  scales down to 1576/SSE-era, then adds AVX, then AVX2, with no SIGILL. (qemu's TCG mis-handles
+  denormals in `_mm_rcp_ps`/`_mm_rsqrt_ps`, so expect 2 failures per AVX/SSE level there that do
+  not reproduce natively - an emulator gap, not a port bug.)
+
 Generated test functions are named `test_<arch>_<ext>_<intrinsic-without-leading-underscore>` (via
 `test_name()`), e.g. `test_x86_sse4a_mm_extracti_si64` or `test_x86_avx512f_mm512_add_epi32` - the
 arch/ext prefix makes which CPU feature a failing test belongs to legible from the bare name alone
@@ -120,6 +148,17 @@ name back from a real test name for this reason - update both if the naming sche
   additionally requires a CPUID leaf 0x19 permission check before it's safe to set) to `0u32` via
   `HARDWARE_CONTROL_OVERRIDES` - the one encoding needing no hardware-support check at all. Both
   mechanisms are per-(function, param name), independent of the vector-typed-only list above.
+- **Key Locker (`kl`) is gated on `common::x86::keylocker_usable()`, not `is_x86_feature_detected!`.**
+  That macro expands to `cfg!(target_feature = "kl") || <cpuid>`, so any build that enables `+kl`
+  crate-wide (`-C target-cpu=native` did, before the portable-binary switch below) reports Key Locker
+  present off CPUID.07H:ECX.KL alone - the bit saying the silicon *has* it.
+  Actually executing a KL instruction needs CR4.KL, which mainline Linux never sets and which surfaces
+  as CPUID.19H:EBX.AESKLE; with AESKLE=0 every KL instruction, not just the CPL0-only `LOADIWKEY`,
+  raises #UD -> SIGILL. Reproduced on an i5-11500H (leaf 7 KL=1, leaf 0x19 AESKLE=0): `ENCODEKEY128`
+  crashed identically, which is what rules out the ring-0 and the `control`-bitfield explanations.
+  The helper also requires WIDE_KL (EBX[2]) because the generated `kl` group covers the `*wide*kl`
+  intrinsics too. Any other feature whose CPUID bit means "present" rather than "enabled by the OS"
+  needs the same treatment - the compile-time short-circuit makes the macro alone unsafe for those.
 - Expected results come from `expected_cpu_values.txt`, captured on real hardware via
   `scripts/cpu/capture_expected.py`. A vector-returning function with no captured expected value asserts
   against zeros.

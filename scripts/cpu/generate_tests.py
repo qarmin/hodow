@@ -182,6 +182,10 @@ BASELINE_ALWAYS_TRUE_FEATURES = {
 # Extensions that should be completely skipped (not generated at all)
 SKIP_EXTENSIONS = {
     "amx",    # Requires unstable x86_amx_intrinsics feature
+    "rtm",    # TSX: both the intrinsics (stdarch_x86_rtm) and `#[target_feature(enable = "rtm")]`
+              # (rtm_target_feature) are unstable, and the x86 build must stay stable-compatible
+              # (`just install`/`install-all` run plain `cargo install`). Reachable before only
+              # via a target-cpu=native build on a machine with TSX still enabled in microcode.
     "dsp",    # ARM DSP — requires unstable stdarch_arm_neon_intrinsics
     "hints",  # ARM hints — requires unstable stdarch_arm_hints
     "sat",    # ARM SAT — requires unstable stdarch_arm_sat
@@ -1245,33 +1249,49 @@ def arch_only_cfg_line(sig: dict) -> list[str]:
     return [f'#[cfg(target_arch = "{arch_only}")]'] if arch_only else []
 
 
+def target_feature_attr(arch: str, ext: str, feature: str) -> str | None:
+    """The `#[target_feature(enable = ...)]` a generated test wrapper must carry, or None.
+
+    Enabling the extension per function instead of crate-wide (`-C target-cpu=native`) is
+    what makes the binary universal: LLVM may only emit the extension's instructions inside
+    these wrappers, which the registry reaches only behind a runtime detection check. A
+    crate-wide `-C target-feature=+...` would let it put them anywhere, including code that
+    runs before any detection. It also stops `is_x86_feature_detected!` from short-circuiting
+    on `cfg!(target_feature = ...)` - see keylocker_usable for what that hid."""
+    if arch == "aarch64" and ext in ("sve", "sve2"):
+        # SVE's scalable-vector types need this on ANY function whose signature or locals
+        # touch one - a hard ABI requirement, not the codegen-scoping role it plays on x86.
+        return '#[target_feature(enable = "sve")]'
+    if arch not in ("x86", "x86_64"):
+        return None
+    if feature in UNSUPPORTED_FEATURES or feature in BASELINE_ALWAYS_TRUE_FEATURES:
+        return None
+    return f'#[target_feature(enable = "{feature}")]'
+
+
+def emit_test_fn(cfg_lines: list[str], test: str, body: list[str], tf_attr: str | None) -> str:
+    """A `#[target_feature]` function does not implement `Fn`, which breaks
+    `&'static TestFunction = &dyn Fn() -> Result<...>` in the registry - so the attribute
+    goes on an inner `_impl` and the registry-visible symbol stays a plain safe wrapper that
+    only calls it through one unsafe block. Verified against rustc; the only shape found
+    that both compiles and registers."""
+    if tf_attr is None:
+        return "\n".join(cfg_lines + [f"pub(super) fn {test}() -> Result<(), String> {{"] + body + ["    Ok(())", "}"])
+    impl_name = f"{test}_impl"
+    lines = cfg_lines + [tf_attr, f"fn {impl_name}() -> Result<(), String> {{"] + body + ["    Ok(())", "}", ""]
+    lines += cfg_lines + [
+        f"pub(super) fn {test}() -> Result<(), String> {{",
+        f"    unsafe {{ {impl_name}() }}",
+        "}",
+    ]
+    return "\n".join(lines)
+
+
 def gen_fn(sig: dict, arch: str, ext: str, expected_values: dict[str, str] | None = None) -> str:
     test = test_name(sig["name"], arch, ext)
     expected = (expected_values or {}).get(test)
-    lines = arch_only_cfg_line(sig)
-    body = gen_fn_body(sig, expected)
-    if arch == "aarch64" and ext in ("sve", "sve2"):
-        # SVE's scalable-vector types need #[target_feature(enable = "sve")] on ANY function
-        # whose signature or locals touch one (a hard ABI requirement, not an optimization
-        # hint like on x86/NEON) - but a #[target_feature] function no longer implements
-        # `Fn`, which breaks `&'static TestFunction = &dyn Fn() -> Result<...>` in the
-        # registry. Splitting into a target_feature-carrying inner fn plus a plain safe
-        # outer wrapper (calling it through one unsafe block, itself untouched by any
-        # scalable type) keeps the registry-visible symbol Fn-compatible. Verified directly
-        # against rustc - this is the only shape found that both compiles and registers.
-        impl_name = f"{test}_impl"
-        lines.append('#[target_feature(enable = "sve")]')
-        lines.append(f"fn {impl_name}() -> Result<(), String> {{")
-        lines += body
-        lines += ["    Ok(())", "}", ""]
-        lines.append(f"pub(super) fn {test}() -> Result<(), String> {{")
-        lines.append(f"    unsafe {{ {impl_name}() }}")
-        lines.append("}")
-        return "\n".join(lines)
-    lines.append(f"pub(super) fn {test}() -> Result<(), String> {{")
-    lines += body
-    lines += ["    Ok(())", "}"]
-    return "\n".join(lines)
+    return emit_test_fn(arch_only_cfg_line(sig), test, gen_fn_body(sig, expected),
+                        target_feature_attr(arch, ext, ext_to_feature(ext)))
 
 
 # Vector types with a WIDTH_AWARE_VEC_INFO entry (any element type) — used to find the
@@ -1382,15 +1402,13 @@ def gen_scenarios(sig: dict, arch: str, ext: str, expected_values: dict[str, str
     same way multiple gen_fn() outputs are joined by gen_part."""
     base = test_name(sig["name"], arch, ext)
     elem = sig_elem_type(sig)
+    tf_attr = target_feature_attr(arch, ext, ext_to_feature(ext))
     bodies = []
     for suffix, overrides, cg_override in expand_scenarios(sig):
         tname = base + (f"_{suffix}" if suffix else "")
         expected = (expected_values or {}).get(tname)
-        lines = arch_only_cfg_line(sig)
-        lines.append(f"pub(super) fn {tname}() -> Result<(), String> {{")
-        lines += gen_fn_body(sig, expected, overrides or None, cg_override, elem)
-        lines += ["    Ok(())", "}"]
-        bodies.append("\n".join(lines))
+        body = gen_fn_body(sig, expected, overrides or None, cg_override, elem)
+        bodies.append(emit_test_fn(arch_only_cfg_line(sig), tname, body, tf_attr))
     return "\n\n".join(bodies)
 
 
@@ -1546,27 +1564,13 @@ def emit_arch_cfg(lines: list[str], arch_cfg: str | None, indent: str = "") -> N
 def gen_mod_rs_for_arch(arch: str, exts: list[tuple[str, str]]) -> str:
     """Generate mod.rs for a single architecture directory.
 
-    The `#[cfg(target_feature = ...)]` gate is x86/x86_64-only on purpose: there, it means
-    "only include this extension's code at all if the crate itself was built with that
-    target feature" (e.g. `-C target-feature=+avx512f`, same as `target-cpu=native` -
-    every x86 test also has its own runtime `is_x86_feature_detected!` check, so this is a
-    second, coarser, opt-in gate on top, not a correctness requirement). For every other
-    architecture this project generates for, the feature name either isn't a real
-    `-C target-feature` string at all (aarch64's "prefetch" - PRFM is baseline ISA, not an
-    optional target feature; see BASELINE_ALWAYS_TRUE_FEATURES) or would just mean "nobody
-    ever passes `-C target-feature=+X` for this architecture in practice", either way
-    permanently and silently compiling the extension's module out - runtime-only detection
-    (get_feature_detect_fn) is both correct and sufficient there, so this gate is skipped."""
-    x86_only = arch in ("x86", "x86_64")
+    Every extension is compiled in unconditionally, on every architecture: each test wrapper
+    carries its own `#[target_feature]` (see target_feature_attr), so nothing here depends on
+    how the crate as a whole was built, and what actually runs is decided at runtime by
+    get_feature_detect_fn."""
     lines = []
-    for ext, feature in exts:
-        # Only add cfg if feature is supported
-        if x86_only and feature and feature not in UNSUPPORTED_FEATURES:
-            lines.append(f"#[cfg(target_feature = \"{feature}\")]")
+    for ext, _feature in exts:
         lines.append(f"pub mod {ext};")
-        # Add blank line only if we added cfg
-        if x86_only and feature and feature not in UNSUPPORTED_FEATURES:
-            lines.append("")
     return "\n".join(lines)
 
 
@@ -1598,6 +1602,10 @@ def get_feature_detect_fn(arch: str, feature: str) -> str:
         return "true /* baseline ISA, not an optional feature - see BASELINE_ALWAYS_TRUE_FEATURES */"
 
     if arch in ("x86", "x86_64"):
+        if feature in ("kl", "widekl"):
+            # See keylocker_usable - the macro's cfg!(target_feature) short-circuit makes
+            # -C target-cpu=native report Key Locker as present when the OS never enabled it.
+            return "crate::cpu::common::x86::keylocker_usable()"
         return f'std::arch::is_x86_feature_detected!("{feature}")'
     if arch == "aarch64":
         # Stable since well before this project's MSRV - no unstable feature gate needed,
@@ -1680,9 +1688,6 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
                 continue
 
             feature = ext_to_feature(ext)
-            # Only add cfg if feature is supported
-            if arch in ("x86", "x86_64") and feature not in UNSUPPORTED_FEATURES:
-                lines.append(f"        #[cfg(target_feature = \"{feature}\")]")
             detect_fn = get_feature_detect_fn(arch, feature)
             lines.append(f"        if {detect_fn} {{")
             lines.append("            count += 1;")
@@ -1720,9 +1725,6 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
                 continue
 
             feature = ext_to_feature(ext)
-            # Only add cfg if feature is supported
-            if arch in ("x86", "x86_64") and feature not in UNSUPPORTED_FEATURES:
-                lines.append(f"        #[cfg(target_feature = \"{feature}\")]")
             detect_fn = get_feature_detect_fn(arch, feature)
             lines.append(f"        if {detect_fn} {{")
             lines.append(f'            modes.insert(format!("{{}}:{{}}", "{arch_display}", "{feature}"));')
@@ -1761,11 +1763,6 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
             feature = ext_to_feature(ext)
             struct = ext_to_struct(ext)
 
-            # Only add cfg if feature is supported
-            if arch in ("x86", "x86_64") and feature not in UNSUPPORTED_FEATURES:
-                lines.append(f"        #[cfg(target_feature = \"{feature}\")]")
-                lines.append("        {")
-
             detect_fn = get_feature_detect_fn(arch, feature)
             lines.append(f"            if {detect_fn} && !should_skip_feature(\"{ext}\") {{")
             lines.append("                    if should_stop() {")
@@ -1785,9 +1782,6 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
             lines.append("                    });")
             lines.append("                    completed_features += 1;")
             lines.append("            }")
-            # Close the cfg block if we opened it
-            if arch in ("x86", "x86_64") and feature not in UNSUPPORTED_FEATURES:
-                lines.append("        }")
             lines.append("")
 
         lines.append("    }")
@@ -1822,9 +1816,6 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
             feature = ext_to_feature(ext)
             struct = ext_to_struct(ext)
 
-            # Only add cfg if feature is supported
-            if arch in ("x86", "x86_64") and feature not in UNSUPPORTED_FEATURES:
-                lines.append(f"        #[cfg(target_feature = \"{feature}\")]")
             lines.append("        {")
             lines.append(f"            for (_, name) in crate::cpu::auto_generated::{arch}::{ext}::{struct}::get_tests() {{")
             lines.append("                functions.push(name.to_string());")
@@ -1863,8 +1854,6 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
             feature = ext_to_feature(ext)
             struct = ext_to_struct(ext)
 
-            if arch in ("x86", "x86_64") and feature not in UNSUPPORTED_FEATURES:
-                lines.append(f"        #[cfg(target_feature = \"{feature}\")]")
             detect_fn = get_feature_detect_fn(arch, feature)
             lines.append(f"        if {detect_fn} {{")
             lines.append(f"            for &(f, n) in crate::cpu::auto_generated::{arch}::{ext}::{struct}::get_tests() {{")

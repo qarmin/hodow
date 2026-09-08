@@ -8,7 +8,8 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_x86_f16c_mm_cvtps_ph() -> Result<(), String> {
+#[target_feature(enable = "f16c")]
+fn test_x86_f16c_mm_cvtps_ph_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -31,7 +32,12 @@ pub(super) fn test_x86_f16c_mm_cvtps_ph() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_f16c_mm_cvtps_ph_normal2() -> Result<(), String> {
+pub(super) fn test_x86_f16c_mm_cvtps_ph() -> Result<(), String> {
+    unsafe { test_x86_f16c_mm_cvtps_ph_impl() }
+}
+
+#[target_feature(enable = "f16c")]
+fn test_x86_f16c_mm_cvtps_ph_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -54,7 +60,12 @@ pub(super) fn test_x86_f16c_mm_cvtps_ph_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_f16c_mm_cvtps_ph_normal3() -> Result<(), String> {
+pub(super) fn test_x86_f16c_mm_cvtps_ph_normal2() -> Result<(), String> {
+    unsafe { test_x86_f16c_mm_cvtps_ph_normal2_impl() }
+}
+
+#[target_feature(enable = "f16c")]
+fn test_x86_f16c_mm_cvtps_ph_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -77,7 +88,12 @@ pub(super) fn test_x86_f16c_mm_cvtps_ph_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_f16c_mm_cvtps_ph_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_f16c_mm_cvtps_ph_normal3() -> Result<(), String> {
+    unsafe { test_x86_f16c_mm_cvtps_ph_normal3_impl() }
+}
+
+#[target_feature(enable = "f16c")]
+fn test_x86_f16c_mm_cvtps_ph_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -100,7 +116,12 @@ pub(super) fn test_x86_f16c_mm_cvtps_ph_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_f16c_mm_cvtps_ph_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_f16c_mm_cvtps_ph_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_f16c_mm_cvtps_ph_boundary_min_impl() }
+}
+
+#[target_feature(enable = "f16c")]
+fn test_x86_f16c_mm_cvtps_ph_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -123,7 +144,12 @@ pub(super) fn test_x86_f16c_mm_cvtps_ph_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_f16c_mm_cvtps_ph_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_f16c_mm_cvtps_ph_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_f16c_mm_cvtps_ph_boundary_max_impl() }
+}
+
+#[target_feature(enable = "f16c")]
+fn test_x86_f16c_mm_cvtps_ph_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -146,7 +172,12 @@ pub(super) fn test_x86_f16c_mm_cvtps_ph_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_f16c_mm_cvtps_ph_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_f16c_mm_cvtps_ph_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_f16c_mm_cvtps_ph_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "f16c")]
+fn test_x86_f16c_mm_cvtps_ph_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -169,7 +200,12 @@ pub(super) fn test_x86_f16c_mm_cvtps_ph_boundary_allones() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_x86_f16c_mm_cvtps_ph_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_f16c_mm_cvtps_ph_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_f16c_mm_cvtps_ph_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "f16c")]
+fn test_x86_f16c_mm_cvtps_ph_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -192,7 +228,12 @@ pub(super) fn test_x86_f16c_mm_cvtps_ph_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_f16c_mm_cvtps_ph_imm_0() -> Result<(), String> {
+pub(super) fn test_x86_f16c_mm_cvtps_ph_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_f16c_mm_cvtps_ph_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "f16c")]
+fn test_x86_f16c_mm_cvtps_ph_imm_0_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -215,7 +256,12 @@ pub(super) fn test_x86_f16c_mm_cvtps_ph_imm_0() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_f16c_mm_cvtps_ph_imm_1() -> Result<(), String> {
+pub(super) fn test_x86_f16c_mm_cvtps_ph_imm_0() -> Result<(), String> {
+    unsafe { test_x86_f16c_mm_cvtps_ph_imm_0_impl() }
+}
+
+#[target_feature(enable = "f16c")]
+fn test_x86_f16c_mm_cvtps_ph_imm_1_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -238,7 +284,12 @@ pub(super) fn test_x86_f16c_mm_cvtps_ph_imm_1() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_f16c_mm256_cvtps_ph() -> Result<(), String> {
+pub(super) fn test_x86_f16c_mm_cvtps_ph_imm_1() -> Result<(), String> {
+    unsafe { test_x86_f16c_mm_cvtps_ph_imm_1_impl() }
+}
+
+#[target_feature(enable = "f16c")]
+fn test_x86_f16c_mm256_cvtps_ph_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -261,7 +312,12 @@ pub(super) fn test_x86_f16c_mm256_cvtps_ph() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_f16c_mm256_cvtps_ph_normal2() -> Result<(), String> {
+pub(super) fn test_x86_f16c_mm256_cvtps_ph() -> Result<(), String> {
+    unsafe { test_x86_f16c_mm256_cvtps_ph_impl() }
+}
+
+#[target_feature(enable = "f16c")]
+fn test_x86_f16c_mm256_cvtps_ph_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -284,7 +340,12 @@ pub(super) fn test_x86_f16c_mm256_cvtps_ph_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_f16c_mm256_cvtps_ph_normal3() -> Result<(), String> {
+pub(super) fn test_x86_f16c_mm256_cvtps_ph_normal2() -> Result<(), String> {
+    unsafe { test_x86_f16c_mm256_cvtps_ph_normal2_impl() }
+}
+
+#[target_feature(enable = "f16c")]
+fn test_x86_f16c_mm256_cvtps_ph_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -307,7 +368,12 @@ pub(super) fn test_x86_f16c_mm256_cvtps_ph_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_f16c_mm256_cvtps_ph_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_f16c_mm256_cvtps_ph_normal3() -> Result<(), String> {
+    unsafe { test_x86_f16c_mm256_cvtps_ph_normal3_impl() }
+}
+
+#[target_feature(enable = "f16c")]
+fn test_x86_f16c_mm256_cvtps_ph_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -330,7 +396,12 @@ pub(super) fn test_x86_f16c_mm256_cvtps_ph_boundary_min() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_f16c_mm256_cvtps_ph_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_f16c_mm256_cvtps_ph_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_f16c_mm256_cvtps_ph_boundary_min_impl() }
+}
+
+#[target_feature(enable = "f16c")]
+fn test_x86_f16c_mm256_cvtps_ph_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -353,7 +424,12 @@ pub(super) fn test_x86_f16c_mm256_cvtps_ph_boundary_max() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_f16c_mm256_cvtps_ph_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_f16c_mm256_cvtps_ph_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_f16c_mm256_cvtps_ph_boundary_max_impl() }
+}
+
+#[target_feature(enable = "f16c")]
+fn test_x86_f16c_mm256_cvtps_ph_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -376,7 +452,12 @@ pub(super) fn test_x86_f16c_mm256_cvtps_ph_boundary_zero() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_x86_f16c_mm256_cvtps_ph_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_f16c_mm256_cvtps_ph_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_f16c_mm256_cvtps_ph_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "f16c")]
+fn test_x86_f16c_mm256_cvtps_ph_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -399,7 +480,12 @@ pub(super) fn test_x86_f16c_mm256_cvtps_ph_boundary_allones() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_f16c_mm256_cvtps_ph_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_f16c_mm256_cvtps_ph_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_f16c_mm256_cvtps_ph_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "f16c")]
+fn test_x86_f16c_mm256_cvtps_ph_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -422,7 +508,12 @@ pub(super) fn test_x86_f16c_mm256_cvtps_ph_boundary_mixed() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_x86_f16c_mm256_cvtps_ph_imm_0() -> Result<(), String> {
+pub(super) fn test_x86_f16c_mm256_cvtps_ph_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_f16c_mm256_cvtps_ph_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "f16c")]
+fn test_x86_f16c_mm256_cvtps_ph_imm_0_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -445,7 +536,12 @@ pub(super) fn test_x86_f16c_mm256_cvtps_ph_imm_0() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_f16c_mm256_cvtps_ph_imm_1() -> Result<(), String> {
+pub(super) fn test_x86_f16c_mm256_cvtps_ph_imm_0() -> Result<(), String> {
+    unsafe { test_x86_f16c_mm256_cvtps_ph_imm_0_impl() }
+}
+
+#[target_feature(enable = "f16c")]
+fn test_x86_f16c_mm256_cvtps_ph_imm_1_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -466,4 +562,8 @@ pub(super) fn test_x86_f16c_mm256_cvtps_ph_imm_1() -> Result<(), String> {
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_f16c_mm256_cvtps_ph_imm_1() -> Result<(), String> {
+    unsafe { test_x86_f16c_mm256_cvtps_ph_imm_1_impl() }
 }

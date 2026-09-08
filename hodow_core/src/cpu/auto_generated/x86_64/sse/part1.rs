@@ -5,7 +5,8 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_x86_64_sse_mm_cvtss_si64() -> Result<(), String> {
+#[target_feature(enable = "sse")]
+fn test_x86_64_sse_mm_cvtss_si64_impl() -> Result<(), String> {
     unsafe {
         let result = _mm_cvtss_si64(create__m128_from([1.0, 2.0, 3.0, 4.0]));
         check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_cvtss_si64(create__m128_from([1.0, 2.0, 3.0, 4.0]))"))?;
@@ -25,7 +26,12 @@ pub(super) fn test_x86_64_sse_mm_cvtss_si64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_64_sse_mm_cvtss_si64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_64_sse_mm_cvtss_si64() -> Result<(), String> {
+    unsafe { test_x86_64_sse_mm_cvtss_si64_impl() }
+}
+
+#[target_feature(enable = "sse")]
+fn test_x86_64_sse_mm_cvtss_si64_normal2_impl() -> Result<(), String> {
     unsafe {
         let result = _mm_cvtss_si64(create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]));
         check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_cvtss_si64(create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]))"))?;
@@ -45,7 +51,12 @@ pub(super) fn test_x86_64_sse_mm_cvtss_si64_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_64_sse_mm_cvtss_si64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_64_sse_mm_cvtss_si64_normal2() -> Result<(), String> {
+    unsafe { test_x86_64_sse_mm_cvtss_si64_normal2_impl() }
+}
+
+#[target_feature(enable = "sse")]
+fn test_x86_64_sse_mm_cvtss_si64_normal3_impl() -> Result<(), String> {
     unsafe {
         let result = _mm_cvtss_si64(create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]));
         check_int_equality(result as i32, 100).map_err(|e| format!("{e} | call: _mm_cvtss_si64(create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]))"))?;
@@ -65,7 +76,12 @@ pub(super) fn test_x86_64_sse_mm_cvtss_si64_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_64_sse_mm_cvtss_si64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_64_sse_mm_cvtss_si64_normal3() -> Result<(), String> {
+    unsafe { test_x86_64_sse_mm_cvtss_si64_normal3_impl() }
+}
+
+#[target_feature(enable = "sse")]
+fn test_x86_64_sse_mm_cvtss_si64_boundary_min_impl() -> Result<(), String> {
     unsafe {
         let result = _mm_cvtss_si64(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]));
         check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_cvtss_si64(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
@@ -85,7 +101,12 @@ pub(super) fn test_x86_64_sse_mm_cvtss_si64_boundary_min() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_x86_64_sse_mm_cvtss_si64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_64_sse_mm_cvtss_si64_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_64_sse_mm_cvtss_si64_boundary_min_impl() }
+}
+
+#[target_feature(enable = "sse")]
+fn test_x86_64_sse_mm_cvtss_si64_boundary_max_impl() -> Result<(), String> {
     unsafe {
         let result = _mm_cvtss_si64(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]));
         check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_cvtss_si64(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
@@ -105,7 +126,12 @@ pub(super) fn test_x86_64_sse_mm_cvtss_si64_boundary_max() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_x86_64_sse_mm_cvtss_si64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_64_sse_mm_cvtss_si64_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_64_sse_mm_cvtss_si64_boundary_max_impl() }
+}
+
+#[target_feature(enable = "sse")]
+fn test_x86_64_sse_mm_cvtss_si64_boundary_zero_impl() -> Result<(), String> {
     unsafe {
         let result = _mm_cvtss_si64(create__m128_from([0.0, 0.0, 0.0, 0.0]));
         check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_cvtss_si64(create__m128_from([0.0, 0.0, 0.0, 0.0]))"))?;
@@ -125,7 +151,12 @@ pub(super) fn test_x86_64_sse_mm_cvtss_si64_boundary_zero() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_x86_64_sse_mm_cvtss_si64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_64_sse_mm_cvtss_si64_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_64_sse_mm_cvtss_si64_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "sse")]
+fn test_x86_64_sse_mm_cvtss_si64_boundary_allones_impl() -> Result<(), String> {
     unsafe {
         let result = _mm_cvtss_si64(create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]));
         check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_cvtss_si64(create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
@@ -145,7 +176,12 @@ pub(super) fn test_x86_64_sse_mm_cvtss_si64_boundary_allones() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_64_sse_mm_cvtss_si64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_64_sse_mm_cvtss_si64_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_64_sse_mm_cvtss_si64_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "sse")]
+fn test_x86_64_sse_mm_cvtss_si64_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
         let result = _mm_cvtss_si64(create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]));
         check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_cvtss_si64(create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
@@ -165,7 +201,12 @@ pub(super) fn test_x86_64_sse_mm_cvtss_si64_boundary_mixed() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_x86_64_sse_mm_cvttss_si64() -> Result<(), String> {
+pub(super) fn test_x86_64_sse_mm_cvtss_si64_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_64_sse_mm_cvtss_si64_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "sse")]
+fn test_x86_64_sse_mm_cvttss_si64_impl() -> Result<(), String> {
     unsafe {
         let result = _mm_cvttss_si64(create__m128_from([1.0, 2.0, 3.0, 4.0]));
         check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_cvttss_si64(create__m128_from([1.0, 2.0, 3.0, 4.0]))"))?;
@@ -185,7 +226,12 @@ pub(super) fn test_x86_64_sse_mm_cvttss_si64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_64_sse_mm_cvttss_si64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_64_sse_mm_cvttss_si64() -> Result<(), String> {
+    unsafe { test_x86_64_sse_mm_cvttss_si64_impl() }
+}
+
+#[target_feature(enable = "sse")]
+fn test_x86_64_sse_mm_cvttss_si64_normal2_impl() -> Result<(), String> {
     unsafe {
         let result = _mm_cvttss_si64(create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]));
         check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_cvttss_si64(create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]))"))?;
@@ -205,7 +251,12 @@ pub(super) fn test_x86_64_sse_mm_cvttss_si64_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_64_sse_mm_cvttss_si64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_64_sse_mm_cvttss_si64_normal2() -> Result<(), String> {
+    unsafe { test_x86_64_sse_mm_cvttss_si64_normal2_impl() }
+}
+
+#[target_feature(enable = "sse")]
+fn test_x86_64_sse_mm_cvttss_si64_normal3_impl() -> Result<(), String> {
     unsafe {
         let result = _mm_cvttss_si64(create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]));
         check_int_equality(result as i32, 100).map_err(|e| format!("{e} | call: _mm_cvttss_si64(create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]))"))?;
@@ -225,7 +276,12 @@ pub(super) fn test_x86_64_sse_mm_cvttss_si64_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_64_sse_mm_cvttss_si64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_64_sse_mm_cvttss_si64_normal3() -> Result<(), String> {
+    unsafe { test_x86_64_sse_mm_cvttss_si64_normal3_impl() }
+}
+
+#[target_feature(enable = "sse")]
+fn test_x86_64_sse_mm_cvttss_si64_boundary_min_impl() -> Result<(), String> {
     unsafe {
         let result = _mm_cvttss_si64(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]));
         check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_cvttss_si64(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
@@ -245,7 +301,12 @@ pub(super) fn test_x86_64_sse_mm_cvttss_si64_boundary_min() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_x86_64_sse_mm_cvttss_si64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_64_sse_mm_cvttss_si64_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_64_sse_mm_cvttss_si64_boundary_min_impl() }
+}
+
+#[target_feature(enable = "sse")]
+fn test_x86_64_sse_mm_cvttss_si64_boundary_max_impl() -> Result<(), String> {
     unsafe {
         let result = _mm_cvttss_si64(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]));
         check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_cvttss_si64(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
@@ -265,7 +326,12 @@ pub(super) fn test_x86_64_sse_mm_cvttss_si64_boundary_max() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_x86_64_sse_mm_cvttss_si64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_64_sse_mm_cvttss_si64_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_64_sse_mm_cvttss_si64_boundary_max_impl() }
+}
+
+#[target_feature(enable = "sse")]
+fn test_x86_64_sse_mm_cvttss_si64_boundary_zero_impl() -> Result<(), String> {
     unsafe {
         let result = _mm_cvttss_si64(create__m128_from([0.0, 0.0, 0.0, 0.0]));
         check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_cvttss_si64(create__m128_from([0.0, 0.0, 0.0, 0.0]))"))?;
@@ -285,7 +351,12 @@ pub(super) fn test_x86_64_sse_mm_cvttss_si64_boundary_zero() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_x86_64_sse_mm_cvttss_si64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_64_sse_mm_cvttss_si64_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_64_sse_mm_cvttss_si64_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "sse")]
+fn test_x86_64_sse_mm_cvttss_si64_boundary_allones_impl() -> Result<(), String> {
     unsafe {
         let result = _mm_cvttss_si64(create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]));
         check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_cvttss_si64(create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
@@ -305,7 +376,12 @@ pub(super) fn test_x86_64_sse_mm_cvttss_si64_boundary_allones() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_64_sse_mm_cvttss_si64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_64_sse_mm_cvttss_si64_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_64_sse_mm_cvttss_si64_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "sse")]
+fn test_x86_64_sse_mm_cvttss_si64_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
         let result = _mm_cvttss_si64(create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]));
         check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_cvttss_si64(create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
@@ -323,4 +399,8 @@ pub(super) fn test_x86_64_sse_mm_cvttss_si64_boundary_mixed() -> Result<(), Stri
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_64_sse_mm_cvttss_si64_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_64_sse_mm_cvttss_si64_boundary_mixed_impl() }
 }

@@ -1,0 +1,18 @@
+# The one x86_64 extension enabled crate-wide rather than per test function.
+#
+# Everything else the CPU suite covers is reached only through a generated wrapper carrying
+# its own `#[target_feature]`, which is what keeps the binary portable (see the `install-all`
+# comment in the justfile). `cmpxchg16b` cannot work that way: stdarch's intrinsic forwards to
+# `core::sync::atomic::atomic_compare_exchange::<u128>`, a generic in core that carries no
+# target feature of its own, so at `opt-level = 0` it is not inlined into the wrapper and LLVM
+# lowers it to an `__atomic_compare_exchange_16` libcall that libgcc does not provide - a debug
+# build then fails to link. Release builds inline it and link fine either way.
+#
+# The cost is a portability floor of CPUs with CMPXCHG16B (Intel 2004+, AMD K8 rev F 2006+,
+# i.e. everything in x86-64-v2). Dropping the extension instead would mean the tool could no
+# longer test that instruction at all.
+#
+# RUSTFLAGS in the environment REPLACES this rather than adding to it - any recipe or command
+# that sets RUSTFLAGS on x86_64 must repeat `-C target-feature=+cmpxchg16b` itself.
+[target.'cfg(target_arch = "x86_64")']
+rustflags = ["-C", "target-feature=+cmpxchg16b"]

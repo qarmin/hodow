@@ -8,7 +8,8 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_x86_avx512f_mm512_cvtps_ph() -> Result<(), String> {
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_cvtps_ph_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -31,7 +32,12 @@ pub(super) fn test_x86_avx512f_mm512_cvtps_ph() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_cvtps_ph_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cvtps_ph() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_cvtps_ph_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_cvtps_ph_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -54,7 +60,12 @@ pub(super) fn test_x86_avx512f_mm512_cvtps_ph_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_cvtps_ph_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cvtps_ph_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_cvtps_ph_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_cvtps_ph_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -77,7 +88,12 @@ pub(super) fn test_x86_avx512f_mm512_cvtps_ph_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_cvtps_ph_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cvtps_ph_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_cvtps_ph_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_cvtps_ph_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -100,7 +116,12 @@ pub(super) fn test_x86_avx512f_mm512_cvtps_ph_boundary_min() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_cvtps_ph_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cvtps_ph_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_cvtps_ph_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_cvtps_ph_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -123,7 +144,12 @@ pub(super) fn test_x86_avx512f_mm512_cvtps_ph_boundary_max() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_cvtps_ph_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cvtps_ph_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_cvtps_ph_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_cvtps_ph_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -146,7 +172,12 @@ pub(super) fn test_x86_avx512f_mm512_cvtps_ph_boundary_zero() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_cvtps_ph_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cvtps_ph_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_cvtps_ph_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_cvtps_ph_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -169,7 +200,12 @@ pub(super) fn test_x86_avx512f_mm512_cvtps_ph_boundary_allones() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_cvtps_ph_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cvtps_ph_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_cvtps_ph_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_cvtps_ph_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -192,7 +228,12 @@ pub(super) fn test_x86_avx512f_mm512_cvtps_ph_boundary_mixed() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtps_ph() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cvtps_ph_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_cvtps_ph_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtps_ph_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -215,7 +256,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtps_ph() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtps_ph_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtps_ph() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtps_ph_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtps_ph_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -238,7 +284,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtps_ph_normal2() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtps_ph_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtps_ph_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtps_ph_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtps_ph_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -261,7 +312,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtps_ph_normal3() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtps_ph_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtps_ph_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtps_ph_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtps_ph_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -284,7 +340,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtps_ph_boundary_min() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtps_ph_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtps_ph_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtps_ph_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtps_ph_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -307,7 +368,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtps_ph_boundary_max() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtps_ph_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtps_ph_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtps_ph_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtps_ph_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -330,7 +396,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtps_ph_boundary_zero() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtps_ph_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtps_ph_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtps_ph_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtps_ph_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -353,7 +424,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtps_ph_boundary_allones() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtps_ph_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtps_ph_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtps_ph_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtps_ph_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -376,7 +452,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtps_ph_boundary_mixed() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_cvtps_ph() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtps_ph_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtps_ph_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_cvtps_ph_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -399,7 +480,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_cvtps_ph() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_cvtps_ph_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_cvtps_ph() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_cvtps_ph_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_cvtps_ph_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -422,7 +508,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_cvtps_ph_normal2() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_cvtps_ph_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_cvtps_ph_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_cvtps_ph_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_cvtps_ph_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -445,7 +536,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_cvtps_ph_normal3() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_cvtps_ph_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_cvtps_ph_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_cvtps_ph_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_cvtps_ph_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -468,7 +564,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_cvtps_ph_boundary_min() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_cvtps_ph_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_cvtps_ph_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_cvtps_ph_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_cvtps_ph_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -491,7 +592,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_cvtps_ph_boundary_max() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_cvtps_ph_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_cvtps_ph_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_cvtps_ph_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_cvtps_ph_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -514,7 +620,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_cvtps_ph_boundary_zero() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_cvtps_ph_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_cvtps_ph_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_cvtps_ph_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_cvtps_ph_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -537,7 +648,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_cvtps_ph_boundary_allones() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_cvtps_ph_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_cvtps_ph_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_cvtps_ph_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_cvtps_ph_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -560,7 +676,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_cvtps_ph_boundary_mixed() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvtps_ph() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_cvtps_ph_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_cvtps_ph_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvtps_ph_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -583,7 +704,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtps_ph() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvtps_ph_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvtps_ph() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvtps_ph_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvtps_ph_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -606,7 +732,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtps_ph_normal2() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvtps_ph_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvtps_ph_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvtps_ph_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvtps_ph_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -629,7 +760,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtps_ph_normal3() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvtps_ph_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvtps_ph_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvtps_ph_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvtps_ph_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -652,7 +788,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtps_ph_boundary_min() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvtps_ph_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvtps_ph_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvtps_ph_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvtps_ph_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -675,7 +816,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtps_ph_boundary_max() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvtps_ph_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvtps_ph_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvtps_ph_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvtps_ph_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -698,7 +844,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtps_ph_boundary_zero() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvtps_ph_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvtps_ph_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvtps_ph_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvtps_ph_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -721,7 +872,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtps_ph_boundary_allones() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvtps_ph_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvtps_ph_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvtps_ph_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvtps_ph_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -744,7 +900,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtps_ph_boundary_mixed() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvtps_ph_imm_0() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvtps_ph_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvtps_ph_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvtps_ph_imm_0_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -767,7 +928,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtps_ph_imm_0() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvtps_ph_imm_1() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvtps_ph_imm_0() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvtps_ph_imm_0_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvtps_ph_imm_1_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -790,7 +956,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtps_ph_imm_1() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_cvtps_ph() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvtps_ph_imm_1() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvtps_ph_imm_1_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_cvtps_ph_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -813,7 +984,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_cvtps_ph() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_cvtps_ph_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_cvtps_ph() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_cvtps_ph_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_cvtps_ph_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -836,7 +1012,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_cvtps_ph_normal2() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_cvtps_ph_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_cvtps_ph_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_cvtps_ph_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_cvtps_ph_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -859,7 +1040,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_cvtps_ph_normal3() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_cvtps_ph_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_cvtps_ph_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_cvtps_ph_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_cvtps_ph_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -882,7 +1068,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_cvtps_ph_boundary_min() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_cvtps_ph_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_cvtps_ph_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_cvtps_ph_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_cvtps_ph_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -905,7 +1096,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_cvtps_ph_boundary_max() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_cvtps_ph_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_cvtps_ph_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_cvtps_ph_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_cvtps_ph_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -928,7 +1124,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_cvtps_ph_boundary_zero() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_cvtps_ph_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_cvtps_ph_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_cvtps_ph_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_cvtps_ph_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -951,7 +1152,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_cvtps_ph_boundary_allones() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_cvtps_ph_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_cvtps_ph_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_cvtps_ph_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_cvtps_ph_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -974,7 +1180,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_cvtps_ph_boundary_mixed() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_cvtps_ph_imm_0() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_cvtps_ph_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_cvtps_ph_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_cvtps_ph_imm_0_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -997,7 +1208,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_cvtps_ph_imm_0() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_cvtps_ph_imm_1() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_cvtps_ph_imm_0() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_cvtps_ph_imm_0_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_cvtps_ph_imm_1_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1020,7 +1236,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_cvtps_ph_imm_1() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvtps_ph() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_cvtps_ph_imm_1() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_cvtps_ph_imm_1_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtps_ph_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1043,7 +1264,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtps_ph() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvtps_ph_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvtps_ph() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtps_ph_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtps_ph_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1066,7 +1292,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtps_ph_normal2() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvtps_ph_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvtps_ph_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtps_ph_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtps_ph_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1089,7 +1320,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtps_ph_normal3() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvtps_ph_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvtps_ph_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtps_ph_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtps_ph_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1112,7 +1348,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtps_ph_boundary_min() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvtps_ph_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvtps_ph_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtps_ph_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtps_ph_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1135,7 +1376,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtps_ph_boundary_max() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvtps_ph_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvtps_ph_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtps_ph_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtps_ph_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1158,7 +1404,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtps_ph_boundary_zero() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvtps_ph_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvtps_ph_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtps_ph_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtps_ph_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1181,7 +1432,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtps_ph_boundary_allones() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvtps_ph_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvtps_ph_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtps_ph_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtps_ph_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1204,7 +1460,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtps_ph_boundary_mixed() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvtps_ph_imm_0() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvtps_ph_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtps_ph_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtps_ph_imm_0_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1227,7 +1488,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtps_ph_imm_0() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvtps_ph_imm_1() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvtps_ph_imm_0() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtps_ph_imm_0_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtps_ph_imm_1_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1250,7 +1516,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtps_ph_imm_1() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_cvtps_ph() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvtps_ph_imm_1() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtps_ph_imm_1_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_cvtps_ph_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1273,7 +1544,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_cvtps_ph() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_cvtps_ph_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_cvtps_ph() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_cvtps_ph_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_cvtps_ph_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1296,7 +1572,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_cvtps_ph_normal2() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_cvtps_ph_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_cvtps_ph_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_cvtps_ph_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_cvtps_ph_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1319,7 +1600,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_cvtps_ph_normal3() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_cvtps_ph_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_cvtps_ph_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_cvtps_ph_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_cvtps_ph_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1342,7 +1628,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_cvtps_ph_boundary_min() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_cvtps_ph_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_cvtps_ph_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_cvtps_ph_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_cvtps_ph_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1365,7 +1656,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_cvtps_ph_boundary_max() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_cvtps_ph_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_cvtps_ph_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_cvtps_ph_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_cvtps_ph_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1388,7 +1684,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_cvtps_ph_boundary_zero() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_cvtps_ph_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_cvtps_ph_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_cvtps_ph_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_cvtps_ph_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1411,7 +1712,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_cvtps_ph_boundary_allones() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_cvtps_ph_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_cvtps_ph_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_cvtps_ph_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_cvtps_ph_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1434,7 +1740,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_cvtps_ph_boundary_mixed() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_cvtps_ph_imm_0() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_cvtps_ph_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_cvtps_ph_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_cvtps_ph_imm_0_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1457,7 +1768,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_cvtps_ph_imm_0() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_cvtps_ph_imm_1() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_cvtps_ph_imm_0() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_cvtps_ph_imm_0_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_cvtps_ph_imm_1_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1480,7 +1796,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_cvtps_ph_imm_1() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_cvt_roundph_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_cvtps_ph_imm_1() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_cvtps_ph_imm_1_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_cvt_roundph_ps_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1503,7 +1824,12 @@ pub(super) fn test_x86_avx512f_mm512_cvt_roundph_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvt_roundph_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cvt_roundph_ps() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_cvt_roundph_ps_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvt_roundph_ps_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1526,7 +1852,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvt_roundph_ps() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvt_roundph_ps_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvt_roundph_ps() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvt_roundph_ps_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvt_roundph_ps_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1549,7 +1880,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvt_roundph_ps_normal2() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvt_roundph_ps_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvt_roundph_ps_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvt_roundph_ps_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvt_roundph_ps_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1572,7 +1908,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvt_roundph_ps_normal3() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvt_roundph_ps_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvt_roundph_ps_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvt_roundph_ps_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvt_roundph_ps_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1595,7 +1936,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvt_roundph_ps_boundary_min() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvt_roundph_ps_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvt_roundph_ps_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvt_roundph_ps_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvt_roundph_ps_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1618,7 +1964,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvt_roundph_ps_boundary_max() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvt_roundph_ps_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvt_roundph_ps_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvt_roundph_ps_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvt_roundph_ps_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1641,7 +1992,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvt_roundph_ps_boundary_zero() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvt_roundph_ps_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvt_roundph_ps_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvt_roundph_ps_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvt_roundph_ps_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1664,7 +2020,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvt_roundph_ps_boundary_allones() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvt_roundph_ps_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvt_roundph_ps_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvt_roundph_ps_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvt_roundph_ps_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1687,7 +2048,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvt_roundph_ps_boundary_mixed() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_cvt_roundph_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvt_roundph_ps_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvt_roundph_ps_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_cvt_roundph_ps_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1710,7 +2076,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_cvt_roundph_ps() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_cvtph_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_cvt_roundph_ps() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_cvt_roundph_ps_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_cvtph_ps_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1733,7 +2104,12 @@ pub(super) fn test_x86_avx512f_mm512_cvtph_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtph_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cvtph_ps() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_cvtph_ps_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtph_ps_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1756,7 +2132,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtph_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtph_ps_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtph_ps() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtph_ps_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtph_ps_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1779,7 +2160,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtph_ps_normal2() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtph_ps_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtph_ps_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtph_ps_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtph_ps_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1802,7 +2188,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtph_ps_normal3() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtph_ps_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtph_ps_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtph_ps_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtph_ps_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1825,7 +2216,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtph_ps_boundary_min() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtph_ps_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtph_ps_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtph_ps_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtph_ps_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1848,7 +2244,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtph_ps_boundary_max() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtph_ps_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtph_ps_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtph_ps_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtph_ps_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1871,7 +2272,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtph_ps_boundary_zero() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtph_ps_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtph_ps_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtph_ps_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtph_ps_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1894,7 +2300,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtph_ps_boundary_allones() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtph_ps_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtph_ps_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtph_ps_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtph_ps_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1917,7 +2328,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtph_ps_boundary_mixed() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_cvtph_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtph_ps_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtph_ps_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_cvtph_ps_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1940,7 +2356,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_cvtph_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvtph_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_cvtph_ps() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_cvtph_ps_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvtph_ps_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_mask_cvtph_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([9, 10, 11, 12])));
         check_float_array_equality(&result, &[5.364418e-7, 2.0, 5.9604645e-7, 4.0, 6.556511e-7, 6.0, 7.1525574e-7, 8.0]).map_err(|e| format!("{e} | call: _mm256_mask_cvtph_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([9, 10, 11, 12]))"))?;
@@ -1960,7 +2381,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtph_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvtph_ps_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvtph_ps() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvtph_ps_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvtph_ps_normal2_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_mask_cvtph_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_float_array_equality(&result, &[5.9604645e-8, -1.0, 1.1920929e-7, -3.0, 1.7881393e-7, -5.0, 2.3841858e-7, -7.0]).map_err(|e| format!("{e} | call: _mm256_mask_cvtph_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -1980,7 +2406,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtph_ps_normal2() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvtph_ps_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvtph_ps_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvtph_ps_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvtph_ps_normal3_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_mask_cvtph_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_float_array_equality(&result, &[5.9604645e-8, 200.0, 1.1920929e-7, 400.0, 1.7881393e-7, 600.0, 2.3841858e-7, 800.0]).map_err(|e| format!("{e} | call: _mm256_mask_cvtph_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -2000,7 +2431,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtph_ps_normal3() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvtph_ps_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvtph_ps_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvtph_ps_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvtph_ps_boundary_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_mask_cvtph_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_float_array_equality(&result, &[5.9604645e-8, -3.4028235e38, 1.1920929e-7, -3.4028235e38, 1.7881393e-7, -3.4028235e38, 2.3841858e-7, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_mask_cvtph_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -2020,7 +2456,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtph_ps_boundary_min() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvtph_ps_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvtph_ps_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvtph_ps_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvtph_ps_boundary_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_mask_cvtph_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_float_array_equality(&result, &[5.9604645e-8, 3.4028235e38, 1.1920929e-7, 3.4028235e38, 1.7881393e-7, 3.4028235e38, 2.3841858e-7, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_mask_cvtph_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -2040,7 +2481,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtph_ps_boundary_max() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvtph_ps_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvtph_ps_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvtph_ps_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvtph_ps_boundary_zero_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_mask_cvtph_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_mask_cvtph_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -2060,7 +2506,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtph_ps_boundary_zero() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvtph_ps_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvtph_ps_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvtph_ps_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvtph_ps_boundary_allones_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_mask_cvtph_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_float_array_equality(&result, &[5.9604645e-8, f32::NAN, 1.1920929e-7, f32::NAN, 1.7881393e-7, f32::NAN, 2.3841858e-7, f32::NAN]).map_err(|e| format!("{e} | call: _mm256_mask_cvtph_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -2080,7 +2531,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtph_ps_boundary_allones() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvtph_ps_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvtph_ps_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvtph_ps_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvtph_ps_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_mask_cvtph_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_float_array_equality(&result, &[5.9604645e-8, -f32::INFINITY, 1.1920929e-7, 5.877472e-39, 1.7881393e-7, -f32::INFINITY, 2.3841858e-7, 5.877472e-39]).map_err(|e| format!("{e} | call: _mm256_mask_cvtph_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -2100,7 +2556,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtph_ps_boundary_mixed() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_cvtph_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvtph_ps_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvtph_ps_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_cvtph_ps_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_maskz_cvtph_ps(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_float_array_equality(&result, &[5.9604645e-8, 0.0, 1.1920929e-7, 0.0, 1.7881393e-7, 0.0, 2.3841858e-7, 0.0]).map_err(|e| format!("{e} | call: _mm256_maskz_cvtph_ps(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -2120,7 +2581,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_cvtph_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvtph_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_cvtph_ps() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_cvtph_ps_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtph_ps_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_mask_cvtph_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([5, 6, 7, 8])));
         check_float_array_equality(&result, &[2.9802322e-7, 2.0, 3.5762787e-7, 4.0]).map_err(|e| format!("{e} | call: _mm_mask_cvtph_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
@@ -2140,7 +2606,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtph_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvtph_ps_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvtph_ps() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtph_ps_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtph_ps_normal2_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_mask_cvtph_ps(create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_float_array_equality(&result, &[5.9604645e-8, -1.0, 1.1920929e-7, -3.0]).map_err(|e| format!("{e} | call: _mm_mask_cvtph_ps(create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -2160,7 +2631,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtph_ps_normal2() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvtph_ps_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvtph_ps_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtph_ps_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtph_ps_normal3_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_mask_cvtph_ps(create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_float_array_equality(&result, &[5.9604645e-8, 200.0, 1.1920929e-7, 400.0]).map_err(|e| format!("{e} | call: _mm_mask_cvtph_ps(create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -2180,7 +2656,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtph_ps_normal3() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvtph_ps_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvtph_ps_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtph_ps_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtph_ps_boundary_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_mask_cvtph_ps(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_float_array_equality(&result, &[5.9604645e-8, -3.4028235e38, 1.1920929e-7, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm_mask_cvtph_ps(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -2200,7 +2681,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtph_ps_boundary_min() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvtph_ps_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvtph_ps_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtph_ps_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtph_ps_boundary_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_mask_cvtph_ps(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_float_array_equality(&result, &[5.9604645e-8, 3.4028235e38, 1.1920929e-7, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm_mask_cvtph_ps(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -2220,7 +2706,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtph_ps_boundary_max() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvtph_ps_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvtph_ps_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtph_ps_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtph_ps_boundary_zero_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_mask_cvtph_ps(create__m128_from([0.0, 0.0, 0.0, 0.0]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm_mask_cvtph_ps(create__m128_from([0.0, 0.0, 0.0, 0.0]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -2240,7 +2731,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtph_ps_boundary_zero() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvtph_ps_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvtph_ps_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtph_ps_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtph_ps_boundary_allones_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_mask_cvtph_ps(create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_float_array_equality(&result, &[5.9604645e-8, f32::NAN, 1.1920929e-7, f32::NAN]).map_err(|e| format!("{e} | call: _mm_mask_cvtph_ps(create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -2260,7 +2756,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtph_ps_boundary_allones() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvtph_ps_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvtph_ps_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtph_ps_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtph_ps_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_mask_cvtph_ps(create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_float_array_equality(&result, &[5.9604645e-8, -f32::INFINITY, 1.1920929e-7, 5.877472e-39]).map_err(|e| format!("{e} | call: _mm_mask_cvtph_ps(create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -2280,7 +2781,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtph_ps_boundary_mixed() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_cvtph_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvtph_ps_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtph_ps_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_cvtph_ps_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_maskz_cvtph_ps(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_float_array_equality(&result, &[5.9604645e-8, 0.0, 1.1920929e-7, 0.0]).map_err(|e| format!("{e} | call: _mm_maskz_cvtph_ps(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -2300,7 +2806,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_cvtph_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_cvtt_roundps_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_cvtph_ps() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_cvtph_ps_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_cvtt_roundps_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2323,7 +2834,12 @@ pub(super) fn test_x86_avx512f_mm512_cvtt_roundps_epi32() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cvtt_roundps_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_cvtt_roundps_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2346,7 +2862,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2369,7 +2890,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_normal2() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2392,7 +2918,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_normal3() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2415,7 +2946,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_boundary_min() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2438,7 +2974,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_boundary_max() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2461,7 +3002,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_boundary_zero() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2484,7 +3030,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_boundary_allones() 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2507,7 +3058,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_boundary_mixed() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_cvtt_roundps_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundps_epi32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_cvtt_roundps_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2530,7 +3086,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_cvtt_roundps_epi32() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_cvtt_roundps_epu32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_cvtt_roundps_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_cvtt_roundps_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_cvtt_roundps_epu32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2553,7 +3114,12 @@ pub(super) fn test_x86_avx512f_mm512_cvtt_roundps_epu32() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cvtt_roundps_epu32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_cvtt_roundps_epu32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2576,7 +3142,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2599,7 +3170,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_normal2() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2622,7 +3198,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_normal3() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2645,7 +3226,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_boundary_min() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2668,7 +3254,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_boundary_max() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2691,7 +3282,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_boundary_zero() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2714,7 +3310,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_boundary_allones() 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2737,7 +3338,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_boundary_mixed() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_cvtt_roundps_epu32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundps_epu32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_cvtt_roundps_epu32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2760,7 +3366,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_cvtt_roundps_epu32() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_cvtt_roundpd_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_cvtt_roundps_epu32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_cvtt_roundps_epu32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_cvtt_roundpd_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2783,7 +3394,12 @@ pub(super) fn test_x86_avx512f_mm512_cvtt_roundpd_epi32() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cvtt_roundpd_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_cvtt_roundpd_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2806,7 +3422,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2829,7 +3450,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_normal2() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2852,7 +3478,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_normal3() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2875,7 +3506,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_boundary_min() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2898,7 +3534,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_boundary_max() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2921,7 +3562,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_boundary_zero() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2944,7 +3590,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_boundary_allones() 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2967,7 +3618,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_boundary_mixed() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_cvtt_roundpd_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_cvtt_roundpd_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2990,7 +3646,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_cvtt_roundpd_epi32() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_cvtt_roundpd_epu32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_cvtt_roundpd_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_cvtt_roundpd_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_cvtt_roundpd_epu32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3013,7 +3674,12 @@ pub(super) fn test_x86_avx512f_mm512_cvtt_roundpd_epu32() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cvtt_roundpd_epu32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_cvtt_roundpd_epu32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3036,7 +3702,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3059,7 +3730,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_normal2() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3082,7 +3758,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_normal3() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3105,7 +3786,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_boundary_min() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3128,7 +3814,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_boundary_max() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3151,7 +3842,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_boundary_zero() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3174,7 +3870,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_boundary_allones() 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3197,7 +3898,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_boundary_mixed() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_cvttps_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_cvttps_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3220,7 +3926,12 @@ pub(super) fn test_x86_avx512f_mm512_cvttps_epi32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cvttps_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_cvttps_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvttps_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3243,7 +3954,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epi32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epi32_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvttps_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvttps_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3266,7 +3982,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epi32_normal2() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epi32_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epi32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvttps_epi32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvttps_epi32_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3289,7 +4010,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epi32_normal3() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epi32_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epi32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvttps_epi32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvttps_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3312,7 +4038,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epi32_boundary_min() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epi32_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epi32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvttps_epi32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvttps_epi32_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3335,7 +4066,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epi32_boundary_max() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epi32_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epi32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvttps_epi32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvttps_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3358,7 +4094,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epi32_boundary_zero() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epi32_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epi32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvttps_epi32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvttps_epi32_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3381,7 +4122,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epi32_boundary_allones() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epi32_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epi32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvttps_epi32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvttps_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3404,7 +4150,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epi32_boundary_mixed() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_cvttps_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvttps_epi32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_cvttps_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3427,7 +4178,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_cvttps_epi32() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_cvttps_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_cvttps_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvttps_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3450,7 +4206,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epi32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epi32_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvttps_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvttps_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3473,7 +4234,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epi32_normal2() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epi32_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epi32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvttps_epi32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvttps_epi32_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3496,7 +4262,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epi32_normal3() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epi32_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epi32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvttps_epi32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvttps_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3519,7 +4290,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epi32_boundary_min() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epi32_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epi32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvttps_epi32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvttps_epi32_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3542,7 +4318,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epi32_boundary_max() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epi32_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epi32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvttps_epi32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvttps_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3565,7 +4346,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epi32_boundary_zero() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epi32_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epi32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvttps_epi32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvttps_epi32_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3588,7 +4374,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epi32_boundary_allones() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epi32_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epi32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvttps_epi32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvttps_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3611,7 +4402,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epi32_boundary_mixed() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_cvttps_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvttps_epi32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_cvttps_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3634,7 +4430,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_cvttps_epi32() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvttps_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_cvttps_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_cvttps_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvttps_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3657,7 +4458,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvttps_epi32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvttps_epi32_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvttps_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvttps_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvttps_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3680,7 +4486,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvttps_epi32_normal2() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvttps_epi32_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvttps_epi32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvttps_epi32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvttps_epi32_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3703,7 +4514,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvttps_epi32_normal3() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvttps_epi32_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvttps_epi32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvttps_epi32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvttps_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3726,7 +4542,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvttps_epi32_boundary_min() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvttps_epi32_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvttps_epi32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvttps_epi32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvttps_epi32_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3749,7 +4570,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvttps_epi32_boundary_max() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvttps_epi32_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvttps_epi32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvttps_epi32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvttps_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3772,7 +4598,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvttps_epi32_boundary_zero() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvttps_epi32_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvttps_epi32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvttps_epi32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvttps_epi32_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3795,7 +4626,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvttps_epi32_boundary_allones() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvttps_epi32_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvttps_epi32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvttps_epi32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvttps_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3818,7 +4654,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvttps_epi32_boundary_mixed() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_cvttps_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvttps_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvttps_epi32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_cvttps_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3841,7 +4682,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_cvttps_epi32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_cvttps_epu32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_cvttps_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_cvttps_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_cvttps_epu32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3864,7 +4710,12 @@ pub(super) fn test_x86_avx512f_mm512_cvttps_epu32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epu32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cvttps_epu32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_cvttps_epu32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvttps_epu32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3887,7 +4738,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epu32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epu32_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epu32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvttps_epu32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvttps_epu32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3910,7 +4766,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epu32_normal2() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epu32_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epu32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvttps_epu32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvttps_epu32_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3933,7 +4794,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epu32_normal3() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epu32_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epu32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvttps_epu32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvttps_epu32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3956,7 +4822,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epu32_boundary_min() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epu32_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epu32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvttps_epu32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvttps_epu32_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3979,7 +4850,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epu32_boundary_max() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epu32_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epu32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvttps_epu32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvttps_epu32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4002,7 +4878,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epu32_boundary_zero() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epu32_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epu32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvttps_epu32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvttps_epu32_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4025,7 +4906,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epu32_boundary_allones() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epu32_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epu32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvttps_epu32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvttps_epu32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4048,7 +4934,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epu32_boundary_mixed() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_cvttps_epu32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epu32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvttps_epu32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_cvttps_epu32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4071,7 +4962,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_cvttps_epu32() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_cvttps_epu32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_cvttps_epu32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_cvttps_epu32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_cvttps_epu32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4094,7 +4990,12 @@ pub(super) fn test_x86_avx512f_mm256_cvttps_epu32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epu32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_cvttps_epu32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_cvttps_epu32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvttps_epu32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4117,7 +5018,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epu32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epu32_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epu32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvttps_epu32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvttps_epu32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4140,7 +5046,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epu32_normal2() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epu32_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epu32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvttps_epu32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvttps_epu32_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4163,7 +5074,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epu32_normal3() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epu32_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epu32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvttps_epu32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvttps_epu32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4186,7 +5102,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epu32_boundary_min() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epu32_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epu32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvttps_epu32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvttps_epu32_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4209,7 +5130,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epu32_boundary_max() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epu32_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epu32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvttps_epu32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvttps_epu32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4232,7 +5158,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epu32_boundary_zero() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epu32_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epu32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvttps_epu32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvttps_epu32_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4255,7 +5186,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epu32_boundary_allones() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epu32_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epu32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvttps_epu32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvttps_epu32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4278,7 +5214,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epu32_boundary_mixed() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_cvttps_epu32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epu32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvttps_epu32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_cvttps_epu32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4301,7 +5242,12 @@ pub(super) fn test_x86_avx512f_mm256_maskz_cvttps_epu32() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_cvttps_epu32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_maskz_cvttps_epu32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_cvttps_epu32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_cvttps_epu32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4324,7 +5270,12 @@ pub(super) fn test_x86_avx512f_mm_cvttps_epu32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvttps_epu32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cvttps_epu32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_cvttps_epu32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvttps_epu32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4347,7 +5298,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvttps_epu32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvttps_epu32_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvttps_epu32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvttps_epu32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvttps_epu32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4370,7 +5326,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvttps_epu32_normal2() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvttps_epu32_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvttps_epu32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvttps_epu32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvttps_epu32_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4393,7 +5354,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvttps_epu32_normal3() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvttps_epu32_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvttps_epu32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvttps_epu32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvttps_epu32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4416,7 +5382,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvttps_epu32_boundary_min() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvttps_epu32_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvttps_epu32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvttps_epu32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvttps_epu32_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4439,7 +5410,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvttps_epu32_boundary_max() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvttps_epu32_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvttps_epu32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvttps_epu32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvttps_epu32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4462,7 +5438,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvttps_epu32_boundary_zero() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvttps_epu32_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvttps_epu32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvttps_epu32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvttps_epu32_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4485,7 +5466,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvttps_epu32_boundary_allones() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvttps_epu32_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvttps_epu32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvttps_epu32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvttps_epu32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4508,7 +5494,12 @@ pub(super) fn test_x86_avx512f_mm_mask_cvttps_epu32_boundary_mixed() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_cvttps_epu32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvttps_epu32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvttps_epu32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_cvttps_epu32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4531,7 +5522,12 @@ pub(super) fn test_x86_avx512f_mm_maskz_cvttps_epu32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_cvtt_roundpd_epu32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_cvttps_epu32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_cvttps_epu32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_cvtt_roundpd_epu32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4554,7 +5550,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_cvtt_roundpd_epu32() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_cvttpd_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_cvtt_roundpd_epu32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_cvtt_roundpd_epu32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_cvttpd_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4577,7 +5578,12 @@ pub(super) fn test_x86_avx512f_mm512_cvttpd_epi32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvttpd_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cvttpd_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_cvttpd_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvttpd_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4600,7 +5606,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvttpd_epi32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvttpd_epi32_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvttpd_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvttpd_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvttpd_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4623,7 +5634,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvttpd_epi32_normal2() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvttpd_epi32_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvttpd_epi32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvttpd_epi32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvttpd_epi32_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4646,7 +5662,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvttpd_epi32_normal3() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvttpd_epi32_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvttpd_epi32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvttpd_epi32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvttpd_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4669,7 +5690,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvttpd_epi32_boundary_min() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvttpd_epi32_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvttpd_epi32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvttpd_epi32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvttpd_epi32_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4692,7 +5718,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvttpd_epi32_boundary_max() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvttpd_epi32_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvttpd_epi32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvttpd_epi32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvttpd_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4715,7 +5746,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvttpd_epi32_boundary_zero() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvttpd_epi32_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvttpd_epi32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvttpd_epi32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvttpd_epi32_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4738,7 +5774,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvttpd_epi32_boundary_allones() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvttpd_epi32_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvttpd_epi32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvttpd_epi32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvttpd_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4761,7 +5802,12 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvttpd_epi32_boundary_mixed() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_cvttpd_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvttpd_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvttpd_epi32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_cvttpd_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4784,7 +5830,12 @@ pub(super) fn test_x86_avx512f_mm512_maskz_cvttpd_epi32() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvttpd_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_maskz_cvttpd_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_cvttpd_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvttpd_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4807,7 +5858,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvttpd_epi32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvttpd_epi32_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvttpd_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvttpd_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvttpd_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4830,7 +5886,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvttpd_epi32_normal2() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvttpd_epi32_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvttpd_epi32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvttpd_epi32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvttpd_epi32_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4853,7 +5914,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvttpd_epi32_normal3() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvttpd_epi32_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvttpd_epi32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvttpd_epi32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvttpd_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4876,7 +5942,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvttpd_epi32_boundary_min() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvttpd_epi32_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvttpd_epi32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvttpd_epi32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvttpd_epi32_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4899,7 +5970,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvttpd_epi32_boundary_max() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvttpd_epi32_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvttpd_epi32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvttpd_epi32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvttpd_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4922,7 +5998,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvttpd_epi32_boundary_zero() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvttpd_epi32_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvttpd_epi32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvttpd_epi32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvttpd_epi32_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4945,7 +6026,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvttpd_epi32_boundary_allones() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvttpd_epi32_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvttpd_epi32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvttpd_epi32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvttpd_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4968,7 +6054,12 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvttpd_epi32_boundary_mixed() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_cvttpd_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cvttpd_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvttpd_epi32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_cvttpd_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4989,4 +6080,8 @@ pub(super) fn test_x86_avx512f_mm256_maskz_cvttpd_epi32() -> Result<(), String> 
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_maskz_cvttpd_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_cvttpd_epi32_impl() }
 }

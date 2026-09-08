@@ -8,7 +8,8 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_x86_avx512bw_mm512_mask_sll_epi16() -> Result<(), String> {
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_sll_epi16_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -31,7 +32,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_sll_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_sll_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_sll_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_sll_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_sll_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -54,7 +60,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_sll_epi16_normal2() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_sll_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_sll_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_sll_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_sll_epi16_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -77,7 +88,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_sll_epi16_normal3() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_sll_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_sll_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_sll_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_sll_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -100,7 +116,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_sll_epi16_boundary_min() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_sll_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_sll_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_sll_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_sll_epi16_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -123,7 +144,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_sll_epi16_boundary_max() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_sll_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_sll_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_sll_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_sll_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -146,7 +172,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_sll_epi16_boundary_zero() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_sll_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_sll_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_sll_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_sll_epi16_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -169,7 +200,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_sll_epi16_boundary_allones() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_sll_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_sll_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_sll_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_sll_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -192,7 +228,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_sll_epi16_boundary_mixed() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_sll_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_sll_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_sll_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_sll_epi16_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -215,7 +256,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_sll_epi16_asym_min_max() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_sll_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_sll_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_sll_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_sll_epi16_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -238,7 +284,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_sll_epi16_asym_max_min() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_sll_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_sll_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_sll_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_sll_epi16_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -261,7 +312,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_sll_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_sll_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_sll_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_sll_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_sll_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -284,7 +340,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_sll_epi16_normal2() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_sll_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_sll_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_sll_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_sll_epi16_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -307,7 +368,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_sll_epi16_normal3() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_sll_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_sll_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_sll_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_sll_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -330,7 +396,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_sll_epi16_boundary_min() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_sll_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_sll_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_sll_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_sll_epi16_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -353,7 +424,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_sll_epi16_boundary_max() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_sll_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_sll_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_sll_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_sll_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -376,7 +452,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_sll_epi16_boundary_zero() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_sll_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_sll_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_sll_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_sll_epi16_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -399,7 +480,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_sll_epi16_boundary_allones() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_sll_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_sll_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_sll_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_sll_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -422,7 +508,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_sll_epi16_boundary_mixed() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_sll_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_sll_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_sll_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_sll_epi16_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -445,7 +536,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_sll_epi16_asym_min_max() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_sll_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_sll_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_sll_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_sll_epi16_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -468,7 +564,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_sll_epi16_asym_max_min() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_sll_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_sll_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_sll_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_sll_epi16_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_mask_sll_epi16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]), create__m128i_from_i32_array([17, 18, 19, 20])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_mask_sll_epi16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]), create__m128i_from_i32_array([17, 18, 19, 20]))"))?;
@@ -488,7 +589,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_sll_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_sll_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_sll_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_sll_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_sll_epi16_normal2_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_mask_sll_epi16(create__m256i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3]), create__m128i_from_i16_array([20, 19, 22, 17, 24, 15, 26, 13])));
         check_array_equality(&result, &[0, -1, 0, -3, 0, -5, 0, -7, 0, -1, 0, -3, 0, -5, 0, -7]).map_err(|e| format!("{e} | call: _mm256_mask_sll_epi16(create__m256i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3]), create__m128i_from_i16_array([20, 19, 22, 17, 24, 15, 26, 13]))"))?;
@@ -508,7 +614,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_sll_epi16_normal2() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_sll_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_sll_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_sll_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_sll_epi16_normal3_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_mask_sll_epi16(create__m256i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810, 910, 1010, 1110, 1210, 1310, 1410, 1510, 1610]), create__m128i_from_i16_array([120, 220, 320, 420, 520, 620, 720, 820])));
         check_array_equality(&result, &[0, 200, 0, 400, 0, 600, 0, 800, 0, 1000, 0, 1200, 0, 1400, 0, 1600]).map_err(|e| format!("{e} | call: _mm256_mask_sll_epi16(create__m256i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810, 910, 1010, 1110, 1210, 1310, 1410, 1510, 1610]), create__m128i_from_i16_array([120, 220, 320, 420, 520, 620, 720, 820]))"))?;
@@ -528,7 +639,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_sll_epi16_normal3() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_sll_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_sll_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_sll_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_sll_epi16_boundary_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_mask_sll_epi16(create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN])));
         check_array_equality(&result, &[0, -32768, 0, -32768, 0, -32768, 0, -32768, 0, -32768, 0, -32768, 0, -32768, 0, -32768]).map_err(|e| format!("{e} | call: _mm256_mask_sll_epi16(create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]))"))?;
@@ -548,7 +664,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_sll_epi16_boundary_min() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_sll_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_sll_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_sll_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_sll_epi16_boundary_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_mask_sll_epi16(create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX])));
         check_array_equality(&result, &[0, 32767, 0, 32767, 0, 32767, 0, 32767, 0, 32767, 0, 32767, 0, 32767, 0, 32767]).map_err(|e| format!("{e} | call: _mm256_mask_sll_epi16(create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]))"))?;
@@ -568,7 +689,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_sll_epi16_boundary_max() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_sll_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_sll_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_sll_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_sll_epi16_boundary_zero_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_mask_sll_epi16(create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_mask_sll_epi16(create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]))"))?;
@@ -588,7 +714,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_sll_epi16_boundary_zero() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_sll_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_sll_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_sll_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_sll_epi16_boundary_allones_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_mask_sll_epi16(create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1])));
         check_array_equality(&result, &[0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1]).map_err(|e| format!("{e} | call: _mm256_mask_sll_epi16(create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]))"))?;
@@ -608,7 +739,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_sll_epi16_boundary_allones() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_sll_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_sll_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_sll_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_sll_epi16_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_mask_sll_epi16(create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1])));
         check_array_equality(&result, &[0, 32767, 0, -1, 0, 32767, 0, -1, 0, 32767, 0, -1, 0, 32767, 0, -1]).map_err(|e| format!("{e} | call: _mm256_mask_sll_epi16(create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]))"))?;
@@ -628,7 +764,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_sll_epi16_boundary_mixed() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_sll_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_sll_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_sll_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_sll_epi16_asym_min_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_mask_sll_epi16(create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_array_equality(&result, &[0, -32768, 0, -32768, 0, -32768, 0, -32768, 0, -32768, 0, -32768, 0, -32768, 0, -32768]).map_err(|e| format!("{e} | call: _mm256_mask_sll_epi16(create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -648,7 +789,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_sll_epi16_asym_min_max() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_sll_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_sll_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_sll_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_sll_epi16_asym_max_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_mask_sll_epi16(create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_array_equality(&result, &[0, 32767, 0, 32767, 0, 32767, 0, 32767, 0, 32767, 0, 32767, 0, 32767, 0, 32767]).map_err(|e| format!("{e} | call: _mm256_mask_sll_epi16(create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -668,7 +814,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_sll_epi16_asym_max_min() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_sll_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_sll_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_sll_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_sll_epi16_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_maskz_sll_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m128i_from_i32_array([9, 10, 11, 12])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_maskz_sll_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m128i_from_i32_array([9, 10, 11, 12]))"))?;
@@ -688,7 +839,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_sll_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_sll_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_sll_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_sll_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_sll_epi16_normal2_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_maskz_sll_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__m128i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_maskz_sll_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__m128i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3]))"))?;
@@ -708,7 +864,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_sll_epi16_normal2() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_sll_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_sll_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_sll_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_sll_epi16_normal3_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_maskz_sll_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]), create__m128i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_maskz_sll_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]), create__m128i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810]))"))?;
@@ -728,7 +889,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_sll_epi16_normal3() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_sll_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_sll_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_sll_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_sll_epi16_boundary_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_maskz_sll_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_maskz_sll_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]))"))?;
@@ -748,7 +914,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_sll_epi16_boundary_min() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_sll_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_sll_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_sll_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_sll_epi16_boundary_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_maskz_sll_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_maskz_sll_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]))"))?;
@@ -768,7 +939,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_sll_epi16_boundary_max() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_sll_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_sll_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_sll_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_sll_epi16_boundary_zero_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_maskz_sll_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_maskz_sll_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]))"))?;
@@ -788,7 +964,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_sll_epi16_boundary_zero() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_sll_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_sll_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_sll_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_sll_epi16_boundary_allones_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_maskz_sll_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_maskz_sll_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]))"))?;
@@ -808,7 +989,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_sll_epi16_boundary_allones() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_sll_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_sll_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_sll_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_sll_epi16_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_maskz_sll_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_maskz_sll_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]))"))?;
@@ -828,7 +1014,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_sll_epi16_boundary_mixed() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_sll_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_sll_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_sll_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_sll_epi16_asym_min_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_maskz_sll_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_maskz_sll_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]))"))?;
@@ -848,7 +1039,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_sll_epi16_asym_min_max() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_sll_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_sll_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_sll_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_sll_epi16_asym_max_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_maskz_sll_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_maskz_sll_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]))"))?;
@@ -868,7 +1064,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_sll_epi16_asym_max_min() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_sll_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_sll_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_sll_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_sll_epi16_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_mask_sll_epi16(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([5, 6, 7, 8]), create__m128i_from_i32_array([9, 10, 11, 12])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_mask_sll_epi16(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([5, 6, 7, 8]), create__m128i_from_i32_array([9, 10, 11, 12]))"))?;
@@ -888,7 +1089,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_sll_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_sll_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_sll_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_sll_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_sll_epi16_normal2_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_mask_sll_epi16(create__m128i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3]), create__m128i_from_i16_array([20, 19, 22, 17, 24, 15, 26, 13])));
         check_array_equality(&result, &[0, -1, 0, -3, 0, -5, 0, -7]).map_err(|e| format!("{e} | call: _mm_mask_sll_epi16(create__m128i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3]), create__m128i_from_i16_array([20, 19, 22, 17, 24, 15, 26, 13]))"))?;
@@ -908,7 +1114,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_sll_epi16_normal2() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_sll_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_sll_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_sll_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_sll_epi16_normal3_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_mask_sll_epi16(create__m128i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810]), create__m128i_from_i16_array([120, 220, 320, 420, 520, 620, 720, 820])));
         check_array_equality(&result, &[0, 200, 0, 400, 0, 600, 0, 800]).map_err(|e| format!("{e} | call: _mm_mask_sll_epi16(create__m128i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810]), create__m128i_from_i16_array([120, 220, 320, 420, 520, 620, 720, 820]))"))?;
@@ -928,7 +1139,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_sll_epi16_normal3() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_sll_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_sll_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_sll_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_sll_epi16_boundary_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_mask_sll_epi16(create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN])));
         check_array_equality(&result, &[0, -32768, 0, -32768, 0, -32768, 0, -32768]).map_err(|e| format!("{e} | call: _mm_mask_sll_epi16(create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]))"))?;
@@ -948,7 +1164,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_sll_epi16_boundary_min() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_sll_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_sll_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_sll_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_sll_epi16_boundary_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_mask_sll_epi16(create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX])));
         check_array_equality(&result, &[0, 32767, 0, 32767, 0, 32767, 0, 32767]).map_err(|e| format!("{e} | call: _mm_mask_sll_epi16(create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]))"))?;
@@ -968,7 +1189,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_sll_epi16_boundary_max() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_sll_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_sll_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_sll_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_sll_epi16_boundary_zero_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_mask_sll_epi16(create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_mask_sll_epi16(create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]))"))?;
@@ -988,7 +1214,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_sll_epi16_boundary_zero() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_sll_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_sll_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_sll_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_sll_epi16_boundary_allones_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_mask_sll_epi16(create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1])));
         check_array_equality(&result, &[0, -1, 0, -1, 0, -1, 0, -1]).map_err(|e| format!("{e} | call: _mm_mask_sll_epi16(create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]))"))?;
@@ -1008,7 +1239,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_sll_epi16_boundary_allones() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_sll_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_sll_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_sll_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_sll_epi16_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_mask_sll_epi16(create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1])));
         check_array_equality(&result, &[0, 32767, 0, -1, 0, 32767, 0, -1]).map_err(|e| format!("{e} | call: _mm_mask_sll_epi16(create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]))"))?;
@@ -1028,7 +1264,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_sll_epi16_boundary_mixed() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_sll_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_sll_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_sll_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_sll_epi16_asym_min_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_mask_sll_epi16(create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_array_equality(&result, &[0, -32768, 0, -32768, 0, -32768, 0, -32768]).map_err(|e| format!("{e} | call: _mm_mask_sll_epi16(create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -1048,7 +1289,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_sll_epi16_asym_min_max() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_sll_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_sll_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_sll_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_sll_epi16_asym_max_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_mask_sll_epi16(create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_array_equality(&result, &[0, 32767, 0, 32767, 0, 32767, 0, 32767]).map_err(|e| format!("{e} | call: _mm_mask_sll_epi16(create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -1068,7 +1314,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_sll_epi16_asym_max_min() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_sll_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_sll_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_sll_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_sll_epi16_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_maskz_sll_epi16(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_maskz_sll_epi16(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
@@ -1088,7 +1339,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_sll_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_sll_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_sll_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_sll_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_sll_epi16_normal2_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_maskz_sll_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7]), create__m128i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_maskz_sll_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7]), create__m128i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3]))"))?;
@@ -1108,7 +1364,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_sll_epi16_normal2() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_sll_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_sll_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_sll_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_sll_epi16_normal3_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_maskz_sll_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800]), create__m128i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_maskz_sll_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800]), create__m128i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810]))"))?;
@@ -1128,7 +1389,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_sll_epi16_normal3() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_sll_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_sll_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_sll_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_sll_epi16_boundary_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_maskz_sll_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_maskz_sll_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]))"))?;
@@ -1148,7 +1414,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_sll_epi16_boundary_min() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_sll_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_sll_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_sll_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_sll_epi16_boundary_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_maskz_sll_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_maskz_sll_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]))"))?;
@@ -1168,7 +1439,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_sll_epi16_boundary_max() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_sll_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_sll_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_sll_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_sll_epi16_boundary_zero_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_maskz_sll_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_maskz_sll_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]))"))?;
@@ -1188,7 +1464,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_sll_epi16_boundary_zero() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_sll_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_sll_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_sll_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_sll_epi16_boundary_allones_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_maskz_sll_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_maskz_sll_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]))"))?;
@@ -1208,7 +1489,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_sll_epi16_boundary_allones() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_sll_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_sll_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_sll_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_sll_epi16_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_maskz_sll_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_maskz_sll_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]))"))?;
@@ -1228,7 +1514,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_sll_epi16_boundary_mixed() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_sll_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_sll_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_sll_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_sll_epi16_asym_min_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_maskz_sll_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_maskz_sll_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]))"))?;
@@ -1248,7 +1539,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_sll_epi16_asym_min_max() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_sll_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_sll_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_sll_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_sll_epi16_asym_max_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_maskz_sll_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_maskz_sll_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]))"))?;
@@ -1268,7 +1564,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_sll_epi16_asym_max_min() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_srl_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_sll_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_sll_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_srl_epi16_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1291,7 +1592,12 @@ pub(super) fn test_x86_avx512bw_mm512_srl_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_srl_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_srl_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_srl_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_srl_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1314,7 +1620,12 @@ pub(super) fn test_x86_avx512bw_mm512_srl_epi16_normal2() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_srl_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_srl_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_srl_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_srl_epi16_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1337,7 +1648,12 @@ pub(super) fn test_x86_avx512bw_mm512_srl_epi16_normal3() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_srl_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_srl_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_srl_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_srl_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1360,7 +1676,12 @@ pub(super) fn test_x86_avx512bw_mm512_srl_epi16_boundary_min() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_srl_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_srl_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_srl_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_srl_epi16_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1383,7 +1704,12 @@ pub(super) fn test_x86_avx512bw_mm512_srl_epi16_boundary_max() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_srl_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_srl_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_srl_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_srl_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1406,7 +1732,12 @@ pub(super) fn test_x86_avx512bw_mm512_srl_epi16_boundary_zero() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_srl_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_srl_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_srl_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_srl_epi16_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1429,7 +1760,12 @@ pub(super) fn test_x86_avx512bw_mm512_srl_epi16_boundary_allones() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_srl_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_srl_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_srl_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_srl_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1452,7 +1788,12 @@ pub(super) fn test_x86_avx512bw_mm512_srl_epi16_boundary_mixed() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_srl_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_srl_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_srl_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_srl_epi16_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1475,7 +1816,12 @@ pub(super) fn test_x86_avx512bw_mm512_srl_epi16_asym_min_max() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_srl_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_srl_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_srl_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_srl_epi16_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1498,7 +1844,12 @@ pub(super) fn test_x86_avx512bw_mm512_srl_epi16_asym_max_min() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_srl_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_srl_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_srl_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_srl_epi16_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1521,7 +1872,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_srl_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_srl_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_srl_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_srl_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_srl_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1544,7 +1900,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_srl_epi16_normal2() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_srl_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_srl_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_srl_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_srl_epi16_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1567,7 +1928,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_srl_epi16_normal3() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_srl_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_srl_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_srl_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_srl_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1590,7 +1956,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_srl_epi16_boundary_min() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_srl_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_srl_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_srl_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_srl_epi16_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1613,7 +1984,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_srl_epi16_boundary_max() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_srl_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_srl_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_srl_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_srl_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1636,7 +2012,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_srl_epi16_boundary_zero() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_srl_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_srl_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_srl_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_srl_epi16_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1659,7 +2040,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_srl_epi16_boundary_allones() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_srl_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_srl_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_srl_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_srl_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1682,7 +2068,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_srl_epi16_boundary_mixed() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_srl_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_srl_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_srl_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_srl_epi16_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1705,7 +2096,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_srl_epi16_asym_min_max() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_srl_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_srl_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_srl_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_srl_epi16_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1728,7 +2124,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_srl_epi16_asym_max_min() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_srl_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_srl_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_srl_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_srl_epi16_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1751,7 +2152,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_srl_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_srl_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_srl_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_srl_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_srl_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1774,7 +2180,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_srl_epi16_normal2() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_srl_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_srl_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_srl_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_srl_epi16_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1797,7 +2208,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_srl_epi16_normal3() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_srl_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_srl_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_srl_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_srl_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1820,7 +2236,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_srl_epi16_boundary_min() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_srl_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_srl_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_srl_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_srl_epi16_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1843,7 +2264,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_srl_epi16_boundary_max() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_srl_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_srl_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_srl_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_srl_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1866,7 +2292,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_srl_epi16_boundary_zero() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_srl_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_srl_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_srl_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_srl_epi16_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1889,7 +2320,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_srl_epi16_boundary_allones() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_srl_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_srl_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_srl_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_srl_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1912,7 +2348,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_srl_epi16_boundary_mixed() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_srl_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_srl_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_srl_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_srl_epi16_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1935,7 +2376,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_srl_epi16_asym_min_max() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_srl_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_srl_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_srl_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_srl_epi16_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1958,7 +2404,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_srl_epi16_asym_max_min() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_srl_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_srl_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_srl_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_srl_epi16_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_mask_srl_epi16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]), create__m128i_from_i32_array([17, 18, 19, 20])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_mask_srl_epi16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]), create__m128i_from_i32_array([17, 18, 19, 20]))"))?;
@@ -1978,7 +2429,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_srl_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_srl_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_srl_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_srl_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_srl_epi16_normal2_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_mask_srl_epi16(create__m256i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3]), create__m128i_from_i16_array([20, 19, 22, 17, 24, 15, 26, 13])));
         check_array_equality(&result, &[0, -1, 0, -3, 0, -5, 0, -7, 0, -1, 0, -3, 0, -5, 0, -7]).map_err(|e| format!("{e} | call: _mm256_mask_srl_epi16(create__m256i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3]), create__m128i_from_i16_array([20, 19, 22, 17, 24, 15, 26, 13]))"))?;
@@ -1998,7 +2454,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_srl_epi16_normal2() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_srl_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_srl_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_srl_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_srl_epi16_normal3_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_mask_srl_epi16(create__m256i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810, 910, 1010, 1110, 1210, 1310, 1410, 1510, 1610]), create__m128i_from_i16_array([120, 220, 320, 420, 520, 620, 720, 820])));
         check_array_equality(&result, &[0, 200, 0, 400, 0, 600, 0, 800, 0, 1000, 0, 1200, 0, 1400, 0, 1600]).map_err(|e| format!("{e} | call: _mm256_mask_srl_epi16(create__m256i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810, 910, 1010, 1110, 1210, 1310, 1410, 1510, 1610]), create__m128i_from_i16_array([120, 220, 320, 420, 520, 620, 720, 820]))"))?;
@@ -2018,7 +2479,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_srl_epi16_normal3() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_srl_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_srl_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_srl_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_srl_epi16_boundary_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_mask_srl_epi16(create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN])));
         check_array_equality(&result, &[0, -32768, 0, -32768, 0, -32768, 0, -32768, 0, -32768, 0, -32768, 0, -32768, 0, -32768]).map_err(|e| format!("{e} | call: _mm256_mask_srl_epi16(create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]))"))?;
@@ -2038,7 +2504,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_srl_epi16_boundary_min() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_srl_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_srl_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_srl_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_srl_epi16_boundary_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_mask_srl_epi16(create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX])));
         check_array_equality(&result, &[0, 32767, 0, 32767, 0, 32767, 0, 32767, 0, 32767, 0, 32767, 0, 32767, 0, 32767]).map_err(|e| format!("{e} | call: _mm256_mask_srl_epi16(create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]))"))?;
@@ -2058,7 +2529,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_srl_epi16_boundary_max() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_srl_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_srl_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_srl_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_srl_epi16_boundary_zero_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_mask_srl_epi16(create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_mask_srl_epi16(create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]))"))?;
@@ -2078,7 +2554,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_srl_epi16_boundary_zero() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_srl_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_srl_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_srl_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_srl_epi16_boundary_allones_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_mask_srl_epi16(create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1])));
         check_array_equality(&result, &[0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1]).map_err(|e| format!("{e} | call: _mm256_mask_srl_epi16(create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]))"))?;
@@ -2098,7 +2579,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_srl_epi16_boundary_allones() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_srl_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_srl_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_srl_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_srl_epi16_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_mask_srl_epi16(create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1])));
         check_array_equality(&result, &[0, 32767, 0, -1, 0, 32767, 0, -1, 0, 32767, 0, -1, 0, 32767, 0, -1]).map_err(|e| format!("{e} | call: _mm256_mask_srl_epi16(create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]))"))?;
@@ -2118,7 +2604,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_srl_epi16_boundary_mixed() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_srl_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_srl_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_srl_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_srl_epi16_asym_min_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_mask_srl_epi16(create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_array_equality(&result, &[0, -32768, 0, -32768, 0, -32768, 0, -32768, 0, -32768, 0, -32768, 0, -32768, 0, -32768]).map_err(|e| format!("{e} | call: _mm256_mask_srl_epi16(create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -2138,7 +2629,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_srl_epi16_asym_min_max() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_srl_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_srl_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_srl_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_srl_epi16_asym_max_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_mask_srl_epi16(create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_array_equality(&result, &[0, 32767, 0, 32767, 0, 32767, 0, 32767, 0, 32767, 0, 32767, 0, 32767, 0, 32767]).map_err(|e| format!("{e} | call: _mm256_mask_srl_epi16(create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -2158,7 +2654,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_srl_epi16_asym_max_min() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_srl_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_srl_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_srl_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_srl_epi16_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_maskz_srl_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m128i_from_i32_array([9, 10, 11, 12])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_maskz_srl_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m128i_from_i32_array([9, 10, 11, 12]))"))?;
@@ -2178,7 +2679,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_srl_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_srl_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_srl_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_srl_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_srl_epi16_normal2_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_maskz_srl_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__m128i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_maskz_srl_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__m128i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3]))"))?;
@@ -2198,7 +2704,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_srl_epi16_normal2() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_srl_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_srl_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_srl_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_srl_epi16_normal3_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_maskz_srl_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]), create__m128i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_maskz_srl_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]), create__m128i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810]))"))?;
@@ -2218,7 +2729,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_srl_epi16_normal3() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_srl_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_srl_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_srl_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_srl_epi16_boundary_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_maskz_srl_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_maskz_srl_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]))"))?;
@@ -2238,7 +2754,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_srl_epi16_boundary_min() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_srl_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_srl_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_srl_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_srl_epi16_boundary_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_maskz_srl_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_maskz_srl_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]))"))?;
@@ -2258,7 +2779,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_srl_epi16_boundary_max() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_srl_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_srl_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_srl_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_srl_epi16_boundary_zero_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_maskz_srl_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_maskz_srl_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]))"))?;
@@ -2278,7 +2804,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_srl_epi16_boundary_zero() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_srl_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_srl_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_srl_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_srl_epi16_boundary_allones_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_maskz_srl_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_maskz_srl_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]))"))?;
@@ -2298,7 +2829,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_srl_epi16_boundary_allones() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_srl_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_srl_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_srl_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_srl_epi16_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_maskz_srl_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_maskz_srl_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]))"))?;
@@ -2318,7 +2854,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_srl_epi16_boundary_mixed() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_srl_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_srl_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_srl_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_srl_epi16_asym_min_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_maskz_srl_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_maskz_srl_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]))"))?;
@@ -2338,7 +2879,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_srl_epi16_asym_min_max() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_srl_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_srl_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_srl_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_srl_epi16_asym_max_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_maskz_srl_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_maskz_srl_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]))"))?;
@@ -2358,7 +2904,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_srl_epi16_asym_max_min() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_srl_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_srl_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_srl_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_srl_epi16_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_mask_srl_epi16(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([5, 6, 7, 8]), create__m128i_from_i32_array([9, 10, 11, 12])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_mask_srl_epi16(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([5, 6, 7, 8]), create__m128i_from_i32_array([9, 10, 11, 12]))"))?;
@@ -2378,7 +2929,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_srl_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_srl_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_srl_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_srl_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_srl_epi16_normal2_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_mask_srl_epi16(create__m128i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3]), create__m128i_from_i16_array([20, 19, 22, 17, 24, 15, 26, 13])));
         check_array_equality(&result, &[0, -1, 0, -3, 0, -5, 0, -7]).map_err(|e| format!("{e} | call: _mm_mask_srl_epi16(create__m128i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3]), create__m128i_from_i16_array([20, 19, 22, 17, 24, 15, 26, 13]))"))?;
@@ -2398,7 +2954,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_srl_epi16_normal2() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_srl_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_srl_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_srl_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_srl_epi16_normal3_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_mask_srl_epi16(create__m128i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810]), create__m128i_from_i16_array([120, 220, 320, 420, 520, 620, 720, 820])));
         check_array_equality(&result, &[0, 200, 0, 400, 0, 600, 0, 800]).map_err(|e| format!("{e} | call: _mm_mask_srl_epi16(create__m128i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810]), create__m128i_from_i16_array([120, 220, 320, 420, 520, 620, 720, 820]))"))?;
@@ -2418,7 +2979,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_srl_epi16_normal3() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_srl_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_srl_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_srl_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_srl_epi16_boundary_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_mask_srl_epi16(create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN])));
         check_array_equality(&result, &[0, -32768, 0, -32768, 0, -32768, 0, -32768]).map_err(|e| format!("{e} | call: _mm_mask_srl_epi16(create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]))"))?;
@@ -2438,7 +3004,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_srl_epi16_boundary_min() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_srl_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_srl_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_srl_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_srl_epi16_boundary_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_mask_srl_epi16(create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX])));
         check_array_equality(&result, &[0, 32767, 0, 32767, 0, 32767, 0, 32767]).map_err(|e| format!("{e} | call: _mm_mask_srl_epi16(create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]))"))?;
@@ -2458,7 +3029,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_srl_epi16_boundary_max() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_srl_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_srl_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_srl_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_srl_epi16_boundary_zero_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_mask_srl_epi16(create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_mask_srl_epi16(create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]))"))?;
@@ -2478,7 +3054,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_srl_epi16_boundary_zero() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_srl_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_srl_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_srl_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_srl_epi16_boundary_allones_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_mask_srl_epi16(create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1])));
         check_array_equality(&result, &[0, -1, 0, -1, 0, -1, 0, -1]).map_err(|e| format!("{e} | call: _mm_mask_srl_epi16(create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]))"))?;
@@ -2498,7 +3079,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_srl_epi16_boundary_allones() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_srl_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_srl_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_srl_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_srl_epi16_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_mask_srl_epi16(create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1])));
         check_array_equality(&result, &[0, 32767, 0, -1, 0, 32767, 0, -1]).map_err(|e| format!("{e} | call: _mm_mask_srl_epi16(create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]))"))?;
@@ -2518,7 +3104,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_srl_epi16_boundary_mixed() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_srl_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_srl_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_srl_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_srl_epi16_asym_min_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_mask_srl_epi16(create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_array_equality(&result, &[0, -32768, 0, -32768, 0, -32768, 0, -32768]).map_err(|e| format!("{e} | call: _mm_mask_srl_epi16(create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -2538,7 +3129,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_srl_epi16_asym_min_max() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_srl_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_srl_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_srl_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_srl_epi16_asym_max_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_mask_srl_epi16(create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_array_equality(&result, &[0, 32767, 0, 32767, 0, 32767, 0, 32767]).map_err(|e| format!("{e} | call: _mm_mask_srl_epi16(create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -2558,7 +3154,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_srl_epi16_asym_max_min() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_srl_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_srl_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_srl_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_srl_epi16_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_maskz_srl_epi16(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_maskz_srl_epi16(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
@@ -2578,7 +3179,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_srl_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_srl_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_srl_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_srl_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_srl_epi16_normal2_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_maskz_srl_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7]), create__m128i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_maskz_srl_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7]), create__m128i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3]))"))?;
@@ -2598,7 +3204,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_srl_epi16_normal2() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_srl_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_srl_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_srl_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_srl_epi16_normal3_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_maskz_srl_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800]), create__m128i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_maskz_srl_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800]), create__m128i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810]))"))?;
@@ -2618,7 +3229,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_srl_epi16_normal3() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_srl_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_srl_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_srl_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_srl_epi16_boundary_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_maskz_srl_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_maskz_srl_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]))"))?;
@@ -2638,7 +3254,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_srl_epi16_boundary_min() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_srl_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_srl_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_srl_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_srl_epi16_boundary_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_maskz_srl_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_maskz_srl_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]))"))?;
@@ -2658,7 +3279,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_srl_epi16_boundary_max() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_srl_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_srl_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_srl_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_srl_epi16_boundary_zero_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_maskz_srl_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_maskz_srl_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]))"))?;
@@ -2678,7 +3304,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_srl_epi16_boundary_zero() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_srl_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_srl_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_srl_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_srl_epi16_boundary_allones_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_maskz_srl_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_maskz_srl_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]))"))?;
@@ -2698,7 +3329,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_srl_epi16_boundary_allones() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_srl_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_srl_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_srl_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_srl_epi16_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_maskz_srl_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_maskz_srl_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]))"))?;
@@ -2718,7 +3354,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_srl_epi16_boundary_mixed() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_srl_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_srl_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_srl_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_srl_epi16_asym_min_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_maskz_srl_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_maskz_srl_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]))"))?;
@@ -2738,7 +3379,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_srl_epi16_asym_min_max() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_srl_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_srl_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_srl_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_srl_epi16_asym_max_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_maskz_srl_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_maskz_srl_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]))"))?;
@@ -2758,7 +3404,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_srl_epi16_asym_max_min() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_sra_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_srl_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_srl_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_sra_epi16_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2781,7 +3432,12 @@ pub(super) fn test_x86_avx512bw_mm512_sra_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_sra_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_sra_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_sra_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_sra_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2804,7 +3460,12 @@ pub(super) fn test_x86_avx512bw_mm512_sra_epi16_normal2() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_sra_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_sra_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_sra_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_sra_epi16_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2827,7 +3488,12 @@ pub(super) fn test_x86_avx512bw_mm512_sra_epi16_normal3() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_sra_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_sra_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_sra_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_sra_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2850,7 +3516,12 @@ pub(super) fn test_x86_avx512bw_mm512_sra_epi16_boundary_min() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_sra_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_sra_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_sra_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_sra_epi16_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2873,7 +3544,12 @@ pub(super) fn test_x86_avx512bw_mm512_sra_epi16_boundary_max() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_sra_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_sra_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_sra_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_sra_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2896,7 +3572,12 @@ pub(super) fn test_x86_avx512bw_mm512_sra_epi16_boundary_zero() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_sra_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_sra_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_sra_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_sra_epi16_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2919,7 +3600,12 @@ pub(super) fn test_x86_avx512bw_mm512_sra_epi16_boundary_allones() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_sra_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_sra_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_sra_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_sra_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2942,7 +3628,12 @@ pub(super) fn test_x86_avx512bw_mm512_sra_epi16_boundary_mixed() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_sra_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_sra_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_sra_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_sra_epi16_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2965,7 +3656,12 @@ pub(super) fn test_x86_avx512bw_mm512_sra_epi16_asym_min_max() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_sra_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_sra_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_sra_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_sra_epi16_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2988,7 +3684,12 @@ pub(super) fn test_x86_avx512bw_mm512_sra_epi16_asym_max_min() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_sra_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_sra_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_sra_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_sra_epi16_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3011,7 +3712,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_sra_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_sra_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_sra_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_sra_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_sra_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3034,7 +3740,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_sra_epi16_normal2() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_sra_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_sra_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_sra_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_sra_epi16_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3057,7 +3768,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_sra_epi16_normal3() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_sra_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_sra_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_sra_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_sra_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3080,7 +3796,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_sra_epi16_boundary_min() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_sra_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_sra_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_sra_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_sra_epi16_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3103,7 +3824,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_sra_epi16_boundary_max() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_sra_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_sra_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_sra_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_sra_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3126,7 +3852,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_sra_epi16_boundary_zero() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_sra_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_sra_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_sra_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_sra_epi16_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3149,7 +3880,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_sra_epi16_boundary_allones() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_sra_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_sra_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_sra_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_sra_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3172,7 +3908,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_sra_epi16_boundary_mixed() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_sra_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_sra_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_sra_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_sra_epi16_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3195,7 +3936,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_sra_epi16_asym_min_max() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_sra_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_sra_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_sra_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_sra_epi16_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3218,7 +3964,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_sra_epi16_asym_max_min() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_sra_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_sra_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_sra_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_sra_epi16_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3241,7 +3992,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_sra_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_sra_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_sra_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_sra_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_sra_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3264,7 +4020,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_sra_epi16_normal2() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_sra_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_sra_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_sra_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_sra_epi16_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3287,7 +4048,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_sra_epi16_normal3() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_sra_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_sra_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_sra_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_sra_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3310,7 +4076,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_sra_epi16_boundary_min() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_sra_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_sra_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_sra_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_sra_epi16_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3333,7 +4104,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_sra_epi16_boundary_max() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_sra_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_sra_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_sra_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_sra_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3356,7 +4132,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_sra_epi16_boundary_zero() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_sra_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_sra_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_sra_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_sra_epi16_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3379,7 +4160,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_sra_epi16_boundary_allones() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_sra_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_sra_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_sra_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_sra_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3402,7 +4188,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_sra_epi16_boundary_mixed() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_sra_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_sra_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_sra_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_sra_epi16_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3425,7 +4216,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_sra_epi16_asym_min_max() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_sra_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_sra_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_sra_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_sra_epi16_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3448,7 +4244,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_sra_epi16_asym_max_min() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_sra_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_sra_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_sra_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_sra_epi16_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_mask_sra_epi16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]), create__m128i_from_i32_array([17, 18, 19, 20])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_mask_sra_epi16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]), create__m128i_from_i32_array([17, 18, 19, 20]))"))?;
@@ -3468,7 +4269,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_sra_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_sra_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_sra_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_sra_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_sra_epi16_normal2_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_mask_sra_epi16(create__m256i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3]), create__m128i_from_i16_array([20, 19, 22, 17, 24, 15, 26, 13])));
         check_array_equality(&result, &[0, -1, 0, -3, 0, -5, 0, -7, 0, -1, 0, -3, 0, -5, 0, -7]).map_err(|e| format!("{e} | call: _mm256_mask_sra_epi16(create__m256i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3]), create__m128i_from_i16_array([20, 19, 22, 17, 24, 15, 26, 13]))"))?;
@@ -3488,7 +4294,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_sra_epi16_normal2() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_sra_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_sra_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_sra_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_sra_epi16_normal3_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_mask_sra_epi16(create__m256i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810, 910, 1010, 1110, 1210, 1310, 1410, 1510, 1610]), create__m128i_from_i16_array([120, 220, 320, 420, 520, 620, 720, 820])));
         check_array_equality(&result, &[0, 200, 0, 400, 0, 600, 0, 800, 0, 1000, 0, 1200, 0, 1400, 0, 1600]).map_err(|e| format!("{e} | call: _mm256_mask_sra_epi16(create__m256i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810, 910, 1010, 1110, 1210, 1310, 1410, 1510, 1610]), create__m128i_from_i16_array([120, 220, 320, 420, 520, 620, 720, 820]))"))?;
@@ -3508,7 +4319,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_sra_epi16_normal3() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_sra_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_sra_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_sra_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_sra_epi16_boundary_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_mask_sra_epi16(create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN])));
         check_array_equality(&result, &[-1, -32768, -1, -32768, -1, -32768, -1, -32768, -1, -32768, -1, -32768, -1, -32768, -1, -32768]).map_err(|e| format!("{e} | call: _mm256_mask_sra_epi16(create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]))"))?;
@@ -3528,7 +4344,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_sra_epi16_boundary_min() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_sra_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_sra_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_sra_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_sra_epi16_boundary_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_mask_sra_epi16(create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX])));
         check_array_equality(&result, &[0, 32767, 0, 32767, 0, 32767, 0, 32767, 0, 32767, 0, 32767, 0, 32767, 0, 32767]).map_err(|e| format!("{e} | call: _mm256_mask_sra_epi16(create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]))"))?;
@@ -3548,7 +4369,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_sra_epi16_boundary_max() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_sra_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_sra_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_sra_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_sra_epi16_boundary_zero_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_mask_sra_epi16(create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_mask_sra_epi16(create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]))"))?;
@@ -3568,7 +4394,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_sra_epi16_boundary_zero() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_sra_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_sra_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_sra_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_sra_epi16_boundary_allones_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_mask_sra_epi16(create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1])));
         check_array_equality(&result, &[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm256_mask_sra_epi16(create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]))"))?;
@@ -3588,7 +4419,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_sra_epi16_boundary_allones() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_sra_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_sra_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_sra_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_sra_epi16_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_mask_sra_epi16(create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1])));
         check_array_equality(&result, &[-1, 32767, 0, -1, -1, 32767, 0, -1, -1, 32767, 0, -1, -1, 32767, 0, -1]).map_err(|e| format!("{e} | call: _mm256_mask_sra_epi16(create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]))"))?;
@@ -3608,7 +4444,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_sra_epi16_boundary_mixed() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_sra_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_sra_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_sra_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_sra_epi16_asym_min_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_mask_sra_epi16(create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_array_equality(&result, &[0, -32768, 0, -32768, 0, -32768, 0, -32768, 0, -32768, 0, -32768, 0, -32768, 0, -32768]).map_err(|e| format!("{e} | call: _mm256_mask_sra_epi16(create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -3628,7 +4469,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_sra_epi16_asym_min_max() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_sra_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_sra_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_sra_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_sra_epi16_asym_max_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_mask_sra_epi16(create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_array_equality(&result, &[-1, 32767, -1, 32767, -1, 32767, -1, 32767, -1, 32767, -1, 32767, -1, 32767, -1, 32767]).map_err(|e| format!("{e} | call: _mm256_mask_sra_epi16(create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -3648,7 +4494,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_sra_epi16_asym_max_min() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_sra_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_sra_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_sra_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_sra_epi16_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_maskz_sra_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m128i_from_i32_array([9, 10, 11, 12])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_maskz_sra_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m128i_from_i32_array([9, 10, 11, 12]))"))?;
@@ -3668,7 +4519,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_sra_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_sra_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_sra_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_sra_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_sra_epi16_normal2_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_maskz_sra_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__m128i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_maskz_sra_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__m128i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3]))"))?;
@@ -3688,7 +4544,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_sra_epi16_normal2() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_sra_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_sra_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_sra_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_sra_epi16_normal3_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_maskz_sra_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]), create__m128i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_maskz_sra_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]), create__m128i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810]))"))?;
@@ -3708,7 +4569,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_sra_epi16_normal3() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_sra_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_sra_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_sra_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_sra_epi16_boundary_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_maskz_sra_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN])));
         check_array_equality(&result, &[-1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0]).map_err(|e| format!("{e} | call: _mm256_maskz_sra_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]))"))?;
@@ -3728,7 +4594,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_sra_epi16_boundary_min() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_sra_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_sra_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_sra_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_sra_epi16_boundary_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_maskz_sra_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_maskz_sra_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]))"))?;
@@ -3748,7 +4619,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_sra_epi16_boundary_max() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_sra_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_sra_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_sra_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_sra_epi16_boundary_zero_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_maskz_sra_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_maskz_sra_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]))"))?;
@@ -3768,7 +4644,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_sra_epi16_boundary_zero() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_sra_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_sra_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_sra_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_sra_epi16_boundary_allones_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_maskz_sra_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1])));
         check_array_equality(&result, &[-1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0]).map_err(|e| format!("{e} | call: _mm256_maskz_sra_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]))"))?;
@@ -3788,7 +4669,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_sra_epi16_boundary_allones() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_sra_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_sra_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_sra_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_sra_epi16_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_maskz_sra_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1])));
         check_array_equality(&result, &[-1, 0, 0, 0, -1, 0, 0, 0, -1, 0, 0, 0, -1, 0, 0, 0]).map_err(|e| format!("{e} | call: _mm256_maskz_sra_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]))"))?;
@@ -3808,7 +4694,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_sra_epi16_boundary_mixed() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_sra_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_sra_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_sra_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_sra_epi16_asym_min_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_maskz_sra_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX])));
         check_array_equality(&result, &[-1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0]).map_err(|e| format!("{e} | call: _mm256_maskz_sra_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]))"))?;
@@ -3828,7 +4719,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_sra_epi16_asym_min_max() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_sra_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_sra_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_sra_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_sra_epi16_asym_max_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i16_array(_mm256_maskz_sra_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm256_maskz_sra_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]))"))?;
@@ -3848,7 +4744,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_sra_epi16_asym_max_min() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_sra_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_sra_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_sra_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_sra_epi16_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_mask_sra_epi16(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([5, 6, 7, 8]), create__m128i_from_i32_array([9, 10, 11, 12])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_mask_sra_epi16(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([5, 6, 7, 8]), create__m128i_from_i32_array([9, 10, 11, 12]))"))?;
@@ -3868,7 +4769,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_sra_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_sra_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_sra_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_sra_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_sra_epi16_normal2_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_mask_sra_epi16(create__m128i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3]), create__m128i_from_i16_array([20, 19, 22, 17, 24, 15, 26, 13])));
         check_array_equality(&result, &[0, -1, 0, -3, 0, -5, 0, -7]).map_err(|e| format!("{e} | call: _mm_mask_sra_epi16(create__m128i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3]), create__m128i_from_i16_array([20, 19, 22, 17, 24, 15, 26, 13]))"))?;
@@ -3888,7 +4794,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_sra_epi16_normal2() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_sra_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_sra_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_sra_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_sra_epi16_normal3_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_mask_sra_epi16(create__m128i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810]), create__m128i_from_i16_array([120, 220, 320, 420, 520, 620, 720, 820])));
         check_array_equality(&result, &[0, 200, 0, 400, 0, 600, 0, 800]).map_err(|e| format!("{e} | call: _mm_mask_sra_epi16(create__m128i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810]), create__m128i_from_i16_array([120, 220, 320, 420, 520, 620, 720, 820]))"))?;
@@ -3908,7 +4819,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_sra_epi16_normal3() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_sra_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_sra_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_sra_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_sra_epi16_boundary_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_mask_sra_epi16(create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN])));
         check_array_equality(&result, &[-1, -32768, -1, -32768, -1, -32768, -1, -32768]).map_err(|e| format!("{e} | call: _mm_mask_sra_epi16(create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]))"))?;
@@ -3928,7 +4844,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_sra_epi16_boundary_min() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_sra_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_sra_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_sra_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_sra_epi16_boundary_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_mask_sra_epi16(create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX])));
         check_array_equality(&result, &[0, 32767, 0, 32767, 0, 32767, 0, 32767]).map_err(|e| format!("{e} | call: _mm_mask_sra_epi16(create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]))"))?;
@@ -3948,7 +4869,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_sra_epi16_boundary_max() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_sra_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_sra_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_sra_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_sra_epi16_boundary_zero_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_mask_sra_epi16(create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_mask_sra_epi16(create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]))"))?;
@@ -3968,7 +4894,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_sra_epi16_boundary_zero() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_sra_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_sra_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_sra_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_sra_epi16_boundary_allones_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_mask_sra_epi16(create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1])));
         check_array_equality(&result, &[-1, -1, -1, -1, -1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_mask_sra_epi16(create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]))"))?;
@@ -3988,7 +4919,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_sra_epi16_boundary_allones() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_sra_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_sra_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_sra_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_sra_epi16_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_mask_sra_epi16(create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1])));
         check_array_equality(&result, &[-1, 32767, 0, -1, -1, 32767, 0, -1]).map_err(|e| format!("{e} | call: _mm_mask_sra_epi16(create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]))"))?;
@@ -4008,7 +4944,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_sra_epi16_boundary_mixed() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_sra_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_sra_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_sra_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_sra_epi16_asym_min_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_mask_sra_epi16(create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_array_equality(&result, &[0, -32768, 0, -32768, 0, -32768, 0, -32768]).map_err(|e| format!("{e} | call: _mm_mask_sra_epi16(create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -4028,7 +4969,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_sra_epi16_asym_min_max() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_sra_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_sra_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_sra_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_sra_epi16_asym_max_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_mask_sra_epi16(create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_array_equality(&result, &[-1, 32767, -1, 32767, -1, 32767, -1, 32767]).map_err(|e| format!("{e} | call: _mm_mask_sra_epi16(create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -4048,7 +4994,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_sra_epi16_asym_max_min() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_sra_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_sra_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_sra_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_sra_epi16_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_maskz_sra_epi16(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_maskz_sra_epi16(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
@@ -4068,7 +5019,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_sra_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_sra_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_sra_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_sra_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_sra_epi16_normal2_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_maskz_sra_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7]), create__m128i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_maskz_sra_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7]), create__m128i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3]))"))?;
@@ -4088,7 +5044,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_sra_epi16_normal2() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_sra_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_sra_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_sra_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_sra_epi16_normal3_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_maskz_sra_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800]), create__m128i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_maskz_sra_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800]), create__m128i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810]))"))?;
@@ -4108,7 +5069,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_sra_epi16_normal3() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_sra_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_sra_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_sra_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_sra_epi16_boundary_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_maskz_sra_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN])));
         check_array_equality(&result, &[-1, 0, -1, 0, -1, 0, -1, 0]).map_err(|e| format!("{e} | call: _mm_maskz_sra_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]))"))?;
@@ -4128,7 +5094,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_sra_epi16_boundary_min() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_sra_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_sra_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_sra_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_sra_epi16_boundary_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_maskz_sra_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_maskz_sra_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]))"))?;
@@ -4148,7 +5119,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_sra_epi16_boundary_max() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_sra_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_sra_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_sra_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_sra_epi16_boundary_zero_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_maskz_sra_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_maskz_sra_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]))"))?;
@@ -4168,7 +5144,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_sra_epi16_boundary_zero() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_sra_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_sra_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_sra_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_sra_epi16_boundary_allones_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_maskz_sra_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1])));
         check_array_equality(&result, &[-1, 0, -1, 0, -1, 0, -1, 0]).map_err(|e| format!("{e} | call: _mm_maskz_sra_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]))"))?;
@@ -4188,7 +5169,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_sra_epi16_boundary_allones() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_sra_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_sra_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_sra_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_sra_epi16_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_maskz_sra_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1])));
         check_array_equality(&result, &[-1, 0, 0, 0, -1, 0, 0, 0]).map_err(|e| format!("{e} | call: _mm_maskz_sra_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]))"))?;
@@ -4208,7 +5194,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_sra_epi16_boundary_mixed() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_sra_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_sra_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_sra_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_sra_epi16_asym_min_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_maskz_sra_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX])));
         check_array_equality(&result, &[-1, 0, -1, 0, -1, 0, -1, 0]).map_err(|e| format!("{e} | call: _mm_maskz_sra_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]))"))?;
@@ -4228,7 +5219,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_sra_epi16_asym_min_max() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_sra_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_sra_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_sra_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_sra_epi16_asym_max_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i16_array(_mm_maskz_sra_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN])));
         check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_maskz_sra_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]))"))?;
@@ -4248,7 +5244,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_sra_epi16_asym_max_min() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_permutex2var_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_sra_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_sra_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_permutex2var_epi16_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4271,7 +5272,12 @@ pub(super) fn test_x86_avx512bw_mm512_permutex2var_epi16() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_permutex2var_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_permutex2var_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_permutex2var_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_permutex2var_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4294,7 +5300,12 @@ pub(super) fn test_x86_avx512bw_mm512_permutex2var_epi16_normal2() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_permutex2var_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_permutex2var_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_permutex2var_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_permutex2var_epi16_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4317,7 +5328,12 @@ pub(super) fn test_x86_avx512bw_mm512_permutex2var_epi16_normal3() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_permutex2var_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_permutex2var_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_permutex2var_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_permutex2var_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4340,7 +5356,12 @@ pub(super) fn test_x86_avx512bw_mm512_permutex2var_epi16_boundary_min() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_permutex2var_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_permutex2var_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_permutex2var_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_permutex2var_epi16_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4363,7 +5384,12 @@ pub(super) fn test_x86_avx512bw_mm512_permutex2var_epi16_boundary_max() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_permutex2var_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_permutex2var_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_permutex2var_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_permutex2var_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4386,7 +5412,12 @@ pub(super) fn test_x86_avx512bw_mm512_permutex2var_epi16_boundary_zero() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_permutex2var_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_permutex2var_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_permutex2var_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_permutex2var_epi16_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4409,7 +5440,12 @@ pub(super) fn test_x86_avx512bw_mm512_permutex2var_epi16_boundary_allones() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_permutex2var_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_permutex2var_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_permutex2var_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_permutex2var_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4432,7 +5468,12 @@ pub(super) fn test_x86_avx512bw_mm512_permutex2var_epi16_boundary_mixed() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_permutex2var_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_permutex2var_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_permutex2var_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_permutex2var_epi16_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4455,7 +5496,12 @@ pub(super) fn test_x86_avx512bw_mm512_permutex2var_epi16_asym_min_max() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_permutex2var_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_permutex2var_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_permutex2var_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_permutex2var_epi16_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4478,7 +5524,12 @@ pub(super) fn test_x86_avx512bw_mm512_permutex2var_epi16_asym_max_min() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_permutex2var_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_permutex2var_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_permutex2var_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4501,7 +5552,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_permutex2var_epi16() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_permutex2var_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_permutex2var_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4524,7 +5580,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_normal2() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_permutex2var_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4547,7 +5608,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_normal3() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_permutex2var_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4570,7 +5636,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_boundary_min() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_permutex2var_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4593,7 +5664,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_boundary_max() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_permutex2var_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4616,7 +5692,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_boundary_zero() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_permutex2var_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4639,7 +5720,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_boundary_allones()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_permutex2var_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4662,7 +5748,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_boundary_mixed() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_permutex2var_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4685,7 +5776,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_asym_min_max() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_permutex2var_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4708,7 +5804,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_asym_max_min() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_permutex2var_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_permutex2var_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4731,7 +5832,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_permutex2var_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4754,7 +5860,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_normal2() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_permutex2var_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4777,7 +5888,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_normal3() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_permutex2var_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4800,7 +5916,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_boundary_min() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_permutex2var_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4823,7 +5944,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_boundary_max() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_permutex2var_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4846,7 +5972,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_boundary_zero() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_permutex2var_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4869,7 +6000,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_boundary_allones(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_permutex2var_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4892,7 +6028,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_boundary_mixed() 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_permutex2var_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4915,7 +6056,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_asym_min_max() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_permutex2var_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4938,7 +6084,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_asym_max_min() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_permutex2var_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_permutex2var_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4961,7 +6112,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask2_permutex2var_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4984,7 +6140,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_normal2() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask2_permutex2var_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5007,7 +6168,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_normal3() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask2_permutex2var_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5030,7 +6196,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_boundary_min() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask2_permutex2var_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5053,7 +6224,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_boundary_max() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask2_permutex2var_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5076,7 +6252,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_boundary_zero() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask2_permutex2var_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5099,7 +6280,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_boundary_allones(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask2_permutex2var_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5122,7 +6308,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_boundary_mixed() 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask2_permutex2var_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5145,7 +6336,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_asym_min_max() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask2_permutex2var_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5168,7 +6364,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_asym_max_min() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_permutex2var_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask2_permutex2var_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask2_permutex2var_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_permutex2var_epi16_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5191,7 +6392,12 @@ pub(super) fn test_x86_avx512bw_mm256_permutex2var_epi16() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_permutex2var_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_permutex2var_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_permutex2var_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_permutex2var_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5214,7 +6420,12 @@ pub(super) fn test_x86_avx512bw_mm256_permutex2var_epi16_normal2() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_permutex2var_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_permutex2var_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_permutex2var_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_permutex2var_epi16_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5237,7 +6448,12 @@ pub(super) fn test_x86_avx512bw_mm256_permutex2var_epi16_normal3() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_permutex2var_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_permutex2var_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_permutex2var_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_permutex2var_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5260,7 +6476,12 @@ pub(super) fn test_x86_avx512bw_mm256_permutex2var_epi16_boundary_min() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_permutex2var_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_permutex2var_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_permutex2var_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_permutex2var_epi16_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5283,7 +6504,12 @@ pub(super) fn test_x86_avx512bw_mm256_permutex2var_epi16_boundary_max() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_permutex2var_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_permutex2var_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_permutex2var_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_permutex2var_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5306,7 +6532,12 @@ pub(super) fn test_x86_avx512bw_mm256_permutex2var_epi16_boundary_zero() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_permutex2var_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_permutex2var_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_permutex2var_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_permutex2var_epi16_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5329,7 +6560,12 @@ pub(super) fn test_x86_avx512bw_mm256_permutex2var_epi16_boundary_allones() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_permutex2var_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_permutex2var_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_permutex2var_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_permutex2var_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5352,7 +6588,12 @@ pub(super) fn test_x86_avx512bw_mm256_permutex2var_epi16_boundary_mixed() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_permutex2var_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_permutex2var_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_permutex2var_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_permutex2var_epi16_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5375,7 +6616,12 @@ pub(super) fn test_x86_avx512bw_mm256_permutex2var_epi16_asym_min_max() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_permutex2var_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_permutex2var_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_permutex2var_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_permutex2var_epi16_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5398,7 +6644,12 @@ pub(super) fn test_x86_avx512bw_mm256_permutex2var_epi16_asym_max_min() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_permutex2var_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_permutex2var_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_permutex2var_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5421,7 +6672,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_permutex2var_epi16() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_permutex2var_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_permutex2var_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5444,7 +6700,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_normal2() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_permutex2var_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5467,7 +6728,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_normal3() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_permutex2var_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5490,7 +6756,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_boundary_min() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_permutex2var_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5513,7 +6784,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_boundary_max() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_permutex2var_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5536,7 +6812,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_boundary_zero() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_permutex2var_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5559,7 +6840,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_boundary_allones()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_permutex2var_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5582,7 +6868,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_boundary_mixed() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_permutex2var_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5605,7 +6896,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_asym_min_max() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_permutex2var_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5628,7 +6924,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_asym_max_min() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_permutex2var_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_permutex2var_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5651,7 +6952,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_permutex2var_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5674,7 +6980,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_normal2() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_permutex2var_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5697,7 +7008,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_normal3() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_permutex2var_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5720,7 +7036,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_boundary_min() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_permutex2var_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5743,7 +7064,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_boundary_max() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_permutex2var_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5766,7 +7092,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_boundary_zero() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_permutex2var_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5789,7 +7120,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_boundary_allones(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_permutex2var_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5812,7 +7148,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_boundary_mixed() 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_permutex2var_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5835,7 +7176,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_asym_min_max() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_permutex2var_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5858,7 +7204,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_asym_max_min() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_permutex2var_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_permutex2var_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5881,7 +7232,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask2_permutex2var_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5904,7 +7260,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_normal2() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask2_permutex2var_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5927,7 +7288,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_normal3() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask2_permutex2var_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5950,7 +7316,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_boundary_min() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask2_permutex2var_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5973,7 +7344,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_boundary_max() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask2_permutex2var_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5996,7 +7372,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_boundary_zero() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask2_permutex2var_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6019,7 +7400,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_boundary_allones(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask2_permutex2var_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6042,7 +7428,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_boundary_mixed() 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask2_permutex2var_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6065,7 +7456,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_asym_min_max() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask2_permutex2var_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6088,7 +7484,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_asym_max_min() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_permutex2var_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask2_permutex2var_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask2_permutex2var_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_permutex2var_epi16_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6111,7 +7512,12 @@ pub(super) fn test_x86_avx512bw_mm_permutex2var_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_permutex2var_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_permutex2var_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_permutex2var_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_permutex2var_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6134,7 +7540,12 @@ pub(super) fn test_x86_avx512bw_mm_permutex2var_epi16_normal2() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_permutex2var_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_permutex2var_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_permutex2var_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_permutex2var_epi16_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6157,7 +7568,12 @@ pub(super) fn test_x86_avx512bw_mm_permutex2var_epi16_normal3() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_permutex2var_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_permutex2var_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_permutex2var_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_permutex2var_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6180,7 +7596,12 @@ pub(super) fn test_x86_avx512bw_mm_permutex2var_epi16_boundary_min() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_permutex2var_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_permutex2var_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_permutex2var_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_permutex2var_epi16_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6203,7 +7624,12 @@ pub(super) fn test_x86_avx512bw_mm_permutex2var_epi16_boundary_max() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_permutex2var_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_permutex2var_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_permutex2var_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_permutex2var_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6226,7 +7652,12 @@ pub(super) fn test_x86_avx512bw_mm_permutex2var_epi16_boundary_zero() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_permutex2var_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_permutex2var_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_permutex2var_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_permutex2var_epi16_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6249,7 +7680,12 @@ pub(super) fn test_x86_avx512bw_mm_permutex2var_epi16_boundary_allones() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_permutex2var_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_permutex2var_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_permutex2var_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_permutex2var_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6272,7 +7708,12 @@ pub(super) fn test_x86_avx512bw_mm_permutex2var_epi16_boundary_mixed() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_permutex2var_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_permutex2var_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_permutex2var_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_permutex2var_epi16_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6295,7 +7736,12 @@ pub(super) fn test_x86_avx512bw_mm_permutex2var_epi16_asym_min_max() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_permutex2var_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_permutex2var_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_permutex2var_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_permutex2var_epi16_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6318,7 +7764,12 @@ pub(super) fn test_x86_avx512bw_mm_permutex2var_epi16_asym_max_min() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_permutex2var_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_permutex2var_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_permutex2var_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_permutex2var_epi16_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6341,7 +7792,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_permutex2var_epi16() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_permutex2var_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_permutex2var_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_permutex2var_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_permutex2var_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6364,7 +7820,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_permutex2var_epi16_normal2() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_permutex2var_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_permutex2var_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_permutex2var_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_permutex2var_epi16_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6387,7 +7848,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_permutex2var_epi16_normal3() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_permutex2var_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_permutex2var_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_permutex2var_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_permutex2var_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6410,7 +7876,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_permutex2var_epi16_boundary_min() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_permutex2var_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_permutex2var_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_permutex2var_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_permutex2var_epi16_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6433,7 +7904,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_permutex2var_epi16_boundary_max() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_permutex2var_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_permutex2var_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_permutex2var_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_permutex2var_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6456,7 +7932,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_permutex2var_epi16_boundary_zero() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_permutex2var_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_permutex2var_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_permutex2var_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_permutex2var_epi16_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6479,7 +7960,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_permutex2var_epi16_boundary_allones() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_permutex2var_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_permutex2var_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_permutex2var_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_permutex2var_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6502,7 +7988,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_permutex2var_epi16_boundary_mixed() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_permutex2var_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_permutex2var_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_permutex2var_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_permutex2var_epi16_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6525,7 +8016,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_permutex2var_epi16_asym_min_max() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_permutex2var_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_permutex2var_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_permutex2var_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_permutex2var_epi16_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6548,7 +8044,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_permutex2var_epi16_asym_max_min() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_permutex2var_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_permutex2var_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_permutex2var_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6571,7 +8072,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_permutex2var_epi16() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_permutex2var_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_permutex2var_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6594,7 +8100,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_normal2() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_permutex2var_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6617,7 +8128,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_normal3() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_permutex2var_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6640,7 +8156,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_boundary_min() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_permutex2var_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6663,7 +8184,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_boundary_max() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_permutex2var_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6686,7 +8212,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_boundary_zero() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_permutex2var_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6709,7 +8240,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_boundary_allones() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_permutex2var_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6732,7 +8268,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_boundary_mixed() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_permutex2var_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6755,7 +8296,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_asym_min_max() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_permutex2var_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6778,7 +8324,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_asym_max_min() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask2_permutex2var_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_permutex2var_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_permutex2var_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6801,7 +8352,12 @@ pub(super) fn test_x86_avx512bw_mm_mask2_permutex2var_epi16() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask2_permutex2var_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask2_permutex2var_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6824,7 +8380,12 @@ pub(super) fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_normal2() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask2_permutex2var_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6847,7 +8408,12 @@ pub(super) fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_normal3() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask2_permutex2var_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6870,7 +8436,12 @@ pub(super) fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_boundary_min() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask2_permutex2var_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6893,7 +8464,12 @@ pub(super) fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_boundary_max() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask2_permutex2var_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6916,7 +8492,12 @@ pub(super) fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_boundary_zero() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask2_permutex2var_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6939,7 +8520,12 @@ pub(super) fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_boundary_allones() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask2_permutex2var_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6962,7 +8548,12 @@ pub(super) fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_boundary_mixed() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask2_permutex2var_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6985,7 +8576,12 @@ pub(super) fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_asym_min_max() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask2_permutex2var_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7008,7 +8604,12 @@ pub(super) fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_asym_max_min() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_permutexvar_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask2_permutex2var_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask2_permutex2var_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_permutexvar_epi16_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7031,7 +8632,12 @@ pub(super) fn test_x86_avx512bw_mm512_permutexvar_epi16() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_permutexvar_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_permutexvar_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_permutexvar_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_permutexvar_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7054,7 +8660,12 @@ pub(super) fn test_x86_avx512bw_mm512_permutexvar_epi16_normal2() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_permutexvar_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_permutexvar_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_permutexvar_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_permutexvar_epi16_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7077,7 +8688,12 @@ pub(super) fn test_x86_avx512bw_mm512_permutexvar_epi16_normal3() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_permutexvar_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_permutexvar_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_permutexvar_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_permutexvar_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7100,7 +8716,12 @@ pub(super) fn test_x86_avx512bw_mm512_permutexvar_epi16_boundary_min() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_permutexvar_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_permutexvar_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_permutexvar_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_permutexvar_epi16_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7123,7 +8744,12 @@ pub(super) fn test_x86_avx512bw_mm512_permutexvar_epi16_boundary_max() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_permutexvar_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_permutexvar_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_permutexvar_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_permutexvar_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7146,7 +8772,12 @@ pub(super) fn test_x86_avx512bw_mm512_permutexvar_epi16_boundary_zero() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_permutexvar_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_permutexvar_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_permutexvar_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_permutexvar_epi16_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7169,7 +8800,12 @@ pub(super) fn test_x86_avx512bw_mm512_permutexvar_epi16_boundary_allones() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_permutexvar_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_permutexvar_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_permutexvar_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_permutexvar_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7192,7 +8828,12 @@ pub(super) fn test_x86_avx512bw_mm512_permutexvar_epi16_boundary_mixed() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_permutexvar_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_permutexvar_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_permutexvar_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_permutexvar_epi16_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7215,7 +8856,12 @@ pub(super) fn test_x86_avx512bw_mm512_permutexvar_epi16_asym_min_max() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_permutexvar_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_permutexvar_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_permutexvar_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_permutexvar_epi16_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7238,7 +8884,12 @@ pub(super) fn test_x86_avx512bw_mm512_permutexvar_epi16_asym_max_min() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_permutexvar_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_permutexvar_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_permutexvar_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7261,7 +8912,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_permutexvar_epi16() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_permutexvar_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_permutexvar_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7284,7 +8940,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_normal2() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_permutexvar_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7307,7 +8968,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_normal3() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_permutexvar_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7330,7 +8996,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_boundary_min() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_permutexvar_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7353,7 +9024,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_boundary_max() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_permutexvar_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7376,7 +9052,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_boundary_zero() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_permutexvar_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7399,7 +9080,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_boundary_allones() 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_permutexvar_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7422,7 +9108,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_boundary_mixed() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_permutexvar_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7445,7 +9136,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_asym_min_max() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_permutexvar_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7468,7 +9164,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_asym_max_min() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_permutexvar_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_permutexvar_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7491,7 +9192,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_permutexvar_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7514,7 +9220,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_normal2() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_permutexvar_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7537,7 +9248,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_normal3() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_permutexvar_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7560,7 +9276,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_boundary_min() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_permutexvar_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7583,7 +9304,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_boundary_max() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_permutexvar_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7606,7 +9332,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_boundary_zero() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_permutexvar_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7629,7 +9360,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_boundary_allones()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_permutexvar_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7652,7 +9388,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_boundary_mixed() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_permutexvar_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7675,7 +9416,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_asym_min_max() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_permutexvar_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7698,7 +9444,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_asym_max_min() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_permutexvar_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_permutexvar_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_permutexvar_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_permutexvar_epi16_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7721,7 +9472,12 @@ pub(super) fn test_x86_avx512bw_mm256_permutexvar_epi16() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_permutexvar_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_permutexvar_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_permutexvar_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_permutexvar_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7744,7 +9500,12 @@ pub(super) fn test_x86_avx512bw_mm256_permutexvar_epi16_normal2() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_permutexvar_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_permutexvar_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_permutexvar_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_permutexvar_epi16_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7767,7 +9528,12 @@ pub(super) fn test_x86_avx512bw_mm256_permutexvar_epi16_normal3() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_permutexvar_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_permutexvar_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_permutexvar_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_permutexvar_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7790,7 +9556,12 @@ pub(super) fn test_x86_avx512bw_mm256_permutexvar_epi16_boundary_min() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_permutexvar_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_permutexvar_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_permutexvar_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_permutexvar_epi16_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7813,7 +9584,12 @@ pub(super) fn test_x86_avx512bw_mm256_permutexvar_epi16_boundary_max() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_permutexvar_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_permutexvar_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_permutexvar_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_permutexvar_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7836,7 +9612,12 @@ pub(super) fn test_x86_avx512bw_mm256_permutexvar_epi16_boundary_zero() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_permutexvar_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_permutexvar_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_permutexvar_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_permutexvar_epi16_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7859,7 +9640,12 @@ pub(super) fn test_x86_avx512bw_mm256_permutexvar_epi16_boundary_allones() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_permutexvar_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_permutexvar_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_permutexvar_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_permutexvar_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7882,7 +9668,12 @@ pub(super) fn test_x86_avx512bw_mm256_permutexvar_epi16_boundary_mixed() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_permutexvar_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_permutexvar_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_permutexvar_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_permutexvar_epi16_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7905,7 +9696,12 @@ pub(super) fn test_x86_avx512bw_mm256_permutexvar_epi16_asym_min_max() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_permutexvar_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_permutexvar_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_permutexvar_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_permutexvar_epi16_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7928,7 +9724,12 @@ pub(super) fn test_x86_avx512bw_mm256_permutexvar_epi16_asym_max_min() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_permutexvar_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_permutexvar_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_permutexvar_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7951,7 +9752,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_permutexvar_epi16() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_permutexvar_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_permutexvar_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7974,7 +9780,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_normal2() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_permutexvar_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7997,7 +9808,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_normal3() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_permutexvar_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8020,7 +9836,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_boundary_min() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_permutexvar_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8043,7 +9864,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_boundary_max() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_permutexvar_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8066,7 +9892,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_boundary_zero() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_permutexvar_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8089,7 +9920,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_boundary_allones() 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_permutexvar_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8112,7 +9948,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_boundary_mixed() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_permutexvar_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8135,7 +9976,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_asym_min_max() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_permutexvar_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8158,7 +10004,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_asym_max_min() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_permutexvar_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_permutexvar_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8181,7 +10032,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_permutexvar_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8204,7 +10060,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_normal2() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_permutexvar_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8227,7 +10088,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_normal3() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_permutexvar_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8250,7 +10116,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_boundary_min() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_permutexvar_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8273,7 +10144,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_boundary_max() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_permutexvar_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8296,7 +10172,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_boundary_zero() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_permutexvar_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8319,7 +10200,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_boundary_allones()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_permutexvar_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8342,7 +10228,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_boundary_mixed() -
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_permutexvar_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8365,7 +10256,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_asym_min_max() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_permutexvar_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8388,7 +10284,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_asym_max_min() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_permutexvar_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_permutexvar_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_permutexvar_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_permutexvar_epi16_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8411,7 +10312,12 @@ pub(super) fn test_x86_avx512bw_mm_permutexvar_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_permutexvar_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_permutexvar_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_permutexvar_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_permutexvar_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8434,7 +10340,12 @@ pub(super) fn test_x86_avx512bw_mm_permutexvar_epi16_normal2() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_permutexvar_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_permutexvar_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_permutexvar_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_permutexvar_epi16_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8457,7 +10368,12 @@ pub(super) fn test_x86_avx512bw_mm_permutexvar_epi16_normal3() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_permutexvar_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_permutexvar_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_permutexvar_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_permutexvar_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8480,7 +10396,12 @@ pub(super) fn test_x86_avx512bw_mm_permutexvar_epi16_boundary_min() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_permutexvar_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_permutexvar_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_permutexvar_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_permutexvar_epi16_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8503,7 +10424,12 @@ pub(super) fn test_x86_avx512bw_mm_permutexvar_epi16_boundary_max() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_permutexvar_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_permutexvar_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_permutexvar_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_permutexvar_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8526,7 +10452,12 @@ pub(super) fn test_x86_avx512bw_mm_permutexvar_epi16_boundary_zero() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_permutexvar_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_permutexvar_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_permutexvar_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_permutexvar_epi16_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8549,7 +10480,12 @@ pub(super) fn test_x86_avx512bw_mm_permutexvar_epi16_boundary_allones() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_permutexvar_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_permutexvar_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_permutexvar_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_permutexvar_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8572,7 +10508,12 @@ pub(super) fn test_x86_avx512bw_mm_permutexvar_epi16_boundary_mixed() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_permutexvar_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_permutexvar_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_permutexvar_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_permutexvar_epi16_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8595,7 +10536,12 @@ pub(super) fn test_x86_avx512bw_mm_permutexvar_epi16_asym_min_max() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_permutexvar_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_permutexvar_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_permutexvar_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_permutexvar_epi16_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8618,7 +10564,12 @@ pub(super) fn test_x86_avx512bw_mm_permutexvar_epi16_asym_max_min() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_permutexvar_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_permutexvar_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_permutexvar_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_permutexvar_epi16_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8641,7 +10592,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_permutexvar_epi16() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_permutexvar_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_permutexvar_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_permutexvar_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_permutexvar_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8664,7 +10620,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_permutexvar_epi16_normal2() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_permutexvar_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_permutexvar_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_permutexvar_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_permutexvar_epi16_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8687,7 +10648,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_permutexvar_epi16_normal3() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_permutexvar_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_permutexvar_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_permutexvar_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_permutexvar_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8710,7 +10676,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_permutexvar_epi16_boundary_min() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_permutexvar_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_permutexvar_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_permutexvar_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_permutexvar_epi16_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8733,7 +10704,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_permutexvar_epi16_boundary_max() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_permutexvar_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_permutexvar_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_permutexvar_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_permutexvar_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8756,7 +10732,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_permutexvar_epi16_boundary_zero() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_permutexvar_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_permutexvar_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_permutexvar_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_permutexvar_epi16_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8779,7 +10760,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_permutexvar_epi16_boundary_allones() -> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_permutexvar_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_permutexvar_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_permutexvar_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_permutexvar_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8802,7 +10788,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_permutexvar_epi16_boundary_mixed() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_permutexvar_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_permutexvar_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_permutexvar_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_permutexvar_epi16_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8825,7 +10816,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_permutexvar_epi16_asym_min_max() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_permutexvar_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_permutexvar_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_permutexvar_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_permutexvar_epi16_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8848,7 +10844,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_permutexvar_epi16_asym_max_min() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_permutexvar_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_permutexvar_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_permutexvar_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8871,7 +10872,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_permutexvar_epi16() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_permutexvar_epi16() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_permutexvar_epi16_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8894,7 +10900,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_normal2() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_permutexvar_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8917,7 +10928,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_normal3() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_permutexvar_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8940,7 +10956,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_boundary_min() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_permutexvar_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8963,7 +10984,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_boundary_max() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_permutexvar_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8986,7 +11012,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_boundary_zero() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_permutexvar_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9009,7 +11040,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_boundary_allones() ->
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_permutexvar_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9032,7 +11068,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_boundary_mixed() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_permutexvar_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9055,7 +11096,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_asym_min_max() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_permutexvar_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9078,7 +11124,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_asym_max_min() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_shuffle_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_permutexvar_epi16_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_permutexvar_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_shuffle_epi8_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i8_array(_mm512_shuffle_epi8(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__m512i_from_i32_array([17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32])));
         check_array_equality(&result, &[0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 2, 1, 1, 1, 0, 5, 5, 5, 0, 5, 5, 5, 0, 5, 5, 5, 7, 5, 5, 5, 0, 9, 9, 9, 0, 9, 9, 9, 0, 9, 9, 9, 12, 9, 9, 9, 0, 13, 13, 13, 0, 13, 13, 13, 0, 13, 13, 13, 13, 13, 13, 13]).map_err(|e| format!("{e} | call: _mm512_shuffle_epi8(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__m512i_from_i32_array([17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]))"))?;
@@ -9098,7 +11149,12 @@ pub(super) fn test_x86_avx512bw_mm512_shuffle_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_shuffle_epi8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_shuffle_epi8() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_shuffle_epi8_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_shuffle_epi8_normal2_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i8_array(_mm512_shuffle_epi8(create__m512i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__m512i_from_i8_array([10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3])));
         check_array_equality(&result, &[2, -1, 4, -7, 6, -5, 0, -3, 2, -1, 4, -7, 6, -5, 0, -3, 2, -1, 4, -7, 6, -5, 0, -3, 2, -1, 4, -7, 6, -5, 0, -3, 2, -1, 4, -7, 6, -5, 0, -3, 2, -1, 4, -7, 6, -5, 0, -3, 2, -1, 4, -7, 6, -5, 0, -3, 2, -1, 4, -7, 6, -5, 0, -3]).map_err(|e| format!("{e} | call: _mm512_shuffle_epi8(create__m512i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__m512i_from_i8_array([10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3]))"))?;
@@ -9118,7 +11174,12 @@ pub(super) fn test_x86_avx512bw_mm512_shuffle_epi8_normal2() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_shuffle_epi8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_shuffle_epi8_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_shuffle_epi8_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_shuffle_epi8_normal3_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i8_array(_mm512_shuffle_epi8(create__m512i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64, -92, 8, 108, -48, 52, -104, -4, 96, -60, 40, -116, -16, 84, -72, 28, -128, -28, 72, -84, 16, 116, -40, 60, -96, 4, 104, -52, 48, -108, -8, 92, -64, 36, -120, -20, 80, -76, 24, 124, -32, 68, -88, 12, 112, -44, 56, -100, 0]), create__m512i_from_i8_array([110, -46, 54, -102, -2, 98, -58, 42, -114, -14, 86, -70, 30, -126, -26, 74, -82, 18, 118, -38, 62, -94, 6, 106, -50, 50, -106, -6, 94, -62, 38, -118, -18, 82, -74, 26, 126, -30, 70, -86, 14, 114, -42, 58, -98, 2, 102, -54, 46, -110, -10, 90, -66, 34, -122, -22, 78, -78, 22, 122, -34, 66, -90, 10])));
         check_array_equality(&result, &[-36, 0, -68, 0, 0, 44, 0, 76, 0, 0, -68, 0, -36, 0, 0, 76, 0, 108, -4, 0, 28, 0, -4, -116, 0, 108, 0, 0, 28, 0, -4, 0, 0, -84, 0, -52, 92, 0, 60, 0, 92, -84, 0, -52, 0, -84, 60, 0, -100, 0, 0, 12, 0, -20, 0, 0, -100, 0, 124, 12, 0, -20, 0, 12]).map_err(|e| format!("{e} | call: _mm512_shuffle_epi8(create__m512i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64, -92, 8, 108, -48, 52, -104, -4, 96, -60, 40, -116, -16, 84, -72, 28, -128, -28, 72, -84, 16, 116, -40, 60, -96, 4, 104, -52, 48, -108, -8, 92, -64, 36, -120, -20, 80, -76, 24, 124, -32, 68, -88, 12, 112, -44, 56, -100, 0]), create__m512i_from_i8_array([110, -46, 54, -102, -2, 98, -58, 42, -114, -14, 86, -70, 30, -126, -26, 74, -82, 18, 118, -38, 62, -94, 6, 106, -50, 50, -106, -6, 94, -62, 38, -118, -18, 82, -74, 26, 126, -30, 70, -86, 14, 114, -42, 58, -98, 2, 102, -54, 46, -110, -10, 90, -66, 34, -122, -22, 78, -78, 22, 122, -34, 66, -90, 10]))"))?;
@@ -9138,7 +11199,12 @@ pub(super) fn test_x86_avx512bw_mm512_shuffle_epi8_normal3() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_shuffle_epi8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_shuffle_epi8_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_shuffle_epi8_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_shuffle_epi8_boundary_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i8_array(_mm512_shuffle_epi8(create__m512i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m512i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN])));
         check_array_equality(&result, &[0; 64]).map_err(|e| format!("{e} | call: _mm512_shuffle_epi8(create__m512i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m512i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]))"))?;
@@ -9158,7 +11224,12 @@ pub(super) fn test_x86_avx512bw_mm512_shuffle_epi8_boundary_min() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_shuffle_epi8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_shuffle_epi8_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_shuffle_epi8_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_shuffle_epi8_boundary_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i8_array(_mm512_shuffle_epi8(create__m512i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m512i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX])));
         check_array_equality(&result, &[127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127]).map_err(|e| format!("{e} | call: _mm512_shuffle_epi8(create__m512i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m512i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]))"))?;
@@ -9178,7 +11249,12 @@ pub(super) fn test_x86_avx512bw_mm512_shuffle_epi8_boundary_max() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_shuffle_epi8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_shuffle_epi8_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_shuffle_epi8_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_shuffle_epi8_boundary_zero_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i8_array(_mm512_shuffle_epi8(create__m512i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m512i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])));
         check_array_equality(&result, &[0; 64]).map_err(|e| format!("{e} | call: _mm512_shuffle_epi8(create__m512i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m512i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))"))?;
@@ -9198,7 +11274,12 @@ pub(super) fn test_x86_avx512bw_mm512_shuffle_epi8_boundary_zero() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_shuffle_epi8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_shuffle_epi8_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_shuffle_epi8_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_shuffle_epi8_boundary_allones_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i8_array(_mm512_shuffle_epi8(create__m512i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m512i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1])));
         check_array_equality(&result, &[0; 64]).map_err(|e| format!("{e} | call: _mm512_shuffle_epi8(create__m512i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m512i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]))"))?;
@@ -9218,7 +11299,12 @@ pub(super) fn test_x86_avx512bw_mm512_shuffle_epi8_boundary_allones() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_shuffle_epi8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_shuffle_epi8_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_shuffle_epi8_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_shuffle_epi8_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i8_array(_mm512_shuffle_epi8(create__m512i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]), create__m512i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1])));
         check_array_equality(&result, &[0, -1, -128, 0, 0, -1, -128, 0, 0, -1, -128, 0, 0, -1, -128, 0, 0, -1, -128, 0, 0, -1, -128, 0, 0, -1, -128, 0, 0, -1, -128, 0, 0, -1, -128, 0, 0, -1, -128, 0, 0, -1, -128, 0, 0, -1, -128, 0, 0, -1, -128, 0, 0, -1, -128, 0, 0, -1, -128, 0, 0, -1, -128, 0]).map_err(|e| format!("{e} | call: _mm512_shuffle_epi8(create__m512i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]), create__m512i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]))"))?;
@@ -9238,7 +11324,12 @@ pub(super) fn test_x86_avx512bw_mm512_shuffle_epi8_boundary_mixed() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_shuffle_epi8_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_shuffle_epi8_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_shuffle_epi8_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_shuffle_epi8_asym_min_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i8_array(_mm512_shuffle_epi8(create__m512i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m512i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX])));
         check_array_equality(&result, &[-128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128]).map_err(|e| format!("{e} | call: _mm512_shuffle_epi8(create__m512i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m512i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]))"))?;
@@ -9258,7 +11349,12 @@ pub(super) fn test_x86_avx512bw_mm512_shuffle_epi8_asym_min_max() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_shuffle_epi8_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_shuffle_epi8_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_shuffle_epi8_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_shuffle_epi8_asym_max_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i8_array(_mm512_shuffle_epi8(create__m512i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m512i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN])));
         check_array_equality(&result, &[0; 64]).map_err(|e| format!("{e} | call: _mm512_shuffle_epi8(create__m512i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m512i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]))"))?;
@@ -9278,7 +11374,12 @@ pub(super) fn test_x86_avx512bw_mm512_shuffle_epi8_asym_max_min() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_shuffle_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_shuffle_epi8_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_shuffle_epi8_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_shuffle_epi8_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i8_array(_mm512_mask_shuffle_epi8(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__mmask64_from(0x5555555555555555u64), create__m512i_from_i32_array([17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]), create__m512i_from_i32_array([33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48])));
         check_array_equality(&result, &[0, 0, 17, 0, 0, 0, 17, 0, 0, 0, 17, 0, 18, 0, 17, 0, 0, 0, 21, 0, 0, 0, 21, 0, 0, 0, 21, 0, 23, 0, 21, 0, 0, 0, 25, 0, 0, 0, 25, 0, 0, 0, 25, 0, 28, 0, 25, 0, 0, 0, 29, 0, 0, 0, 29, 0, 0, 0, 29, 0, 29, 0, 29, 0]).map_err(|e| format!("{e} | call: _mm512_mask_shuffle_epi8(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__mmask64_from(0x5555555555555555u64), create__m512i_from_i32_array([17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]), create__m512i_from_i32_array([33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48]))"))?;
@@ -9298,7 +11399,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_shuffle_epi8() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_shuffle_epi8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_shuffle_epi8() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_shuffle_epi8_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_shuffle_epi8_normal2_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i8_array(_mm512_mask_shuffle_epi8(create__m512i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3]), create__m512i_from_i8_array([20, 19, 22, 17, 24, 15, 26, 13, 20, 19, 22, 17, 24, 15, 26, 13, 20, 19, 22, 17, 24, 15, 26, 13, 20, 19, 22, 17, 24, 15, 26, 13, 20, 19, 22, 17, 24, 15, 26, 13, 20, 19, 22, 17, 24, 15, 26, 13, 20, 19, 22, 17, 24, 15, 26, 13, 20, 19, 22, 17, 24, 15, 26, 13])));
         check_array_equality(&result, &[14, -1, 16, -3, 10, -5, 12, -7, 14, -1, 16, -3, 10, -5, 12, -7, 14, -1, 16, -3, 10, -5, 12, -7, 14, -1, 16, -3, 10, -5, 12, -7, 14, -1, 16, -3, 10, -5, 12, -7, 14, -1, 16, -3, 10, -5, 12, -7, 14, -1, 16, -3, 10, -5, 12, -7, 14, -1, 16, -3, 10, -5, 12, -7]).map_err(|e| format!("{e} | call: _mm512_mask_shuffle_epi8(create__m512i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3]), create__m512i_from_i8_array([20, 19, 22, 17, 24, 15, 26, 13, 20, 19, 22, 17, 24, 15, 26, 13, 20, 19, 22, 17, 24, 15, 26, 13, 20, 19, 22, 17, 24, 15, 26, 13, 20, 19, 22, 17, 24, 15, 26, 13, 20, 19, 22, 17, 24, 15, 26, 13, 20, 19, 22, 17, 24, 15, 26, 13, 20, 19, 22, 17, 24, 15, 26, 13]))"))?;
@@ -9318,7 +11424,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_shuffle_epi8_normal2() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_shuffle_epi8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_shuffle_epi8_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_shuffle_epi8_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_shuffle_epi8_normal3_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i8_array(_mm512_mask_shuffle_epi8(create__m512i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64, -92, 8, 108, -48, 52, -104, -4, 96, -60, 40, -116, -16, 84, -72, 28, -128, -28, 72, -84, 16, 116, -40, 60, -96, 4, 104, -52, 48, -108, -8, 92, -64, 36, -120, -20, 80, -76, 24, 124, -32, 68, -88, 12, 112, -44, 56, -100, 0]), create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([110, -46, 54, -102, -2, 98, -58, 42, -114, -14, 86, -70, 30, -126, -26, 74, -82, 18, 118, -38, 62, -94, 6, 106, -50, 50, -106, -6, 94, -62, 38, -118, -18, 82, -74, 26, 126, -30, 70, -86, 14, 114, -42, 58, -98, 2, 102, -54, 46, -110, -10, 90, -66, 34, -122, -22, 78, -78, 22, 122, -34, 66, -90, 10]), create__m512i_from_i8_array([120, -36, 64, -92, 8, 108, -48, 52, -104, -4, 96, -60, 40, -116, -16, 84, -72, 28, -128, -28, 72, -84, 16, 116, -40, 60, -96, 4, 104, -52, 48, -108, -8, 92, -64, 36, -120, -20, 80, -76, 24, 124, -32, 68, -88, 12, 112, -44, 56, -100, 0, 100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20])));
         check_array_equality(&result, &[-114, -56, 110, -112, -114, 88, 0, 32, 0, -24, 110, -80, -114, 120, 0, 64, 0, 8, 0, -48, -50, -104, -82, 96, 0, 40, 0, -16, -50, -72, -82, -128, 0, 72, 0, 16, 0, -40, -18, -96, 14, 104, 0, 48, 0, -8, -18, -64, 78, -120, 46, 80, 0, 24, 0, -32, 78, -88, 46, 112, 0, 56, 0, 0]).map_err(|e| format!("{e} | call: _mm512_mask_shuffle_epi8(create__m512i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64, -92, 8, 108, -48, 52, -104, -4, 96, -60, 40, -116, -16, 84, -72, 28, -128, -28, 72, -84, 16, 116, -40, 60, -96, 4, 104, -52, 48, -108, -8, 92, -64, 36, -120, -20, 80, -76, 24, 124, -32, 68, -88, 12, 112, -44, 56, -100, 0]), create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([110, -46, 54, -102, -2, 98, -58, 42, -114, -14, 86, -70, 30, -126, -26, 74, -82, 18, 118, -38, 62, -94, 6, 106, -50, 50, -106, -6, 94, -62, 38, -118, -18, 82, -74, 26, 126, -30, 70, -86, 14, 114, -42, 58, -98, 2, 102, -54, 46, -110, -10, 90, -66, 34, -122, -22, 78, -78, 22, 122, -34, 66, -90, 10]), create__m512i_from_i8_array([120, -36, 64, -92, 8, 108, -48, 52, -104, -4, 96, -60, 40, -116, -16, 84, -72, 28, -128, -28, 72, -84, 16, 116, -40, 60, -96, 4, 104, -52, 48, -108, -8, 92, -64, 36, -120, -20, 80, -76, 24, 124, -32, 68, -88, 12, 112, -44, 56, -100, 0, 100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20]))"))?;
@@ -9338,7 +11449,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_shuffle_epi8_normal3() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_shuffle_epi8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_shuffle_epi8_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_shuffle_epi8_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_shuffle_epi8_boundary_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i8_array(_mm512_mask_shuffle_epi8(create__m512i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m512i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN])));
         check_array_equality(&result, &[0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128]).map_err(|e| format!("{e} | call: _mm512_mask_shuffle_epi8(create__m512i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m512i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]))"))?;
@@ -9358,7 +11474,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_shuffle_epi8_boundary_min() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_shuffle_epi8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_shuffle_epi8_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_shuffle_epi8_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_shuffle_epi8_boundary_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i8_array(_mm512_mask_shuffle_epi8(create__m512i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m512i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX])));
         check_array_equality(&result, &[127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127]).map_err(|e| format!("{e} | call: _mm512_mask_shuffle_epi8(create__m512i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m512i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]))"))?;
@@ -9378,7 +11499,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_shuffle_epi8_boundary_max() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_shuffle_epi8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_shuffle_epi8_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_shuffle_epi8_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_shuffle_epi8_boundary_zero_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i8_array(_mm512_mask_shuffle_epi8(create__m512i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m512i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])));
         check_array_equality(&result, &[0; 64]).map_err(|e| format!("{e} | call: _mm512_mask_shuffle_epi8(create__m512i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m512i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))"))?;
@@ -9398,7 +11524,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_shuffle_epi8_boundary_zero() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_shuffle_epi8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_shuffle_epi8_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_shuffle_epi8_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_shuffle_epi8_boundary_allones_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i8_array(_mm512_mask_shuffle_epi8(create__m512i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m512i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1])));
         check_array_equality(&result, &[0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1]).map_err(|e| format!("{e} | call: _mm512_mask_shuffle_epi8(create__m512i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m512i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]))"))?;
@@ -9418,7 +11549,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_shuffle_epi8_boundary_allones() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_shuffle_epi8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_shuffle_epi8_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_shuffle_epi8_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_shuffle_epi8_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i8_array(_mm512_mask_shuffle_epi8(create__m512i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]), create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]), create__m512i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1])));
         check_array_equality(&result, &[0, 127, -128, -1, 0, 127, -128, -1, 0, 127, -128, -1, 0, 127, -128, -1, 0, 127, -128, -1, 0, 127, -128, -1, 0, 127, -128, -1, 0, 127, -128, -1, 0, 127, -128, -1, 0, 127, -128, -1, 0, 127, -128, -1, 0, 127, -128, -1, 0, 127, -128, -1, 0, 127, -128, -1, 0, 127, -128, -1, 0, 127, -128, -1]).map_err(|e| format!("{e} | call: _mm512_mask_shuffle_epi8(create__m512i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]), create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]), create__m512i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]))"))?;
@@ -9438,7 +11574,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_shuffle_epi8_boundary_mixed() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_shuffle_epi8_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_shuffle_epi8_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_shuffle_epi8_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_shuffle_epi8_asym_min_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i8_array(_mm512_mask_shuffle_epi8(create__m512i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])));
         check_array_equality(&result, &[127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128]).map_err(|e| format!("{e} | call: _mm512_mask_shuffle_epi8(create__m512i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]))"))?;
@@ -9458,7 +11599,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_shuffle_epi8_asym_min_max() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_mask_shuffle_epi8_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_shuffle_epi8_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_shuffle_epi8_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_mask_shuffle_epi8_asym_max_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i8_array(_mm512_mask_shuffle_epi8(create__m512i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])));
         check_array_equality(&result, &[-128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127]).map_err(|e| format!("{e} | call: _mm512_mask_shuffle_epi8(create__m512i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]))"))?;
@@ -9478,7 +11624,12 @@ pub(super) fn test_x86_avx512bw_mm512_mask_shuffle_epi8_asym_max_min() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_shuffle_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_mask_shuffle_epi8_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_mask_shuffle_epi8_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i8_array(_mm512_maskz_shuffle_epi8(create__mmask64_from(0x5555555555555555u64), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__m512i_from_i32_array([17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32])));
         check_array_equality(&result, &[0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0, 1, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 7, 0, 5, 0, 0, 0, 9, 0, 0, 0, 9, 0, 0, 0, 9, 0, 12, 0, 9, 0, 0, 0, 13, 0, 0, 0, 13, 0, 0, 0, 13, 0, 13, 0, 13, 0]).map_err(|e| format!("{e} | call: _mm512_maskz_shuffle_epi8(create__mmask64_from(0x5555555555555555u64), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__m512i_from_i32_array([17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]))"))?;
@@ -9498,7 +11649,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_shuffle_epi8() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_shuffle_epi8() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_shuffle_epi8_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_normal2_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i8_array(_mm512_maskz_shuffle_epi8(create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__m512i_from_i8_array([10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3])));
         check_array_equality(&result, &[2, 0, 4, 0, 6, 0, 0, 0, 2, 0, 4, 0, 6, 0, 0, 0, 2, 0, 4, 0, 6, 0, 0, 0, 2, 0, 4, 0, 6, 0, 0, 0, 2, 0, 4, 0, 6, 0, 0, 0, 2, 0, 4, 0, 6, 0, 0, 0, 2, 0, 4, 0, 6, 0, 0, 0, 2, 0, 4, 0, 6, 0, 0, 0]).map_err(|e| format!("{e} | call: _mm512_maskz_shuffle_epi8(create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__m512i_from_i8_array([10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3]))"))?;
@@ -9518,7 +11674,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_normal2() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_shuffle_epi8_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_normal3_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i8_array(_mm512_maskz_shuffle_epi8(create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64, -92, 8, 108, -48, 52, -104, -4, 96, -60, 40, -116, -16, 84, -72, 28, -128, -28, 72, -84, 16, 116, -40, 60, -96, 4, 104, -52, 48, -108, -8, 92, -64, 36, -120, -20, 80, -76, 24, 124, -32, 68, -88, 12, 112, -44, 56, -100, 0]), create__m512i_from_i8_array([110, -46, 54, -102, -2, 98, -58, 42, -114, -14, 86, -70, 30, -126, -26, 74, -82, 18, 118, -38, 62, -94, 6, 106, -50, 50, -106, -6, 94, -62, 38, -118, -18, 82, -74, 26, 126, -30, 70, -86, 14, 114, -42, 58, -98, 2, 102, -54, 46, -110, -10, 90, -66, 34, -122, -22, 78, -78, 22, 122, -34, 66, -90, 10])));
         check_array_equality(&result, &[-36, 0, -68, 0, 0, 0, 0, 0, 0, 0, -68, 0, -36, 0, 0, 0, 0, 0, -4, 0, 28, 0, -4, 0, 0, 0, 0, 0, 28, 0, -4, 0, 0, 0, 0, 0, 92, 0, 60, 0, 92, 0, 0, 0, 0, 0, 60, 0, -100, 0, 0, 0, 0, 0, 0, 0, -100, 0, 124, 0, 0, 0, 0, 0]).map_err(|e| format!("{e} | call: _mm512_maskz_shuffle_epi8(create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64, -92, 8, 108, -48, 52, -104, -4, 96, -60, 40, -116, -16, 84, -72, 28, -128, -28, 72, -84, 16, 116, -40, 60, -96, 4, 104, -52, 48, -108, -8, 92, -64, 36, -120, -20, 80, -76, 24, 124, -32, 68, -88, 12, 112, -44, 56, -100, 0]), create__m512i_from_i8_array([110, -46, 54, -102, -2, 98, -58, 42, -114, -14, 86, -70, 30, -126, -26, 74, -82, 18, 118, -38, 62, -94, 6, 106, -50, 50, -106, -6, 94, -62, 38, -118, -18, 82, -74, 26, 126, -30, 70, -86, 14, 114, -42, 58, -98, 2, 102, -54, 46, -110, -10, 90, -66, 34, -122, -22, 78, -78, 22, 122, -34, 66, -90, 10]))"))?;
@@ -9538,7 +11699,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_normal3() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_shuffle_epi8_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_boundary_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i8_array(_mm512_maskz_shuffle_epi8(create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m512i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN])));
         check_array_equality(&result, &[0; 64]).map_err(|e| format!("{e} | call: _mm512_maskz_shuffle_epi8(create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m512i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]))"))?;
@@ -9558,7 +11724,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_boundary_min() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_shuffle_epi8_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_boundary_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i8_array(_mm512_maskz_shuffle_epi8(create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m512i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX])));
         check_array_equality(&result, &[127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0]).map_err(|e| format!("{e} | call: _mm512_maskz_shuffle_epi8(create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m512i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]))"))?;
@@ -9578,7 +11749,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_boundary_max() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_shuffle_epi8_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_boundary_zero_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i8_array(_mm512_maskz_shuffle_epi8(create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m512i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])));
         check_array_equality(&result, &[0; 64]).map_err(|e| format!("{e} | call: _mm512_maskz_shuffle_epi8(create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m512i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))"))?;
@@ -9598,7 +11774,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_boundary_zero() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_shuffle_epi8_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_boundary_allones_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i8_array(_mm512_maskz_shuffle_epi8(create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m512i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1])));
         check_array_equality(&result, &[0; 64]).map_err(|e| format!("{e} | call: _mm512_maskz_shuffle_epi8(create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m512i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]))"))?;
@@ -9618,7 +11799,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_boundary_allones() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_shuffle_epi8_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i8_array(_mm512_maskz_shuffle_epi8(create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]), create__m512i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1])));
         check_array_equality(&result, &[0, 0, -128, 0, 0, 0, -128, 0, 0, 0, -128, 0, 0, 0, -128, 0, 0, 0, -128, 0, 0, 0, -128, 0, 0, 0, -128, 0, 0, 0, -128, 0, 0, 0, -128, 0, 0, 0, -128, 0, 0, 0, -128, 0, 0, 0, -128, 0, 0, 0, -128, 0, 0, 0, -128, 0, 0, 0, -128, 0, 0, 0, -128, 0]).map_err(|e| format!("{e} | call: _mm512_maskz_shuffle_epi8(create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]), create__m512i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]))"))?;
@@ -9638,7 +11824,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_boundary_mixed() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_shuffle_epi8_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_asym_min_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i8_array(_mm512_maskz_shuffle_epi8(create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m512i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX])));
         check_array_equality(&result, &[-128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0]).map_err(|e| format!("{e} | call: _mm512_maskz_shuffle_epi8(create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m512i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]))"))?;
@@ -9658,7 +11849,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_asym_min_max() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_shuffle_epi8_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_asym_max_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i8_array(_mm512_maskz_shuffle_epi8(create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m512i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN])));
         check_array_equality(&result, &[0; 64]).map_err(|e| format!("{e} | call: _mm512_maskz_shuffle_epi8(create__mmask64_from(0x5555555555555555u64), create__m512i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m512i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]))"))?;
@@ -9678,7 +11874,12 @@ pub(super) fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_asym_max_min() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_shuffle_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_maskz_shuffle_epi8_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_maskz_shuffle_epi8_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_shuffle_epi8_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i8_array(_mm256_mask_shuffle_epi8(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask32_from(0x55555555u32), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]), create__m256i_from_i32_array([17, 18, 19, 20, 21, 22, 23, 24])));
         check_array_equality(&result, &[0, 0, 9, 0, 0, 0, 9, 0, 0, 0, 9, 0, 10, 0, 9, 0, 0, 0, 13, 0, 0, 0, 13, 0, 0, 0, 13, 0, 15, 0, 13, 0]).map_err(|e| format!("{e} | call: _mm256_mask_shuffle_epi8(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask32_from(0x55555555u32), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]), create__m256i_from_i32_array([17, 18, 19, 20, 21, 22, 23, 24]))"))?;
@@ -9698,7 +11899,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_shuffle_epi8() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_shuffle_epi8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_shuffle_epi8() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_shuffle_epi8_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_shuffle_epi8_normal2_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i8_array(_mm256_mask_shuffle_epi8(create__m256i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3]), create__m256i_from_i8_array([20, 19, 22, 17, 24, 15, 26, 13, 20, 19, 22, 17, 24, 15, 26, 13, 20, 19, 22, 17, 24, 15, 26, 13, 20, 19, 22, 17, 24, 15, 26, 13])));
         check_array_equality(&result, &[14, -1, 16, -3, 10, -5, 12, -7, 14, -1, 16, -3, 10, -5, 12, -7, 14, -1, 16, -3, 10, -5, 12, -7, 14, -1, 16, -3, 10, -5, 12, -7]).map_err(|e| format!("{e} | call: _mm256_mask_shuffle_epi8(create__m256i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3]), create__m256i_from_i8_array([20, 19, 22, 17, 24, 15, 26, 13, 20, 19, 22, 17, 24, 15, 26, 13, 20, 19, 22, 17, 24, 15, 26, 13, 20, 19, 22, 17, 24, 15, 26, 13]))"))?;
@@ -9718,7 +11924,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_shuffle_epi8_normal2() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_shuffle_epi8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_shuffle_epi8_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_shuffle_epi8_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_shuffle_epi8_normal3_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i8_array(_mm256_mask_shuffle_epi8(create__m256i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64, -92, 8, 108, -48, 52, -104, -4, 96, -60, 40, -116, -16, 84, -72, 28, -128]), create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([110, -46, 54, -102, -2, 98, -58, 42, -114, -14, 86, -70, 30, -126, -26, 74, -82, 18, 118, -38, 62, -94, 6, 106, -50, 50, -106, -6, 94, -62, 38, -118]), create__m256i_from_i8_array([120, -36, 64, -92, 8, 108, -48, 52, -104, -4, 96, -60, 40, -116, -16, 84, -72, 28, -128, -28, 72, -84, 16, 116, -40, 60, -96, 4, 104, -52, 48, -108])));
         check_array_equality(&result, &[-114, -56, 110, -112, -114, 88, 0, 32, 0, -24, 110, -80, -114, 120, 0, 64, 0, 8, 0, -48, -50, -104, -82, 96, 0, 40, 0, -16, -50, -72, -82, -128]).map_err(|e| format!("{e} | call: _mm256_mask_shuffle_epi8(create__m256i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64, -92, 8, 108, -48, 52, -104, -4, 96, -60, 40, -116, -16, 84, -72, 28, -128]), create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([110, -46, 54, -102, -2, 98, -58, 42, -114, -14, 86, -70, 30, -126, -26, 74, -82, 18, 118, -38, 62, -94, 6, 106, -50, 50, -106, -6, 94, -62, 38, -118]), create__m256i_from_i8_array([120, -36, 64, -92, 8, 108, -48, 52, -104, -4, 96, -60, 40, -116, -16, 84, -72, 28, -128, -28, 72, -84, 16, 116, -40, 60, -96, 4, 104, -52, 48, -108]))"))?;
@@ -9738,7 +11949,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_shuffle_epi8_normal3() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_shuffle_epi8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_shuffle_epi8_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_shuffle_epi8_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_shuffle_epi8_boundary_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i8_array(_mm256_mask_shuffle_epi8(create__m256i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m256i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN])));
         check_array_equality(&result, &[0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128]).map_err(|e| format!("{e} | call: _mm256_mask_shuffle_epi8(create__m256i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m256i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]))"))?;
@@ -9758,7 +11974,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_shuffle_epi8_boundary_min() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_shuffle_epi8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_shuffle_epi8_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_shuffle_epi8_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_shuffle_epi8_boundary_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i8_array(_mm256_mask_shuffle_epi8(create__m256i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m256i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX])));
         check_array_equality(&result, &[127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127]).map_err(|e| format!("{e} | call: _mm256_mask_shuffle_epi8(create__m256i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m256i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]))"))?;
@@ -9778,7 +11999,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_shuffle_epi8_boundary_max() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_shuffle_epi8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_shuffle_epi8_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_shuffle_epi8_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_shuffle_epi8_boundary_zero_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i8_array(_mm256_mask_shuffle_epi8(create__m256i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m256i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])));
         check_array_equality(&result, &[0; 32]).map_err(|e| format!("{e} | call: _mm256_mask_shuffle_epi8(create__m256i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m256i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))"))?;
@@ -9798,7 +12024,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_shuffle_epi8_boundary_zero() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_shuffle_epi8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_shuffle_epi8_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_shuffle_epi8_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_shuffle_epi8_boundary_allones_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i8_array(_mm256_mask_shuffle_epi8(create__m256i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m256i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1])));
         check_array_equality(&result, &[0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1]).map_err(|e| format!("{e} | call: _mm256_mask_shuffle_epi8(create__m256i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m256i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]))"))?;
@@ -9818,7 +12049,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_shuffle_epi8_boundary_allones() -> Re
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_shuffle_epi8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_shuffle_epi8_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_shuffle_epi8_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_shuffle_epi8_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i8_array(_mm256_mask_shuffle_epi8(create__m256i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]), create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]), create__m256i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1])));
         check_array_equality(&result, &[0, 127, -128, -1, 0, 127, -128, -1, 0, 127, -128, -1, 0, 127, -128, -1, 0, 127, -128, -1, 0, 127, -128, -1, 0, 127, -128, -1, 0, 127, -128, -1]).map_err(|e| format!("{e} | call: _mm256_mask_shuffle_epi8(create__m256i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]), create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]), create__m256i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]))"))?;
@@ -9838,7 +12074,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_shuffle_epi8_boundary_mixed() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_shuffle_epi8_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_shuffle_epi8_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_shuffle_epi8_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_shuffle_epi8_asym_min_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i8_array(_mm256_mask_shuffle_epi8(create__m256i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
         check_array_equality(&result, &[127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128]).map_err(|e| format!("{e} | call: _mm256_mask_shuffle_epi8(create__m256i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
@@ -9858,7 +12099,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_shuffle_epi8_asym_min_max() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_mask_shuffle_epi8_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_shuffle_epi8_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_shuffle_epi8_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_mask_shuffle_epi8_asym_max_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i8_array(_mm256_mask_shuffle_epi8(create__m256i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
         check_array_equality(&result, &[-128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127]).map_err(|e| format!("{e} | call: _mm256_mask_shuffle_epi8(create__m256i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
@@ -9878,7 +12124,12 @@ pub(super) fn test_x86_avx512bw_mm256_mask_shuffle_epi8_asym_max_min() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_shuffle_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_shuffle_epi8_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_mask_shuffle_epi8_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i8_array(_mm256_maskz_shuffle_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
         check_array_equality(&result, &[0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0, 1, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 5, 0, 5, 0]).map_err(|e| format!("{e} | call: _mm256_maskz_shuffle_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]))"))?;
@@ -9898,7 +12149,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_shuffle_epi8() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_shuffle_epi8() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_shuffle_epi8_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_normal2_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i8_array(_mm256_maskz_shuffle_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__m256i_from_i8_array([10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3])));
         check_array_equality(&result, &[2, 0, 4, 0, 6, 0, 0, 0, 2, 0, 4, 0, 6, 0, 0, 0, 2, 0, 4, 0, 6, 0, 0, 0, 2, 0, 4, 0, 6, 0, 0, 0]).map_err(|e| format!("{e} | call: _mm256_maskz_shuffle_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__m256i_from_i8_array([10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3]))"))?;
@@ -9918,7 +12174,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_normal2() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_shuffle_epi8_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_normal3_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i8_array(_mm256_maskz_shuffle_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64, -92, 8, 108, -48, 52, -104, -4, 96, -60, 40, -116, -16, 84, -72, 28, -128]), create__m256i_from_i8_array([110, -46, 54, -102, -2, 98, -58, 42, -114, -14, 86, -70, 30, -126, -26, 74, -82, 18, 118, -38, 62, -94, 6, 106, -50, 50, -106, -6, 94, -62, 38, -118])));
         check_array_equality(&result, &[-36, 0, -68, 0, 0, 0, 0, 0, 0, 0, -68, 0, -36, 0, 0, 0, 0, 0, -4, 0, 28, 0, -4, 0, 0, 0, 0, 0, 28, 0, -4, 0]).map_err(|e| format!("{e} | call: _mm256_maskz_shuffle_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64, -92, 8, 108, -48, 52, -104, -4, 96, -60, 40, -116, -16, 84, -72, 28, -128]), create__m256i_from_i8_array([110, -46, 54, -102, -2, 98, -58, 42, -114, -14, 86, -70, 30, -126, -26, 74, -82, 18, 118, -38, 62, -94, 6, 106, -50, 50, -106, -6, 94, -62, 38, -118]))"))?;
@@ -9938,7 +12199,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_normal3() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_shuffle_epi8_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_boundary_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i8_array(_mm256_maskz_shuffle_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m256i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN])));
         check_array_equality(&result, &[0; 32]).map_err(|e| format!("{e} | call: _mm256_maskz_shuffle_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m256i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]))"))?;
@@ -9958,7 +12224,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_boundary_min() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_shuffle_epi8_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_boundary_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i8_array(_mm256_maskz_shuffle_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m256i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX])));
         check_array_equality(&result, &[127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0]).map_err(|e| format!("{e} | call: _mm256_maskz_shuffle_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m256i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]))"))?;
@@ -9978,7 +12249,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_boundary_max() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_shuffle_epi8_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_boundary_zero_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i8_array(_mm256_maskz_shuffle_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m256i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])));
         check_array_equality(&result, &[0; 32]).map_err(|e| format!("{e} | call: _mm256_maskz_shuffle_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m256i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))"))?;
@@ -9998,7 +12274,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_boundary_zero() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_shuffle_epi8_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_boundary_allones_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i8_array(_mm256_maskz_shuffle_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m256i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1])));
         check_array_equality(&result, &[0; 32]).map_err(|e| format!("{e} | call: _mm256_maskz_shuffle_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m256i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]))"))?;
@@ -10018,7 +12299,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_boundary_allones() -> R
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_shuffle_epi8_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i8_array(_mm256_maskz_shuffle_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]), create__m256i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1])));
         check_array_equality(&result, &[0, 0, -128, 0, 0, 0, -128, 0, 0, 0, -128, 0, 0, 0, -128, 0, 0, 0, -128, 0, 0, 0, -128, 0, 0, 0, -128, 0, 0, 0, -128, 0]).map_err(|e| format!("{e} | call: _mm256_maskz_shuffle_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]), create__m256i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]))"))?;
@@ -10038,7 +12324,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_boundary_mixed() -> Res
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_shuffle_epi8_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_asym_min_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i8_array(_mm256_maskz_shuffle_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m256i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX])));
         check_array_equality(&result, &[-128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0]).map_err(|e| format!("{e} | call: _mm256_maskz_shuffle_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m256i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]))"))?;
@@ -10058,7 +12349,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_asym_min_max() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_shuffle_epi8_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_asym_max_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i8_array(_mm256_maskz_shuffle_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m256i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN])));
         check_array_equality(&result, &[0; 32]).map_err(|e| format!("{e} | call: _mm256_maskz_shuffle_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m256i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]))"))?;
@@ -10078,7 +12374,12 @@ pub(super) fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_asym_max_min() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_shuffle_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_maskz_shuffle_epi8_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm256_maskz_shuffle_epi8_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_shuffle_epi8_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i8_array(_mm_mask_shuffle_epi8(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask16_from(0b0101010101010101), create__m128i_from_i32_array([5, 6, 7, 8]), create__m128i_from_i32_array([9, 10, 11, 12])));
         check_array_equality(&result, &[0, 0, 5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 8, 0, 5, 0]).map_err(|e| format!("{e} | call: _mm_mask_shuffle_epi8(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask16_from(0b0101010101010101), create__m128i_from_i32_array([5, 6, 7, 8]), create__m128i_from_i32_array([9, 10, 11, 12]))"))?;
@@ -10098,7 +12399,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_shuffle_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_shuffle_epi8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_shuffle_epi8() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_shuffle_epi8_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_shuffle_epi8_normal2_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i8_array(_mm_mask_shuffle_epi8(create__m128i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3]), create__m128i_from_i8_array([20, 19, 22, 17, 24, 15, 26, 13, 20, 19, 22, 17, 24, 15, 26, 13])));
         check_array_equality(&result, &[14, -1, 16, -3, 10, -5, 12, -7, 14, -1, 16, -3, 10, -5, 12, -7]).map_err(|e| format!("{e} | call: _mm_mask_shuffle_epi8(create__m128i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3]), create__m128i_from_i8_array([20, 19, 22, 17, 24, 15, 26, 13, 20, 19, 22, 17, 24, 15, 26, 13]))"))?;
@@ -10118,7 +12424,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_shuffle_epi8_normal2() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_shuffle_epi8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_shuffle_epi8_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_shuffle_epi8_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_shuffle_epi8_normal3_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i8_array(_mm_mask_shuffle_epi8(create__m128i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64]), create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([110, -46, 54, -102, -2, 98, -58, 42, -114, -14, 86, -70, 30, -126, -26, 74]), create__m128i_from_i8_array([120, -36, 64, -92, 8, 108, -48, 52, -104, -4, 96, -60, 40, -116, -16, 84])));
         check_array_equality(&result, &[-114, -56, 110, -112, -114, 88, 0, 32, 0, -24, 110, -80, -114, 120, 0, 64]).map_err(|e| format!("{e} | call: _mm_mask_shuffle_epi8(create__m128i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64]), create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([110, -46, 54, -102, -2, 98, -58, 42, -114, -14, 86, -70, 30, -126, -26, 74]), create__m128i_from_i8_array([120, -36, 64, -92, 8, 108, -48, 52, -104, -4, 96, -60, 40, -116, -16, 84]))"))?;
@@ -10138,7 +12449,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_shuffle_epi8_normal3() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_shuffle_epi8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_shuffle_epi8_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_shuffle_epi8_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_shuffle_epi8_boundary_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i8_array(_mm_mask_shuffle_epi8(create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN])));
         check_array_equality(&result, &[0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128]).map_err(|e| format!("{e} | call: _mm_mask_shuffle_epi8(create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]))"))?;
@@ -10158,7 +12474,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_shuffle_epi8_boundary_min() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_shuffle_epi8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_shuffle_epi8_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_shuffle_epi8_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_shuffle_epi8_boundary_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i8_array(_mm_mask_shuffle_epi8(create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX])));
         check_array_equality(&result, &[127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127]).map_err(|e| format!("{e} | call: _mm_mask_shuffle_epi8(create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]))"))?;
@@ -10178,7 +12499,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_shuffle_epi8_boundary_max() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_shuffle_epi8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_shuffle_epi8_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_shuffle_epi8_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_shuffle_epi8_boundary_zero_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i8_array(_mm_mask_shuffle_epi8(create__m128i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm_mask_shuffle_epi8(create__m128i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))"))?;
@@ -10198,7 +12524,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_shuffle_epi8_boundary_zero() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_shuffle_epi8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_shuffle_epi8_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_shuffle_epi8_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_shuffle_epi8_boundary_allones_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i8_array(_mm_mask_shuffle_epi8(create__m128i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1])));
         check_array_equality(&result, &[0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1]).map_err(|e| format!("{e} | call: _mm_mask_shuffle_epi8(create__m128i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]))"))?;
@@ -10218,7 +12549,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_shuffle_epi8_boundary_allones() -> Resul
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_shuffle_epi8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_shuffle_epi8_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_shuffle_epi8_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_shuffle_epi8_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i8_array(_mm_mask_shuffle_epi8(create__m128i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]), create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]), create__m128i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1])));
         check_array_equality(&result, &[0, 127, -128, -1, 0, 127, -128, -1, 0, 127, -128, -1, 0, 127, -128, -1]).map_err(|e| format!("{e} | call: _mm_mask_shuffle_epi8(create__m128i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]), create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]), create__m128i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]))"))?;
@@ -10238,7 +12574,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_shuffle_epi8_boundary_mixed() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_shuffle_epi8_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_shuffle_epi8_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_shuffle_epi8_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_shuffle_epi8_asym_min_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i8_array(_mm_mask_shuffle_epi8(create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_array_equality(&result, &[127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128]).map_err(|e| format!("{e} | call: _mm_mask_shuffle_epi8(create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -10258,7 +12599,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_shuffle_epi8_asym_min_max() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_mask_shuffle_epi8_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_shuffle_epi8_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_shuffle_epi8_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_mask_shuffle_epi8_asym_max_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i8_array(_mm_mask_shuffle_epi8(create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_array_equality(&result, &[-128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127, -128, 127]).map_err(|e| format!("{e} | call: _mm_mask_shuffle_epi8(create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -10278,7 +12624,12 @@ pub(super) fn test_x86_avx512bw_mm_mask_shuffle_epi8_asym_max_min() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_shuffle_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_shuffle_epi8_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_mask_shuffle_epi8_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_shuffle_epi8_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i8_array(_mm_maskz_shuffle_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
         check_array_equality(&result, &[0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0, 1, 0]).map_err(|e| format!("{e} | call: _mm_maskz_shuffle_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
@@ -10298,7 +12649,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_shuffle_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_shuffle_epi8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_shuffle_epi8() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_shuffle_epi8_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_shuffle_epi8_normal2_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i8_array(_mm_maskz_shuffle_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__m128i_from_i8_array([10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3])));
         check_array_equality(&result, &[2, 0, 4, 0, 6, 0, 0, 0, 2, 0, 4, 0, 6, 0, 0, 0]).map_err(|e| format!("{e} | call: _mm_maskz_shuffle_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__m128i_from_i8_array([10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3]))"))?;
@@ -10318,7 +12674,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_shuffle_epi8_normal2() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_shuffle_epi8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_shuffle_epi8_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_shuffle_epi8_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_shuffle_epi8_normal3_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i8_array(_mm_maskz_shuffle_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64]), create__m128i_from_i8_array([110, -46, 54, -102, -2, 98, -58, 42, -114, -14, 86, -70, 30, -126, -26, 74])));
         check_array_equality(&result, &[-36, 0, -68, 0, 0, 0, 0, 0, 0, 0, -68, 0, -36, 0, 0, 0]).map_err(|e| format!("{e} | call: _mm_maskz_shuffle_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64]), create__m128i_from_i8_array([110, -46, 54, -102, -2, 98, -58, 42, -114, -14, 86, -70, 30, -126, -26, 74]))"))?;
@@ -10338,7 +12699,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_shuffle_epi8_normal3() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_shuffle_epi8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_shuffle_epi8_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_shuffle_epi8_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_shuffle_epi8_boundary_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i8_array(_mm_maskz_shuffle_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm_maskz_shuffle_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]))"))?;
@@ -10358,7 +12724,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_shuffle_epi8_boundary_min() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_shuffle_epi8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_shuffle_epi8_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_shuffle_epi8_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_shuffle_epi8_boundary_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i8_array(_mm_maskz_shuffle_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX])));
         check_array_equality(&result, &[127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0, 127, 0]).map_err(|e| format!("{e} | call: _mm_maskz_shuffle_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]))"))?;
@@ -10378,7 +12749,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_shuffle_epi8_boundary_max() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_shuffle_epi8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_shuffle_epi8_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_shuffle_epi8_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_shuffle_epi8_boundary_zero_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i8_array(_mm_maskz_shuffle_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm_maskz_shuffle_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))"))?;
@@ -10398,7 +12774,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_shuffle_epi8_boundary_zero() -> Result<
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_shuffle_epi8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_shuffle_epi8_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_shuffle_epi8_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_shuffle_epi8_boundary_allones_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i8_array(_mm_maskz_shuffle_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm_maskz_shuffle_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]))"))?;
@@ -10418,7 +12799,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_shuffle_epi8_boundary_allones() -> Resu
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_shuffle_epi8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_shuffle_epi8_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_shuffle_epi8_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_shuffle_epi8_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i8_array(_mm_maskz_shuffle_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]), create__m128i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1])));
         check_array_equality(&result, &[0, 0, -128, 0, 0, 0, -128, 0, 0, 0, -128, 0, 0, 0, -128, 0]).map_err(|e| format!("{e} | call: _mm_maskz_shuffle_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]), create__m128i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]))"))?;
@@ -10438,7 +12824,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_shuffle_epi8_boundary_mixed() -> Result
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_shuffle_epi8_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_shuffle_epi8_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_shuffle_epi8_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_shuffle_epi8_asym_min_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i8_array(_mm_maskz_shuffle_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX])));
         check_array_equality(&result, &[-128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0, -128, 0]).map_err(|e| format!("{e} | call: _mm_maskz_shuffle_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]))"))?;
@@ -10458,7 +12849,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_shuffle_epi8_asym_min_max() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm_maskz_shuffle_epi8_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_shuffle_epi8_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_shuffle_epi8_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm_maskz_shuffle_epi8_asym_max_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i8_array(_mm_maskz_shuffle_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN])));
         check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm_maskz_shuffle_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]))"))?;
@@ -10478,7 +12874,12 @@ pub(super) fn test_x86_avx512bw_mm_maskz_shuffle_epi8_asym_max_min() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_sad_epu8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_maskz_shuffle_epi8_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm_maskz_shuffle_epi8_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_sad_epu8_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_u8_array(_mm512_sad_epu8(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__m512i_from_i32_array([17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32])));
         check_array_equality(&result, &[32, 0, 0, 0, 0, 0, 0, 0, 32, 0, 0, 0, 0, 0, 0, 0, 32, 0, 0, 0, 0, 0, 0, 0, 32, 0, 0, 0, 0, 0, 0, 0, 32, 0, 0, 0, 0, 0, 0, 0, 32, 0, 0, 0, 0, 0, 0, 0, 32, 0, 0, 0, 0, 0, 0, 0, 32, 0, 0, 0, 0, 0, 0, 0]).map_err(|e| format!("{e} | call: _mm512_sad_epu8(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__m512i_from_i32_array([17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]))"))?;
@@ -10498,7 +12899,12 @@ pub(super) fn test_x86_avx512bw_mm512_sad_epu8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_sad_epu8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_sad_epu8() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_sad_epu8_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_sad_epu8_normal2_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_u8_array(_mm512_sad_epu8(create__m512i_from_u8_array([0, 255, 2, 253, 4, 251, 6, 249, 0, 255, 2, 253, 4, 251, 6, 249, 0, 255, 2, 253, 4, 251, 6, 249, 0, 255, 2, 253, 4, 251, 6, 249, 0, 255, 2, 253, 4, 251, 6, 249, 0, 255, 2, 253, 4, 251, 6, 249, 0, 255, 2, 253, 4, 251, 6, 249, 0, 255, 2, 253, 4, 251, 6, 249]), create__m512i_from_u8_array([10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3])));
         check_array_equality(&result, &[0, 4, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0]).map_err(|e| format!("{e} | call: _mm512_sad_epu8(create__m512i_from_u8_array([0, 255, 2, 253, 4, 251, 6, 249, 0, 255, 2, 253, 4, 251, 6, 249, 0, 255, 2, 253, 4, 251, 6, 249, 0, 255, 2, 253, 4, 251, 6, 249, 0, 255, 2, 253, 4, 251, 6, 249, 0, 255, 2, 253, 4, 251, 6, 249, 0, 255, 2, 253, 4, 251, 6, 249, 0, 255, 2, 253, 4, 251, 6, 249]), create__m512i_from_u8_array([10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3]))"))?;
@@ -10518,7 +12924,12 @@ pub(super) fn test_x86_avx512bw_mm512_sad_epu8_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_sad_epu8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_sad_epu8_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_sad_epu8_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_sad_epu8_normal3_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_u8_array(_mm512_sad_epu8(create__m512i_from_u8_array([100, 200, 44, 144, 244, 88, 188, 32, 132, 232, 76, 176, 20, 120, 220, 64, 164, 8, 108, 208, 52, 152, 252, 96, 196, 40, 140, 240, 84, 184, 28, 128, 228, 72, 172, 16, 116, 216, 60, 160, 4, 104, 204, 48, 148, 248, 92, 192, 36, 136, 236, 80, 180, 24, 124, 224, 68, 168, 12, 112, 212, 56, 156, 0]), create__m512i_from_u8_array([110, 210, 54, 154, 254, 98, 198, 42, 142, 242, 86, 186, 30, 130, 230, 74, 174, 18, 118, 218, 62, 162, 6, 106, 206, 50, 150, 250, 94, 194, 38, 138, 238, 82, 182, 26, 126, 226, 70, 170, 14, 114, 214, 58, 158, 2, 102, 202, 46, 146, 246, 90, 190, 34, 134, 234, 78, 178, 22, 122, 222, 66, 166, 10])));
         check_array_equality(&result, &[80, 0, 0, 0, 0, 0, 0, 0, 80, 0, 0, 0, 0, 0, 0, 0, 60, 1, 0, 0, 0, 0, 0, 0, 80, 0, 0, 0, 0, 0, 0, 0, 80, 0, 0, 0, 0, 0, 0, 0, 60, 1, 0, 0, 0, 0, 0, 0, 80, 0, 0, 0, 0, 0, 0, 0, 80, 0, 0, 0, 0, 0, 0, 0]).map_err(|e| format!("{e} | call: _mm512_sad_epu8(create__m512i_from_u8_array([100, 200, 44, 144, 244, 88, 188, 32, 132, 232, 76, 176, 20, 120, 220, 64, 164, 8, 108, 208, 52, 152, 252, 96, 196, 40, 140, 240, 84, 184, 28, 128, 228, 72, 172, 16, 116, 216, 60, 160, 4, 104, 204, 48, 148, 248, 92, 192, 36, 136, 236, 80, 180, 24, 124, 224, 68, 168, 12, 112, 212, 56, 156, 0]), create__m512i_from_u8_array([110, 210, 54, 154, 254, 98, 198, 42, 142, 242, 86, 186, 30, 130, 230, 74, 174, 18, 118, 218, 62, 162, 6, 106, 206, 50, 150, 250, 94, 194, 38, 138, 238, 82, 182, 26, 126, 226, 70, 170, 14, 114, 214, 58, 158, 2, 102, 202, 46, 146, 246, 90, 190, 34, 134, 234, 78, 178, 22, 122, 222, 66, 166, 10]))"))?;
@@ -10538,7 +12949,12 @@ pub(super) fn test_x86_avx512bw_mm512_sad_epu8_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_sad_epu8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_sad_epu8_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_sad_epu8_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_sad_epu8_boundary_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_u8_array(_mm512_sad_epu8(create__m512i_from_u8_array([u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN]), create__m512i_from_u8_array([u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN])));
         check_array_equality(&result, &[0; 64]).map_err(|e| format!("{e} | call: _mm512_sad_epu8(create__m512i_from_u8_array([u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN]), create__m512i_from_u8_array([u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN]))"))?;
@@ -10558,7 +12974,12 @@ pub(super) fn test_x86_avx512bw_mm512_sad_epu8_boundary_min() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_sad_epu8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_sad_epu8_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_sad_epu8_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_sad_epu8_boundary_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_u8_array(_mm512_sad_epu8(create__m512i_from_u8_array([u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX]), create__m512i_from_u8_array([u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX])));
         check_array_equality(&result, &[0; 64]).map_err(|e| format!("{e} | call: _mm512_sad_epu8(create__m512i_from_u8_array([u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX]), create__m512i_from_u8_array([u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX]))"))?;
@@ -10578,7 +12999,12 @@ pub(super) fn test_x86_avx512bw_mm512_sad_epu8_boundary_max() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_sad_epu8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_sad_epu8_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_sad_epu8_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_sad_epu8_boundary_zero_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_u8_array(_mm512_sad_epu8(create__m512i_from_u8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m512i_from_u8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])));
         check_array_equality(&result, &[0; 64]).map_err(|e| format!("{e} | call: _mm512_sad_epu8(create__m512i_from_u8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m512i_from_u8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))"))?;
@@ -10598,7 +13024,12 @@ pub(super) fn test_x86_avx512bw_mm512_sad_epu8_boundary_zero() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_sad_epu8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_sad_epu8_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_sad_epu8_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_sad_epu8_boundary_allones_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_u8_array(_mm512_sad_epu8(create__m512i_from_u8_array([u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX]), create__m512i_from_u8_array([u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX])));
         check_array_equality(&result, &[0; 64]).map_err(|e| format!("{e} | call: _mm512_sad_epu8(create__m512i_from_u8_array([u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX]), create__m512i_from_u8_array([u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX]))"))?;
@@ -10618,7 +13049,12 @@ pub(super) fn test_x86_avx512bw_mm512_sad_epu8_boundary_allones() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_sad_epu8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_sad_epu8_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_sad_epu8_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_sad_epu8_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_u8_array(_mm512_sad_epu8(create__m512i_from_u8_array([u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX]), create__m512i_from_u8_array([u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX])));
         check_array_equality(&result, &[0; 64]).map_err(|e| format!("{e} | call: _mm512_sad_epu8(create__m512i_from_u8_array([u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX]), create__m512i_from_u8_array([u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX]))"))?;
@@ -10638,7 +13074,12 @@ pub(super) fn test_x86_avx512bw_mm512_sad_epu8_boundary_mixed() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_sad_epu8_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_sad_epu8_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_sad_epu8_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_sad_epu8_asym_min_max_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_u8_array(_mm512_sad_epu8(create__m512i_from_u8_array([u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN]), create__m512i_from_u8_array([u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX])));
         check_array_equality(&result, &[248, 7, 0, 0, 0, 0, 0, 0, 248, 7, 0, 0, 0, 0, 0, 0, 248, 7, 0, 0, 0, 0, 0, 0, 248, 7, 0, 0, 0, 0, 0, 0, 248, 7, 0, 0, 0, 0, 0, 0, 248, 7, 0, 0, 0, 0, 0, 0, 248, 7, 0, 0, 0, 0, 0, 0, 248, 7, 0, 0, 0, 0, 0, 0]).map_err(|e| format!("{e} | call: _mm512_sad_epu8(create__m512i_from_u8_array([u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN]), create__m512i_from_u8_array([u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX]))"))?;
@@ -10658,7 +13099,12 @@ pub(super) fn test_x86_avx512bw_mm512_sad_epu8_asym_min_max() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_sad_epu8_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_sad_epu8_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_sad_epu8_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_sad_epu8_asym_max_min_impl() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_u8_array(_mm512_sad_epu8(create__m512i_from_u8_array([u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX]), create__m512i_from_u8_array([u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN])));
         check_array_equality(&result, &[248, 7, 0, 0, 0, 0, 0, 0, 248, 7, 0, 0, 0, 0, 0, 0, 248, 7, 0, 0, 0, 0, 0, 0, 248, 7, 0, 0, 0, 0, 0, 0, 248, 7, 0, 0, 0, 0, 0, 0, 248, 7, 0, 0, 0, 0, 0, 0, 248, 7, 0, 0, 0, 0, 0, 0, 248, 7, 0, 0, 0, 0, 0, 0]).map_err(|e| format!("{e} | call: _mm512_sad_epu8(create__m512i_from_u8_array([u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX]), create__m512i_from_u8_array([u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN]))"))?;
@@ -10678,7 +13124,12 @@ pub(super) fn test_x86_avx512bw_mm512_sad_epu8_asym_max_min() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_sad_epu8_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_sad_epu8_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_dbsad_epu8_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10701,7 +13152,12 @@ pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_dbsad_epu8_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_dbsad_epu8_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10724,7 +13180,12 @@ pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_normal2() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_dbsad_epu8_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_dbsad_epu8_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10747,7 +13208,12 @@ pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_normal3() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_dbsad_epu8_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_dbsad_epu8_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10770,7 +13236,12 @@ pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_boundary_min() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_dbsad_epu8_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_dbsad_epu8_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10793,7 +13264,12 @@ pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_boundary_max() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_dbsad_epu8_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_dbsad_epu8_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10816,7 +13292,12 @@ pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_boundary_zero() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_dbsad_epu8_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_dbsad_epu8_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10839,7 +13320,12 @@ pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_boundary_allones() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_dbsad_epu8_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_dbsad_epu8_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10862,7 +13348,12 @@ pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_boundary_mixed() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_dbsad_epu8_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_dbsad_epu8_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10885,7 +13376,12 @@ pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_asym_min_max() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_dbsad_epu8_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_dbsad_epu8_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10908,7 +13404,12 @@ pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_asym_max_min() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_imm_0() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_dbsad_epu8_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_dbsad_epu8_imm_0_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10931,7 +13432,12 @@ pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_imm_0() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_imm_1() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_imm_0() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_dbsad_epu8_imm_0_impl() }
+}
+
+#[target_feature(enable = "avx512bw")]
+fn test_x86_avx512bw_mm512_dbsad_epu8_imm_1_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10952,4 +13458,8 @@ pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_imm_1() -> Result<(), String> {
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_avx512bw_mm512_dbsad_epu8_imm_1() -> Result<(), String> {
+    unsafe { test_x86_avx512bw_mm512_dbsad_epu8_imm_1_impl() }
 }

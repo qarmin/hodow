@@ -8,34 +8,37 @@ GLSLANG := "tmp/VK-GL-CTS/tmpbuild-glslang/StandAlone/glslang"
 CTS_DIR := "tmp/VK-GL-CTS"
 
 check:
-    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} check -p hodow_cli --message-format short
+    cargo +{{NIGHTLY}} check -p hodow_cli --message-format short
 
 sanitizer *args:
-    RUSTFLAGS="-Zsanitizer=address" cargo +{{NIGHTLY}} run -p hodow_cli --target x86_64-unknown-linux-gnu {{args}}
+    RUSTFLAGS="-Zsanitizer=address -C target-feature=+cmpxchg16b" cargo +{{NIGHTLY}} run -p hodow_cli --target x86_64-unknown-linux-gnu {{args}}
 
 miri *args:
-    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} miri run -p hodow_cli --features miri_build cpu {{args}}
+    cargo +{{NIGHTLY}} miri run -p hodow_cli --features miri_build cpu {{args}}
 
 clippy:
-    RUSTFLAGS="-C target-cpu=native" cargo clippy -p hodow_cli --all-features --all-targets
+    cargo clippy -p hodow_cli --all-features --all-targets
 
 # --- Install ----------------------------------------------------------------------
 # No systemd service, no daemon - hodow is a one-shot test tool you invoke by hand
 # (`hodow_cli cpu`, `hodow_cli gpu`, ...), not something that needs to keep running.
 
-# Install `hodow_cli` onto PATH (~/.cargo/bin) - portable build (no target-cpu=native),
-# default features (cpu + gpu + serve, no vulkan). Good enough for everyday local use;
-# CPU extensions are still detected at runtime, just fewer of them get compiled in.
+# Install `hodow_cli` onto PATH (~/.cargo/bin) with default features (cpu + gpu + serve,
+# no vulkan).
 install:
     cargo install --path hodow_cli --force
 
-# Same, but adds the `vulkan` feature and builds with target-cpu=native, so the CPU
-# suite compiles in every extension *this exact machine's* compiler can see (matches
-# `just cpu`'s build profile - see its comment on why AVX-512 etc. need this even though
-# detection itself is always a runtime check). The resulting binary is tied to this
-# machine's CPU - do not copy it to another one.
+# Same, plus the `vulkan` feature.
+#
+# No recipe in this file passes `-C target-cpu=native` any more. Every generated CPU test
+# carries its own `#[target_feature]` (see scripts/cpu/generate_tests.py), so the whole
+# suite - AVX-512, GFNI, SHA, ... - is compiled in regardless of the building machine and
+# what runs is decided purely by runtime detection. The binary is portable: copy it to any
+# x86_64 box and it tests whatever that box actually has. Enabling the extensions
+# crate-wide instead would let LLVM emit them anywhere, including code reached before
+# detection, which is the one thing that must not happen in a portable build.
 install-all:
-    RUSTFLAGS="-C target-cpu=native" cargo install --path hodow_cli --force --features vulkan
+    cargo install --path hodow_cli --force --features vulkan
 
 # Cross-build for 32-bit ARM (same target as `just arm`) and copy the binary straight
 # onto a perimeter device via scp - nothing installed remotely, no service, just the
@@ -58,58 +61,58 @@ install-arm ip_address user="root":
 # --release group (`stress`, `server`, `gpur`, `memtest`) sharing target/release/hodow_cli.
 
 cpu *args:
-    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan -- -d cpu {{args}}
+    cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan -- -d cpu {{args}}
 
 stress *args:
-    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan --release -- -d cpu --stress {{args}}
+    cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan --release -- -d cpu --stress {{args}}
 
 serve *args:
-    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan -- -d serve {{args}}
+    cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan -- -d serve {{args}}
 
 # Same as `serve`, but release-profile - use for a long-lived instance you actually want
 # to leave running (debug-profile CPU/stress jobs are noticeably slower).
 server *args:
-    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan --release -- -d serve {{args}}
+    cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan --release -- -d serve {{args}}
 
 # Submit a CPU job to a running `just serve` instance, e.g. `just submit -e avx2`.
 submit *args:
-    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan -- -d cpu --submit-to http://127.0.0.1:7878 {{args}}
+    cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan -- -d cpu --submit-to http://127.0.0.1:7878 {{args}}
 
 # Submit a stress job to a running `just server` instance, e.g. `just submit-stress --stress-secs 30`.
 submit-stress *args:
-    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan --release -- -d cpu --stress --submit-to http://127.0.0.1:7878 {{args}}
+    cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan --release -- -d cpu --stress --submit-to http://127.0.0.1:7878 {{args}}
 
 # Submit a GPU job, e.g. `just submit-gpu --memtest`.
 submit-gpu *args:
-    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan -- -d gpu --submit-to http://127.0.0.1:7878 {{args}}
+    cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan -- -d gpu --submit-to http://127.0.0.1:7878 {{args}}
 
 # Submit a Vulkan compute-validation job.
 submit-vulkan *args:
-    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan -- -d vulkan --submit-to http://127.0.0.1:7878 {{args}}
+    cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan -- -d vulkan --submit-to http://127.0.0.1:7878 {{args}}
 
 arm:
     cargo zigbuild -p hodow_cli --target armv7-unknown-linux-gnueabihf.2.28 --no-default-features --features gpu
 
 gpu *args:
-    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan -- -d gpu --time-limit 1000 {{args}}
+    cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan -- -d gpu --time-limit 1000 {{args}}
 
 vulkan *args:
-    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan -- -d vulkan {{args}}
+    cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan -- -d vulkan {{args}}
 
 memtest *args:
-    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan --release -- -d gpu --memtest {{args}}
+    cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan --release -- -d gpu --memtest {{args}}
 
 gpua *args:
-    RUSTFLAGS="-Zsanitizer=address" cargo +{{NIGHTLY}} run -p hodow_cli --target x86_64-unknown-linux-gnu --features gpu -- -d gpu --time-limit 1000 {{args}}
+    RUSTFLAGS="-Zsanitizer=address -C target-feature=+cmpxchg16b" cargo +{{NIGHTLY}} run -p hodow_cli --target x86_64-unknown-linux-gnu --features gpu -- -d gpu --time-limit 1000 {{args}}
 
 gpur *args:
-    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan --release -- -d gpu --time-limit 1000 {{args}}
+    cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan --release -- -d gpu --time-limit 1000 {{args}}
 
 gui *args:
-    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_gui -- {{args}}
+    cargo +{{NIGHTLY}} run -p hodow_gui -- {{args}}
 
 guia *args:
-    RUSTFLAGS="-Zsanitizer=address" cargo +{{NIGHTLY}} run -p hodow_gui --target x86_64-unknown-linux-gnu --features gpu -- {{args}}
+    RUSTFLAGS="-Zsanitizer=address -C target-feature=+cmpxchg16b" cargo +{{NIGHTLY}} run -p hodow_gui --target x86_64-unknown-linux-gnu --features gpu -- {{args}}
 
 gen-gl-table:
     python3 scripts/generate_gl_table.py
@@ -253,7 +256,7 @@ upgrade:
 
 fix:
     cargo +{{NIGHTLY}} fmt
-    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} clippy --fix --allow-dirty --allow-staged --all-features --all-targets
+    cargo +{{NIGHTLY}} clippy --fix --allow-dirty --allow-staged --all-features --all-targets
     cargo +{{NIGHTLY}} fmt
     cargo fmt
 
@@ -265,11 +268,11 @@ test-gpu-all sanitizer="false":
 
     if [ "{{sanitizer}}" = "true" ]; then
         echo "🧪 Testing all GPU configurations with ADDRESS SANITIZER..."
-        FLAGS='-Zsanitizer=address'
+        FLAGS='-Zsanitizer=address -C target-feature=+cmpxchg16b'
         TARGET='--target x86_64-unknown-linux-gnu'
     else
         echo "🧪 Testing all GPU configurations (normal build)..."
-        FLAGS='-C target-cpu=native'
+        FLAGS='-C target-feature=+cmpxchg16b'
         TARGET=''
     fi
 
@@ -314,11 +317,11 @@ test-gpu-window sanitizer="false":
 
     if [ "{{sanitizer}}" = "true" ]; then
         echo "🪟 Testing GPU with visible window (ADDRESS SANITIZER)..."
-        FLAGS='-Zsanitizer=address'
+        FLAGS='-Zsanitizer=address -C target-feature=+cmpxchg16b'
         TARGET='--target x86_64-unknown-linux-gnu'
     else
         echo "🪟 Testing GPU with visible window (normal build)..."
-        FLAGS='-C target-cpu=native'
+        FLAGS='-C target-feature=+cmpxchg16b'
         TARGET=''
     fi
 
