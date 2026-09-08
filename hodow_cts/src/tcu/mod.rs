@@ -29,4 +29,4 @@ pub use rgba::RGBA;
 pub use surface::Surface;
 pub use test_case::{FlatCase, TestCaseGroup, TestNode, TestNodeInfo, flatten};
 pub use texture::{ChannelOrder, ChannelType, TextureChannelClass, TextureFormat, map_vk_format};
-pub use vector::{IVec2, IVec3, IVec4, UVec3, UVec4, Vec4, multiply_components};
+pub use vector::{IVec2, IVec3, IVec4, UVec3, UVec4, Vec2, Vec3, Vec4, multiply_components};

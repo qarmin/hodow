@@ -54,6 +54,8 @@ pub type IVec3 = Vector<i32, 3>;
 pub type IVec4 = Vector<i32, 4>;
 pub type UVec3 = Vector<u32, 3>;
 pub type UVec4 = Vector<u32, 4>;
+pub type Vec2 = Vector<f32, 2>;
+pub type Vec3 = Vector<f32, 3>;
 pub type Vec4 = Vector<f32, 4>;
 
 impl IVec2 {
@@ -83,6 +85,18 @@ impl UVec3 {
 impl UVec4 {
     pub const fn new(x: u32, y: u32, z: u32, w: u32) -> Self {
         Self::from_array([x, y, z, w])
+    }
+}
+
+impl Vec2 {
+    pub const fn new(x: f32, y: f32) -> Self {
+        Self::from_array([x, y])
+    }
+}
+
+impl Vec3 {
+    pub const fn new(x: f32, y: f32, z: f32) -> Self {
+        Self::from_array([x, y, z])
     }
 }
 

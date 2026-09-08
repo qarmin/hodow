@@ -18,6 +18,7 @@ framework/common/tcuImageCompare.hpp
 framework/common/tcuPixelFormat.hpp
 framework/common/tcuRGBA.cpp
 framework/common/tcuRGBA.hpp
+framework/common/tcuRandomValueIterator.hpp
 framework/common/tcuRenderTarget.hpp
 framework/common/tcuSurface.cpp
 framework/common/tcuSurface.hpp
@@ -156,6 +157,10 @@ modules/gles2/functional/es2fBooleanStateQueryTests.cpp
 modules/gles2/functional/es2fBooleanStateQueryTests.hpp
 modules/gles2/functional/es2fBufferObjectQueryTests.cpp
 modules/gles2/functional/es2fBufferObjectQueryTests.hpp
+modules/gles2/functional/es2fBufferTestUtil.cpp
+modules/gles2/functional/es2fBufferTestUtil.hpp
+modules/gles2/functional/es2fBufferWriteTests.cpp
+modules/gles2/functional/es2fBufferWriteTests.hpp
 modules/gles2/functional/es2fColorClearTest.cpp
 modules/gles2/functional/es2fColorClearTest.hpp
 modules/gles2/functional/es2fDepthStencilClearTests.cpp

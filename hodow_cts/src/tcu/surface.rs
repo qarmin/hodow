@@ -39,6 +39,15 @@ impl Surface {
         }
     }
 
+    /// `Surface::setSize` - reallocates; the contents are undefined afterwards, exactly
+    /// as upstream's `de::ArrayBuffer::setStorage` leaves them.
+    pub fn set_size(&mut self, width: i32, height: i32) {
+        self.width = width;
+        self.height = height;
+        self.pixels.clear();
+        self.pixels.resize((width as usize) * (height as usize) * 4, 0);
+    }
+
     pub fn get_width(&self) -> i32 {
         self.width
     }
