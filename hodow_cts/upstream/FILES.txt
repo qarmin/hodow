@@ -229,5 +229,6 @@ modules/gles3/tes3TestPackage.cpp
 
 # --- OpenGL ES 3.1 tests (deqp::gles31) --------------------------------------------
 modules/gles31/functional/es31fBasicComputeShaderTests.cpp
+modules/gles31/functional/es31fIndirectComputeDispatchTests.cpp
 modules/gles31/tes31InfoTests.cpp
 modules/gles31/tes31TestPackage.cpp

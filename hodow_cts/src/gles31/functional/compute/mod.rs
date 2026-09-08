@@ -11,11 +11,13 @@
 // Modifications: rewritten in Rust for hodow_cts.
 
 pub mod basic_compute_shader_tests;
+pub mod indirect_compute_dispatch_tests;
 
 use crate::glu::TestCaseGroup;
 
 pub fn create_tests() -> TestCaseGroup {
     let mut group = TestCaseGroup::new("compute");
     group.add_child(basic_compute_shader_tests::create_tests());
+    group.add_child(indirect_compute_dispatch_tests::create_tests());
     group
 }
