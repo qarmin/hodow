@@ -11,11 +11,11 @@
 // function and the registration is a table of them; see the note in
 // `gles2/functional/negative_api/buffer.rs`.
 //
-// **46 of upstream's 103 cases are here** - everything from `activetexture` through
-// `texsubimage2d_invalid_buffer_target` in upstream's order, except
+// **50 of upstream's 103 cases are here** - everything from `activetexture` through
+// `texparameterfv` in upstream's order, except
 // `compressedteximage2d_invalid_astc_target` (and its 3D and texstorage3d siblings),
 // which need `tcu::mapGLCompressedTexFormat` / `getBlockPixelSize` / `getBlockSize` -
-// none of which is ported. `texparameteri` onwards is the next batch.
+// none of which is ported. `compressedtexsubimage2d` onwards is the next batch.
 //
 // Upstream's `isES` branches are resolved here: `ApiType` in this port is ES-only by
 // construction (see `Api::gl_api_type`), so only the ES branch is written.
@@ -1584,7 +1584,85 @@ fn texsubimage2d_invalid_buffer_target(case: &mut ApiCase<'_>) {
     }
 }
 
-/// `NegativeTextureApiTests::init`, restricted to the 46 ported cases.
+// glTexParameteri / glTexParameterf / glTexParameteriv / glTexParameterfv
+
+/// The four sections each `texparameter*` case runs, once with no texture bound and
+/// again with one bound - upstream writes both out identically.
+fn texparameter_sections(case: &mut ApiCase<'_>, set: impl Fn(GLenum, GLenum, GLint)) {
+    case.section("GL_INVALID_ENUM is generated if target or pname is not one of the accepted defined values.");
+    set(0, glw::GL_TEXTURE_MIN_FILTER, glw::GL_LINEAR as GLint);
+    case.expect_error(glw::GL_INVALID_ENUM);
+    set(glw::GL_TEXTURE_2D, 0, glw::GL_LINEAR as GLint);
+    case.expect_error(glw::GL_INVALID_ENUM);
+    set(0, 0, glw::GL_LINEAR as GLint);
+    case.expect_error(glw::GL_INVALID_ENUM);
+
+    case.section("GL_INVALID_ENUM is generated if params should have a defined symbolic constant value (based on the value of pname) and does not.");
+    set(glw::GL_TEXTURE_2D, glw::GL_TEXTURE_MAG_FILTER, 0);
+    case.expect_error(glw::GL_INVALID_ENUM);
+    set(glw::GL_TEXTURE_2D, glw::GL_TEXTURE_MIN_FILTER, glw::GL_REPEAT as GLint);
+    case.expect_error(glw::GL_INVALID_ENUM);
+    set(glw::GL_TEXTURE_2D, glw::GL_TEXTURE_WRAP_S, 0);
+    case.expect_error(glw::GL_INVALID_ENUM);
+    set(glw::GL_TEXTURE_2D, glw::GL_TEXTURE_WRAP_T, glw::GL_NEAREST as GLint);
+    case.expect_error(glw::GL_INVALID_ENUM);
+}
+
+/// The whole body of a `texparameter*` case: the sections above with nothing bound,
+/// then a texture bound, then the same sections again.
+fn texparameter_case(case: &mut ApiCase<'_>, set: impl Fn(GLenum, GLenum, GLint) + Copy) {
+    let gl = case.gl();
+    texparameter_sections(case, set);
+
+    let mut texture: GLuint = 0;
+    // SAFETY: the name is this case's own and is deleted at the end.
+    unsafe {
+        gl.gen_textures(1, &mut texture);
+        gl.bind_texture(glw::GL_TEXTURE_2D, texture);
+    }
+
+    texparameter_sections(case, set);
+
+    // SAFETY: the name is this case's own.
+    unsafe { gl.delete_textures(1, &texture) };
+}
+
+fn texparameteri(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    texparameter_case(case, |target, pname, param| {
+        // SAFETY: a current context; no pointer is involved.
+        unsafe { gl.tex_parameteri(target, pname, param) };
+    });
+}
+
+fn texparameterf(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    texparameter_case(case, |target, pname, param| {
+        // SAFETY: as above. Upstream passes the same symbolic constants here, as a
+        // float, which is what this API takes.
+        unsafe { gl.tex_parameterf(target, pname, param as f32) };
+    });
+}
+
+fn texparameteriv(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    texparameter_case(case, |target, pname, param| {
+        let params = [param];
+        // SAFETY: one GLint of source, which is what every pname here reads.
+        unsafe { gl.tex_parameteriv(target, pname, params.as_ptr()) };
+    });
+}
+
+fn texparameterfv(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    texparameter_case(case, |target, pname, param| {
+        let params = [param as f32];
+        // SAFETY: one GLfloat of source, which is what every pname here reads.
+        unsafe { gl.tex_parameterfv(target, pname, params.as_ptr()) };
+    });
+}
+
+/// `NegativeTextureApiTests::init`, restricted to the 50 ported cases.
 pub fn create_tests() -> TestCaseGroup {
     let mut group = TestCaseGroup::new("texture");
     let cases: &[(&'static str, ApiCaseFn)] = &[
@@ -1634,6 +1712,10 @@ pub fn create_tests() -> TestCaseGroup {
         ("texsubimage2d_invalid_offset", texsubimage2d_invalid_offset),
         ("texsubimage2d_neg_width_height", texsubimage2d_neg_width_height),
         ("texsubimage2d_invalid_buffer_target", texsubimage2d_invalid_buffer_target),
+        ("texparameteri", texparameteri),
+        ("texparameterf", texparameterf),
+        ("texparameteriv", texparameteriv),
+        ("texparameterfv", texparameterfv),
     ];
     add_api_cases(&mut group, cases);
     group
