@@ -11,11 +11,11 @@
 // function and the registration is a table of them; see the note in
 // `gles2/functional/negative_api/buffer.rs`.
 //
-// **39 of upstream's 103 cases are here** - everything from `activetexture` through
-// `teximage2d_invalid_buffer_target` in upstream's order, except
+// **46 of upstream's 103 cases are here** - everything from `activetexture` through
+// `texsubimage2d_invalid_buffer_target` in upstream's order, except
 // `compressedteximage2d_invalid_astc_target` (and its 3D and texstorage3d siblings),
 // which need `tcu::mapGLCompressedTexFormat` / `getBlockPixelSize` / `getBlockSize` -
-// none of which is ported. `texsubimage2d` onwards is the next batch.
+// none of which is ported. `texparameteri` onwards is the next batch.
 //
 // Upstream's `isES` branches are resolved here: `ApiType` in this port is ES-only by
 // construction (see `Api::gl_api_type`), so only the ES branch is written.
@@ -1304,7 +1304,287 @@ fn teximage2d_invalid_buffer_target(case: &mut ApiCase<'_>) {
     }
 }
 
-/// `NegativeTextureApiTests::init`, restricted to the 39 ported cases.
+// glTexSubImage2D
+
+/// The 2D texture with a 32x32 level 0 of `internal_format` that the
+/// `texsubimage2d_*` cases set up.
+fn gen_2d_texture_32x32(case: &mut ApiCase<'_>, internal_format: GLenum, format: GLenum) -> GLuint {
+    let gl = case.gl();
+    let mut texture: GLuint = 0;
+    // SAFETY: the name is the caller's to delete; the level is left with unspecified
+    // contents, as upstream's null pointer asks for.
+    unsafe {
+        gl.gen_textures(1, &mut texture);
+        gl.bind_texture(glw::GL_TEXTURE_2D, texture);
+        gl.tex_image_2d(glw::GL_TEXTURE_2D, 0, internal_format as GLint, 32, 32, 0, format, glw::GL_UNSIGNED_BYTE, std::ptr::null());
+    }
+    case.expect_error(glw::GL_NO_ERROR);
+    texture
+}
+
+fn texsubimage2d(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    let texture = gen_2d_texture_32x32(case, glw::GL_RGBA, glw::GL_RGBA);
+
+    case.section("GL_INVALID_ENUM is generated if target is invalid.");
+    // SAFETY: a null pixel pointer throughout, as upstream passes.
+    unsafe { gl.tex_sub_image_2d(0, 0, 0, 0, 4, 4, glw::GL_RGBA, glw::GL_UNSIGNED_BYTE, std::ptr::null()) };
+    case.expect_error(glw::GL_INVALID_ENUM);
+
+    case.section("GL_INVALID_ENUM is generated if format is not an accepted format constant.");
+    // SAFETY: as above. Upstream's argument list here is shifted by one relative to
+    // its neighbours - width lands on 0, height on 4 and *format* on the literal 4,
+    // which is what makes this an invalid format rather than an invalid width;
+    // reproduced literally.
+    unsafe { gl.tex_sub_image_2d(glw::GL_TEXTURE_2D, 0, 0, 0, 0, 4, 4, glw::GL_UNSIGNED_BYTE, std::ptr::null()) };
+    case.expect_error(glw::GL_INVALID_ENUM);
+
+    case.section("GL_INVALID_ENUM is generated if type is not a type constant.");
+    // SAFETY: as above.
+    unsafe { gl.tex_sub_image_2d(glw::GL_TEXTURE_2D, 0, 0, 0, 4, 4, glw::GL_RGB, 0, std::ptr::null()) };
+    case.expect_error(glw::GL_INVALID_ENUM);
+
+    case.section("GL_INVALID_OPERATION is generated if the combination of internalFormat of the previously specified texture array, format and type is not valid.");
+    // SAFETY: as above.
+    unsafe {
+        gl.tex_sub_image_2d(glw::GL_TEXTURE_2D, 0, 0, 0, 4, 4, glw::GL_RGBA, glw::GL_UNSIGNED_SHORT_5_6_5, std::ptr::null());
+        case.expect_error(glw::GL_INVALID_OPERATION);
+        gl.tex_sub_image_2d(glw::GL_TEXTURE_2D, 0, 0, 0, 4, 4, glw::GL_RGB, glw::GL_UNSIGNED_SHORT_4_4_4_4, std::ptr::null());
+        case.expect_error(glw::GL_INVALID_OPERATION);
+        gl.tex_sub_image_2d(glw::GL_TEXTURE_2D, 0, 0, 0, 4, 4, glw::GL_RGB, glw::GL_UNSIGNED_SHORT_5_5_5_1, std::ptr::null());
+        case.expect_error(glw::GL_INVALID_OPERATION);
+        gl.tex_sub_image_2d(glw::GL_TEXTURE_2D, 0, 0, 0, 4, 4, glw::GL_RGB, glw::GL_UNSIGNED_SHORT_5_5_5_1, std::ptr::null());
+        case.expect_error(glw::GL_INVALID_OPERATION);
+        gl.tex_sub_image_2d(glw::GL_TEXTURE_2D, 0, 0, 0, 4, 4, glw::GL_RGBA_INTEGER, glw::GL_UNSIGNED_INT, std::ptr::null());
+        case.expect_error(glw::GL_INVALID_OPERATION);
+        gl.tex_sub_image_2d(glw::GL_TEXTURE_2D, 0, 0, 0, 4, 4, glw::GL_RGB, glw::GL_FLOAT, std::ptr::null());
+        case.expect_error(glw::GL_INVALID_OPERATION);
+    }
+
+    // SAFETY: the name is this case's own.
+    unsafe { gl.delete_textures(1, &texture) };
+}
+
+/// The 2D + cube-map pair the two `texsubimage2d_*level` cases set up, each with a
+/// 32x32 RGB level 0.
+///
+/// Note `texsubimage2d_neg_level` binds *both* names to GL_TEXTURE_2D, so its cube
+/// faces are specified against whatever cube map is bound (none) - upstream's own
+/// copy-paste, reproduced by the `cube_target` argument.
+fn gen_texsubimage2d_level_textures(case: &mut ApiCase<'_>, cube_target: GLenum) -> [GLuint; 2] {
+    let gl = case.gl();
+    let mut textures = [0u32; 2];
+    // SAFETY: two names asked for, two GLuint of room; the levels are left with
+    // unspecified contents, as upstream's null pointer asks for.
+    unsafe {
+        gl.gen_textures(2, textures.as_mut_ptr());
+        gl.bind_texture(glw::GL_TEXTURE_2D, textures[0]);
+        gl.tex_image_2d(glw::GL_TEXTURE_2D, 0, glw::GL_RGB as GLint, 32, 32, 0, glw::GL_RGB, glw::GL_UNSIGNED_BYTE, std::ptr::null());
+        gl.bind_texture(cube_target, textures[1]);
+        for target in CUBE_FACE_TEX_TARGETS {
+            gl.tex_image_2d(target, 0, glw::GL_RGB as GLint, 32, 32, 0, glw::GL_RGB, glw::GL_UNSIGNED_BYTE, std::ptr::null());
+        }
+    }
+    case.expect_error(glw::GL_NO_ERROR);
+    textures
+}
+
+fn texsubimage2d_neg_level(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    // Upstream binds the second texture to GL_TEXTURE_2D here, not to
+    // GL_TEXTURE_CUBE_MAP as its `max_level` sibling does; reproduced.
+    let textures = gen_texsubimage2d_level_textures(case, glw::GL_TEXTURE_2D);
+
+    case.section("GL_INVALID_VALUE is generated if level is less than 0.");
+    // SAFETY: a null pixel pointer with a 0x0 region.
+    unsafe { gl.tex_sub_image_2d(glw::GL_TEXTURE_2D, -1, 0, 0, 0, 0, glw::GL_RGB, glw::GL_UNSIGNED_BYTE, std::ptr::null()) };
+    case.expect_error(glw::GL_INVALID_VALUE);
+
+    case.section("GL_INVALID_VALUE is generated if level is less than 0.");
+    // SAFETY: as above.
+    unsafe {
+        for target in CUBE_FACE_TEX_TARGETS {
+            gl.tex_sub_image_2d(target, -1, 0, 0, 0, 0, glw::GL_RGB, glw::GL_UNSIGNED_BYTE, std::ptr::null());
+            case.expect_error(glw::GL_INVALID_VALUE);
+        }
+    }
+
+    // SAFETY: both names are this case's own.
+    unsafe { gl.delete_textures(2, textures.as_ptr()) };
+}
+
+fn texsubimage2d_max_level(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    let textures = gen_texsubimage2d_level_textures(case, glw::GL_TEXTURE_CUBE_MAP);
+
+    case.section("GL_INVALID_VALUE is generated if level is greater than log_2(GL_MAX_TEXTURE_SIZE).");
+    let log2_max_texture_size = de_log2_floor32(case.get_int(glw::GL_MAX_TEXTURE_SIZE)) + 1;
+    // SAFETY: as above.
+    unsafe {
+        gl.tex_sub_image_2d(glw::GL_TEXTURE_2D, log2_max_texture_size, 0, 0, 0, 0, glw::GL_RGB, glw::GL_UNSIGNED_BYTE, std::ptr::null());
+    }
+    case.expect_error(glw::GL_INVALID_VALUE);
+
+    case.section("GL_INVALID_VALUE is generated if level is greater than log_2(GL_MAX_CUBE_MAP_TEXTURE_SIZE).");
+    let log2_max_cubemap_size = de_log2_floor32(case.get_int(glw::GL_MAX_CUBE_MAP_TEXTURE_SIZE)) + 1;
+    // SAFETY: as above.
+    unsafe {
+        for target in CUBE_FACE_TEX_TARGETS {
+            gl.tex_sub_image_2d(target, log2_max_cubemap_size, 0, 0, 0, 0, glw::GL_RGB, glw::GL_UNSIGNED_BYTE, std::ptr::null());
+            case.expect_error(glw::GL_INVALID_VALUE);
+        }
+    }
+
+    // SAFETY: both names are this case's own.
+    unsafe { gl.delete_textures(2, textures.as_ptr()) };
+}
+
+fn texsubimage2d_neg_offset(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    let texture = gen_2d_texture_32x32(case, glw::GL_RGB, glw::GL_RGB);
+
+    case.section("GL_INVALID_VALUE is generated if xoffset or yoffset are negative.");
+    // SAFETY: a null pixel pointer with a 0x0 region.
+    unsafe {
+        gl.tex_sub_image_2d(glw::GL_TEXTURE_2D, 0, -1, 0, 0, 0, glw::GL_RGB, glw::GL_UNSIGNED_BYTE, std::ptr::null());
+        case.expect_error(glw::GL_INVALID_VALUE);
+        gl.tex_sub_image_2d(glw::GL_TEXTURE_2D, 0, 0, -1, 0, 0, glw::GL_RGB, glw::GL_UNSIGNED_BYTE, std::ptr::null());
+        case.expect_error(glw::GL_INVALID_VALUE);
+        gl.tex_sub_image_2d(glw::GL_TEXTURE_2D, 0, -1, -1, 0, 0, glw::GL_RGB, glw::GL_UNSIGNED_BYTE, std::ptr::null());
+        case.expect_error(glw::GL_INVALID_VALUE);
+    }
+
+    // SAFETY: the name is this case's own.
+    unsafe { gl.delete_textures(1, &texture) };
+}
+
+fn texsubimage2d_invalid_offset(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    let texture = gen_2d_texture_32x32(case, glw::GL_RGBA, glw::GL_RGBA);
+
+    case.section("GL_INVALID_VALUE is generated if xoffset + width > texture_width or yoffset + height > texture_height.");
+    // SAFETY: a null pixel pointer, so the out-of-range region is only validated.
+    unsafe {
+        gl.tex_sub_image_2d(glw::GL_TEXTURE_2D, 0, 30, 0, 4, 4, glw::GL_RGBA, glw::GL_UNSIGNED_BYTE, std::ptr::null());
+        case.expect_error(glw::GL_INVALID_VALUE);
+        gl.tex_sub_image_2d(glw::GL_TEXTURE_2D, 0, 0, 30, 4, 4, glw::GL_RGBA, glw::GL_UNSIGNED_BYTE, std::ptr::null());
+        case.expect_error(glw::GL_INVALID_VALUE);
+        gl.tex_sub_image_2d(glw::GL_TEXTURE_2D, 0, 30, 30, 4, 4, glw::GL_RGBA, glw::GL_UNSIGNED_BYTE, std::ptr::null());
+        case.expect_error(glw::GL_INVALID_VALUE);
+    }
+
+    // SAFETY: the name is this case's own.
+    unsafe { gl.delete_textures(1, &texture) };
+}
+
+fn texsubimage2d_neg_width_height(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    let texture = gen_2d_texture_32x32(case, glw::GL_RGBA, glw::GL_RGBA);
+
+    case.section("GL_INVALID_VALUE is generated if width or height is less than 0.");
+    // SAFETY: a null pixel pointer.
+    unsafe {
+        gl.tex_sub_image_2d(glw::GL_TEXTURE_2D, 0, 0, 0, -1, 0, glw::GL_RGBA, glw::GL_UNSIGNED_BYTE, std::ptr::null());
+        case.expect_error(glw::GL_INVALID_VALUE);
+        gl.tex_sub_image_2d(glw::GL_TEXTURE_2D, 0, 0, 0, 0, -1, glw::GL_RGBA, glw::GL_UNSIGNED_BYTE, std::ptr::null());
+        case.expect_error(glw::GL_INVALID_VALUE);
+        gl.tex_sub_image_2d(glw::GL_TEXTURE_2D, 0, 0, 0, -1, -1, glw::GL_RGBA, glw::GL_UNSIGNED_BYTE, std::ptr::null());
+        case.expect_error(glw::GL_INVALID_VALUE);
+    }
+
+    // SAFETY: the name is this case's own.
+    unsafe { gl.delete_textures(1, &texture) };
+}
+
+fn texsubimage2d_invalid_buffer_target(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    let mut buf: GLuint = 0;
+    let mut texture: GLuint = 0;
+    let data = [0u8; 64];
+    // SAFETY: both names are this case's own and the 64-byte upload reads a 64-byte
+    // array.
+    unsafe {
+        gl.gen_textures(1, &mut texture);
+        gl.bind_texture(glw::GL_TEXTURE_2D, texture);
+        gl.tex_image_2d(
+            glw::GL_TEXTURE_2D,
+            0,
+            glw::GL_RGBA as GLint,
+            32,
+            32,
+            0,
+            glw::GL_RGBA,
+            glw::GL_UNSIGNED_BYTE,
+            std::ptr::null(),
+        );
+        gl.gen_buffers(1, &mut buf);
+        gl.bind_buffer(glw::GL_PIXEL_UNPACK_BUFFER, buf);
+        gl.buffer_data(glw::GL_PIXEL_UNPACK_BUFFER, 64, data.as_ptr().cast(), glw::GL_DYNAMIC_COPY);
+    }
+    case.expect_error(glw::GL_NO_ERROR);
+
+    case.section("GL_INVALID_OPERATION is generated if a non-zero buffer object name is bound to the GL_PIXEL_UNPACK_BUFFER target and...");
+
+    case.section("...the buffer object's data store is currently mapped.");
+    // SAFETY: with a pixel-unpack buffer bound, the last argument is a byte offset into
+    // that buffer, not a pointer.
+    unsafe {
+        gl.map_buffer_range(glw::GL_PIXEL_UNPACK_BUFFER, 0, 32, glw::GL_MAP_WRITE_BIT);
+        gl.tex_sub_image_2d(glw::GL_TEXTURE_2D, 0, 0, 0, 4, 4, glw::GL_RGBA, glw::GL_UNSIGNED_BYTE, std::ptr::null());
+        case.expect_error(glw::GL_INVALID_OPERATION);
+        gl.unmap_buffer(glw::GL_PIXEL_UNPACK_BUFFER);
+    }
+
+    case.section("...the data would be unpacked from the buffer object such that the memory reads required would exceed the data store size.");
+    // SAFETY: as above; a 32x32 RGBA8 region needs 4 KiB and the buffer holds 64 bytes.
+    unsafe { gl.tex_sub_image_2d(glw::GL_TEXTURE_2D, 0, 0, 0, 32, 32, glw::GL_RGBA, glw::GL_UNSIGNED_BYTE, std::ptr::null()) };
+    case.expect_error(glw::GL_INVALID_OPERATION);
+
+    case.section("...data is not evenly divisible into the number of bytes needed to store in memory a datum indicated by type.");
+    log::debug!("// Set byte offset = 3");
+    // SAFETY: the re-specification happens with no unpack buffer bound, so its null
+    // pixel pointer is a real (absent) pointer; the last call's 3 is a byte offset into
+    // the buffer that is bound again by then.
+    unsafe {
+        gl.bind_buffer(glw::GL_PIXEL_UNPACK_BUFFER, 0);
+        gl.tex_image_2d(
+            glw::GL_TEXTURE_2D,
+            0,
+            glw::GL_RGBA4 as GLint,
+            4,
+            4,
+            0,
+            glw::GL_RGBA,
+            glw::GL_UNSIGNED_SHORT_4_4_4_4,
+            std::ptr::null(),
+        );
+        gl.bind_buffer(glw::GL_PIXEL_UNPACK_BUFFER, buf);
+    }
+    case.expect_error(glw::GL_NO_ERROR);
+    // SAFETY: as above.
+    unsafe {
+        gl.tex_sub_image_2d(
+            glw::GL_TEXTURE_2D,
+            0,
+            0,
+            0,
+            4,
+            4,
+            glw::GL_RGBA,
+            glw::GL_UNSIGNED_SHORT_4_4_4_4,
+            std::ptr::without_provenance(3),
+        );
+    }
+    case.expect_error(glw::GL_INVALID_OPERATION);
+
+    // SAFETY: both names are this case's own.
+    unsafe {
+        gl.delete_buffers(1, &buf);
+        gl.delete_textures(1, &texture);
+    }
+}
+
+/// `NegativeTextureApiTests::init`, restricted to the 46 ported cases.
 pub fn create_tests() -> TestCaseGroup {
     let mut group = TestCaseGroup::new("texture");
     let cases: &[(&'static str, ApiCaseFn)] = &[
@@ -1347,6 +1627,13 @@ pub fn create_tests() -> TestCaseGroup {
         ("teximage2d_max_width_height", teximage2d_max_width_height),
         ("teximage2d_invalid_border", teximage2d_invalid_border),
         ("teximage2d_invalid_buffer_target", teximage2d_invalid_buffer_target),
+        ("texsubimage2d", texsubimage2d),
+        ("texsubimage2d_neg_level", texsubimage2d_neg_level),
+        ("texsubimage2d_max_level", texsubimage2d_max_level),
+        ("texsubimage2d_neg_offset", texsubimage2d_neg_offset),
+        ("texsubimage2d_invalid_offset", texsubimage2d_invalid_offset),
+        ("texsubimage2d_neg_width_height", texsubimage2d_neg_width_height),
+        ("texsubimage2d_invalid_buffer_target", texsubimage2d_invalid_buffer_target),
     ];
     add_api_cases(&mut group, cases);
     group
