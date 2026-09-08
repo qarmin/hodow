@@ -8,7 +8,7 @@
 // Licensed under the Apache License, Version 2.0 (see LICENSE at the repo root).
 //
 // Modifications: rewritten in Rust for hodow_cts. Upstream registers six sub-groups
-// here; `texture` is 11 of its 103 cases (see the note at the top of `texture.rs`).
+// here; `texture` is 20 of its 103 cases (see the note at the top of `texture.rs`).
 
 pub mod buffer;
 pub mod fragment;

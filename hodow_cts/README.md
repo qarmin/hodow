@@ -59,7 +59,7 @@ sub-group.
 | `dEQP-GLES3.functional.implementation_limits.*` | 49 of 49 | - |
 | `dEQP-GLES3.functional.color_clear.*` | 19 of 19 | - |
 | `dEQP-GLES3.functional.depth_stencil_clear.*` | 11 of 11 | - |
-| `dEQP-GLES3.functional.negative_api.*` | 222 of 314 | 92 of `texture` (from `compressedteximage2d_invalid_astc_target` on) |
+| `dEQP-GLES3.functional.negative_api.*` | 231 of 314 | 83 of `texture` (from `compressedteximage2d_invalid_astc_target` on) |
 | `dEQP-GLES31.functional.compute.basic.*` | 33 of 41 | the eight image cases (`copy_image_to_ssbo`, `copy_ssbo_to_image`, `image_atomic_op`, `image_barrier`) |
 
 The OpenGL ES side is where the work is going: the target hardware for this port is an
