@@ -51,6 +51,7 @@ object_wrapper!(Framebuffer, gen_framebuffers, delete_framebuffers, "framebuffer
 object_wrapper!(Renderbuffer, gen_renderbuffers, delete_renderbuffers, "renderbuffer");
 object_wrapper!(VertexArray, gen_vertex_arrays, delete_vertex_arrays, "vertex array");
 object_wrapper!(Query, gen_queries, delete_queries, "query object");
+object_wrapper!(ProgramPipeline, gen_program_pipelines, delete_program_pipelines, "program pipeline");
 
 /// `BufferMemMap` from the ES 3.1 test modules - a mapped buffer range, unmapped on
 /// drop.

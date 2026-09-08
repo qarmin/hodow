@@ -14,10 +14,12 @@ pub mod buffer_write_tests;
 pub mod clip_control_tests;
 pub mod color_clear_test;
 pub mod depth_stencil_clear_tests;
+pub mod fbo;
 pub mod implementation_limit_tests;
 pub mod light_amount_test;
 pub mod multisampled_render_to_texture_tests;
 pub mod negative_api;
+pub mod shader_api_tests;
 pub mod prerequisite_tests;
 pub mod shader_frag_data_tests;
 pub mod state_query;
@@ -37,6 +39,8 @@ pub fn create_tests() -> TestCaseGroup {
     group.add_child(light_amount_test::create_tests());
     group.add_child(multisampled_render_to_texture_tests::create_tests());
     group.add_child(create_shaders_tests());
+    group.add_child(fbo::create_tests());
+    group.add_child(shader_api_tests::create_tests());
     group.add_child(negative_api::create_tests());
     group.add_child(state_query::create_tests());
     group
