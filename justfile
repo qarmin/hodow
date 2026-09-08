@@ -125,8 +125,16 @@ gui *args:
 guia *args:
     RUSTFLAGS="-Zsanitizer=address -C target-feature=+cmpxchg16b" cargo +{{NIGHTLY}} run -p hodow_gui --target x86_64-unknown-linux-gnu --features gpu -- {{args}}
 
+# Regenerate hodow_core/src/opengl/FUNCTIONS_TABLE.md from data/gpu/gl_functions.csv.
 gen-gl-table:
-    python3 scripts/generate_gl_table.py
+    uv run --no-project python scripts/gpu/generate_gl_table.py
+
+# Re-extract data/cpu/signatures.txt from the pinned toolchain's own stdarch, then regenerate
+# the CPU tests from it. No vendored copy of stdarch to keep in sync - `rust-src` is the source.
+gen-cpu-tests:
+    rustup component add rust-src --toolchain {{NIGHTLY}}
+    uv run --no-project python scripts/cpu/extract_signatures.py --toolchain {{NIGHTLY}}
+    uv run --no-project python scripts/cpu/generate_tests.py
 
 # --- hodow_cts (Vulkan CTS port) --------------------------------------------------
 # hodow_cts is a separate binary target, so the shared-binary hazard described above

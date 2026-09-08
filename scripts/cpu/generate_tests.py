@@ -10,15 +10,19 @@ from collections import defaultdict
 
 FUNCTIONS_PER_PART = 50
 OUTPUT_DIR = Path("hodow_core/src/cpu/auto_generated")
-SIGNATURES_FILE = Path("hodow_core/src/cpu/signatures.txt")
-FUNCTIONS_FILE = Path("scripts/cpu/excluded_functions.txt")
+# Every hand-maintained input and captured output of the CPU generators lives here.
+DATA_DIR = Path("data/cpu")
+# One file per (arch, extension), so a recapture touches only what it recaptured.
+EXPECTED_DIR = DATA_DIR / "expected"
+SIGNATURES_FILE = DATA_DIR / "signatures.txt"
+FUNCTIONS_FILE = DATA_DIR / "excluded_functions.txt"
 # Functions that fail *only* under Miri (foreign-function / inline-asm limitations) but
 # run fine on real hardware. They are generated and executed natively, but skipped when
 # the test binary is run under Miri via a `cfg!(miri)` guard.
-MIRI_ONLY_FILE = Path("scripts/cpu/miri_only_functions.txt")
+MIRI_ONLY_FILE = DATA_DIR / "miri_only_functions.txt"
 # Functions kept out of pilot-scope value-axis scenario expansion because a vector-typed
 # parameter is really a control field, not a value - see the file's own header comment.
-UB_ON_VALUE_SCENARIOS_FILE = Path("scripts/cpu/ub_on_value_scenarios.txt")
+UB_ON_VALUE_SCENARIOS_FILE = DATA_DIR / "ub_on_value_scenarios.txt"
 
 # Populated from MIRI_ONLY_FILE in main().
 MIRI_SKIP_FUNCTIONS: set[str] = set()
@@ -1028,20 +1032,61 @@ def arg_expr(ptype: str, *, random: bool) -> str:
     return table.get(pt, f"0 /* {pt} */")
 
 
-def load_expected_values(path: Path) -> dict[str, str]:
-    """Parse expected_cpu_values.txt: 'test_name - rust_expr' → {test_name: rust_expr}"""
-    if not path.exists():
-        return {}
+EXPECTED_HEADER = """\
+# Expected values captured from real hardware for this extension's generated tests.
+# Format: test_name - rust_expr
+#
+# One file per (architecture, extension) - written by scripts/cpu/capture_expected.py and
+# capture_expected_cross.py, read by generate_tests.py. Do not hand-edit: recapture instead.
+# A qemu-derived value is not a real-silicon one; see CLAUDE.md's "Non-x86 architectures".
+"""
+
+
+def expected_file(arch: str, ext: str) -> Path:
+    return EXPECTED_DIR / arch / f"{ext}.txt"
+
+
+def load_expected_values(directory: Path = EXPECTED_DIR) -> dict[str, str]:
+    """Merge every `<arch>/<ext>.txt` under `directory` into {test_name: rust_expr}."""
     result: dict[str, str] = {}
-    for line in path.read_text().splitlines():
-        line = line.strip()
-        if not line or line.startswith("#"):
-            continue
-        if " - " not in line:
-            continue
-        name, _, value = line.partition(" - ")
-        result[name.strip()] = value.strip()
+    if not directory.is_dir():
+        return result
+    for path in sorted(directory.rglob("*.txt")):
+        for line in path.read_text().splitlines():
+            line = line.strip()
+            if not line or line.startswith("#") or " - " not in line:
+                continue
+            name, _, value = line.partition(" - ")
+            result[name.strip()] = value.strip()
     return result
+
+
+def write_expected_values(groups: dict[tuple[str, str], dict[str, str]]) -> list[Path]:
+    """Write one file per (arch, ext); returns the paths touched."""
+    written = []
+    for (arch, ext), entries in sorted(groups.items()):
+        path = expected_file(arch, ext)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        body = "".join(f"{name} - {entries[name]}\n" for name in sorted(entries))
+        path.write_text(EXPECTED_HEADER + "\n" + body)
+        written.append(path)
+    return written
+
+
+def test_group_map(sigs_file: Path = SIGNATURES_FILE) -> dict[str, tuple[str, str]]:
+    """{test_name: (arch, extension)} for every test the generator would emit.
+
+    Capture scripts only ever see test *names* in a log, but have to write each value into
+    its extension's file. Rebuilding the map from the same parse + scenario expansion the
+    generator uses keeps the two from disagreeing - a name is never guessed by splitting it
+    on underscores, which is ambiguous anyway (`arm_shared`, `fp_armv8`)."""
+    out: dict[str, tuple[str, str]] = {}
+    for (arch, ext), funcs in parse_signatures(sigs_file).items():
+        for sig in funcs:
+            names = list_scenario_names(sig, arch, ext) if in_pilot_scope(arch, ext, sig["name"]) else [test_name(sig["name"], arch, ext)]
+            for name in names:
+                out[name] = (arch, ext)
+    return out
 
 
 def _elem_type_for_unpack(ret: str) -> str | None:
@@ -2002,7 +2047,7 @@ def main() -> None:
         return
 
     all_sigs = parse_signatures(sigs_file)
-    expected_values = load_expected_values(base / "expected_cpu_values.txt")
+    expected_values = load_expected_values(base / EXPECTED_DIR)
 
     out = base / OUTPUT_DIR
     out.mkdir(parents=True, exist_ok=True)

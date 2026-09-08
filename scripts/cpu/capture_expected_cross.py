@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Cross-arch counterpart to capture_expected.py: cross-builds hodow_cli for a non-x86
-target, runs it under qemu-user, and captures failures into expected_cpu_values.txt the
+target, runs it under qemu-user, and captures failures into data/cpu/expected/ the
 same way - reuses that script's FAIL_RE/to_rust_value/load_ev/merge-and-write logic
 verbatim rather than duplicating it.
 
@@ -11,7 +11,7 @@ target added (`rustup target add <triple> --toolchain <nightly>`), a matching
 `<prefix>-gcc` cross-linker, and `qemu-<arch>` (all in `qemu-user`).
 
 A qemu-derived "expected" value is not a real-silicon one - worth a distinct header
-note in expected_cpu_values.txt if this is ever done at scale (see CLAUDE.md's
+note in the affected data/cpu/expected/ files if this is ever done at scale (see CLAUDE.md's
 "Non-x86 architectures" section).
 
 Usage:
@@ -53,7 +53,6 @@ def main() -> None:
     extra = sys.argv[5:] if len(sys.argv) > 4 and sys.argv[4] == "--" else []
 
     base_dir = Path.cwd()
-    ev_path = base_dir / "expected_cpu_values.txt"
 
     env_var = f"CARGO_TARGET_{target.upper().replace('-', '_')}_LINKER"
     env = {**os.environ, env_var: cross_gcc}
@@ -69,7 +68,7 @@ def main() -> None:
     if build.returncode != 0:
         print(build.stdout)
         print(build.stderr)
-        print(f"Build failed for {target} - not touching {ev_path}.")
+        print(f"Build failed for {target} - no values captured.")
         sys.exit(1)
 
     sysroot = find_sysroot(cross_gcc)
@@ -94,20 +93,13 @@ def main() -> None:
         captured[test_name] = got_val
 
     if not captured:
-        print("No test failures found — expected_cpu_values.txt not modified.")
+        print("No test failures found — no expected-value file modified.")
         return
 
-    header, existing = base.load_ev(ev_path)
-    merged = {**existing, **captured}
-
-    lines: list[str] = list(header)
-    if lines and lines[-1].strip():
-        lines.append("")
-    for name in sorted(merged):
-        lines.append(f"{name} - {merged[name]}")
-
-    ev_path.write_text("\n".join(lines) + "\n")
-    print(f"Captured {len(captured)} value(s) → {ev_path}  (total: {len(merged)} entries)")
+    written = base.merge_and_write(captured)
+    print(f"Captured {len(captured)} value(s) → {len(written)} file(s):")
+    for path in written:
+        print(f"  {path}")
     print()
     for name, val in sorted(captured.items()):
         print(f"  {name} - {val}")

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Run 'just cpu' and capture test failures to populate expected_cpu_values.txt.
+Run 'just cpu' and capture test failures to populate data/cpu/expected/<arch>/<ext>.txt.
 
 For each failing test the script extracts the actual 'Got' value and writes
 it as the new expected value, so subsequent runs will verify against the
@@ -15,6 +15,9 @@ import subprocess
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).parent))
+import generate_tests as gt  # noqa: E402  - single source of truth for where values live
+
 # Matches:  test_mm_foo(x86_64::AVX512BW) failed: Got VALUE, expected OLD
 FAIL_RE = re.compile(r'(test_\w+)\([^)]+\) failed: Got (.+), expected ')
 
@@ -27,8 +30,31 @@ def to_rust_value(val: str) -> str:
     return val
 
 
+def merge_and_write(captured: dict[str, str]) -> list[Path]:
+    """Merge newly captured values into the per-extension files, touching only the extensions
+    that actually produced a value. A recapture on one architecture used to rewrite the single
+    4 MB file and show up as a diff against every other architecture's values."""
+    existing = gt.load_expected_values()
+    groups_map = gt.test_group_map()
+    touched: dict[tuple[str, str], dict[str, str]] = {}
+    unknown = []
+    for name in captured:
+        key = groups_map.get(name)
+        if key is None:
+            unknown.append(name)
+            continue
+        touched.setdefault(key, {})
+    for name, value in {**existing, **captured}.items():
+        key = groups_map.get(name)
+        if key in touched:
+            touched[key][name] = value
+    if unknown:
+        print(f"warning: {len(unknown)} captured value(s) match no known test, skipped: {unknown[:3]}")
+    return gt.write_expected_values(touched)
+
+
 def load_ev(path: Path) -> tuple[list[str], dict[str, str]]:
-    """Load expected_cpu_values.txt → (header_lines, {name: value})."""
+    """Load a single `name - value` file → (header_lines, {name: value})."""
     if not path.exists():
         return [], {}
     header: list[str] = []
@@ -50,7 +76,6 @@ def main() -> None:
     # Use current working directory as the repository root so scripts are
     # invoked as: python3 scripts/cpu/xxx.py from the repo root.
     base = Path.cwd()
-    ev_path = base / "expected_cpu_values.txt"
 
     # Extra args forwarded to 'just cpu'
     extra = sys.argv[1:]
@@ -76,21 +101,14 @@ def main() -> None:
         captured[test_name] = got_val
 
     if not captured:
-        print("No test failures found — expected_cpu_values.txt not modified.")
+        print("No test failures found — no expected-value file modified.")
         print("(If tests passed, the existing expected values are already correct.)")
         return
 
-    header, existing = load_ev(ev_path)
-    merged = {**existing, **captured}  # new values override old
-
-    lines: list[str] = list(header)
-    if lines and lines[-1].strip():
-        lines.append("")
-    for name in sorted(merged):
-        lines.append(f"{name} - {merged[name]}")
-
-    ev_path.write_text("\n".join(lines) + "\n")
-    print(f"Captured {len(captured)} value(s) → {ev_path}  (total: {len(merged)} entries)")
+    written = merge_and_write(captured)
+    print(f"Captured {len(captured)} value(s) → {len(written)} file(s):")
+    for path in written:
+        print(f"  {path}")
     print()
     for name, val in sorted(captured.items()):
         print(f"  {name} - {val}")

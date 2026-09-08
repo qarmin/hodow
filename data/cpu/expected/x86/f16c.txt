@@ -1,0 +1,25 @@
+# Expected values captured from real hardware for this extension's generated tests.
+# Format: test_name - rust_expr
+#
+# One file per (architecture, extension) - written by scripts/cpu/capture_expected.py and
+# capture_expected_cross.py, read by generate_tests.py. Do not hand-edit: recapture instead.
+# A qemu-derived value is not a real-silicon one; see CLAUDE.md's "Non-x86 architectures".
+
+test_x86_f16c_mm256_cvtps_ph - [1073757184, 1140867584, 1174422784, 1207977728]
+test_x86_f16c_mm256_cvtps_ph_boundary_allones - [2113961472, 2113961472, 2113961472, 2113961472]
+test_x86_f16c_mm256_cvtps_ph_boundary_max - [2080406528, 2080406528, 2080406528, 2080406528]
+test_x86_f16c_mm256_cvtps_ph_boundary_min - [-67044352, -67044352, -67044352, -67044352]
+test_x86_f16c_mm256_cvtps_ph_boundary_mixed - [-67077120, 32768, -67077120, 32768]
+test_x86_f16c_mm256_cvtps_ph_imm_0 - [1073757184, 1140867584, 1174422784, 1207977728]
+test_x86_f16c_mm256_cvtps_ph_imm_1 - [1073757184, 1140867584, 1174422784, 1207977728]
+test_x86_f16c_mm256_cvtps_ph_normal2 - [-1140850688, -1040171008, -989838336, -956283392]
+test_x86_f16c_mm256_cvtps_ph_normal3 - [1514165824, 1581276336, 1622171600, 1648386424]
+test_x86_f16c_mm_cvtps_ph - [1073757184, 1140867584, 0, 0]
+test_x86_f16c_mm_cvtps_ph_boundary_allones - [2113961472, 2113961472, 0, 0]
+test_x86_f16c_mm_cvtps_ph_boundary_max - [2080406528, 2080406528, 0, 0]
+test_x86_f16c_mm_cvtps_ph_boundary_min - [-67044352, -67044352, 0, 0]
+test_x86_f16c_mm_cvtps_ph_boundary_mixed - [-67077120, 32768, 0, 0]
+test_x86_f16c_mm_cvtps_ph_imm_0 - [1073757184, 1140867584, 0, 0]
+test_x86_f16c_mm_cvtps_ph_imm_1 - [1073757184, 1140867584, 0, 0]
+test_x86_f16c_mm_cvtps_ph_normal2 - [-1140850688, -1040171008, 0, 0]
+test_x86_f16c_mm_cvtps_ph_normal3 - [1514165824, 1581276336, 0, 0]

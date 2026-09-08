@@ -34,7 +34,7 @@ from typing import Optional
 # ── Paths ────────────────────────────────────────────────────────────────────
 
 ROOT = Path.cwd()
-DEFAULT_CSV = ROOT / "gl_functions.csv"
+DEFAULT_CSV = ROOT / "data" / "gpu" / "gl_functions.csv"
 TESTS_DIR = ROOT / "hodow_core" / "src" / "opengl" / "tests"
 
 # ── Regex patterns ───────────────────────────────────────────────────────────

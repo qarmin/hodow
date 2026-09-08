@@ -60,7 +60,7 @@ def load_excluded_functions(base: Path) -> set[str]:
     Generated test names are `test_<arch>_<ext>_<func-without-leading-underscore>`, so a
     real test name is matched against this by suffix (see is_excluded()), not equality -
     the arch/ext portion in between isn't known here."""
-    excluded_path = base / "scripts" / "cpu" / "excluded_functions.txt"
+    excluded_path = base / "data" / "cpu" / "excluded_functions.txt"
     excluded = set()
 
     if not excluded_path.exists():

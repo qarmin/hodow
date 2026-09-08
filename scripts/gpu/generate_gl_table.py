@@ -21,8 +21,8 @@ from pathlib import Path
 
 # Use current working directory as repo root when script is invoked from repo root
 ROOT = Path.cwd()
-CSV_PATH = ROOT / 'gl_functions.csv'
-SUPPORTED_CSV_PATH = ROOT / 'gl_glutin_supported_functions.csv'
+CSV_PATH = ROOT / 'data' / 'gpu' / 'gl_functions.csv'
+SUPPORTED_CSV_PATH = ROOT / 'data' / 'gpu' / 'gl_glutin_supported_functions.csv'
 OUT_MD = ROOT / 'hodow_core' / 'src' / 'opengl' / 'FUNCTIONS_TABLE.md'
 OUT_UNIMPLEMENTED = ROOT / 'hodow_core' / 'src' / 'opengl' / 'unimplemented.txt'
 TESTS_DIR = ROOT / 'hodow_core' / 'src' / 'opengl' / 'tests'

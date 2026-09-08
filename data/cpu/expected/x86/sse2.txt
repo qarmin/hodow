@@ -1,0 +1,364 @@
+# Expected values captured from real hardware for this extension's generated tests.
+# Format: test_name - rust_expr
+#
+# One file per (architecture, extension) - written by scripts/cpu/capture_expected.py and
+# capture_expected_cross.py, read by generate_tests.py. Do not hand-edit: recapture instead.
+# A qemu-derived value is not a real-silicon one; see CLAUDE.md's "Non-x86 architectures".
+
+test_x86_sse2_mm_cmpeq_pd_boundary_max - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpeq_pd_boundary_min - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpeq_pd_boundary_mixed - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpeq_pd_boundary_zero - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpeq_sd - [0.0, 2.0]
+test_x86_sse2_mm_cmpeq_sd_asym_max_min - [0.0, 1.7976931348623157e308]
+test_x86_sse2_mm_cmpeq_sd_asym_min_max - [0.0, -1.7976931348623157e308]
+test_x86_sse2_mm_cmpeq_sd_boundary_allones - [0.0, f32::NAN]
+test_x86_sse2_mm_cmpeq_sd_boundary_max - [f32::NAN, 1.7976931348623157e308]
+test_x86_sse2_mm_cmpeq_sd_boundary_min - [f32::NAN, -1.7976931348623157e308]
+test_x86_sse2_mm_cmpeq_sd_boundary_mixed - [f32::NAN, -f32::INFINITY]
+test_x86_sse2_mm_cmpeq_sd_boundary_zero - [f32::NAN, 0.0]
+test_x86_sse2_mm_cmpeq_sd_normal2 - [0.0, -1.0]
+test_x86_sse2_mm_cmpeq_sd_normal3 - [0.0, 200.0]
+test_x86_sse2_mm_cmpge_pd_asym_max_min - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpge_pd_boundary_max - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpge_pd_boundary_min - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpge_pd_boundary_mixed - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpge_pd_boundary_zero - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpge_sd - [0.0, 2.0]
+test_x86_sse2_mm_cmpge_sd_asym_max_min - [f32::NAN, 1.7976931348623157e308]
+test_x86_sse2_mm_cmpge_sd_asym_min_max - [0.0, -1.7976931348623157e308]
+test_x86_sse2_mm_cmpge_sd_boundary_allones - [0.0, f32::NAN]
+test_x86_sse2_mm_cmpge_sd_boundary_max - [f32::NAN, 1.7976931348623157e308]
+test_x86_sse2_mm_cmpge_sd_boundary_min - [f32::NAN, -1.7976931348623157e308]
+test_x86_sse2_mm_cmpge_sd_boundary_mixed - [f32::NAN, -f32::INFINITY]
+test_x86_sse2_mm_cmpge_sd_boundary_zero - [f32::NAN, 0.0]
+test_x86_sse2_mm_cmpge_sd_normal2 - [0.0, -1.0]
+test_x86_sse2_mm_cmpge_sd_normal3 - [0.0, 200.0]
+test_x86_sse2_mm_cmpgt_pd_asym_max_min - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpgt_sd - [0.0, 2.0]
+test_x86_sse2_mm_cmpgt_sd_asym_max_min - [f32::NAN, 1.7976931348623157e308]
+test_x86_sse2_mm_cmpgt_sd_asym_min_max - [0.0, -1.7976931348623157e308]
+test_x86_sse2_mm_cmpgt_sd_boundary_allones - [0.0, f32::NAN]
+test_x86_sse2_mm_cmpgt_sd_boundary_max - [0.0, 1.7976931348623157e308]
+test_x86_sse2_mm_cmpgt_sd_boundary_min - [0.0, -1.7976931348623157e308]
+test_x86_sse2_mm_cmpgt_sd_boundary_mixed - [0.0, -f32::INFINITY]
+test_x86_sse2_mm_cmpgt_sd_normal2 - [0.0, -1.0]
+test_x86_sse2_mm_cmpgt_sd_normal3 - [0.0, 200.0]
+test_x86_sse2_mm_cmple_pd - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmple_pd_asym_min_max - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmple_pd_boundary_max - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmple_pd_boundary_min - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmple_pd_boundary_mixed - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmple_pd_boundary_zero - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmple_pd_normal2 - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmple_pd_normal3 - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmple_sd - [f32::NAN, 2.0]
+test_x86_sse2_mm_cmple_sd_asym_max_min - [0.0, 1.7976931348623157e308]
+test_x86_sse2_mm_cmple_sd_asym_min_max - [f32::NAN, -1.7976931348623157e308]
+test_x86_sse2_mm_cmple_sd_boundary_allones - [0.0, f32::NAN]
+test_x86_sse2_mm_cmple_sd_boundary_max - [f32::NAN, 1.7976931348623157e308]
+test_x86_sse2_mm_cmple_sd_boundary_min - [f32::NAN, -1.7976931348623157e308]
+test_x86_sse2_mm_cmple_sd_boundary_mixed - [f32::NAN, -f32::INFINITY]
+test_x86_sse2_mm_cmple_sd_boundary_zero - [f32::NAN, 0.0]
+test_x86_sse2_mm_cmple_sd_normal2 - [f32::NAN, -1.0]
+test_x86_sse2_mm_cmple_sd_normal3 - [f32::NAN, 200.0]
+test_x86_sse2_mm_cmplt_pd - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmplt_pd_asym_min_max - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmplt_pd_normal2 - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmplt_pd_normal3 - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmplt_sd - [f32::NAN, 2.0]
+test_x86_sse2_mm_cmplt_sd_asym_max_min - [0.0, 1.7976931348623157e308]
+test_x86_sse2_mm_cmplt_sd_asym_min_max - [f32::NAN, -1.7976931348623157e308]
+test_x86_sse2_mm_cmplt_sd_boundary_allones - [0.0, f32::NAN]
+test_x86_sse2_mm_cmplt_sd_boundary_max - [0.0, 1.7976931348623157e308]
+test_x86_sse2_mm_cmplt_sd_boundary_min - [0.0, -1.7976931348623157e308]
+test_x86_sse2_mm_cmplt_sd_boundary_mixed - [0.0, -f32::INFINITY]
+test_x86_sse2_mm_cmplt_sd_normal2 - [f32::NAN, -1.0]
+test_x86_sse2_mm_cmplt_sd_normal3 - [f32::NAN, 200.0]
+test_x86_sse2_mm_cmpneq_pd - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpneq_pd_asym_max_min - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpneq_pd_asym_min_max - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpneq_pd_boundary_allones - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpneq_pd_normal2 - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpneq_pd_normal3 - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpneq_sd - [f32::NAN, 2.0]
+test_x86_sse2_mm_cmpneq_sd_asym_max_min - [f32::NAN, 1.7976931348623157e308]
+test_x86_sse2_mm_cmpneq_sd_asym_min_max - [f32::NAN, -1.7976931348623157e308]
+test_x86_sse2_mm_cmpneq_sd_boundary_allones - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpneq_sd_boundary_max - [0.0, 1.7976931348623157e308]
+test_x86_sse2_mm_cmpneq_sd_boundary_min - [0.0, -1.7976931348623157e308]
+test_x86_sse2_mm_cmpneq_sd_boundary_mixed - [0.0, -f32::INFINITY]
+test_x86_sse2_mm_cmpneq_sd_normal2 - [f32::NAN, -1.0]
+test_x86_sse2_mm_cmpneq_sd_normal3 - [f32::NAN, 200.0]
+test_x86_sse2_mm_cmpnge_pd - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpnge_pd_asym_min_max - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpnge_pd_boundary_allones - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpnge_pd_normal2 - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpnge_pd_normal3 - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpnge_sd - [f32::NAN, 2.0]
+test_x86_sse2_mm_cmpnge_sd_asym_max_min - [0.0, 1.7976931348623157e308]
+test_x86_sse2_mm_cmpnge_sd_asym_min_max - [f32::NAN, -1.7976931348623157e308]
+test_x86_sse2_mm_cmpnge_sd_boundary_allones - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpnge_sd_boundary_max - [0.0, 1.7976931348623157e308]
+test_x86_sse2_mm_cmpnge_sd_boundary_min - [0.0, -1.7976931348623157e308]
+test_x86_sse2_mm_cmpnge_sd_boundary_mixed - [0.0, -f32::INFINITY]
+test_x86_sse2_mm_cmpnge_sd_normal2 - [f32::NAN, -1.0]
+test_x86_sse2_mm_cmpnge_sd_normal3 - [f32::NAN, 200.0]
+test_x86_sse2_mm_cmpngt_pd - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpngt_pd_asym_min_max - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpngt_pd_boundary_allones - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpngt_pd_boundary_max - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpngt_pd_boundary_min - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpngt_pd_boundary_mixed - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpngt_pd_boundary_zero - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpngt_pd_normal2 - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpngt_pd_normal3 - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpngt_sd - [f32::NAN, 2.0]
+test_x86_sse2_mm_cmpngt_sd_asym_max_min - [0.0, 1.7976931348623157e308]
+test_x86_sse2_mm_cmpngt_sd_asym_min_max - [f32::NAN, -1.7976931348623157e308]
+test_x86_sse2_mm_cmpngt_sd_boundary_allones - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpngt_sd_boundary_max - [f32::NAN, 1.7976931348623157e308]
+test_x86_sse2_mm_cmpngt_sd_boundary_min - [f32::NAN, -1.7976931348623157e308]
+test_x86_sse2_mm_cmpngt_sd_boundary_mixed - [f32::NAN, -f32::INFINITY]
+test_x86_sse2_mm_cmpngt_sd_boundary_zero - [f32::NAN, 0.0]
+test_x86_sse2_mm_cmpngt_sd_normal2 - [f32::NAN, -1.0]
+test_x86_sse2_mm_cmpngt_sd_normal3 - [f32::NAN, 200.0]
+test_x86_sse2_mm_cmpnle_pd_asym_max_min - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpnle_pd_boundary_allones - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpnle_sd - [0.0, 2.0]
+test_x86_sse2_mm_cmpnle_sd_asym_max_min - [f32::NAN, 1.7976931348623157e308]
+test_x86_sse2_mm_cmpnle_sd_asym_min_max - [0.0, -1.7976931348623157e308]
+test_x86_sse2_mm_cmpnle_sd_boundary_allones - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpnle_sd_boundary_max - [0.0, 1.7976931348623157e308]
+test_x86_sse2_mm_cmpnle_sd_boundary_min - [0.0, -1.7976931348623157e308]
+test_x86_sse2_mm_cmpnle_sd_boundary_mixed - [0.0, -f32::INFINITY]
+test_x86_sse2_mm_cmpnle_sd_normal2 - [0.0, -1.0]
+test_x86_sse2_mm_cmpnle_sd_normal3 - [0.0, 200.0]
+test_x86_sse2_mm_cmpnlt_pd_asym_max_min - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpnlt_pd_boundary_allones - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpnlt_pd_boundary_max - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpnlt_pd_boundary_min - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpnlt_pd_boundary_mixed - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpnlt_pd_boundary_zero - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpnlt_sd - [0.0, 2.0]
+test_x86_sse2_mm_cmpnlt_sd_asym_max_min - [f32::NAN, 1.7976931348623157e308]
+test_x86_sse2_mm_cmpnlt_sd_asym_min_max - [0.0, -1.7976931348623157e308]
+test_x86_sse2_mm_cmpnlt_sd_boundary_allones - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpnlt_sd_boundary_max - [f32::NAN, 1.7976931348623157e308]
+test_x86_sse2_mm_cmpnlt_sd_boundary_min - [f32::NAN, -1.7976931348623157e308]
+test_x86_sse2_mm_cmpnlt_sd_boundary_mixed - [f32::NAN, -f32::INFINITY]
+test_x86_sse2_mm_cmpnlt_sd_boundary_zero - [f32::NAN, 0.0]
+test_x86_sse2_mm_cmpnlt_sd_normal2 - [0.0, -1.0]
+test_x86_sse2_mm_cmpnlt_sd_normal3 - [0.0, 200.0]
+test_x86_sse2_mm_cmpord_pd - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpord_pd_asym_max_min - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpord_pd_asym_min_max - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpord_pd_boundary_max - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpord_pd_boundary_min - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpord_pd_boundary_mixed - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpord_pd_boundary_zero - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpord_pd_normal2 - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpord_pd_normal3 - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpord_sd - [f32::NAN, 2.0]
+test_x86_sse2_mm_cmpord_sd_asym_max_min - [f32::NAN, 1.7976931348623157e308]
+test_x86_sse2_mm_cmpord_sd_asym_min_max - [f32::NAN, -1.7976931348623157e308]
+test_x86_sse2_mm_cmpord_sd_boundary_allones - [0.0, f32::NAN]
+test_x86_sse2_mm_cmpord_sd_boundary_max - [f32::NAN, 1.7976931348623157e308]
+test_x86_sse2_mm_cmpord_sd_boundary_min - [f32::NAN, -1.7976931348623157e308]
+test_x86_sse2_mm_cmpord_sd_boundary_mixed - [f32::NAN, -f32::INFINITY]
+test_x86_sse2_mm_cmpord_sd_boundary_zero - [f32::NAN, 0.0]
+test_x86_sse2_mm_cmpord_sd_normal2 - [f32::NAN, -1.0]
+test_x86_sse2_mm_cmpord_sd_normal3 - [f32::NAN, 200.0]
+test_x86_sse2_mm_cmpunord_pd_boundary_allones - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpunord_sd - [0.0, 2.0]
+test_x86_sse2_mm_cmpunord_sd_asym_max_min - [0.0, 1.7976931348623157e308]
+test_x86_sse2_mm_cmpunord_sd_asym_min_max - [0.0, -1.7976931348623157e308]
+test_x86_sse2_mm_cmpunord_sd_boundary_allones - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_cmpunord_sd_boundary_max - [0.0, 1.7976931348623157e308]
+test_x86_sse2_mm_cmpunord_sd_boundary_min - [0.0, -1.7976931348623157e308]
+test_x86_sse2_mm_cmpunord_sd_boundary_mixed - [0.0, -f32::INFINITY]
+test_x86_sse2_mm_cmpunord_sd_normal2 - [0.0, -1.0]
+test_x86_sse2_mm_cmpunord_sd_normal3 - [0.0, 200.0]
+test_x86_sse2_mm_comieq_sd_boundary_max - 1
+test_x86_sse2_mm_comieq_sd_boundary_min - 1
+test_x86_sse2_mm_comieq_sd_boundary_mixed - 1
+test_x86_sse2_mm_comieq_sd_boundary_zero - 1
+test_x86_sse2_mm_comige_sd_asym_max_min - 1
+test_x86_sse2_mm_comige_sd_boundary_max - 1
+test_x86_sse2_mm_comige_sd_boundary_min - 1
+test_x86_sse2_mm_comige_sd_boundary_mixed - 1
+test_x86_sse2_mm_comige_sd_boundary_zero - 1
+test_x86_sse2_mm_comigt_sd_asym_max_min - 1
+test_x86_sse2_mm_comile_sd - 1
+test_x86_sse2_mm_comile_sd_asym_min_max - 1
+test_x86_sse2_mm_comile_sd_boundary_max - 1
+test_x86_sse2_mm_comile_sd_boundary_min - 1
+test_x86_sse2_mm_comile_sd_boundary_mixed - 1
+test_x86_sse2_mm_comile_sd_boundary_zero - 1
+test_x86_sse2_mm_comile_sd_normal2 - 1
+test_x86_sse2_mm_comile_sd_normal3 - 1
+test_x86_sse2_mm_comilt_sd - 1
+test_x86_sse2_mm_comilt_sd_asym_min_max - 1
+test_x86_sse2_mm_comilt_sd_normal2 - 1
+test_x86_sse2_mm_comilt_sd_normal3 - 1
+test_x86_sse2_mm_comineq_sd - 1
+test_x86_sse2_mm_comineq_sd_asym_max_min - 1
+test_x86_sse2_mm_comineq_sd_asym_min_max - 1
+test_x86_sse2_mm_comineq_sd_boundary_allones - 1
+test_x86_sse2_mm_comineq_sd_normal2 - 1
+test_x86_sse2_mm_comineq_sd_normal3 - 1
+test_x86_sse2_mm_cvtpd_epi32 - [1, 2, 0, 0]
+test_x86_sse2_mm_cvtps_epi32 - [1, 2, 3, 4]
+test_x86_sse2_mm_cvtsd_si32 - 1
+test_x86_sse2_mm_cvtsd_si32_boundary_allones - -2147483648
+test_x86_sse2_mm_cvtsd_si32_boundary_max - -2147483648
+test_x86_sse2_mm_cvtsd_si32_boundary_min - -2147483648
+test_x86_sse2_mm_cvtsd_si32_boundary_mixed - -2147483648
+test_x86_sse2_mm_cvtsd_si32_normal3 - 100
+test_x86_sse2_mm_cvtsd_ss - [5.0, 2.0, 3.0, 4.0]
+test_x86_sse2_mm_cvtsd_ss_boundary_allones - [1.0, f32::NAN, f32::NAN, f32::NAN]
+test_x86_sse2_mm_cvtsd_ss_boundary_max - [1.0, 3.4028235e38, 3.4028235e38, 3.4028235e38]
+test_x86_sse2_mm_cvtsd_ss_boundary_min - [1.0, -3.4028235e38, -3.4028235e38, -3.4028235e38]
+test_x86_sse2_mm_cvtsd_ss_boundary_mixed - [1.0, -f32::INFINITY, -0.0, 5.877472e-39]
+test_x86_sse2_mm_cvtsd_ss_boundary_zero - [1.0, 0.0, 0.0, 0.0]
+test_x86_sse2_mm_cvtsd_ss_normal2 - [1.0, -1.0, 2.0, -3.0]
+test_x86_sse2_mm_cvtsd_ss_normal3 - [1.0, 200.0, 300.0, 400.0]
+test_x86_sse2_mm_cvttpd_epi32 - [1, 2, 0, 0]
+test_x86_sse2_mm_cvttps_epi32 - [1, 2, 3, 4]
+test_x86_sse2_mm_cvttsd_si32 - 1
+test_x86_sse2_mm_cvttsd_si32_boundary_allones - -2147483648
+test_x86_sse2_mm_cvttsd_si32_boundary_max - -2147483648
+test_x86_sse2_mm_cvttsd_si32_boundary_min - -2147483648
+test_x86_sse2_mm_cvttsd_si32_boundary_mixed - -2147483648
+test_x86_sse2_mm_cvttsd_si32_normal3 - 100
+test_x86_sse2_mm_madd_epi16 - [5, 0, 12, 0, 21, 0, 32, 0]
+test_x86_sse2_mm_madd_epi16_asym_max_min - [0, -32767, 0, -32767, 0, -32767, 0, -32767]
+test_x86_sse2_mm_madd_epi16_asym_min_max - [0, -32767, 0, -32767, 0, -32767, 0, -32767]
+test_x86_sse2_mm_madd_epi16_boundary_allones - [2, 0, 2, 0, 2, 0, 2, 0]
+test_x86_sse2_mm_madd_epi16_boundary_max - [2, 32766, 2, 32766, 2, 32766, 2, 32766]
+test_x86_sse2_mm_madd_epi16_boundary_min - [0, -32768, 0, -32768, 0, -32768, 0, -32768]
+test_x86_sse2_mm_madd_epi16_boundary_mixed - [1, 32767, 1, 0, 1, 32767, 1, 0]
+test_x86_sse2_mm_madd_epi16_normal2 - [-9, -1, 3, 0, 31, 0, 75, 0]
+test_x86_sse2_mm_madd_epi16_normal3 - [-12536, 0, -5144, 3, 31176, 9, 30888, 17]
+test_x86_sse2_mm_max_pd - [3.0, 4.0]
+test_x86_sse2_mm_max_pd_asym_max_min - [1.7976931348623157e308, 1.7976931348623157e308]
+test_x86_sse2_mm_max_pd_asym_min_max - [1.7976931348623157e308, 1.7976931348623157e308]
+test_x86_sse2_mm_max_pd_boundary_allones - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_max_pd_boundary_max - [1.7976931348623157e308, 1.7976931348623157e308]
+test_x86_sse2_mm_max_pd_boundary_min - [-1.7976931348623157e308, -1.7976931348623157e308]
+test_x86_sse2_mm_max_pd_boundary_mixed - [f32::INFINITY, -f32::INFINITY]
+test_x86_sse2_mm_max_pd_normal2 - [10.0, 9.0]
+test_x86_sse2_mm_max_pd_normal3 - [110.0, 210.0]
+test_x86_sse2_mm_max_sd - [3.0, 2.0]
+test_x86_sse2_mm_max_sd_asym_max_min - [1.7976931348623157e308, 1.7976931348623157e308]
+test_x86_sse2_mm_max_sd_asym_min_max - [1.7976931348623157e308, -1.7976931348623157e308]
+test_x86_sse2_mm_max_sd_boundary_allones - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_max_sd_boundary_max - [1.7976931348623157e308, 1.7976931348623157e308]
+test_x86_sse2_mm_max_sd_boundary_min - [-1.7976931348623157e308, -1.7976931348623157e308]
+test_x86_sse2_mm_max_sd_boundary_mixed - [f32::INFINITY, -f32::INFINITY]
+test_x86_sse2_mm_max_sd_normal2 - [10.0, -1.0]
+test_x86_sse2_mm_max_sd_normal3 - [110.0, 200.0]
+test_x86_sse2_mm_min_pd - [1.0, 2.0]
+test_x86_sse2_mm_min_pd_asym_max_min - [-1.7976931348623157e308, -1.7976931348623157e308]
+test_x86_sse2_mm_min_pd_asym_min_max - [-1.7976931348623157e308, -1.7976931348623157e308]
+test_x86_sse2_mm_min_pd_boundary_allones - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_min_pd_boundary_max - [1.7976931348623157e308, 1.7976931348623157e308]
+test_x86_sse2_mm_min_pd_boundary_min - [-1.7976931348623157e308, -1.7976931348623157e308]
+test_x86_sse2_mm_min_pd_boundary_mixed - [f32::INFINITY, -f32::INFINITY]
+test_x86_sse2_mm_min_pd_normal2 - [0.0, -1.0]
+test_x86_sse2_mm_min_pd_normal3 - [100.0, 200.0]
+test_x86_sse2_mm_min_sd - [1.0, 2.0]
+test_x86_sse2_mm_min_sd_asym_max_min - [-1.7976931348623157e308, 1.7976931348623157e308]
+test_x86_sse2_mm_min_sd_asym_min_max - [-1.7976931348623157e308, -1.7976931348623157e308]
+test_x86_sse2_mm_min_sd_boundary_allones - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_min_sd_boundary_max - [1.7976931348623157e308, 1.7976931348623157e308]
+test_x86_sse2_mm_min_sd_boundary_min - [-1.7976931348623157e308, -1.7976931348623157e308]
+test_x86_sse2_mm_min_sd_boundary_mixed - [f32::INFINITY, -f32::INFINITY]
+test_x86_sse2_mm_min_sd_normal2 - [0.0, -1.0]
+test_x86_sse2_mm_min_sd_normal3 - [100.0, 200.0]
+test_x86_sse2_mm_packs_epi16 - [1, 2, 3, 4, 5, 6, 7, 8]
+test_x86_sse2_mm_packs_epi16_asym_max_min - [32639, 32639, 32639, 32639, -32640, -32640, -32640, -32640]
+test_x86_sse2_mm_packs_epi16_asym_min_max - [-32640, -32640, -32640, -32640, 32639, 32639, 32639, 32639]
+test_x86_sse2_mm_packs_epi16_boundary_allones - [-1, -1, -1, -1, -1, -1, -1, -1]
+test_x86_sse2_mm_packs_epi16_boundary_max - [32639, 32639, 32639, 32639, 32639, 32639, 32639, 32639]
+test_x86_sse2_mm_packs_epi16_boundary_min - [-32640, -32640, -32640, -32640, -32640, -32640, -32640, -32640]
+test_x86_sse2_mm_packs_epi16_boundary_mixed - [32640, -256, 32640, -256, 32640, -256, 32640, -256]
+test_x86_sse2_mm_packs_epi16_normal2 - [-256, -766, -1276, -1786, 2314, 1804, 1294, 784]
+test_x86_sse2_mm_packs_epi16_normal3 - [32612, 32639, 32639, 32639, 32622, 32639, 32639, 32639]
+test_x86_sse2_mm_packs_epi32 - [131073, 262147, 393221, 524295]
+test_x86_sse2_mm_packs_epi32_asym_max_min - [2147450879, 2147450879, -2147450880, -2147450880]
+test_x86_sse2_mm_packs_epi32_asym_min_max - [-2147450880, -2147450880, 2147450879, 2147450879]
+test_x86_sse2_mm_packs_epi32_boundary_allones - [-1, -1, -1, -1]
+test_x86_sse2_mm_packs_epi32_boundary_max - [2147450879, 2147450879, 2147450879, 2147450879]
+test_x86_sse2_mm_packs_epi32_boundary_min - [-2147450880, -2147450880, -2147450880, -2147450880]
+test_x86_sse2_mm_packs_epi32_boundary_mixed - [2147450880, -65536, 2147450880, -65536]
+test_x86_sse2_mm_packs_epi32_normal2 - [-65536, -196606, 589834, 458764]
+test_x86_sse2_mm_packs_epi32_normal3 - [13107300, 26214700, 13762670, 26870070]
+test_x86_sse2_mm_packus_epi16 - [1, 2, 3, 4, 5, 6, 7, 8]
+test_x86_sse2_mm_packus_epi16_asym_max_min - [-1, -1, -1, -1, 0, 0, 0, 0]
+test_x86_sse2_mm_packus_epi16_asym_min_max - [0, 0, 0, 0, -1, -1, -1, -1]
+test_x86_sse2_mm_packus_epi16_boundary_max - [-1, -1, -1, -1, -1, -1, -1, -1]
+test_x86_sse2_mm_packus_epi16_boundary_mixed - [-256, 0, -256, 0, -256, 0, -256, 0]
+test_x86_sse2_mm_packus_epi16_normal2 - [0, 2, 4, 6, 2314, 1804, 1294, 784]
+test_x86_sse2_mm_packus_epi16_normal3 - [-14236, -1, -1, -1, -11666, -1, -1, -1]
+test_x86_sse2_mm_sad_epu8 - [8, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0]
+test_x86_sse2_mm_sad_epu8_asym_max_min - [248, 7, 0, 0, 0, 0, 0, 0, 248, 7, 0, 0, 0, 0, 0, 0]
+test_x86_sse2_mm_sad_epu8_asym_min_max - [248, 7, 0, 0, 0, 0, 0, 0, 248, 7, 0, 0, 0, 0, 0, 0]
+test_x86_sse2_mm_sad_epu8_normal2 - [0, 4, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0]
+test_x86_sse2_mm_sad_epu8_normal3 - [80, 0, 0, 0, 0, 0, 0, 0, 80, 0, 0, 0, 0, 0, 0, 0]
+test_x86_sse2_mm_sll_epi64_normal2 - [0, -1024]
+test_x86_sse2_mm_sqrt_pd - [1.0, 1.4142135623730951]
+test_x86_sse2_mm_sqrt_pd_boundary_allones - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_sqrt_pd_boundary_max - [1.3407807929942596e154, 1.3407807929942596e154]
+test_x86_sse2_mm_sqrt_pd_boundary_min - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_sqrt_pd_boundary_mixed - [f32::INFINITY, f32::NAN]
+test_x86_sse2_mm_sqrt_pd_normal2 - [0.0, f32::NAN]
+test_x86_sse2_mm_sqrt_pd_normal3 - [10.0, 14.142135623730951]
+test_x86_sse2_mm_sqrt_sd - [1.7320508075688772, 2.0]
+test_x86_sse2_mm_sqrt_sd_asym_max_min - [f32::NAN, 1.7976931348623157e308]
+test_x86_sse2_mm_sqrt_sd_asym_min_max - [1.3407807929942596e154, -1.7976931348623157e308]
+test_x86_sse2_mm_sqrt_sd_boundary_allones - [f32::NAN, f32::NAN]
+test_x86_sse2_mm_sqrt_sd_boundary_max - [1.3407807929942596e154, 1.7976931348623157e308]
+test_x86_sse2_mm_sqrt_sd_boundary_min - [f32::NAN, -1.7976931348623157e308]
+test_x86_sse2_mm_sqrt_sd_boundary_mixed - [f32::INFINITY, -f32::INFINITY]
+test_x86_sse2_mm_sqrt_sd_normal2 - [3.1622776601683795, -1.0]
+test_x86_sse2_mm_sqrt_sd_normal3 - [10.488088481701515, 200.0]
+test_x86_sse2_mm_sra_epi16_asym_min_max - [-1, -1, -1, -1, -1, -1, -1, -1]
+test_x86_sse2_mm_sra_epi16_boundary_allones - [-1, -1, -1, -1, -1, -1, -1, -1]
+test_x86_sse2_mm_sra_epi16_boundary_min - [-1, -1, -1, -1, -1, -1, -1, -1]
+test_x86_sse2_mm_sra_epi16_boundary_mixed - [-1, 0, 0, -1, -1, 0, 0, -1]
+test_x86_sse2_mm_sra_epi16_normal2 - [0, -1, 0, -1, 0, -1, 0, -1]
+test_x86_sse2_mm_sra_epi32_asym_min_max - [-1, -1, -1, -1]
+test_x86_sse2_mm_sra_epi32_boundary_allones - [-1, -1, -1, -1]
+test_x86_sse2_mm_sra_epi32_boundary_min - [-1, -1, -1, -1]
+test_x86_sse2_mm_sra_epi32_boundary_mixed - [-1, 0, 0, -1]
+test_x86_sse2_mm_sra_epi32_normal2 - [0, -1, 0, -1]
+test_x86_sse2_mm_srl_epi64_normal2 - [0, 18014398509481983]
+test_x86_sse2_mm_ucomieq_sd_boundary_max - 1
+test_x86_sse2_mm_ucomieq_sd_boundary_min - 1
+test_x86_sse2_mm_ucomieq_sd_boundary_mixed - 1
+test_x86_sse2_mm_ucomieq_sd_boundary_zero - 1
+test_x86_sse2_mm_ucomige_sd_asym_max_min - 1
+test_x86_sse2_mm_ucomige_sd_boundary_max - 1
+test_x86_sse2_mm_ucomige_sd_boundary_min - 1
+test_x86_sse2_mm_ucomige_sd_boundary_mixed - 1
+test_x86_sse2_mm_ucomige_sd_boundary_zero - 1
+test_x86_sse2_mm_ucomigt_sd_asym_max_min - 1
+test_x86_sse2_mm_ucomile_sd - 1
+test_x86_sse2_mm_ucomile_sd_asym_min_max - 1
+test_x86_sse2_mm_ucomile_sd_boundary_max - 1
+test_x86_sse2_mm_ucomile_sd_boundary_min - 1
+test_x86_sse2_mm_ucomile_sd_boundary_mixed - 1
+test_x86_sse2_mm_ucomile_sd_boundary_zero - 1
+test_x86_sse2_mm_ucomile_sd_normal2 - 1
+test_x86_sse2_mm_ucomile_sd_normal3 - 1
+test_x86_sse2_mm_ucomilt_sd - 1
+test_x86_sse2_mm_ucomilt_sd_asym_min_max - 1
+test_x86_sse2_mm_ucomilt_sd_normal2 - 1
+test_x86_sse2_mm_ucomilt_sd_normal3 - 1
+test_x86_sse2_mm_ucomineq_sd - 1
+test_x86_sse2_mm_ucomineq_sd_asym_max_min - 1
+test_x86_sse2_mm_ucomineq_sd_asym_min_max - 1
+test_x86_sse2_mm_ucomineq_sd_boundary_allones - 1
+test_x86_sse2_mm_ucomineq_sd_normal2 - 1
+test_x86_sse2_mm_ucomineq_sd_normal3 - 1

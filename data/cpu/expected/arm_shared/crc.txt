@@ -1,0 +1,13 @@
+# Expected values captured from real hardware for this extension's generated tests.
+# Format: test_name - rust_expr
+#
+# One file per (architecture, extension) - written by scripts/cpu/capture_expected.py and
+# capture_expected_cross.py, read by generate_tests.py. Do not hand-edit: recapture instead.
+# A qemu-derived value is not a real-silicon one; see CLAUDE.md's "Non-x86 architectures".
+
+test_arm_shared_crc_crc32b - -1727442502
+test_arm_shared_crc_crc32cb - 324072436
+test_arm_shared_crc_crc32ch - 887597209
+test_arm_shared_crc_crc32cw - 1646430521
+test_arm_shared_crc_crc32h - 724390851
+test_arm_shared_crc_crc32w - 313896942

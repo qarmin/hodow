@@ -218,7 +218,7 @@ def main():
     )
     parser.add_argument(
         '-o', '--output',
-        default='gl_glutin_supported_functions.csv',
+        default='data/gpu/gl_glutin_supported_functions.csv',
         help='Plik wyjściowy CSV (domyślnie: gl_glutin_supported_functions.csv)'
     )
 

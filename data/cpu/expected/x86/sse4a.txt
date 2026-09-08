@@ -1,0 +1,39 @@
+# Expected values captured from real hardware for this extension's generated tests.
+# Format: test_name - rust_expr
+#
+# One file per (architecture, extension) - written by scripts/cpu/capture_expected.py and
+# capture_expected_cross.py, read by generate_tests.py. Do not hand-edit: recapture instead.
+# A qemu-derived value is not a real-silicon one; see CLAUDE.md's "Non-x86 architectures".
+
+test_x86_sse4a_mm_extract_si64 - [1, 0, 0, 0]
+test_x86_sse4a_mm_extract_si64_asym_max_min - [2147483647, 2147483647, 0, 0]
+test_x86_sse4a_mm_extract_si64_asym_min_max - [1, 0, 0, 0]
+test_x86_sse4a_mm_extract_si64_boundary_allones - [1, 0, 0, 0]
+test_x86_sse4a_mm_extract_si64_boundary_min - [-2147483648, -2147483648, 0, 0]
+test_x86_sse4a_mm_extract_si64_boundary_mixed - [-2147483648, 2147483647, 0, 0]
+test_x86_sse4a_mm_extract_si64_normal3 - [100, 200, 0, 0]
+test_x86_sse4a_mm_extracti_si64 - [1, 2, 3, 4]
+test_x86_sse4a_mm_extracti_si64_boundary_allones - [-1, -1, -1, -1]
+test_x86_sse4a_mm_extracti_si64_boundary_max - [2147483647, 2147483647, 2147483647, 2147483647]
+test_x86_sse4a_mm_extracti_si64_boundary_min - [-2147483648, -2147483648, -2147483648, -2147483648]
+test_x86_sse4a_mm_extracti_si64_boundary_mixed - [-2147483648, 2147483647, 0, -1]
+test_x86_sse4a_mm_extracti_si64_normal2 - [0, -1, 2, -3]
+test_x86_sse4a_mm_extracti_si64_normal3 - [100, 200, 300, 400]
+test_x86_sse4a_mm_insert_si64 - [5, 2, 0, 0]
+test_x86_sse4a_mm_insert_si64_asym_max_min - [-2147483648, -2147483648, 0, 0]
+test_x86_sse4a_mm_insert_si64_asym_min_max - [-2147483648, -2147483648, 0, 0]
+test_x86_sse4a_mm_insert_si64_boundary_allones - [-1, -1, 0, 0]
+test_x86_sse4a_mm_insert_si64_boundary_max - [2147483647, -1, 0, 0]
+test_x86_sse4a_mm_insert_si64_boundary_min - [-2147483648, -2147483648, 0, 0]
+test_x86_sse4a_mm_insert_si64_boundary_mixed - [-2147483648, 2147483647, 0, 0]
+test_x86_sse4a_mm_insert_si64_normal2 - [10, -1, 0, 0]
+test_x86_sse4a_mm_insert_si64_normal3 - [220, 420, 0, 0]
+test_x86_sse4a_mm_inserti_si64 - [5, 6, 7, 8]
+test_x86_sse4a_mm_inserti_si64_asym_max_min - [-2147483648, -2147483648, -2147483648, -2147483648]
+test_x86_sse4a_mm_inserti_si64_asym_min_max - [2147483647, 2147483647, 2147483647, 2147483647]
+test_x86_sse4a_mm_inserti_si64_boundary_allones - [-1, -1, -1, -1]
+test_x86_sse4a_mm_inserti_si64_boundary_max - [2147483647, 2147483647, 2147483647, 2147483647]
+test_x86_sse4a_mm_inserti_si64_boundary_min - [-2147483648, -2147483648, -2147483648, -2147483648]
+test_x86_sse4a_mm_inserti_si64_boundary_mixed - [-2147483648, 2147483647, 0, -1]
+test_x86_sse4a_mm_inserti_si64_normal2 - [10, 9, 12, 7]
+test_x86_sse4a_mm_inserti_si64_normal3 - [110, 210, 310, 410]

@@ -1,15 +1,14 @@
 /target
 /tmp/
 .idea/
-*.csv
 *.bak
-archs/
 __pycache__/
 winit
 glutin
 ___*
 core.*
 *.core
+miri_errors.txt
 
 /box64_repro/target/
 /box64_repro/.box64/

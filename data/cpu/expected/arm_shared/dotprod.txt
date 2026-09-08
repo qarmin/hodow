@@ -1,0 +1,19 @@
+# Expected values captured from real hardware for this extension's generated tests.
+# Format: test_name - rust_expr
+#
+# One file per (architecture, extension) - written by scripts/cpu/capture_expected.py and
+# capture_expected_cross.py, read by generate_tests.py. Do not hand-edit: recapture instead.
+# A qemu-derived value is not a real-silicon one; see CLAUDE.md's "Non-x86 architectures".
+
+test_arm_shared_dotprod_vdot_lane_s32 - [231, 432]
+test_arm_shared_dotprod_vdot_lane_u32 - [231, 432]
+test_arm_shared_dotprod_vdot_laneq_s32 - [231, 432]
+test_arm_shared_dotprod_vdot_laneq_u32 - [231, 432]
+test_arm_shared_dotprod_vdot_s32 - [231, 568]
+test_arm_shared_dotprod_vdot_u32 - [231, 568]
+test_arm_shared_dotprod_vdotq_lane_s32 - [591, 952, 1313, 1674]
+test_arm_shared_dotprod_vdotq_lane_u32 - [591, 952, 1313, 1674]
+test_arm_shared_dotprod_vdotq_laneq_s32 - [591, 952, 1313, 1674]
+test_arm_shared_dotprod_vdotq_laneq_u32 - [591, 952, 1313, 1674]
+test_arm_shared_dotprod_vdotq_s32 - [591, 1120, 1777, 2562]
+test_arm_shared_dotprod_vdotq_u32 - [591, 1120, 1777, 2562]

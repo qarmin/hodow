@@ -7,20 +7,34 @@ Output format:
   arch/path/to/file.rs
   LINENUM:pub [unsafe] fn function_name(a: T, b: T) -> T {
 
+Reads stdarch straight out of the pinned toolchain's `rust-src` component, so the extraction
+always matches the compiler the project builds with and there is nothing to copy by hand.
+`--src` overrides that, for extracting from a different stdarch than the toolchain ships.
+
 Usage:
   python3 scripts/cpu/extract_signatures.py [--archs x86 arm ...]
   python3 scripts/cpu/extract_signatures.py [--out custom_output.txt]
+  python3 scripts/cpu/extract_signatures.py [--src path/to/core_arch/src]
 
-Without --archs: processes all architectures found in ARCHS_DIR.
+Without --archs: processes every architecture in ARCHITECTURES.
 """
 
 import re
 import sys
 import argparse
+import subprocess
 from pathlib import Path
 
-# Folder needs to be copied from stdlib -> library/stdarch/crates/core_arch/src
-ARCHS_DIR = Path("archs")
+STDARCH_SUBPATH = Path("lib/rustlib/src/rust/library/stdarch/crates/core_arch/src")
+
+
+def default_src(toolchain: str | None) -> Path:
+    """stdarch inside the active (or given) toolchain's sysroot."""
+    cmd = ["rustc", "--print", "sysroot"] + ([] if toolchain is None else [])
+    if toolchain:
+        cmd = ["rustc", f"+{toolchain}", "--print", "sysroot"]
+    sysroot = subprocess.run(cmd, capture_output=True, text=True, check=True).stdout.strip()
+    return Path(sysroot) / STDARCH_SUBPATH
 
 # Architecture directories to scan
 ARCHITECTURES = [
@@ -210,9 +224,29 @@ def main() -> None:
     )
     parser.add_argument(
         "--out", metavar="PATH",
-        help="Write output to this file. Default: hodow_core/src/cpu/signatures.txt",
+        help="Write output to this file. Default: data/cpu/signatures.txt",
+    )
+    parser.add_argument(
+        "--src", metavar="DIR",
+        help="stdarch core_arch/src to read. Default: the toolchain's own, via `rustc --print sysroot`.",
+    )
+    parser.add_argument(
+        "--toolchain", metavar="NAME",
+        help="Toolchain to take stdarch from (e.g. nightly-2026-08-21). Default: the active one.",
     )
     args = parser.parse_args()
+
+    if args.src:
+        archs_dir = Path(args.src)
+    else:
+        archs_dir = default_src(args.toolchain)
+        if not archs_dir.is_dir():
+            parser.error(
+                f"{archs_dir} not found - the toolchain has no `rust-src` component.\n"
+                f"Install it with: rustup component add rust-src"
+                + (f" --toolchain {args.toolchain}" if args.toolchain else "")
+            )
+    print(f"Reading stdarch from {archs_dir}", file=sys.stderr)
 
     only_stems: set[str] | None = None
     if args.files:
@@ -224,7 +258,7 @@ def main() -> None:
     sections: dict[str, list[tuple[int, str, str | None]]] = {}
 
     for arch in archs_to_process:
-        arch_dir = ARCHS_DIR / arch
+        arch_dir = archs_dir / arch
         if not arch_dir.exists() or not arch_dir.is_dir():
             print(f"Warning: Architecture directory {arch_dir} not found, skipping", file=sys.stderr)
             continue
@@ -247,7 +281,7 @@ def main() -> None:
     output = "\n".join(lines_out)
 
     # Default output path
-    out_path = Path(args.out) if args.out else Path("hodow_core/src/cpu/signatures.txt")
+    out_path = Path(args.out) if args.out else Path("data/cpu/signatures.txt")
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(output)

@@ -1,0 +1,98 @@
+# Expected values captured from real hardware for this extension's generated tests.
+# Format: test_name - rust_expr
+#
+# One file per (architecture, extension) - written by scripts/cpu/capture_expected.py and
+# capture_expected_cross.py, read by generate_tests.py. Do not hand-edit: recapture instead.
+# A qemu-derived value is not a real-silicon one; see CLAUDE.md's "Non-x86 architectures".
+
+test_x86_sse42_mm_cmpestrc - 1
+test_x86_sse42_mm_cmpestrc_boundary_allones - 1
+test_x86_sse42_mm_cmpestrc_boundary_max - 1
+test_x86_sse42_mm_cmpestrc_boundary_min - 1
+test_x86_sse42_mm_cmpestrc_boundary_mixed - 1
+test_x86_sse42_mm_cmpestrc_boundary_zero - 1
+test_x86_sse42_mm_cmpestrc_imm_0 - 1
+test_x86_sse42_mm_cmpestrc_imm_1 - 1
+test_x86_sse42_mm_cmpestrc_normal2 - 1
+test_x86_sse42_mm_cmpestri - 1
+test_x86_sse42_mm_cmpestri_asym_max_min - 16
+test_x86_sse42_mm_cmpestri_asym_min_max - 16
+test_x86_sse42_mm_cmpestri_imm_0 - 1
+test_x86_sse42_mm_cmpestri_imm_1 - 1
+test_x86_sse42_mm_cmpestri_normal2 - 1
+test_x86_sse42_mm_cmpestri_normal3 - 16
+test_x86_sse42_mm_cmpestrm - [750, 0, 0, 0]
+test_x86_sse42_mm_cmpestrm_boundary_allones - [3, 0, 0, 0]
+test_x86_sse42_mm_cmpestrm_boundary_max - [3, 0, 0, 0]
+test_x86_sse42_mm_cmpestrm_boundary_min - [3, 0, 0, 0]
+test_x86_sse42_mm_cmpestrm_boundary_mixed - [3, 0, 0, 0]
+test_x86_sse42_mm_cmpestrm_boundary_zero - [3, 0, 0, 0]
+test_x86_sse42_mm_cmpestrm_imm_0 - [750, 0, 0, 0]
+test_x86_sse42_mm_cmpestrm_imm_1 - [170, 0, 0, 0]
+test_x86_sse42_mm_cmpestrm_normal2 - [2, 0, 0, 0]
+test_x86_sse42_mm_cmpestro_boundary_allones - 1
+test_x86_sse42_mm_cmpestro_boundary_max - 1
+test_x86_sse42_mm_cmpestro_boundary_min - 1
+test_x86_sse42_mm_cmpestro_boundary_mixed - 1
+test_x86_sse42_mm_cmpestro_boundary_zero - 1
+test_x86_sse42_mm_cmpestrs - 1
+test_x86_sse42_mm_cmpestrs_asym_max_min - 1
+test_x86_sse42_mm_cmpestrs_asym_min_max - 1
+test_x86_sse42_mm_cmpestrs_boundary_allones - 1
+test_x86_sse42_mm_cmpestrs_boundary_max - 1
+test_x86_sse42_mm_cmpestrs_boundary_min - 1
+test_x86_sse42_mm_cmpestrs_boundary_mixed - 1
+test_x86_sse42_mm_cmpestrs_boundary_zero - 1
+test_x86_sse42_mm_cmpestrs_imm_0 - 1
+test_x86_sse42_mm_cmpestrs_imm_1 - 1
+test_x86_sse42_mm_cmpestrs_normal2 - 1
+test_x86_sse42_mm_cmpestrs_normal3 - 1
+test_x86_sse42_mm_cmpestrz - 1
+test_x86_sse42_mm_cmpestrz_asym_max_min - 1
+test_x86_sse42_mm_cmpestrz_asym_min_max - 1
+test_x86_sse42_mm_cmpestrz_boundary_allones - 1
+test_x86_sse42_mm_cmpestrz_boundary_max - 1
+test_x86_sse42_mm_cmpestrz_boundary_min - 1
+test_x86_sse42_mm_cmpestrz_boundary_mixed - 1
+test_x86_sse42_mm_cmpestrz_boundary_zero - 1
+test_x86_sse42_mm_cmpestrz_imm_0 - 1
+test_x86_sse42_mm_cmpestrz_normal2 - 1
+test_x86_sse42_mm_cmpestrz_normal3 - 1
+test_x86_sse42_mm_cmpistra_asym_min_max - 1
+test_x86_sse42_mm_cmpistrc_boundary_allones - 1
+test_x86_sse42_mm_cmpistrc_boundary_max - 1
+test_x86_sse42_mm_cmpistri - 16
+test_x86_sse42_mm_cmpistri_asym_max_min - 16
+test_x86_sse42_mm_cmpistri_asym_min_max - 16
+test_x86_sse42_mm_cmpistri_boundary_min - 16
+test_x86_sse42_mm_cmpistri_boundary_mixed - 16
+test_x86_sse42_mm_cmpistri_boundary_zero - 16
+test_x86_sse42_mm_cmpistri_imm_0 - 16
+test_x86_sse42_mm_cmpistri_imm_1 - 8
+test_x86_sse42_mm_cmpistri_normal2 - 16
+test_x86_sse42_mm_cmpistri_normal3 - 16
+test_x86_sse42_mm_cmpistrm_boundary_allones - [65535, 0, 0, 0]
+test_x86_sse42_mm_cmpistrm_boundary_max - [65535, 0, 0, 0]
+test_x86_sse42_mm_cmpistro_boundary_allones - 1
+test_x86_sse42_mm_cmpistro_boundary_max - 1
+test_x86_sse42_mm_cmpistrs - 1
+test_x86_sse42_mm_cmpistrs_asym_min_max - 1
+test_x86_sse42_mm_cmpistrs_boundary_min - 1
+test_x86_sse42_mm_cmpistrs_boundary_mixed - 1
+test_x86_sse42_mm_cmpistrs_boundary_zero - 1
+test_x86_sse42_mm_cmpistrs_imm_0 - 1
+test_x86_sse42_mm_cmpistrs_imm_1 - 1
+test_x86_sse42_mm_cmpistrs_normal2 - 1
+test_x86_sse42_mm_cmpistrs_normal3 - 1
+test_x86_sse42_mm_cmpistrz - 1
+test_x86_sse42_mm_cmpistrz_asym_max_min - 1
+test_x86_sse42_mm_cmpistrz_boundary_min - 1
+test_x86_sse42_mm_cmpistrz_boundary_mixed - 1
+test_x86_sse42_mm_cmpistrz_boundary_zero - 1
+test_x86_sse42_mm_cmpistrz_imm_0 - 1
+test_x86_sse42_mm_cmpistrz_imm_1 - 1
+test_x86_sse42_mm_cmpistrz_normal2 - 1
+test_x86_sse42_mm_cmpistrz_normal3 - 1
+test_x86_sse42_mm_crc32_u16 - 887597209
+test_x86_sse42_mm_crc32_u32 - 1646430521
+test_x86_sse42_mm_crc32_u8 - 324072436
