@@ -207,6 +207,7 @@ modules/gles3/functional/es3fApiCase.hpp
 modules/gles3/functional/es3fFunctionalTests.cpp
 modules/gles3/functional/es3fNegativeBufferApiTests.cpp
 modules/gles3/functional/es3fNegativeFragmentApiTests.cpp
+modules/gles3/functional/es3fNegativeStateApiTests.cpp
 modules/gles3/functional/es3fNegativeVertexArrayApiTests.cpp
 
 # --- OpenGL ES 3.1 tests (deqp::gles31) --------------------------------------------
