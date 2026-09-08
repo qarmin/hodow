@@ -19,6 +19,7 @@ pub mod light_amount_test;
 pub mod multisampled_render_to_texture_tests;
 pub mod negative_api;
 pub mod prerequisite_tests;
+pub mod shader_frag_data_tests;
 pub mod state_query;
 
 use crate::glu::TestCaseGroup;
@@ -35,7 +36,18 @@ pub fn create_tests() -> TestCaseGroup {
     group.add_child(buffer_write_tests::create_tests());
     group.add_child(light_amount_test::create_tests());
     group.add_child(multisampled_render_to_texture_tests::create_tests());
+    group.add_child(create_shaders_tests());
     group.add_child(negative_api::create_tests());
     group.add_child(state_query::create_tests());
+    group
+}
+
+/// `ShadersTestGroup::init`, restricted to the sub-groups that are ported. The rest of
+/// its 29 children are the `gls::ShaderLibrary`-driven ones (`preprocessor`,
+/// `constants`, ...) and the `gls::ShaderRenderCase`-driven ones (`indexing`, `loops`,
+/// `operator`, ...); neither framework is ported yet.
+fn create_shaders_tests() -> TestCaseGroup {
+    let mut group = TestCaseGroup::new("shaders");
+    group.add_child(shader_frag_data_tests::create_tests());
     group
 }

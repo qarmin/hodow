@@ -51,6 +51,7 @@ sub-group.
 | `dEQP-GLES2.functional.buffer.*` | 49 of 49 | - |
 | `dEQP-GLES2.functional.light_amount.*` | 19 of 19 | - |
 | `dEQP-GLES2.functional.multisampled_render_to_texture.*` | 1 of 1 | - |
+| `dEQP-GLES2.functional.shaders.fragdata.*` | 3 of 7 | the four `gls::ShaderLibrary`-driven ones (`invalid_assign_to_1`, `write_fragcolor_and_fragdata_*`) |
 | `dEQP-GLES2.functional.negative_api.*` | 246 of 246 | - |
 | `dEQP-GLES2.functional.state_query.*` | 396 of 396 | - |
 | `dEQP-GLES3.info.*` | 6 of 6 | - |

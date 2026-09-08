@@ -192,6 +192,8 @@ modules/gles2/functional/es2fNegativeTextureApiTests.cpp
 modules/gles2/functional/es2fNegativeVertexArrayApiTests.cpp
 modules/gles2/functional/es2fPrerequisiteTests.cpp
 modules/gles2/functional/es2fPrerequisiteTests.hpp
+modules/gles2/functional/es2fShaderFragDataTests.cpp
+modules/gles2/functional/es2fShaderFragDataTests.hpp
 modules/gles2/functional/es2fRboStateQueryTests.cpp
 modules/gles2/functional/es2fRboStateQueryTests.hpp
 modules/gles2/functional/es2fShaderStateQueryTests.cpp
