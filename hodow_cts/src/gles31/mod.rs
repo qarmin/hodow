@@ -11,12 +11,13 @@
 
 pub mod functional;
 
-use crate::glu::TestCaseGroup;
+use crate::glu::{TestCaseGroup, info_tests};
 
 /// `TestPackage::init` for `dEQP-GLES31` - the root group's children, in upstream's
 /// order.
 pub fn create_tests() -> TestCaseGroup {
     let mut root = TestCaseGroup::new("dEQP-GLES31");
+    root.add_child(info_tests::create_tests());
     root.add_child(functional::create_tests());
     root
 }
