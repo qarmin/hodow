@@ -9,15 +9,15 @@
 //
 // Modifications: rewritten in Rust for hodow_cts.
 //
-// The eight image cases (copy_image_to_ssbo, copy_ssbo_to_image, image_atomic_op,
-// image_barrier) are not ported yet and are deliberately not registered: a case in the
-// tree that runs nothing would inflate the coverage number. Everything else in
-// upstream's `basic` group is here, in upstream's order.
+// Six of the eight image cases (copy_ssbo_to_image, image_atomic_op, image_barrier)
+// are not ported yet and are deliberately not registered: a case in the tree that runs
+// nothing would inflate the coverage number. Everything else in upstream's `basic`
+// group is here, in upstream's order.
 
 use crate::glu::objects::BufferMemMap;
-use crate::glu::{self, Buffer, Context, ProgramSources, ShaderProgram, TestCase, TestCaseGroup};
+use crate::glu::{self, Buffer, Context, ProgramSources, ShaderProgram, TestCase, TestCaseGroup, Texture};
 use crate::glw::{self, GLuint};
-use crate::tcu::{IVec3, Random, TestError, TestOutcome, TestStatus, multiply_components};
+use crate::tcu::{IVec2, IVec3, Random, TestError, TestOutcome, TestStatus, multiply_components};
 
 /// The GLSL that every case in this group shares: the `#version` line, then a
 /// `local_size` layout built from the case's own work-group shape.
@@ -917,6 +917,125 @@ impl TestCase for SharedVarAtomicOpCase {
     }
 }
 
+/// `CopyImageToSSBOCase`
+struct CopyImageToSSBOCase {
+    name: String,
+    local_size: IVec2,
+    image_size: IVec2,
+}
+
+impl TestCase for CopyImageToSSBOCase {
+    fn name(&self) -> &str {
+        &self.name
+    }
+
+    fn iterate(&self, context: &Context) -> TestOutcome {
+        assert_eq!(self.image_size.x() % self.local_size.x(), 0);
+        assert_eq!(self.image_size.y() % self.local_size.y(), 0);
+
+        let source = format!(
+            "{version}\n\
+             layout (local_size_x = {local_x}, local_size_y = {local_y}) in;\n\
+             layout(r32ui, binding = 1) readonly uniform highp uimage2D u_srcImg;\n\
+             layout(binding = 0) buffer Output {{\n    uint values[{num_values}];\n}} sb_out;\n\n\
+             void main (void) {{\n\
+             \x20   uint stride = gl_NumWorkGroups.x*gl_WorkGroupSize.x;\n\
+             \x20   uint value  = imageLoad(u_srcImg, ivec2(gl_GlobalInvocationID.xy)).x;\n\
+             \x20   sb_out.values[gl_GlobalInvocationID.y*stride + gl_GlobalInvocationID.x] = value;\n\
+             }}\n",
+            version = context.context_type().glsl_version().declaration(),
+            local_x = self.local_size.x(),
+            local_y = self.local_size.y(),
+            num_values = self.image_size.x() * self.image_size.y(),
+        );
+
+        let gl = context.gl();
+        let output_buffer = Buffer::new(gl);
+        let input_texture = Texture::new(gl);
+        let program = build(gl, &source)?;
+        let work_size = IVec2::new(self.image_size.x() / self.local_size.x(), self.image_size.y() / self.local_size.y());
+        let mut rnd = Random::new(0xab2c7);
+        let mut input_values = vec![0u32; (self.image_size.x() * self.image_size.y()) as usize];
+
+        log::debug!("Work groups: {:?}", work_size.m_data);
+
+        // SAFETY: a current context; every pointer below is to a live local.
+        unsafe {
+            gl.use_program(program.program());
+
+            // Input values
+            for value in &mut input_values {
+                *value = rnd.get_uint32();
+            }
+
+            // Input image setup
+            gl.bind_texture(glw::GL_TEXTURE_2D, input_texture.get());
+            gl.tex_storage_2d(glw::GL_TEXTURE_2D, 1, glw::GL_R32UI, self.image_size.x(), self.image_size.y());
+            gl.tex_sub_image_2d(
+                glw::GL_TEXTURE_2D,
+                0,
+                0,
+                0,
+                self.image_size.x(),
+                self.image_size.y(),
+                glw::GL_RED_INTEGER,
+                glw::GL_UNSIGNED_INT,
+                input_values.as_ptr().cast(),
+            );
+            gl.tex_parameteri(glw::GL_TEXTURE_2D, glw::GL_TEXTURE_MIN_FILTER, glw::GL_NEAREST as i32);
+            gl.tex_parameteri(glw::GL_TEXTURE_2D, glw::GL_TEXTURE_MAG_FILTER, glw::GL_NEAREST as i32);
+            glu::expect_no_error(gl, "Uploading image data failed")?;
+
+            // Bind to unit 1
+            gl.bind_image_texture(1, input_texture.get(), 0, glw::FALSE, 0, glw::GL_READ_ONLY, glw::GL_R32UI);
+            glu::expect_no_error(gl, "Image setup failed")?;
+
+            // Output buffer setup
+            {
+                let block_index = resource_index(gl, program.program(), glw::GL_SHADER_STORAGE_BLOCK, "Output")?;
+                let block_size = glu::get_program_resource_int(gl, program.program(), glw::GL_SHADER_STORAGE_BLOCK, block_index, glw::GL_BUFFER_DATA_SIZE)?;
+
+                gl.bind_buffer(glw::GL_SHADER_STORAGE_BUFFER, output_buffer.get());
+                gl.buffer_data(glw::GL_SHADER_STORAGE_BUFFER, block_size as isize, std::ptr::null(), glw::GL_STREAM_READ);
+                gl.bind_buffer_base(glw::GL_SHADER_STORAGE_BUFFER, 0, output_buffer.get());
+                glu::expect_no_error(gl, "Output buffer setup failed")?;
+            }
+
+            // Dispatch compute workload
+            gl.dispatch_compute(work_size.x() as u32, work_size.y() as u32, 1);
+            glu::expect_no_error(gl, "glDispatchCompute()")?;
+
+            // Read back and compare
+            {
+                let block_index = resource_index(gl, program.program(), glw::GL_SHADER_STORAGE_BLOCK, "Output")?;
+                let block_size = glu::get_program_resource_int(gl, program.program(), glw::GL_SHADER_STORAGE_BLOCK, block_index, glw::GL_BUFFER_DATA_SIZE)?;
+                let value_index = resource_index(gl, program.program(), glw::GL_BUFFER_VARIABLE, "Output.values")?;
+                let value_info = glu::get_program_interface_variable_info(gl, program.program(), glw::GL_BUFFER_VARIABLE, value_index)?;
+                let map = BufferMemMap::new(gl, glw::GL_SHADER_STORAGE_BUFFER, 0, block_size as isize, glw::GL_MAP_READ_BIT)
+                    .ok_or_else(|| TestError::Fail("glMapBufferRange() returned null".to_string()))?;
+
+                if value_info.array_size as usize != input_values.len() {
+                    return Err(TestError::Fail(format!(
+                        "Output.values has {} elements, expected {}",
+                        value_info.array_size,
+                        input_values.len()
+                    )));
+                }
+
+                let results: Vec<u32> = map.read_strided(value_info.offset as usize, value_info.array_stride as usize, value_info.array_size as usize);
+
+                for (ndx, (&res, &reference)) in results.iter().zip(input_values.iter()).enumerate() {
+                    if res != reference {
+                        return Err(TestError::Fail(format!("Comparison failed for Output.values[{ndx}]")));
+                    }
+                }
+            }
+        }
+
+        Ok(TestStatus::pass("Pass"))
+    }
+}
+
 /// `AtomicCounterCase`
 struct AtomicCounterCase {
     name: String,
@@ -1155,6 +1274,17 @@ pub fn create_tests() -> TestCaseGroup {
             name: name.to_string(),
             local_size,
             work_size,
+        }) as Box<dyn TestCase>);
+    }
+
+    for (name, local_size, image_size) in [
+        ("copy_image_to_ssbo_small", IVec2::new(1, 1), IVec2::new(64, 64)),
+        ("copy_image_to_ssbo_large", IVec2::new(2, 4), IVec2::new(512, 512)),
+    ] {
+        group.add_child(Box::new(CopyImageToSSBOCase {
+            name: name.to_string(),
+            local_size,
+            image_size,
         }) as Box<dyn TestCase>);
     }
 
