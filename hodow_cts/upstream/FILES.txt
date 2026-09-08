@@ -204,6 +204,10 @@ modules/gles2/functional/es2fTextureStateQueryTests.hpp
 # --- OpenGL ES 3.0 tests (deqp::gles3) ---------------------------------------------
 modules/gles3/functional/es3fApiCase.cpp
 modules/gles3/functional/es3fApiCase.hpp
+modules/gles3/functional/es3fColorClearTest.cpp
+modules/gles3/functional/es3fColorClearTest.hpp
+modules/gles3/functional/es3fDepthStencilClearTests.cpp
+modules/gles3/functional/es3fDepthStencilClearTests.hpp
 modules/gles3/functional/es3fFunctionalTests.cpp
 modules/gles3/functional/es3fNegativeBufferApiTests.cpp
 modules/gles3/functional/es3fNegativeFragmentApiTests.cpp
@@ -211,6 +215,8 @@ modules/gles3/functional/es3fNegativeShaderApiTests.cpp
 modules/gles3/functional/es3fNegativeShaderApiTests.hpp
 modules/gles3/functional/es3fNegativeStateApiTests.cpp
 modules/gles3/functional/es3fNegativeVertexArrayApiTests.cpp
+modules/gles3/functional/es3fPrerequisiteTests.cpp
+modules/gles3/functional/es3fPrerequisiteTests.hpp
 
 # --- OpenGL ES 3.1 tests (deqp::gles31) --------------------------------------------
 modules/gles31/functional/es31fBasicComputeShaderTests.cpp

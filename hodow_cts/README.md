@@ -54,6 +54,9 @@ sub-group.
 | `dEQP-GLES2.functional.negative_api.*` | 246 of 246 | - |
 | `dEQP-GLES2.functional.state_query.*` | 396 of 396 | - |
 | `dEQP-GLES3.info.*` | 6 of 6 | - |
+| `dEQP-GLES3.functional.prerequisite.*` | 3 of 3 | - |
+| `dEQP-GLES3.functional.color_clear.*` | 19 of 19 | - |
+| `dEQP-GLES3.functional.depth_stencil_clear.*` | 11 of 11 | - |
 | `dEQP-GLES3.functional.negative_api.*` | 211 of 314 | `texture` (103) |
 | `dEQP-GLES31.functional.compute.basic.*` | 33 of 41 | the eight image cases (`copy_image_to_ssbo`, `copy_ssbo_to_image`, `image_atomic_op`, `image_barrier`) |
 

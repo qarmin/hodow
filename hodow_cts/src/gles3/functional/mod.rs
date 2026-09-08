@@ -9,7 +9,10 @@
 //
 // Modifications: rewritten in Rust for hodow_cts.
 
+pub mod color_clear_test;
+pub mod depth_stencil_clear_tests;
 pub mod negative_api;
+pub mod prerequisite_tests;
 
 use crate::glu::TestCaseGroup;
 
@@ -17,6 +20,9 @@ use crate::glu::TestCaseGroup;
 /// relative order from upstream.
 pub fn create_tests() -> TestCaseGroup {
     let mut group = TestCaseGroup::new("functional");
+    group.add_child(prerequisite_tests::create_tests());
+    group.add_child(color_clear_test::create_tests());
+    group.add_child(depth_stencil_clear_tests::create_tests());
     group.add_child(negative_api::create_tests());
     group
 }
