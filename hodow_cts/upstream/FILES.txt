@@ -218,6 +218,7 @@ modules/gles3/functional/es3fNegativeFragmentApiTests.cpp
 modules/gles3/functional/es3fNegativeShaderApiTests.cpp
 modules/gles3/functional/es3fNegativeShaderApiTests.hpp
 modules/gles3/functional/es3fNegativeStateApiTests.cpp
+modules/gles3/functional/es3fNegativeTextureApiTests.cpp
 modules/gles3/functional/es3fNegativeVertexArrayApiTests.cpp
 modules/gles3/functional/es3fPrerequisiteTests.cpp
 modules/gles3/functional/es3fPrerequisiteTests.hpp

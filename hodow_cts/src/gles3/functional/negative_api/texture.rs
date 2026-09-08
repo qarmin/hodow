@@ -1,0 +1,418 @@
+// SPDX-License-Identifier: Apache-2.0
+//
+// Derived from VK-GL-CTS:
+//   modules/gles3/functional/es3fNegativeTextureApiTests.cpp
+// Upstream revision: see hodow_cts/upstream/COMMIT
+//
+// Copyright 2014 The Android Open Source Project
+// Licensed under the Apache License, Version 2.0 (see LICENSE at the repo root).
+//
+// Modifications: rewritten in Rust for hodow_cts. Each `ES3F_ADD_API_CASE` body is a
+// function and the registration is a table of them; see the note in
+// `gles2/functional/negative_api/buffer.rs`.
+//
+// **11 of upstream's 103 cases are here** - `activetexture`, `bindtexture` and the
+// nine non-ASTC `compressedteximage2d_*` cases, i.e. the start of the file in
+// upstream's order. Still to come: `compressedteximage2d_invalid_astc_target` (and its
+// 3D and texstorage3d siblings), which need `tcu::mapGLCompressedTexFormat` /
+// `getBlockPixelSize` / `getBlockSize` - none of which is ported - and then
+// `copyteximage2d_*` onwards.
+//
+// Upstream's `isES` branches are resolved here: `ApiType` in this port is ES-only by
+// construction (see `Api::gl_api_type`), so only the ES branch is written.
+
+use crate::glu::{ApiCase, ApiCaseFn, TestCaseGroup, add_api_cases};
+use crate::glw::{self, GLenum, GLint, GLuint};
+
+/// `divRoundUp`
+fn div_round_up(a: i32, b: i32) -> i32 {
+    a / b + i32::from(a % b != 0)
+}
+
+/// `etc2DataSize` - one 64-bit block per 4x4 pixels.
+fn etc2_data_size(width: i32, height: i32) -> i32 {
+    div_round_up(width, 4) * div_round_up(height, 4) * 8
+}
+
+/// `etc2EacDataSize`
+fn etc2_eac_data_size(width: i32, height: i32) -> i32 {
+    2 * etc2_data_size(width, height)
+}
+
+/// `FOR_CUBE_FACES`'s six targets, in `cubeFaceToGLFace(tcu::CubeFace)` order.
+///
+/// The cases below list them out one by one instead, because upstream does: each face
+/// gets its own log section there, and the order it writes them in is the
+/// GL_TEXTURE_CUBE_MAP_* declaration order, not `tcu::CubeFace`'s.
+const CUBE_FACE_TEX_TARGETS: [GLenum; 6] = [
+    glw::GL_TEXTURE_CUBE_MAP_POSITIVE_X,
+    glw::GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
+    glw::GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
+    glw::GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
+    glw::GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
+    glw::GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,
+];
+
+/// `deLog2Floor32`
+fn de_log2_floor32(a: GLint) -> GLint {
+    31 - (a as u32).leading_zeros() as GLint
+}
+
+// glActiveTexture
+
+fn activetexture(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    case.section("GL_INVALID_ENUM is generated if texture is not one of GL_TEXTUREi, where i ranges from 0 to (GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS - 1).");
+    // SAFETY: a current context; the enum is invalid on purpose.
+    unsafe { gl.active_texture(glw::GL_NONE.wrapping_sub(1)) };
+    case.expect_error(glw::GL_INVALID_ENUM);
+    let num_max_texture_units = case.get_int(glw::GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS);
+    // SAFETY: as above; one past the last texture unit.
+    unsafe { gl.active_texture(glw::GL_TEXTURE0 + num_max_texture_units as GLenum) };
+    case.expect_error(glw::GL_INVALID_ENUM);
+}
+
+// glBindTexture
+
+fn bindtexture(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    let mut texture = [0u32; 2];
+    // SAFETY: two names asked for, two GLuint of room; both are deleted at the end.
+    unsafe { gl.gen_textures(2, texture.as_mut_ptr()) };
+
+    case.section("GL_INVALID_ENUM is generated if target is not one of the allowable values.");
+    // SAFETY: a current context; no pointer is involved.
+    unsafe {
+        gl.bind_texture(0, 1);
+        case.expect_error(glw::GL_INVALID_ENUM);
+        gl.bind_texture(glw::GL_FRAMEBUFFER, 1);
+        case.expect_error(glw::GL_INVALID_ENUM);
+    }
+
+    case.section("GL_INVALID_OPERATION is generated if texture was previously created with a target that doesn't match that of target.");
+    // SAFETY: both names are this case's own.
+    unsafe {
+        gl.bind_texture(glw::GL_TEXTURE_2D, texture[0]);
+        case.expect_error(glw::GL_NO_ERROR);
+        gl.bind_texture(glw::GL_TEXTURE_CUBE_MAP, texture[0]);
+        case.expect_error(glw::GL_INVALID_OPERATION);
+        gl.bind_texture(glw::GL_TEXTURE_3D, texture[0]);
+        case.expect_error(glw::GL_INVALID_OPERATION);
+        gl.bind_texture(glw::GL_TEXTURE_2D_ARRAY, texture[0]);
+        case.expect_error(glw::GL_INVALID_OPERATION);
+        gl.bind_texture(glw::GL_TEXTURE_CUBE_MAP, texture[1]);
+        case.expect_error(glw::GL_NO_ERROR);
+        gl.bind_texture(glw::GL_TEXTURE_2D, texture[1]);
+        case.expect_error(glw::GL_INVALID_OPERATION);
+        gl.bind_texture(glw::GL_TEXTURE_3D, texture[1]);
+        case.expect_error(glw::GL_INVALID_OPERATION);
+        gl.bind_texture(glw::GL_TEXTURE_2D_ARRAY, texture[1]);
+        case.expect_error(glw::GL_INVALID_OPERATION);
+    }
+
+    // SAFETY: both names are this case's own.
+    unsafe { gl.delete_textures(2, texture.as_ptr()) };
+}
+
+// glCompressedTexImage2D
+
+fn compressedteximage2d_invalid_target(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    case.section("GL_INVALID_ENUM is generated if target is invalid.");
+    // SAFETY: a null data pointer with imageSize 0, as upstream passes; every call is
+    // rejected for its target before anything is read.
+    unsafe {
+        gl.compressed_tex_image_2d(0, 0, glw::GL_COMPRESSED_RGBA8_ETC2_EAC, 0, 0, 0, 0, std::ptr::null());
+        case.expect_error(glw::GL_INVALID_ENUM);
+        gl.compressed_tex_image_2d(glw::GL_TEXTURE_CUBE_MAP, 0, glw::GL_COMPRESSED_RGBA8_ETC2_EAC, 0, 0, 0, 0, std::ptr::null());
+        case.expect_error(glw::GL_INVALID_ENUM);
+    }
+}
+
+fn compressedteximage2d_invalid_format(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    case.section("GL_INVALID_ENUM is generated if internalformat is not a supported format returned in GL_COMPRESSED_TEXTURE_FORMATS.");
+    // SAFETY: as in `compressedteximage2d_invalid_target`.
+    unsafe {
+        gl.compressed_tex_image_2d(glw::GL_TEXTURE_2D, 0, 0, 0, 0, 0, 0, std::ptr::null());
+        case.expect_error(glw::GL_INVALID_ENUM);
+        gl.compressed_tex_image_2d(glw::GL_TEXTURE_2D, 0, glw::GL_RGBA, 0, 0, 0, 0, std::ptr::null());
+        case.expect_error(glw::GL_INVALID_ENUM);
+        gl.compressed_tex_image_2d(glw::GL_TEXTURE_2D, 0, glw::GL_RGBA32F, 0, 0, 0, 0, std::ptr::null());
+        case.expect_error(glw::GL_INVALID_ENUM);
+        for target in CUBE_FACE_TEX_TARGETS {
+            gl.compressed_tex_image_2d(target, 0, 0, 0, 0, 0, 0, std::ptr::null());
+            case.expect_error(glw::GL_INVALID_ENUM);
+        }
+    }
+}
+
+fn compressedteximage2d_neg_level(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    case.section("GL_INVALID_VALUE is generated if level is less than 0.");
+    // SAFETY: as above.
+    unsafe {
+        gl.compressed_tex_image_2d(glw::GL_TEXTURE_2D, -1, glw::GL_COMPRESSED_RGBA8_ETC2_EAC, 0, 0, 0, 0, std::ptr::null());
+        case.expect_error(glw::GL_INVALID_VALUE);
+        for target in CUBE_FACE_TEX_TARGETS {
+            gl.compressed_tex_image_2d(target, -1, glw::GL_COMPRESSED_RGBA8_ETC2_EAC, 0, 0, 0, 0, std::ptr::null());
+            case.expect_error(glw::GL_INVALID_VALUE);
+        }
+    }
+}
+
+fn compressedteximage2d_max_level(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    case.section("GL_INVALID_VALUE is generated if level is greater than log_2(GL_MAX_TEXTURE_SIZE) for a 2d texture target.");
+    let log2_max_texture_size = de_log2_floor32(case.get_int(glw::GL_MAX_TEXTURE_SIZE)) + 1;
+    // SAFETY: a null data pointer, so the imageSize argument is only ever validated
+    // against the dimensions, never dereferenced.
+    unsafe {
+        gl.compressed_tex_image_2d(
+            glw::GL_TEXTURE_2D,
+            log2_max_texture_size,
+            glw::GL_COMPRESSED_RGB8_ETC2,
+            16,
+            16,
+            0,
+            etc2_data_size(16, 16),
+            std::ptr::null(),
+        );
+    }
+    case.expect_error(glw::GL_INVALID_VALUE);
+
+    case.section("GL_INVALID_VALUE is generated if level is greater than log_2(GL_MAX_CUBE_MAP_TEXTURE_SIZE) for a cubemap target.");
+    let log2_max_cubemap_size = de_log2_floor32(case.get_int(glw::GL_MAX_CUBE_MAP_TEXTURE_SIZE)) + 1;
+    // SAFETY: as above.
+    unsafe {
+        for target in CUBE_FACE_TEX_TARGETS {
+            gl.compressed_tex_image_2d(
+                target,
+                log2_max_cubemap_size,
+                glw::GL_COMPRESSED_RGBA8_ETC2_EAC,
+                16,
+                16,
+                0,
+                etc2_eac_data_size(16, 16),
+                std::ptr::null(),
+            );
+            case.expect_error(glw::GL_INVALID_VALUE);
+        }
+    }
+}
+
+fn compressedteximage2d_neg_width_height(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    case.section("GL_INVALID_VALUE is generated if width or height is less than 0.");
+
+    case.section("GL_TEXTURE_2D target");
+    // SAFETY: a null data pointer with imageSize 0 throughout.
+    unsafe {
+        gl.compressed_tex_image_2d(glw::GL_TEXTURE_2D, 0, glw::GL_COMPRESSED_RGBA8_ETC2_EAC, -1, 0, 0, 0, std::ptr::null());
+        case.expect_error(glw::GL_INVALID_VALUE);
+        gl.compressed_tex_image_2d(glw::GL_TEXTURE_2D, 0, glw::GL_COMPRESSED_RGBA8_ETC2_EAC, 0, -1, 0, 0, std::ptr::null());
+        case.expect_error(glw::GL_INVALID_VALUE);
+        gl.compressed_tex_image_2d(glw::GL_TEXTURE_2D, 0, glw::GL_COMPRESSED_RGBA8_ETC2_EAC, -1, -1, 0, 0, std::ptr::null());
+        case.expect_error(glw::GL_INVALID_VALUE);
+    }
+
+    for target in CUBE_FACE_TEX_TARGETS {
+        case.section(&format!("{target:#x} target"));
+        // SAFETY: as above.
+        unsafe {
+            gl.compressed_tex_image_2d(target, 0, glw::GL_COMPRESSED_RGBA8_ETC2_EAC, -1, 0, 0, 0, std::ptr::null());
+            case.expect_error(glw::GL_INVALID_VALUE);
+            gl.compressed_tex_image_2d(target, 0, glw::GL_COMPRESSED_RGBA8_ETC2_EAC, 0, -1, 0, 0, std::ptr::null());
+            case.expect_error(glw::GL_INVALID_VALUE);
+            gl.compressed_tex_image_2d(target, 0, glw::GL_COMPRESSED_RGBA8_ETC2_EAC, -1, -1, 0, 0, std::ptr::null());
+            case.expect_error(glw::GL_INVALID_VALUE);
+        }
+    }
+}
+
+fn compressedteximage2d_max_width_height(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    let max_texture_size = case.get_int(glw::GL_MAX_TEXTURE_SIZE) + 1;
+    let max_cubemap_size = case.get_int(glw::GL_MAX_CUBE_MAP_TEXTURE_SIZE) + 1;
+
+    case.section("GL_INVALID_VALUE is generated if width or height is greater than GL_MAX_TEXTURE_SIZE.");
+
+    case.section("GL_TEXTURE_2D target");
+    // SAFETY: a null data pointer, so `imageSize` is only validated, never read
+    // through - which is what lets upstream name a size no allocation backs.
+    unsafe {
+        gl.compressed_tex_image_2d(
+            glw::GL_TEXTURE_2D,
+            0,
+            glw::GL_COMPRESSED_RGBA8_ETC2_EAC,
+            max_texture_size,
+            1,
+            0,
+            etc2_eac_data_size(max_texture_size, 1),
+            std::ptr::null(),
+        );
+        case.expect_error(glw::GL_INVALID_VALUE);
+        gl.compressed_tex_image_2d(
+            glw::GL_TEXTURE_2D,
+            0,
+            glw::GL_COMPRESSED_RGBA8_ETC2_EAC,
+            1,
+            max_texture_size,
+            0,
+            etc2_eac_data_size(1, max_texture_size),
+            std::ptr::null(),
+        );
+        case.expect_error(glw::GL_INVALID_VALUE);
+        gl.compressed_tex_image_2d(
+            glw::GL_TEXTURE_2D,
+            0,
+            glw::GL_COMPRESSED_RGBA8_ETC2_EAC,
+            max_texture_size,
+            max_texture_size,
+            0,
+            etc2_eac_data_size(max_texture_size, max_texture_size),
+            std::ptr::null(),
+        );
+        case.expect_error(glw::GL_INVALID_VALUE);
+    }
+
+    for target in CUBE_FACE_TEX_TARGETS {
+        case.section(&format!("{target:#x} target"));
+        // SAFETY: as above.
+        unsafe {
+            gl.compressed_tex_image_2d(
+                target,
+                0,
+                glw::GL_COMPRESSED_RGBA8_ETC2_EAC,
+                max_cubemap_size,
+                1,
+                0,
+                etc2_eac_data_size(max_cubemap_size, 1),
+                std::ptr::null(),
+            );
+            case.expect_error(glw::GL_INVALID_VALUE);
+            gl.compressed_tex_image_2d(
+                target,
+                0,
+                glw::GL_COMPRESSED_RGBA8_ETC2_EAC,
+                1,
+                max_cubemap_size,
+                0,
+                etc2_eac_data_size(1, max_cubemap_size),
+                std::ptr::null(),
+            );
+            case.expect_error(glw::GL_INVALID_VALUE);
+            gl.compressed_tex_image_2d(
+                target,
+                0,
+                glw::GL_COMPRESSED_RGBA8_ETC2_EAC,
+                max_cubemap_size,
+                max_cubemap_size,
+                0,
+                etc2_eac_data_size(max_cubemap_size, max_cubemap_size),
+                std::ptr::null(),
+            );
+            case.expect_error(glw::GL_INVALID_VALUE);
+        }
+    }
+}
+
+fn compressedteximage2d_invalid_border(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    let error = glw::GL_INVALID_VALUE;
+    case.section("GL_INVALID_VALUE is generated if border is not 0.");
+
+    case.section("GL_TEXTURE_2D target");
+    // SAFETY: a null data pointer with imageSize 0 throughout.
+    unsafe {
+        gl.compressed_tex_image_2d(glw::GL_TEXTURE_2D, 0, glw::GL_COMPRESSED_RGBA8_ETC2_EAC, 0, 0, 1, 0, std::ptr::null());
+        case.expect_error(error);
+        gl.compressed_tex_image_2d(glw::GL_TEXTURE_2D, 0, glw::GL_COMPRESSED_RGBA8_ETC2_EAC, 0, 0, -1, 0, std::ptr::null());
+        case.expect_error(error);
+    }
+
+    for target in CUBE_FACE_TEX_TARGETS {
+        case.section(&format!("{target:#x} target"));
+        // SAFETY: as above.
+        unsafe {
+            gl.compressed_tex_image_2d(target, 0, glw::GL_COMPRESSED_RGBA8_ETC2_EAC, 0, 0, 1, 0, std::ptr::null());
+            case.expect_error(error);
+            gl.compressed_tex_image_2d(target, 0, glw::GL_COMPRESSED_RGBA8_ETC2_EAC, 0, 0, -1, 0, std::ptr::null());
+            case.expect_error(error);
+        }
+    }
+}
+
+fn compressedteximage2d_invalid_size(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    case.section("GL_INVALID_VALUE is generated if imageSize is not consistent with the format, dimensions, and contents of the specified compressed image data.");
+    // SAFETY: a null data pointer, so every deliberately-wrong `imageSize` here is
+    // only compared against the dimensions, never used to read.
+    unsafe {
+        gl.compressed_tex_image_2d(glw::GL_TEXTURE_2D, 0, glw::GL_COMPRESSED_RGBA8_ETC2_EAC, 0, 0, 0, -1, std::ptr::null());
+        case.expect_error(glw::GL_INVALID_VALUE);
+        gl.compressed_tex_image_2d(glw::GL_TEXTURE_2D, 0, glw::GL_COMPRESSED_RGBA8_ETC2_EAC, 16, 16, 0, 4 * 4 * 8, std::ptr::null());
+        case.expect_error(glw::GL_INVALID_VALUE);
+        gl.compressed_tex_image_2d(glw::GL_TEXTURE_2D, 0, glw::GL_COMPRESSED_RGB8_ETC2, 16, 16, 0, 4 * 4 * 16, std::ptr::null());
+        case.expect_error(glw::GL_INVALID_VALUE);
+        gl.compressed_tex_image_2d(glw::GL_TEXTURE_2D, 0, glw::GL_COMPRESSED_SIGNED_R11_EAC, 16, 16, 0, 4 * 4 * 16, std::ptr::null());
+        case.expect_error(glw::GL_INVALID_VALUE);
+    }
+}
+
+fn compressedteximage2d_invalid_buffer_target(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    let mut buf: GLuint = 0;
+    let data = [0u8; 64];
+    // SAFETY: the name is this case's own and the 64-byte upload reads a 64-byte array.
+    unsafe {
+        gl.gen_buffers(1, &mut buf);
+        gl.bind_buffer(glw::GL_PIXEL_UNPACK_BUFFER, buf);
+        gl.buffer_data(glw::GL_PIXEL_UNPACK_BUFFER, 64, data.as_ptr().cast(), glw::GL_DYNAMIC_COPY);
+    }
+    case.expect_error(glw::GL_NO_ERROR);
+
+    case.section(
+        "GL_INVALID_OPERATION is generated if a non-zero buffer object name is bound to the GL_PIXEL_UNPACK_BUFFER target and the buffer object's data store is currently mapped.",
+    );
+    // SAFETY: with a pixel-unpack buffer bound, the last argument is an offset into
+    // that buffer, not a pointer - hence the null.
+    unsafe {
+        gl.map_buffer_range(glw::GL_PIXEL_UNPACK_BUFFER, 0, 32, glw::GL_MAP_WRITE_BIT);
+        gl.compressed_tex_image_2d(glw::GL_TEXTURE_2D, 0, glw::GL_COMPRESSED_RGB8_ETC2, 4, 4, 0, etc2_data_size(4, 4), std::ptr::null());
+        case.expect_error(glw::GL_INVALID_OPERATION);
+        gl.unmap_buffer(glw::GL_PIXEL_UNPACK_BUFFER);
+    }
+
+    case.section(
+        "GL_INVALID_OPERATION is generated if a non-zero buffer object name is bound to the GL_PIXEL_UNPACK_BUFFER target and the data would be unpacked from the buffer object such that the memory reads required would exceed the data store size.",
+    );
+    // SAFETY: as above; a 16x16 ETC2 image needs 128 bytes and the buffer holds 64.
+    unsafe {
+        gl.compressed_tex_image_2d(glw::GL_TEXTURE_2D, 0, glw::GL_COMPRESSED_RGB8_ETC2, 16, 16, 0, etc2_data_size(16, 16), std::ptr::null());
+    }
+    case.expect_error(glw::GL_INVALID_OPERATION);
+
+    // SAFETY: the name is this case's own.
+    unsafe { gl.delete_buffers(1, &buf) };
+}
+
+/// `NegativeTextureApiTests::init`, restricted to the 11 ported cases.
+pub fn create_tests() -> TestCaseGroup {
+    let mut group = TestCaseGroup::new("texture");
+    let cases: &[(&'static str, ApiCaseFn)] = &[
+        ("activetexture", activetexture),
+        ("bindtexture", bindtexture),
+        ("compressedteximage2d_invalid_target", compressedteximage2d_invalid_target),
+        ("compressedteximage2d_invalid_format", compressedteximage2d_invalid_format),
+        ("compressedteximage2d_neg_level", compressedteximage2d_neg_level),
+        ("compressedteximage2d_max_level", compressedteximage2d_max_level),
+        ("compressedteximage2d_neg_width_height", compressedteximage2d_neg_width_height),
+        ("compressedteximage2d_max_width_height", compressedteximage2d_max_width_height),
+        ("compressedteximage2d_invalid_border", compressedteximage2d_invalid_border),
+        ("compressedteximage2d_invalid_size", compressedteximage2d_invalid_size),
+        ("compressedteximage2d_invalid_buffer_target", compressedteximage2d_invalid_buffer_target),
+    ];
+    add_api_cases(&mut group, cases);
+    group
+}
