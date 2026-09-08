@@ -8,10 +8,12 @@
 // Licensed under the Apache License, Version 2.0 (see LICENSE at the repo root).
 //
 // Modifications: rewritten in Rust for hodow_cts. Upstream registers six sub-groups
-// here; `texture` and `shader` are not ported yet.
+// here; `texture` is not ported yet, and `shader` is 29 of its 63 cases (see the
+// note at the top of `shader.rs`).
 
 pub mod buffer;
 pub mod fragment;
+pub mod shader;
 pub mod state;
 pub mod vertex_array;
 
@@ -21,6 +23,7 @@ use crate::glu::TestCaseGroup;
 pub fn create_tests() -> TestCaseGroup {
     let mut group = TestCaseGroup::new("negative_api");
     group.add_child(buffer::create_tests());
+    group.add_child(shader::create_tests());
     group.add_child(fragment::create_tests());
     group.add_child(vertex_array::create_tests());
     group.add_child(state::create_tests());
