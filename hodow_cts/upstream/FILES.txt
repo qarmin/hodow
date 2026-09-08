@@ -209,6 +209,8 @@ modules/gles3/functional/es3fColorClearTest.hpp
 modules/gles3/functional/es3fDepthStencilClearTests.cpp
 modules/gles3/functional/es3fDepthStencilClearTests.hpp
 modules/gles3/functional/es3fFunctionalTests.cpp
+modules/gles3/functional/es3fImplementationLimitTests.cpp
+modules/gles3/functional/es3fImplementationLimitTests.hpp
 modules/gles3/functional/es3fNegativeBufferApiTests.cpp
 modules/gles3/functional/es3fNegativeFragmentApiTests.cpp
 modules/gles3/functional/es3fNegativeShaderApiTests.cpp
