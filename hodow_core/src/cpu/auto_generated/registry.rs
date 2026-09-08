@@ -1,8 +1,56 @@
 #![allow(unused_imports)]
 #![allow(unreachable_code)]
 
-use crate::cpu::{ExtensionTest, FeatureStats, TestStatistics, ProgressCallback, TestFunction};
+use crate::cpu::{ExtensionStatus, ExtensionTest, FeatureStats, TestStatistics, ProgressCallback, TestFunction};
 use crate::cpu::{reset_stop_flag, should_stop, should_skip_feature};
+
+#[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
+fn detect_arm_shared_aes() -> bool {
+    #[cfg(target_arch = "arm")]
+    { return std::arch::is_arm_feature_detected!("aes"); }
+    #[cfg(target_arch = "aarch64")]
+    { return std::arch::is_aarch64_feature_detected!("aes"); }
+}
+
+#[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
+fn detect_arm_shared_crc() -> bool {
+    #[cfg(target_arch = "arm")]
+    { return std::arch::is_arm_feature_detected!("crc"); }
+    #[cfg(target_arch = "aarch64")]
+    { return std::arch::is_aarch64_feature_detected!("crc"); }
+}
+
+#[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
+fn detect_arm_shared_dotprod() -> bool {
+    #[cfg(target_arch = "arm")]
+    { return std::arch::is_arm_feature_detected!("dotprod"); }
+    #[cfg(target_arch = "aarch64")]
+    { return std::arch::is_aarch64_feature_detected!("dotprod"); }
+}
+
+#[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
+fn detect_arm_shared_fp_armv8() -> bool {
+    #[cfg(target_arch = "arm")]
+    { return false; /* no is_arm_feature_detected! string for "fp-armv8" */ }
+    #[cfg(target_arch = "aarch64")]
+    { return std::arch::is_aarch64_feature_detected!("neon"); /* plain NEON here; "fp-armv8" is a 32-bit ARM requirement */ }
+}
+
+#[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
+fn detect_arm_shared_fp16() -> bool {
+    #[cfg(target_arch = "arm")]
+    { return false; /* no is_arm_feature_detected! string for "fp16" */ }
+    #[cfg(target_arch = "aarch64")]
+    { return std::arch::is_aarch64_feature_detected!("fp16"); }
+}
+
+#[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
+fn detect_arm_shared_i8mm() -> bool {
+    #[cfg(target_arch = "arm")]
+    { return std::arch::is_arm_feature_detected!("i8mm"); }
+    #[cfg(target_arch = "aarch64")]
+    { return std::arch::is_aarch64_feature_detected!("i8mm"); }
+}
 
 #[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
 fn detect_arm_shared_neon() -> bool {
@@ -12,12 +60,64 @@ fn detect_arm_shared_neon() -> bool {
     { return std::arch::is_aarch64_feature_detected!("neon"); }
 }
 
+#[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
+fn detect_arm_shared_sha2() -> bool {
+    #[cfg(target_arch = "arm")]
+    { return std::arch::is_arm_feature_detected!("sha2"); }
+    #[cfg(target_arch = "aarch64")]
+    { return std::arch::is_aarch64_feature_detected!("sha2"); }
+}
+
+#[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
+fn detect_arm_shared_vfp4() -> bool {
+    #[cfg(target_arch = "arm")]
+    { return false; /* no is_arm_feature_detected! string for "vfp4" */ }
+    #[cfg(target_arch = "aarch64")]
+    { return std::arch::is_aarch64_feature_detected!("neon"); /* plain NEON here; "vfp4" is a 32-bit ARM requirement */ }
+}
+
 /// Count how many CPU features/extensions are available on this machine
 pub fn count_available_features() -> usize {
     let mut count = 0;
 
     #[cfg(target_arch = "aarch64")]
     {
+        if std::arch::is_aarch64_feature_detected!("aes") {
+            count += 1;
+        }
+
+        if std::arch::is_aarch64_feature_detected!("crc") {
+            count += 1;
+        }
+
+        if std::arch::is_aarch64_feature_detected!("faminmax") {
+            count += 1;
+        }
+
+        if std::arch::is_aarch64_feature_detected!("fcma") {
+            count += 1;
+        }
+
+        if std::arch::is_aarch64_feature_detected!("fp16") {
+            count += 1;
+        }
+
+        if std::arch::is_aarch64_feature_detected!("fp8") {
+            count += 1;
+        }
+
+        if std::arch::is_aarch64_feature_detected!("frintts") {
+            count += 1;
+        }
+
+        if std::arch::is_aarch64_feature_detected!("jsconv") {
+            count += 1;
+        }
+
+        if std::arch::is_aarch64_feature_detected!("lut") {
+            count += 1;
+        }
+
         if std::arch::is_aarch64_feature_detected!("mte") {
             count += 1;
         }
@@ -34,6 +134,22 @@ pub fn count_available_features() -> usize {
             count += 1;
         }
 
+        if std::arch::is_aarch64_feature_detected!("rcpc3") {
+            count += 1;
+        }
+
+        if std::arch::is_aarch64_feature_detected!("rdm") {
+            count += 1;
+        }
+
+        if std::arch::is_aarch64_feature_detected!("sha3") {
+            count += 1;
+        }
+
+        if std::arch::is_aarch64_feature_detected!("sm4") {
+            count += 1;
+        }
+
         if std::arch::is_aarch64_feature_detected!("sve") {
             count += 1;
         }
@@ -46,7 +162,7 @@ pub fn count_available_features() -> usize {
 
     #[cfg(target_arch = "arm")]
     {
-        if std::arch::is_arm_feature_detected!("neon") {
+        if std::arch::is_arm_feature_detected!("aes") {
             count += 1;
         }
 
@@ -54,7 +170,39 @@ pub fn count_available_features() -> usize {
 
     #[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
     {
+        if detect_arm_shared_aes() {
+            count += 1;
+        }
+
+        if detect_arm_shared_crc() {
+            count += 1;
+        }
+
+        if detect_arm_shared_dotprod() {
+            count += 1;
+        }
+
+        if detect_arm_shared_fp16() {
+            count += 1;
+        }
+
+        if detect_arm_shared_fp_armv8() {
+            count += 1;
+        }
+
+        if detect_arm_shared_i8mm() {
+            count += 1;
+        }
+
         if detect_arm_shared_neon() {
+            count += 1;
+        }
+
+        if detect_arm_shared_sha2() {
+            count += 1;
+        }
+
+        if detect_arm_shared_vfp4() {
             count += 1;
         }
 
@@ -403,6 +551,33 @@ pub fn available_modes() -> Vec<String> {
 
     #[cfg(target_arch = "aarch64")]
     {
+        if std::arch::is_aarch64_feature_detected!("aes") {
+            modes.insert(format!("{}:{}", "aarch64", "aes"));
+        }
+        if std::arch::is_aarch64_feature_detected!("crc") {
+            modes.insert(format!("{}:{}", "aarch64", "crc"));
+        }
+        if std::arch::is_aarch64_feature_detected!("faminmax") {
+            modes.insert(format!("{}:{}", "aarch64", "faminmax"));
+        }
+        if std::arch::is_aarch64_feature_detected!("fcma") {
+            modes.insert(format!("{}:{}", "aarch64", "fcma"));
+        }
+        if std::arch::is_aarch64_feature_detected!("fp16") {
+            modes.insert(format!("{}:{}", "aarch64", "fp16"));
+        }
+        if std::arch::is_aarch64_feature_detected!("fp8") {
+            modes.insert(format!("{}:{}", "aarch64", "fp8"));
+        }
+        if std::arch::is_aarch64_feature_detected!("frintts") {
+            modes.insert(format!("{}:{}", "aarch64", "frintts"));
+        }
+        if std::arch::is_aarch64_feature_detected!("jsconv") {
+            modes.insert(format!("{}:{}", "aarch64", "jsconv"));
+        }
+        if std::arch::is_aarch64_feature_detected!("lut") {
+            modes.insert(format!("{}:{}", "aarch64", "lut"));
+        }
         if std::arch::is_aarch64_feature_detected!("mte") {
             modes.insert(format!("{}:{}", "aarch64", "mte"));
         }
@@ -415,6 +590,18 @@ pub fn available_modes() -> Vec<String> {
         if std::arch::is_aarch64_feature_detected!("rand") {
             modes.insert(format!("{}:{}", "aarch64", "rand"));
         }
+        if std::arch::is_aarch64_feature_detected!("rcpc3") {
+            modes.insert(format!("{}:{}", "aarch64", "rcpc3"));
+        }
+        if std::arch::is_aarch64_feature_detected!("rdm") {
+            modes.insert(format!("{}:{}", "aarch64", "rdm"));
+        }
+        if std::arch::is_aarch64_feature_detected!("sha3") {
+            modes.insert(format!("{}:{}", "aarch64", "sha3"));
+        }
+        if std::arch::is_aarch64_feature_detected!("sm4") {
+            modes.insert(format!("{}:{}", "aarch64", "sm4"));
+        }
         if std::arch::is_aarch64_feature_detected!("sve") {
             modes.insert(format!("{}:{}", "aarch64", "sve"));
         }
@@ -425,15 +612,39 @@ pub fn available_modes() -> Vec<String> {
 
     #[cfg(target_arch = "arm")]
     {
-        if std::arch::is_arm_feature_detected!("neon") {
-            modes.insert(format!("{}:{}", "arm", "neon"));
+        if std::arch::is_arm_feature_detected!("aes") {
+            modes.insert(format!("{}:{}", "arm", "aes"));
         }
     }
 
     #[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
     {
+        if detect_arm_shared_aes() {
+            modes.insert(format!("{}:{}", "arm", "aes"));
+        }
+        if detect_arm_shared_crc() {
+            modes.insert(format!("{}:{}", "arm", "crc"));
+        }
+        if detect_arm_shared_dotprod() {
+            modes.insert(format!("{}:{}", "arm", "dotprod"));
+        }
+        if detect_arm_shared_fp16() {
+            modes.insert(format!("{}:{}", "arm", "fp16"));
+        }
+        if detect_arm_shared_fp_armv8() {
+            modes.insert(format!("{}:{}", "arm", "fp-armv8"));
+        }
+        if detect_arm_shared_i8mm() {
+            modes.insert(format!("{}:{}", "arm", "i8mm"));
+        }
         if detect_arm_shared_neon() {
             modes.insert(format!("{}:{}", "arm", "neon"));
+        }
+        if detect_arm_shared_sha2() {
+            modes.insert(format!("{}:{}", "arm", "sha2"));
+        }
+        if detect_arm_shared_vfp4() {
+            modes.insert(format!("{}:{}", "arm", "vfp4"));
         }
     }
 
@@ -711,6 +922,177 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
 
     #[cfg(target_arch = "aarch64")]
     {
+            if std::arch::is_aarch64_feature_detected!("aes") && !should_skip_feature("aes") {
+                    if should_stop() {
+                        return Ok(TestStatistics { features, was_cancelled: true });
+                    }
+                    let (r, s, e) = crate::cpu::auto_generated::aarch64::aes::AES::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::aarch64::aes::AES::get_tests().len(),
+                    progress_callback,
+                    )?;
+                    features.push(FeatureStats {
+                        feature_name: crate::cpu::auto_generated::aarch64::aes::AES::get_name(),
+                        tests_run: r,
+                        tests_skipped: s,
+                        tests_errored: e,
+                    });
+                    completed_features += 1;
+            }
+
+            if std::arch::is_aarch64_feature_detected!("crc") && !should_skip_feature("crc") {
+                    if should_stop() {
+                        return Ok(TestStatistics { features, was_cancelled: true });
+                    }
+                    let (r, s, e) = crate::cpu::auto_generated::aarch64::crc::CRC::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::aarch64::crc::CRC::get_tests().len(),
+                    progress_callback,
+                    )?;
+                    features.push(FeatureStats {
+                        feature_name: crate::cpu::auto_generated::aarch64::crc::CRC::get_name(),
+                        tests_run: r,
+                        tests_skipped: s,
+                        tests_errored: e,
+                    });
+                    completed_features += 1;
+            }
+
+            if std::arch::is_aarch64_feature_detected!("faminmax") && !should_skip_feature("faminmax") {
+                    if should_stop() {
+                        return Ok(TestStatistics { features, was_cancelled: true });
+                    }
+                    let (r, s, e) = crate::cpu::auto_generated::aarch64::faminmax::FAMINMAX::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::aarch64::faminmax::FAMINMAX::get_tests().len(),
+                    progress_callback,
+                    )?;
+                    features.push(FeatureStats {
+                        feature_name: crate::cpu::auto_generated::aarch64::faminmax::FAMINMAX::get_name(),
+                        tests_run: r,
+                        tests_skipped: s,
+                        tests_errored: e,
+                    });
+                    completed_features += 1;
+            }
+
+            if std::arch::is_aarch64_feature_detected!("fcma") && !should_skip_feature("fcma") {
+                    if should_stop() {
+                        return Ok(TestStatistics { features, was_cancelled: true });
+                    }
+                    let (r, s, e) = crate::cpu::auto_generated::aarch64::fcma::FCMA::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::aarch64::fcma::FCMA::get_tests().len(),
+                    progress_callback,
+                    )?;
+                    features.push(FeatureStats {
+                        feature_name: crate::cpu::auto_generated::aarch64::fcma::FCMA::get_name(),
+                        tests_run: r,
+                        tests_skipped: s,
+                        tests_errored: e,
+                    });
+                    completed_features += 1;
+            }
+
+            if std::arch::is_aarch64_feature_detected!("fp16") && !should_skip_feature("fp16") {
+                    if should_stop() {
+                        return Ok(TestStatistics { features, was_cancelled: true });
+                    }
+                    let (r, s, e) = crate::cpu::auto_generated::aarch64::fp16::FP16::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::aarch64::fp16::FP16::get_tests().len(),
+                    progress_callback,
+                    )?;
+                    features.push(FeatureStats {
+                        feature_name: crate::cpu::auto_generated::aarch64::fp16::FP16::get_name(),
+                        tests_run: r,
+                        tests_skipped: s,
+                        tests_errored: e,
+                    });
+                    completed_features += 1;
+            }
+
+            if std::arch::is_aarch64_feature_detected!("fp8") && !should_skip_feature("fp8") {
+                    if should_stop() {
+                        return Ok(TestStatistics { features, was_cancelled: true });
+                    }
+                    let (r, s, e) = crate::cpu::auto_generated::aarch64::fp8::FP8::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::aarch64::fp8::FP8::get_tests().len(),
+                    progress_callback,
+                    )?;
+                    features.push(FeatureStats {
+                        feature_name: crate::cpu::auto_generated::aarch64::fp8::FP8::get_name(),
+                        tests_run: r,
+                        tests_skipped: s,
+                        tests_errored: e,
+                    });
+                    completed_features += 1;
+            }
+
+            if std::arch::is_aarch64_feature_detected!("frintts") && !should_skip_feature("frintts") {
+                    if should_stop() {
+                        return Ok(TestStatistics { features, was_cancelled: true });
+                    }
+                    let (r, s, e) = crate::cpu::auto_generated::aarch64::frintts::FRINTTS::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::aarch64::frintts::FRINTTS::get_tests().len(),
+                    progress_callback,
+                    )?;
+                    features.push(FeatureStats {
+                        feature_name: crate::cpu::auto_generated::aarch64::frintts::FRINTTS::get_name(),
+                        tests_run: r,
+                        tests_skipped: s,
+                        tests_errored: e,
+                    });
+                    completed_features += 1;
+            }
+
+            if std::arch::is_aarch64_feature_detected!("jsconv") && !should_skip_feature("jsconv") {
+                    if should_stop() {
+                        return Ok(TestStatistics { features, was_cancelled: true });
+                    }
+                    let (r, s, e) = crate::cpu::auto_generated::aarch64::jsconv::JSCONV::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::aarch64::jsconv::JSCONV::get_tests().len(),
+                    progress_callback,
+                    )?;
+                    features.push(FeatureStats {
+                        feature_name: crate::cpu::auto_generated::aarch64::jsconv::JSCONV::get_name(),
+                        tests_run: r,
+                        tests_skipped: s,
+                        tests_errored: e,
+                    });
+                    completed_features += 1;
+            }
+
+            if std::arch::is_aarch64_feature_detected!("lut") && !should_skip_feature("lut") {
+                    if should_stop() {
+                        return Ok(TestStatistics { features, was_cancelled: true });
+                    }
+                    let (r, s, e) = crate::cpu::auto_generated::aarch64::lut::LUT::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::aarch64::lut::LUT::get_tests().len(),
+                    progress_callback,
+                    )?;
+                    features.push(FeatureStats {
+                        feature_name: crate::cpu::auto_generated::aarch64::lut::LUT::get_name(),
+                        tests_run: r,
+                        tests_skipped: s,
+                        tests_errored: e,
+                    });
+                    completed_features += 1;
+            }
+
             if std::arch::is_aarch64_feature_detected!("mte") && !should_skip_feature("mte") {
                     if should_stop() {
                         return Ok(TestStatistics { features, was_cancelled: true });
@@ -787,6 +1169,82 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                     completed_features += 1;
             }
 
+            if std::arch::is_aarch64_feature_detected!("rcpc3") && !should_skip_feature("rcpc3") {
+                    if should_stop() {
+                        return Ok(TestStatistics { features, was_cancelled: true });
+                    }
+                    let (r, s, e) = crate::cpu::auto_generated::aarch64::rcpc3::RCPC3::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::aarch64::rcpc3::RCPC3::get_tests().len(),
+                    progress_callback,
+                    )?;
+                    features.push(FeatureStats {
+                        feature_name: crate::cpu::auto_generated::aarch64::rcpc3::RCPC3::get_name(),
+                        tests_run: r,
+                        tests_skipped: s,
+                        tests_errored: e,
+                    });
+                    completed_features += 1;
+            }
+
+            if std::arch::is_aarch64_feature_detected!("rdm") && !should_skip_feature("rdm") {
+                    if should_stop() {
+                        return Ok(TestStatistics { features, was_cancelled: true });
+                    }
+                    let (r, s, e) = crate::cpu::auto_generated::aarch64::rdm::RDM::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::aarch64::rdm::RDM::get_tests().len(),
+                    progress_callback,
+                    )?;
+                    features.push(FeatureStats {
+                        feature_name: crate::cpu::auto_generated::aarch64::rdm::RDM::get_name(),
+                        tests_run: r,
+                        tests_skipped: s,
+                        tests_errored: e,
+                    });
+                    completed_features += 1;
+            }
+
+            if std::arch::is_aarch64_feature_detected!("sha3") && !should_skip_feature("sha3") {
+                    if should_stop() {
+                        return Ok(TestStatistics { features, was_cancelled: true });
+                    }
+                    let (r, s, e) = crate::cpu::auto_generated::aarch64::sha3::SHA3::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::aarch64::sha3::SHA3::get_tests().len(),
+                    progress_callback,
+                    )?;
+                    features.push(FeatureStats {
+                        feature_name: crate::cpu::auto_generated::aarch64::sha3::SHA3::get_name(),
+                        tests_run: r,
+                        tests_skipped: s,
+                        tests_errored: e,
+                    });
+                    completed_features += 1;
+            }
+
+            if std::arch::is_aarch64_feature_detected!("sm4") && !should_skip_feature("sm4") {
+                    if should_stop() {
+                        return Ok(TestStatistics { features, was_cancelled: true });
+                    }
+                    let (r, s, e) = crate::cpu::auto_generated::aarch64::sm4::SM4::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::aarch64::sm4::SM4::get_tests().len(),
+                    progress_callback,
+                    )?;
+                    features.push(FeatureStats {
+                        feature_name: crate::cpu::auto_generated::aarch64::sm4::SM4::get_name(),
+                        tests_run: r,
+                        tests_skipped: s,
+                        tests_errored: e,
+                    });
+                    completed_features += 1;
+            }
+
             if std::arch::is_aarch64_feature_detected!("sve") && !should_skip_feature("sve") {
                     if should_stop() {
                         return Ok(TestStatistics { features, was_cancelled: true });
@@ -829,18 +1287,18 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
 
     #[cfg(target_arch = "arm")]
     {
-            if std::arch::is_arm_feature_detected!("neon") && !should_skip_feature("neon") {
+            if std::arch::is_arm_feature_detected!("aes") && !should_skip_feature("aes") {
                     if should_stop() {
                         return Ok(TestStatistics { features, was_cancelled: true });
                     }
-                    let (r, s, e) = crate::cpu::auto_generated::arm::neon::NEON::test_with_progress(
+                    let (r, s, e) = crate::cpu::auto_generated::arm::aes::AES::test_with_progress(
                     total_features,
                     completed_features,
-                    crate::cpu::auto_generated::arm::neon::NEON::get_tests().len(),
+                    crate::cpu::auto_generated::arm::aes::AES::get_tests().len(),
                     progress_callback,
                     )?;
                     features.push(FeatureStats {
-                        feature_name: crate::cpu::auto_generated::arm::neon::NEON::get_name(),
+                        feature_name: crate::cpu::auto_generated::arm::aes::AES::get_name(),
                         tests_run: r,
                         tests_skipped: s,
                         tests_errored: e,
@@ -852,6 +1310,120 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
 
     #[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
     {
+            if detect_arm_shared_aes() && !should_skip_feature("aes") {
+                    if should_stop() {
+                        return Ok(TestStatistics { features, was_cancelled: true });
+                    }
+                    let (r, s, e) = crate::cpu::auto_generated::arm_shared::aes::AES::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::arm_shared::aes::AES::get_tests().len(),
+                    progress_callback,
+                    )?;
+                    features.push(FeatureStats {
+                        feature_name: crate::cpu::auto_generated::arm_shared::aes::AES::get_name(),
+                        tests_run: r,
+                        tests_skipped: s,
+                        tests_errored: e,
+                    });
+                    completed_features += 1;
+            }
+
+            if detect_arm_shared_crc() && !should_skip_feature("crc") {
+                    if should_stop() {
+                        return Ok(TestStatistics { features, was_cancelled: true });
+                    }
+                    let (r, s, e) = crate::cpu::auto_generated::arm_shared::crc::CRC::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::arm_shared::crc::CRC::get_tests().len(),
+                    progress_callback,
+                    )?;
+                    features.push(FeatureStats {
+                        feature_name: crate::cpu::auto_generated::arm_shared::crc::CRC::get_name(),
+                        tests_run: r,
+                        tests_skipped: s,
+                        tests_errored: e,
+                    });
+                    completed_features += 1;
+            }
+
+            if detect_arm_shared_dotprod() && !should_skip_feature("dotprod") {
+                    if should_stop() {
+                        return Ok(TestStatistics { features, was_cancelled: true });
+                    }
+                    let (r, s, e) = crate::cpu::auto_generated::arm_shared::dotprod::DOTPROD::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::arm_shared::dotprod::DOTPROD::get_tests().len(),
+                    progress_callback,
+                    )?;
+                    features.push(FeatureStats {
+                        feature_name: crate::cpu::auto_generated::arm_shared::dotprod::DOTPROD::get_name(),
+                        tests_run: r,
+                        tests_skipped: s,
+                        tests_errored: e,
+                    });
+                    completed_features += 1;
+            }
+
+            if detect_arm_shared_fp16() && !should_skip_feature("fp16") {
+                    if should_stop() {
+                        return Ok(TestStatistics { features, was_cancelled: true });
+                    }
+                    let (r, s, e) = crate::cpu::auto_generated::arm_shared::fp16::FP16::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::arm_shared::fp16::FP16::get_tests().len(),
+                    progress_callback,
+                    )?;
+                    features.push(FeatureStats {
+                        feature_name: crate::cpu::auto_generated::arm_shared::fp16::FP16::get_name(),
+                        tests_run: r,
+                        tests_skipped: s,
+                        tests_errored: e,
+                    });
+                    completed_features += 1;
+            }
+
+            if detect_arm_shared_fp_armv8() && !should_skip_feature("fp_armv8") {
+                    if should_stop() {
+                        return Ok(TestStatistics { features, was_cancelled: true });
+                    }
+                    let (r, s, e) = crate::cpu::auto_generated::arm_shared::fp_armv8::FP_ARMV8::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::arm_shared::fp_armv8::FP_ARMV8::get_tests().len(),
+                    progress_callback,
+                    )?;
+                    features.push(FeatureStats {
+                        feature_name: crate::cpu::auto_generated::arm_shared::fp_armv8::FP_ARMV8::get_name(),
+                        tests_run: r,
+                        tests_skipped: s,
+                        tests_errored: e,
+                    });
+                    completed_features += 1;
+            }
+
+            if detect_arm_shared_i8mm() && !should_skip_feature("i8mm") {
+                    if should_stop() {
+                        return Ok(TestStatistics { features, was_cancelled: true });
+                    }
+                    let (r, s, e) = crate::cpu::auto_generated::arm_shared::i8mm::I8MM::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::arm_shared::i8mm::I8MM::get_tests().len(),
+                    progress_callback,
+                    )?;
+                    features.push(FeatureStats {
+                        feature_name: crate::cpu::auto_generated::arm_shared::i8mm::I8MM::get_name(),
+                        tests_run: r,
+                        tests_skipped: s,
+                        tests_errored: e,
+                    });
+                    completed_features += 1;
+            }
+
             if detect_arm_shared_neon() && !should_skip_feature("neon") {
                     if should_stop() {
                         return Ok(TestStatistics { features, was_cancelled: true });
@@ -864,6 +1436,44 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                     )?;
                     features.push(FeatureStats {
                         feature_name: crate::cpu::auto_generated::arm_shared::neon::NEON::get_name(),
+                        tests_run: r,
+                        tests_skipped: s,
+                        tests_errored: e,
+                    });
+                    completed_features += 1;
+            }
+
+            if detect_arm_shared_sha2() && !should_skip_feature("sha2") {
+                    if should_stop() {
+                        return Ok(TestStatistics { features, was_cancelled: true });
+                    }
+                    let (r, s, e) = crate::cpu::auto_generated::arm_shared::sha2::SHA2::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::arm_shared::sha2::SHA2::get_tests().len(),
+                    progress_callback,
+                    )?;
+                    features.push(FeatureStats {
+                        feature_name: crate::cpu::auto_generated::arm_shared::sha2::SHA2::get_name(),
+                        tests_run: r,
+                        tests_skipped: s,
+                        tests_errored: e,
+                    });
+                    completed_features += 1;
+            }
+
+            if detect_arm_shared_vfp4() && !should_skip_feature("vfp4") {
+                    if should_stop() {
+                        return Ok(TestStatistics { features, was_cancelled: true });
+                    }
+                    let (r, s, e) = crate::cpu::auto_generated::arm_shared::vfp4::VFP4::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::arm_shared::vfp4::VFP4::get_tests().len(),
+                    progress_callback,
+                    )?;
+                    features.push(FeatureStats {
+                        feature_name: crate::cpu::auto_generated::arm_shared::vfp4::VFP4::get_name(),
                         tests_run: r,
                         tests_skipped: s,
                         tests_errored: e,
@@ -2283,6 +2893,60 @@ pub fn list_all_functions() -> Vec<String> {
     #[cfg(target_arch = "aarch64")]
     {
         {
+            for (_, name) in crate::cpu::auto_generated::aarch64::aes::AES::get_tests() {
+                functions.push(name.to_string());
+            }
+        }
+
+        {
+            for (_, name) in crate::cpu::auto_generated::aarch64::crc::CRC::get_tests() {
+                functions.push(name.to_string());
+            }
+        }
+
+        {
+            for (_, name) in crate::cpu::auto_generated::aarch64::faminmax::FAMINMAX::get_tests() {
+                functions.push(name.to_string());
+            }
+        }
+
+        {
+            for (_, name) in crate::cpu::auto_generated::aarch64::fcma::FCMA::get_tests() {
+                functions.push(name.to_string());
+            }
+        }
+
+        {
+            for (_, name) in crate::cpu::auto_generated::aarch64::fp16::FP16::get_tests() {
+                functions.push(name.to_string());
+            }
+        }
+
+        {
+            for (_, name) in crate::cpu::auto_generated::aarch64::fp8::FP8::get_tests() {
+                functions.push(name.to_string());
+            }
+        }
+
+        {
+            for (_, name) in crate::cpu::auto_generated::aarch64::frintts::FRINTTS::get_tests() {
+                functions.push(name.to_string());
+            }
+        }
+
+        {
+            for (_, name) in crate::cpu::auto_generated::aarch64::jsconv::JSCONV::get_tests() {
+                functions.push(name.to_string());
+            }
+        }
+
+        {
+            for (_, name) in crate::cpu::auto_generated::aarch64::lut::LUT::get_tests() {
+                functions.push(name.to_string());
+            }
+        }
+
+        {
             for (_, name) in crate::cpu::auto_generated::aarch64::mte::MTE::get_tests() {
                 functions.push(name.to_string());
             }
@@ -2307,6 +2971,30 @@ pub fn list_all_functions() -> Vec<String> {
         }
 
         {
+            for (_, name) in crate::cpu::auto_generated::aarch64::rcpc3::RCPC3::get_tests() {
+                functions.push(name.to_string());
+            }
+        }
+
+        {
+            for (_, name) in crate::cpu::auto_generated::aarch64::rdm::RDM::get_tests() {
+                functions.push(name.to_string());
+            }
+        }
+
+        {
+            for (_, name) in crate::cpu::auto_generated::aarch64::sha3::SHA3::get_tests() {
+                functions.push(name.to_string());
+            }
+        }
+
+        {
+            for (_, name) in crate::cpu::auto_generated::aarch64::sm4::SM4::get_tests() {
+                functions.push(name.to_string());
+            }
+        }
+
+        {
             for (_, name) in crate::cpu::auto_generated::aarch64::sve::SVE::get_tests() {
                 functions.push(name.to_string());
             }
@@ -2323,7 +3011,7 @@ pub fn list_all_functions() -> Vec<String> {
     #[cfg(target_arch = "arm")]
     {
         {
-            for (_, name) in crate::cpu::auto_generated::arm::neon::NEON::get_tests() {
+            for (_, name) in crate::cpu::auto_generated::arm::aes::AES::get_tests() {
                 functions.push(name.to_string());
             }
         }
@@ -2333,7 +3021,55 @@ pub fn list_all_functions() -> Vec<String> {
     #[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
     {
         {
+            for (_, name) in crate::cpu::auto_generated::arm_shared::aes::AES::get_tests() {
+                functions.push(name.to_string());
+            }
+        }
+
+        {
+            for (_, name) in crate::cpu::auto_generated::arm_shared::crc::CRC::get_tests() {
+                functions.push(name.to_string());
+            }
+        }
+
+        {
+            for (_, name) in crate::cpu::auto_generated::arm_shared::dotprod::DOTPROD::get_tests() {
+                functions.push(name.to_string());
+            }
+        }
+
+        {
+            for (_, name) in crate::cpu::auto_generated::arm_shared::fp16::FP16::get_tests() {
+                functions.push(name.to_string());
+            }
+        }
+
+        {
+            for (_, name) in crate::cpu::auto_generated::arm_shared::fp_armv8::FP_ARMV8::get_tests() {
+                functions.push(name.to_string());
+            }
+        }
+
+        {
+            for (_, name) in crate::cpu::auto_generated::arm_shared::i8mm::I8MM::get_tests() {
+                functions.push(name.to_string());
+            }
+        }
+
+        {
             for (_, name) in crate::cpu::auto_generated::arm_shared::neon::NEON::get_tests() {
+                functions.push(name.to_string());
+            }
+        }
+
+        {
+            for (_, name) in crate::cpu::auto_generated::arm_shared::sha2::SHA2::get_tests() {
+                functions.push(name.to_string());
+            }
+        }
+
+        {
+            for (_, name) in crate::cpu::auto_generated::arm_shared::vfp4::VFP4::get_tests() {
                 functions.push(name.to_string());
             }
         }
@@ -2817,6 +3553,376 @@ pub fn list_all_functions() -> Vec<String> {
     functions
 }
 
+/// Every extension this binary was built with, whether or not this machine has it -
+/// the whole suite is always compiled in (see target_feature_attr in the generator),
+/// so this is the only place the difference is visible.
+pub fn extension_status() -> Vec<ExtensionStatus> {
+    #[allow(unused_mut)]
+    let mut exts: Vec<ExtensionStatus> = Vec::new();
+
+    #[cfg(target_arch = "aarch64")]
+    {
+        exts.push(ExtensionStatus { arch: "aarch64", ext: "aes",
+            test_count: crate::cpu::auto_generated::aarch64::aes::AES::get_tests().len(),
+            supported: std::arch::is_aarch64_feature_detected!("aes"), detectable: true });
+        exts.push(ExtensionStatus { arch: "aarch64", ext: "crc",
+            test_count: crate::cpu::auto_generated::aarch64::crc::CRC::get_tests().len(),
+            supported: std::arch::is_aarch64_feature_detected!("crc"), detectable: true });
+        exts.push(ExtensionStatus { arch: "aarch64", ext: "faminmax",
+            test_count: crate::cpu::auto_generated::aarch64::faminmax::FAMINMAX::get_tests().len(),
+            supported: std::arch::is_aarch64_feature_detected!("faminmax"), detectable: true });
+        exts.push(ExtensionStatus { arch: "aarch64", ext: "fcma",
+            test_count: crate::cpu::auto_generated::aarch64::fcma::FCMA::get_tests().len(),
+            supported: std::arch::is_aarch64_feature_detected!("fcma"), detectable: true });
+        exts.push(ExtensionStatus { arch: "aarch64", ext: "fp16",
+            test_count: crate::cpu::auto_generated::aarch64::fp16::FP16::get_tests().len(),
+            supported: std::arch::is_aarch64_feature_detected!("fp16"), detectable: true });
+        exts.push(ExtensionStatus { arch: "aarch64", ext: "fp8",
+            test_count: crate::cpu::auto_generated::aarch64::fp8::FP8::get_tests().len(),
+            supported: std::arch::is_aarch64_feature_detected!("fp8"), detectable: true });
+        exts.push(ExtensionStatus { arch: "aarch64", ext: "frintts",
+            test_count: crate::cpu::auto_generated::aarch64::frintts::FRINTTS::get_tests().len(),
+            supported: std::arch::is_aarch64_feature_detected!("frintts"), detectable: true });
+        exts.push(ExtensionStatus { arch: "aarch64", ext: "jsconv",
+            test_count: crate::cpu::auto_generated::aarch64::jsconv::JSCONV::get_tests().len(),
+            supported: std::arch::is_aarch64_feature_detected!("jsconv"), detectable: true });
+        exts.push(ExtensionStatus { arch: "aarch64", ext: "lut",
+            test_count: crate::cpu::auto_generated::aarch64::lut::LUT::get_tests().len(),
+            supported: std::arch::is_aarch64_feature_detected!("lut"), detectable: true });
+        exts.push(ExtensionStatus { arch: "aarch64", ext: "mte",
+            test_count: crate::cpu::auto_generated::aarch64::mte::MTE::get_tests().len(),
+            supported: std::arch::is_aarch64_feature_detected!("mte"), detectable: true });
+        exts.push(ExtensionStatus { arch: "aarch64", ext: "neon",
+            test_count: crate::cpu::auto_generated::aarch64::neon::NEON::get_tests().len(),
+            supported: std::arch::is_aarch64_feature_detected!("neon"), detectable: true });
+        exts.push(ExtensionStatus { arch: "aarch64", ext: "prefetch",
+            test_count: crate::cpu::auto_generated::aarch64::prefetch::PREFETCH::get_tests().len(),
+            supported: true /* baseline ISA, not an optional feature - see BASELINE_ALWAYS_TRUE_FEATURES */, detectable: true });
+        exts.push(ExtensionStatus { arch: "aarch64", ext: "rand",
+            test_count: crate::cpu::auto_generated::aarch64::rand::RAND::get_tests().len(),
+            supported: std::arch::is_aarch64_feature_detected!("rand"), detectable: true });
+        exts.push(ExtensionStatus { arch: "aarch64", ext: "rcpc3",
+            test_count: crate::cpu::auto_generated::aarch64::rcpc3::RCPC3::get_tests().len(),
+            supported: std::arch::is_aarch64_feature_detected!("rcpc3"), detectable: true });
+        exts.push(ExtensionStatus { arch: "aarch64", ext: "rdm",
+            test_count: crate::cpu::auto_generated::aarch64::rdm::RDM::get_tests().len(),
+            supported: std::arch::is_aarch64_feature_detected!("rdm"), detectable: true });
+        exts.push(ExtensionStatus { arch: "aarch64", ext: "sha3",
+            test_count: crate::cpu::auto_generated::aarch64::sha3::SHA3::get_tests().len(),
+            supported: std::arch::is_aarch64_feature_detected!("sha3"), detectable: true });
+        exts.push(ExtensionStatus { arch: "aarch64", ext: "sm4",
+            test_count: crate::cpu::auto_generated::aarch64::sm4::SM4::get_tests().len(),
+            supported: std::arch::is_aarch64_feature_detected!("sm4"), detectable: true });
+        exts.push(ExtensionStatus { arch: "aarch64", ext: "sve",
+            test_count: crate::cpu::auto_generated::aarch64::sve::SVE::get_tests().len(),
+            supported: std::arch::is_aarch64_feature_detected!("sve"), detectable: true });
+        exts.push(ExtensionStatus { arch: "aarch64", ext: "sve2",
+            test_count: crate::cpu::auto_generated::aarch64::sve2::SVE2::get_tests().len(),
+            supported: std::arch::is_aarch64_feature_detected!("sve2"), detectable: true });
+    }
+
+    #[cfg(target_arch = "arm")]
+    {
+        exts.push(ExtensionStatus { arch: "arm", ext: "aes",
+            test_count: crate::cpu::auto_generated::arm::aes::AES::get_tests().len(),
+            supported: std::arch::is_arm_feature_detected!("aes"), detectable: true });
+    }
+
+    #[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
+    {
+        exts.push(ExtensionStatus { arch: "arm_shared", ext: "aes",
+            test_count: crate::cpu::auto_generated::arm_shared::aes::AES::get_tests().len(),
+            supported: detect_arm_shared_aes(), detectable: true });
+        exts.push(ExtensionStatus { arch: "arm_shared", ext: "crc",
+            test_count: crate::cpu::auto_generated::arm_shared::crc::CRC::get_tests().len(),
+            supported: detect_arm_shared_crc(), detectable: true });
+        exts.push(ExtensionStatus { arch: "arm_shared", ext: "dotprod",
+            test_count: crate::cpu::auto_generated::arm_shared::dotprod::DOTPROD::get_tests().len(),
+            supported: detect_arm_shared_dotprod(), detectable: true });
+        exts.push(ExtensionStatus { arch: "arm_shared", ext: "fp16",
+            test_count: crate::cpu::auto_generated::arm_shared::fp16::FP16::get_tests().len(),
+            supported: detect_arm_shared_fp16(), detectable: true });
+        exts.push(ExtensionStatus { arch: "arm_shared", ext: "fp_armv8",
+            test_count: crate::cpu::auto_generated::arm_shared::fp_armv8::FP_ARMV8::get_tests().len(),
+            supported: detect_arm_shared_fp_armv8(), detectable: true });
+        exts.push(ExtensionStatus { arch: "arm_shared", ext: "i8mm",
+            test_count: crate::cpu::auto_generated::arm_shared::i8mm::I8MM::get_tests().len(),
+            supported: detect_arm_shared_i8mm(), detectable: true });
+        exts.push(ExtensionStatus { arch: "arm_shared", ext: "neon",
+            test_count: crate::cpu::auto_generated::arm_shared::neon::NEON::get_tests().len(),
+            supported: detect_arm_shared_neon(), detectable: true });
+        exts.push(ExtensionStatus { arch: "arm_shared", ext: "sha2",
+            test_count: crate::cpu::auto_generated::arm_shared::sha2::SHA2::get_tests().len(),
+            supported: detect_arm_shared_sha2(), detectable: true });
+        exts.push(ExtensionStatus { arch: "arm_shared", ext: "vfp4",
+            test_count: crate::cpu::auto_generated::arm_shared::vfp4::VFP4::get_tests().len(),
+            supported: detect_arm_shared_vfp4(), detectable: true });
+    }
+
+    #[cfg(target_arch = "loongarch64")]
+    {
+        exts.push(ExtensionStatus { arch: "loongarch64", ext: "lasx",
+            test_count: crate::cpu::auto_generated::loongarch64::lasx::LASX::get_tests().len(),
+            supported: false /* feature detection not yet implemented */, detectable: false });
+        exts.push(ExtensionStatus { arch: "loongarch64", ext: "lsx",
+            test_count: crate::cpu::auto_generated::loongarch64::lsx::LSX::get_tests().len(),
+            supported: false /* feature detection not yet implemented */, detectable: false });
+    }
+
+    #[cfg(target_arch = "mips")]
+    {
+        exts.push(ExtensionStatus { arch: "mips", ext: "msa",
+            test_count: crate::cpu::auto_generated::mips::msa::MSA::get_tests().len(),
+            supported: false /* no runtime detection available */, detectable: false });
+    }
+
+    // nvptx is not a standard rust target_arch, so this is always compiled
+    {
+        exts.push(ExtensionStatus { arch: "nvptx", ext: "packed",
+            test_count: crate::cpu::auto_generated::nvptx::packed::PACKED::get_tests().len(),
+            supported: false /* no runtime detection available */, detectable: false });
+    }
+
+    #[cfg(target_arch = "powerpc")]
+    {
+        exts.push(ExtensionStatus { arch: "powerpc", ext: "altivec",
+            test_count: crate::cpu::auto_generated::powerpc::altivec::ALTIVEC::get_tests().len(),
+            supported: false /* no runtime detection available */, detectable: false });
+        exts.push(ExtensionStatus { arch: "powerpc", ext: "vsx",
+            test_count: crate::cpu::auto_generated::powerpc::vsx::VSX::get_tests().len(),
+            supported: false /* no runtime detection available */, detectable: false });
+    }
+
+    #[cfg(target_arch = "powerpc64")]
+    {
+        exts.push(ExtensionStatus { arch: "powerpc64", ext: "vsx",
+            test_count: crate::cpu::auto_generated::powerpc64::vsx::VSX::get_tests().len(),
+            supported: false /* no runtime detection available */, detectable: false });
+    }
+
+    #[cfg(target_arch = "riscv32")]
+    {
+        exts.push(ExtensionStatus { arch: "riscv32", ext: "zk",
+            test_count: crate::cpu::auto_generated::riscv32::zk::ZK::get_tests().len(),
+            supported: std::arch::is_riscv_feature_detected!("zk"), detectable: true });
+    }
+
+    #[cfg(target_arch = "riscv64")]
+    {
+        exts.push(ExtensionStatus { arch: "riscv64", ext: "zk",
+            test_count: crate::cpu::auto_generated::riscv64::zk::ZK::get_tests().len(),
+            supported: std::arch::is_riscv_feature_detected!("zk"), detectable: true });
+    }
+
+    #[cfg(any(target_arch = "riscv32", target_arch = "riscv64"))]
+    {
+        exts.push(ExtensionStatus { arch: "riscv_shared", ext: "p",
+            test_count: crate::cpu::auto_generated::riscv_shared::p::P::get_tests().len(),
+            supported: std::arch::is_riscv_feature_detected!("p"), detectable: true });
+        exts.push(ExtensionStatus { arch: "riscv_shared", ext: "zb",
+            test_count: crate::cpu::auto_generated::riscv_shared::zb::ZB::get_tests().len(),
+            supported: false /* no runtime detection available */, detectable: false });
+        exts.push(ExtensionStatus { arch: "riscv_shared", ext: "zk",
+            test_count: crate::cpu::auto_generated::riscv_shared::zk::ZK::get_tests().len(),
+            supported: std::arch::is_riscv_feature_detected!("zk"), detectable: true });
+    }
+
+    #[cfg(target_arch = "s390x")]
+    {
+        exts.push(ExtensionStatus { arch: "s390x", ext: "vector",
+            test_count: crate::cpu::auto_generated::s390x::vector::VECTOR::get_tests().len(),
+            supported: false /* no runtime detection available */, detectable: false });
+    }
+
+    #[cfg(target_arch = "wasm32")]
+    {
+        exts.push(ExtensionStatus { arch: "wasm32", ext: "atomic",
+            test_count: crate::cpu::auto_generated::wasm32::atomic::ATOMIC::get_tests().len(),
+            supported: false /* no runtime detection available */, detectable: false });
+        exts.push(ExtensionStatus { arch: "wasm32", ext: "memory",
+            test_count: crate::cpu::auto_generated::wasm32::memory::MEMORY::get_tests().len(),
+            supported: false /* no runtime detection available */, detectable: false });
+        exts.push(ExtensionStatus { arch: "wasm32", ext: "relaxed_simd",
+            test_count: crate::cpu::auto_generated::wasm32::relaxed_simd::RELAXED_SIMD::get_tests().len(),
+            supported: false /* no runtime detection available */, detectable: false });
+        exts.push(ExtensionStatus { arch: "wasm32", ext: "simd128",
+            test_count: crate::cpu::auto_generated::wasm32::simd128::SIMD128::get_tests().len(),
+            supported: false /* no runtime detection available */, detectable: false });
+    }
+
+    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+    {
+        exts.push(ExtensionStatus { arch: "x86", ext: "adx",
+            test_count: crate::cpu::auto_generated::x86::adx::ADX::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("adx"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "aes",
+            test_count: crate::cpu::auto_generated::x86::aes::AES::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("aes"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "avx",
+            test_count: crate::cpu::auto_generated::x86::avx::AVX::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("avx"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "avx2",
+            test_count: crate::cpu::auto_generated::x86::avx2::AVX2::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("avx2"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "avx512bf16",
+            test_count: crate::cpu::auto_generated::x86::avx512bf16::AVX512BF16::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("avx512bf16"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "avx512bitalg",
+            test_count: crate::cpu::auto_generated::x86::avx512bitalg::AVX512BITALG::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("avx512bitalg"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "avx512bw",
+            test_count: crate::cpu::auto_generated::x86::avx512bw::AVX512BW::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("avx512bw"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "avx512cd",
+            test_count: crate::cpu::auto_generated::x86::avx512cd::AVX512CD::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("avx512cd"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "avx512dq",
+            test_count: crate::cpu::auto_generated::x86::avx512dq::AVX512DQ::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("avx512dq"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "avx512f",
+            test_count: crate::cpu::auto_generated::x86::avx512f::AVX512F::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("avx512f"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "avx512fp16",
+            test_count: crate::cpu::auto_generated::x86::avx512fp16::AVX512FP16::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("avx512fp16"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "avx512ifma",
+            test_count: crate::cpu::auto_generated::x86::avx512ifma::AVX512IFMA::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("avx512ifma"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "avx512vbmi",
+            test_count: crate::cpu::auto_generated::x86::avx512vbmi::AVX512VBMI::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("avx512vbmi"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "avx512vbmi2",
+            test_count: crate::cpu::auto_generated::x86::avx512vbmi2::AVX512VBMI2::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("avx512vbmi2"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "avx512vnni",
+            test_count: crate::cpu::auto_generated::x86::avx512vnni::AVX512VNNI::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("avx512vnni"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "avxneconvert",
+            test_count: crate::cpu::auto_generated::x86::avxneconvert::AVXNECONVERT::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("avxneconvert"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "bmi1",
+            test_count: crate::cpu::auto_generated::x86::bmi1::BMI1::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("bmi1"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "bmi2",
+            test_count: crate::cpu::auto_generated::x86::bmi2::BMI2::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("bmi2"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "bt",
+            test_count: crate::cpu::auto_generated::x86::bt::BT::get_tests().len(),
+            supported: false /* no runtime detection available */, detectable: false });
+        exts.push(ExtensionStatus { arch: "x86", ext: "cpuid",
+            test_count: crate::cpu::auto_generated::x86::cpuid::CPUID::get_tests().len(),
+            supported: false /* no runtime detection available */, detectable: false });
+        exts.push(ExtensionStatus { arch: "x86", ext: "eflags",
+            test_count: crate::cpu::auto_generated::x86::eflags::EFLAGS::get_tests().len(),
+            supported: false /* no runtime detection available */, detectable: false });
+        exts.push(ExtensionStatus { arch: "x86", ext: "f16c",
+            test_count: crate::cpu::auto_generated::x86::f16c::F16C::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("f16c"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "fxsr",
+            test_count: crate::cpu::auto_generated::x86::fxsr::FXSR::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("fxsr"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "gfni",
+            test_count: crate::cpu::auto_generated::x86::gfni::GFNI::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("gfni"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "kl",
+            test_count: crate::cpu::auto_generated::x86::kl::KL::get_tests().len(),
+            supported: crate::cpu::common::x86::keylocker_usable(), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "pclmulqdq",
+            test_count: crate::cpu::auto_generated::x86::pclmulqdq::PCLMULQDQ::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("pclmulqdq"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "rdrand",
+            test_count: crate::cpu::auto_generated::x86::rdrand::RDRAND::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("rdrand"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "rdtsc",
+            test_count: crate::cpu::auto_generated::x86::rdtsc::RDTSC::get_tests().len(),
+            supported: false /* no runtime detection available */, detectable: false });
+        exts.push(ExtensionStatus { arch: "x86", ext: "sha",
+            test_count: crate::cpu::auto_generated::x86::sha::SHA::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("sha"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "sse",
+            test_count: crate::cpu::auto_generated::x86::sse::SSE::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("sse"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "sse2",
+            test_count: crate::cpu::auto_generated::x86::sse2::SSE2::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("sse2"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "sse3",
+            test_count: crate::cpu::auto_generated::x86::sse3::SSE3::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("sse3"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "sse41",
+            test_count: crate::cpu::auto_generated::x86::sse41::SSE41::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("sse4.1"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "sse42",
+            test_count: crate::cpu::auto_generated::x86::sse42::SSE42::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("sse4.2"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "sse4a",
+            test_count: crate::cpu::auto_generated::x86::sse4a::SSE4A::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("sse4a"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "ssse3",
+            test_count: crate::cpu::auto_generated::x86::ssse3::SSSE3::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("ssse3"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "tbm",
+            test_count: crate::cpu::auto_generated::x86::tbm::TBM::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("tbm"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "vaes",
+            test_count: crate::cpu::auto_generated::x86::vaes::VAES::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("vaes"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "vpclmulqdq",
+            test_count: crate::cpu::auto_generated::x86::vpclmulqdq::VPCLMULQDQ::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("vpclmulqdq"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86", ext: "xsave",
+            test_count: crate::cpu::auto_generated::x86::xsave::XSAVE::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("xsave"), detectable: true });
+    }
+
+    #[cfg(target_arch = "x86_64")]
+    {
+        exts.push(ExtensionStatus { arch: "x86_64", ext: "adx",
+            test_count: crate::cpu::auto_generated::x86_64::adx::ADX::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("adx"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86_64", ext: "avx512f",
+            test_count: crate::cpu::auto_generated::x86_64::avx512f::AVX512F::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("avx512f"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86_64", ext: "avx512fp16",
+            test_count: crate::cpu::auto_generated::x86_64::avx512fp16::AVX512FP16::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("avx512fp16"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86_64", ext: "bmi",
+            test_count: crate::cpu::auto_generated::x86_64::bmi::BMI::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("bmi1"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86_64", ext: "bmi2",
+            test_count: crate::cpu::auto_generated::x86_64::bmi2::BMI2::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("bmi2"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86_64", ext: "bt",
+            test_count: crate::cpu::auto_generated::x86_64::bt::BT::get_tests().len(),
+            supported: false /* no runtime detection available */, detectable: false });
+        exts.push(ExtensionStatus { arch: "x86_64", ext: "cmpxchg16b",
+            test_count: crate::cpu::auto_generated::x86_64::cmpxchg16b::CMPXCHG16B::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("cmpxchg16b"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86_64", ext: "fxsr",
+            test_count: crate::cpu::auto_generated::x86_64::fxsr::FXSR::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("fxsr"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86_64", ext: "rdrand",
+            test_count: crate::cpu::auto_generated::x86_64::rdrand::RDRAND::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("rdrand"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86_64", ext: "sse",
+            test_count: crate::cpu::auto_generated::x86_64::sse::SSE::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("sse"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86_64", ext: "sse2",
+            test_count: crate::cpu::auto_generated::x86_64::sse2::SSE2::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("sse2"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86_64", ext: "sse42",
+            test_count: crate::cpu::auto_generated::x86_64::sse42::SSE42::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("sse4.2"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86_64", ext: "tbm",
+            test_count: crate::cpu::auto_generated::x86_64::tbm::TBM::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("tbm"), detectable: true });
+        exts.push(ExtensionStatus { arch: "x86_64", ext: "xsave",
+            test_count: crate::cpu::auto_generated::x86_64::xsave::XSAVE::get_tests().len(),
+            supported: std::arch::is_x86_feature_detected!("xsave"), detectable: true });
+    }
+
+    exts
+}
+
 /// Flat list of (test_name, feature, test_fn) for every feature detected at runtime
 /// on this machine, in the canonical execution order. Used by the isolated subprocess
 /// runner (so a crashing/hanging test can be attributed and skipped instead of
@@ -2827,6 +3933,60 @@ pub fn all_tests() -> Vec<(&'static str, &'static str, &'static TestFunction)> {
 
     #[cfg(target_arch = "aarch64")]
     {
+        if std::arch::is_aarch64_feature_detected!("aes") {
+            for &(f, n) in crate::cpu::auto_generated::aarch64::aes::AES::get_tests() {
+                tests.push((n, "aes", f));
+            }
+        }
+
+        if std::arch::is_aarch64_feature_detected!("crc") {
+            for &(f, n) in crate::cpu::auto_generated::aarch64::crc::CRC::get_tests() {
+                tests.push((n, "crc", f));
+            }
+        }
+
+        if std::arch::is_aarch64_feature_detected!("faminmax") {
+            for &(f, n) in crate::cpu::auto_generated::aarch64::faminmax::FAMINMAX::get_tests() {
+                tests.push((n, "faminmax", f));
+            }
+        }
+
+        if std::arch::is_aarch64_feature_detected!("fcma") {
+            for &(f, n) in crate::cpu::auto_generated::aarch64::fcma::FCMA::get_tests() {
+                tests.push((n, "fcma", f));
+            }
+        }
+
+        if std::arch::is_aarch64_feature_detected!("fp16") {
+            for &(f, n) in crate::cpu::auto_generated::aarch64::fp16::FP16::get_tests() {
+                tests.push((n, "fp16", f));
+            }
+        }
+
+        if std::arch::is_aarch64_feature_detected!("fp8") {
+            for &(f, n) in crate::cpu::auto_generated::aarch64::fp8::FP8::get_tests() {
+                tests.push((n, "fp8", f));
+            }
+        }
+
+        if std::arch::is_aarch64_feature_detected!("frintts") {
+            for &(f, n) in crate::cpu::auto_generated::aarch64::frintts::FRINTTS::get_tests() {
+                tests.push((n, "frintts", f));
+            }
+        }
+
+        if std::arch::is_aarch64_feature_detected!("jsconv") {
+            for &(f, n) in crate::cpu::auto_generated::aarch64::jsconv::JSCONV::get_tests() {
+                tests.push((n, "jsconv", f));
+            }
+        }
+
+        if std::arch::is_aarch64_feature_detected!("lut") {
+            for &(f, n) in crate::cpu::auto_generated::aarch64::lut::LUT::get_tests() {
+                tests.push((n, "lut", f));
+            }
+        }
+
         if std::arch::is_aarch64_feature_detected!("mte") {
             for &(f, n) in crate::cpu::auto_generated::aarch64::mte::MTE::get_tests() {
                 tests.push((n, "mte", f));
@@ -2851,6 +4011,30 @@ pub fn all_tests() -> Vec<(&'static str, &'static str, &'static TestFunction)> {
             }
         }
 
+        if std::arch::is_aarch64_feature_detected!("rcpc3") {
+            for &(f, n) in crate::cpu::auto_generated::aarch64::rcpc3::RCPC3::get_tests() {
+                tests.push((n, "rcpc3", f));
+            }
+        }
+
+        if std::arch::is_aarch64_feature_detected!("rdm") {
+            for &(f, n) in crate::cpu::auto_generated::aarch64::rdm::RDM::get_tests() {
+                tests.push((n, "rdm", f));
+            }
+        }
+
+        if std::arch::is_aarch64_feature_detected!("sha3") {
+            for &(f, n) in crate::cpu::auto_generated::aarch64::sha3::SHA3::get_tests() {
+                tests.push((n, "sha3", f));
+            }
+        }
+
+        if std::arch::is_aarch64_feature_detected!("sm4") {
+            for &(f, n) in crate::cpu::auto_generated::aarch64::sm4::SM4::get_tests() {
+                tests.push((n, "sm4", f));
+            }
+        }
+
         if std::arch::is_aarch64_feature_detected!("sve") {
             for &(f, n) in crate::cpu::auto_generated::aarch64::sve::SVE::get_tests() {
                 tests.push((n, "sve", f));
@@ -2867,9 +4051,9 @@ pub fn all_tests() -> Vec<(&'static str, &'static str, &'static TestFunction)> {
 
     #[cfg(target_arch = "arm")]
     {
-        if std::arch::is_arm_feature_detected!("neon") {
-            for &(f, n) in crate::cpu::auto_generated::arm::neon::NEON::get_tests() {
-                tests.push((n, "neon", f));
+        if std::arch::is_arm_feature_detected!("aes") {
+            for &(f, n) in crate::cpu::auto_generated::arm::aes::AES::get_tests() {
+                tests.push((n, "aes", f));
             }
         }
 
@@ -2877,9 +4061,57 @@ pub fn all_tests() -> Vec<(&'static str, &'static str, &'static TestFunction)> {
 
     #[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
     {
+        if detect_arm_shared_aes() {
+            for &(f, n) in crate::cpu::auto_generated::arm_shared::aes::AES::get_tests() {
+                tests.push((n, "aes", f));
+            }
+        }
+
+        if detect_arm_shared_crc() {
+            for &(f, n) in crate::cpu::auto_generated::arm_shared::crc::CRC::get_tests() {
+                tests.push((n, "crc", f));
+            }
+        }
+
+        if detect_arm_shared_dotprod() {
+            for &(f, n) in crate::cpu::auto_generated::arm_shared::dotprod::DOTPROD::get_tests() {
+                tests.push((n, "dotprod", f));
+            }
+        }
+
+        if detect_arm_shared_fp16() {
+            for &(f, n) in crate::cpu::auto_generated::arm_shared::fp16::FP16::get_tests() {
+                tests.push((n, "fp16", f));
+            }
+        }
+
+        if detect_arm_shared_fp_armv8() {
+            for &(f, n) in crate::cpu::auto_generated::arm_shared::fp_armv8::FP_ARMV8::get_tests() {
+                tests.push((n, "fp_armv8", f));
+            }
+        }
+
+        if detect_arm_shared_i8mm() {
+            for &(f, n) in crate::cpu::auto_generated::arm_shared::i8mm::I8MM::get_tests() {
+                tests.push((n, "i8mm", f));
+            }
+        }
+
         if detect_arm_shared_neon() {
             for &(f, n) in crate::cpu::auto_generated::arm_shared::neon::NEON::get_tests() {
                 tests.push((n, "neon", f));
+            }
+        }
+
+        if detect_arm_shared_sha2() {
+            for &(f, n) in crate::cpu::auto_generated::arm_shared::sha2::SHA2::get_tests() {
+                tests.push((n, "sha2", f));
+            }
+        }
+
+        if detect_arm_shared_vfp4() {
+            for &(f, n) in crate::cpu::auto_generated::arm_shared::vfp4::VFP4::get_tests() {
+                tests.push((n, "vfp4", f));
             }
         }
 

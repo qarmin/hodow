@@ -68,6 +68,7 @@ use crate::cpu::auto_generated::aarch64::sve2::part33::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 
+#[allow(non_camel_case_types)]
 pub struct SVE2;
 
 impl ExtensionTest for SVE2 {

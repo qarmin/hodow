@@ -138,7 +138,30 @@ FEATURE_FLAGS = {
     "sse42": "sse4.2",
     "bmi":   "bmi1",   # x86_64/bmi.rs is bmi1 intrinsics
     "test":  "sse2",   # x86/test.rs contains SSE2-level helpers
+    # Rebucketed NEON groups (see rebucket_neon_by_feature) whose detection string is not a
+    # valid Rust module name, so the module got the underscored spelling.
+    "sve2_aes":     "sve2-aes",
+    "sve2_bitperm": "sve2-bitperm",
+    "sve2_sha3":    "sve2-sha3",
+    "sve2_sm4":     "sve2-sm4",
+    "fp_armv8":     "fp-armv8",
 }
+
+# `is_arm_feature_detected!` (32-bit ARM) knows only these. Everything else a NEON function can
+# ask for - fp16, vfp4, fp-armv8, and every aarch64-only extension - has no runtime check there
+# at all, so the generated group reports "not detectable" on arm and is skipped rather than run.
+ARM32_DETECTABLE_FEATURES = {"neon", "pmull", "crc", "aes", "sha2", "i8mm", "dotprod"}
+
+# The arm-only extras from rebucket_neon_by_feature. On aarch64 these functions are plain NEON
+# (the requirement comes from a `cfg_attr(target_arch = "arm", ...)`), and neither name is an
+# `is_aarch64_feature_detected!` string, so that is what the group checks there.
+NEON_AARCH64_PLAIN_FEATURES = {"vfp4", "fp-armv8"}
+
+# Base target_features that say nothing about which group a NEON function belongs in: `neon`
+# itself, and the architecture-revision markers stdarch attaches on 32-bit ARM. `v7` is the
+# baseline of the armv7 target this project builds for, and `v8` alone never gated anything
+# that actually crashed - only the concrete extensions below it do.
+NEON_BASELINE_FEATURES = {"neon", "v7", "v8"}
 
 # Features that don't have runtime detection or aren't proper target_feature
 # These will always return false for feature detection
@@ -832,12 +855,17 @@ def parse_signatures(path: Path) -> dict[tuple[str, str], list[dict]]:
             continue
         if current_key is None:
             continue
-        m = re.match(r"^\d+(?:@(\w+))?:(pub\s+(?:unsafe\s+)?fn\s+.+)", line)
+        m = re.match(r"^\d+(?:@(\w+))?(?:%([^:]*))?:(pub\s+(?:unsafe\s+)?fn\s+.+)", line)
         if not m:
             continue
-        sig = parse_sig(m.group(2))
+        sig = parse_sig(m.group(3))
         if sig is None:
             continue
+        # The function's own `#[target_feature]` set, `base^arm-only` (extract_signatures.py's
+        # find_target_features). Absent for anything extracted before that was captured.
+        base, _, arm_only = (m.group(2) or "").partition("^")
+        sig["features"] = [f for f in base.split("+") if f]
+        sig["arm_features"] = [f for f in arm_only.split("+") if f]
         # Set only for arm_shared entries hard-gated to a single target_arch upstream
         # (see extract_signatures.py's find_hard_arch_gate) - the generated wrapper test
         # must carry the same #[cfg(target_arch = ...)], since arm_shared is compiled
@@ -851,7 +879,40 @@ def parse_signatures(path: Path) -> dict[tuple[str, str], list[dict]]:
         seen.add(key)
         result[current_key].append(sig)
 
-    return result
+    return rebucket_neon_by_feature(result)
+
+
+def rebucket_neon_by_feature(data: dict[tuple[str, str], list[dict]]) -> dict[tuple[str, str], list[dict]]:
+    """Move functions out of a `neon` group into a group named after the feature they really
+    need, so the runtime gate checks that feature instead of NEON.
+
+    stdarch keeps CRC32, the crypto intrinsics, dot-product, i8mm and everything else in the
+    same `neon/generated.rs`, and bucketing by source file alone put all of them behind
+    `is_*_feature_detected!("neon")`. On a NEON-only chip that is not a skip, it is a SIGILL:
+    61 of them on an i.MX ARMv7 board (crc32/vaes/vsha/vdot/vmmla plus the vfma/vmaxnm/vrndn
+    group below). Scoped to `neon` on purpose - every other extension already comes from a
+    file named after its own feature, and moving an x86 function would rename its tests and
+    invalidate its captured expected values for nothing.
+
+    Two shapes, both handled here:
+      - an extra *base* feature (`"neon,dotprod"`, `"crc"`, `"aes"`, ...) - required on every
+        architecture, and detectable on both arm and aarch64;
+      - an arm-only extra (`cfg_attr(target_arch = "arm", target_feature(enable = "vfp4"))`)
+        where the function is plain NEON on aarch64. Those get their own group too, whose
+        detect helper answers `is_aarch64_feature_detected!("neon")` on aarch64 and `false` on
+        arm, where no runtime check for `vfp4`/`fp-armv8` exists."""
+    out: dict[tuple[str, str], list[dict]] = defaultdict(list)
+    for (arch, ext), funcs in data.items():
+        if ext != "neon":
+            out[(arch, ext)].extend(funcs)
+            continue
+        for sig in funcs:
+            extra = [f for f in sig.get("features", []) if f not in NEON_BASELINE_FEATURES]
+            if not extra:
+                extra = [f for f in sig.get("arm_features", []) if f not in NEON_BASELINE_FEATURES]
+            target = extra[0].replace("-", "_") if extra else ext
+            out[(arch, target)].append(sig)
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -1507,6 +1568,9 @@ def gen_ext_rs(arch: str, ext: str, funcs: list[dict], n_parts: int) -> str:
         "",
         "use crate::cpu::{ExtensionTest, TestFunction};",
         "",
+        # An extension whose name has an underscore (fp_armv8, sve2_aes) upper-cases into
+        # something that is not camel case; the name has to keep matching the module.
+        "#[allow(non_camel_case_types)]",
         f"pub struct {struct};",
         "",
         f"impl ExtensionTest for {struct} {{",
@@ -1620,13 +1684,18 @@ def get_feature_detect_fn(arch: str, feature: str) -> str:
         # See gen_arm_shared_detect_helpers - neither detection macro compiles standalone
         # on the "wrong" one of arm/aarch64, so this dispatches to a per-feature helper
         # that's internally cfg-split instead of emitting either macro call directly here.
-        return f"detect_arm_shared_{feature}()"
+        return f"{arm_shared_detect_name(feature)}()"
     if arch in ("riscv32", "riscv64", "riscv_shared"):
         # Unstable (stdarch_riscv_feature_detection) - see lib.rs's cfg_attr.
         return f'std::arch::is_riscv_feature_detected!("{feature}")'
     # For other architectures, we'll need to add detection when available
     # For now, return a placeholder that always returns false
     return "false /* feature detection not yet implemented */"
+
+
+def arm_shared_detect_name(feature: str) -> str:
+    """Helper name for `feature` - a target_feature string can contain `-` (`fp-armv8`)."""
+    return f"detect_arm_shared_{feature.replace('-', '_')}"
 
 
 def gen_arm_shared_detect_helpers(all_data: dict[str, dict[str, list[dict]]]) -> list[str]:
@@ -1645,11 +1714,15 @@ def gen_arm_shared_detect_helpers(all_data: dict[str, dict[str, list[dict]]]) ->
     for feature in features:
         lines += [
             "#[cfg(any(target_arch = \"arm\", target_arch = \"aarch64\"))]",
-            f"fn detect_arm_shared_{feature}() -> bool {{",
+            f"fn {arm_shared_detect_name(feature)}() -> bool {{",
             "    #[cfg(target_arch = \"arm\")]",
-            f"    {{ return std::arch::is_arm_feature_detected!(\"{feature}\"); }}",
+            (f"    {{ return std::arch::is_arm_feature_detected!(\"{feature}\"); }}"
+             if feature in ARM32_DETECTABLE_FEATURES
+             else f"    {{ return false; /* no is_arm_feature_detected! string for \"{feature}\" */ }}"),
             "    #[cfg(target_arch = \"aarch64\")]",
-            f"    {{ return std::arch::is_aarch64_feature_detected!(\"{feature}\"); }}",
+            (f"    {{ return std::arch::is_aarch64_feature_detected!(\"neon\"); /* plain NEON here; \"{feature}\" is a 32-bit ARM requirement */ }}"
+             if feature in NEON_AARCH64_PLAIN_FEATURES
+             else f"    {{ return std::arch::is_aarch64_feature_detected!(\"{feature}\"); }}"),
             "}",
             "",
         ]
@@ -1662,7 +1735,7 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
         "#![allow(unused_imports)]",
         "#![allow(unreachable_code)]",
         "",
-        "use crate::cpu::{ExtensionTest, FeatureStats, TestStatistics, ProgressCallback, TestFunction};",
+        "use crate::cpu::{ExtensionStatus, ExtensionTest, FeatureStats, TestStatistics, ProgressCallback, TestFunction};",
         "use crate::cpu::{reset_stop_flag, should_stop, should_skip_feature};",
         "",
     ]
@@ -1828,6 +1901,37 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
 
     lines += [
         "    functions",
+        "}",
+        "",
+        "/// Every extension this binary was built with, whether or not this machine has it -",
+        "/// the whole suite is always compiled in (see target_feature_attr in the generator),",
+        "/// so this is the only place the difference is visible.",
+        "pub fn extension_status() -> Vec<ExtensionStatus> {",
+        "    #[allow(unused_mut)]",
+        "    let mut exts: Vec<ExtensionStatus> = Vec::new();",
+        "",
+    ]
+
+    for arch in sorted(all_data.keys()):
+        emit_arch_cfg(lines, get_target_arch_cfg(arch), "    ")
+        lines.append("    {")
+        for ext, funcs in sorted(all_data[arch].items()):
+            if ext in SKIP_EXTENSIONS or not funcs:
+                continue
+            struct = ext_to_struct(ext)
+            detect_fn = get_feature_detect_fn(arch, ext_to_feature(ext))
+            # get_feature_detect_fn falls back to a literal `false` when the extension has no
+            # detection string at all - that is "can never run", not "this CPU lacks it".
+            detectable = "false" if detect_fn.startswith("false") else "true"
+            path = f"crate::cpu::auto_generated::{arch}::{ext}::{struct}"
+            lines.append(f"        exts.push(ExtensionStatus {{ arch: \"{arch}\", ext: \"{ext}\",")
+            lines.append(f"            test_count: {path}::get_tests().len(),")
+            lines.append(f"            supported: {detect_fn}, detectable: {detectable} }});")
+        lines.append("    }")
+        lines.append("")
+
+    lines += [
+        "    exts",
         "}",
         "",
         "/// Flat list of (test_name, feature, test_fn) for every feature detected at runtime",

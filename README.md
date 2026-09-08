@@ -23,9 +23,8 @@ additionally needs [`cargo-zigbuild`](https://github.com/rust-cross/cargo-zigbui
 cross-compiling to a 32-bit ARM device.
 
 ```bash
-just install        # onto PATH (~/.cargo/bin) - portable build, cpu + gpu + serve
-just install-all    # same, but + vulkan and target-cpu=native (fastest/widest CPU coverage
-                     # on THIS machine specifically - do not copy the binary elsewhere)
+just install        # onto PATH (~/.cargo/bin) - cpu + gpu + serve
+just install-all    # same, plus vulkan
 just install-arm 192.168.1.50            # cross-build + scp straight onto an ARM perimeter
 just install-arm 192.168.1.50 pi         # ...as a specific remote user instead of root
 ```
@@ -39,8 +38,14 @@ cross-`gcc`) does the same cross-build by hand for a 64-bit target in the meanti
 `CLAUDE.md`'s "Non-x86 architectures" section for the full cross-compile + qemu-user recipe this
 project already uses to verify that build.
 
-No `just`? Plain `cargo install --path hodow_cli` (optionally with `--features vulkan` and/or
-`RUSTFLAGS="-C target-cpu=native"`) does the same thing directly.
+Either binary is portable. The whole CPU suite - AVX-512, GFNI, SHA and the rest - is compiled in
+no matter what the building machine has, because each generated test carries its own
+`#[target_feature]`; runtime detection alone decides what runs. Build it anywhere, copy it to any
+x86_64 box, and it tests whatever that box actually has. Do not add `-C target-cpu=native`: it
+makes the binary machine-specific without adding any coverage.
+
+No `just`? Plain `cargo install --path hodow_cli` (optionally with `--features vulkan`) does the
+same thing directly.
 
 ### Run
 
@@ -51,6 +56,10 @@ CPU/GPU/Vulkan are independent test suites with different runtimes and different
 commands rather than one that silently swallows which one broke.
 
 ```bash
+hodow_cli info                   # what this machine is: CPU, RAM, distro, OpenGL/Vulkan, and
+                                  # which CPU extensions are compiled in vs. present here
+hodow_cli info --no-gpu          # ...without the Graphics section, which is the only part
+                                  # that loads a GPU driver
 hodow_cli cpu                    # run the CPU SIMD instruction-set suite
 hodow_cli cpu --isolate          # same, but crash-safe: a segfaulting instruction is
                                   # reported as CRASHED for that one test, not a dead process

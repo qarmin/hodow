@@ -33,8 +33,9 @@ pub struct Capabilities {
     /// "arch:feature" strings for every CPU extension detected as available at runtime on
     /// this machine (e.g. "x86:avx512f") - same data `hodow_cli cpu -l` prints.
     pub cpu_modes: Vec<String>,
-    /// Total number of registered CPU test functions for those detected extensions - i.e.
-    /// how many tests a filter-less `Cpu` job actually runs here.
+    /// How many tests a filter-less `Cpu` job actually runs here - only the detected
+    /// extensions. `list_all_functions()` is a larger number: the whole suite is compiled in
+    /// regardless of this machine (see `extension_status`).
     pub cpu_test_count: usize,
     pub gpu_compiled: bool,
     pub vulkan_compiled: bool,
@@ -43,7 +44,7 @@ pub struct Capabilities {
 fn detect_capabilities() -> Capabilities {
     Capabilities {
         cpu_modes: hodow_core::available_modes(),
-        cpu_test_count: hodow_core::list_all_functions().len(),
+        cpu_test_count: hodow_core::all_tests().len(),
         gpu_compiled: cfg!(feature = "gpu"),
         vulkan_compiled: cfg!(feature = "vulkan"),
     }

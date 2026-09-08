@@ -123,7 +123,10 @@ pub enum TestOutcome {
     Fail(String),
     Panic,
     Timeout,
-    Crashed,
+    /// Carries the signal name / exit status - see `isolate::crash_reason`. Records written
+    /// before this carried a reason were a bare `"Crashed"` string and no longer deserialize;
+    /// `Store::read_events` already skips lines it cannot parse.
+    Crashed(String),
 }
 
 /// One line of a job's `jobs/<id>.jsonl` event log.

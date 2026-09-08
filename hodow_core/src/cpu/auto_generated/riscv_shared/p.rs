@@ -8,6 +8,7 @@ use crate::cpu::auto_generated::riscv_shared::p::part3::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 
+#[allow(non_camel_case_types)]
 pub struct P;
 
 impl ExtensionTest for P {

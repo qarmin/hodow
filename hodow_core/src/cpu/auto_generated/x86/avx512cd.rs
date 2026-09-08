@@ -4,6 +4,7 @@ use crate::cpu::auto_generated::x86::avx512cd::part1::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 
+#[allow(non_camel_case_types)]
 pub struct AVX512CD;
 
 impl ExtensionTest for AVX512CD {

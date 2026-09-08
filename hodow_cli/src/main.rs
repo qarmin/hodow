@@ -11,6 +11,7 @@ use log::info;
 mod cli;
 mod cpu;
 mod gpu;
+mod info;
 mod isolate;
 #[cfg(feature = "serve")]
 mod serve;
@@ -126,7 +127,9 @@ fn main() {
     handsome_logger::TermLogger::init(config, Default::default(), Default::default()).expect("Failed to initialize logger");
 
     print_build_info();
-    if !is_worker {
+    // `info` writes a plain report on stdout, not a log - no timestamps, no call sites, and
+    // no "Running: ..." banner ahead of it.
+    if !is_worker && !matches!(cli.command, Commands::Info(_)) {
         info!("Running: {:?}", cli.command);
     }
 
@@ -136,5 +139,6 @@ fn main() {
         Commands::Vulkan(args) => vulkan::process_vulkan(args),
         #[cfg(feature = "serve")]
         Commands::Serve(args) => serve::process_serve(args),
+        Commands::Info(args) => info::process_info(args),
     }
 }

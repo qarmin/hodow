@@ -76,6 +76,37 @@ def collapse_signature(lines: list[str], start: int) -> tuple[str, int] | None:
 
 
 _HARD_ARCH_GATE_RE = re.compile(r'^#\[cfg\(target_arch\s*=\s*"(arm|aarch64)"\)\]$')
+_PLAIN_TF_RE = re.compile(r'^#\[target_feature\(enable\s*=\s*"([^"]+)"\)\]$')
+_ARM_ONLY_TF_RE = re.compile(r'^#\[cfg_attr\(target_arch\s*=\s*"arm",\s*target_feature\(enable\s*=\s*"([^"]+)"\)\)\]$')
+
+
+def find_target_features(lines: list[str], fn_idx: int) -> tuple[list[str], list[str]]:
+    """The features the function actually needs, straight from its own attributes: the
+    unconditional `#[target_feature(enable = "...")]` set, and separately the extra one
+    `#[cfg_attr(target_arch = "arm", ...)]` adds on 32-bit ARM only.
+
+    Bucketing by source file alone is what put `__crc32b` (which needs `crc`) and
+    `vaesdq_u8` (`aes`) into the `neon` group, where a NEON-only CPU ran them and took a
+    SIGILL. Same backward walk as find_hard_arch_gate, for the same multi-line reason."""
+    base: list[str] = []
+    arm_only: list[str] = []
+    depth = 0
+    j = fn_idx - 1
+    while j >= 0:
+        stripped = lines[j].strip()
+        if not stripped:
+            j -= 1
+            continue
+        depth += stripped.count(")") - stripped.count("(")
+        if depth <= 0:
+            if m := _PLAIN_TF_RE.match(stripped):
+                base = m.group(1).split(",") + base
+            elif m := _ARM_ONLY_TF_RE.match(stripped):
+                arm_only = m.group(1).split(",") + arm_only
+            elif not stripped.startswith("#["):
+                break
+        j -= 1
+    return base, arm_only
 
 
 def find_hard_arch_gate(lines: list[str], fn_idx: int) -> str | None:
@@ -106,7 +137,7 @@ def find_hard_arch_gate(lines: list[str], fn_idx: int) -> str | None:
     return None
 
 
-def extract_file(path: Path, rel_prefix: str) -> list[tuple[int, str, str | None]]:
+def extract_file(path: Path, rel_prefix: str) -> list[tuple[int, str, str | None, tuple[list[str], list[str]]]]:
     """
     Returns list of (1-based line number, collapsed signature string, arch-only constraint)
     for every public intrinsic function in `path`.
@@ -123,10 +154,11 @@ def extract_file(path: Path, rel_prefix: str) -> list[tuple[int, str, str | None
         m = fn_re.match(lines[i].strip())
         if m:
             arch_only = find_hard_arch_gate(lines, i)
+            features = find_target_features(lines, i)
             result = collapse_signature(lines, i)
             if result is not None:
                 sig, end = result
-                results.append((i + 1, sig, arch_only))  # 1-based
+                results.append((i + 1, sig, arch_only, features))  # 1-based
                 i = end + 1
                 continue
         i += 1
@@ -135,9 +167,9 @@ def extract_file(path: Path, rel_prefix: str) -> list[tuple[int, str, str | None
 
 
 def process_dir(src_dir: Path, rel_prefix: str,
-                only_stems: set[str] | None) -> dict[str, list[tuple[int, str, str | None]]]:
+                only_stems: set[str] | None) -> dict[str, list[tuple[int, str, str | None, tuple[list[str], list[str]]]]]:
     """Process a directory and its subdirectories for .rs files."""
-    out: dict[str, list[tuple[int, str, str | None]]] = {}
+    out: dict[str, list[tuple[int, str, str | None, tuple[list[str], list[str]]]]] = {}
 
     # Process .rs files directly in this directory
     for rs in sorted(src_dir.glob("*.rs")):
@@ -202,8 +234,13 @@ def main() -> None:
     lines_out: list[str] = []
     for file_key, sigs in sorted(sections.items()):
         lines_out.append(file_key)
-        for lineno, sig, arch_only in sigs:
+        for lineno, sig, arch_only, (base, arm_only) in sigs:
             marker = f"@{arch_only}" if arch_only else ""
+            # `%base` / `%base^arm-only` - the function's own target_feature attributes, see
+            # find_target_features. Omitted entirely when it has none, so the vast majority of
+            # lines (and every pre-existing x86 one) keep their previous shape.
+            if base or arm_only:
+                marker += "%" + "+".join(base) + (("^" + "+".join(arm_only)) if arm_only else "")
             lines_out.append(f"{lineno}{marker}:{sig}")
         lines_out.append("")
 

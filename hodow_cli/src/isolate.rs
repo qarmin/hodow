@@ -36,7 +36,40 @@ pub(crate) enum Outcome {
     Fail(String),
     Panic,
     Timeout,
-    Crashed,
+    /// How the child died - a signal name where there was one, otherwise the exit status.
+    Crashed(String),
+}
+
+/// Turn a dead child's exit status into something a reader can act on: SIGILL means the
+/// instruction is not available here, SIGSEGV means a bad address, SIGBUS a misaligned one,
+/// SIGKILL is usually the OOM killer rather than the test at all. Reporting all of them as a
+/// bare "CRASHED" throws that away.
+fn crash_reason(status: Option<std::process::ExitStatus>) -> String {
+    let Some(status) = status else {
+        return "could not be reaped".to_string();
+    };
+    #[cfg(unix)]
+    {
+        use std::os::unix::process::ExitStatusExt;
+        if let Some(sig) = status.signal() {
+            let name = match sig {
+                4 => "SIGILL (illegal instruction)",
+                5 => "SIGTRAP (trap)",
+                6 => "SIGABRT (abort)",
+                7 => "SIGBUS (bus error - misaligned or unmapped access)",
+                8 => "SIGFPE (arithmetic error)",
+                9 => "SIGKILL (killed - usually the OOM killer)",
+                11 => "SIGSEGV (segmentation fault)",
+                15 => "SIGTERM (terminated)",
+                other => return format!("signal {other}"),
+            };
+            return format!("{name}{}", if status.core_dumped() { ", core dumped" } else { "" });
+        }
+    }
+    match status.code() {
+        Some(code) => format!("exit code {code}"),
+        None => "terminated for an unknown reason".to_string(),
+    }
 }
 
 /// The filtered test list (name, fn) both the worker and the parent must agree on, so
@@ -218,15 +251,16 @@ pub(crate) fn run_isolated_core(args: &CpuArgs, mut on_event: impl FnMut(usize, 
             }
         }
 
-        let _ = child.wait();
+        let status = child.wait().ok();
         let _ = reader.join();
 
         // Child died mid-test without a DONE line => it crashed on that test.
         if let Some(culprit) = in_flight
             && culprit < total
         {
-            info!("CRASHED: {}", names[culprit]);
-            outcome[culprit] = Outcome::Crashed;
+            let reason = crash_reason(status);
+            info!("CRASHED ({reason}): {}", names[culprit]);
+            outcome[culprit] = Outcome::Crashed(reason);
             on_event(culprit, names[culprit], &outcome[culprit]);
             advanced_to = culprit + 1;
         }
@@ -235,7 +269,9 @@ pub(crate) fn run_isolated_core(args: &CpuArgs, mut on_event: impl FnMut(usize, 
         // Guard against a startup crash producing no progress (avoid an infinite respawn loop).
         if next == prev_next && next < total {
             if outcome[next] == Outcome::Pending {
-                outcome[next] = Outcome::Crashed;
+                let reason = crash_reason(status);
+                error!("CRASHED before reporting any progress ({reason}): {}", names[next]);
+                outcome[next] = Outcome::Crashed(reason);
                 on_event(next, names[next], &outcome[next]);
             }
             next += 1;
@@ -259,7 +295,7 @@ fn print_report(names: &[&'static str], outcome: &[Outcome]) {
             Outcome::Fail(_) => fail += 1,
             Outcome::Panic => panic += 1,
             Outcome::Timeout => timeout += 1,
-            Outcome::Crashed => crashed += 1,
+            Outcome::Crashed(_) => crashed += 1,
             Outcome::Pending => pending += 1,
         }
     }
@@ -286,7 +322,7 @@ fn print_report(names: &[&'static str], outcome: &[Outcome]) {
             Outcome::Fail(msg) => Some((*name, format!("FAIL: {msg}"))),
             Outcome::Panic => Some((*name, "PANIC".to_string())),
             Outcome::Timeout => Some((*name, "TIMEOUT".to_string())),
-            Outcome::Crashed => Some((*name, "CRASHED".to_string())),
+            Outcome::Crashed(reason) => Some((*name, format!("CRASHED: {reason}"))),
             _ => None,
         })
         .collect();
@@ -343,7 +379,7 @@ fn build_records(names: &[&'static str], outcome: &[Outcome]) -> Vec<ReportRecor
                 Outcome::Fail(msg) => ("fail", Some(msg.clone())),
                 Outcome::Panic => ("panic", None),
                 Outcome::Timeout => ("timeout", None),
-                Outcome::Crashed => ("crashed", None),
+                Outcome::Crashed(reason) => ("crashed", Some(reason.clone())),
                 Outcome::Pending => ("pending", None),
             };
             let (got, expected) = message.as_deref().map(split_got_expected).unwrap_or((None, None));

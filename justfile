@@ -45,7 +45,8 @@ install-all:
 # binary landing there ready to run by hand, e.g. `ssh {{user}}@<ip> ./hodow_cli cpu`.
 # Usage: just install-arm 192.168.1.50 [user]
 install-arm ip_address user="root":
-    cargo zigbuild -p hodow_cli --target armv7-unknown-linux-gnueabihf.2.28 --release --no-default-features --features gpu
+    rustup target add armv7-unknown-linux-gnueabihf --toolchain {{NIGHTLY}}
+    cargo +{{NIGHTLY}} zigbuild -p hodow_cli --target armv7-unknown-linux-gnueabihf.2.28 --release --no-default-features --features gpu
     scp -O target/armv7-unknown-linux-gnueabihf/release/hodow_cli {{user}}@{{ip_address}}:~/hodow_cli
     @echo "Copied to {{user}}@{{ip_address}}:~/hodow_cli - run e.g. './hodow_cli cpu --isolate' there."
 
@@ -90,14 +91,24 @@ submit-gpu *args:
 submit-vulkan *args:
     cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan -- -d vulkan --submit-to http://127.0.0.1:7878 {{args}}
 
+# Nightly, like every other recipe here: hodow_core's arm/aarch64/riscv paths need
+# `#![feature(...)]` for the unstable stdarch intrinsics and detection macros they use
+# (lib.rs's per-arch cfg_attr), which is E0554 on stable. Inert on x86_64, which is why
+# `install`/`install-all` can stay on the default toolchain.
 arm:
-    cargo zigbuild -p hodow_cli --target armv7-unknown-linux-gnueabihf.2.28 --no-default-features --features gpu
+    rustup target add armv7-unknown-linux-gnueabihf --toolchain {{NIGHTLY}}
+    cargo +{{NIGHTLY}} zigbuild -p hodow_cli --target armv7-unknown-linux-gnueabihf.2.28 --no-default-features --features gpu
 
 gpu *args:
     cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan -- -d gpu --time-limit 1000 {{args}}
 
 vulkan *args:
     cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan -- -d vulkan {{args}}
+
+# What this machine is and which CPU extensions this binary can test on it. Touches no
+# driver, so it is safe to run first on an unknown box.
+info *args:
+    cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan -- info {{args}}
 
 memtest *args:
     cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan --release -- -d gpu --memtest {{args}}

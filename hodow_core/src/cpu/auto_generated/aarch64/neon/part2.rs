@@ -7,66 +7,6 @@ use crate::cpu::common::sve::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_aarch64_neon_vaddv_u16() -> Result<(), String> {
-    unsafe {
-        let result = vaddv_u16(create_uint16x4_t_from([1, 2, 3, 4]));
-        check_int_equality(result as i32, 10).map_err(|e| format!("{e} | call: vaddv_u16(create_uint16x4_t_from([1, 2, 3, 4]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = vaddv_u16(create_random_uint16x4_t());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_aarch64_neon_vaddvq_u16() -> Result<(), String> {
-    unsafe {
-        let result = vaddvq_u16(create_uint16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]));
-        check_int_equality(result as i32, 36).map_err(|e| format!("{e} | call: vaddvq_u16(create_uint16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = vaddvq_u16(create_random_uint16x8_t());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_aarch64_neon_vaddvq_u32() -> Result<(), String> {
-    unsafe {
-        let result = vaddvq_u32(create_uint32x4_t_from([1, 2, 3, 4]));
-        check_int_equality(result as i32, 10).map_err(|e| format!("{e} | call: vaddvq_u32(create_uint32x4_t_from([1, 2, 3, 4]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = vaddvq_u32(create_random_uint32x4_t());
-            }
-        }
-    }
-    Ok(())
-}
-
 pub(super) fn test_aarch64_neon_vaddvq_s64() -> Result<(), String> {
     unsafe {
         let result = vaddvq_s64(create_int64x2_t_from([1, 2]));
@@ -101,406 +41,6 @@ pub(super) fn test_aarch64_neon_vaddvq_u64() -> Result<(), String> {
                     break;
                 }
                 let _ = vaddvq_u64(create_random_uint64x2_t());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_aarch64_neon_vamax_f32() -> Result<(), String> {
-    unsafe {
-        let result = unpack_float32x2_t_to_f32_array(vamax_f32(create_float32x2_t_from([1.0, 2.0]), create_float32x2_t_from([3.0, 4.0])));
-        check_array_equality(&result, &[0.0f32; 2]).map_err(|e| format!("{e} | call: vamax_f32(create_float32x2_t_from([1.0, 2.0]), create_float32x2_t_from([3.0, 4.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = vamax_f32(create_random_float32x2_t(), create_random_float32x2_t());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_aarch64_neon_vamaxq_f32() -> Result<(), String> {
-    unsafe {
-        let result = unpack_float32x4_t_to_f32_array(vamaxq_f32(create_float32x4_t_from([1.0, 2.0, 3.0, 4.0]), create_float32x4_t_from([5.0, 6.0, 7.0, 8.0])));
-        check_array_equality(&result, &[0.0f32; 4]).map_err(|e| format!("{e} | call: vamaxq_f32(create_float32x4_t_from([1.0, 2.0, 3.0, 4.0]), create_float32x4_t_from([5.0, 6.0, 7.0, 8.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = vamaxq_f32(create_random_float32x4_t(), create_random_float32x4_t());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_aarch64_neon_vamaxq_f64() -> Result<(), String> {
-    unsafe {
-        let result = unpack_float64x2_t_to_f64_array(vamaxq_f64(create_float64x2_t_from([1.0, 2.0]), create_float64x2_t_from([3.0, 4.0])));
-        check_array_equality(&result, &[0.0f64; 2]).map_err(|e| format!("{e} | call: vamaxq_f64(create_float64x2_t_from([1.0, 2.0]), create_float64x2_t_from([3.0, 4.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = vamaxq_f64(create_random_float64x2_t(), create_random_float64x2_t());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_aarch64_neon_vamin_f32() -> Result<(), String> {
-    unsafe {
-        let result = unpack_float32x2_t_to_f32_array(vamin_f32(create_float32x2_t_from([1.0, 2.0]), create_float32x2_t_from([3.0, 4.0])));
-        check_array_equality(&result, &[0.0f32; 2]).map_err(|e| format!("{e} | call: vamin_f32(create_float32x2_t_from([1.0, 2.0]), create_float32x2_t_from([3.0, 4.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = vamin_f32(create_random_float32x2_t(), create_random_float32x2_t());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_aarch64_neon_vaminq_f32() -> Result<(), String> {
-    unsafe {
-        let result = unpack_float32x4_t_to_f32_array(vaminq_f32(create_float32x4_t_from([1.0, 2.0, 3.0, 4.0]), create_float32x4_t_from([5.0, 6.0, 7.0, 8.0])));
-        check_array_equality(&result, &[0.0f32; 4]).map_err(|e| format!("{e} | call: vaminq_f32(create_float32x4_t_from([1.0, 2.0, 3.0, 4.0]), create_float32x4_t_from([5.0, 6.0, 7.0, 8.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = vaminq_f32(create_random_float32x4_t(), create_random_float32x4_t());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_aarch64_neon_vaminq_f64() -> Result<(), String> {
-    unsafe {
-        let result = unpack_float64x2_t_to_f64_array(vaminq_f64(create_float64x2_t_from([1.0, 2.0]), create_float64x2_t_from([3.0, 4.0])));
-        check_array_equality(&result, &[0.0f64; 2]).map_err(|e| format!("{e} | call: vaminq_f64(create_float64x2_t_from([1.0, 2.0]), create_float64x2_t_from([3.0, 4.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = vaminq_f64(create_random_float64x2_t(), create_random_float64x2_t());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_aarch64_neon_vbcaxq_s8() -> Result<(), String> {
-    unsafe {
-        let result = unpack_int8x16_t_to_i8_array(vbcaxq_s8(create_int8x16_t_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create_int8x16_t_from([17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]), create_int8x16_t_from([33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48])));
-        check_array_equality(&result, &[17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 16]).map_err(|e| format!("{e} | call: vbcaxq_s8(create_int8x16_t_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create_int8x16_t_from([17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]), create_int8x16_t_from([33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = vbcaxq_s8(create_random_int8x16_t(), create_random_int8x16_t(), create_random_int8x16_t());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_aarch64_neon_vbcaxq_s16() -> Result<(), String> {
-    unsafe {
-        let result = unpack_int16x8_t_to_i16_array(vbcaxq_s16(create_int16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]), create_int16x8_t_from([9, 10, 11, 12, 13, 14, 15, 16]), create_int16x8_t_from([17, 18, 19, 20, 21, 22, 23, 24])));
-        check_array_equality(&result, &[9, 10, 11, 12, 13, 14, 15, 8]).map_err(|e| format!("{e} | call: vbcaxq_s16(create_int16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]), create_int16x8_t_from([9, 10, 11, 12, 13, 14, 15, 16]), create_int16x8_t_from([17, 18, 19, 20, 21, 22, 23, 24]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = vbcaxq_s16(create_random_int16x8_t(), create_random_int16x8_t(), create_random_int16x8_t());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_aarch64_neon_vbcaxq_s32() -> Result<(), String> {
-    unsafe {
-        let result = unpack_int32x4_t_to_i32_array(vbcaxq_s32(create_int32x4_t_from([1, 2, 3, 4]), create_int32x4_t_from([5, 6, 7, 8]), create_int32x4_t_from([9, 10, 11, 12])));
-        check_array_equality(&result, &[5, 6, 7, 4]).map_err(|e| format!("{e} | call: vbcaxq_s32(create_int32x4_t_from([1, 2, 3, 4]), create_int32x4_t_from([5, 6, 7, 8]), create_int32x4_t_from([9, 10, 11, 12]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = vbcaxq_s32(create_random_int32x4_t(), create_random_int32x4_t(), create_random_int32x4_t());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_aarch64_neon_vbcaxq_s64() -> Result<(), String> {
-    unsafe {
-        let result = unpack_int64x2_t_to_i64_array(vbcaxq_s64(create_int64x2_t_from([1, 2]), create_int64x2_t_from([3, 4]), create_int64x2_t_from([5, 6])));
-        check_array_equality(&result, &[3, 2]).map_err(|e| format!("{e} | call: vbcaxq_s64(create_int64x2_t_from([1, 2]), create_int64x2_t_from([3, 4]), create_int64x2_t_from([5, 6]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = vbcaxq_s64(create_random_int64x2_t(), create_random_int64x2_t(), create_random_int64x2_t());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_aarch64_neon_vbcaxq_u8() -> Result<(), String> {
-    unsafe {
-        let result = unpack_uint8x16_t_to_u8_array(vbcaxq_u8(create_uint8x16_t_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create_uint8x16_t_from([17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]), create_uint8x16_t_from([33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48])));
-        check_array_equality(&result, &[17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 16]).map_err(|e| format!("{e} | call: vbcaxq_u8(create_uint8x16_t_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create_uint8x16_t_from([17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]), create_uint8x16_t_from([33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = vbcaxq_u8(create_random_uint8x16_t(), create_random_uint8x16_t(), create_random_uint8x16_t());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_aarch64_neon_vbcaxq_u16() -> Result<(), String> {
-    unsafe {
-        let result = unpack_uint16x8_t_to_u16_array(vbcaxq_u16(create_uint16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]), create_uint16x8_t_from([9, 10, 11, 12, 13, 14, 15, 16]), create_uint16x8_t_from([17, 18, 19, 20, 21, 22, 23, 24])));
-        check_array_equality(&result, &[9, 10, 11, 12, 13, 14, 15, 8]).map_err(|e| format!("{e} | call: vbcaxq_u16(create_uint16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]), create_uint16x8_t_from([9, 10, 11, 12, 13, 14, 15, 16]), create_uint16x8_t_from([17, 18, 19, 20, 21, 22, 23, 24]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = vbcaxq_u16(create_random_uint16x8_t(), create_random_uint16x8_t(), create_random_uint16x8_t());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_aarch64_neon_vbcaxq_u32() -> Result<(), String> {
-    unsafe {
-        let result = unpack_uint32x4_t_to_u32_array(vbcaxq_u32(create_uint32x4_t_from([1, 2, 3, 4]), create_uint32x4_t_from([5, 6, 7, 8]), create_uint32x4_t_from([9, 10, 11, 12])));
-        check_array_equality(&result, &[5, 6, 7, 4]).map_err(|e| format!("{e} | call: vbcaxq_u32(create_uint32x4_t_from([1, 2, 3, 4]), create_uint32x4_t_from([5, 6, 7, 8]), create_uint32x4_t_from([9, 10, 11, 12]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = vbcaxq_u32(create_random_uint32x4_t(), create_random_uint32x4_t(), create_random_uint32x4_t());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_aarch64_neon_vbcaxq_u64() -> Result<(), String> {
-    unsafe {
-        let result = unpack_uint64x2_t_to_u64_array(vbcaxq_u64(create_uint64x2_t_from([1, 2]), create_uint64x2_t_from([3, 4]), create_uint64x2_t_from([5, 6])));
-        check_array_equality(&result, &[3, 2]).map_err(|e| format!("{e} | call: vbcaxq_u64(create_uint64x2_t_from([1, 2]), create_uint64x2_t_from([3, 4]), create_uint64x2_t_from([5, 6]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = vbcaxq_u64(create_random_uint64x2_t(), create_random_uint64x2_t(), create_random_uint64x2_t());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_aarch64_neon_vcadd_rot270_f32() -> Result<(), String> {
-    unsafe {
-        let result = unpack_float32x2_t_to_f32_array(vcadd_rot270_f32(create_float32x2_t_from([1.0, 2.0]), create_float32x2_t_from([3.0, 4.0])));
-        check_array_equality(&result, &[5.0, -1.0]).map_err(|e| format!("{e} | call: vcadd_rot270_f32(create_float32x2_t_from([1.0, 2.0]), create_float32x2_t_from([3.0, 4.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = vcadd_rot270_f32(create_random_float32x2_t(), create_random_float32x2_t());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_aarch64_neon_vcaddq_rot270_f32() -> Result<(), String> {
-    unsafe {
-        let result = unpack_float32x4_t_to_f32_array(vcaddq_rot270_f32(create_float32x4_t_from([1.0, 2.0, 3.0, 4.0]), create_float32x4_t_from([5.0, 6.0, 7.0, 8.0])));
-        check_array_equality(&result, &[7.0, -3.0, 11.0, -3.0]).map_err(|e| format!("{e} | call: vcaddq_rot270_f32(create_float32x4_t_from([1.0, 2.0, 3.0, 4.0]), create_float32x4_t_from([5.0, 6.0, 7.0, 8.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = vcaddq_rot270_f32(create_random_float32x4_t(), create_random_float32x4_t());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_aarch64_neon_vcaddq_rot270_f64() -> Result<(), String> {
-    unsafe {
-        let result = unpack_float64x2_t_to_f64_array(vcaddq_rot270_f64(create_float64x2_t_from([1.0, 2.0]), create_float64x2_t_from([3.0, 4.0])));
-        check_array_equality(&result, &[5.0, -1.0]).map_err(|e| format!("{e} | call: vcaddq_rot270_f64(create_float64x2_t_from([1.0, 2.0]), create_float64x2_t_from([3.0, 4.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = vcaddq_rot270_f64(create_random_float64x2_t(), create_random_float64x2_t());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_aarch64_neon_vcadd_rot90_f32() -> Result<(), String> {
-    unsafe {
-        let result = unpack_float32x2_t_to_f32_array(vcadd_rot90_f32(create_float32x2_t_from([1.0, 2.0]), create_float32x2_t_from([3.0, 4.0])));
-        check_array_equality(&result, &[-3.0, 5.0]).map_err(|e| format!("{e} | call: vcadd_rot90_f32(create_float32x2_t_from([1.0, 2.0]), create_float32x2_t_from([3.0, 4.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = vcadd_rot90_f32(create_random_float32x2_t(), create_random_float32x2_t());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_aarch64_neon_vcaddq_rot90_f32() -> Result<(), String> {
-    unsafe {
-        let result = unpack_float32x4_t_to_f32_array(vcaddq_rot90_f32(create_float32x4_t_from([1.0, 2.0, 3.0, 4.0]), create_float32x4_t_from([5.0, 6.0, 7.0, 8.0])));
-        check_array_equality(&result, &[-5.0, 7.0, -5.0, 11.0]).map_err(|e| format!("{e} | call: vcaddq_rot90_f32(create_float32x4_t_from([1.0, 2.0, 3.0, 4.0]), create_float32x4_t_from([5.0, 6.0, 7.0, 8.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = vcaddq_rot90_f32(create_random_float32x4_t(), create_random_float32x4_t());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_aarch64_neon_vcaddq_rot90_f64() -> Result<(), String> {
-    unsafe {
-        let result = unpack_float64x2_t_to_f64_array(vcaddq_rot90_f64(create_float64x2_t_from([1.0, 2.0]), create_float64x2_t_from([3.0, 4.0])));
-        check_array_equality(&result, &[-3.0, 5.0]).map_err(|e| format!("{e} | call: vcaddq_rot90_f64(create_float64x2_t_from([1.0, 2.0]), create_float64x2_t_from([3.0, 4.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = vcaddq_rot90_f64(create_random_float64x2_t(), create_random_float64x2_t());
             }
         }
     }
@@ -1001,6 +541,466 @@ pub(super) fn test_aarch64_neon_vceqd_f64() -> Result<(), String> {
                     break;
                 }
                 let _ = vceqd_f64(rand::random::<f64>(), rand::random::<f64>());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_aarch64_neon_vceqs_f32() -> Result<(), String> {
+    unsafe {
+        let result = vceqs_f32(1.0f32, 2.0f32);
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: vceqs_f32(1.0f32, 2.0f32)"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = vceqs_f32(rand::random::<f32>(), rand::random::<f32>());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_aarch64_neon_vceqd_s64() -> Result<(), String> {
+    unsafe {
+        let result = vceqd_s64(1i64, 2i64);
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: vceqd_s64(1i64, 2i64)"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = vceqd_s64(rand::random::<i64>(), rand::random::<i64>());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_aarch64_neon_vceqd_u64() -> Result<(), String> {
+    unsafe {
+        let result = vceqd_u64(1u64, 2u64);
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: vceqd_u64(1u64, 2u64)"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = vceqd_u64(rand::random::<u64>(), rand::random::<u64>());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_aarch64_neon_vceqz_f32() -> Result<(), String> {
+    unsafe {
+        let result = unpack_uint32x2_t_to_u32_array(vceqz_f32(create_float32x2_t_from([1.0, 2.0])));
+        check_array_equality(&result, &[0u32; 2]).map_err(|e| format!("{e} | call: vceqz_f32(create_float32x2_t_from([1.0, 2.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = vceqz_f32(create_random_float32x2_t());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_aarch64_neon_vceqzq_f32() -> Result<(), String> {
+    unsafe {
+        let result = unpack_uint32x4_t_to_u32_array(vceqzq_f32(create_float32x4_t_from([1.0, 2.0, 3.0, 4.0])));
+        check_array_equality(&result, &[0u32; 4]).map_err(|e| format!("{e} | call: vceqzq_f32(create_float32x4_t_from([1.0, 2.0, 3.0, 4.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = vceqzq_f32(create_random_float32x4_t());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_aarch64_neon_vceqz_f64() -> Result<(), String> {
+    unsafe {
+        let result = unpack_uint64x1_t_to_u64_array(vceqz_f64(create_float64x1_t_from([1.0])));
+        check_array_equality(&result, &[0u64; 1]).map_err(|e| format!("{e} | call: vceqz_f64(create_float64x1_t_from([1.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = vceqz_f64(create_random_float64x1_t());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_aarch64_neon_vceqzq_f64() -> Result<(), String> {
+    unsafe {
+        let result = unpack_uint64x2_t_to_u64_array(vceqzq_f64(create_float64x2_t_from([1.0, 2.0])));
+        check_array_equality(&result, &[0u64; 2]).map_err(|e| format!("{e} | call: vceqzq_f64(create_float64x2_t_from([1.0, 2.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = vceqzq_f64(create_random_float64x2_t());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_aarch64_neon_vceqz_s8() -> Result<(), String> {
+    unsafe {
+        let result = unpack_uint8x8_t_to_u8_array(vceqz_s8(create_int8x8_t_from([1, 2, 3, 4, 5, 6, 7, 8])));
+        check_array_equality(&result, &[0u8; 8]).map_err(|e| format!("{e} | call: vceqz_s8(create_int8x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = vceqz_s8(create_random_int8x8_t());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_aarch64_neon_vceqzq_s8() -> Result<(), String> {
+    unsafe {
+        let result = unpack_uint8x16_t_to_u8_array(vceqzq_s8(create_int8x16_t_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])));
+        check_array_equality(&result, &[0u8; 16]).map_err(|e| format!("{e} | call: vceqzq_s8(create_int8x16_t_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = vceqzq_s8(create_random_int8x16_t());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_aarch64_neon_vceqz_s16() -> Result<(), String> {
+    unsafe {
+        let result = unpack_uint16x4_t_to_u16_array(vceqz_s16(create_int16x4_t_from([1, 2, 3, 4])));
+        check_array_equality(&result, &[0u16; 4]).map_err(|e| format!("{e} | call: vceqz_s16(create_int16x4_t_from([1, 2, 3, 4]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = vceqz_s16(create_random_int16x4_t());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_aarch64_neon_vceqzq_s16() -> Result<(), String> {
+    unsafe {
+        let result = unpack_uint16x8_t_to_u16_array(vceqzq_s16(create_int16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8])));
+        check_array_equality(&result, &[0u16; 8]).map_err(|e| format!("{e} | call: vceqzq_s16(create_int16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = vceqzq_s16(create_random_int16x8_t());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_aarch64_neon_vceqz_s32() -> Result<(), String> {
+    unsafe {
+        let result = unpack_uint32x2_t_to_u32_array(vceqz_s32(create_int32x2_t_from([1, 2])));
+        check_array_equality(&result, &[0u32; 2]).map_err(|e| format!("{e} | call: vceqz_s32(create_int32x2_t_from([1, 2]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = vceqz_s32(create_random_int32x2_t());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_aarch64_neon_vceqzq_s32() -> Result<(), String> {
+    unsafe {
+        let result = unpack_uint32x4_t_to_u32_array(vceqzq_s32(create_int32x4_t_from([1, 2, 3, 4])));
+        check_array_equality(&result, &[0u32; 4]).map_err(|e| format!("{e} | call: vceqzq_s32(create_int32x4_t_from([1, 2, 3, 4]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = vceqzq_s32(create_random_int32x4_t());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_aarch64_neon_vceqz_s64() -> Result<(), String> {
+    unsafe {
+        let result = unpack_uint64x1_t_to_u64_array(vceqz_s64(create_int64x1_t_from([1])));
+        check_array_equality(&result, &[0u64; 1]).map_err(|e| format!("{e} | call: vceqz_s64(create_int64x1_t_from([1]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = vceqz_s64(create_random_int64x1_t());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_aarch64_neon_vceqzq_s64() -> Result<(), String> {
+    unsafe {
+        let result = unpack_uint64x2_t_to_u64_array(vceqzq_s64(create_int64x2_t_from([1, 2])));
+        check_array_equality(&result, &[0u64; 2]).map_err(|e| format!("{e} | call: vceqzq_s64(create_int64x2_t_from([1, 2]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = vceqzq_s64(create_random_int64x2_t());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_aarch64_neon_vceqz_p8() -> Result<(), String> {
+    unsafe {
+        let result = unpack_uint8x8_t_to_u8_array(vceqz_p8(create_poly8x8_t_from([1, 2, 3, 4, 5, 6, 7, 8])));
+        check_array_equality(&result, &[0u8; 8]).map_err(|e| format!("{e} | call: vceqz_p8(create_poly8x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = vceqz_p8(create_random_poly8x8_t());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_aarch64_neon_vceqzq_p8() -> Result<(), String> {
+    unsafe {
+        let result = unpack_uint8x16_t_to_u8_array(vceqzq_p8(create_poly8x16_t_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])));
+        check_array_equality(&result, &[0u8; 16]).map_err(|e| format!("{e} | call: vceqzq_p8(create_poly8x16_t_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = vceqzq_p8(create_random_poly8x16_t());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_aarch64_neon_vceqz_p64() -> Result<(), String> {
+    unsafe {
+        let result = unpack_uint64x1_t_to_u64_array(vceqz_p64(create_poly64x1_t_from([1])));
+        check_array_equality(&result, &[0u64; 1]).map_err(|e| format!("{e} | call: vceqz_p64(create_poly64x1_t_from([1]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = vceqz_p64(create_random_poly64x1_t());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_aarch64_neon_vceqzq_p64() -> Result<(), String> {
+    unsafe {
+        let result = unpack_uint64x2_t_to_u64_array(vceqzq_p64(create_poly64x2_t_from([1, 2])));
+        check_array_equality(&result, &[0u64; 2]).map_err(|e| format!("{e} | call: vceqzq_p64(create_poly64x2_t_from([1, 2]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = vceqzq_p64(create_random_poly64x2_t());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_aarch64_neon_vceqz_u8() -> Result<(), String> {
+    unsafe {
+        let result = unpack_uint8x8_t_to_u8_array(vceqz_u8(create_uint8x8_t_from([1, 2, 3, 4, 5, 6, 7, 8])));
+        check_array_equality(&result, &[0u8; 8]).map_err(|e| format!("{e} | call: vceqz_u8(create_uint8x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = vceqz_u8(create_random_uint8x8_t());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_aarch64_neon_vceqzq_u8() -> Result<(), String> {
+    unsafe {
+        let result = unpack_uint8x16_t_to_u8_array(vceqzq_u8(create_uint8x16_t_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])));
+        check_array_equality(&result, &[0u8; 16]).map_err(|e| format!("{e} | call: vceqzq_u8(create_uint8x16_t_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = vceqzq_u8(create_random_uint8x16_t());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_aarch64_neon_vceqz_u16() -> Result<(), String> {
+    unsafe {
+        let result = unpack_uint16x4_t_to_u16_array(vceqz_u16(create_uint16x4_t_from([1, 2, 3, 4])));
+        check_array_equality(&result, &[0u16; 4]).map_err(|e| format!("{e} | call: vceqz_u16(create_uint16x4_t_from([1, 2, 3, 4]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = vceqz_u16(create_random_uint16x4_t());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_aarch64_neon_vceqzq_u16() -> Result<(), String> {
+    unsafe {
+        let result = unpack_uint16x8_t_to_u16_array(vceqzq_u16(create_uint16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8])));
+        check_array_equality(&result, &[0u16; 8]).map_err(|e| format!("{e} | call: vceqzq_u16(create_uint16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = vceqzq_u16(create_random_uint16x8_t());
             }
         }
     }

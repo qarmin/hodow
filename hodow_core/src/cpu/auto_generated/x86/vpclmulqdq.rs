@@ -4,6 +4,7 @@ use crate::cpu::auto_generated::x86::vpclmulqdq::part1::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 
+#[allow(non_camel_case_types)]
 pub struct VPCLMULQDQ;
 
 impl ExtensionTest for VPCLMULQDQ {

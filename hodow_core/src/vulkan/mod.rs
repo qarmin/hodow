@@ -31,6 +31,52 @@ pub struct VulkanReport {
     pub init_error: Option<String>,
 }
 
+/// One physical device as `probe_devices` sees it - identification only, nothing dispatched.
+#[derive(Debug, Clone)]
+pub struct VulkanDeviceInfo {
+    pub name: String,
+    pub api_version: String,
+    pub device_type: &'static str,
+}
+
+/// Enumerate Vulkan devices without running anything on them. Loads the loader and creates an
+/// instance (so a missing loader/ICD is reported as `Err`, the "Vulkan is not available here"
+/// case), but never creates a logical device or a queue - `run_compute_validation` does that.
+pub fn probe_devices() -> Result<Vec<VulkanDeviceInfo>, String> {
+    // SAFETY: standard loader/instance lifecycle; the instance is destroyed before returning.
+    unsafe {
+        let entry = ash::Entry::load().map_err(|e| format!("loader not available: {e}"))?;
+        let app_info = vk::ApplicationInfo::default()
+            .application_name(c"hodow")
+            .api_version(vk::make_api_version(0, 1, 1, 0));
+        let instance = entry
+            .create_instance(&vk::InstanceCreateInfo::default().application_info(&app_info), None)
+            .map_err(|e| format!("vkCreateInstance failed: {e}"))?;
+
+        let result = instance.enumerate_physical_devices().map_err(|e| format!("enumerate_physical_devices failed: {e}")).map(|pds| {
+            pds.into_iter()
+                .map(|pd| {
+                    let props = instance.get_physical_device_properties(pd);
+                    let v = props.api_version;
+                    VulkanDeviceInfo {
+                        name: c_str_to_string(&props.device_name),
+                        api_version: format!("{}.{}.{}", vk::api_version_major(v), vk::api_version_minor(v), vk::api_version_patch(v)),
+                        device_type: match props.device_type {
+                            vk::PhysicalDeviceType::DISCRETE_GPU => "discrete GPU",
+                            vk::PhysicalDeviceType::INTEGRATED_GPU => "integrated GPU",
+                            vk::PhysicalDeviceType::VIRTUAL_GPU => "virtual GPU",
+                            vk::PhysicalDeviceType::CPU => "CPU",
+                            _ => "other",
+                        },
+                    }
+                })
+                .collect()
+        });
+        instance.destroy_instance(None);
+        result
+    }
+}
+
 const COUNT: usize = 1024;
 const LOCAL_SIZE: u32 = 64;
 

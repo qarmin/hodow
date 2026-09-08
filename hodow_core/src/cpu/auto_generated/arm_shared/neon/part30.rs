@@ -8,10 +8,10 @@ use crate::cpu::common::arm::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_arm_shared_neon_vrhaddq_s8() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vrsra_n_s16() -> Result<(), String> {
     unsafe {
-        let result = unpack_int8x16_t_to_i8_array(vrhaddq_s8(create_int8x16_t_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create_int8x16_t_from([17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32])));
-        check_array_equality(&result, &[9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]).map_err(|e| format!("{e} | call: vrhaddq_s8(create_int8x16_t_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create_int8x16_t_from([17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]))"))?;
+        let result = unpack_int16x4_t_to_i16_array(vrsra_n_s16::<1>(create_int16x4_t_from([1, 2, 3, 4]), create_int16x4_t_from([5, 6, 7, 8])));
+        check_array_equality(&result, &[4, 5, 7, 8]).map_err(|e| format!("{e} | call: vrsra_n_s16::<1>(create_int16x4_t_from([1, 2, 3, 4]), create_int16x4_t_from([5, 6, 7, 8]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -21,17 +21,17 @@ pub(super) fn test_arm_shared_neon_vrhaddq_s8() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrhaddq_s8(create_random_int8x16_t(), create_random_int8x16_t());
+                let _ = vrsra_n_s16::<1>(create_random_int16x4_t(), create_random_int16x4_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrhadd_s16() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vrsraq_n_s16() -> Result<(), String> {
     unsafe {
-        let result = unpack_int16x4_t_to_i16_array(vrhadd_s16(create_int16x4_t_from([1, 2, 3, 4]), create_int16x4_t_from([5, 6, 7, 8])));
-        check_array_equality(&result, &[3, 4, 5, 6]).map_err(|e| format!("{e} | call: vrhadd_s16(create_int16x4_t_from([1, 2, 3, 4]), create_int16x4_t_from([5, 6, 7, 8]))"))?;
+        let result = unpack_int16x8_t_to_i16_array(vrsraq_n_s16::<1>(create_int16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]), create_int16x8_t_from([9, 10, 11, 12, 13, 14, 15, 16])));
+        check_array_equality(&result, &[6, 7, 9, 10, 12, 13, 15, 16]).map_err(|e| format!("{e} | call: vrsraq_n_s16::<1>(create_int16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]), create_int16x8_t_from([9, 10, 11, 12, 13, 14, 15, 16]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -41,17 +41,17 @@ pub(super) fn test_arm_shared_neon_vrhadd_s16() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrhadd_s16(create_random_int16x4_t(), create_random_int16x4_t());
+                let _ = vrsraq_n_s16::<1>(create_random_int16x8_t(), create_random_int16x8_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrhaddq_s16() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vrsra_n_s32() -> Result<(), String> {
     unsafe {
-        let result = unpack_int16x8_t_to_i16_array(vrhaddq_s16(create_int16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]), create_int16x8_t_from([9, 10, 11, 12, 13, 14, 15, 16])));
-        check_array_equality(&result, &[5, 6, 7, 8, 9, 10, 11, 12]).map_err(|e| format!("{e} | call: vrhaddq_s16(create_int16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]), create_int16x8_t_from([9, 10, 11, 12, 13, 14, 15, 16]))"))?;
+        let result = unpack_int32x2_t_to_i32_array(vrsra_n_s32::<1>(create_int32x2_t_from([1, 2]), create_int32x2_t_from([3, 4])));
+        check_array_equality(&result, &[3, 4]).map_err(|e| format!("{e} | call: vrsra_n_s32::<1>(create_int32x2_t_from([1, 2]), create_int32x2_t_from([3, 4]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -61,17 +61,17 @@ pub(super) fn test_arm_shared_neon_vrhaddq_s16() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrhaddq_s16(create_random_int16x8_t(), create_random_int16x8_t());
+                let _ = vrsra_n_s32::<1>(create_random_int32x2_t(), create_random_int32x2_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrhadd_s32() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vrsraq_n_s32() -> Result<(), String> {
     unsafe {
-        let result = unpack_int32x2_t_to_i32_array(vrhadd_s32(create_int32x2_t_from([1, 2]), create_int32x2_t_from([3, 4])));
-        check_array_equality(&result, &[2, 3]).map_err(|e| format!("{e} | call: vrhadd_s32(create_int32x2_t_from([1, 2]), create_int32x2_t_from([3, 4]))"))?;
+        let result = unpack_int32x4_t_to_i32_array(vrsraq_n_s32::<1>(create_int32x4_t_from([1, 2, 3, 4]), create_int32x4_t_from([5, 6, 7, 8])));
+        check_array_equality(&result, &[4, 5, 7, 8]).map_err(|e| format!("{e} | call: vrsraq_n_s32::<1>(create_int32x4_t_from([1, 2, 3, 4]), create_int32x4_t_from([5, 6, 7, 8]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -81,17 +81,17 @@ pub(super) fn test_arm_shared_neon_vrhadd_s32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrhadd_s32(create_random_int32x2_t(), create_random_int32x2_t());
+                let _ = vrsraq_n_s32::<1>(create_random_int32x4_t(), create_random_int32x4_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrhaddq_s32() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vrsra_n_s64() -> Result<(), String> {
     unsafe {
-        let result = unpack_int32x4_t_to_i32_array(vrhaddq_s32(create_int32x4_t_from([1, 2, 3, 4]), create_int32x4_t_from([5, 6, 7, 8])));
-        check_array_equality(&result, &[3, 4, 5, 6]).map_err(|e| format!("{e} | call: vrhaddq_s32(create_int32x4_t_from([1, 2, 3, 4]), create_int32x4_t_from([5, 6, 7, 8]))"))?;
+        let result = unpack_int64x1_t_to_i64_array(vrsra_n_s64::<1>(create_int64x1_t_from([1]), create_int64x1_t_from([2])));
+        check_array_equality(&result, &[2]).map_err(|e| format!("{e} | call: vrsra_n_s64::<1>(create_int64x1_t_from([1]), create_int64x1_t_from([2]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -101,17 +101,17 @@ pub(super) fn test_arm_shared_neon_vrhaddq_s32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrhaddq_s32(create_random_int32x4_t(), create_random_int32x4_t());
+                let _ = vrsra_n_s64::<1>(create_random_int64x1_t(), create_random_int64x1_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrhadd_u8() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vrsraq_n_s64() -> Result<(), String> {
     unsafe {
-        let result = unpack_uint8x8_t_to_u8_array(vrhadd_u8(create_uint8x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]), create_uint8x8_t_from([9, 10, 11, 12, 13, 14, 15, 16])));
-        check_array_equality(&result, &[5, 6, 7, 8, 9, 10, 11, 12]).map_err(|e| format!("{e} | call: vrhadd_u8(create_uint8x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]), create_uint8x8_t_from([9, 10, 11, 12, 13, 14, 15, 16]))"))?;
+        let result = unpack_int64x2_t_to_i64_array(vrsraq_n_s64::<1>(create_int64x2_t_from([1, 2]), create_int64x2_t_from([3, 4])));
+        check_array_equality(&result, &[3, 4]).map_err(|e| format!("{e} | call: vrsraq_n_s64::<1>(create_int64x2_t_from([1, 2]), create_int64x2_t_from([3, 4]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -121,17 +121,17 @@ pub(super) fn test_arm_shared_neon_vrhadd_u8() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrhadd_u8(create_random_uint8x8_t(), create_random_uint8x8_t());
+                let _ = vrsraq_n_s64::<1>(create_random_int64x2_t(), create_random_int64x2_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrhaddq_u8() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vrsra_n_u8() -> Result<(), String> {
     unsafe {
-        let result = unpack_uint8x16_t_to_u8_array(vrhaddq_u8(create_uint8x16_t_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create_uint8x16_t_from([17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32])));
-        check_array_equality(&result, &[9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]).map_err(|e| format!("{e} | call: vrhaddq_u8(create_uint8x16_t_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create_uint8x16_t_from([17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]))"))?;
+        let result = unpack_uint8x8_t_to_u8_array(vrsra_n_u8::<1>(create_uint8x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]), create_uint8x8_t_from([9, 10, 11, 12, 13, 14, 15, 16])));
+        check_array_equality(&result, &[6, 7, 9, 10, 12, 13, 15, 16]).map_err(|e| format!("{e} | call: vrsra_n_u8::<1>(create_uint8x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]), create_uint8x8_t_from([9, 10, 11, 12, 13, 14, 15, 16]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -141,17 +141,17 @@ pub(super) fn test_arm_shared_neon_vrhaddq_u8() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrhaddq_u8(create_random_uint8x16_t(), create_random_uint8x16_t());
+                let _ = vrsra_n_u8::<1>(create_random_uint8x8_t(), create_random_uint8x8_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrhadd_u16() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vrsraq_n_u8() -> Result<(), String> {
     unsafe {
-        let result = unpack_uint16x4_t_to_u16_array(vrhadd_u16(create_uint16x4_t_from([1, 2, 3, 4]), create_uint16x4_t_from([5, 6, 7, 8])));
-        check_array_equality(&result, &[3, 4, 5, 6]).map_err(|e| format!("{e} | call: vrhadd_u16(create_uint16x4_t_from([1, 2, 3, 4]), create_uint16x4_t_from([5, 6, 7, 8]))"))?;
+        let result = unpack_uint8x16_t_to_u8_array(vrsraq_n_u8::<1>(create_uint8x16_t_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create_uint8x16_t_from([17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32])));
+        check_array_equality(&result, &[10, 11, 13, 14, 16, 17, 19, 20, 22, 23, 25, 26, 28, 29, 31, 32]).map_err(|e| format!("{e} | call: vrsraq_n_u8::<1>(create_uint8x16_t_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create_uint8x16_t_from([17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -161,17 +161,17 @@ pub(super) fn test_arm_shared_neon_vrhadd_u16() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrhadd_u16(create_random_uint16x4_t(), create_random_uint16x4_t());
+                let _ = vrsraq_n_u8::<1>(create_random_uint8x16_t(), create_random_uint8x16_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrhaddq_u16() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vrsra_n_u16() -> Result<(), String> {
     unsafe {
-        let result = unpack_uint16x8_t_to_u16_array(vrhaddq_u16(create_uint16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]), create_uint16x8_t_from([9, 10, 11, 12, 13, 14, 15, 16])));
-        check_array_equality(&result, &[5, 6, 7, 8, 9, 10, 11, 12]).map_err(|e| format!("{e} | call: vrhaddq_u16(create_uint16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]), create_uint16x8_t_from([9, 10, 11, 12, 13, 14, 15, 16]))"))?;
+        let result = unpack_uint16x4_t_to_u16_array(vrsra_n_u16::<1>(create_uint16x4_t_from([1, 2, 3, 4]), create_uint16x4_t_from([5, 6, 7, 8])));
+        check_array_equality(&result, &[4, 5, 7, 8]).map_err(|e| format!("{e} | call: vrsra_n_u16::<1>(create_uint16x4_t_from([1, 2, 3, 4]), create_uint16x4_t_from([5, 6, 7, 8]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -181,17 +181,17 @@ pub(super) fn test_arm_shared_neon_vrhaddq_u16() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrhaddq_u16(create_random_uint16x8_t(), create_random_uint16x8_t());
+                let _ = vrsra_n_u16::<1>(create_random_uint16x4_t(), create_random_uint16x4_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrhadd_u32() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vrsraq_n_u16() -> Result<(), String> {
     unsafe {
-        let result = unpack_uint32x2_t_to_u32_array(vrhadd_u32(create_uint32x2_t_from([1, 2]), create_uint32x2_t_from([3, 4])));
-        check_array_equality(&result, &[2, 3]).map_err(|e| format!("{e} | call: vrhadd_u32(create_uint32x2_t_from([1, 2]), create_uint32x2_t_from([3, 4]))"))?;
+        let result = unpack_uint16x8_t_to_u16_array(vrsraq_n_u16::<1>(create_uint16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]), create_uint16x8_t_from([9, 10, 11, 12, 13, 14, 15, 16])));
+        check_array_equality(&result, &[6, 7, 9, 10, 12, 13, 15, 16]).map_err(|e| format!("{e} | call: vrsraq_n_u16::<1>(create_uint16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]), create_uint16x8_t_from([9, 10, 11, 12, 13, 14, 15, 16]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -201,17 +201,17 @@ pub(super) fn test_arm_shared_neon_vrhadd_u32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrhadd_u32(create_random_uint32x2_t(), create_random_uint32x2_t());
+                let _ = vrsraq_n_u16::<1>(create_random_uint16x8_t(), create_random_uint16x8_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrhaddq_u32() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vrsra_n_u32() -> Result<(), String> {
     unsafe {
-        let result = unpack_uint32x4_t_to_u32_array(vrhaddq_u32(create_uint32x4_t_from([1, 2, 3, 4]), create_uint32x4_t_from([5, 6, 7, 8])));
-        check_array_equality(&result, &[3, 4, 5, 6]).map_err(|e| format!("{e} | call: vrhaddq_u32(create_uint32x4_t_from([1, 2, 3, 4]), create_uint32x4_t_from([5, 6, 7, 8]))"))?;
+        let result = unpack_uint32x2_t_to_u32_array(vrsra_n_u32::<1>(create_uint32x2_t_from([1, 2]), create_uint32x2_t_from([3, 4])));
+        check_array_equality(&result, &[3, 4]).map_err(|e| format!("{e} | call: vrsra_n_u32::<1>(create_uint32x2_t_from([1, 2]), create_uint32x2_t_from([3, 4]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -221,17 +221,17 @@ pub(super) fn test_arm_shared_neon_vrhaddq_u32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrhaddq_u32(create_random_uint32x4_t(), create_random_uint32x4_t());
+                let _ = vrsra_n_u32::<1>(create_random_uint32x2_t(), create_random_uint32x2_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrndn_f32() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vrsraq_n_u32() -> Result<(), String> {
     unsafe {
-        let result = unpack_float32x2_t_to_f32_array(vrndn_f32(create_float32x2_t_from([1.0, 2.0])));
-        check_array_equality(&result, &[1.0, 2.0]).map_err(|e| format!("{e} | call: vrndn_f32(create_float32x2_t_from([1.0, 2.0]))"))?;
+        let result = unpack_uint32x4_t_to_u32_array(vrsraq_n_u32::<1>(create_uint32x4_t_from([1, 2, 3, 4]), create_uint32x4_t_from([5, 6, 7, 8])));
+        check_array_equality(&result, &[4, 5, 7, 8]).map_err(|e| format!("{e} | call: vrsraq_n_u32::<1>(create_uint32x4_t_from([1, 2, 3, 4]), create_uint32x4_t_from([5, 6, 7, 8]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -241,17 +241,17 @@ pub(super) fn test_arm_shared_neon_vrndn_f32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrndn_f32(create_random_float32x2_t());
+                let _ = vrsraq_n_u32::<1>(create_random_uint32x4_t(), create_random_uint32x4_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrndnq_f32() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vrsra_n_u64() -> Result<(), String> {
     unsafe {
-        let result = unpack_float32x4_t_to_f32_array(vrndnq_f32(create_float32x4_t_from([1.0, 2.0, 3.0, 4.0])));
-        check_array_equality(&result, &[1.0, 2.0, 3.0, 4.0]).map_err(|e| format!("{e} | call: vrndnq_f32(create_float32x4_t_from([1.0, 2.0, 3.0, 4.0]))"))?;
+        let result = unpack_uint64x1_t_to_u64_array(vrsra_n_u64::<1>(create_uint64x1_t_from([1]), create_uint64x1_t_from([2])));
+        check_array_equality(&result, &[2]).map_err(|e| format!("{e} | call: vrsra_n_u64::<1>(create_uint64x1_t_from([1]), create_uint64x1_t_from([2]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -261,17 +261,17 @@ pub(super) fn test_arm_shared_neon_vrndnq_f32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrndnq_f32(create_random_float32x4_t());
+                let _ = vrsra_n_u64::<1>(create_random_uint64x1_t(), create_random_uint64x1_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshl_s8() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vrsraq_n_u64() -> Result<(), String> {
     unsafe {
-        let result = unpack_int8x8_t_to_i8_array(vrshl_s8(create_int8x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]), create_int8x8_t_from([9, 10, 11, 12, 13, 14, 15, 16])));
-        check_array_equality(&result, &[0i8; 8]).map_err(|e| format!("{e} | call: vrshl_s8(create_int8x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]), create_int8x8_t_from([9, 10, 11, 12, 13, 14, 15, 16]))"))?;
+        let result = unpack_uint64x2_t_to_u64_array(vrsraq_n_u64::<1>(create_uint64x2_t_from([1, 2]), create_uint64x2_t_from([3, 4])));
+        check_array_equality(&result, &[3, 4]).map_err(|e| format!("{e} | call: vrsraq_n_u64::<1>(create_uint64x2_t_from([1, 2]), create_uint64x2_t_from([3, 4]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -281,17 +281,17 @@ pub(super) fn test_arm_shared_neon_vrshl_s8() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshl_s8(create_random_int8x8_t(), create_random_int8x8_t());
+                let _ = vrsraq_n_u64::<1>(create_random_uint64x2_t(), create_random_uint64x2_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshlq_s8() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vrsubhn_s16() -> Result<(), String> {
     unsafe {
-        let result = unpack_int8x16_t_to_i8_array(vrshlq_s8(create_int8x16_t_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create_int8x16_t_from([17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32])));
-        check_array_equality(&result, &[0i8; 16]).map_err(|e| format!("{e} | call: vrshlq_s8(create_int8x16_t_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create_int8x16_t_from([17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]))"))?;
+        let result = unpack_int8x8_t_to_i8_array(vrsubhn_s16(create_int16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]), create_int16x8_t_from([9, 10, 11, 12, 13, 14, 15, 16])));
+        check_array_equality(&result, &[0i8; 8]).map_err(|e| format!("{e} | call: vrsubhn_s16(create_int16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]), create_int16x8_t_from([9, 10, 11, 12, 13, 14, 15, 16]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -301,17 +301,17 @@ pub(super) fn test_arm_shared_neon_vrshlq_s8() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshlq_s8(create_random_int8x16_t(), create_random_int8x16_t());
+                let _ = vrsubhn_s16(create_random_int16x8_t(), create_random_int16x8_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshl_s16() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vrsubhn_s32() -> Result<(), String> {
     unsafe {
-        let result = unpack_int16x4_t_to_i16_array(vrshl_s16(create_int16x4_t_from([1, 2, 3, 4]), create_int16x4_t_from([5, 6, 7, 8])));
-        check_array_equality(&result, &[32, 128, 384, 1024]).map_err(|e| format!("{e} | call: vrshl_s16(create_int16x4_t_from([1, 2, 3, 4]), create_int16x4_t_from([5, 6, 7, 8]))"))?;
+        let result = unpack_int16x4_t_to_i16_array(vrsubhn_s32(create_int32x4_t_from([1, 2, 3, 4]), create_int32x4_t_from([5, 6, 7, 8])));
+        check_array_equality(&result, &[0i16; 4]).map_err(|e| format!("{e} | call: vrsubhn_s32(create_int32x4_t_from([1, 2, 3, 4]), create_int32x4_t_from([5, 6, 7, 8]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -321,17 +321,17 @@ pub(super) fn test_arm_shared_neon_vrshl_s16() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshl_s16(create_random_int16x4_t(), create_random_int16x4_t());
+                let _ = vrsubhn_s32(create_random_int32x4_t(), create_random_int32x4_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshlq_s16() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vrsubhn_s64() -> Result<(), String> {
     unsafe {
-        let result = unpack_int16x8_t_to_i16_array(vrshlq_s16(create_int16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]), create_int16x8_t_from([9, 10, 11, 12, 13, 14, 15, 16])));
-        check_array_equality(&result, &[512, 2048, 6144, 16384, -24576, -32768, -32768, 0]).map_err(|e| format!("{e} | call: vrshlq_s16(create_int16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]), create_int16x8_t_from([9, 10, 11, 12, 13, 14, 15, 16]))"))?;
+        let result = unpack_int32x2_t_to_i32_array(vrsubhn_s64(create_int64x2_t_from([1, 2]), create_int64x2_t_from([3, 4])));
+        check_array_equality(&result, &[0i32; 2]).map_err(|e| format!("{e} | call: vrsubhn_s64(create_int64x2_t_from([1, 2]), create_int64x2_t_from([3, 4]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -341,17 +341,17 @@ pub(super) fn test_arm_shared_neon_vrshlq_s16() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshlq_s16(create_random_int16x8_t(), create_random_int16x8_t());
+                let _ = vrsubhn_s64(create_random_int64x2_t(), create_random_int64x2_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshl_s32() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vrsubhn_u16() -> Result<(), String> {
     unsafe {
-        let result = unpack_int32x2_t_to_i32_array(vrshl_s32(create_int32x2_t_from([1, 2]), create_int32x2_t_from([3, 4])));
-        check_array_equality(&result, &[8, 32]).map_err(|e| format!("{e} | call: vrshl_s32(create_int32x2_t_from([1, 2]), create_int32x2_t_from([3, 4]))"))?;
+        let result = unpack_uint8x8_t_to_u8_array(vrsubhn_u16(create_uint16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]), create_uint16x8_t_from([9, 10, 11, 12, 13, 14, 15, 16])));
+        check_array_equality(&result, &[0u8; 8]).map_err(|e| format!("{e} | call: vrsubhn_u16(create_uint16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]), create_uint16x8_t_from([9, 10, 11, 12, 13, 14, 15, 16]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -361,17 +361,17 @@ pub(super) fn test_arm_shared_neon_vrshl_s32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshl_s32(create_random_int32x2_t(), create_random_int32x2_t());
+                let _ = vrsubhn_u16(create_random_uint16x8_t(), create_random_uint16x8_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshlq_s32() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vrsubhn_u32() -> Result<(), String> {
     unsafe {
-        let result = unpack_int32x4_t_to_i32_array(vrshlq_s32(create_int32x4_t_from([1, 2, 3, 4]), create_int32x4_t_from([5, 6, 7, 8])));
-        check_array_equality(&result, &[32, 128, 384, 1024]).map_err(|e| format!("{e} | call: vrshlq_s32(create_int32x4_t_from([1, 2, 3, 4]), create_int32x4_t_from([5, 6, 7, 8]))"))?;
+        let result = unpack_uint16x4_t_to_u16_array(vrsubhn_u32(create_uint32x4_t_from([1, 2, 3, 4]), create_uint32x4_t_from([5, 6, 7, 8])));
+        check_array_equality(&result, &[0u16; 4]).map_err(|e| format!("{e} | call: vrsubhn_u32(create_uint32x4_t_from([1, 2, 3, 4]), create_uint32x4_t_from([5, 6, 7, 8]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -381,17 +381,17 @@ pub(super) fn test_arm_shared_neon_vrshlq_s32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshlq_s32(create_random_int32x4_t(), create_random_int32x4_t());
+                let _ = vrsubhn_u32(create_random_uint32x4_t(), create_random_uint32x4_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshl_s64() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vrsubhn_u64() -> Result<(), String> {
     unsafe {
-        let result = unpack_int64x1_t_to_i64_array(vrshl_s64(create_int64x1_t_from([1]), create_int64x1_t_from([2])));
-        check_array_equality(&result, &[4]).map_err(|e| format!("{e} | call: vrshl_s64(create_int64x1_t_from([1]), create_int64x1_t_from([2]))"))?;
+        let result = unpack_uint32x2_t_to_u32_array(vrsubhn_u64(create_uint64x2_t_from([1, 2]), create_uint64x2_t_from([3, 4])));
+        check_array_equality(&result, &[0u32; 2]).map_err(|e| format!("{e} | call: vrsubhn_u64(create_uint64x2_t_from([1, 2]), create_uint64x2_t_from([3, 4]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -401,17 +401,17 @@ pub(super) fn test_arm_shared_neon_vrshl_s64() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshl_s64(create_random_int64x1_t(), create_random_int64x1_t());
+                let _ = vrsubhn_u64(create_random_uint64x2_t(), create_random_uint64x2_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshlq_s64() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vset_lane_f32() -> Result<(), String> {
     unsafe {
-        let result = unpack_int64x2_t_to_i64_array(vrshlq_s64(create_int64x2_t_from([1, 2]), create_int64x2_t_from([3, 4])));
-        check_array_equality(&result, &[8, 32]).map_err(|e| format!("{e} | call: vrshlq_s64(create_int64x2_t_from([1, 2]), create_int64x2_t_from([3, 4]))"))?;
+        let result = unpack_float32x2_t_to_f32_array(vset_lane_f32::<0>(1.0f32, create_float32x2_t_from([2.0, 3.0])));
+        check_array_equality(&result, &[1.0, 3.0]).map_err(|e| format!("{e} | call: vset_lane_f32::<0>(1.0f32, create_float32x2_t_from([2.0, 3.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -421,17 +421,17 @@ pub(super) fn test_arm_shared_neon_vrshlq_s64() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshlq_s64(create_random_int64x2_t(), create_random_int64x2_t());
+                let _ = vset_lane_f32::<0>(rand::random::<f32>(), create_random_float32x2_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshl_u8() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vsetq_lane_f32() -> Result<(), String> {
     unsafe {
-        let result = unpack_uint8x8_t_to_u8_array(vrshl_u8(create_uint8x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]), create_int8x8_t_from([9, 10, 11, 12, 13, 14, 15, 16])));
-        check_array_equality(&result, &[0u8; 8]).map_err(|e| format!("{e} | call: vrshl_u8(create_uint8x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]), create_int8x8_t_from([9, 10, 11, 12, 13, 14, 15, 16]))"))?;
+        let result = unpack_float32x4_t_to_f32_array(vsetq_lane_f32::<0>(1.0f32, create_float32x4_t_from([2.0, 3.0, 4.0, 5.0])));
+        check_array_equality(&result, &[1.0, 3.0, 4.0, 5.0]).map_err(|e| format!("{e} | call: vsetq_lane_f32::<0>(1.0f32, create_float32x4_t_from([2.0, 3.0, 4.0, 5.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -441,17 +441,17 @@ pub(super) fn test_arm_shared_neon_vrshl_u8() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshl_u8(create_random_uint8x8_t(), create_random_int8x8_t());
+                let _ = vsetq_lane_f32::<0>(rand::random::<f32>(), create_random_float32x4_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshlq_u8() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vset_lane_s8() -> Result<(), String> {
     unsafe {
-        let result = unpack_uint8x16_t_to_u8_array(vrshlq_u8(create_uint8x16_t_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create_int8x16_t_from([17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32])));
-        check_array_equality(&result, &[0u8; 16]).map_err(|e| format!("{e} | call: vrshlq_u8(create_uint8x16_t_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create_int8x16_t_from([17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]))"))?;
+        let result = unpack_int8x8_t_to_i8_array(vset_lane_s8::<0>(1i8, create_int8x8_t_from([2, 3, 4, 5, 6, 7, 8, 9])));
+        check_array_equality(&result, &[1, 3, 4, 5, 6, 7, 8, 9]).map_err(|e| format!("{e} | call: vset_lane_s8::<0>(1i8, create_int8x8_t_from([2, 3, 4, 5, 6, 7, 8, 9]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -461,17 +461,17 @@ pub(super) fn test_arm_shared_neon_vrshlq_u8() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshlq_u8(create_random_uint8x16_t(), create_random_int8x16_t());
+                let _ = vset_lane_s8::<0>(rand::random::<i8>(), create_random_int8x8_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshl_u16() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vsetq_lane_s8() -> Result<(), String> {
     unsafe {
-        let result = unpack_uint16x4_t_to_u16_array(vrshl_u16(create_uint16x4_t_from([1, 2, 3, 4]), create_int16x4_t_from([5, 6, 7, 8])));
-        check_array_equality(&result, &[32, 128, 384, 1024]).map_err(|e| format!("{e} | call: vrshl_u16(create_uint16x4_t_from([1, 2, 3, 4]), create_int16x4_t_from([5, 6, 7, 8]))"))?;
+        let result = unpack_int8x16_t_to_i8_array(vsetq_lane_s8::<0>(1i8, create_int8x16_t_from([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17])));
+        check_array_equality(&result, &[1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]).map_err(|e| format!("{e} | call: vsetq_lane_s8::<0>(1i8, create_int8x16_t_from([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -481,17 +481,17 @@ pub(super) fn test_arm_shared_neon_vrshl_u16() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshl_u16(create_random_uint16x4_t(), create_random_int16x4_t());
+                let _ = vsetq_lane_s8::<0>(rand::random::<i8>(), create_random_int8x16_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshlq_u16() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vset_lane_s16() -> Result<(), String> {
     unsafe {
-        let result = unpack_uint16x8_t_to_u16_array(vrshlq_u16(create_uint16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]), create_int16x8_t_from([9, 10, 11, 12, 13, 14, 15, 16])));
-        check_array_equality(&result, &[512, 2048, 6144, 16384, 40960, 32768, 32768, 0]).map_err(|e| format!("{e} | call: vrshlq_u16(create_uint16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]), create_int16x8_t_from([9, 10, 11, 12, 13, 14, 15, 16]))"))?;
+        let result = unpack_int16x4_t_to_i16_array(vset_lane_s16::<0>(1i16, create_int16x4_t_from([2, 3, 4, 5])));
+        check_array_equality(&result, &[1, 3, 4, 5]).map_err(|e| format!("{e} | call: vset_lane_s16::<0>(1i16, create_int16x4_t_from([2, 3, 4, 5]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -501,17 +501,17 @@ pub(super) fn test_arm_shared_neon_vrshlq_u16() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshlq_u16(create_random_uint16x8_t(), create_random_int16x8_t());
+                let _ = vset_lane_s16::<0>(rand::random::<i16>(), create_random_int16x4_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshl_u32() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vsetq_lane_s16() -> Result<(), String> {
     unsafe {
-        let result = unpack_uint32x2_t_to_u32_array(vrshl_u32(create_uint32x2_t_from([1, 2]), create_int32x2_t_from([3, 4])));
-        check_array_equality(&result, &[8, 32]).map_err(|e| format!("{e} | call: vrshl_u32(create_uint32x2_t_from([1, 2]), create_int32x2_t_from([3, 4]))"))?;
+        let result = unpack_int16x8_t_to_i16_array(vsetq_lane_s16::<0>(1i16, create_int16x8_t_from([2, 3, 4, 5, 6, 7, 8, 9])));
+        check_array_equality(&result, &[1, 3, 4, 5, 6, 7, 8, 9]).map_err(|e| format!("{e} | call: vsetq_lane_s16::<0>(1i16, create_int16x8_t_from([2, 3, 4, 5, 6, 7, 8, 9]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -521,17 +521,17 @@ pub(super) fn test_arm_shared_neon_vrshl_u32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshl_u32(create_random_uint32x2_t(), create_random_int32x2_t());
+                let _ = vsetq_lane_s16::<0>(rand::random::<i16>(), create_random_int16x8_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshlq_u32() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vset_lane_s32() -> Result<(), String> {
     unsafe {
-        let result = unpack_uint32x4_t_to_u32_array(vrshlq_u32(create_uint32x4_t_from([1, 2, 3, 4]), create_int32x4_t_from([5, 6, 7, 8])));
-        check_array_equality(&result, &[32, 128, 384, 1024]).map_err(|e| format!("{e} | call: vrshlq_u32(create_uint32x4_t_from([1, 2, 3, 4]), create_int32x4_t_from([5, 6, 7, 8]))"))?;
+        let result = unpack_int32x2_t_to_i32_array(vset_lane_s32::<0>(1i32, create_int32x2_t_from([2, 3])));
+        check_array_equality(&result, &[1, 3]).map_err(|e| format!("{e} | call: vset_lane_s32::<0>(1i32, create_int32x2_t_from([2, 3]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -541,17 +541,17 @@ pub(super) fn test_arm_shared_neon_vrshlq_u32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshlq_u32(create_random_uint32x4_t(), create_random_int32x4_t());
+                let _ = vset_lane_s32::<0>(rand::random::<i32>(), create_random_int32x2_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshl_u64() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vsetq_lane_s32() -> Result<(), String> {
     unsafe {
-        let result = unpack_uint64x1_t_to_u64_array(vrshl_u64(create_uint64x1_t_from([1]), create_int64x1_t_from([2])));
-        check_array_equality(&result, &[4]).map_err(|e| format!("{e} | call: vrshl_u64(create_uint64x1_t_from([1]), create_int64x1_t_from([2]))"))?;
+        let result = unpack_int32x4_t_to_i32_array(vsetq_lane_s32::<0>(1i32, create_int32x4_t_from([2, 3, 4, 5])));
+        check_array_equality(&result, &[1, 3, 4, 5]).map_err(|e| format!("{e} | call: vsetq_lane_s32::<0>(1i32, create_int32x4_t_from([2, 3, 4, 5]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -561,17 +561,17 @@ pub(super) fn test_arm_shared_neon_vrshl_u64() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshl_u64(create_random_uint64x1_t(), create_random_int64x1_t());
+                let _ = vsetq_lane_s32::<0>(rand::random::<i32>(), create_random_int32x4_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshlq_u64() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vsetq_lane_s64() -> Result<(), String> {
     unsafe {
-        let result = unpack_uint64x2_t_to_u64_array(vrshlq_u64(create_uint64x2_t_from([1, 2]), create_int64x2_t_from([3, 4])));
-        check_array_equality(&result, &[8, 32]).map_err(|e| format!("{e} | call: vrshlq_u64(create_uint64x2_t_from([1, 2]), create_int64x2_t_from([3, 4]))"))?;
+        let result = unpack_int64x2_t_to_i64_array(vsetq_lane_s64::<0>(1i64, create_int64x2_t_from([2, 3])));
+        check_array_equality(&result, &[1, 3]).map_err(|e| format!("{e} | call: vsetq_lane_s64::<0>(1i64, create_int64x2_t_from([2, 3]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -581,17 +581,17 @@ pub(super) fn test_arm_shared_neon_vrshlq_u64() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshlq_u64(create_random_uint64x2_t(), create_random_int64x2_t());
+                let _ = vsetq_lane_s64::<0>(rand::random::<i64>(), create_random_int64x2_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshr_n_s8() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vset_lane_u8() -> Result<(), String> {
     unsafe {
-        let result = unpack_int8x8_t_to_i8_array(vrshr_n_s8::<1>(create_int8x8_t_from([1, 2, 3, 4, 5, 6, 7, 8])));
-        check_array_equality(&result, &[1, 1, 2, 2, 3, 3, 4, 4]).map_err(|e| format!("{e} | call: vrshr_n_s8::<1>(create_int8x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
+        let result = unpack_uint8x8_t_to_u8_array(vset_lane_u8::<0>(1u8, create_uint8x8_t_from([2, 3, 4, 5, 6, 7, 8, 9])));
+        check_array_equality(&result, &[1, 3, 4, 5, 6, 7, 8, 9]).map_err(|e| format!("{e} | call: vset_lane_u8::<0>(1u8, create_uint8x8_t_from([2, 3, 4, 5, 6, 7, 8, 9]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -601,17 +601,17 @@ pub(super) fn test_arm_shared_neon_vrshr_n_s8() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshr_n_s8::<1>(create_random_int8x8_t());
+                let _ = vset_lane_u8::<0>(rand::random::<u8>(), create_random_uint8x8_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshrq_n_s8() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vsetq_lane_u8() -> Result<(), String> {
     unsafe {
-        let result = unpack_int8x16_t_to_i8_array(vrshrq_n_s8::<1>(create_int8x16_t_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])));
-        check_array_equality(&result, &[1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8]).map_err(|e| format!("{e} | call: vrshrq_n_s8::<1>(create_int8x16_t_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]))"))?;
+        let result = unpack_uint8x16_t_to_u8_array(vsetq_lane_u8::<0>(1u8, create_uint8x16_t_from([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17])));
+        check_array_equality(&result, &[1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]).map_err(|e| format!("{e} | call: vsetq_lane_u8::<0>(1u8, create_uint8x16_t_from([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -621,17 +621,17 @@ pub(super) fn test_arm_shared_neon_vrshrq_n_s8() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshrq_n_s8::<1>(create_random_int8x16_t());
+                let _ = vsetq_lane_u8::<0>(rand::random::<u8>(), create_random_uint8x16_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshr_n_s16() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vset_lane_u16() -> Result<(), String> {
     unsafe {
-        let result = unpack_int16x4_t_to_i16_array(vrshr_n_s16::<1>(create_int16x4_t_from([1, 2, 3, 4])));
-        check_array_equality(&result, &[1, 1, 2, 2]).map_err(|e| format!("{e} | call: vrshr_n_s16::<1>(create_int16x4_t_from([1, 2, 3, 4]))"))?;
+        let result = unpack_uint16x4_t_to_u16_array(vset_lane_u16::<0>(1u16, create_uint16x4_t_from([2, 3, 4, 5])));
+        check_array_equality(&result, &[1, 3, 4, 5]).map_err(|e| format!("{e} | call: vset_lane_u16::<0>(1u16, create_uint16x4_t_from([2, 3, 4, 5]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -641,17 +641,17 @@ pub(super) fn test_arm_shared_neon_vrshr_n_s16() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshr_n_s16::<1>(create_random_int16x4_t());
+                let _ = vset_lane_u16::<0>(rand::random::<u16>(), create_random_uint16x4_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshrq_n_s16() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vsetq_lane_u16() -> Result<(), String> {
     unsafe {
-        let result = unpack_int16x8_t_to_i16_array(vrshrq_n_s16::<1>(create_int16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8])));
-        check_array_equality(&result, &[1, 1, 2, 2, 3, 3, 4, 4]).map_err(|e| format!("{e} | call: vrshrq_n_s16::<1>(create_int16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
+        let result = unpack_uint16x8_t_to_u16_array(vsetq_lane_u16::<0>(1u16, create_uint16x8_t_from([2, 3, 4, 5, 6, 7, 8, 9])));
+        check_array_equality(&result, &[1, 3, 4, 5, 6, 7, 8, 9]).map_err(|e| format!("{e} | call: vsetq_lane_u16::<0>(1u16, create_uint16x8_t_from([2, 3, 4, 5, 6, 7, 8, 9]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -661,17 +661,17 @@ pub(super) fn test_arm_shared_neon_vrshrq_n_s16() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshrq_n_s16::<1>(create_random_int16x8_t());
+                let _ = vsetq_lane_u16::<0>(rand::random::<u16>(), create_random_uint16x8_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshr_n_s32() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vset_lane_u32() -> Result<(), String> {
     unsafe {
-        let result = unpack_int32x2_t_to_i32_array(vrshr_n_s32::<1>(create_int32x2_t_from([1, 2])));
-        check_array_equality(&result, &[1, 1]).map_err(|e| format!("{e} | call: vrshr_n_s32::<1>(create_int32x2_t_from([1, 2]))"))?;
+        let result = unpack_uint32x2_t_to_u32_array(vset_lane_u32::<0>(1u32, create_uint32x2_t_from([2, 3])));
+        check_array_equality(&result, &[1, 3]).map_err(|e| format!("{e} | call: vset_lane_u32::<0>(1u32, create_uint32x2_t_from([2, 3]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -681,17 +681,17 @@ pub(super) fn test_arm_shared_neon_vrshr_n_s32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshr_n_s32::<1>(create_random_int32x2_t());
+                let _ = vset_lane_u32::<0>(rand::random::<u32>(), create_random_uint32x2_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshrq_n_s32() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vsetq_lane_u32() -> Result<(), String> {
     unsafe {
-        let result = unpack_int32x4_t_to_i32_array(vrshrq_n_s32::<1>(create_int32x4_t_from([1, 2, 3, 4])));
-        check_array_equality(&result, &[1, 1, 2, 2]).map_err(|e| format!("{e} | call: vrshrq_n_s32::<1>(create_int32x4_t_from([1, 2, 3, 4]))"))?;
+        let result = unpack_uint32x4_t_to_u32_array(vsetq_lane_u32::<0>(1u32, create_uint32x4_t_from([2, 3, 4, 5])));
+        check_array_equality(&result, &[1, 3, 4, 5]).map_err(|e| format!("{e} | call: vsetq_lane_u32::<0>(1u32, create_uint32x4_t_from([2, 3, 4, 5]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -701,17 +701,17 @@ pub(super) fn test_arm_shared_neon_vrshrq_n_s32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshrq_n_s32::<1>(create_random_int32x4_t());
+                let _ = vsetq_lane_u32::<0>(rand::random::<u32>(), create_random_uint32x4_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshr_n_s64() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vsetq_lane_u64() -> Result<(), String> {
     unsafe {
-        let result = unpack_int64x1_t_to_i64_array(vrshr_n_s64::<1>(create_int64x1_t_from([1])));
-        check_array_equality(&result, &[1]).map_err(|e| format!("{e} | call: vrshr_n_s64::<1>(create_int64x1_t_from([1]))"))?;
+        let result = unpack_uint64x2_t_to_u64_array(vsetq_lane_u64::<0>(1u64, create_uint64x2_t_from([2, 3])));
+        check_array_equality(&result, &[1, 3]).map_err(|e| format!("{e} | call: vsetq_lane_u64::<0>(1u64, create_uint64x2_t_from([2, 3]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -721,17 +721,17 @@ pub(super) fn test_arm_shared_neon_vrshr_n_s64() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshr_n_s64::<1>(create_random_int64x1_t());
+                let _ = vsetq_lane_u64::<0>(rand::random::<u64>(), create_random_uint64x2_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshrq_n_s64() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vset_lane_p8() -> Result<(), String> {
     unsafe {
-        let result = unpack_int64x2_t_to_i64_array(vrshrq_n_s64::<1>(create_int64x2_t_from([1, 2])));
-        check_array_equality(&result, &[1, 1]).map_err(|e| format!("{e} | call: vrshrq_n_s64::<1>(create_int64x2_t_from([1, 2]))"))?;
+        let result = unpack_poly8x8_t_to_u8_array(vset_lane_p8::<0>(1u8, create_poly8x8_t_from([2, 3, 4, 5, 6, 7, 8, 9])));
+        check_array_equality(&result, &[1, 3, 4, 5, 6, 7, 8, 9]).map_err(|e| format!("{e} | call: vset_lane_p8::<0>(1u8, create_poly8x8_t_from([2, 3, 4, 5, 6, 7, 8, 9]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -741,17 +741,17 @@ pub(super) fn test_arm_shared_neon_vrshrq_n_s64() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshrq_n_s64::<1>(create_random_int64x2_t());
+                let _ = vset_lane_p8::<0>(rand::random::<u8>(), create_random_poly8x8_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshr_n_u8() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vsetq_lane_p8() -> Result<(), String> {
     unsafe {
-        let result = unpack_uint8x8_t_to_u8_array(vrshr_n_u8::<1>(create_uint8x8_t_from([1, 2, 3, 4, 5, 6, 7, 8])));
-        check_array_equality(&result, &[1, 1, 2, 2, 3, 3, 4, 4]).map_err(|e| format!("{e} | call: vrshr_n_u8::<1>(create_uint8x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
+        let result = unpack_poly8x16_t_to_u8_array(vsetq_lane_p8::<0>(1u8, create_poly8x16_t_from([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17])));
+        check_array_equality(&result, &[1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]).map_err(|e| format!("{e} | call: vsetq_lane_p8::<0>(1u8, create_poly8x16_t_from([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -761,17 +761,17 @@ pub(super) fn test_arm_shared_neon_vrshr_n_u8() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshr_n_u8::<1>(create_random_uint8x8_t());
+                let _ = vsetq_lane_p8::<0>(rand::random::<u8>(), create_random_poly8x16_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshrq_n_u8() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vset_lane_p16() -> Result<(), String> {
     unsafe {
-        let result = unpack_uint8x16_t_to_u8_array(vrshrq_n_u8::<1>(create_uint8x16_t_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])));
-        check_array_equality(&result, &[1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8]).map_err(|e| format!("{e} | call: vrshrq_n_u8::<1>(create_uint8x16_t_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]))"))?;
+        let result = unpack_poly16x4_t_to_u16_array(vset_lane_p16::<0>(1u16, create_poly16x4_t_from([2, 3, 4, 5])));
+        check_array_equality(&result, &[1, 3, 4, 5]).map_err(|e| format!("{e} | call: vset_lane_p16::<0>(1u16, create_poly16x4_t_from([2, 3, 4, 5]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -781,17 +781,17 @@ pub(super) fn test_arm_shared_neon_vrshrq_n_u8() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshrq_n_u8::<1>(create_random_uint8x16_t());
+                let _ = vset_lane_p16::<0>(rand::random::<u16>(), create_random_poly16x4_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshr_n_u16() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vsetq_lane_p16() -> Result<(), String> {
     unsafe {
-        let result = unpack_uint16x4_t_to_u16_array(vrshr_n_u16::<1>(create_uint16x4_t_from([1, 2, 3, 4])));
-        check_array_equality(&result, &[1, 1, 2, 2]).map_err(|e| format!("{e} | call: vrshr_n_u16::<1>(create_uint16x4_t_from([1, 2, 3, 4]))"))?;
+        let result = unpack_poly16x8_t_to_u16_array(vsetq_lane_p16::<0>(1u16, create_poly16x8_t_from([2, 3, 4, 5, 6, 7, 8, 9])));
+        check_array_equality(&result, &[1, 3, 4, 5, 6, 7, 8, 9]).map_err(|e| format!("{e} | call: vsetq_lane_p16::<0>(1u16, create_poly16x8_t_from([2, 3, 4, 5, 6, 7, 8, 9]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -801,17 +801,17 @@ pub(super) fn test_arm_shared_neon_vrshr_n_u16() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshr_n_u16::<1>(create_random_uint16x4_t());
+                let _ = vsetq_lane_p16::<0>(rand::random::<u16>(), create_random_poly16x8_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshrq_n_u16() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vset_lane_s64() -> Result<(), String> {
     unsafe {
-        let result = unpack_uint16x8_t_to_u16_array(vrshrq_n_u16::<1>(create_uint16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8])));
-        check_array_equality(&result, &[1, 1, 2, 2, 3, 3, 4, 4]).map_err(|e| format!("{e} | call: vrshrq_n_u16::<1>(create_uint16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
+        let result = unpack_int64x1_t_to_i64_array(vset_lane_s64::<0>(1i64, create_int64x1_t_from([2])));
+        check_array_equality(&result, &[1]).map_err(|e| format!("{e} | call: vset_lane_s64::<0>(1i64, create_int64x1_t_from([2]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -821,17 +821,17 @@ pub(super) fn test_arm_shared_neon_vrshrq_n_u16() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshrq_n_u16::<1>(create_random_uint16x8_t());
+                let _ = vset_lane_s64::<0>(rand::random::<i64>(), create_random_int64x1_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshr_n_u32() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vset_lane_u64() -> Result<(), String> {
     unsafe {
-        let result = unpack_uint32x2_t_to_u32_array(vrshr_n_u32::<1>(create_uint32x2_t_from([1, 2])));
-        check_array_equality(&result, &[1, 1]).map_err(|e| format!("{e} | call: vrshr_n_u32::<1>(create_uint32x2_t_from([1, 2]))"))?;
+        let result = unpack_uint64x1_t_to_u64_array(vset_lane_u64::<0>(1u64, create_uint64x1_t_from([2])));
+        check_array_equality(&result, &[1]).map_err(|e| format!("{e} | call: vset_lane_u64::<0>(1u64, create_uint64x1_t_from([2]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -841,17 +841,17 @@ pub(super) fn test_arm_shared_neon_vrshr_n_u32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshr_n_u32::<1>(create_random_uint32x2_t());
+                let _ = vset_lane_u64::<0>(rand::random::<u64>(), create_random_uint64x1_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshrq_n_u32() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vshl_n_s8() -> Result<(), String> {
     unsafe {
-        let result = unpack_uint32x4_t_to_u32_array(vrshrq_n_u32::<1>(create_uint32x4_t_from([1, 2, 3, 4])));
-        check_array_equality(&result, &[1, 1, 2, 2]).map_err(|e| format!("{e} | call: vrshrq_n_u32::<1>(create_uint32x4_t_from([1, 2, 3, 4]))"))?;
+        let result = unpack_int8x8_t_to_i8_array(vshl_n_s8::<1>(create_int8x8_t_from([1, 2, 3, 4, 5, 6, 7, 8])));
+        check_array_equality(&result, &[2, 4, 6, 8, 10, 12, 14, 16]).map_err(|e| format!("{e} | call: vshl_n_s8::<1>(create_int8x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -861,17 +861,17 @@ pub(super) fn test_arm_shared_neon_vrshrq_n_u32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshrq_n_u32::<1>(create_random_uint32x4_t());
+                let _ = vshl_n_s8::<1>(create_random_int8x8_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshr_n_u64() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vshlq_n_s8() -> Result<(), String> {
     unsafe {
-        let result = unpack_uint64x1_t_to_u64_array(vrshr_n_u64::<1>(create_uint64x1_t_from([1])));
-        check_array_equality(&result, &[1]).map_err(|e| format!("{e} | call: vrshr_n_u64::<1>(create_uint64x1_t_from([1]))"))?;
+        let result = unpack_int8x16_t_to_i8_array(vshlq_n_s8::<1>(create_int8x16_t_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])));
+        check_array_equality(&result, &[2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32]).map_err(|e| format!("{e} | call: vshlq_n_s8::<1>(create_int8x16_t_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -881,17 +881,17 @@ pub(super) fn test_arm_shared_neon_vrshr_n_u64() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshr_n_u64::<1>(create_random_uint64x1_t());
+                let _ = vshlq_n_s8::<1>(create_random_int8x16_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshrq_n_u64() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vshl_n_s16() -> Result<(), String> {
     unsafe {
-        let result = unpack_uint64x2_t_to_u64_array(vrshrq_n_u64::<1>(create_uint64x2_t_from([1, 2])));
-        check_array_equality(&result, &[1, 1]).map_err(|e| format!("{e} | call: vrshrq_n_u64::<1>(create_uint64x2_t_from([1, 2]))"))?;
+        let result = unpack_int16x4_t_to_i16_array(vshl_n_s16::<1>(create_int16x4_t_from([1, 2, 3, 4])));
+        check_array_equality(&result, &[2, 4, 6, 8]).map_err(|e| format!("{e} | call: vshl_n_s16::<1>(create_int16x4_t_from([1, 2, 3, 4]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -901,18 +901,17 @@ pub(super) fn test_arm_shared_neon_vrshrq_n_u64() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshrq_n_u64::<1>(create_random_uint64x2_t());
+                let _ = vshl_n_s16::<1>(create_random_int16x4_t());
             }
         }
     }
     Ok(())
 }
 
-#[cfg(target_arch = "arm")]
-pub(super) fn test_arm_shared_neon_vrshrn_n_s16() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vshlq_n_s16() -> Result<(), String> {
     unsafe {
-        let result = unpack_int8x8_t_to_i8_array(vrshrn_n_s16::<1>(create_int16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8])));
-        check_array_equality(&result, &[1, 1, 2, 2, 3, 3, 4, 4]).map_err(|e| format!("{e} | call: vrshrn_n_s16::<1>(create_int16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
+        let result = unpack_int16x8_t_to_i16_array(vshlq_n_s16::<1>(create_int16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8])));
+        check_array_equality(&result, &[2, 4, 6, 8, 10, 12, 14, 16]).map_err(|e| format!("{e} | call: vshlq_n_s16::<1>(create_int16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -922,18 +921,17 @@ pub(super) fn test_arm_shared_neon_vrshrn_n_s16() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshrn_n_s16::<1>(create_random_int16x8_t());
+                let _ = vshlq_n_s16::<1>(create_random_int16x8_t());
             }
         }
     }
     Ok(())
 }
 
-#[cfg(target_arch = "arm")]
-pub(super) fn test_arm_shared_neon_vrshrn_n_s32() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vshl_n_s32() -> Result<(), String> {
     unsafe {
-        let result = unpack_int16x4_t_to_i16_array(vrshrn_n_s32::<1>(create_int32x4_t_from([1, 2, 3, 4])));
-        check_array_equality(&result, &[1, 1, 2, 2]).map_err(|e| format!("{e} | call: vrshrn_n_s32::<1>(create_int32x4_t_from([1, 2, 3, 4]))"))?;
+        let result = unpack_int32x2_t_to_i32_array(vshl_n_s32::<1>(create_int32x2_t_from([1, 2])));
+        check_array_equality(&result, &[2, 4]).map_err(|e| format!("{e} | call: vshl_n_s32::<1>(create_int32x2_t_from([1, 2]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -943,18 +941,17 @@ pub(super) fn test_arm_shared_neon_vrshrn_n_s32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshrn_n_s32::<1>(create_random_int32x4_t());
+                let _ = vshl_n_s32::<1>(create_random_int32x2_t());
             }
         }
     }
     Ok(())
 }
 
-#[cfg(target_arch = "arm")]
-pub(super) fn test_arm_shared_neon_vrshrn_n_s64() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vshlq_n_s32() -> Result<(), String> {
     unsafe {
-        let result = unpack_int32x2_t_to_i32_array(vrshrn_n_s64::<1>(create_int64x2_t_from([1, 2])));
-        check_array_equality(&result, &[1, 1]).map_err(|e| format!("{e} | call: vrshrn_n_s64::<1>(create_int64x2_t_from([1, 2]))"))?;
+        let result = unpack_int32x4_t_to_i32_array(vshlq_n_s32::<1>(create_int32x4_t_from([1, 2, 3, 4])));
+        check_array_equality(&result, &[2, 4, 6, 8]).map_err(|e| format!("{e} | call: vshlq_n_s32::<1>(create_int32x4_t_from([1, 2, 3, 4]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -964,17 +961,17 @@ pub(super) fn test_arm_shared_neon_vrshrn_n_s64() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshrn_n_s64::<1>(create_random_int64x2_t());
+                let _ = vshlq_n_s32::<1>(create_random_int32x4_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshrn_n_u16() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vshl_n_s64() -> Result<(), String> {
     unsafe {
-        let result = unpack_uint8x8_t_to_u8_array(vrshrn_n_u16::<1>(create_uint16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8])));
-        check_array_equality(&result, &[1, 1, 2, 2, 3, 3, 4, 4]).map_err(|e| format!("{e} | call: vrshrn_n_u16::<1>(create_uint16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
+        let result = unpack_int64x1_t_to_i64_array(vshl_n_s64::<1>(create_int64x1_t_from([1])));
+        check_array_equality(&result, &[2]).map_err(|e| format!("{e} | call: vshl_n_s64::<1>(create_int64x1_t_from([1]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -984,17 +981,17 @@ pub(super) fn test_arm_shared_neon_vrshrn_n_u16() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshrn_n_u16::<1>(create_random_uint16x8_t());
+                let _ = vshl_n_s64::<1>(create_random_int64x1_t());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_arm_shared_neon_vrshrn_n_u32() -> Result<(), String> {
+pub(super) fn test_arm_shared_neon_vshlq_n_s64() -> Result<(), String> {
     unsafe {
-        let result = unpack_uint16x4_t_to_u16_array(vrshrn_n_u32::<1>(create_uint32x4_t_from([1, 2, 3, 4])));
-        check_array_equality(&result, &[1, 1, 2, 2]).map_err(|e| format!("{e} | call: vrshrn_n_u32::<1>(create_uint32x4_t_from([1, 2, 3, 4]))"))?;
+        let result = unpack_int64x2_t_to_i64_array(vshlq_n_s64::<1>(create_int64x2_t_from([1, 2])));
+        check_array_equality(&result, &[2, 4]).map_err(|e| format!("{e} | call: vshlq_n_s64::<1>(create_int64x2_t_from([1, 2]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1004,7 +1001,7 @@ pub(super) fn test_arm_shared_neon_vrshrn_n_u32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vrshrn_n_u32::<1>(create_random_uint32x4_t());
+                let _ = vshlq_n_s64::<1>(create_random_int64x2_t());
             }
         }
     }

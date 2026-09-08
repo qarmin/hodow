@@ -118,6 +118,79 @@ pub fn available_opengl_modes() -> Vec<String> {
     vec!["default-headless".to_string()]
 }
 
+/// What a headless context reports about the driver. Strings straight from `glGetString`.
+pub struct GlInfo {
+    pub vendor: String,
+    pub renderer: String,
+    pub version: String,
+    pub glsl_version: String,
+    /// Which entry of `PROBE_ATTEMPTS` produced this - on a machine where the default is
+    /// refused, knowing it took GLES is half the answer.
+    pub attempt: String,
+}
+
+/// The combinations `probe_opengl` walks, in order. The default alone is not enough: it asks
+/// for desktop OpenGL, which a GLES-only driver (Vivante/imx-gpu-viv, Mali, VideoCore) cannot
+/// give at all, and it asks EGL for the default display, which the Wayland build of such a
+/// driver rejects outright ("No default display support on wayland") when nothing else set up
+/// a `wl_display`. Reporting "unavailable" off that one attempt says nothing about whether the
+/// GPU works - only that one combination did not.
+const PROBE_ATTEMPTS: &[(&str, DisplayApiHint, GlApiHint)] = &[
+    ("EGL + OpenGL", DisplayApiHint::Egl, GlApiHint::Auto),
+    ("EGL + GLES 3.0", DisplayApiHint::Egl, GlApiHint::Gles { major: 3, minor: 0 }),
+    ("EGL + GLES 2.0", DisplayApiHint::Egl, GlApiHint::Gles { major: 2, minor: 0 }),
+    ("GLX + OpenGL", DisplayApiHint::Glx, GlApiHint::Auto),
+];
+
+/// Create a throwaway headless context just to read the driver's identification strings.
+/// Unlike `test_all_opengl` this renders nothing, but it does still load and initialize the
+/// GL driver, so it is the one part of `hodow_cli info` that can be affected by a broken one.
+///
+/// On failure the error lists every combination tried and why each one was refused, which is
+/// what tells a GLES-only or Wayland-only driver apart from having no driver at all.
+pub fn probe_opengl() -> Result<GlInfo, String> {
+    let mut failures = Vec::new();
+    for (label, display_api, gl_api) in PROBE_ATTEMPTS {
+        let opts = GpuOptions {
+            no_window: true,
+            display_api: *display_api,
+            gl_api: *gl_api,
+            ..Default::default()
+        };
+        match probe_with(&opts) {
+            Ok(mut info) => {
+                info.attempt = label.to_string();
+                return Ok(info);
+            }
+            Err(e) => failures.push(format!("{label}: {e}")),
+        }
+    }
+    Err(failures.join("; "))
+}
+
+fn probe_with(opts: &GpuOptions) -> Result<GlInfo, String> {
+    let ctx = init_opengl(opts).map_err(|e| e.to_string())?;
+    let info = unsafe {
+        let get = |name: u32| -> String {
+            let ptr = gl::GetString(name);
+            if ptr.is_null() {
+                "unknown".to_string()
+            } else {
+                std::ffi::CStr::from_ptr(ptr as *const std::os::raw::c_char).to_string_lossy().into_owned()
+            }
+        };
+        GlInfo {
+            vendor: get(gl::VENDOR),
+            renderer: get(gl::RENDERER),
+            version: get(gl::VERSION),
+            glsl_version: get(gl::SHADING_LANGUAGE_VERSION),
+            attempt: String::new(),
+        }
+    };
+    drop(ctx);
+    Ok(info)
+}
+
 pub fn test_all_opengl(opts: &GpuOptions) -> GLTestResult {
     tests::test_all_gl(opts)
 }

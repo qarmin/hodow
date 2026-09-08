@@ -22,6 +22,22 @@ pub enum Commands {
     /// Run a persistent job-queue server with a web dashboard
     #[cfg(feature = "serve")]
     Serve(ServeArgs),
+    /// Print what this machine is and which CPU extensions this binary can test on it
+    Info(InfoArgs),
+}
+
+// ── Info ─────────────────────────────────────────────────────────────────────
+
+#[derive(Args, Debug)]
+pub struct InfoArgs {
+    /// One line per extension instead of two grouped lists
+    #[arg(short = 'v', long = "verbose")]
+    pub verbose: bool,
+
+    /// Skip the Graphics section. That section is the only part of `info` that loads a GPU
+    /// driver, so this keeps the command usable on a machine where doing so hangs or crashes.
+    #[arg(long = "no-gpu")]
+    pub no_gpu: bool,
 }
 
 // ── Serve ───────────────────────────────────────────────────────────────────

@@ -32,6 +32,7 @@ use crate::cpu::auto_generated::loongarch64::lsx::part15::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 
+#[allow(non_camel_case_types)]
 pub struct LSX;
 
 impl ExtensionTest for LSX {

@@ -25,6 +25,23 @@ heavily on AI-assisted code generation (see README.md "AI Usage").
 ## Commands (via `just`, see `justfile`)
 
 - `just check` - quick `cargo check` on `hodow_cli`.
+- `just info` (`hodow_cli info`) - host/kernel/distro, CPU model + topology, RAM, build profile and
+  cargo features, then the CPU-extension report: how many extensions/tests are **compiled in**
+  versus **supported here**, split three ways (supported / not present / no runtime detection -
+  the last being `UNSUPPORTED_FEATURES` entries like `rdtsc` that can never run anywhere). `-v`
+  gives one line per extension. Reads `/proc` and `/sys` directly, no system-info crate.
+  The Graphics section is the one part that loads driver code: `opengl::probe_opengl` brings up a
+  throwaway headless context for `glGetString`, `vulkan::probe_devices` creates an instance and
+  enumerates physical devices but never a logical device. Both distinguish "not compiled in" from
+  "compiled in but unavailable here", which is the question on a board with no Vulkan driver.
+  `--no-gpu` skips that section for a machine where touching a driver hangs; the rest of `info`
+  never does. `print_graphics` drops `log::max_level` to `Off` around the probes - context
+  creation logs a screenful and none of it belongs mid-report, and both probes return their
+  failure as a `Result` that gets printed anyway.
+  Backed by the generated `extension_status()`; `hodow_core::list_all_functions()`
+  now counts the *whole* suite, so use `all_tests()` for "what would run here". It prints through
+  `println!`, not `log`, and `main` suppresses the "Running: ..." banner for it - it is a report,
+  not a log, and timestamps/call sites only get in the way of pasting it into a bug report.
 - `just cpu` / `just gpu` / `just vulkan` / `just gui` - run each subsystem (debug). `*r` suffix (`gpur`, ...)
   = release. `*a` suffix (`gpua`, `sanitizer`, `guia`) = build under `-Zsanitizer=address`.
 - `just stress` - CPU stress test across all cores (release).
@@ -73,7 +90,11 @@ heavily on AI-assisted code generation (see README.md "AI Usage").
 Almost every recipe pins the nightly toolchain via the `NIGHTLY` variable at the top of `justfile` (a dated
 nightly, e.g. `nightly-2026-08-21`) rather than a floating `+nightly` - bump that one variable to move the
 whole project to a newer nightly. MSRV is `1.98` (`rust-version` in `[workspace.package]`); there is no
-`rust-toolchain.toml` by design.
+`rust-toolchain.toml` by design. **Any recipe that builds for arm/aarch64/riscv must be pinned** -
+`hodow_core`'s per-arch `cfg_attr(target_arch = ..., feature(...))` lists are E0554 on stable, so `arm`
+and `install-arm` are nightly and each `rustup target add ... --toolchain {{NIGHTLY}}` first (the target
+being installed for the *default* toolchain does not help a pinned one). Those blocks are inert on
+x86_64, which is the only reason `install`/`install-all` can stay on whatever toolchain is default.
 
 Feature flags: `gpu` (OpenGL path, includes `winit`/`glutin`/`glow`), `vulkan` (independent, `ash` + `naga`),
 `miri_build` (enables Miri-safe guards in generated CPU tests).
@@ -245,6 +266,46 @@ exercised, both fixed the same way - the *entries*, not the generator, were wron
   placeholder failures (expected - nothing captured yet) plus the pre-existing `sse4a`
   `extracti_si64`/`inserti_si64` build-profile sensitivity (see the dedicated note on it
   elsewhere in this file); clean afterward except for those same already-known four functions.
+
+### NEON groups are split by the feature each function really needs
+
+stdarch keeps CRC32, the crypto intrinsics, dot-product, i8mm, fcma, lut and the rest in the
+same `neon/generated.rs`, so bucketing by source file put every one of them behind
+`is_*_feature_detected!("neon")`. On a NEON-only chip that is a SIGILL, not a skip - 61 of them
+on an i.MX ARMv7 board. `rebucket_neon_by_feature` (`generate_tests.py`) moves each function
+into a group named after its own `#[target_feature]`, captured from upstream by
+`extract_signatures.py`'s `find_target_features` and written into `signatures.txt` as a
+`%base^arm-only` marker (absent when a function has no such attribute, so pre-existing lines
+keep their shape). **Scoped to `neon` on purpose** - every other extension already comes from a
+file named after its own feature, and rebucketing an x86 function would rename its tests and
+throw away its captured expected values for nothing. Verified: the x86/x86_64 output is
+byte-identical across the change.
+
+- Two shapes. An extra *base* feature (`"neon,dotprod"`, `"crc"`, `"aes"`) is required on both
+  architectures and detectable on both. An arm-only extra
+  (`cfg_attr(target_arch = "arm", target_feature(enable = "vfp4"))`) means the function is plain
+  NEON on aarch64 - `NEON_AARCH64_PLAIN_FEATURES` makes that group check `neon` there and
+  `false` on arm, where no runtime check for `vfp4`/`fp-armv8` exists.
+- `v7`/`v8` are ignored (`NEON_BASELINE_FEATURES`): `v7` is the baseline of the armv7 target,
+  and the only `%neon^v8` functions are f16 reinterprets that generate nothing anyway.
+- `ARM32_DETECTABLE_FEATURES` is the whole of `is_arm_feature_detected!` (`neon pmull crc aes
+  sha2 i8mm dotprod`). Anything else a NEON function asks for - `fp16`, `vfp4`, `fp-armv8`,
+  every aarch64-only extension - has no 32-bit check at all, so that group reports "no
+  detection" and is skipped there. That is 14 tests (`vfma*`/`vfms*`/`vmaxnm*`/`vminnm*`/
+  `vrndn*`) traded for 14 fewer SIGILLs; `/proc/cpuinfo`'s `Features: ... vfpv4` would be a way
+  to recover them later, outside what std offers.
+- Test names change with the group (`test_arm_shared_neon_crc32b` ->
+  `test_arm_shared_crc_crc32b`), so the ARM half of `expected_cpu_values.txt` was recaptured -
+  `capture_expected_cross.py aarch64-unknown-linux-gnu aarch64-linux-gnu-gcc qemu-aarch64`,
+  then regenerate, then re-run. Note it builds `--release`; run the verification in the same
+  profile. armv7 could not be recaptured here (no `arm-linux-gnueabihf-gcc`, no zig).
+- This also retires the qemu `-s` skip list the section below describes: `faminmax`, `lut` and
+  `rcpc3` now land in their own groups, qemu does not advertise them, and they are skipped
+  instead of trapping. Confirmed - aarch64 under qemu reports them as "not present" and runs
+  7146 tests with 0 errors.
+- `stdarch_aarch64_feature_detection` had to join lib.rs's aarch64 `feature(...)` list: the new
+  groups check features whose detection strings are still unstable, unlike the
+  `neon`/`crc`/`aes` handful that was enough before.
 
 ### Non-x86 architectures
 
@@ -531,6 +592,13 @@ to the container by editing `~/.claude/skills/NOT_SKILL/Dockerfile` and asking f
 Only a validation **ERROR** fails a case; warnings are logged. That matches upstream - deqp-vk
 under `--deqp-vk-validation=enable` passes cases the layer warns about, and several of those
 warnings are inherent to how upstream wrote the test.
+
+`Outcome::Crashed` carries *why* the child died (`isolate::crash_reason` off the reaped
+`ExitStatus`): `SIGILL (illegal instruction)` means the instruction is not available on this
+machine, `SIGSEGV`/`SIGBUS` a bad or misaligned address, `SIGKILL` is usually the OOM killer and
+not the test at all. It reaches the log line, `--report`'s `message`, and `serve`'s
+`TestOutcome::Crashed(String)` (whose old unit-variant records in an existing job history no
+longer deserialize - `Store::read_events` already skips lines it cannot parse).
 
 `isolate.rs`'s `run_isolated`/`run_worker` filter the test list by the same `-t`/`-e`/`-s` state as the
 plain (non-isolated) run path (via `hodow_core::should_skip_test_or_feature`, using the `(name, feature,

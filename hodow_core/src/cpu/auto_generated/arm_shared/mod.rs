@@ -1,1 +1,9 @@
+pub mod aes;
+pub mod crc;
+pub mod dotprod;
+pub mod fp16;
+pub mod fp_armv8;
+pub mod i8mm;
 pub mod neon;
+pub mod sha2;
+pub mod vfp4;

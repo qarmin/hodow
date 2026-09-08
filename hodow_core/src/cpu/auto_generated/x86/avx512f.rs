@@ -50,6 +50,7 @@ use crate::cpu::auto_generated::x86::avx512f::part24::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 
+#[allow(non_camel_case_types)]
 pub struct AVX512F;
 
 impl ExtensionTest for AVX512F {

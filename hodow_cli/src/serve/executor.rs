@@ -115,10 +115,10 @@ fn run_cpu_job(state: &AppState, id: JobId, spec: &super::model::CpuJobSpec) -> 
                 crash = Some((idx, name.to_string()));
                 TestOutcome::Timeout
             }
-            Outcome::Crashed => {
+            Outcome::Crashed(reason) => {
                 summary.crashed += 1;
-                crash = Some((idx, name.to_string()));
-                TestOutcome::Crashed
+                crash = Some((idx, format!("{name} ({reason})")));
+                TestOutcome::Crashed(reason.clone())
             }
         };
         summary.total += 1;

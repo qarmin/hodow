@@ -33,8 +33,6 @@ mod part32;
 mod part33;
 mod part34;
 mod part35;
-mod part36;
-mod part37;
 
 use crate::cpu::auto_generated::arm_shared::neon::part1::*;
 use crate::cpu::auto_generated::arm_shared::neon::part2::*;
@@ -71,11 +69,10 @@ use crate::cpu::auto_generated::arm_shared::neon::part32::*;
 use crate::cpu::auto_generated::arm_shared::neon::part33::*;
 use crate::cpu::auto_generated::arm_shared::neon::part34::*;
 use crate::cpu::auto_generated::arm_shared::neon::part35::*;
-use crate::cpu::auto_generated::arm_shared::neon::part36::*;
-use crate::cpu::auto_generated::arm_shared::neon::part37::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 
+#[allow(non_camel_case_types)]
 pub struct NEON;
 
 impl ExtensionTest for NEON {
@@ -85,16 +82,6 @@ impl ExtensionTest for NEON {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_arm_shared_neon_crc32b, "test_arm_shared_neon_crc32b"),
-            (&test_arm_shared_neon_crc32cb, "test_arm_shared_neon_crc32cb"),
-            #[cfg(target_arch = "arm")]
-            (&test_arm_shared_neon_crc32cd, "test_arm_shared_neon_crc32cd"),
-            (&test_arm_shared_neon_crc32ch, "test_arm_shared_neon_crc32ch"),
-            (&test_arm_shared_neon_crc32cw, "test_arm_shared_neon_crc32cw"),
-            #[cfg(target_arch = "arm")]
-            (&test_arm_shared_neon_crc32d, "test_arm_shared_neon_crc32d"),
-            (&test_arm_shared_neon_crc32h, "test_arm_shared_neon_crc32h"),
-            (&test_arm_shared_neon_crc32w, "test_arm_shared_neon_crc32w"),
             (&test_arm_shared_neon_vaba_s16, "test_arm_shared_neon_vaba_s16"),
             (&test_arm_shared_neon_vaba_s32, "test_arm_shared_neon_vaba_s32"),
             (&test_arm_shared_neon_vaba_s8, "test_arm_shared_neon_vaba_s8"),
@@ -200,10 +187,6 @@ impl ExtensionTest for NEON {
             (&test_arm_shared_neon_vaddw_u16, "test_arm_shared_neon_vaddw_u16"),
             (&test_arm_shared_neon_vaddw_u32, "test_arm_shared_neon_vaddw_u32"),
             (&test_arm_shared_neon_vaddw_u8, "test_arm_shared_neon_vaddw_u8"),
-            (&test_arm_shared_neon_vaesdq_u8, "test_arm_shared_neon_vaesdq_u8"),
-            (&test_arm_shared_neon_vaeseq_u8, "test_arm_shared_neon_vaeseq_u8"),
-            (&test_arm_shared_neon_vaesimcq_u8, "test_arm_shared_neon_vaesimcq_u8"),
-            (&test_arm_shared_neon_vaesmcq_u8, "test_arm_shared_neon_vaesmcq_u8"),
             (&test_arm_shared_neon_vand_s8, "test_arm_shared_neon_vand_s8"),
             (&test_arm_shared_neon_vandq_s8, "test_arm_shared_neon_vandq_s8"),
             (&test_arm_shared_neon_vand_s16, "test_arm_shared_neon_vand_s16"),
@@ -391,7 +374,6 @@ impl ExtensionTest for NEON {
             (&test_arm_shared_neon_vcreate_u64, "test_arm_shared_neon_vcreate_u64"),
             (&test_arm_shared_neon_vcreate_p8, "test_arm_shared_neon_vcreate_p8"),
             (&test_arm_shared_neon_vcreate_p16, "test_arm_shared_neon_vcreate_p16"),
-            (&test_arm_shared_neon_vcreate_p64, "test_arm_shared_neon_vcreate_p64"),
             (&test_arm_shared_neon_vcvt_f32_s32, "test_arm_shared_neon_vcvt_f32_s32"),
             (&test_arm_shared_neon_vcvtq_f32_s32, "test_arm_shared_neon_vcvtq_f32_s32"),
             (&test_arm_shared_neon_vcvt_f32_u32, "test_arm_shared_neon_vcvt_f32_u32"),
@@ -416,18 +398,6 @@ impl ExtensionTest for NEON {
             (&test_arm_shared_neon_vcvtq_s32_f32, "test_arm_shared_neon_vcvtq_s32_f32"),
             (&test_arm_shared_neon_vcvt_u32_f32, "test_arm_shared_neon_vcvt_u32_f32"),
             (&test_arm_shared_neon_vcvtq_u32_f32, "test_arm_shared_neon_vcvtq_u32_f32"),
-            (&test_arm_shared_neon_vdot_lane_s32, "test_arm_shared_neon_vdot_lane_s32"),
-            (&test_arm_shared_neon_vdotq_lane_s32, "test_arm_shared_neon_vdotq_lane_s32"),
-            (&test_arm_shared_neon_vdot_lane_u32, "test_arm_shared_neon_vdot_lane_u32"),
-            (&test_arm_shared_neon_vdotq_lane_u32, "test_arm_shared_neon_vdotq_lane_u32"),
-            (&test_arm_shared_neon_vdot_laneq_s32, "test_arm_shared_neon_vdot_laneq_s32"),
-            (&test_arm_shared_neon_vdotq_laneq_s32, "test_arm_shared_neon_vdotq_laneq_s32"),
-            (&test_arm_shared_neon_vdot_laneq_u32, "test_arm_shared_neon_vdot_laneq_u32"),
-            (&test_arm_shared_neon_vdotq_laneq_u32, "test_arm_shared_neon_vdotq_laneq_u32"),
-            (&test_arm_shared_neon_vdot_s32, "test_arm_shared_neon_vdot_s32"),
-            (&test_arm_shared_neon_vdotq_s32, "test_arm_shared_neon_vdotq_s32"),
-            (&test_arm_shared_neon_vdot_u32, "test_arm_shared_neon_vdot_u32"),
-            (&test_arm_shared_neon_vdotq_u32, "test_arm_shared_neon_vdotq_u32"),
             (&test_arm_shared_neon_vdup_lane_f32, "test_arm_shared_neon_vdup_lane_f32"),
             (&test_arm_shared_neon_vdup_lane_s32, "test_arm_shared_neon_vdup_lane_s32"),
             (&test_arm_shared_neon_vdup_lane_u32, "test_arm_shared_neon_vdup_lane_u32"),
@@ -532,14 +502,6 @@ impl ExtensionTest for NEON {
             (&test_arm_shared_neon_vextq_s8, "test_arm_shared_neon_vextq_s8"),
             (&test_arm_shared_neon_vextq_u8, "test_arm_shared_neon_vextq_u8"),
             (&test_arm_shared_neon_vextq_p8, "test_arm_shared_neon_vextq_p8"),
-            (&test_arm_shared_neon_vfma_f32, "test_arm_shared_neon_vfma_f32"),
-            (&test_arm_shared_neon_vfmaq_f32, "test_arm_shared_neon_vfmaq_f32"),
-            (&test_arm_shared_neon_vfma_n_f32, "test_arm_shared_neon_vfma_n_f32"),
-            (&test_arm_shared_neon_vfmaq_n_f32, "test_arm_shared_neon_vfmaq_n_f32"),
-            (&test_arm_shared_neon_vfms_f32, "test_arm_shared_neon_vfms_f32"),
-            (&test_arm_shared_neon_vfmsq_f32, "test_arm_shared_neon_vfmsq_f32"),
-            (&test_arm_shared_neon_vfms_n_f32, "test_arm_shared_neon_vfms_n_f32"),
-            (&test_arm_shared_neon_vfmsq_n_f32, "test_arm_shared_neon_vfmsq_n_f32"),
             (&test_arm_shared_neon_vget_high_f32, "test_arm_shared_neon_vget_high_f32"),
             (&test_arm_shared_neon_vget_high_p16, "test_arm_shared_neon_vget_high_p16"),
             (&test_arm_shared_neon_vget_high_p8, "test_arm_shared_neon_vget_high_p8"),
@@ -632,7 +594,6 @@ impl ExtensionTest for NEON {
             (&test_arm_shared_neon_vld1q_dup_u32, "test_arm_shared_neon_vld1q_dup_u32"),
             (&test_arm_shared_neon_vld1q_dup_u64, "test_arm_shared_neon_vld1q_dup_u64"),
             (&test_arm_shared_neon_vld1q_dup_u8, "test_arm_shared_neon_vld1q_dup_u8"),
-            (&test_arm_shared_neon_vld1_dup_p64, "test_arm_shared_neon_vld1_dup_p64"),
             (&test_arm_shared_neon_vld1_dup_s64, "test_arm_shared_neon_vld1_dup_s64"),
             (&test_arm_shared_neon_vld1_dup_u64, "test_arm_shared_neon_vld1_dup_u64"),
             #[cfg(target_arch = "arm")]
@@ -663,8 +624,6 @@ impl ExtensionTest for NEON {
             (&test_arm_shared_neon_vld1_p16, "test_arm_shared_neon_vld1_p16"),
             #[cfg(target_arch = "arm")]
             (&test_arm_shared_neon_vld1q_p16, "test_arm_shared_neon_vld1q_p16"),
-            #[cfg(target_arch = "arm")]
-            (&test_arm_shared_neon_vld1q_p64, "test_arm_shared_neon_vld1q_p64"),
             (&test_arm_shared_neon_vld1_lane_f32, "test_arm_shared_neon_vld1_lane_f32"),
             (&test_arm_shared_neon_vld1_lane_p16, "test_arm_shared_neon_vld1_lane_p16"),
             (&test_arm_shared_neon_vld1_lane_p8, "test_arm_shared_neon_vld1_lane_p8"),
@@ -687,10 +646,6 @@ impl ExtensionTest for NEON {
             (&test_arm_shared_neon_vld1q_lane_u32, "test_arm_shared_neon_vld1q_lane_u32"),
             (&test_arm_shared_neon_vld1q_lane_u64, "test_arm_shared_neon_vld1q_lane_u64"),
             (&test_arm_shared_neon_vld1q_lane_u8, "test_arm_shared_neon_vld1q_lane_u8"),
-            (&test_arm_shared_neon_vld1_lane_p64, "test_arm_shared_neon_vld1_lane_p64"),
-            (&test_arm_shared_neon_vld1q_lane_p64, "test_arm_shared_neon_vld1q_lane_p64"),
-            #[cfg(target_arch = "arm")]
-            (&test_arm_shared_neon_vld1_p64, "test_arm_shared_neon_vld1_p64"),
             #[cfg(target_arch = "arm")]
             (&test_arm_shared_neon_vld1_s8, "test_arm_shared_neon_vld1_s8"),
             #[cfg(target_arch = "arm")]
@@ -707,7 +662,6 @@ impl ExtensionTest for NEON {
             (&test_arm_shared_neon_vld1_s64, "test_arm_shared_neon_vld1_s64"),
             #[cfg(target_arch = "arm")]
             (&test_arm_shared_neon_vld1q_s64, "test_arm_shared_neon_vld1q_s64"),
-            (&test_arm_shared_neon_vld1q_dup_p64, "test_arm_shared_neon_vld1q_dup_p64"),
             (&test_arm_shared_neon_vldrq_p128, "test_arm_shared_neon_vldrq_p128"),
             (&test_arm_shared_neon_vmax_f32, "test_arm_shared_neon_vmax_f32"),
             (&test_arm_shared_neon_vmaxq_f32, "test_arm_shared_neon_vmaxq_f32"),
@@ -723,8 +677,6 @@ impl ExtensionTest for NEON {
             (&test_arm_shared_neon_vmaxq_u16, "test_arm_shared_neon_vmaxq_u16"),
             (&test_arm_shared_neon_vmax_u32, "test_arm_shared_neon_vmax_u32"),
             (&test_arm_shared_neon_vmaxq_u32, "test_arm_shared_neon_vmaxq_u32"),
-            (&test_arm_shared_neon_vmaxnm_f32, "test_arm_shared_neon_vmaxnm_f32"),
-            (&test_arm_shared_neon_vmaxnmq_f32, "test_arm_shared_neon_vmaxnmq_f32"),
             (&test_arm_shared_neon_vmin_f32, "test_arm_shared_neon_vmin_f32"),
             (&test_arm_shared_neon_vminq_f32, "test_arm_shared_neon_vminq_f32"),
             (&test_arm_shared_neon_vmin_s8, "test_arm_shared_neon_vmin_s8"),
@@ -739,8 +691,6 @@ impl ExtensionTest for NEON {
             (&test_arm_shared_neon_vminq_u16, "test_arm_shared_neon_vminq_u16"),
             (&test_arm_shared_neon_vmin_u32, "test_arm_shared_neon_vmin_u32"),
             (&test_arm_shared_neon_vminq_u32, "test_arm_shared_neon_vminq_u32"),
-            (&test_arm_shared_neon_vminnm_f32, "test_arm_shared_neon_vminnm_f32"),
-            (&test_arm_shared_neon_vminnmq_f32, "test_arm_shared_neon_vminnmq_f32"),
             (&test_arm_shared_neon_vmla_f32, "test_arm_shared_neon_vmla_f32"),
             (&test_arm_shared_neon_vmlaq_f32, "test_arm_shared_neon_vmlaq_f32"),
             (&test_arm_shared_neon_vmla_lane_f32, "test_arm_shared_neon_vmla_lane_f32"),
@@ -865,8 +815,6 @@ impl ExtensionTest for NEON {
             (&test_arm_shared_neon_vmlsl_u8, "test_arm_shared_neon_vmlsl_u8"),
             (&test_arm_shared_neon_vmlsl_u16, "test_arm_shared_neon_vmlsl_u16"),
             (&test_arm_shared_neon_vmlsl_u32, "test_arm_shared_neon_vmlsl_u32"),
-            (&test_arm_shared_neon_vmmlaq_s32, "test_arm_shared_neon_vmmlaq_s32"),
-            (&test_arm_shared_neon_vmmlaq_u32, "test_arm_shared_neon_vmmlaq_u32"),
             (&test_arm_shared_neon_vmov_n_f32, "test_arm_shared_neon_vmov_n_f32"),
             (&test_arm_shared_neon_vmov_n_p16, "test_arm_shared_neon_vmov_n_p16"),
             (&test_arm_shared_neon_vmov_n_p8, "test_arm_shared_neon_vmov_n_p8"),
@@ -1546,18 +1494,6 @@ impl ExtensionTest for NEON {
             (&test_arm_shared_neon_vreinterpretq_u32_p64, "test_arm_shared_neon_vreinterpretq_u32_p64"),
             (&test_arm_shared_neon_vreinterpretq_p8_p64, "test_arm_shared_neon_vreinterpretq_p8_p64"),
             (&test_arm_shared_neon_vreinterpretq_p16_p64, "test_arm_shared_neon_vreinterpretq_p16_p64"),
-            (&test_arm_shared_neon_vreinterpretq_s8_p128, "test_arm_shared_neon_vreinterpretq_s8_p128"),
-            (&test_arm_shared_neon_vreinterpretq_s16_p128, "test_arm_shared_neon_vreinterpretq_s16_p128"),
-            (&test_arm_shared_neon_vreinterpretq_s32_p128, "test_arm_shared_neon_vreinterpretq_s32_p128"),
-            (&test_arm_shared_neon_vreinterpretq_s64_p128, "test_arm_shared_neon_vreinterpretq_s64_p128"),
-            (&test_arm_shared_neon_vreinterpretq_u8_p128, "test_arm_shared_neon_vreinterpretq_u8_p128"),
-            (&test_arm_shared_neon_vreinterpretq_u16_p128, "test_arm_shared_neon_vreinterpretq_u16_p128"),
-            (&test_arm_shared_neon_vreinterpretq_u32_p128, "test_arm_shared_neon_vreinterpretq_u32_p128"),
-            (&test_arm_shared_neon_vreinterpretq_u64_p128, "test_arm_shared_neon_vreinterpretq_u64_p128"),
-            (&test_arm_shared_neon_vreinterpretq_p8_p128, "test_arm_shared_neon_vreinterpretq_p8_p128"),
-            (&test_arm_shared_neon_vreinterpretq_p16_p128, "test_arm_shared_neon_vreinterpretq_p16_p128"),
-            (&test_arm_shared_neon_vreinterpretq_p64_p128, "test_arm_shared_neon_vreinterpretq_p64_p128"),
-            (&test_arm_shared_neon_vreinterpretq_p128_p64, "test_arm_shared_neon_vreinterpretq_p128_p64"),
             (&test_arm_shared_neon_vrev16_p8, "test_arm_shared_neon_vrev16_p8"),
             (&test_arm_shared_neon_vrev16_s8, "test_arm_shared_neon_vrev16_s8"),
             (&test_arm_shared_neon_vrev16_u8, "test_arm_shared_neon_vrev16_u8"),
@@ -1606,8 +1542,6 @@ impl ExtensionTest for NEON {
             (&test_arm_shared_neon_vrhaddq_u16, "test_arm_shared_neon_vrhaddq_u16"),
             (&test_arm_shared_neon_vrhadd_u32, "test_arm_shared_neon_vrhadd_u32"),
             (&test_arm_shared_neon_vrhaddq_u32, "test_arm_shared_neon_vrhaddq_u32"),
-            (&test_arm_shared_neon_vrndn_f32, "test_arm_shared_neon_vrndn_f32"),
-            (&test_arm_shared_neon_vrndnq_f32, "test_arm_shared_neon_vrndnq_f32"),
             (&test_arm_shared_neon_vrshl_s8, "test_arm_shared_neon_vrshl_s8"),
             (&test_arm_shared_neon_vrshlq_s8, "test_arm_shared_neon_vrshlq_s8"),
             (&test_arm_shared_neon_vrshl_s16, "test_arm_shared_neon_vrshl_s16"),
@@ -1697,20 +1631,8 @@ impl ExtensionTest for NEON {
             (&test_arm_shared_neon_vsetq_lane_p8, "test_arm_shared_neon_vsetq_lane_p8"),
             (&test_arm_shared_neon_vset_lane_p16, "test_arm_shared_neon_vset_lane_p16"),
             (&test_arm_shared_neon_vsetq_lane_p16, "test_arm_shared_neon_vsetq_lane_p16"),
-            (&test_arm_shared_neon_vset_lane_p64, "test_arm_shared_neon_vset_lane_p64"),
             (&test_arm_shared_neon_vset_lane_s64, "test_arm_shared_neon_vset_lane_s64"),
             (&test_arm_shared_neon_vset_lane_u64, "test_arm_shared_neon_vset_lane_u64"),
-            (&test_arm_shared_neon_vsetq_lane_p64, "test_arm_shared_neon_vsetq_lane_p64"),
-            (&test_arm_shared_neon_vsha1cq_u32, "test_arm_shared_neon_vsha1cq_u32"),
-            (&test_arm_shared_neon_vsha1h_u32, "test_arm_shared_neon_vsha1h_u32"),
-            (&test_arm_shared_neon_vsha1mq_u32, "test_arm_shared_neon_vsha1mq_u32"),
-            (&test_arm_shared_neon_vsha1pq_u32, "test_arm_shared_neon_vsha1pq_u32"),
-            (&test_arm_shared_neon_vsha1su0q_u32, "test_arm_shared_neon_vsha1su0q_u32"),
-            (&test_arm_shared_neon_vsha1su1q_u32, "test_arm_shared_neon_vsha1su1q_u32"),
-            (&test_arm_shared_neon_vsha256h2q_u32, "test_arm_shared_neon_vsha256h2q_u32"),
-            (&test_arm_shared_neon_vsha256hq_u32, "test_arm_shared_neon_vsha256hq_u32"),
-            (&test_arm_shared_neon_vsha256su0q_u32, "test_arm_shared_neon_vsha256su0q_u32"),
-            (&test_arm_shared_neon_vsha256su1q_u32, "test_arm_shared_neon_vsha256su1q_u32"),
             (&test_arm_shared_neon_vshl_n_s8, "test_arm_shared_neon_vshl_n_s8"),
             (&test_arm_shared_neon_vshlq_n_s8, "test_arm_shared_neon_vshlq_n_s8"),
             (&test_arm_shared_neon_vshl_n_s16, "test_arm_shared_neon_vshl_n_s16"),
@@ -1935,10 +1857,8 @@ impl ExtensionTest for NEON {
             (&test_arm_shared_neon_vst1q_lane_p8, "test_arm_shared_neon_vst1q_lane_p8"),
             (&test_arm_shared_neon_vst1_lane_p16, "test_arm_shared_neon_vst1_lane_p16"),
             (&test_arm_shared_neon_vst1q_lane_p16, "test_arm_shared_neon_vst1q_lane_p16"),
-            (&test_arm_shared_neon_vst1_lane_p64, "test_arm_shared_neon_vst1_lane_p64"),
             (&test_arm_shared_neon_vst1_lane_s64, "test_arm_shared_neon_vst1_lane_s64"),
             (&test_arm_shared_neon_vst1_lane_u64, "test_arm_shared_neon_vst1_lane_u64"),
-            (&test_arm_shared_neon_vst1q_lane_p64, "test_arm_shared_neon_vst1q_lane_p64"),
             (&test_arm_shared_neon_vstrq_p128, "test_arm_shared_neon_vstrq_p128"),
             (&test_arm_shared_neon_vsub_f32, "test_arm_shared_neon_vsub_f32"),
             (&test_arm_shared_neon_vsubq_f32, "test_arm_shared_neon_vsubq_f32"),
@@ -1982,10 +1902,6 @@ impl ExtensionTest for NEON {
             (&test_arm_shared_neon_vsubw_u8, "test_arm_shared_neon_vsubw_u8"),
             (&test_arm_shared_neon_vsubw_u16, "test_arm_shared_neon_vsubw_u16"),
             (&test_arm_shared_neon_vsubw_u32, "test_arm_shared_neon_vsubw_u32"),
-            (&test_arm_shared_neon_vsudot_lane_s32, "test_arm_shared_neon_vsudot_lane_s32"),
-            (&test_arm_shared_neon_vsudotq_lane_s32, "test_arm_shared_neon_vsudotq_lane_s32"),
-            (&test_arm_shared_neon_vsudot_laneq_s32, "test_arm_shared_neon_vsudot_laneq_s32"),
-            (&test_arm_shared_neon_vsudotq_laneq_s32, "test_arm_shared_neon_vsudotq_laneq_s32"),
             #[cfg(target_arch = "arm")]
             (&test_arm_shared_neon_vtbl1_s8, "test_arm_shared_neon_vtbl1_s8"),
             #[cfg(target_arch = "arm")]
@@ -2014,13 +1930,6 @@ impl ExtensionTest for NEON {
             (&test_arm_shared_neon_vtstq_u16, "test_arm_shared_neon_vtstq_u16"),
             (&test_arm_shared_neon_vtst_u32, "test_arm_shared_neon_vtst_u32"),
             (&test_arm_shared_neon_vtstq_u32, "test_arm_shared_neon_vtstq_u32"),
-            (&test_arm_shared_neon_vusdot_lane_s32, "test_arm_shared_neon_vusdot_lane_s32"),
-            (&test_arm_shared_neon_vusdotq_lane_s32, "test_arm_shared_neon_vusdotq_lane_s32"),
-            (&test_arm_shared_neon_vusdot_laneq_s32, "test_arm_shared_neon_vusdot_laneq_s32"),
-            (&test_arm_shared_neon_vusdotq_laneq_s32, "test_arm_shared_neon_vusdotq_laneq_s32"),
-            (&test_arm_shared_neon_vusdot_s32, "test_arm_shared_neon_vusdot_s32"),
-            (&test_arm_shared_neon_vusdotq_s32, "test_arm_shared_neon_vusdotq_s32"),
-            (&test_arm_shared_neon_vusmmlaq_s32, "test_arm_shared_neon_vusmmlaq_s32"),
         ]
     }
 }

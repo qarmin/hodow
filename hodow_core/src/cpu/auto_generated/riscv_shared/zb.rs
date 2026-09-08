@@ -4,6 +4,7 @@ use crate::cpu::auto_generated::riscv_shared::zb::part1::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 
+#[allow(non_camel_case_types)]
 pub struct ZB;
 
 impl ExtensionTest for ZB {

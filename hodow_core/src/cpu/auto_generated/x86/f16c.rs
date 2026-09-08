@@ -4,6 +4,7 @@ use crate::cpu::auto_generated::x86::f16c::part1::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 
+#[allow(non_camel_case_types)]
 pub struct F16C;
 
 impl ExtensionTest for F16C {

@@ -4,6 +4,7 @@ use crate::cpu::auto_generated::powerpc::vsx::part1::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 
+#[allow(non_camel_case_types)]
 pub struct VSX;
 
 impl ExtensionTest for VSX {

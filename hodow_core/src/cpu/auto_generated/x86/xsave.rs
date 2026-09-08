@@ -4,6 +4,7 @@ use crate::cpu::auto_generated::x86::xsave::part1::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 
+#[allow(non_camel_case_types)]
 pub struct XSAVE;
 
 impl ExtensionTest for XSAVE {

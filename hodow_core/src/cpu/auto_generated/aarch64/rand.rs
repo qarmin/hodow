@@ -4,6 +4,7 @@ use crate::cpu::auto_generated::aarch64::rand::part1::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 
+#[allow(non_camel_case_types)]
 pub struct RAND;
 
 impl ExtensionTest for RAND {
