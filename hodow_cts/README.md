@@ -45,6 +45,7 @@ sub-group.
 | `dEQP-GLES2.info.*` | 6 of 6 | - |
 | `dEQP-GLES2.functional.prerequisite.*` | 3 of 3 | - |
 | `dEQP-GLES2.functional.implementation_limits.*` | 16 of 16 | - |
+| `dEQP-GLES2.functional.clip_control.*` | 4 of 8 | the four that need the depth-texture FBO (`depth_mode_zero_to_one`, `depth_mode_one_to_one`, `face_culling`, `viewport_bounds`) |
 | `dEQP-GLES2.functional.color_clear.*` | 19 of 19 | - |
 | `dEQP-GLES2.functional.depth_stencil_clear.*` | 11 of 11 | - |
 | `dEQP-GLES2.functional.buffer.*` | 49 of 49 | - |
@@ -623,8 +624,8 @@ that is the order in which a driver's problems compound:
 1. `info`, `implementation_limits`, `negative_api`, `state_query` - **done, 664 cases**.
    None of these draw anything, so they run on a driver too broken to render, and they
    are what tells you whether the entry points and the error semantics are there at all.
-2. `prerequisite`, `color_clear`, `depth_stencil_clear`, `buffer` - **done, 82 cases**;
-   only `clip_control` remains. These are the first cases that touch the framebuffer, so
+2. `prerequisite`, `color_clear`, `depth_stencil_clear`, `buffer` - **done, 82 cases**,
+   plus 4 of `clip_control`'s 8. These are the first cases that touch the framebuffer, so
    they are also what forced the render target to have real depth and stencil: EGL
    sorts configs with *fewer* depth/stencil bits first, so `eglu::choose_config` now
    asks for d24s8 and only falls back to colour-only if the driver has no such config.

@@ -13,6 +13,7 @@
 framework/common/tcuAstcUtil.cpp
 framework/common/tcuBilinearImageCompare.cpp
 framework/common/tcuCompressedTexture.cpp
+framework/common/tcuFuzzyImageCompare.hpp
 framework/common/tcuImageCompare.cpp
 framework/common/tcuImageCompare.hpp
 framework/common/tcuPixelFormat.hpp
@@ -161,6 +162,8 @@ modules/gles2/functional/es2fBufferTestUtil.cpp
 modules/gles2/functional/es2fBufferTestUtil.hpp
 modules/gles2/functional/es2fBufferWriteTests.cpp
 modules/gles2/functional/es2fBufferWriteTests.hpp
+modules/gles2/functional/es2fClipControlTests.cpp
+modules/gles2/functional/es2fClipControlTests.hpp
 modules/gles2/functional/es2fColorClearTest.cpp
 modules/gles2/functional/es2fColorClearTest.hpp
 modules/gles2/functional/es2fDepthStencilClearTests.cpp

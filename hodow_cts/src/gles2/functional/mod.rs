@@ -11,6 +11,7 @@
 
 pub mod buffer_test_util;
 pub mod buffer_write_tests;
+pub mod clip_control_tests;
 pub mod color_clear_test;
 pub mod depth_stencil_clear_tests;
 pub mod implementation_limit_tests;
@@ -26,6 +27,7 @@ pub fn create_tests() -> TestCaseGroup {
     let mut group = TestCaseGroup::new("functional");
     group.add_child(prerequisite_tests::create_tests());
     group.add_child(implementation_limit_tests::create_tests());
+    group.add_child(clip_control_tests::create_tests());
     group.add_child(color_clear_test::create_tests());
     group.add_child(depth_stencil_clear_tests::create_tests());
     group.add_child(buffer_write_tests::create_tests());
