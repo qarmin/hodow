@@ -124,9 +124,6 @@ pub struct GlInfo {
     pub renderer: String,
     pub version: String,
     pub glsl_version: String,
-    /// Which entry of `PROBE_ATTEMPTS` produced this - on a machine where the default is
-    /// refused, knowing it took GLES is half the answer.
-    pub attempt: String,
 }
 
 /// The combinations `probe_opengl` walks, in order. The default alone is not enough: it asks
@@ -149,8 +146,9 @@ const PROBE_ATTEMPTS: &[(&str, DisplayApiHint, GlApiHint)] = &[
 /// On failure the error lists every combination tried and why each one was refused, which is
 /// what tells a GLES-only or Wayland-only driver apart from having no driver at all.
 pub fn probe_opengl() -> Result<GlInfo, String> {
-    let mut failures = Vec::new();
+    let mut failures: Vec<(String, String)> = Vec::new();
     for (label, display_api, gl_api) in PROBE_ATTEMPTS {
+        let _ = label;
         let opts = GpuOptions {
             no_window: true,
             display_api: *display_api,
@@ -158,14 +156,48 @@ pub fn probe_opengl() -> Result<GlInfo, String> {
             ..Default::default()
         };
         match probe_with(&opts) {
-            Ok(mut info) => {
-                info.attempt = label.to_string();
-                return Ok(info);
+            Ok(info) => return Ok(info),
+            Err(e) => {
+                // Every attempt after a repeat is wasted: the display/API hints only take
+                // effect once an EGLDisplay exists (see OpenGLMode::create_with_opts - with no
+                // $DISPLAY it ignores both and goes straight to the device platform, then the
+                // default display). An identical message means the run died before that, so
+                // continuing just makes the driver print the same warning again.
+                let repeat = failures.last().is_some_and(|(_, prev)| *prev == e);
+                failures.push((label.to_string(), e));
+                if repeat {
+                    break;
+                }
             }
-            Err(e) => failures.push(format!("{label}: {e}")),
         }
     }
-    Err(failures.join("; "))
+    Err(format_failures(&failures))
+}
+
+/// Collapse repeated identical failures, and add the environment that decides which display
+/// path is even reachable - "failed to create EGLDisplay" plus "no compositor and no X server"
+/// is a diagnosis, on its own it is not.
+fn format_failures(failures: &[(String, String)]) -> String {
+    let mut out = Vec::new();
+    let mut i = 0;
+    while i < failures.len() {
+        let (label, message) = &failures[i];
+        let same = failures[i..].iter().take_while(|(_, m)| m == message).count();
+        if same > 1 {
+            out.push(format!("{message} (identically for {label} and {} other combination(s))", same - 1));
+        } else {
+            out.push(format!("{label}: {message}"));
+        }
+        i += same;
+    }
+    let env = |k: &str| std::env::var(k).ok().filter(|v| !v.is_empty()).unwrap_or_else(|| "unset".into());
+    out.push(format!(
+        "environment: DISPLAY={}, WAYLAND_DISPLAY={}, XDG_RUNTIME_DIR={}",
+        env("DISPLAY"),
+        env("WAYLAND_DISPLAY"),
+        env("XDG_RUNTIME_DIR")
+    ));
+    out.join("; ")
 }
 
 fn probe_with(opts: &GpuOptions) -> Result<GlInfo, String> {
@@ -184,7 +216,6 @@ fn probe_with(opts: &GpuOptions) -> Result<GlInfo, String> {
             renderer: get(gl::RENDERER),
             version: get(gl::VERSION),
             glsl_version: get(gl::SHADING_LANGUAGE_VERSION),
-            attempt: String::new(),
         }
     };
     drop(ctx);

@@ -46,7 +46,13 @@ heavily on AI-assisted code generation (see README.md "AI Usage").
   enumerates physical devices but never a logical device. Both distinguish "not compiled in" from
   "compiled in but unavailable here", which is the question on a board with no Vulkan driver.
   `--no-gpu` skips that section for a machine where touching a driver hangs; the rest of `info`
-  never does. `print_graphics` drops `log::max_level` to `Off` around the probes - context
+  never does. **`OpenGLMode::create_with_opts` ignores `display_api`/`gl_api` entirely when
+  `$DISPLAY` is unset** - it goes straight to the EGL device platform, then the default EGL
+  display - so varying them proves nothing about a headless box that fails before an EGLDisplay
+  exists. `probe_opengl` stops as soon as a failure repeats verbatim and prints
+  `DISPLAY`/`WAYLAND_DISPLAY`/`XDG_RUNTIME_DIR` alongside, which is what separates "no driver"
+  from "driver present, but no display to attach it to".
+  A Wayland-only driver is handled in `context.rs`, not here - see below. `print_graphics` drops `log::max_level` to `Off` around the probes - context
   creation logs a screenful and none of it belongs mid-report, and both probes return their
   failure as a `Result` that gets printed anyway.
   Backed by the generated `extension_status()`; `hodow_core::list_all_functions()`
@@ -497,8 +503,22 @@ generated.rs references them.
 
 - Each test implements the `GLTest` trait (`hodow_core/src/opengl/test_trait.rs`) in its own file under
   `hodow_core/src/opengl/tests/`, registered in `tests/mod.rs`.
-- `context.rs` creates a headless context; on a machine with no X server and no DRM node it falls back to
-  EGL's `EGL_EXT_platform_device` (surfaceless, e.g. Mesa llvmpipe) so GPU tests run in CI/containers.
+- `context.rs` creates a headless context. With no `$DISPLAY` it tries, in order: the running
+  Wayland compositor's own `wl_display` (`create_wayland_display`, via `wayland-client` -
+  `WaylandConnectionGuard` keeps the connection alive for the context's lifetime, since EGL only
+  borrows the pointer), then EGL's `EGL_EXT_platform_device` (surfaceless, e.g. Mesa llvmpipe, so
+  GPU tests run in CI/containers), then plain `eglGetDisplay(EGL_DEFAULT_DISPLAY)`.
+  The compositor comes first because a Wayland-only driver refuses both fallbacks: i.MX/Vivante's
+  `imx-gpu-viv` answers the default display with "No default display support on wayland" and has
+  no device platform, so before this the entire `gpu` suite could not start on such a board even
+  with Weston running. Mesa is happy either way, so the reordering costs nothing.
+  Needs `WAYLAND_DISPLAY` and `XDG_RUNTIME_DIR` in the environment - over SSH they have to be set
+  by hand (`XDG_RUNTIME_DIR=/run/user/0 WAYLAND_DISPLAY=wayland-1 ./hodow_cli ...`).
+  **The positive path is unverified**: the dev container has no Wayland compositor, so only the
+  fallbacks were exercised (no regression: `just gpu --no-window` still 40/40). Adding `weston`
+  to the container would make it testable.
+- Note `just gpu` *with* a window needs a display for winit and fails in a headless container
+  regardless of any of the above - that is pre-existing, use `--no-window` there.
 - Tests should call `drain_gl_errors()` before running and the harness checks `glGetError` after - a test
   that returns `Ok` but left a pending GL error is reported as failed. Many legacy-looking tests are written
   against a core profile (glutin default), not compatibility - watch for that when adding new ones (bind a

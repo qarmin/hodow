@@ -2250,6 +2250,7 @@ dependencies = [
  "naga",
  "rand 0.10.2",
  "raw-window-handle",
+ "wayland-client",
  "winit",
  "x11-dl",
 ]

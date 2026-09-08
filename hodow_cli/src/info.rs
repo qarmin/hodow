@@ -133,8 +133,12 @@ fn print_graphics() {
     // Bringing a GL context up logs a screenful through `log` (EGL platform, chosen version,
     // an X-display warning when headless). None of it belongs in the middle of this report,
     // and nothing is lost: both probes return the failure as a `Result` this function prints.
+    // ...unless --debug asked for them, which is the whole point when a driver refuses.
     let previous = log::max_level();
-    log::set_max_level(log::LevelFilter::Off);
+    let quiet = previous < log::LevelFilter::Debug;
+    if quiet {
+        log::set_max_level(log::LevelFilter::Off);
+    }
 
     #[cfg(feature = "gpu")]
     match hodow_core::probe_opengl() {
@@ -142,10 +146,9 @@ fn print_graphics() {
             line("OpenGL", &format!("{} - {}", gl.version, gl.renderer));
             line("OpenGL vendor", &gl.vendor);
             line("GLSL", &gl.glsl_version);
-            line("OpenGL via", &gl.attempt);
         }
         Err(e) => {
-            line("OpenGL", "unavailable - every combination refused:");
+            line("OpenGL", "unavailable:");
             for attempt in e.split("; ") {
                 line("", &format!("- {attempt}"));
             }
@@ -168,7 +171,9 @@ fn print_graphics() {
     #[cfg(not(feature = "vulkan"))]
     line("Vulkan", "not compiled in (build with --features vulkan)");
 
-    log::set_max_level(previous);
+    if quiet {
+        log::set_max_level(previous);
+    }
 }
 
 fn print_extensions(verbose: bool) {
