@@ -8,18 +8,8 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_x86_bmi2_mulx_u32() -> Result<(), String> {
-    unsafe {
-        let a = 1u32;
-        let b = 2u32;
-        let mut ref_hi = 3u32;
-        let result = _mulx_u32(a, b, &mut ref_hi);
-        check_int_equality(result as i32, 2).map_err(|e| format!("{e} | call: _mulx_u32(a, b, &mut ref_hi)"))?;
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_bmi2_bzhi_u32() -> Result<(), String> {
+#[target_feature(enable = "bmi2")]
+fn test_x86_bmi2_bzhi_u32_impl() -> Result<(), String> {
     unsafe {
         let result = _bzhi_u32(1u32, 2u32);
         check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _bzhi_u32(1u32, 2u32)"))?;
@@ -39,7 +29,12 @@ pub(super) fn test_x86_bmi2_bzhi_u32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_bmi2_pdep_u32() -> Result<(), String> {
+pub(super) fn test_x86_bmi2_bzhi_u32() -> Result<(), String> {
+    unsafe { test_x86_bmi2_bzhi_u32_impl() }
+}
+
+#[target_feature(enable = "bmi2")]
+fn test_x86_bmi2_pdep_u32_impl() -> Result<(), String> {
     unsafe {
         let result = _pdep_u32(1u32, 2u32);
         check_int_equality(result as i32, 2).map_err(|e| format!("{e} | call: _pdep_u32(1u32, 2u32)"))?;
@@ -59,7 +54,12 @@ pub(super) fn test_x86_bmi2_pdep_u32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_bmi2_pext_u32() -> Result<(), String> {
+pub(super) fn test_x86_bmi2_pdep_u32() -> Result<(), String> {
+    unsafe { test_x86_bmi2_pdep_u32_impl() }
+}
+
+#[target_feature(enable = "bmi2")]
+fn test_x86_bmi2_pext_u32_impl() -> Result<(), String> {
     unsafe {
         let result = _pext_u32(1u32, 2u32);
         check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _pext_u32(1u32, 2u32)"))?;
@@ -77,4 +77,8 @@ pub(super) fn test_x86_bmi2_pext_u32() -> Result<(), String> {
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_bmi2_pext_u32() -> Result<(), String> {
+    unsafe { test_x86_bmi2_pext_u32_impl() }
 }

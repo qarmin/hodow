@@ -222,7 +222,7 @@ pub fn test_all_gl(opts: &crate::opengl::GpuOptions) -> GLTestResult {
             // debug-output test), which would otherwise blind diagnostics for all later tests.
             unsafe { enable_gl_debug_output() };
             unsafe { drain_gl_errors() }; // clean slate so errors are attributed to this test
-            let outcome = test.run();
+            let outcome = run_test_catching_panic(test);
             let gl_err = unsafe { drain_gl_errors() };
             total_run += 1;
             match (outcome, gl_err) {
@@ -266,6 +266,28 @@ pub fn test_all_gl(opts: &crate::opengl::GpuOptions) -> GLTestResult {
     }
 }
 
+/// Run one test, turning a panic into that test's failure.
+///
+/// The `gl` crate's generated bindings `panic!("gl function was not loaded")` when a test calls
+/// an entry point the driver does not export. That is the normal case on a GLES-only driver
+/// (Vivante/imx-gpu-viv, where the desktop-GL 1.x tests have nothing to call), and killing the
+/// process on the first one means the other 39 tests never report anything. A missing function
+/// is a result about the driver, so it belongs in the results.
+fn run_test_catching_panic(test: &&'static dyn GLTest) -> Result<String, String> {
+    match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| test.run())) {
+        Ok(Ok(msg)) => Ok(msg),
+        Ok(Err(e)) => Err(e.to_string()),
+        Err(payload) => {
+            let msg = payload
+                .downcast_ref::<&str>()
+                .map(|s| (*s).to_string())
+                .or_else(|| payload.downcast_ref::<String>().cloned())
+                .unwrap_or_else(|| "panicked with a non-string payload".to_string());
+            Err(format!("panicked: {msg}"))
+        }
+    }
+}
+
 /// Test runner state for frame-by-frame execution
 struct TestRunner {
     tests: Vec<&'static dyn GLTest>,
@@ -298,7 +320,7 @@ impl crate::opengl::gui::StatefulRunner for TestRunner {
         let test_start = std::time::Instant::now();
 
         unsafe { drain_gl_errors() }; // clean slate so errors are attributed to this test
-        let outcome = test.run();
+        let outcome = run_test_catching_panic(&test);
         let gl_err = unsafe { drain_gl_errors() };
         let elapsed_ms = test_start.elapsed().as_millis();
         self.total_run += 1;

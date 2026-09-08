@@ -1,0 +1,29 @@
+#version 450
+#extension GL_EXT_shared_memory_block : enable
+#extension GL_EXT_shader_explicit_arithmetic_types : enable
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+shared A { u8vec4 arr[256]; } zero;
+struct st {
+    bool x;
+    float y;
+};
+shared B { st arr[4]; };
+layout(set = 0, binding = 0) buffer Result { uint result; };
+void main() {
+for (int i = 0; i < zero.arr.length(); i++) {
+    zero.arr[i] = u8vec4(uint8_t(1), uint8_t(1), uint8_t(1), uint8_t(1));
+  }
+  for (int i = 0; i < zero.arr.length(); i++) {
+    zero.arr[i] = u8vec4(uint8_t(0), uint8_t(0), uint8_t(0), uint8_t(0));
+  }
+  result = (
+    (arr[0].x == bool(0))
+    && (arr[0].y == float(0))
+    && (arr[1].x == bool(0))
+    && (arr[1].y == float(0))
+    && (arr[2].x == bool(0))
+    && (arr[2].y == float(0))
+    && (arr[3].x == bool(0))
+    && (arr[3].y == float(0))
+  ) ? 0 : 0xFF;
+}

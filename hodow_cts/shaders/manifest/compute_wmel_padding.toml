@@ -1,0 +1,2268 @@
+# Shader/parameter manifest for
+#   dEQP-VK.compute.pipeline.workgroup_memory_explicit_layout.padding.*  (182 cases)
+#   dEQP-VK.compute.pipeline.workgroup_memory_explicit_layout.size.*     (7 cases)
+#
+# Upstream bakes every offset and every expected word straight into the GLSL, so each
+# case really does get its own shader - unlike compute_zero_initialize.toml, where one
+# shader serves a whole loop of cases. The `[[case]]` blocks below are therefore the
+# expansion of the two `AddPaddingTests` loops and of the `AddSizeTests` size array,
+# in upstream registration order (which is the order both binaries execute in).
+#
+# Only the values upstream's loops choose are written down here; everything the shader
+# needs beyond that - the `layout (scalar)` prefix, the GLSL type name, the literal for
+# each value and the 32 expected-word comparisons - is computed from them inside
+# shaders/src/compute/wmel_padding.comp, restating `PaddingTest::CaseDef::needsScalar`
+# and the `c.expected[...] = ...` lines of `AddPaddingTests`.
+
+upstream_source = "external/vulkancts/modules/vulkan/compute/vktComputeWorkgroupMemoryExplicitLayoutTests.cpp"
+rust_module = "compute/workgroup_memory_explicit_layout_padding_tests"
+
+# `vk::SPIRV_VERSION_1_4` in both initPrograms(). Not optional: a `shared` block is
+# SPV_KHR_workgroup_memory_explicit_layout, which glslang refuses to emit below 1.4.
+spirv_version = "spirv1.4"
+
+# --- PaddingTest / AddPaddingTests -------------------------------------------------
+
+[[case]]
+name = "uint_0_uint_4"
+rust_const = "PADDING_UINT_0_UINT_4"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 0 }
+offset1 = { type = "u32", value = 4 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_0_uint_20"
+rust_const = "PADDING_UINT_0_UINT_20"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 0 }
+offset1 = { type = "u32", value = 20 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_0_uint_36"
+rust_const = "PADDING_UINT_0_UINT_36"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 0 }
+offset1 = { type = "u32", value = 36 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_0_uint_52"
+rust_const = "PADDING_UINT_0_UINT_52"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 0 }
+offset1 = { type = "u32", value = 52 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_0_uint_68"
+rust_const = "PADDING_UINT_0_UINT_68"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 0 }
+offset1 = { type = "u32", value = 68 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_0_uint_84"
+rust_const = "PADDING_UINT_0_UINT_84"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 0 }
+offset1 = { type = "u32", value = 84 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_0_uint_100"
+rust_const = "PADDING_UINT_0_UINT_100"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 0 }
+offset1 = { type = "u32", value = 100 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_0_uint_116"
+rust_const = "PADDING_UINT_0_UINT_116"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 0 }
+offset1 = { type = "u32", value = 116 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_4_uint_8"
+rust_const = "PADDING_UINT_4_UINT_8"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 4 }
+offset1 = { type = "u32", value = 8 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_4_uint_24"
+rust_const = "PADDING_UINT_4_UINT_24"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 4 }
+offset1 = { type = "u32", value = 24 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_4_uint_40"
+rust_const = "PADDING_UINT_4_UINT_40"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 4 }
+offset1 = { type = "u32", value = 40 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_4_uint_56"
+rust_const = "PADDING_UINT_4_UINT_56"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 4 }
+offset1 = { type = "u32", value = 56 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_4_uint_72"
+rust_const = "PADDING_UINT_4_UINT_72"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 4 }
+offset1 = { type = "u32", value = 72 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_4_uint_88"
+rust_const = "PADDING_UINT_4_UINT_88"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 4 }
+offset1 = { type = "u32", value = 88 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_4_uint_104"
+rust_const = "PADDING_UINT_4_UINT_104"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 4 }
+offset1 = { type = "u32", value = 104 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_4_uint_120"
+rust_const = "PADDING_UINT_4_UINT_120"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 4 }
+offset1 = { type = "u32", value = 120 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_8_uint_12"
+rust_const = "PADDING_UINT_8_UINT_12"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 8 }
+offset1 = { type = "u32", value = 12 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_8_uint_28"
+rust_const = "PADDING_UINT_8_UINT_28"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 8 }
+offset1 = { type = "u32", value = 28 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_8_uint_44"
+rust_const = "PADDING_UINT_8_UINT_44"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 8 }
+offset1 = { type = "u32", value = 44 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_8_uint_60"
+rust_const = "PADDING_UINT_8_UINT_60"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 8 }
+offset1 = { type = "u32", value = 60 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_8_uint_76"
+rust_const = "PADDING_UINT_8_UINT_76"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 8 }
+offset1 = { type = "u32", value = 76 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_8_uint_92"
+rust_const = "PADDING_UINT_8_UINT_92"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 8 }
+offset1 = { type = "u32", value = 92 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_8_uint_108"
+rust_const = "PADDING_UINT_8_UINT_108"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 8 }
+offset1 = { type = "u32", value = 108 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_8_uint_124"
+rust_const = "PADDING_UINT_8_UINT_124"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 8 }
+offset1 = { type = "u32", value = 124 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_12_uint_16"
+rust_const = "PADDING_UINT_12_UINT_16"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 12 }
+offset1 = { type = "u32", value = 16 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_12_uint_32"
+rust_const = "PADDING_UINT_12_UINT_32"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 12 }
+offset1 = { type = "u32", value = 32 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_12_uint_48"
+rust_const = "PADDING_UINT_12_UINT_48"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 12 }
+offset1 = { type = "u32", value = 48 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_12_uint_64"
+rust_const = "PADDING_UINT_12_UINT_64"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 12 }
+offset1 = { type = "u32", value = 64 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_12_uint_80"
+rust_const = "PADDING_UINT_12_UINT_80"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 12 }
+offset1 = { type = "u32", value = 80 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_12_uint_96"
+rust_const = "PADDING_UINT_12_UINT_96"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 12 }
+offset1 = { type = "u32", value = 96 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_12_uint_112"
+rust_const = "PADDING_UINT_12_UINT_112"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 12 }
+offset1 = { type = "u32", value = 112 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_16_uint_20"
+rust_const = "PADDING_UINT_16_UINT_20"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 16 }
+offset1 = { type = "u32", value = 20 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_16_uint_36"
+rust_const = "PADDING_UINT_16_UINT_36"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 16 }
+offset1 = { type = "u32", value = 36 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_16_uint_52"
+rust_const = "PADDING_UINT_16_UINT_52"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 16 }
+offset1 = { type = "u32", value = 52 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_16_uint_68"
+rust_const = "PADDING_UINT_16_UINT_68"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 16 }
+offset1 = { type = "u32", value = 68 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_16_uint_84"
+rust_const = "PADDING_UINT_16_UINT_84"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 16 }
+offset1 = { type = "u32", value = 84 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_16_uint_100"
+rust_const = "PADDING_UINT_16_UINT_100"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 16 }
+offset1 = { type = "u32", value = 100 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_16_uint_116"
+rust_const = "PADDING_UINT_16_UINT_116"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 16 }
+offset1 = { type = "u32", value = 116 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_20_uint_24"
+rust_const = "PADDING_UINT_20_UINT_24"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 20 }
+offset1 = { type = "u32", value = 24 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_20_uint_40"
+rust_const = "PADDING_UINT_20_UINT_40"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 20 }
+offset1 = { type = "u32", value = 40 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_20_uint_56"
+rust_const = "PADDING_UINT_20_UINT_56"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 20 }
+offset1 = { type = "u32", value = 56 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_20_uint_72"
+rust_const = "PADDING_UINT_20_UINT_72"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 20 }
+offset1 = { type = "u32", value = 72 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_20_uint_88"
+rust_const = "PADDING_UINT_20_UINT_88"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 20 }
+offset1 = { type = "u32", value = 88 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_20_uint_104"
+rust_const = "PADDING_UINT_20_UINT_104"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 20 }
+offset1 = { type = "u32", value = 104 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_20_uint_120"
+rust_const = "PADDING_UINT_20_UINT_120"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 20 }
+offset1 = { type = "u32", value = 120 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_24_uint_28"
+rust_const = "PADDING_UINT_24_UINT_28"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 24 }
+offset1 = { type = "u32", value = 28 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_24_uint_44"
+rust_const = "PADDING_UINT_24_UINT_44"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 24 }
+offset1 = { type = "u32", value = 44 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_24_uint_60"
+rust_const = "PADDING_UINT_24_UINT_60"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 24 }
+offset1 = { type = "u32", value = 60 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_24_uint_76"
+rust_const = "PADDING_UINT_24_UINT_76"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 24 }
+offset1 = { type = "u32", value = 76 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_24_uint_92"
+rust_const = "PADDING_UINT_24_UINT_92"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 24 }
+offset1 = { type = "u32", value = 92 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_24_uint_108"
+rust_const = "PADDING_UINT_24_UINT_108"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 24 }
+offset1 = { type = "u32", value = 108 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_24_uint_124"
+rust_const = "PADDING_UINT_24_UINT_124"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 24 }
+offset1 = { type = "u32", value = 124 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_28_uint_32"
+rust_const = "PADDING_UINT_28_UINT_32"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 28 }
+offset1 = { type = "u32", value = 32 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_28_uint_48"
+rust_const = "PADDING_UINT_28_UINT_48"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 28 }
+offset1 = { type = "u32", value = 48 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_28_uint_64"
+rust_const = "PADDING_UINT_28_UINT_64"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 28 }
+offset1 = { type = "u32", value = 64 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_28_uint_80"
+rust_const = "PADDING_UINT_28_UINT_80"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 28 }
+offset1 = { type = "u32", value = 80 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_28_uint_96"
+rust_const = "PADDING_UINT_28_UINT_96"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 28 }
+offset1 = { type = "u32", value = 96 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_28_uint_112"
+rust_const = "PADDING_UINT_28_UINT_112"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 28 }
+offset1 = { type = "u32", value = 112 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_32_uint_36"
+rust_const = "PADDING_UINT_32_UINT_36"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 32 }
+offset1 = { type = "u32", value = 36 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_32_uint_52"
+rust_const = "PADDING_UINT_32_UINT_52"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 32 }
+offset1 = { type = "u32", value = 52 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_32_uint_68"
+rust_const = "PADDING_UINT_32_UINT_68"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 32 }
+offset1 = { type = "u32", value = 68 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_32_uint_84"
+rust_const = "PADDING_UINT_32_UINT_84"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 32 }
+offset1 = { type = "u32", value = 84 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_32_uint_100"
+rust_const = "PADDING_UINT_32_UINT_100"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 32 }
+offset1 = { type = "u32", value = 100 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_32_uint_116"
+rust_const = "PADDING_UINT_32_UINT_116"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 32 }
+offset1 = { type = "u32", value = 116 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_36_uint_40"
+rust_const = "PADDING_UINT_36_UINT_40"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 36 }
+offset1 = { type = "u32", value = 40 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_36_uint_56"
+rust_const = "PADDING_UINT_36_UINT_56"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 36 }
+offset1 = { type = "u32", value = 56 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_36_uint_72"
+rust_const = "PADDING_UINT_36_UINT_72"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 36 }
+offset1 = { type = "u32", value = 72 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_36_uint_88"
+rust_const = "PADDING_UINT_36_UINT_88"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 36 }
+offset1 = { type = "u32", value = 88 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_36_uint_104"
+rust_const = "PADDING_UINT_36_UINT_104"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 36 }
+offset1 = { type = "u32", value = 104 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_36_uint_120"
+rust_const = "PADDING_UINT_36_UINT_120"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 36 }
+offset1 = { type = "u32", value = 120 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_40_uint_44"
+rust_const = "PADDING_UINT_40_UINT_44"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 40 }
+offset1 = { type = "u32", value = 44 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_40_uint_60"
+rust_const = "PADDING_UINT_40_UINT_60"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 40 }
+offset1 = { type = "u32", value = 60 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_40_uint_76"
+rust_const = "PADDING_UINT_40_UINT_76"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 40 }
+offset1 = { type = "u32", value = 76 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_40_uint_92"
+rust_const = "PADDING_UINT_40_UINT_92"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 40 }
+offset1 = { type = "u32", value = 92 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_40_uint_108"
+rust_const = "PADDING_UINT_40_UINT_108"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 40 }
+offset1 = { type = "u32", value = 108 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_40_uint_124"
+rust_const = "PADDING_UINT_40_UINT_124"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 40 }
+offset1 = { type = "u32", value = 124 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_44_uint_48"
+rust_const = "PADDING_UINT_44_UINT_48"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 44 }
+offset1 = { type = "u32", value = 48 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_44_uint_64"
+rust_const = "PADDING_UINT_44_UINT_64"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 44 }
+offset1 = { type = "u32", value = 64 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_44_uint_80"
+rust_const = "PADDING_UINT_44_UINT_80"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 44 }
+offset1 = { type = "u32", value = 80 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_44_uint_96"
+rust_const = "PADDING_UINT_44_UINT_96"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 44 }
+offset1 = { type = "u32", value = 96 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_44_uint_112"
+rust_const = "PADDING_UINT_44_UINT_112"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 44 }
+offset1 = { type = "u32", value = 112 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_48_uint_52"
+rust_const = "PADDING_UINT_48_UINT_52"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 48 }
+offset1 = { type = "u32", value = 52 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_48_uint_68"
+rust_const = "PADDING_UINT_48_UINT_68"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 48 }
+offset1 = { type = "u32", value = 68 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_48_uint_84"
+rust_const = "PADDING_UINT_48_UINT_84"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 48 }
+offset1 = { type = "u32", value = 84 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_48_uint_100"
+rust_const = "PADDING_UINT_48_UINT_100"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 48 }
+offset1 = { type = "u32", value = 100 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_48_uint_116"
+rust_const = "PADDING_UINT_48_UINT_116"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 48 }
+offset1 = { type = "u32", value = 116 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_52_uint_56"
+rust_const = "PADDING_UINT_52_UINT_56"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 52 }
+offset1 = { type = "u32", value = 56 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_52_uint_72"
+rust_const = "PADDING_UINT_52_UINT_72"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 52 }
+offset1 = { type = "u32", value = 72 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_52_uint_88"
+rust_const = "PADDING_UINT_52_UINT_88"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 52 }
+offset1 = { type = "u32", value = 88 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_52_uint_104"
+rust_const = "PADDING_UINT_52_UINT_104"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 52 }
+offset1 = { type = "u32", value = 104 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_52_uint_120"
+rust_const = "PADDING_UINT_52_UINT_120"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 52 }
+offset1 = { type = "u32", value = 120 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_56_uint_60"
+rust_const = "PADDING_UINT_56_UINT_60"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 56 }
+offset1 = { type = "u32", value = 60 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_56_uint_76"
+rust_const = "PADDING_UINT_56_UINT_76"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 56 }
+offset1 = { type = "u32", value = 76 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_56_uint_92"
+rust_const = "PADDING_UINT_56_UINT_92"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 56 }
+offset1 = { type = "u32", value = 92 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_56_uint_108"
+rust_const = "PADDING_UINT_56_UINT_108"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 56 }
+offset1 = { type = "u32", value = 108 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_56_uint_124"
+rust_const = "PADDING_UINT_56_UINT_124"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 56 }
+offset1 = { type = "u32", value = 124 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_60_uint_64"
+rust_const = "PADDING_UINT_60_UINT_64"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 60 }
+offset1 = { type = "u32", value = 64 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_60_uint_80"
+rust_const = "PADDING_UINT_60_UINT_80"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 60 }
+offset1 = { type = "u32", value = 80 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_60_uint_96"
+rust_const = "PADDING_UINT_60_UINT_96"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 60 }
+offset1 = { type = "u32", value = 96 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_60_uint_112"
+rust_const = "PADDING_UINT_60_UINT_112"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 60 }
+offset1 = { type = "u32", value = 112 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_64_uint_68"
+rust_const = "PADDING_UINT_64_UINT_68"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 64 }
+offset1 = { type = "u32", value = 68 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_64_uint_84"
+rust_const = "PADDING_UINT_64_UINT_84"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 64 }
+offset1 = { type = "u32", value = 84 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_64_uint_100"
+rust_const = "PADDING_UINT_64_UINT_100"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 64 }
+offset1 = { type = "u32", value = 100 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_64_uint_116"
+rust_const = "PADDING_UINT_64_UINT_116"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 64 }
+offset1 = { type = "u32", value = 116 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_68_uint_72"
+rust_const = "PADDING_UINT_68_UINT_72"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 68 }
+offset1 = { type = "u32", value = 72 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_68_uint_88"
+rust_const = "PADDING_UINT_68_UINT_88"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 68 }
+offset1 = { type = "u32", value = 88 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_68_uint_104"
+rust_const = "PADDING_UINT_68_UINT_104"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 68 }
+offset1 = { type = "u32", value = 104 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_68_uint_120"
+rust_const = "PADDING_UINT_68_UINT_120"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 68 }
+offset1 = { type = "u32", value = 120 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_72_uint_76"
+rust_const = "PADDING_UINT_72_UINT_76"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 72 }
+offset1 = { type = "u32", value = 76 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_72_uint_92"
+rust_const = "PADDING_UINT_72_UINT_92"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 72 }
+offset1 = { type = "u32", value = 92 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_72_uint_108"
+rust_const = "PADDING_UINT_72_UINT_108"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 72 }
+offset1 = { type = "u32", value = 108 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_72_uint_124"
+rust_const = "PADDING_UINT_72_UINT_124"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 72 }
+offset1 = { type = "u32", value = 124 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_76_uint_80"
+rust_const = "PADDING_UINT_76_UINT_80"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 76 }
+offset1 = { type = "u32", value = 80 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_76_uint_96"
+rust_const = "PADDING_UINT_76_UINT_96"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 76 }
+offset1 = { type = "u32", value = 96 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_76_uint_112"
+rust_const = "PADDING_UINT_76_UINT_112"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 76 }
+offset1 = { type = "u32", value = 112 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_80_uint_84"
+rust_const = "PADDING_UINT_80_UINT_84"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 80 }
+offset1 = { type = "u32", value = 84 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_80_uint_100"
+rust_const = "PADDING_UINT_80_UINT_100"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 80 }
+offset1 = { type = "u32", value = 100 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_80_uint_116"
+rust_const = "PADDING_UINT_80_UINT_116"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 80 }
+offset1 = { type = "u32", value = 116 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_84_uint_88"
+rust_const = "PADDING_UINT_84_UINT_88"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 84 }
+offset1 = { type = "u32", value = 88 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_84_uint_104"
+rust_const = "PADDING_UINT_84_UINT_104"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 84 }
+offset1 = { type = "u32", value = 104 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_84_uint_120"
+rust_const = "PADDING_UINT_84_UINT_120"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 84 }
+offset1 = { type = "u32", value = 120 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_88_uint_92"
+rust_const = "PADDING_UINT_88_UINT_92"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 88 }
+offset1 = { type = "u32", value = 92 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_88_uint_108"
+rust_const = "PADDING_UINT_88_UINT_108"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 88 }
+offset1 = { type = "u32", value = 108 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_88_uint_124"
+rust_const = "PADDING_UINT_88_UINT_124"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 88 }
+offset1 = { type = "u32", value = 124 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_92_uint_96"
+rust_const = "PADDING_UINT_92_UINT_96"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 92 }
+offset1 = { type = "u32", value = 96 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_92_uint_112"
+rust_const = "PADDING_UINT_92_UINT_112"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 92 }
+offset1 = { type = "u32", value = 112 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_96_uint_100"
+rust_const = "PADDING_UINT_96_UINT_100"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 96 }
+offset1 = { type = "u32", value = 100 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_96_uint_116"
+rust_const = "PADDING_UINT_96_UINT_116"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 96 }
+offset1 = { type = "u32", value = 116 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_100_uint_104"
+rust_const = "PADDING_UINT_100_UINT_104"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 100 }
+offset1 = { type = "u32", value = 104 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_100_uint_120"
+rust_const = "PADDING_UINT_100_UINT_120"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 100 }
+offset1 = { type = "u32", value = 120 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_104_uint_108"
+rust_const = "PADDING_UINT_104_UINT_108"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 104 }
+offset1 = { type = "u32", value = 108 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_104_uint_124"
+rust_const = "PADDING_UINT_104_UINT_124"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 104 }
+offset1 = { type = "u32", value = 124 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_108_uint_112"
+rust_const = "PADDING_UINT_108_UINT_112"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 108 }
+offset1 = { type = "u32", value = 112 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_112_uint_116"
+rust_const = "PADDING_UINT_112_UINT_116"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 112 }
+offset1 = { type = "u32", value = 116 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_116_uint_120"
+rust_const = "PADDING_UINT_116_UINT_120"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 116 }
+offset1 = { type = "u32", value = 120 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint_120_uint_124"
+rust_const = "PADDING_UINT_120_UINT_124"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint" }
+offset0 = { type = "u32", value = 120 }
+offset1 = { type = "u32", value = 124 }
+value0 = { type = "u32", value = 0x1234 }
+value1 = { type = "u32", value = 0x5678 }
+
+[[case]]
+name = "uint8_t_0_uint8_t_1"
+rust_const = "PADDING_UINT8_T_0_UINT8_T_1"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 0 }
+offset1 = { type = "u32", value = 1 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_0_uint8_t_17"
+rust_const = "PADDING_UINT8_T_0_UINT8_T_17"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 0 }
+offset1 = { type = "u32", value = 17 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_1_uint8_t_2"
+rust_const = "PADDING_UINT8_T_1_UINT8_T_2"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 1 }
+offset1 = { type = "u32", value = 2 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_1_uint8_t_18"
+rust_const = "PADDING_UINT8_T_1_UINT8_T_18"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 1 }
+offset1 = { type = "u32", value = 18 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_2_uint8_t_3"
+rust_const = "PADDING_UINT8_T_2_UINT8_T_3"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 2 }
+offset1 = { type = "u32", value = 3 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_2_uint8_t_19"
+rust_const = "PADDING_UINT8_T_2_UINT8_T_19"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 2 }
+offset1 = { type = "u32", value = 19 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_3_uint8_t_4"
+rust_const = "PADDING_UINT8_T_3_UINT8_T_4"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 3 }
+offset1 = { type = "u32", value = 4 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_3_uint8_t_20"
+rust_const = "PADDING_UINT8_T_3_UINT8_T_20"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 3 }
+offset1 = { type = "u32", value = 20 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_4_uint8_t_5"
+rust_const = "PADDING_UINT8_T_4_UINT8_T_5"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 4 }
+offset1 = { type = "u32", value = 5 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_4_uint8_t_21"
+rust_const = "PADDING_UINT8_T_4_UINT8_T_21"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 4 }
+offset1 = { type = "u32", value = 21 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_5_uint8_t_6"
+rust_const = "PADDING_UINT8_T_5_UINT8_T_6"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 5 }
+offset1 = { type = "u32", value = 6 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_5_uint8_t_22"
+rust_const = "PADDING_UINT8_T_5_UINT8_T_22"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 5 }
+offset1 = { type = "u32", value = 22 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_6_uint8_t_7"
+rust_const = "PADDING_UINT8_T_6_UINT8_T_7"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 6 }
+offset1 = { type = "u32", value = 7 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_6_uint8_t_23"
+rust_const = "PADDING_UINT8_T_6_UINT8_T_23"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 6 }
+offset1 = { type = "u32", value = 23 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_7_uint8_t_8"
+rust_const = "PADDING_UINT8_T_7_UINT8_T_8"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 7 }
+offset1 = { type = "u32", value = 8 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_7_uint8_t_24"
+rust_const = "PADDING_UINT8_T_7_UINT8_T_24"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 7 }
+offset1 = { type = "u32", value = 24 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_8_uint8_t_9"
+rust_const = "PADDING_UINT8_T_8_UINT8_T_9"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 8 }
+offset1 = { type = "u32", value = 9 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_8_uint8_t_25"
+rust_const = "PADDING_UINT8_T_8_UINT8_T_25"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 8 }
+offset1 = { type = "u32", value = 25 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_9_uint8_t_10"
+rust_const = "PADDING_UINT8_T_9_UINT8_T_10"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 9 }
+offset1 = { type = "u32", value = 10 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_9_uint8_t_26"
+rust_const = "PADDING_UINT8_T_9_UINT8_T_26"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 9 }
+offset1 = { type = "u32", value = 26 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_10_uint8_t_11"
+rust_const = "PADDING_UINT8_T_10_UINT8_T_11"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 10 }
+offset1 = { type = "u32", value = 11 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_10_uint8_t_27"
+rust_const = "PADDING_UINT8_T_10_UINT8_T_27"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 10 }
+offset1 = { type = "u32", value = 27 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_11_uint8_t_12"
+rust_const = "PADDING_UINT8_T_11_UINT8_T_12"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 11 }
+offset1 = { type = "u32", value = 12 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_11_uint8_t_28"
+rust_const = "PADDING_UINT8_T_11_UINT8_T_28"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 11 }
+offset1 = { type = "u32", value = 28 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_12_uint8_t_13"
+rust_const = "PADDING_UINT8_T_12_UINT8_T_13"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 12 }
+offset1 = { type = "u32", value = 13 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_12_uint8_t_29"
+rust_const = "PADDING_UINT8_T_12_UINT8_T_29"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 12 }
+offset1 = { type = "u32", value = 29 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_13_uint8_t_14"
+rust_const = "PADDING_UINT8_T_13_UINT8_T_14"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 13 }
+offset1 = { type = "u32", value = 14 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_13_uint8_t_30"
+rust_const = "PADDING_UINT8_T_13_UINT8_T_30"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 13 }
+offset1 = { type = "u32", value = 30 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_14_uint8_t_15"
+rust_const = "PADDING_UINT8_T_14_UINT8_T_15"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 14 }
+offset1 = { type = "u32", value = 15 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_14_uint8_t_31"
+rust_const = "PADDING_UINT8_T_14_UINT8_T_31"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 14 }
+offset1 = { type = "u32", value = 31 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_15_uint8_t_16"
+rust_const = "PADDING_UINT8_T_15_UINT8_T_16"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 15 }
+offset1 = { type = "u32", value = 16 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_16_uint8_t_17"
+rust_const = "PADDING_UINT8_T_16_UINT8_T_17"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 16 }
+offset1 = { type = "u32", value = 17 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_17_uint8_t_18"
+rust_const = "PADDING_UINT8_T_17_UINT8_T_18"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 17 }
+offset1 = { type = "u32", value = 18 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_18_uint8_t_19"
+rust_const = "PADDING_UINT8_T_18_UINT8_T_19"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 18 }
+offset1 = { type = "u32", value = 19 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_19_uint8_t_20"
+rust_const = "PADDING_UINT8_T_19_UINT8_T_20"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 19 }
+offset1 = { type = "u32", value = 20 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_20_uint8_t_21"
+rust_const = "PADDING_UINT8_T_20_UINT8_T_21"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 20 }
+offset1 = { type = "u32", value = 21 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_21_uint8_t_22"
+rust_const = "PADDING_UINT8_T_21_UINT8_T_22"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 21 }
+offset1 = { type = "u32", value = 22 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_22_uint8_t_23"
+rust_const = "PADDING_UINT8_T_22_UINT8_T_23"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 22 }
+offset1 = { type = "u32", value = 23 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_23_uint8_t_24"
+rust_const = "PADDING_UINT8_T_23_UINT8_T_24"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 23 }
+offset1 = { type = "u32", value = 24 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_24_uint8_t_25"
+rust_const = "PADDING_UINT8_T_24_UINT8_T_25"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 24 }
+offset1 = { type = "u32", value = 25 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_25_uint8_t_26"
+rust_const = "PADDING_UINT8_T_25_UINT8_T_26"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 25 }
+offset1 = { type = "u32", value = 26 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_26_uint8_t_27"
+rust_const = "PADDING_UINT8_T_26_UINT8_T_27"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 26 }
+offset1 = { type = "u32", value = 27 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_27_uint8_t_28"
+rust_const = "PADDING_UINT8_T_27_UINT8_T_28"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 27 }
+offset1 = { type = "u32", value = 28 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_28_uint8_t_29"
+rust_const = "PADDING_UINT8_T_28_UINT8_T_29"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 28 }
+offset1 = { type = "u32", value = 29 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_29_uint8_t_30"
+rust_const = "PADDING_UINT8_T_29_UINT8_T_30"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 29 }
+offset1 = { type = "u32", value = 30 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+[[case]]
+name = "uint8_t_30_uint8_t_31"
+rust_const = "PADDING_UINT8_T_30_UINT8_T_31"
+rust_type = "PaddingCase"
+programs = [{ name = "comp", template = "compute/wmel_padding.comp", stage = "comp" }]
+[case.params]
+data_type = { type = "enum:DataType", value = "Uint8" }
+offset0 = { type = "u32", value = 30 }
+offset1 = { type = "u32", value = 31 }
+value0 = { type = "u32", value = 0xAA }
+value1 = { type = "u32", value = 0xBB }
+
+# --- SizeTest / AddSizeTests -------------------------------------------------------
+# 8/64/4096 plus, as the upstream comment puts it, "a few variants based on common
+# known maximum sizes" - the shader cannot be generated from the reported limit.
+
+[[case]]
+name = "8"
+rust_const = "SIZE_8"
+rust_type = "SizeCase"
+programs = [{ name = "comp", template = "compute/wmel_size.comp", stage = "comp" }]
+[case.params]
+size = { type = "u32", value = 8 }
+
+[[case]]
+name = "64"
+rust_const = "SIZE_64"
+rust_type = "SizeCase"
+programs = [{ name = "comp", template = "compute/wmel_size.comp", stage = "comp" }]
+[case.params]
+size = { type = "u32", value = 64 }
+
+[[case]]
+name = "4096"
+rust_const = "SIZE_4096"
+rust_type = "SizeCase"
+programs = [{ name = "comp", template = "compute/wmel_size.comp", stage = "comp" }]
+[case.params]
+size = { type = "u32", value = 4096 }
+
+[[case]]
+name = "16384"
+rust_const = "SIZE_16384"
+rust_type = "SizeCase"
+programs = [{ name = "comp", template = "compute/wmel_size.comp", stage = "comp" }]
+[case.params]
+size = { type = "u32", value = 16384 }
+
+[[case]]
+name = "32768"
+rust_const = "SIZE_32768"
+rust_type = "SizeCase"
+programs = [{ name = "comp", template = "compute/wmel_size.comp", stage = "comp" }]
+[case.params]
+size = { type = "u32", value = 32768 }
+
+[[case]]
+name = "49152"
+rust_const = "SIZE_49152"
+rust_type = "SizeCase"
+programs = [{ name = "comp", template = "compute/wmel_size.comp", stage = "comp" }]
+[case.params]
+size = { type = "u32", value = 49152 }
+
+[[case]]
+name = "65536"
+rust_const = "SIZE_65536"
+rust_type = "SizeCase"
+programs = [{ name = "comp", template = "compute/wmel_size.comp", stage = "comp" }]
+[case.params]
+size = { type = "u32", value = 65536 }

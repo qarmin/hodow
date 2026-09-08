@@ -1,8 +1,6 @@
 use std::arch::s390x::*;
 
 #[allow(unused_imports)]
-use crate::cpu::common::arm::*;
-#[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
 pub(super) fn test_s390x_vector_va_float() -> Result<(), String> {

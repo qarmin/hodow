@@ -1,0 +1,33 @@
+[package]
+name = "hodow_cts"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "Rust rewrite of the Khronos Vulkan/OpenGL Conformance Test Suite (VK-GL-CTS)"
+
+[lib]
+name = "hodow_cts"
+path = "src/lib.rs"
+
+[[bin]]
+name = "hodow_cts"
+path = "src/main.rs"
+
+[dependencies]
+# Vulkan bindings generated from vk.xml - same source the upstream CTS framework
+# generates its own dispatch tables from. `libloading` makes the loader a runtime
+# dlopen, so the binary never links against libvulkan and needs no -dev package.
+vulkanalia = { version = "0.35", default-features = false, features = ["std", "libloading"] }
+# libEGL and libGLESv2 are opened at run time for the same reason the Vulkan loader is:
+# the binary links against neither, so it needs no -dev package to build and runs on a
+# board that has only the vendor driver.
+libloading = "0.8"
+clap = { version = "4.5", features = ["derive"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+log.workspace = true
+env_logger = "0.11"
+
+[lints]
+workspace = true

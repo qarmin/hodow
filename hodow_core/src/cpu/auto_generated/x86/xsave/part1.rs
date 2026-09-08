@@ -8,7 +8,8 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_x86_xsave_xsave() -> Result<(), String> {
+#[target_feature(enable = "xsave")]
+fn test_x86_xsave_xsave_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -20,7 +21,12 @@ pub(super) fn test_x86_xsave_xsave() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_xsave_xgetbv() -> Result<(), String> {
+pub(super) fn test_x86_xsave_xsave() -> Result<(), String> {
+    unsafe { test_x86_xsave_xsave_impl() }
+}
+
+#[target_feature(enable = "xsave")]
+fn test_x86_xsave_xgetbv_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -43,7 +49,12 @@ pub(super) fn test_x86_xsave_xgetbv() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_xsave_xsaveopt() -> Result<(), String> {
+pub(super) fn test_x86_xsave_xgetbv() -> Result<(), String> {
+    unsafe { test_x86_xsave_xgetbv_impl() }
+}
+
+#[target_feature(enable = "xsave")]
+fn test_x86_xsave_xsaveopt_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -55,7 +66,12 @@ pub(super) fn test_x86_xsave_xsaveopt() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_xsave_xsavec() -> Result<(), String> {
+pub(super) fn test_x86_xsave_xsaveopt() -> Result<(), String> {
+    unsafe { test_x86_xsave_xsaveopt_impl() }
+}
+
+#[target_feature(enable = "xsave")]
+fn test_x86_xsave_xsavec_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -65,4 +81,8 @@ pub(super) fn test_x86_xsave_xsavec() -> Result<(), String> {
         _xsavec(ptr_mem_addr.0.as_mut_ptr(), save_mask);
     }
     Ok(())
+}
+
+pub(super) fn test_x86_xsave_xsavec() -> Result<(), String> {
+    unsafe { test_x86_xsave_xsavec_impl() }
 }

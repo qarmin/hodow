@@ -1,0 +1,29 @@
+# Expected values captured from real hardware for this extension's generated tests.
+# Format: test_name - rust_expr
+#
+# One file per (architecture, extension) - written by scripts/cpu/capture_expected.py and
+# capture_expected_cross.py, read by generate_tests.py. Do not hand-edit: recapture instead.
+# A qemu-derived value is not a real-silicon one; see CLAUDE.md's "Non-x86 architectures".
+
+test_aarch64_sha3_vbcaxq_s16 - [9, 10, 11, 12, 13, 14, 15, 8]
+test_aarch64_sha3_vbcaxq_s32 - [5, 6, 7, 4]
+test_aarch64_sha3_vbcaxq_s64 - [3, 2]
+test_aarch64_sha3_vbcaxq_s8 - [17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 16]
+test_aarch64_sha3_vbcaxq_u16 - [9, 10, 11, 12, 13, 14, 15, 8]
+test_aarch64_sha3_vbcaxq_u32 - [5, 6, 7, 4]
+test_aarch64_sha3_vbcaxq_u64 - [3, 2]
+test_aarch64_sha3_vbcaxq_u8 - [17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 16]
+test_aarch64_sha3_veor3q_s16 - [25, 26, 27, 28, 29, 30, 31, 0]
+test_aarch64_sha3_veor3q_s32 - [13, 14, 15, 0]
+test_aarch64_sha3_veor3q_s64 - [7, 0]
+test_aarch64_sha3_veor3q_s8 - [49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 0]
+test_aarch64_sha3_veor3q_u16 - [25, 26, 27, 28, 29, 30, 31, 0]
+test_aarch64_sha3_veor3q_u32 - [13, 14, 15, 0]
+test_aarch64_sha3_veor3q_u64 - [7, 0]
+test_aarch64_sha3_veor3q_u8 - [49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 0]
+test_aarch64_sha3_vrax1q_u64 - [7, 10]
+test_aarch64_sha3_vsha512h2q_u64 - [5770237651009406214, 349133864969]
+test_aarch64_sha3_vsha512hq_u64 - [11189044327219203, 7177611956453380]
+test_aarch64_sha3_vsha512su0q_u64 - [144115188075855874, 9439544818968559619]
+test_aarch64_sha3_vsha512su1q_u64 - [105553116266526, 140737488355368]
+test_aarch64_sha3_vxarq_u64 - [2, 6]

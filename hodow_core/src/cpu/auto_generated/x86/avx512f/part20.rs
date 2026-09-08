@@ -8,461 +8,3258 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_x86_avx512f_mm256_maskz_cvt_roundps_ph() -> Result<(), String> {
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm256_maskz_cvt_roundps_ph::<0>(create__mmask8_from(0b01010101), create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
-        check_array_equality(&result, &[15360, 16896, 17664, 18176]).map_err(|e| format!("{e} | call: _mm256_maskz_cvt_roundps_ph::<0>(create__mmask8_from(0b01010101), create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_maskz_cvt_roundps_ph::<0>(create_random__mmask8(), create_random__m256());
-            }
-        }
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i32_array([2, 3, 4, 5]);
+        _mm_mask_cvtsepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvt_roundps_ph() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_mask_cvt_roundps_ph::<0>(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128_from([5.0, 6.0, 7.0, 8.0])));
-        check_array_equality(&result, &[17664, 18176, 0, 0]).map_err(|e| format!("{e} | call: _mm_mask_cvt_roundps_ph::<0>(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128_from([5.0, 6.0, 7.0, 8.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm_mask_cvt_roundps_ph::<0>(create_random__m128i(), create_random__mmask8(), create_random__m128());
-            }
-        }
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i32_array([0, -1, 2, -3]);
+        _mm_mask_cvtsepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_cvt_roundps_ph() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi32_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_maskz_cvt_roundps_ph::<0>(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0])));
-        check_array_equality(&result, &[15360, 16896, 0, 0]).map_err(|e| format!("{e} | call: _mm_maskz_cvt_roundps_ph::<0>(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm_maskz_cvt_roundps_ph::<0>(create_random__mmask8(), create_random__m128());
-            }
-        }
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i32_array([100, 200, 300, 400]);
+        _mm_mask_cvtsepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_cvtps_ph() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm512_cvtps_ph::<8>(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_array_equality(&result, &[1073757184, 1140867584, 1174422784, 1207977728, 1224755328, 1241532800, 1258310272, 1275087744]).map_err(|e| format!("{e} | call: _mm512_cvtps_ph::<8>(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm512_cvtps_ph::<8>(create_random__m512());
-            }
-        }
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]);
+        _mm_mask_cvtsepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtps_ph() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi32_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm512_mask_cvtps_ph::<8>(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask16_from(0b0101010101010101), create__m512_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0])));
-        check_array_equality(&result, &[18560, 18816, 19072, 19328, 19520, 19648, 19776, 19904]).map_err(|e| format!("{e} | call: _mm512_mask_cvtps_ph::<8>(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask16_from(0b0101010101010101), create__m512_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm512_mask_cvtps_ph::<8>(create_random__m256i(), create_random__mmask16(), create_random__m512());
-            }
-        }
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]);
+        _mm_mask_cvtsepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_cvtps_ph() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm512_maskz_cvtps_ph::<8>(create__mmask16_from(0b0101010101010101), create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_array_equality(&result, &[15360, 16896, 17664, 18176, 18560, 18816, 19072, 19328]).map_err(|e| format!("{e} | call: _mm512_maskz_cvtps_ph::<8>(create__mmask16_from(0b0101010101010101), create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm512_maskz_cvtps_ph::<8>(create_random__mmask16(), create_random__m512());
-            }
-        }
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i32_array([0, 0, 0, 0]);
+        _mm_mask_cvtsepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvtps_ph() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi32_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm256_mask_cvtps_ph::<0>(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m256_from([5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0])));
-        check_array_equality(&result, &[17664, 18176, 18560, 18816]).map_err(|e| format!("{e} | call: _mm256_mask_cvtps_ph::<0>(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m256_from([5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_mask_cvtps_ph::<0>(create_random__m128i(), create_random__mmask8(), create_random__m256());
-            }
-        }
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i32_array([-1, -1, -1, -1]);
+        _mm_mask_cvtsepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_cvtps_ph() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm256_maskz_cvtps_ph::<0>(create__mmask8_from(0b01010101), create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
-        check_array_equality(&result, &[15360, 16896, 17664, 18176]).map_err(|e| format!("{e} | call: _mm256_maskz_cvtps_ph::<0>(create__mmask8_from(0b01010101), create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_maskz_cvtps_ph::<0>(create_random__mmask8(), create_random__m256());
-            }
-        }
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]);
+        _mm_mask_cvtsepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvtps_ph() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtusepi64_storeu_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_mask_cvtps_ph::<0>(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128_from([5.0, 6.0, 7.0, 8.0])));
-        check_array_equality(&result, &[17664, 18176, 0, 0]).map_err(|e| format!("{e} | call: _mm_mask_cvtps_ph::<0>(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128_from([5.0, 6.0, 7.0, 8.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm_mask_cvtps_ph::<0>(create_random__m128i(), create_random__mmask8(), create_random__m128());
-            }
-        }
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m512i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]);
+        _mm512_mask_cvtusepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_cvtps_ph() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtusepi64_storeu_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtusepi64_storeu_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtusepi64_storeu_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_maskz_cvtps_ph::<0>(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0])));
-        check_array_equality(&result, &[15360, 16896, 0, 0]).map_err(|e| format!("{e} | call: _mm_maskz_cvtps_ph::<0>(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm_maskz_cvtps_ph::<0>(create_random__mmask8(), create_random__m128());
-            }
-        }
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m512i_from_i32_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]);
+        _mm512_mask_cvtusepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_cvt_roundph_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtusepi64_storeu_epi32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtusepi64_storeu_epi32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtusepi64_storeu_epi32_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m512_to_f32_array(_mm512_cvt_roundph_ps::<8>(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
-        check_float_array_equality(&result, &[0.0f32; 16]).map_err(|e| format!("{e} | call: _mm512_cvt_roundph_ps::<8>(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm512_cvt_roundph_ps::<8>(create_random__m256i());
-            }
-        }
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m512i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]);
+        _mm512_mask_cvtusepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvt_roundph_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtusepi64_storeu_epi32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtusepi64_storeu_epi32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtusepi64_storeu_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m512_to_f32_array(_mm512_mask_cvt_roundph_ps::<8>(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([17, 18, 19, 20, 21, 22, 23, 24])));
-        check_float_array_equality(&result, &[1.013279e-6, 2.0, 1.0728836e-6, 4.0, 1.1324883e-6, 6.0, 1.1920929e-6, 8.0, 1.2516975e-6, 10.0, 1.3113022e-6, 12.0, 1.3709068e-6, 14.0, 1.4305115e-6, 16.0]).map_err(|e| format!("{e} | call: _mm512_mask_cvt_roundph_ps::<8>(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([17, 18, 19, 20, 21, 22, 23, 24]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm512_mask_cvt_roundph_ps::<8>(create_random__m512(), create_random__mmask16(), create_random__m256i());
-            }
-        }
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m512i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]);
+        _mm512_mask_cvtusepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_cvt_roundph_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtusepi64_storeu_epi32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtusepi64_storeu_epi32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtusepi64_storeu_epi32_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m512_to_f32_array(_mm512_maskz_cvt_roundph_ps::<8>(create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
-        check_float_array_equality(&result, &[0.0f32; 16]).map_err(|e| format!("{e} | call: _mm512_maskz_cvt_roundph_ps::<8>(create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm512_maskz_cvt_roundph_ps::<8>(create_random__mmask16(), create_random__m256i());
-            }
-        }
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m512i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]);
+        _mm512_mask_cvtusepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_cvtph_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtusepi64_storeu_epi32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtusepi64_storeu_epi32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtusepi64_storeu_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m512_to_f32_array(_mm512_cvtph_ps(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
-        check_float_array_equality(&result, &[0.0f32; 16]).map_err(|e| format!("{e} | call: _mm512_cvtph_ps(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm512_cvtph_ps(create_random__m256i());
-            }
-        }
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m512i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        _mm512_mask_cvtusepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtph_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtusepi64_storeu_epi32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtusepi64_storeu_epi32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtusepi64_storeu_epi32_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m512_to_f32_array(_mm512_mask_cvtph_ps(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([17, 18, 19, 20, 21, 22, 23, 24])));
-        check_float_array_equality(&result, &[1.013279e-6, 2.0, 1.0728836e-6, 4.0, 1.1324883e-6, 6.0, 1.1920929e-6, 8.0, 1.2516975e-6, 10.0, 1.3113022e-6, 12.0, 1.3709068e-6, 14.0, 1.4305115e-6, 16.0]).map_err(|e| format!("{e} | call: _mm512_mask_cvtph_ps(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([17, 18, 19, 20, 21, 22, 23, 24]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm512_mask_cvtph_ps(create_random__m512(), create_random__mmask16(), create_random__m256i());
-            }
-        }
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m512i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]);
+        _mm512_mask_cvtusepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_cvtph_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cvtusepi64_storeu_epi32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtusepi64_storeu_epi32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_cvtusepi64_storeu_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m512_to_f32_array(_mm512_maskz_cvtph_ps(create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
-        check_float_array_equality(&result, &[0.0f32; 16]).map_err(|e| format!("{e} | call: _mm512_maskz_cvtph_ps(create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm512_maskz_cvtph_ps(create_random__mmask16(), create_random__m256i());
-            }
-        }
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m512i_from_i32_array([i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1]);
+        _mm512_mask_cvtusepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvtph_ps() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_mask_cvtph_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([9, 10, 11, 12])));
-        check_float_array_equality(&result, &[5.364418e-7, 2.0, 5.9604645e-7, 4.0, 6.556511e-7, 6.0, 7.1525574e-7, 8.0]).map_err(|e| format!("{e} | call: _mm256_mask_cvtph_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([9, 10, 11, 12]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_mask_cvtph_ps(create_random__m256(), create_random__mmask8(), create_random__m128i());
-            }
-        }
-    }
-    Ok(())
+pub(super) fn test_x86_avx512f_mm512_mask_cvtusepi64_storeu_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_cvtusepi64_storeu_epi32_boundary_mixed_impl() }
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_cvtph_ps() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_maskz_cvtph_ps(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4])));
-        check_float_array_equality(&result, &[5.9604645e-8, 0.0, 1.1920929e-7, 0.0, 1.7881393e-7, 0.0, 2.3841858e-7, 0.0]).map_err(|e| format!("{e} | call: _mm256_maskz_cvtph_ps(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_maskz_cvtph_ps(create_random__mmask8(), create_random__m128i());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx512f_mm_mask_cvtph_ps() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m128_to_f32_array(_mm_mask_cvtph_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([5, 6, 7, 8])));
-        check_float_array_equality(&result, &[2.9802322e-7, 2.0, 3.5762787e-7, 4.0]).map_err(|e| format!("{e} | call: _mm_mask_cvtph_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm_mask_cvtph_ps(create_random__m128(), create_random__mmask8(), create_random__m128i());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx512f_mm_maskz_cvtph_ps() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m128_to_f32_array(_mm_maskz_cvtph_ps(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4])));
-        check_float_array_equality(&result, &[5.9604645e-8, 0.0, 1.1920929e-7, 0.0]).map_err(|e| format!("{e} | call: _mm_maskz_cvtph_ps(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm_maskz_cvtph_ps(create_random__mmask8(), create_random__m128i());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx512f_mm512_cvtt_roundps_epi32() -> Result<(), String> {
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m512i_to_i32_array(_mm512_cvtt_roundps_epi32::<8>(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_array_equality(&result, &[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]).map_err(|e| format!("{e} | call: _mm512_cvtt_roundps_epi32::<8>(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9]);
+        _mm256_mask_cvtusepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi32_normal2_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i32_array([0, -1, 2, -3, 4, -5, 6, -7]);
+        _mm256_mask_cvtusepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi32_normal3_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800]);
+        _mm256_mask_cvtusepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi32_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]);
+        _mm256_mask_cvtusepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi32_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]);
+        _mm256_mask_cvtusepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi32_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0]);
+        _mm256_mask_cvtusepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi32_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1]);
+        _mm256_mask_cvtusepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi32_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m256i_from_i32_array([i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1]);
+        _mm256_mask_cvtusepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi32_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i32_array([2, 3, 4, 5]);
+        _mm_mask_cvtusepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi32_normal2_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i32_array([0, -1, 2, -3]);
+        _mm_mask_cvtusepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi32_normal3_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i32_array([100, 200, 300, 400]);
+        _mm_mask_cvtusepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi32_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]);
+        _mm_mask_cvtusepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi32_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]);
+        _mm_mask_cvtusepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi32_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i32_array([0, 0, 0, 0]);
+        _mm_mask_cvtusepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi32_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i32_array([-1, -1, -1, -1]);
+        _mm_mask_cvtusepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi32_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]);
+        _mm_mask_cvtusepi64_storeu_epi32(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_load_ss_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128_from([1.0, 2.0, 3.0, 4.0]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([5.0f32; 16]);
+        let result = unpack__m128_to_f32_array(_mm_mask_load_ss(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[5.0, 0.0, 0.0, 0.0]).map_err(|e| format!("{e} | call: _mm_mask_load_ss(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_load_ss() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_load_ss_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_load_ss_normal2_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m128_to_f32_array(_mm_mask_load_ss(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 0.0, 0.0, 0.0]).map_err(|e| format!("{e} | call: _mm_mask_load_ss(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_load_ss_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_load_ss_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_load_ss_normal3_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m128_to_f32_array(_mm_mask_load_ss(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 0.0, 0.0, 0.0]).map_err(|e| format!("{e} | call: _mm_mask_load_ss(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_load_ss_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_load_ss_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_load_ss_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m128_to_f32_array(_mm_mask_load_ss(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 0.0, 0.0, 0.0]).map_err(|e| format!("{e} | call: _mm_mask_load_ss(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_load_ss_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_load_ss_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_load_ss_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m128_to_f32_array(_mm_mask_load_ss(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 0.0, 0.0, 0.0]).map_err(|e| format!("{e} | call: _mm_mask_load_ss(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_load_ss_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_load_ss_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_load_ss_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128_from([0.0, 0.0, 0.0, 0.0]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m128_to_f32_array(_mm_mask_load_ss(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 0.0, 0.0, 0.0]).map_err(|e| format!("{e} | call: _mm_mask_load_ss(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_load_ss_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_load_ss_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_load_ss_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m128_to_f32_array(_mm_mask_load_ss(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 0.0, 0.0, 0.0]).map_err(|e| format!("{e} | call: _mm_mask_load_ss(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_load_ss_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_load_ss_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_load_ss_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m128_to_f32_array(_mm_mask_load_ss(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 0.0, 0.0, 0.0]).map_err(|e| format!("{e} | call: _mm_mask_load_ss(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_load_ss_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_load_ss_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_load_ss_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m128_to_f32_array(_mm_maskz_load_ss(k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 0.0, 0.0, 0.0]).map_err(|e| format!("{e} | call: _mm_maskz_load_ss(k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_load_ss() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_load_ss_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_load_sd_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128d_from([1.0, 2.0]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([3.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_mask_load_sd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[3.0, 0.0]).map_err(|e| format!("{e} | call: _mm_mask_load_sd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_load_sd() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_load_sd_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_load_sd_normal2_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128d_from([0.0f64, -1.0f64]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_mask_load_sd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 0.0]).map_err(|e| format!("{e} | call: _mm_mask_load_sd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_load_sd_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_load_sd_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_load_sd_normal3_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128d_from([100.0f64, 200.0f64]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_mask_load_sd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 0.0]).map_err(|e| format!("{e} | call: _mm_mask_load_sd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_load_sd_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_load_sd_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_load_sd_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128d_from([f64::MIN, f64::MIN]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_mask_load_sd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 0.0]).map_err(|e| format!("{e} | call: _mm_mask_load_sd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_load_sd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_load_sd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_load_sd_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128d_from([f64::MAX, f64::MAX]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_mask_load_sd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 0.0]).map_err(|e| format!("{e} | call: _mm_mask_load_sd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_load_sd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_load_sd_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_load_sd_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128d_from([0.0, 0.0]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_mask_load_sd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 0.0]).map_err(|e| format!("{e} | call: _mm_mask_load_sd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_load_sd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_load_sd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_load_sd_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128d_from([f64::NAN, f64::NAN]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_mask_load_sd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 0.0]).map_err(|e| format!("{e} | call: _mm_mask_load_sd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_load_sd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_load_sd_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_load_sd_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_mask_load_sd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 0.0]).map_err(|e| format!("{e} | call: _mm_mask_load_sd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_load_sd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_load_sd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_load_sd_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_maskz_load_sd(k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 0.0]).map_err(|e| format!("{e} | call: _mm_maskz_load_sd(k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_load_sd() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_load_sd_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_store_ss_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128_from([2.0, 3.0, 4.0, 5.0]);
+        _mm_mask_store_ss(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_store_ss() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_store_ss_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_store_ss_normal2_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]);
+        _mm_mask_store_ss(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_store_ss_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_store_ss_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_store_ss_normal3_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]);
+        _mm_mask_store_ss(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_store_ss_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_store_ss_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_store_ss_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]);
+        _mm_mask_store_ss(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_store_ss_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_store_ss_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_store_ss_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]);
+        _mm_mask_store_ss(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_store_ss_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_store_ss_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_store_ss_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128_from([0.0, 0.0, 0.0, 0.0]);
+        _mm_mask_store_ss(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_store_ss_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_store_ss_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_store_ss_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]);
+        _mm_mask_store_ss(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_store_ss_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_store_ss_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_store_ss_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]);
+        _mm_mask_store_ss(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_store_ss_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_store_ss_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_store_sd_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128d_from([2.0, 3.0]);
+        _mm_mask_store_sd(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_store_sd() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_store_sd_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_store_sd_normal2_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128d_from([0.0f64, -1.0f64]);
+        _mm_mask_store_sd(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_store_sd_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_store_sd_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_store_sd_normal3_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128d_from([100.0f64, 200.0f64]);
+        _mm_mask_store_sd(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_store_sd_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_store_sd_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_store_sd_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128d_from([f64::MIN, f64::MIN]);
+        _mm_mask_store_sd(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_store_sd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_store_sd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_store_sd_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128d_from([f64::MAX, f64::MAX]);
+        _mm_mask_store_sd(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_store_sd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_store_sd_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_store_sd_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128d_from([0.0, 0.0]);
+        _mm_mask_store_sd(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_store_sd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_store_sd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_store_sd_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128d_from([f64::NAN, f64::NAN]);
+        _mm_mask_store_sd(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_store_sd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_store_sd_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_store_sd_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let k = create__mmask8_from(0b01010101);
+        let a = create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]);
+        _mm_mask_store_sd(ptr_mem_addr.0.as_mut_ptr(), k, a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_store_sd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_store_sd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_epi32_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([17i32; 16]);
+        let result = unpack__m512i_to_i32_array(_mm512_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[17, 2, 17, 4, 17, 6, 17, 8, 17, 10, 17, 12, 17, 14, 17, 16]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_epi32_normal2_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512i_from_i32_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let result = unpack__m512i_to_i32_array(_mm512_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, -1, 1, -3, 1, -5, 1, -7, 1, -1, 1, -3, 1, -5, 1, -7]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_epi32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_epi32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_epi32_normal3_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let result = unpack__m512i_to_i32_array(_mm512_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, 200, 1, 400, 1, 600, 1, 800, 1, 1000, 1, 1200, 1, 1400, 1, 1600]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_epi32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_epi32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_epi32_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let result = unpack__m512i_to_i32_array(_mm512_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, -2147483648, 1, -2147483648, 1, -2147483648, 1, -2147483648, 1, -2147483648, 1, -2147483648, 1, -2147483648, 1, -2147483648]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_epi32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_epi32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_epi32_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let result = unpack__m512i_to_i32_array(_mm512_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, 2147483647, 1, 2147483647, 1, 2147483647, 1, 2147483647, 1, 2147483647, 1, 2147483647, 1, 2147483647, 1, 2147483647]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_epi32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_epi32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_epi32_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let result = unpack__m512i_to_i32_array(_mm512_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_epi32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_epi32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_epi32_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let result = unpack__m512i_to_i32_array(_mm512_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_epi32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_epi32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_epi32_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512i_from_i32_array([i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let result = unpack__m512i_to_i32_array(_mm512_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, 2147483647, 1, -1, 1, 2147483647, 1, -1, 1, 2147483647, 1, -1, 1, 2147483647, 1, -1]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_epi32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_expandloadu_epi32_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let k = create__mmask16_from(0b0101010101010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let result = unpack__m512i_to_i32_array(_mm512_maskz_expandloadu_epi32(k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]).map_err(|e| format!("{e} | call: _mm512_maskz_expandloadu_epi32(k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_maskz_expandloadu_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_expandloadu_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_epi32_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([9i32; 16]);
+        let result = unpack__m256i_to_i32_array(_mm256_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[9, 2, 9, 4, 9, 6, 9, 8]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_epi32_normal2_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256i_from_i32_array([0, -1, 2, -3, 4, -5, 6, -7]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let result = unpack__m256i_to_i32_array(_mm256_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, -1, 1, -3, 1, -5, 1, -7]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_epi32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_epi32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_epi32_normal3_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let result = unpack__m256i_to_i32_array(_mm256_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, 200, 1, 400, 1, 600, 1, 800]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_epi32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_epi32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_epi32_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let result = unpack__m256i_to_i32_array(_mm256_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, -2147483648, 1, -2147483648, 1, -2147483648, 1, -2147483648]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_epi32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_epi32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_epi32_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let result = unpack__m256i_to_i32_array(_mm256_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, 2147483647, 1, 2147483647, 1, 2147483647, 1, 2147483647]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_epi32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_epi32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_epi32_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let result = unpack__m256i_to_i32_array(_mm256_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, 0, 1, 0, 1, 0, 1, 0]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_epi32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_epi32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_epi32_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let result = unpack__m256i_to_i32_array(_mm256_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, -1, 1, -1, 1, -1, 1, -1]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_epi32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_epi32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_epi32_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256i_from_i32_array([i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let result = unpack__m256i_to_i32_array(_mm256_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, 2147483647, 1, -1, 1, 2147483647, 1, -1]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_epi32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_expandloadu_epi32_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let result = unpack__m256i_to_i32_array(_mm256_maskz_expandloadu_epi32(k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, 0, 1, 0, 1, 0, 1, 0]).map_err(|e| format!("{e} | call: _mm256_maskz_expandloadu_epi32(k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_maskz_expandloadu_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_expandloadu_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_epi32_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128i_from_i32_array([1, 2, 3, 4]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([5i32; 16]);
+        let result = unpack__m128i_to_i32_array(_mm_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[5, 2, 5, 4]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_epi32_normal2_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128i_from_i32_array([0, -1, 2, -3]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let result = unpack__m128i_to_i32_array(_mm_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, -1, 1, -3]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_epi32_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_epi32_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_epi32_normal3_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128i_from_i32_array([100, 200, 300, 400]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let result = unpack__m128i_to_i32_array(_mm_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, 200, 1, 400]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_epi32_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_epi32_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_epi32_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let result = unpack__m128i_to_i32_array(_mm_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, -2147483648, 1, -2147483648]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_epi32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_epi32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_epi32_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let result = unpack__m128i_to_i32_array(_mm_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, 2147483647, 1, 2147483647]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_epi32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_epi32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_epi32_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128i_from_i32_array([0, 0, 0, 0]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let result = unpack__m128i_to_i32_array(_mm_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, 0, 1, 0]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_epi32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_epi32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_epi32_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128i_from_i32_array([-1, -1, -1, -1]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let result = unpack__m128i_to_i32_array(_mm_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, -1, 1, -1]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_epi32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_epi32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_epi32_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let result = unpack__m128i_to_i32_array(_mm_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, 2147483647, 1, -1]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_epi32(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_epi32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_epi32_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_expandloadu_epi32_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
+        let result = unpack__m128i_to_i32_array(_mm_maskz_expandloadu_epi32(k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, 0, 1, 0]).map_err(|e| format!("{e} | call: _mm_maskz_expandloadu_epi32(k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_expandloadu_epi32() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_expandloadu_epi32_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_epi64_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([17i64; 8]);
+        let result = unpack__m512i_to_i64_array(_mm512_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[17, 17179869187, 17, 34359738375, 17, 51539607563, 17, 68719476751]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_epi64() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_epi64_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_epi64_normal2_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512i_from([0, -1, 2, -3, 4, -5, 6, -7]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
+        let result = unpack__m512i_to_i64_array(_mm512_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, -1, 1, -3, 1, -5, 1, -7]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_epi64_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_epi64_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_epi64_normal3_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512i_from([100, 200, 300, 400, 500, 600, 700, 800]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
+        let result = unpack__m512i_to_i64_array(_mm512_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, 200, 1, 400, 1, 600, 1, 800]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_epi64_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_epi64_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_epi64_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512i_from([i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
+        let result = unpack__m512i_to_i64_array(_mm512_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, -9223372036854775808, 1, -9223372036854775808, 1, -9223372036854775808, 1, -9223372036854775808]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_epi64_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_epi64_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_epi64_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512i_from([i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
+        let result = unpack__m512i_to_i64_array(_mm512_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, 9223372036854775807, 1, 9223372036854775807, 1, 9223372036854775807, 1, 9223372036854775807]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_epi64_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_epi64_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_epi64_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512i_from([0, 0, 0, 0, 0, 0, 0, 0]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
+        let result = unpack__m512i_to_i64_array(_mm512_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, 0, 1, 0, 1, 0, 1, 0]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_epi64_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_epi64_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_epi64_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512i_from([-1, -1, -1, -1, -1, -1, -1, -1]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
+        let result = unpack__m512i_to_i64_array(_mm512_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, -1, 1, -1, 1, -1, 1, -1]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_epi64_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_epi64_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_epi64_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512i_from([i64::MIN, i64::MAX, 0, -1, i64::MIN, i64::MAX, 0, -1]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
+        let result = unpack__m512i_to_i64_array(_mm512_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, 9223372036854775807, 1, -1, 1, 9223372036854775807, 1, -1]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_epi64_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_epi64_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_expandloadu_epi64_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
+        let result = unpack__m512i_to_i64_array(_mm512_maskz_expandloadu_epi64(k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, 0, 1, 0, 1, 0, 1, 0]).map_err(|e| format!("{e} | call: _mm512_maskz_expandloadu_epi64(k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_maskz_expandloadu_epi64() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_expandloadu_epi64_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_epi64_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([9i64; 8]);
+        let result = unpack__m256i_to_i64_array(_mm256_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[9, 17179869187, 9, 34359738375]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_epi64() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_epi64_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_epi64_normal2_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256i_from([0, -1, 2, -3]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
+        let result = unpack__m256i_to_i64_array(_mm256_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, -1, 1, -3]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_epi64_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_epi64_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_epi64_normal3_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256i_from([100, 200, 300, 400]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
+        let result = unpack__m256i_to_i64_array(_mm256_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, 200, 1, 400]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_epi64_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_epi64_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_epi64_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256i_from([i64::MIN, i64::MIN, i64::MIN, i64::MIN]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
+        let result = unpack__m256i_to_i64_array(_mm256_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, -9223372036854775808, 1, -9223372036854775808]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_epi64_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_epi64_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_epi64_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256i_from([i64::MAX, i64::MAX, i64::MAX, i64::MAX]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
+        let result = unpack__m256i_to_i64_array(_mm256_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, 9223372036854775807, 1, 9223372036854775807]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_epi64_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_epi64_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_epi64_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256i_from([0, 0, 0, 0]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
+        let result = unpack__m256i_to_i64_array(_mm256_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, 0, 1, 0]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_epi64_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_epi64_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_epi64_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256i_from([-1, -1, -1, -1]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
+        let result = unpack__m256i_to_i64_array(_mm256_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, -1, 1, -1]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_epi64_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_epi64_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_epi64_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256i_from([i64::MIN, i64::MAX, 0, -1]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
+        let result = unpack__m256i_to_i64_array(_mm256_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, 9223372036854775807, 1, -1]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_epi64_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_epi64_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_expandloadu_epi64_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
+        let result = unpack__m256i_to_i64_array(_mm256_maskz_expandloadu_epi64(k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, 0, 1, 0]).map_err(|e| format!("{e} | call: _mm256_maskz_expandloadu_epi64(k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_maskz_expandloadu_epi64() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_expandloadu_epi64_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_epi64_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128i_from_i32_array([1, 2, 3, 4]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([5i64; 8]);
+        let result = unpack__m128i_to_i64_array(_mm_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[5, 17179869187]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_epi64() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_epi64_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_epi64_normal2_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128i_from_i64_array([0, -1]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
+        let result = unpack__m128i_to_i64_array(_mm_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, -1]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_epi64_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_epi64_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_epi64_normal3_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128i_from_i64_array([100, 200]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
+        let result = unpack__m128i_to_i64_array(_mm_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, 200]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_epi64_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_epi64_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_epi64_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128i_from_i64_array([i64::MIN, i64::MIN]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
+        let result = unpack__m128i_to_i64_array(_mm_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, -9223372036854775808]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_epi64_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_epi64_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_epi64_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128i_from_i64_array([i64::MAX, i64::MAX]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
+        let result = unpack__m128i_to_i64_array(_mm_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, 9223372036854775807]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_epi64_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_epi64_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_epi64_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128i_from_i64_array([0, 0]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
+        let result = unpack__m128i_to_i64_array(_mm_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, 0]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_epi64_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_epi64_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_epi64_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128i_from_i64_array([-1, -1]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
+        let result = unpack__m128i_to_i64_array(_mm_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, -1]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_epi64_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_epi64_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_epi64_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128i_from_i64_array([i64::MIN, i64::MAX]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
+        let result = unpack__m128i_to_i64_array(_mm_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, 9223372036854775807]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_epi64(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_epi64_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_epi64_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_expandloadu_epi64_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
+        let result = unpack__m128i_to_i64_array(_mm_maskz_expandloadu_epi64(k, ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, 0]).map_err(|e| format!("{e} | call: _mm_maskz_expandloadu_epi64(k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_expandloadu_epi64() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_expandloadu_epi64_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_ps_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([17.0f32; 16]);
+        let result = unpack__m512_to_f32_array(_mm512_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[17.0, 2.0, 17.0, 4.0, 17.0, 6.0, 17.0, 8.0, 17.0, 10.0, 17.0, 12.0, 17.0, 14.0, 17.0, 16.0]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_ps() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_ps_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_ps_normal2_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32, 0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m512_to_f32_array(_mm512_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, -1.0, 1.0, -3.0, 1.0, -5.0, 1.0, -7.0, 1.0, -1.0, 1.0, -3.0, 1.0, -5.0, 1.0, -7.0]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_ps_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_ps_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_ps_normal3_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32, 900.0f32, 1000.0f32, 1100.0f32, 1200.0f32, 1300.0f32, 1400.0f32, 1500.0f32, 1600.0f32]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m512_to_f32_array(_mm512_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 200.0, 1.0, 400.0, 1.0, 600.0, 1.0, 800.0, 1.0, 1000.0, 1.0, 1200.0, 1.0, 1400.0, 1.0, 1600.0]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_ps_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_ps_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_ps_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m512_to_f32_array(_mm512_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, -3.4028235e38, 1.0, -3.4028235e38, 1.0, -3.4028235e38, 1.0, -3.4028235e38, 1.0, -3.4028235e38, 1.0, -3.4028235e38, 1.0, -3.4028235e38, 1.0, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_ps_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_ps_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_ps_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m512_to_f32_array(_mm512_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 3.4028235e38, 1.0, 3.4028235e38, 1.0, 3.4028235e38, 1.0, 3.4028235e38, 1.0, 3.4028235e38, 1.0, 3.4028235e38, 1.0, 3.4028235e38, 1.0, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_ps_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_ps_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_ps_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m512_to_f32_array(_mm512_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_ps_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_ps_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_ps_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m512_to_f32_array(_mm512_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, f32::NAN, 1.0, f32::NAN, 1.0, f32::NAN, 1.0, f32::NAN, 1.0, f32::NAN, 1.0, f32::NAN, 1.0, f32::NAN, 1.0, f32::NAN]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_ps_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_ps_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_ps_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m512_to_f32_array(_mm512_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, -f32::INFINITY, 1.0, 5.877472e-39, 1.0, -f32::INFINITY, 1.0, 5.877472e-39, 1.0, -f32::INFINITY, 1.0, 5.877472e-39, 1.0, -f32::INFINITY, 1.0, 5.877472e-39]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_ps_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_ps_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_expandloadu_ps_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let k = create__mmask16_from(0b0101010101010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m512_to_f32_array(_mm512_maskz_expandloadu_ps(k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0]).map_err(|e| format!("{e} | call: _mm512_maskz_expandloadu_ps(k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_maskz_expandloadu_ps() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_expandloadu_ps_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_ps_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([9.0f32; 16]);
+        let result = unpack__m256_to_f32_array(_mm256_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[9.0, 2.0, 9.0, 4.0, 9.0, 6.0, 9.0, 8.0]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_ps() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_ps_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_ps_normal2_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m256_to_f32_array(_mm256_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, -1.0, 1.0, -3.0, 1.0, -5.0, 1.0, -7.0]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_ps_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_ps_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_ps_normal3_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m256_to_f32_array(_mm256_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 200.0, 1.0, 400.0, 1.0, 600.0, 1.0, 800.0]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_ps_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_ps_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_ps_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m256_to_f32_array(_mm256_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, -3.4028235e38, 1.0, -3.4028235e38, 1.0, -3.4028235e38, 1.0, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_ps_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_ps_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_ps_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m256_to_f32_array(_mm256_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 3.4028235e38, 1.0, 3.4028235e38, 1.0, 3.4028235e38, 1.0, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_ps_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_ps_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_ps_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m256_to_f32_array(_mm256_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_ps_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_ps_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_ps_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m256_to_f32_array(_mm256_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, f32::NAN, 1.0, f32::NAN, 1.0, f32::NAN, 1.0, f32::NAN]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_ps_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_ps_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_ps_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m256_to_f32_array(_mm256_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, -f32::INFINITY, 1.0, 5.877472e-39, 1.0, -f32::INFINITY, 1.0, 5.877472e-39]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_ps_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_ps_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_expandloadu_ps_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m256_to_f32_array(_mm256_maskz_expandloadu_ps(k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0]).map_err(|e| format!("{e} | call: _mm256_maskz_expandloadu_ps(k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_maskz_expandloadu_ps() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_expandloadu_ps_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_ps_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128_from([1.0, 2.0, 3.0, 4.0]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([5.0f32; 16]);
+        let result = unpack__m128_to_f32_array(_mm_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[5.0, 2.0, 5.0, 4.0]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_ps() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_ps_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_ps_normal2_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m128_to_f32_array(_mm_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, -1.0, 1.0, -3.0]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_ps_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_ps_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_ps_normal3_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m128_to_f32_array(_mm_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 200.0, 1.0, 400.0]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_ps_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_ps_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_ps_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m128_to_f32_array(_mm_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, -3.4028235e38, 1.0, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_ps_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_ps_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_ps_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m128_to_f32_array(_mm_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 3.4028235e38, 1.0, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_ps_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_ps_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_ps_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128_from([0.0, 0.0, 0.0, 0.0]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m128_to_f32_array(_mm_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 0.0, 1.0, 0.0]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_ps_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_ps_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_ps_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m128_to_f32_array(_mm_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, f32::NAN, 1.0, f32::NAN]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_ps_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_ps_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_ps_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m128_to_f32_array(_mm_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, -f32::INFINITY, 1.0, 5.877472e-39]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_ps(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_ps_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_ps_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_expandloadu_ps_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let result = unpack__m128_to_f32_array(_mm_maskz_expandloadu_ps(k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 0.0, 1.0, 0.0]).map_err(|e| format!("{e} | call: _mm_maskz_expandloadu_ps(k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_expandloadu_ps() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_expandloadu_ps_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_pd_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([9.0f64; 8]);
+        let result = unpack__m512d_to_f64_array(_mm512_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[9.0, 2.0, 9.0, 4.0, 9.0, 6.0, 9.0, 8.0]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_pd() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_pd_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_pd_normal2_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64, 4.0f64, -5.0f64, 6.0f64, -7.0f64]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m512d_to_f64_array(_mm512_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, -1.0, 1.0, -3.0, 1.0, -5.0, 1.0, -7.0]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_pd_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_pd_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_pd_normal3_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64, 500.0f64, 600.0f64, 700.0f64, 800.0f64]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m512d_to_f64_array(_mm512_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 200.0, 1.0, 400.0, 1.0, 600.0, 1.0, 800.0]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_pd_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_pd_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_pd_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN, f64::MIN, f64::MIN, f64::MIN, f64::MIN]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m512d_to_f64_array(_mm512_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, -1.7976931348623157e308, 1.0, -1.7976931348623157e308, 1.0, -1.7976931348623157e308, 1.0, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_pd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_pd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_pd_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX, f64::MAX, f64::MAX, f64::MAX, f64::MAX]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m512d_to_f64_array(_mm512_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 1.7976931348623157e308, 1.0, 1.7976931348623157e308, 1.0, 1.7976931348623157e308, 1.0, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_pd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_pd_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_pd_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512d_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m512d_to_f64_array(_mm512_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_pd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_pd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_pd_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN, f64::NAN, f64::NAN, f64::NAN, f64::NAN]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m512d_to_f64_array(_mm512_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, f64::NAN, 1.0, f64::NAN, 1.0, f64::NAN, 1.0, f64::NAN]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_pd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_pd_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_mask_expandloadu_pd_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m512d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0, f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m512d_to_f64_array(_mm512_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, -f64::INFINITY, 1.0, 1.1125369292536007e-308, 1.0, -f64::INFINITY, 1.0, 1.1125369292536007e-308]).map_err(|e| format!("{e} | call: _mm512_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_mask_expandloadu_pd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_mask_expandloadu_pd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm512_maskz_expandloadu_pd_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m512d_to_f64_array(_mm512_maskz_expandloadu_pd(k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0]).map_err(|e| format!("{e} | call: _mm512_maskz_expandloadu_pd(k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm512_maskz_expandloadu_pd() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm512_maskz_expandloadu_pd_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_pd_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256d_from([1.0, 2.0, 3.0, 4.0]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([5.0f64; 8]);
+        let result = unpack__m256d_to_f64_array(_mm256_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[5.0, 2.0, 5.0, 4.0]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_pd() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_pd_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_pd_normal2_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m256d_to_f64_array(_mm256_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, -1.0, 1.0, -3.0]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_pd_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_pd_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_pd_normal3_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m256d_to_f64_array(_mm256_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 200.0, 1.0, 400.0]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_pd_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_pd_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_pd_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m256d_to_f64_array(_mm256_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, -1.7976931348623157e308, 1.0, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_pd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_pd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_pd_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m256d_to_f64_array(_mm256_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 1.7976931348623157e308, 1.0, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_pd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_pd_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_pd_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256d_from([0.0, 0.0, 0.0, 0.0]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m256d_to_f64_array(_mm256_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 0.0, 1.0, 0.0]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_pd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_pd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_pd_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m256d_to_f64_array(_mm256_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, f64::NAN, 1.0, f64::NAN]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_pd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_pd_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_mask_expandloadu_pd_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m256d_to_f64_array(_mm256_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, -f64::INFINITY, 1.0, 1.1125369292536007e-308]).map_err(|e| format!("{e} | call: _mm256_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_mask_expandloadu_pd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_mask_expandloadu_pd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm256_maskz_expandloadu_pd_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m256d_to_f64_array(_mm256_maskz_expandloadu_pd(k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 0.0, 1.0, 0.0]).map_err(|e| format!("{e} | call: _mm256_maskz_expandloadu_pd(k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm256_maskz_expandloadu_pd() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm256_maskz_expandloadu_pd_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_pd_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128d_from([1.0, 2.0]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([3.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[3.0, 2.0]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_pd() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_pd_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_pd_normal2_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128d_from([0.0f64, -1.0f64]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, -1.0]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_pd_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_pd_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_pd_normal3_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128d_from([100.0f64, 200.0f64]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 200.0]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_pd_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_pd_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_pd_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128d_from([f64::MIN, f64::MIN]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_pd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_pd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_pd_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128d_from([f64::MAX, f64::MAX]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_pd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_pd_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_pd_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128d_from([0.0, 0.0]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 0.0]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_pd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_pd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_pd_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128d_from([f64::NAN, f64::NAN]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, f64::NAN]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_pd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_pd_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_expandloadu_pd_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let src = create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, -f64::INFINITY]).map_err(|e| format!("{e} | call: _mm_mask_expandloadu_pd(src, k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_expandloadu_pd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_expandloadu_pd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_expandloadu_pd_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let result = unpack__m128d_to_f64_array(_mm_maskz_expandloadu_pd(k, ptr_mem_addr.0.as_ptr()));
+        check_float_array_equality(&result, &[1.0, 0.0]).map_err(|e| format!("{e} | call: _mm_maskz_expandloadu_pd(k, ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_expandloadu_pd() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_expandloadu_pd_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_max_ss_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_mask_max_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m128_from([5.0, 6.0, 7.0, 8.0]), create__m128_from([9.0, 10.0, 11.0, 12.0])));
+        check_float_array_equality(&result, &[9.0, 6.0, 7.0, 8.0]).map_err(|e| format!("{e} | call: _mm_mask_max_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m128_from([5.0, 6.0, 7.0, 8.0]), create__m128_from([9.0, 10.0, 11.0, 12.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -472,20 +3269,25 @@ pub(super) fn test_x86_avx512f_mm512_cvtt_roundps_epi32() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm512_cvtt_roundps_epi32::<8>(create_random__m512());
+                let _ = _mm_mask_max_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_ss() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_max_ss_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_max_ss_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m512i_to_i32_array(_mm512_mask_cvtt_roundps_epi32::<8>(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__mmask16_from(0b0101010101010101), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0])));
-        check_array_equality(&result, &[17, 2, 19, 4, 21, 6, 23, 8, 25, 10, 27, 12, 29, 14, 31, 16]).map_err(|e| format!("{e} | call: _mm512_mask_cvtt_roundps_epi32::<8>(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__mmask16_from(0b0101010101010101), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]))"))?;
+        let result = unpack__m128_to_f32_array(_mm_mask_max_ss(create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]), create__mmask8_from(0b01010101), create__m128_from([10.0f32, 9.0f32, 12.0f32, 7.0f32]), create__m128_from([20.0f32, 19.0f32, 22.0f32, 17.0f32])));
+        check_float_array_equality(&result, &[20.0, 9.0, 12.0, 7.0]).map_err(|e| format!("{e} | call: _mm_mask_max_ss(create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]), create__mmask8_from(0b01010101), create__m128_from([10.0f32, 9.0f32, 12.0f32, 7.0f32]), create__m128_from([20.0f32, 19.0f32, 22.0f32, 17.0f32]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -495,20 +3297,25 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epi32() -> Result<(), Str
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm512_mask_cvtt_roundps_epi32::<8>(create_random__m512i(), create_random__mmask16(), create_random__m512());
+                let _ = _mm_mask_max_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_cvtt_roundps_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_ss_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_max_ss_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_max_ss_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m512i_to_i32_array(_mm512_maskz_cvtt_roundps_epi32::<8>(create__mmask16_from(0b0101010101010101), create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_array_equality(&result, &[1, 0, 3, 0, 5, 0, 7, 0, 9, 0, 11, 0, 13, 0, 15, 0]).map_err(|e| format!("{e} | call: _mm512_maskz_cvtt_roundps_epi32::<8>(create__mmask16_from(0b0101010101010101), create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
+        let result = unpack__m128_to_f32_array(_mm_mask_max_ss(create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]), create__mmask8_from(0b01010101), create__m128_from([110.0f32, 210.0f32, 310.0f32, 410.0f32]), create__m128_from([120.0f32, 220.0f32, 320.0f32, 420.0f32])));
+        check_float_array_equality(&result, &[120.0, 210.0, 310.0, 410.0]).map_err(|e| format!("{e} | call: _mm_mask_max_ss(create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]), create__mmask8_from(0b01010101), create__m128_from([110.0f32, 210.0f32, 310.0f32, 410.0f32]), create__m128_from([120.0f32, 220.0f32, 320.0f32, 420.0f32]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -518,20 +3325,25 @@ pub(super) fn test_x86_avx512f_mm512_maskz_cvtt_roundps_epi32() -> Result<(), St
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm512_maskz_cvtt_roundps_epi32::<8>(create_random__mmask16(), create_random__m512());
+                let _ = _mm_mask_max_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_cvtt_roundps_epu32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_ss_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_max_ss_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_max_ss_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m512i_to_i32_array(_mm512_cvtt_roundps_epu32::<8>(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_array_equality(&result, &[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]).map_err(|e| format!("{e} | call: _mm512_cvtt_roundps_epu32::<8>(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
+        let result = unpack__m128_to_f32_array(_mm_mask_max_ss(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
+        check_float_array_equality(&result, &[-3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm_mask_max_ss(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -541,20 +3353,25 @@ pub(super) fn test_x86_avx512f_mm512_cvtt_roundps_epu32() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm512_cvtt_roundps_epu32::<8>(create_random__m512());
+                let _ = _mm_mask_max_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_ss_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_max_ss_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_max_ss_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m512i_to_i32_array(_mm512_mask_cvtt_roundps_epu32::<8>(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__mmask16_from(0b0101010101010101), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0])));
-        check_array_equality(&result, &[17, 2, 19, 4, 21, 6, 23, 8, 25, 10, 27, 12, 29, 14, 31, 16]).map_err(|e| format!("{e} | call: _mm512_mask_cvtt_roundps_epu32::<8>(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__mmask16_from(0b0101010101010101), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]))"))?;
+        let result = unpack__m128_to_f32_array(_mm_mask_max_ss(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
+        check_float_array_equality(&result, &[3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm_mask_max_ss(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -564,20 +3381,25 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundps_epu32() -> Result<(), Str
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm512_mask_cvtt_roundps_epu32::<8>(create_random__m512i(), create_random__mmask16(), create_random__m512());
+                let _ = _mm_mask_max_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_cvtt_roundps_epu32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_ss_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_max_ss_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_max_ss_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m512i_to_i32_array(_mm512_maskz_cvtt_roundps_epu32::<8>(create__mmask16_from(0b0101010101010101), create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_array_equality(&result, &[1, 0, 3, 0, 5, 0, 7, 0, 9, 0, 11, 0, 13, 0, 15, 0]).map_err(|e| format!("{e} | call: _mm512_maskz_cvtt_roundps_epu32::<8>(create__mmask16_from(0b0101010101010101), create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
+        let result = unpack__m128_to_f32_array(_mm_mask_max_ss(create__m128_from([0.0, 0.0, 0.0, 0.0]), create__mmask8_from(0b01010101), create__m128_from([0.0, 0.0, 0.0, 0.0]), create__m128_from([0.0, 0.0, 0.0, 0.0])));
+        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm_mask_max_ss(create__m128_from([0.0, 0.0, 0.0, 0.0]), create__mmask8_from(0b01010101), create__m128_from([0.0, 0.0, 0.0, 0.0]), create__m128_from([0.0, 0.0, 0.0, 0.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -587,20 +3409,25 @@ pub(super) fn test_x86_avx512f_mm512_maskz_cvtt_roundps_epu32() -> Result<(), St
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm512_maskz_cvtt_roundps_epu32::<8>(create_random__mmask16(), create_random__m512());
+                let _ = _mm_mask_max_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_cvtt_roundpd_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_ss_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_max_ss_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_max_ss_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm512_cvtt_roundpd_epi32::<8>(create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
-        check_array_equality(&result, &[1, 2, 3, 4, 5, 6, 7, 8]).map_err(|e| format!("{e} | call: _mm512_cvtt_roundpd_epi32::<8>(create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]))"))?;
+        let result = unpack__m128_to_f32_array(_mm_mask_max_ss(create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__mmask8_from(0b01010101), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
+        check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm_mask_max_ss(create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__mmask8_from(0b01010101), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -610,20 +3437,25 @@ pub(super) fn test_x86_avx512f_mm512_cvtt_roundpd_epi32() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm512_cvtt_roundpd_epi32::<8>(create_random__m512d());
+                let _ = _mm_mask_max_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_ss_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_max_ss_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_max_ss_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm512_mask_cvtt_roundpd_epi32::<8>(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask8_from(0b01010101), create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_array_equality(&result, &[9, 2, 11, 4, 13, 6, 15, 8]).map_err(|e| format!("{e} | call: _mm512_mask_cvtt_roundpd_epi32::<8>(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask8_from(0b01010101), create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
+        let result = unpack__m128_to_f32_array(_mm_mask_max_ss(create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__mmask8_from(0b01010101), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0])));
+        check_float_array_equality(&result, &[f32::INFINITY, -f32::INFINITY, -0.0, 5.877472e-39]).map_err(|e| format!("{e} | call: _mm_mask_max_ss(create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__mmask8_from(0b01010101), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -633,20 +3465,25 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epi32() -> Result<(), Str
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm512_mask_cvtt_roundpd_epi32::<8>(create_random__m256i(), create_random__mmask8(), create_random__m512d());
+                let _ = _mm_mask_max_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_cvtt_roundpd_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_ss_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_max_ss_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_max_ss_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm512_maskz_cvtt_roundpd_epi32::<8>(create__mmask8_from(0b01010101), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
-        check_array_equality(&result, &[1, 0, 3, 0, 5, 0, 7, 0]).map_err(|e| format!("{e} | call: _mm512_maskz_cvtt_roundpd_epi32::<8>(create__mmask8_from(0b01010101), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]))"))?;
+        let result = unpack__m128_to_f32_array(_mm_mask_max_ss(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        check_float_array_equality(&result, &[3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm_mask_max_ss(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([1.0, 2.0, 3.0, 4.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -656,20 +3493,25 @@ pub(super) fn test_x86_avx512f_mm512_maskz_cvtt_roundpd_epi32() -> Result<(), St
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm512_maskz_cvtt_roundpd_epi32::<8>(create_random__mmask8(), create_random__m512d());
+                let _ = _mm_mask_max_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_cvtt_roundpd_epu32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_ss_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_max_ss_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_max_ss_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm512_cvtt_roundpd_epu32::<8>(create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
-        check_array_equality(&result, &[1, 2, 3, 4, 5, 6, 7, 8]).map_err(|e| format!("{e} | call: _mm512_cvtt_roundpd_epu32::<8>(create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]))"))?;
+        let result = unpack__m128_to_f32_array(_mm_mask_max_ss(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        check_float_array_equality(&result, &[1.0, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm_mask_max_ss(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([1.0, 2.0, 3.0, 4.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -679,20 +3521,25 @@ pub(super) fn test_x86_avx512f_mm512_cvtt_roundpd_epu32() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm512_cvtt_roundpd_epu32::<8>(create_random__m512d());
+                let _ = _mm_mask_max_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_ss_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_max_ss_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_max_ss_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm512_mask_cvtt_roundpd_epu32::<8>(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask8_from(0b01010101), create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_array_equality(&result, &[9, 2, 11, 4, 13, 6, 15, 8]).map_err(|e| format!("{e} | call: _mm512_mask_cvtt_roundpd_epu32::<8>(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask8_from(0b01010101), create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
+        let result = unpack__m128_to_f32_array(_mm_maskz_max_ss(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
+        check_float_array_equality(&result, &[5.0, 2.0, 3.0, 4.0]).map_err(|e| format!("{e} | call: _mm_maskz_max_ss(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -702,20 +3549,25 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvtt_roundpd_epu32() -> Result<(), Str
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm512_mask_cvtt_roundpd_epu32::<8>(create_random__m256i(), create_random__mmask8(), create_random__m512d());
+                let _ = _mm_maskz_max_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_cvttps_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_max_ss() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_max_ss_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_max_ss_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m512i_to_i32_array(_mm512_cvttps_epi32(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_array_equality(&result, &[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]).map_err(|e| format!("{e} | call: _mm512_cvttps_epi32(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
+        let result = unpack__m128_to_f32_array(_mm_maskz_max_ss(create__mmask8_from(0b01010101), create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]), create__m128_from([10.0f32, 9.0f32, 12.0f32, 7.0f32])));
+        check_float_array_equality(&result, &[10.0, -1.0, 2.0, -3.0]).map_err(|e| format!("{e} | call: _mm_maskz_max_ss(create__mmask8_from(0b01010101), create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]), create__m128_from([10.0f32, 9.0f32, 12.0f32, 7.0f32]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -725,20 +3577,25 @@ pub(super) fn test_x86_avx512f_mm512_cvttps_epi32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm512_cvttps_epi32(create_random__m512());
+                let _ = _mm_maskz_max_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_max_ss_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_max_ss_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_max_ss_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m512i_to_i32_array(_mm512_mask_cvttps_epi32(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__mmask16_from(0b0101010101010101), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0])));
-        check_array_equality(&result, &[17, 2, 19, 4, 21, 6, 23, 8, 25, 10, 27, 12, 29, 14, 31, 16]).map_err(|e| format!("{e} | call: _mm512_mask_cvttps_epi32(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__mmask16_from(0b0101010101010101), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]))"))?;
+        let result = unpack__m128_to_f32_array(_mm_maskz_max_ss(create__mmask8_from(0b01010101), create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]), create__m128_from([110.0f32, 210.0f32, 310.0f32, 410.0f32])));
+        check_float_array_equality(&result, &[110.0, 200.0, 300.0, 400.0]).map_err(|e| format!("{e} | call: _mm_maskz_max_ss(create__mmask8_from(0b01010101), create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]), create__m128_from([110.0f32, 210.0f32, 310.0f32, 410.0f32]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -748,20 +3605,25 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epi32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm512_mask_cvttps_epi32(create_random__m512i(), create_random__mmask16(), create_random__m512());
+                let _ = _mm_maskz_max_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_cvttps_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_max_ss_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_max_ss_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_max_ss_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m512i_to_i32_array(_mm512_maskz_cvttps_epi32(create__mmask16_from(0b0101010101010101), create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_array_equality(&result, &[1, 0, 3, 0, 5, 0, 7, 0, 9, 0, 11, 0, 13, 0, 15, 0]).map_err(|e| format!("{e} | call: _mm512_maskz_cvttps_epi32(create__mmask16_from(0b0101010101010101), create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
+        let result = unpack__m128_to_f32_array(_mm_maskz_max_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
+        check_float_array_equality(&result, &[-3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm_maskz_max_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -771,20 +3633,25 @@ pub(super) fn test_x86_avx512f_mm512_maskz_cvttps_epi32() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm512_maskz_cvttps_epi32(create_random__mmask16(), create_random__m512());
+                let _ = _mm_maskz_max_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_max_ss_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_max_ss_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_max_ss_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_mask_cvttps_epi32(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask8_from(0b01010101), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_array_equality(&result, &[9, 2, 11, 4, 13, 6, 15, 8]).map_err(|e| format!("{e} | call: _mm256_mask_cvttps_epi32(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask8_from(0b01010101), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
+        let result = unpack__m128_to_f32_array(_mm_maskz_max_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
+        check_float_array_equality(&result, &[3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm_maskz_max_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -794,20 +3661,25 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epi32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm256_mask_cvttps_epi32(create_random__m256i(), create_random__mmask8(), create_random__m256());
+                let _ = _mm_maskz_max_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_cvttps_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_max_ss_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_max_ss_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_max_ss_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_maskz_cvttps_epi32(create__mmask8_from(0b01010101), create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
-        check_array_equality(&result, &[1, 0, 3, 0, 5, 0, 7, 0]).map_err(|e| format!("{e} | call: _mm256_maskz_cvttps_epi32(create__mmask8_from(0b01010101), create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]))"))?;
+        let result = unpack__m128_to_f32_array(_mm_maskz_max_ss(create__mmask8_from(0b01010101), create__m128_from([0.0, 0.0, 0.0, 0.0]), create__m128_from([0.0, 0.0, 0.0, 0.0])));
+        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm_maskz_max_ss(create__mmask8_from(0b01010101), create__m128_from([0.0, 0.0, 0.0, 0.0]), create__m128_from([0.0, 0.0, 0.0, 0.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -817,20 +3689,25 @@ pub(super) fn test_x86_avx512f_mm256_maskz_cvttps_epi32() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm256_maskz_cvttps_epi32(create_random__mmask8(), create_random__m256());
+                let _ = _mm_maskz_max_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvttps_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_max_ss_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_max_ss_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_max_ss_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_mask_cvttps_epi32(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128_from([5.0, 6.0, 7.0, 8.0])));
-        check_array_equality(&result, &[5, 2, 7, 4]).map_err(|e| format!("{e} | call: _mm_mask_cvttps_epi32(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128_from([5.0, 6.0, 7.0, 8.0]))"))?;
+        let result = unpack__m128_to_f32_array(_mm_maskz_max_ss(create__mmask8_from(0b01010101), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
+        check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm_maskz_max_ss(create__mmask8_from(0b01010101), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -840,20 +3717,25 @@ pub(super) fn test_x86_avx512f_mm_mask_cvttps_epi32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_mask_cvttps_epi32(create_random__m128i(), create_random__mmask8(), create_random__m128());
+                let _ = _mm_maskz_max_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_cvttps_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_max_ss_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_max_ss_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_max_ss_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_maskz_cvttps_epi32(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0])));
-        check_array_equality(&result, &[1, 0, 3, 0]).map_err(|e| format!("{e} | call: _mm_maskz_cvttps_epi32(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]))"))?;
+        let result = unpack__m128_to_f32_array(_mm_maskz_max_ss(create__mmask8_from(0b01010101), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0])));
+        check_float_array_equality(&result, &[f32::INFINITY, -f32::INFINITY, -0.0, 5.877472e-39]).map_err(|e| format!("{e} | call: _mm_maskz_max_ss(create__mmask8_from(0b01010101), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -863,20 +3745,25 @@ pub(super) fn test_x86_avx512f_mm_maskz_cvttps_epi32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_maskz_cvttps_epi32(create_random__mmask8(), create_random__m128());
+                let _ = _mm_maskz_max_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_cvttps_epu32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_max_ss_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_max_ss_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_max_ss_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m512i_to_i32_array(_mm512_cvttps_epu32(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_array_equality(&result, &[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]).map_err(|e| format!("{e} | call: _mm512_cvttps_epu32(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
+        let result = unpack__m128_to_f32_array(_mm_maskz_max_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
+        check_float_array_equality(&result, &[3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm_maskz_max_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -886,20 +3773,25 @@ pub(super) fn test_x86_avx512f_mm512_cvttps_epu32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm512_cvttps_epu32(create_random__m512());
+                let _ = _mm_maskz_max_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epu32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_max_ss_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_max_ss_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_max_ss_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m512i_to_i32_array(_mm512_mask_cvttps_epu32(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__mmask16_from(0b0101010101010101), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0])));
-        check_array_equality(&result, &[17, 2, 19, 4, 21, 6, 23, 8, 25, 10, 27, 12, 29, 14, 31, 16]).map_err(|e| format!("{e} | call: _mm512_mask_cvttps_epu32(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__mmask16_from(0b0101010101010101), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]))"))?;
+        let result = unpack__m128_to_f32_array(_mm_maskz_max_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
+        check_float_array_equality(&result, &[3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm_maskz_max_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -909,20 +3801,25 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvttps_epu32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm512_mask_cvttps_epu32(create_random__m512i(), create_random__mmask16(), create_random__m512());
+                let _ = _mm_maskz_max_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_cvttps_epu32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_max_ss_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_max_ss_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_max_sd_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m512i_to_i32_array(_mm512_maskz_cvttps_epu32(create__mmask16_from(0b0101010101010101), create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_array_equality(&result, &[1, 0, 3, 0, 5, 0, 7, 0, 9, 0, 11, 0, 13, 0, 15, 0]).map_err(|e| format!("{e} | call: _mm512_maskz_cvttps_epu32(create__mmask16_from(0b0101010101010101), create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
+        let result = unpack__m128d_to_f64_array(_mm_mask_max_sd(create__m128d_from([1.0, 2.0]), create__mmask8_from(0b01010101), create__m128d_from([3.0, 4.0]), create__m128d_from([5.0, 6.0])));
+        check_float_array_equality(&result, &[5.0, 4.0]).map_err(|e| format!("{e} | call: _mm_mask_max_sd(create__m128d_from([1.0, 2.0]), create__mmask8_from(0b01010101), create__m128d_from([3.0, 4.0]), create__m128d_from([5.0, 6.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -932,20 +3829,25 @@ pub(super) fn test_x86_avx512f_mm512_maskz_cvttps_epu32() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm512_maskz_cvttps_epu32(create_random__mmask16(), create_random__m512());
+                let _ = _mm_mask_max_sd(create_random__m128d(), create_random__mmask8(), create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_cvttps_epu32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_sd() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_max_sd_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_max_sd_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_cvttps_epu32(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
-        check_array_equality(&result, &[1, 2, 3, 4, 5, 6, 7, 8]).map_err(|e| format!("{e} | call: _mm256_cvttps_epu32(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]))"))?;
+        let result = unpack__m128d_to_f64_array(_mm_mask_max_sd(create__m128d_from([0.0f64, -1.0f64]), create__mmask8_from(0b01010101), create__m128d_from([10.0f64, 9.0f64]), create__m128d_from([20.0f64, 19.0f64])));
+        check_float_array_equality(&result, &[20.0, 9.0]).map_err(|e| format!("{e} | call: _mm_mask_max_sd(create__m128d_from([0.0f64, -1.0f64]), create__mmask8_from(0b01010101), create__m128d_from([10.0f64, 9.0f64]), create__m128d_from([20.0f64, 19.0f64]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -955,20 +3857,25 @@ pub(super) fn test_x86_avx512f_mm256_cvttps_epu32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm256_cvttps_epu32(create_random__m256());
+                let _ = _mm_mask_max_sd(create_random__m128d(), create_random__mmask8(), create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epu32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_sd_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_max_sd_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_max_sd_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_mask_cvttps_epu32(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask8_from(0b01010101), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_array_equality(&result, &[9, 2, 11, 4, 13, 6, 15, 8]).map_err(|e| format!("{e} | call: _mm256_mask_cvttps_epu32(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask8_from(0b01010101), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
+        let result = unpack__m128d_to_f64_array(_mm_mask_max_sd(create__m128d_from([100.0f64, 200.0f64]), create__mmask8_from(0b01010101), create__m128d_from([110.0f64, 210.0f64]), create__m128d_from([120.0f64, 220.0f64])));
+        check_float_array_equality(&result, &[120.0, 210.0]).map_err(|e| format!("{e} | call: _mm_mask_max_sd(create__m128d_from([100.0f64, 200.0f64]), create__mmask8_from(0b01010101), create__m128d_from([110.0f64, 210.0f64]), create__m128d_from([120.0f64, 220.0f64]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -978,20 +3885,25 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvttps_epu32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm256_mask_cvttps_epu32(create_random__m256i(), create_random__mmask8(), create_random__m256());
+                let _ = _mm_mask_max_sd(create_random__m128d(), create_random__mmask8(), create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm256_maskz_cvttps_epu32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_sd_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_max_sd_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_max_sd_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_maskz_cvttps_epu32(create__mmask8_from(0b01010101), create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
-        check_array_equality(&result, &[1, 0, 3, 0, 5, 0, 7, 0]).map_err(|e| format!("{e} | call: _mm256_maskz_cvttps_epu32(create__mmask8_from(0b01010101), create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]))"))?;
+        let result = unpack__m128d_to_f64_array(_mm_mask_max_sd(create__m128d_from([f64::MIN, f64::MIN]), create__mmask8_from(0b01010101), create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN])));
+        check_float_array_equality(&result, &[-1.7976931348623157e308, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_mask_max_sd(create__m128d_from([f64::MIN, f64::MIN]), create__mmask8_from(0b01010101), create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1001,20 +3913,25 @@ pub(super) fn test_x86_avx512f_mm256_maskz_cvttps_epu32() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm256_maskz_cvttps_epu32(create_random__mmask8(), create_random__m256());
+                let _ = _mm_mask_max_sd(create_random__m128d(), create_random__mmask8(), create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_cvttps_epu32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_sd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_max_sd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_max_sd_boundary_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cvttps_epu32(create__m128_from([1.0, 2.0, 3.0, 4.0])));
-        check_array_equality(&result, &[1, 2, 3, 4]).map_err(|e| format!("{e} | call: _mm_cvttps_epu32(create__m128_from([1.0, 2.0, 3.0, 4.0]))"))?;
+        let result = unpack__m128d_to_f64_array(_mm_mask_max_sd(create__m128d_from([f64::MAX, f64::MAX]), create__mmask8_from(0b01010101), create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX])));
+        check_float_array_equality(&result, &[1.7976931348623157e308, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_mask_max_sd(create__m128d_from([f64::MAX, f64::MAX]), create__mmask8_from(0b01010101), create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1024,20 +3941,25 @@ pub(super) fn test_x86_avx512f_mm_cvttps_epu32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cvttps_epu32(create_random__m128());
+                let _ = _mm_mask_max_sd(create_random__m128d(), create_random__mmask8(), create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_mask_cvttps_epu32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_sd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_max_sd_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_max_sd_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_mask_cvttps_epu32(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128_from([5.0, 6.0, 7.0, 8.0])));
-        check_array_equality(&result, &[5, 2, 7, 4]).map_err(|e| format!("{e} | call: _mm_mask_cvttps_epu32(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128_from([5.0, 6.0, 7.0, 8.0]))"))?;
+        let result = unpack__m128d_to_f64_array(_mm_mask_max_sd(create__m128d_from([0.0, 0.0]), create__mmask8_from(0b01010101), create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0])));
+        check_float_array_equality(&result, &[0.0; 2]).map_err(|e| format!("{e} | call: _mm_mask_max_sd(create__m128d_from([0.0, 0.0]), create__mmask8_from(0b01010101), create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1047,20 +3969,25 @@ pub(super) fn test_x86_avx512f_mm_mask_cvttps_epu32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_mask_cvttps_epu32(create_random__m128i(), create_random__mmask8(), create_random__m128());
+                let _ = _mm_mask_max_sd(create_random__m128d(), create_random__mmask8(), create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm_maskz_cvttps_epu32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_sd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_max_sd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_max_sd_boundary_allones_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_maskz_cvttps_epu32(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0])));
-        check_array_equality(&result, &[1, 0, 3, 0]).map_err(|e| format!("{e} | call: _mm_maskz_cvttps_epu32(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]))"))?;
+        let result = unpack__m128d_to_f64_array(_mm_mask_max_sd(create__m128d_from([f64::NAN, f64::NAN]), create__mmask8_from(0b01010101), create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN])));
+        check_float_array_equality(&result, &[f64::NAN, f64::NAN]).map_err(|e| format!("{e} | call: _mm_mask_max_sd(create__m128d_from([f64::NAN, f64::NAN]), create__mmask8_from(0b01010101), create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1070,20 +3997,25 @@ pub(super) fn test_x86_avx512f_mm_maskz_cvttps_epu32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_maskz_cvttps_epu32(create_random__mmask8(), create_random__m128());
+                let _ = _mm_mask_max_sd(create_random__m128d(), create_random__mmask8(), create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_maskz_cvtt_roundpd_epu32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_sd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_max_sd_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_max_sd_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm512_maskz_cvtt_roundpd_epu32::<8>(create__mmask8_from(0b01010101), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
-        check_array_equality(&result, &[1, 0, 3, 0, 5, 0, 7, 0]).map_err(|e| format!("{e} | call: _mm512_maskz_cvtt_roundpd_epu32::<8>(create__mmask8_from(0b01010101), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]))"))?;
+        let result = unpack__m128d_to_f64_array(_mm_mask_max_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__mmask8_from(0b01010101), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY])));
+        check_float_array_equality(&result, &[f64::INFINITY, -f64::INFINITY]).map_err(|e| format!("{e} | call: _mm_mask_max_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__mmask8_from(0b01010101), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1093,20 +4025,25 @@ pub(super) fn test_x86_avx512f_mm512_maskz_cvtt_roundpd_epu32() -> Result<(), St
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm512_maskz_cvtt_roundpd_epu32::<8>(create_random__mmask8(), create_random__m512d());
+                let _ = _mm_mask_max_sd(create_random__m128d(), create_random__mmask8(), create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_cvttpd_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_sd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_max_sd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_max_sd_asym_min_max_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm512_cvttpd_epi32(create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
-        check_array_equality(&result, &[1, 2, 3, 4, 5, 6, 7, 8]).map_err(|e| format!("{e} | call: _mm512_cvttpd_epi32(create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]))"))?;
+        let result = unpack__m128d_to_f64_array(_mm_mask_max_sd(create__m128d_from([f64::MIN, f64::MIN]), create__mmask8_from(0b01010101), create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([1.0, 2.0])));
+        check_float_array_equality(&result, &[1.7976931348623157e308, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_mask_max_sd(create__m128d_from([f64::MIN, f64::MIN]), create__mmask8_from(0b01010101), create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([1.0, 2.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1116,20 +4053,25 @@ pub(super) fn test_x86_avx512f_mm512_cvttpd_epi32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm512_cvttpd_epi32(create_random__m512d());
+                let _ = _mm_mask_max_sd(create_random__m128d(), create_random__mmask8(), create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx512f_mm512_mask_cvttpd_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_sd_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_max_sd_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_max_sd_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm512_mask_cvttpd_epi32(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask8_from(0b01010101), create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_array_equality(&result, &[9, 2, 11, 4, 13, 6, 15, 8]).map_err(|e| format!("{e} | call: _mm512_mask_cvttpd_epi32(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask8_from(0b01010101), create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
+        let result = unpack__m128d_to_f64_array(_mm_mask_max_sd(create__m128d_from([f64::MAX, f64::MAX]), create__mmask8_from(0b01010101), create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([1.0, 2.0])));
+        check_float_array_equality(&result, &[1.0, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_mask_max_sd(create__m128d_from([f64::MAX, f64::MAX]), create__mmask8_from(0b01010101), create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([1.0, 2.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1139,9 +4081,3653 @@ pub(super) fn test_x86_avx512f_mm512_mask_cvttpd_epi32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm512_mask_cvttpd_epi32(create_random__m256i(), create_random__mmask8(), create_random__m512d());
+                let _ = _mm_mask_max_sd(create_random__m128d(), create_random__mmask8(), create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_max_sd_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_max_sd_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_max_sd_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_maskz_max_sd(create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0])));
+        check_float_array_equality(&result, &[3.0, 2.0]).map_err(|e| format!("{e} | call: _mm_maskz_max_sd(create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_max_sd(create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_max_sd() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_max_sd_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_max_sd_normal2_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_maskz_max_sd(create__mmask8_from(0b01010101), create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64])));
+        check_float_array_equality(&result, &[10.0, -1.0]).map_err(|e| format!("{e} | call: _mm_maskz_max_sd(create__mmask8_from(0b01010101), create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_max_sd(create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_max_sd_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_max_sd_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_max_sd_normal3_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_maskz_max_sd(create__mmask8_from(0b01010101), create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64])));
+        check_float_array_equality(&result, &[110.0, 200.0]).map_err(|e| format!("{e} | call: _mm_maskz_max_sd(create__mmask8_from(0b01010101), create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_max_sd(create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_max_sd_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_max_sd_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_max_sd_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_maskz_max_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN])));
+        check_float_array_equality(&result, &[-1.7976931348623157e308, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_maskz_max_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_max_sd(create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_max_sd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_max_sd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_max_sd_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_maskz_max_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX])));
+        check_float_array_equality(&result, &[1.7976931348623157e308, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_maskz_max_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_max_sd(create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_max_sd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_max_sd_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_max_sd_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_maskz_max_sd(create__mmask8_from(0b01010101), create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0])));
+        check_float_array_equality(&result, &[0.0; 2]).map_err(|e| format!("{e} | call: _mm_maskz_max_sd(create__mmask8_from(0b01010101), create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_max_sd(create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_max_sd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_max_sd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_max_sd_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_maskz_max_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN])));
+        check_float_array_equality(&result, &[f64::NAN, f64::NAN]).map_err(|e| format!("{e} | call: _mm_maskz_max_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_max_sd(create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_max_sd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_max_sd_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_max_sd_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_maskz_max_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY])));
+        check_float_array_equality(&result, &[f64::INFINITY, -f64::INFINITY]).map_err(|e| format!("{e} | call: _mm_maskz_max_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_max_sd(create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_max_sd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_max_sd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_max_sd_asym_min_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_maskz_max_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX])));
+        check_float_array_equality(&result, &[1.7976931348623157e308, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_maskz_max_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_max_sd(create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_max_sd_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_max_sd_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_max_sd_asym_max_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_maskz_max_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN])));
+        check_float_array_equality(&result, &[1.7976931348623157e308, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_maskz_max_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_max_sd(create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_max_sd_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_max_sd_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_min_ss_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_mask_min_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m128_from([5.0, 6.0, 7.0, 8.0]), create__m128_from([9.0, 10.0, 11.0, 12.0])));
+        check_float_array_equality(&result, &[5.0, 6.0, 7.0, 8.0]).map_err(|e| format!("{e} | call: _mm_mask_min_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m128_from([5.0, 6.0, 7.0, 8.0]), create__m128_from([9.0, 10.0, 11.0, 12.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_min_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_min_ss() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_min_ss_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_min_ss_normal2_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_mask_min_ss(create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]), create__mmask8_from(0b01010101), create__m128_from([10.0f32, 9.0f32, 12.0f32, 7.0f32]), create__m128_from([20.0f32, 19.0f32, 22.0f32, 17.0f32])));
+        check_float_array_equality(&result, &[10.0, 9.0, 12.0, 7.0]).map_err(|e| format!("{e} | call: _mm_mask_min_ss(create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]), create__mmask8_from(0b01010101), create__m128_from([10.0f32, 9.0f32, 12.0f32, 7.0f32]), create__m128_from([20.0f32, 19.0f32, 22.0f32, 17.0f32]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_min_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_min_ss_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_min_ss_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_min_ss_normal3_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_mask_min_ss(create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]), create__mmask8_from(0b01010101), create__m128_from([110.0f32, 210.0f32, 310.0f32, 410.0f32]), create__m128_from([120.0f32, 220.0f32, 320.0f32, 420.0f32])));
+        check_float_array_equality(&result, &[110.0, 210.0, 310.0, 410.0]).map_err(|e| format!("{e} | call: _mm_mask_min_ss(create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]), create__mmask8_from(0b01010101), create__m128_from([110.0f32, 210.0f32, 310.0f32, 410.0f32]), create__m128_from([120.0f32, 220.0f32, 320.0f32, 420.0f32]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_min_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_min_ss_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_min_ss_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_min_ss_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_mask_min_ss(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
+        check_float_array_equality(&result, &[-3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm_mask_min_ss(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_min_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_min_ss_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_min_ss_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_min_ss_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_mask_min_ss(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
+        check_float_array_equality(&result, &[3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm_mask_min_ss(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_min_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_min_ss_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_min_ss_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_min_ss_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_mask_min_ss(create__m128_from([0.0, 0.0, 0.0, 0.0]), create__mmask8_from(0b01010101), create__m128_from([0.0, 0.0, 0.0, 0.0]), create__m128_from([0.0, 0.0, 0.0, 0.0])));
+        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm_mask_min_ss(create__m128_from([0.0, 0.0, 0.0, 0.0]), create__mmask8_from(0b01010101), create__m128_from([0.0, 0.0, 0.0, 0.0]), create__m128_from([0.0, 0.0, 0.0, 0.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_min_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_min_ss_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_min_ss_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_min_ss_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_mask_min_ss(create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__mmask8_from(0b01010101), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
+        check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm_mask_min_ss(create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__mmask8_from(0b01010101), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_min_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_min_ss_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_min_ss_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_min_ss_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_mask_min_ss(create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__mmask8_from(0b01010101), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0])));
+        check_float_array_equality(&result, &[f32::INFINITY, -f32::INFINITY, -0.0, 5.877472e-39]).map_err(|e| format!("{e} | call: _mm_mask_min_ss(create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__mmask8_from(0b01010101), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_min_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_min_ss_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_min_ss_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_min_ss_asym_min_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_mask_min_ss(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        check_float_array_equality(&result, &[1.0, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm_mask_min_ss(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([1.0, 2.0, 3.0, 4.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_min_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_min_ss_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_min_ss_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_min_ss_asym_max_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_mask_min_ss(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        check_float_array_equality(&result, &[-3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm_mask_min_ss(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([1.0, 2.0, 3.0, 4.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_min_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_min_ss_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_min_ss_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_min_ss_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_maskz_min_ss(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
+        check_float_array_equality(&result, &[1.0, 2.0, 3.0, 4.0]).map_err(|e| format!("{e} | call: _mm_maskz_min_ss(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_min_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_min_ss() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_min_ss_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_min_ss_normal2_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_maskz_min_ss(create__mmask8_from(0b01010101), create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]), create__m128_from([10.0f32, 9.0f32, 12.0f32, 7.0f32])));
+        check_float_array_equality(&result, &[0.0, -1.0, 2.0, -3.0]).map_err(|e| format!("{e} | call: _mm_maskz_min_ss(create__mmask8_from(0b01010101), create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]), create__m128_from([10.0f32, 9.0f32, 12.0f32, 7.0f32]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_min_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_min_ss_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_min_ss_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_min_ss_normal3_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_maskz_min_ss(create__mmask8_from(0b01010101), create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]), create__m128_from([110.0f32, 210.0f32, 310.0f32, 410.0f32])));
+        check_float_array_equality(&result, &[100.0, 200.0, 300.0, 400.0]).map_err(|e| format!("{e} | call: _mm_maskz_min_ss(create__mmask8_from(0b01010101), create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]), create__m128_from([110.0f32, 210.0f32, 310.0f32, 410.0f32]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_min_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_min_ss_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_min_ss_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_min_ss_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_maskz_min_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
+        check_float_array_equality(&result, &[-3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm_maskz_min_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_min_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_min_ss_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_min_ss_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_min_ss_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_maskz_min_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
+        check_float_array_equality(&result, &[3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm_maskz_min_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_min_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_min_ss_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_min_ss_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_min_ss_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_maskz_min_ss(create__mmask8_from(0b01010101), create__m128_from([0.0, 0.0, 0.0, 0.0]), create__m128_from([0.0, 0.0, 0.0, 0.0])));
+        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm_maskz_min_ss(create__mmask8_from(0b01010101), create__m128_from([0.0, 0.0, 0.0, 0.0]), create__m128_from([0.0, 0.0, 0.0, 0.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_min_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_min_ss_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_min_ss_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_min_ss_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_maskz_min_ss(create__mmask8_from(0b01010101), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
+        check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm_maskz_min_ss(create__mmask8_from(0b01010101), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_min_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_min_ss_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_min_ss_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_min_ss_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_maskz_min_ss(create__mmask8_from(0b01010101), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0])));
+        check_float_array_equality(&result, &[f32::INFINITY, -f32::INFINITY, -0.0, 5.877472e-39]).map_err(|e| format!("{e} | call: _mm_maskz_min_ss(create__mmask8_from(0b01010101), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_min_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_min_ss_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_min_ss_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_min_ss_asym_min_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_maskz_min_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
+        check_float_array_equality(&result, &[-3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm_maskz_min_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_min_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_min_ss_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_min_ss_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_min_ss_asym_max_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_maskz_min_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
+        check_float_array_equality(&result, &[-3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm_maskz_min_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_min_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_min_ss_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_min_ss_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_min_sd_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_mask_min_sd(create__m128d_from([1.0, 2.0]), create__mmask8_from(0b01010101), create__m128d_from([3.0, 4.0]), create__m128d_from([5.0, 6.0])));
+        check_float_array_equality(&result, &[3.0, 4.0]).map_err(|e| format!("{e} | call: _mm_mask_min_sd(create__m128d_from([1.0, 2.0]), create__mmask8_from(0b01010101), create__m128d_from([3.0, 4.0]), create__m128d_from([5.0, 6.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_min_sd(create_random__m128d(), create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_min_sd() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_min_sd_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_min_sd_normal2_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_mask_min_sd(create__m128d_from([0.0f64, -1.0f64]), create__mmask8_from(0b01010101), create__m128d_from([10.0f64, 9.0f64]), create__m128d_from([20.0f64, 19.0f64])));
+        check_float_array_equality(&result, &[10.0, 9.0]).map_err(|e| format!("{e} | call: _mm_mask_min_sd(create__m128d_from([0.0f64, -1.0f64]), create__mmask8_from(0b01010101), create__m128d_from([10.0f64, 9.0f64]), create__m128d_from([20.0f64, 19.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_min_sd(create_random__m128d(), create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_min_sd_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_min_sd_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_min_sd_normal3_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_mask_min_sd(create__m128d_from([100.0f64, 200.0f64]), create__mmask8_from(0b01010101), create__m128d_from([110.0f64, 210.0f64]), create__m128d_from([120.0f64, 220.0f64])));
+        check_float_array_equality(&result, &[110.0, 210.0]).map_err(|e| format!("{e} | call: _mm_mask_min_sd(create__m128d_from([100.0f64, 200.0f64]), create__mmask8_from(0b01010101), create__m128d_from([110.0f64, 210.0f64]), create__m128d_from([120.0f64, 220.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_min_sd(create_random__m128d(), create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_min_sd_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_min_sd_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_min_sd_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_mask_min_sd(create__m128d_from([f64::MIN, f64::MIN]), create__mmask8_from(0b01010101), create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN])));
+        check_float_array_equality(&result, &[-1.7976931348623157e308, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_mask_min_sd(create__m128d_from([f64::MIN, f64::MIN]), create__mmask8_from(0b01010101), create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_min_sd(create_random__m128d(), create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_min_sd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_min_sd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_min_sd_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_mask_min_sd(create__m128d_from([f64::MAX, f64::MAX]), create__mmask8_from(0b01010101), create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX])));
+        check_float_array_equality(&result, &[1.7976931348623157e308, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_mask_min_sd(create__m128d_from([f64::MAX, f64::MAX]), create__mmask8_from(0b01010101), create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_min_sd(create_random__m128d(), create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_min_sd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_min_sd_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_min_sd_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_mask_min_sd(create__m128d_from([0.0, 0.0]), create__mmask8_from(0b01010101), create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0])));
+        check_float_array_equality(&result, &[0.0; 2]).map_err(|e| format!("{e} | call: _mm_mask_min_sd(create__m128d_from([0.0, 0.0]), create__mmask8_from(0b01010101), create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_min_sd(create_random__m128d(), create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_min_sd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_min_sd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_min_sd_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_mask_min_sd(create__m128d_from([f64::NAN, f64::NAN]), create__mmask8_from(0b01010101), create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN])));
+        check_float_array_equality(&result, &[f64::NAN, f64::NAN]).map_err(|e| format!("{e} | call: _mm_mask_min_sd(create__m128d_from([f64::NAN, f64::NAN]), create__mmask8_from(0b01010101), create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_min_sd(create_random__m128d(), create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_min_sd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_min_sd_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_min_sd_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_mask_min_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__mmask8_from(0b01010101), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY])));
+        check_float_array_equality(&result, &[f64::INFINITY, -f64::INFINITY]).map_err(|e| format!("{e} | call: _mm_mask_min_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__mmask8_from(0b01010101), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_min_sd(create_random__m128d(), create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_min_sd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_min_sd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_min_sd_asym_min_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_mask_min_sd(create__m128d_from([f64::MIN, f64::MIN]), create__mmask8_from(0b01010101), create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([1.0, 2.0])));
+        check_float_array_equality(&result, &[1.0, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_mask_min_sd(create__m128d_from([f64::MIN, f64::MIN]), create__mmask8_from(0b01010101), create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([1.0, 2.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_min_sd(create_random__m128d(), create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_min_sd_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_min_sd_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_min_sd_asym_max_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_mask_min_sd(create__m128d_from([f64::MAX, f64::MAX]), create__mmask8_from(0b01010101), create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([1.0, 2.0])));
+        check_float_array_equality(&result, &[-1.7976931348623157e308, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_mask_min_sd(create__m128d_from([f64::MAX, f64::MAX]), create__mmask8_from(0b01010101), create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([1.0, 2.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_min_sd(create_random__m128d(), create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_min_sd_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_min_sd_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_min_sd_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_maskz_min_sd(create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0])));
+        check_float_array_equality(&result, &[1.0, 2.0]).map_err(|e| format!("{e} | call: _mm_maskz_min_sd(create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_min_sd(create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_min_sd() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_min_sd_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_min_sd_normal2_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_maskz_min_sd(create__mmask8_from(0b01010101), create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64])));
+        check_float_array_equality(&result, &[0.0, -1.0]).map_err(|e| format!("{e} | call: _mm_maskz_min_sd(create__mmask8_from(0b01010101), create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_min_sd(create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_min_sd_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_min_sd_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_min_sd_normal3_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_maskz_min_sd(create__mmask8_from(0b01010101), create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64])));
+        check_float_array_equality(&result, &[100.0, 200.0]).map_err(|e| format!("{e} | call: _mm_maskz_min_sd(create__mmask8_from(0b01010101), create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_min_sd(create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_min_sd_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_min_sd_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_min_sd_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_maskz_min_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN])));
+        check_float_array_equality(&result, &[-1.7976931348623157e308, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_maskz_min_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_min_sd(create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_min_sd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_min_sd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_min_sd_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_maskz_min_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX])));
+        check_float_array_equality(&result, &[1.7976931348623157e308, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_maskz_min_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_min_sd(create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_min_sd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_min_sd_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_min_sd_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_maskz_min_sd(create__mmask8_from(0b01010101), create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0])));
+        check_float_array_equality(&result, &[0.0; 2]).map_err(|e| format!("{e} | call: _mm_maskz_min_sd(create__mmask8_from(0b01010101), create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_min_sd(create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_min_sd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_min_sd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_min_sd_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_maskz_min_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN])));
+        check_float_array_equality(&result, &[f64::NAN, f64::NAN]).map_err(|e| format!("{e} | call: _mm_maskz_min_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_min_sd(create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_min_sd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_min_sd_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_min_sd_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_maskz_min_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY])));
+        check_float_array_equality(&result, &[f64::INFINITY, -f64::INFINITY]).map_err(|e| format!("{e} | call: _mm_maskz_min_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_min_sd(create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_min_sd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_min_sd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_min_sd_asym_min_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_maskz_min_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX])));
+        check_float_array_equality(&result, &[-1.7976931348623157e308, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_maskz_min_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_min_sd(create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_min_sd_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_min_sd_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_min_sd_asym_max_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_maskz_min_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN])));
+        check_float_array_equality(&result, &[-1.7976931348623157e308, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_maskz_min_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_min_sd(create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_min_sd_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_min_sd_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_sqrt_ss_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_mask_sqrt_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m128_from([5.0, 6.0, 7.0, 8.0]), create__m128_from([9.0, 10.0, 11.0, 12.0])));
+        check_float_array_equality(&result, &[3.0, 6.0, 7.0, 8.0]).map_err(|e| format!("{e} | call: _mm_mask_sqrt_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m128_from([5.0, 6.0, 7.0, 8.0]), create__m128_from([9.0, 10.0, 11.0, 12.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_sqrt_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_sqrt_ss() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_sqrt_ss_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_sqrt_ss_normal2_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_mask_sqrt_ss(create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]), create__mmask8_from(0b01010101), create__m128_from([10.0f32, 9.0f32, 12.0f32, 7.0f32]), create__m128_from([20.0f32, 19.0f32, 22.0f32, 17.0f32])));
+        check_float_array_equality(&result, &[4.472136, 9.0, 12.0, 7.0]).map_err(|e| format!("{e} | call: _mm_mask_sqrt_ss(create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]), create__mmask8_from(0b01010101), create__m128_from([10.0f32, 9.0f32, 12.0f32, 7.0f32]), create__m128_from([20.0f32, 19.0f32, 22.0f32, 17.0f32]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_sqrt_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_sqrt_ss_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_sqrt_ss_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_sqrt_ss_normal3_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_mask_sqrt_ss(create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]), create__mmask8_from(0b01010101), create__m128_from([110.0f32, 210.0f32, 310.0f32, 410.0f32]), create__m128_from([120.0f32, 220.0f32, 320.0f32, 420.0f32])));
+        check_float_array_equality(&result, &[10.954452, 210.0, 310.0, 410.0]).map_err(|e| format!("{e} | call: _mm_mask_sqrt_ss(create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]), create__mmask8_from(0b01010101), create__m128_from([110.0f32, 210.0f32, 310.0f32, 410.0f32]), create__m128_from([120.0f32, 220.0f32, 320.0f32, 420.0f32]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_sqrt_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_sqrt_ss_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_sqrt_ss_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_sqrt_ss_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_mask_sqrt_ss(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
+        check_float_array_equality(&result, &[f32::NAN, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm_mask_sqrt_ss(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_sqrt_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_sqrt_ss_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_sqrt_ss_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_sqrt_ss_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_mask_sqrt_ss(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
+        check_float_array_equality(&result, &[1.8446743e19, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm_mask_sqrt_ss(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_sqrt_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_sqrt_ss_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_sqrt_ss_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_sqrt_ss_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_mask_sqrt_ss(create__m128_from([0.0, 0.0, 0.0, 0.0]), create__mmask8_from(0b01010101), create__m128_from([0.0, 0.0, 0.0, 0.0]), create__m128_from([0.0, 0.0, 0.0, 0.0])));
+        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm_mask_sqrt_ss(create__m128_from([0.0, 0.0, 0.0, 0.0]), create__mmask8_from(0b01010101), create__m128_from([0.0, 0.0, 0.0, 0.0]), create__m128_from([0.0, 0.0, 0.0, 0.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_sqrt_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_sqrt_ss_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_sqrt_ss_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_sqrt_ss_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_mask_sqrt_ss(create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__mmask8_from(0b01010101), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
+        check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm_mask_sqrt_ss(create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__mmask8_from(0b01010101), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_sqrt_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_sqrt_ss_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_sqrt_ss_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_sqrt_ss_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_mask_sqrt_ss(create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__mmask8_from(0b01010101), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0])));
+        check_float_array_equality(&result, &[f32::INFINITY, -f32::INFINITY, -0.0, 5.877472e-39]).map_err(|e| format!("{e} | call: _mm_mask_sqrt_ss(create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__mmask8_from(0b01010101), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_sqrt_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_sqrt_ss_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_sqrt_ss_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_sqrt_ss_asym_min_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_mask_sqrt_ss(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        check_float_array_equality(&result, &[1.0, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm_mask_sqrt_ss(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([1.0, 2.0, 3.0, 4.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_sqrt_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_sqrt_ss_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_sqrt_ss_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_sqrt_ss_asym_max_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_mask_sqrt_ss(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        check_float_array_equality(&result, &[1.0, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm_mask_sqrt_ss(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([1.0, 2.0, 3.0, 4.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_sqrt_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_sqrt_ss_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_sqrt_ss_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_sqrt_ss_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_maskz_sqrt_ss(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
+        check_float_array_equality(&result, &[2.236068, 2.0, 3.0, 4.0]).map_err(|e| format!("{e} | call: _mm_maskz_sqrt_ss(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_sqrt_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_sqrt_ss() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_sqrt_ss_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_sqrt_ss_normal2_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_maskz_sqrt_ss(create__mmask8_from(0b01010101), create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]), create__m128_from([10.0f32, 9.0f32, 12.0f32, 7.0f32])));
+        check_float_array_equality(&result, &[3.1622777, -1.0, 2.0, -3.0]).map_err(|e| format!("{e} | call: _mm_maskz_sqrt_ss(create__mmask8_from(0b01010101), create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]), create__m128_from([10.0f32, 9.0f32, 12.0f32, 7.0f32]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_sqrt_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_sqrt_ss_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_sqrt_ss_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_sqrt_ss_normal3_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_maskz_sqrt_ss(create__mmask8_from(0b01010101), create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]), create__m128_from([110.0f32, 210.0f32, 310.0f32, 410.0f32])));
+        check_float_array_equality(&result, &[10.488089, 200.0, 300.0, 400.0]).map_err(|e| format!("{e} | call: _mm_maskz_sqrt_ss(create__mmask8_from(0b01010101), create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]), create__m128_from([110.0f32, 210.0f32, 310.0f32, 410.0f32]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_sqrt_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_sqrt_ss_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_sqrt_ss_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_sqrt_ss_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_maskz_sqrt_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
+        check_float_array_equality(&result, &[f32::NAN, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm_maskz_sqrt_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_sqrt_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_sqrt_ss_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_sqrt_ss_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_sqrt_ss_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_maskz_sqrt_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
+        check_float_array_equality(&result, &[1.8446743e19, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm_maskz_sqrt_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_sqrt_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_sqrt_ss_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_sqrt_ss_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_sqrt_ss_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_maskz_sqrt_ss(create__mmask8_from(0b01010101), create__m128_from([0.0, 0.0, 0.0, 0.0]), create__m128_from([0.0, 0.0, 0.0, 0.0])));
+        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm_maskz_sqrt_ss(create__mmask8_from(0b01010101), create__m128_from([0.0, 0.0, 0.0, 0.0]), create__m128_from([0.0, 0.0, 0.0, 0.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_sqrt_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_sqrt_ss_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_sqrt_ss_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_sqrt_ss_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_maskz_sqrt_ss(create__mmask8_from(0b01010101), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
+        check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm_maskz_sqrt_ss(create__mmask8_from(0b01010101), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_sqrt_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_sqrt_ss_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_sqrt_ss_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_sqrt_ss_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_maskz_sqrt_ss(create__mmask8_from(0b01010101), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0])));
+        check_float_array_equality(&result, &[f32::INFINITY, -f32::INFINITY, -0.0, 5.877472e-39]).map_err(|e| format!("{e} | call: _mm_maskz_sqrt_ss(create__mmask8_from(0b01010101), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_sqrt_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_sqrt_ss_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_sqrt_ss_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_sqrt_ss_asym_min_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_maskz_sqrt_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
+        check_float_array_equality(&result, &[1.8446743e19, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm_maskz_sqrt_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_sqrt_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_sqrt_ss_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_sqrt_ss_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_sqrt_ss_asym_max_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_maskz_sqrt_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
+        check_float_array_equality(&result, &[f32::NAN, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm_maskz_sqrt_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_sqrt_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_sqrt_ss_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_sqrt_ss_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_sqrt_sd_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_mask_sqrt_sd(create__m128d_from([1.0, 2.0]), create__mmask8_from(0b01010101), create__m128d_from([3.0, 4.0]), create__m128d_from([5.0, 6.0])));
+        check_float_array_equality(&result, &[2.23606797749979, 4.0]).map_err(|e| format!("{e} | call: _mm_mask_sqrt_sd(create__m128d_from([1.0, 2.0]), create__mmask8_from(0b01010101), create__m128d_from([3.0, 4.0]), create__m128d_from([5.0, 6.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_sqrt_sd(create_random__m128d(), create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_sqrt_sd() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_sqrt_sd_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_sqrt_sd_normal2_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_mask_sqrt_sd(create__m128d_from([0.0f64, -1.0f64]), create__mmask8_from(0b01010101), create__m128d_from([10.0f64, 9.0f64]), create__m128d_from([20.0f64, 19.0f64])));
+        check_float_array_equality(&result, &[4.47213595499958, 9.0]).map_err(|e| format!("{e} | call: _mm_mask_sqrt_sd(create__m128d_from([0.0f64, -1.0f64]), create__mmask8_from(0b01010101), create__m128d_from([10.0f64, 9.0f64]), create__m128d_from([20.0f64, 19.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_sqrt_sd(create_random__m128d(), create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_sqrt_sd_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_sqrt_sd_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_sqrt_sd_normal3_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_mask_sqrt_sd(create__m128d_from([100.0f64, 200.0f64]), create__mmask8_from(0b01010101), create__m128d_from([110.0f64, 210.0f64]), create__m128d_from([120.0f64, 220.0f64])));
+        check_float_array_equality(&result, &[10.954451150103322, 210.0]).map_err(|e| format!("{e} | call: _mm_mask_sqrt_sd(create__m128d_from([100.0f64, 200.0f64]), create__mmask8_from(0b01010101), create__m128d_from([110.0f64, 210.0f64]), create__m128d_from([120.0f64, 220.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_sqrt_sd(create_random__m128d(), create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_sqrt_sd_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_sqrt_sd_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_sqrt_sd_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_mask_sqrt_sd(create__m128d_from([f64::MIN, f64::MIN]), create__mmask8_from(0b01010101), create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN])));
+        check_float_array_equality(&result, &[f64::NAN, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_mask_sqrt_sd(create__m128d_from([f64::MIN, f64::MIN]), create__mmask8_from(0b01010101), create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_sqrt_sd(create_random__m128d(), create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_sqrt_sd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_sqrt_sd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_sqrt_sd_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_mask_sqrt_sd(create__m128d_from([f64::MAX, f64::MAX]), create__mmask8_from(0b01010101), create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX])));
+        check_float_array_equality(&result, &[1.3407807929942596e154, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_mask_sqrt_sd(create__m128d_from([f64::MAX, f64::MAX]), create__mmask8_from(0b01010101), create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_sqrt_sd(create_random__m128d(), create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_sqrt_sd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_sqrt_sd_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_sqrt_sd_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_mask_sqrt_sd(create__m128d_from([0.0, 0.0]), create__mmask8_from(0b01010101), create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0])));
+        check_float_array_equality(&result, &[0.0; 2]).map_err(|e| format!("{e} | call: _mm_mask_sqrt_sd(create__m128d_from([0.0, 0.0]), create__mmask8_from(0b01010101), create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_sqrt_sd(create_random__m128d(), create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_sqrt_sd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_sqrt_sd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_sqrt_sd_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_mask_sqrt_sd(create__m128d_from([f64::NAN, f64::NAN]), create__mmask8_from(0b01010101), create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN])));
+        check_float_array_equality(&result, &[f64::NAN, f64::NAN]).map_err(|e| format!("{e} | call: _mm_mask_sqrt_sd(create__m128d_from([f64::NAN, f64::NAN]), create__mmask8_from(0b01010101), create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_sqrt_sd(create_random__m128d(), create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_sqrt_sd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_sqrt_sd_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_sqrt_sd_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_mask_sqrt_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__mmask8_from(0b01010101), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY])));
+        check_float_array_equality(&result, &[f64::INFINITY, -f64::INFINITY]).map_err(|e| format!("{e} | call: _mm_mask_sqrt_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__mmask8_from(0b01010101), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_sqrt_sd(create_random__m128d(), create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_sqrt_sd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_sqrt_sd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_sqrt_sd_asym_min_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_mask_sqrt_sd(create__m128d_from([f64::MIN, f64::MIN]), create__mmask8_from(0b01010101), create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([1.0, 2.0])));
+        check_float_array_equality(&result, &[1.0, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_mask_sqrt_sd(create__m128d_from([f64::MIN, f64::MIN]), create__mmask8_from(0b01010101), create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([1.0, 2.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_sqrt_sd(create_random__m128d(), create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_sqrt_sd_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_sqrt_sd_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_sqrt_sd_asym_max_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_mask_sqrt_sd(create__m128d_from([f64::MAX, f64::MAX]), create__mmask8_from(0b01010101), create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([1.0, 2.0])));
+        check_float_array_equality(&result, &[1.0, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_mask_sqrt_sd(create__m128d_from([f64::MAX, f64::MAX]), create__mmask8_from(0b01010101), create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([1.0, 2.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_sqrt_sd(create_random__m128d(), create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_sqrt_sd_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_sqrt_sd_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_sqrt_sd_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_maskz_sqrt_sd(create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0])));
+        check_float_array_equality(&result, &[1.7320508075688772, 2.0]).map_err(|e| format!("{e} | call: _mm_maskz_sqrt_sd(create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_sqrt_sd(create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_sqrt_sd() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_sqrt_sd_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_sqrt_sd_normal2_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_maskz_sqrt_sd(create__mmask8_from(0b01010101), create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64])));
+        check_float_array_equality(&result, &[3.1622776601683795, -1.0]).map_err(|e| format!("{e} | call: _mm_maskz_sqrt_sd(create__mmask8_from(0b01010101), create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_sqrt_sd(create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_sqrt_sd_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_sqrt_sd_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_sqrt_sd_normal3_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_maskz_sqrt_sd(create__mmask8_from(0b01010101), create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64])));
+        check_float_array_equality(&result, &[10.488088481701515, 200.0]).map_err(|e| format!("{e} | call: _mm_maskz_sqrt_sd(create__mmask8_from(0b01010101), create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_sqrt_sd(create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_sqrt_sd_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_sqrt_sd_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_sqrt_sd_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_maskz_sqrt_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN])));
+        check_float_array_equality(&result, &[f64::NAN, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_maskz_sqrt_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_sqrt_sd(create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_sqrt_sd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_sqrt_sd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_sqrt_sd_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_maskz_sqrt_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX])));
+        check_float_array_equality(&result, &[1.3407807929942596e154, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_maskz_sqrt_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_sqrt_sd(create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_sqrt_sd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_sqrt_sd_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_sqrt_sd_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_maskz_sqrt_sd(create__mmask8_from(0b01010101), create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0])));
+        check_float_array_equality(&result, &[0.0; 2]).map_err(|e| format!("{e} | call: _mm_maskz_sqrt_sd(create__mmask8_from(0b01010101), create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_sqrt_sd(create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_sqrt_sd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_sqrt_sd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_sqrt_sd_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_maskz_sqrt_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN])));
+        check_float_array_equality(&result, &[f64::NAN, f64::NAN]).map_err(|e| format!("{e} | call: _mm_maskz_sqrt_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_sqrt_sd(create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_sqrt_sd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_sqrt_sd_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_sqrt_sd_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_maskz_sqrt_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY])));
+        check_float_array_equality(&result, &[f64::INFINITY, -f64::INFINITY]).map_err(|e| format!("{e} | call: _mm_maskz_sqrt_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_sqrt_sd(create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_sqrt_sd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_sqrt_sd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_sqrt_sd_asym_min_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_maskz_sqrt_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX])));
+        check_float_array_equality(&result, &[1.3407807929942596e154, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_maskz_sqrt_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_sqrt_sd(create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_sqrt_sd_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_sqrt_sd_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_sqrt_sd_asym_max_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_maskz_sqrt_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN])));
+        check_float_array_equality(&result, &[f64::NAN, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_maskz_sqrt_sd(create__mmask8_from(0b01010101), create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_sqrt_sd(create_random__mmask8(), create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_sqrt_sd_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_sqrt_sd_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_rsqrt14_ss_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_rsqrt14_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
+        check_float_array_equality(&result, &[0.44719696, 2.0, 3.0, 4.0]).map_err(|e| format!("{e} | call: _mm_rsqrt14_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_rsqrt14_ss(create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_rsqrt14_ss() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_rsqrt14_ss_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_rsqrt14_ss_normal2_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_rsqrt14_ss(create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]), create__m128_from([10.0f32, 9.0f32, 12.0f32, 7.0f32])));
+        check_float_array_equality(&result, &[0.31621933, -1.0, 2.0, -3.0]).map_err(|e| format!("{e} | call: _mm_rsqrt14_ss(create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]), create__m128_from([10.0f32, 9.0f32, 12.0f32, 7.0f32]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_rsqrt14_ss(create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_rsqrt14_ss_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_rsqrt14_ss_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_rsqrt14_ss_normal3_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_rsqrt14_ss(create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]), create__m128_from([110.0f32, 210.0f32, 310.0f32, 410.0f32])));
+        check_float_array_equality(&result, &[0.09534454, 200.0, 300.0, 400.0]).map_err(|e| format!("{e} | call: _mm_rsqrt14_ss(create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]), create__m128_from([110.0f32, 210.0f32, 310.0f32, 410.0f32]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_rsqrt14_ss(create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_rsqrt14_ss_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_rsqrt14_ss_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_rsqrt14_ss_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_rsqrt14_ss(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
+        check_float_array_equality(&result, &[f32::NAN, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm_rsqrt14_ss(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_rsqrt14_ss(create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_rsqrt14_ss_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_rsqrt14_ss_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_rsqrt14_ss_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_rsqrt14_ss(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
+        check_float_array_equality(&result, &[5.421011e-20, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm_rsqrt14_ss(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_rsqrt14_ss(create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_rsqrt14_ss_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_rsqrt14_ss_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_rsqrt14_ss_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_rsqrt14_ss(create__m128_from([0.0, 0.0, 0.0, 0.0]), create__m128_from([0.0, 0.0, 0.0, 0.0])));
+        check_float_array_equality(&result, &[f32::INFINITY, 0.0, 0.0, 0.0]).map_err(|e| format!("{e} | call: _mm_rsqrt14_ss(create__m128_from([0.0, 0.0, 0.0, 0.0]), create__m128_from([0.0, 0.0, 0.0, 0.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_rsqrt14_ss(create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_rsqrt14_ss_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_rsqrt14_ss_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_rsqrt14_ss_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_rsqrt14_ss(create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
+        check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm_rsqrt14_ss(create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_rsqrt14_ss(create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_rsqrt14_ss_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_rsqrt14_ss_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_rsqrt14_ss_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_rsqrt14_ss(create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0])));
+        check_float_array_equality(&result, &[0.0, -f32::INFINITY, -0.0, 5.877472e-39]).map_err(|e| format!("{e} | call: _mm_rsqrt14_ss(create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_rsqrt14_ss(create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_rsqrt14_ss_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_rsqrt14_ss_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_rsqrt14_ss_asym_min_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_rsqrt14_ss(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
+        check_float_array_equality(&result, &[5.421011e-20, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm_rsqrt14_ss(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_rsqrt14_ss(create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_rsqrt14_ss_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_rsqrt14_ss_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_rsqrt14_ss_asym_max_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_rsqrt14_ss(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
+        check_float_array_equality(&result, &[f32::NAN, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm_rsqrt14_ss(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_rsqrt14_ss(create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_rsqrt14_ss_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_rsqrt14_ss_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_rsqrt14_ss_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_mask_rsqrt14_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m128_from([5.0, 6.0, 7.0, 8.0]), create__m128_from([9.0, 10.0, 11.0, 12.0])));
+        check_float_array_equality(&result, &[0.33332443, 6.0, 7.0, 8.0]).map_err(|e| format!("{e} | call: _mm_mask_rsqrt14_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m128_from([5.0, 6.0, 7.0, 8.0]), create__m128_from([9.0, 10.0, 11.0, 12.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_rsqrt14_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_rsqrt14_ss() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_rsqrt14_ss_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_rsqrt14_ss_normal2_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_mask_rsqrt14_ss(create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]), create__mmask8_from(0b01010101), create__m128_from([10.0f32, 9.0f32, 12.0f32, 7.0f32]), create__m128_from([20.0f32, 19.0f32, 22.0f32, 17.0f32])));
+        check_float_array_equality(&result, &[0.22359848, 9.0, 12.0, 7.0]).map_err(|e| format!("{e} | call: _mm_mask_rsqrt14_ss(create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]), create__mmask8_from(0b01010101), create__m128_from([10.0f32, 9.0f32, 12.0f32, 7.0f32]), create__m128_from([20.0f32, 19.0f32, 22.0f32, 17.0f32]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_rsqrt14_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_rsqrt14_ss_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_rsqrt14_ss_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_rsqrt14_ss_normal3_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_mask_rsqrt14_ss(create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]), create__mmask8_from(0b01010101), create__m128_from([110.0f32, 210.0f32, 310.0f32, 410.0f32]), create__m128_from([120.0f32, 220.0f32, 320.0f32, 420.0f32])));
+        check_float_array_equality(&result, &[0.09128475, 210.0, 310.0, 410.0]).map_err(|e| format!("{e} | call: _mm_mask_rsqrt14_ss(create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]), create__mmask8_from(0b01010101), create__m128_from([110.0f32, 210.0f32, 310.0f32, 410.0f32]), create__m128_from([120.0f32, 220.0f32, 320.0f32, 420.0f32]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_rsqrt14_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_rsqrt14_ss_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_rsqrt14_ss_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_rsqrt14_ss_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_mask_rsqrt14_ss(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
+        check_float_array_equality(&result, &[f32::NAN, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm_mask_rsqrt14_ss(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_rsqrt14_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_rsqrt14_ss_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_rsqrt14_ss_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_rsqrt14_ss_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_mask_rsqrt14_ss(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
+        check_float_array_equality(&result, &[5.421011e-20, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm_mask_rsqrt14_ss(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_rsqrt14_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_rsqrt14_ss_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_rsqrt14_ss_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_rsqrt14_ss_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_mask_rsqrt14_ss(create__m128_from([0.0, 0.0, 0.0, 0.0]), create__mmask8_from(0b01010101), create__m128_from([0.0, 0.0, 0.0, 0.0]), create__m128_from([0.0, 0.0, 0.0, 0.0])));
+        check_float_array_equality(&result, &[f32::INFINITY, 0.0, 0.0, 0.0]).map_err(|e| format!("{e} | call: _mm_mask_rsqrt14_ss(create__m128_from([0.0, 0.0, 0.0, 0.0]), create__mmask8_from(0b01010101), create__m128_from([0.0, 0.0, 0.0, 0.0]), create__m128_from([0.0, 0.0, 0.0, 0.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_rsqrt14_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_rsqrt14_ss_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_rsqrt14_ss_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_rsqrt14_ss_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_mask_rsqrt14_ss(create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__mmask8_from(0b01010101), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
+        check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm_mask_rsqrt14_ss(create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__mmask8_from(0b01010101), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_rsqrt14_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_rsqrt14_ss_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_rsqrt14_ss_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_rsqrt14_ss_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_mask_rsqrt14_ss(create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__mmask8_from(0b01010101), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0])));
+        check_float_array_equality(&result, &[0.0, -f32::INFINITY, -0.0, 5.877472e-39]).map_err(|e| format!("{e} | call: _mm_mask_rsqrt14_ss(create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__mmask8_from(0b01010101), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_rsqrt14_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_rsqrt14_ss_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_rsqrt14_ss_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_rsqrt14_ss_asym_min_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_mask_rsqrt14_ss(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        check_float_array_equality(&result, &[1.0, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm_mask_rsqrt14_ss(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([1.0, 2.0, 3.0, 4.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_rsqrt14_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_rsqrt14_ss_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_rsqrt14_ss_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_mask_rsqrt14_ss_asym_max_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_mask_rsqrt14_ss(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        check_float_array_equality(&result, &[1.0, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm_mask_rsqrt14_ss(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([1.0, 2.0, 3.0, 4.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_mask_rsqrt14_ss(create_random__m128(), create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_mask_rsqrt14_ss_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_mask_rsqrt14_ss_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_rsqrt14_ss_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_maskz_rsqrt14_ss(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
+        check_float_array_equality(&result, &[0.44719696, 2.0, 3.0, 4.0]).map_err(|e| format!("{e} | call: _mm_maskz_rsqrt14_ss(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_rsqrt14_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_rsqrt14_ss() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_rsqrt14_ss_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_rsqrt14_ss_normal2_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_maskz_rsqrt14_ss(create__mmask8_from(0b01010101), create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]), create__m128_from([10.0f32, 9.0f32, 12.0f32, 7.0f32])));
+        check_float_array_equality(&result, &[0.31621933, -1.0, 2.0, -3.0]).map_err(|e| format!("{e} | call: _mm_maskz_rsqrt14_ss(create__mmask8_from(0b01010101), create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]), create__m128_from([10.0f32, 9.0f32, 12.0f32, 7.0f32]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_rsqrt14_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_rsqrt14_ss_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_rsqrt14_ss_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_rsqrt14_ss_normal3_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_maskz_rsqrt14_ss(create__mmask8_from(0b01010101), create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]), create__m128_from([110.0f32, 210.0f32, 310.0f32, 410.0f32])));
+        check_float_array_equality(&result, &[0.09534454, 200.0, 300.0, 400.0]).map_err(|e| format!("{e} | call: _mm_maskz_rsqrt14_ss(create__mmask8_from(0b01010101), create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]), create__m128_from([110.0f32, 210.0f32, 310.0f32, 410.0f32]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_rsqrt14_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_rsqrt14_ss_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_rsqrt14_ss_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_rsqrt14_ss_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_maskz_rsqrt14_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
+        check_float_array_equality(&result, &[f32::NAN, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm_maskz_rsqrt14_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_rsqrt14_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_rsqrt14_ss_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_rsqrt14_ss_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_rsqrt14_ss_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_maskz_rsqrt14_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
+        check_float_array_equality(&result, &[5.421011e-20, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm_maskz_rsqrt14_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_rsqrt14_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_rsqrt14_ss_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_rsqrt14_ss_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_rsqrt14_ss_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_maskz_rsqrt14_ss(create__mmask8_from(0b01010101), create__m128_from([0.0, 0.0, 0.0, 0.0]), create__m128_from([0.0, 0.0, 0.0, 0.0])));
+        check_float_array_equality(&result, &[f32::INFINITY, 0.0, 0.0, 0.0]).map_err(|e| format!("{e} | call: _mm_maskz_rsqrt14_ss(create__mmask8_from(0b01010101), create__m128_from([0.0, 0.0, 0.0, 0.0]), create__m128_from([0.0, 0.0, 0.0, 0.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_rsqrt14_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_rsqrt14_ss_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_rsqrt14_ss_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_rsqrt14_ss_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_maskz_rsqrt14_ss(create__mmask8_from(0b01010101), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
+        check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm_maskz_rsqrt14_ss(create__mmask8_from(0b01010101), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_rsqrt14_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_rsqrt14_ss_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_rsqrt14_ss_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_rsqrt14_ss_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_maskz_rsqrt14_ss(create__mmask8_from(0b01010101), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0])));
+        check_float_array_equality(&result, &[0.0, -f32::INFINITY, -0.0, 5.877472e-39]).map_err(|e| format!("{e} | call: _mm_maskz_rsqrt14_ss(create__mmask8_from(0b01010101), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_rsqrt14_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_rsqrt14_ss_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_rsqrt14_ss_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_rsqrt14_ss_asym_min_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_maskz_rsqrt14_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
+        check_float_array_equality(&result, &[5.421011e-20, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm_maskz_rsqrt14_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_rsqrt14_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_rsqrt14_ss_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_rsqrt14_ss_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_maskz_rsqrt14_ss_asym_max_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_maskz_rsqrt14_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
+        check_float_array_equality(&result, &[f32::NAN, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm_maskz_rsqrt14_ss(create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_maskz_rsqrt14_ss(create_random__mmask8(), create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_maskz_rsqrt14_ss_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_maskz_rsqrt14_ss_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_rsqrt14_sd_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_rsqrt14_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0])));
+        check_float_array_equality(&result, &[0.5773391723632813, 2.0]).map_err(|e| format!("{e} | call: _mm_rsqrt14_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_rsqrt14_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_rsqrt14_sd() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_rsqrt14_sd_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_rsqrt14_sd_normal2_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_rsqrt14_sd(create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64])));
+        check_float_array_equality(&result, &[0.3162193298339844, -1.0]).map_err(|e| format!("{e} | call: _mm_rsqrt14_sd(create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_rsqrt14_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_rsqrt14_sd_normal2() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_rsqrt14_sd_normal2_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_rsqrt14_sd_normal3_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_rsqrt14_sd(create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64])));
+        check_float_array_equality(&result, &[0.09534454345703125, 200.0]).map_err(|e| format!("{e} | call: _mm_rsqrt14_sd(create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_rsqrt14_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_rsqrt14_sd_normal3() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_rsqrt14_sd_normal3_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_rsqrt14_sd_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_rsqrt14_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN])));
+        check_float_array_equality(&result, &[f64::NAN, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_rsqrt14_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_rsqrt14_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_rsqrt14_sd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_rsqrt14_sd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_rsqrt14_sd_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_rsqrt14_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX])));
+        check_float_array_equality(&result, &[7.458340731200207e-155, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_rsqrt14_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_rsqrt14_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_rsqrt14_sd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_rsqrt14_sd_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_rsqrt14_sd_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_rsqrt14_sd(create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0])));
+        check_float_array_equality(&result, &[f64::INFINITY, 0.0]).map_err(|e| format!("{e} | call: _mm_rsqrt14_sd(create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_rsqrt14_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_rsqrt14_sd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_rsqrt14_sd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_rsqrt14_sd_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_rsqrt14_sd(create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN])));
+        check_float_array_equality(&result, &[f64::NAN, f64::NAN]).map_err(|e| format!("{e} | call: _mm_rsqrt14_sd(create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_rsqrt14_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_rsqrt14_sd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_rsqrt14_sd_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_rsqrt14_sd_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_rsqrt14_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY])));
+        check_float_array_equality(&result, &[0.0, -f64::INFINITY]).map_err(|e| format!("{e} | call: _mm_rsqrt14_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_rsqrt14_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_rsqrt14_sd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_rsqrt14_sd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_rsqrt14_sd_asym_min_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_rsqrt14_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX])));
+        check_float_array_equality(&result, &[7.458340731200207e-155, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_rsqrt14_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_rsqrt14_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_rsqrt14_sd_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_rsqrt14_sd_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx512f")]
+fn test_x86_avx512f_mm_rsqrt14_sd_asym_max_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_rsqrt14_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN])));
+        check_float_array_equality(&result, &[f64::NAN, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_rsqrt14_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_rsqrt14_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx512f_mm_rsqrt14_sd_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_avx512f_mm_rsqrt14_sd_asym_max_min_impl() }
 }

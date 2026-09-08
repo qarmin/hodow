@@ -4,6 +4,7 @@ use crate::cpu::auto_generated::x86_64::cmpxchg16b::part1::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 
+#[allow(non_camel_case_types)]
 pub struct CMPXCHG16B;
 
 impl ExtensionTest for CMPXCHG16B {

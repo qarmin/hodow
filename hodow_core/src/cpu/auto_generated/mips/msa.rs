@@ -24,6 +24,7 @@ use crate::cpu::auto_generated::mips::msa::part11::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 
+#[allow(non_camel_case_types)]
 pub struct MSA;
 
 impl ExtensionTest for MSA {

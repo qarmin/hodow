@@ -5,7 +5,8 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_x86_64_sse42_mm_crc32_u64() -> Result<(), String> {
+#[target_feature(enable = "sse4.2")]
+fn test_x86_64_sse42_mm_crc32_u64_impl() -> Result<(), String> {
     unsafe {
         let result = _mm_crc32_u64(1u64, 2u64);
         check_int_equality(result as i32, -616265879).map_err(|e| format!("{e} | call: _mm_crc32_u64(1u64, 2u64)"))?;
@@ -23,4 +24,8 @@ pub(super) fn test_x86_64_sse42_mm_crc32_u64() -> Result<(), String> {
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_64_sse42_mm_crc32_u64() -> Result<(), String> {
+    unsafe { test_x86_64_sse42_mm_crc32_u64_impl() }
 }

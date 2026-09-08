@@ -1,8 +1,6 @@
 use std::arch::wasm32::*;
 
 #[allow(unused_imports)]
-use crate::cpu::common::arm::*;
-#[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
 pub(super) fn test_wasm32_atomic_memory_atomic_wait32() -> Result<(), String> {

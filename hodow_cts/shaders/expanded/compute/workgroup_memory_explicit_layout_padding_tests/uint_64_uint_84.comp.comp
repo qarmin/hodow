@@ -1,0 +1,48 @@
+#version 450
+#extension GL_EXT_shared_memory_block : enable
+#extension GL_EXT_shader_explicit_arithmetic_types : enable
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+shared A { uint32_t words[32]; };
+shared B {
+  layout(offset = 64) uint x0;
+  layout(offset = 84) uint x1;
+};
+layout(set = 0, binding = 0) buffer Result { uint result; };
+void main() {
+for (int i = 0; i < 32; i++) words[i] = 0;
+x0 = 0x1234;
+x1 = 0x5678;
+result = 32;
+if (words[0] == 0x0) result--;
+if (words[1] == 0x0) result--;
+if (words[2] == 0x0) result--;
+if (words[3] == 0x0) result--;
+if (words[4] == 0x0) result--;
+if (words[5] == 0x0) result--;
+if (words[6] == 0x0) result--;
+if (words[7] == 0x0) result--;
+if (words[8] == 0x0) result--;
+if (words[9] == 0x0) result--;
+if (words[10] == 0x0) result--;
+if (words[11] == 0x0) result--;
+if (words[12] == 0x0) result--;
+if (words[13] == 0x0) result--;
+if (words[14] == 0x0) result--;
+if (words[15] == 0x0) result--;
+if (words[16] == 0x1234) result--;
+if (words[17] == 0x0) result--;
+if (words[18] == 0x0) result--;
+if (words[19] == 0x0) result--;
+if (words[20] == 0x0) result--;
+if (words[21] == 0x5678) result--;
+if (words[22] == 0x0) result--;
+if (words[23] == 0x0) result--;
+if (words[24] == 0x0) result--;
+if (words[25] == 0x0) result--;
+if (words[26] == 0x0) result--;
+if (words[27] == 0x0) result--;
+if (words[28] == 0x0) result--;
+if (words[29] == 0x0) result--;
+if (words[30] == 0x0) result--;
+if (words[31] == 0x0) result--;
+}

@@ -1,0 +1,30 @@
+# Functions kept out of pilot-scope value-axis scenario expansion (normal2/normal3/
+# boundary_*/asym_*) because at least one of their vector-typed parameters isn't really a
+# value to vary - it's a control field (a length/index, a memory offset, ...) packed into
+# the same register type a normal SIMD payload would use, so an extreme override can
+# assemble a genuinely invalid/undefined combination instead of just an unusual value.
+# These functions still get generated and still get their single, fixed, known-valid
+# scenario - only the multi-scenario expansion is skipped for them.
+#
+# Each entry needs a one-line reason: what the parameter actually controls, and the exact
+# invalid combination an override would produce. "seemed risky" is not a reason - if it
+# can't be pinned to a concrete invalid-state argument, it likely belongs in pilot scope.
+#
+# gather/scatter are NOT listed here individually - in_pilot_scope excludes the whole
+# family by substring match ("gather"/"scatter" in the name) instead, since there are
+# ~120 of them and the reason is identical for all: the vector parameter is a per-lane
+# memory index multiplied by a compile-time scale, so a boundary override is an
+# out-of-bounds read, full stop. See the comment above in_pilot_scope in this same file.
+
+# SSE4A EXTRQ/INSERTQ (register form): length is bits [5:0] and index is bits [13:8] of
+# the second __m128i parameter. stdarch's own doc comment: "If length == 0 && index != 0
+# or length + index > 64[,] the result is undefined." An all-ones or all-i32::MAX override
+# on that parameter decodes to length=63, index=63 -> length+index=126>64 -> undefined,
+# confirmed by generating and then dropping the resulting boundary_max/boundary_allones/
+# asym_min_max scenarios (see git history). The immediate forms (_mm_extracti_si64/
+# _mm_inserti_si64) are unaffected - their length/index are const generics, checked by a
+# compile-time static_assert! in stdarch itself, so a scenario that would violate this is
+# a build failure, not a silent bad test - and every scenario here only ever varies their
+# genuinely-a-value x/y parameters.
+_mm_extract_si64
+_mm_insert_si64

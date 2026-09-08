@@ -1,0 +1,35 @@
+#version 310 es
+#extension GL_OES_texture_cube_map_array : require
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout(set = 0, binding = 1) uniform highp textureCubeArray u_separateTexture0;
+layout(set = 0, binding = 2) uniform highp sampler u_separateSampler0;
+layout(set = 1, binding = 0) uniform highp textureCubeArray u_separateTexture1;
+layout(set = 1, binding = 1) uniform highp sampler u_separateSampler1;
+layout(set = 0, binding = 0, std140) writeonly buffer OutBuf
+{
+    highp vec4 read_colors[4];
+} b_out;
+void main (void)
+{
+    highp int quadrant_id = int(gl_WorkGroupID.x);
+    highp vec4 result_color;
+    result_color = vec4(0.0);
+    if (quadrant_id == 0)
+        result_color += textureLod(samplerCubeArray(u_separateTexture0, u_separateSampler0), vec4(float(-0.953125), float(-0.96875), float(1), float(1)), 0.0);
+    else if (quadrant_id == 1)
+        result_color += textureLod(samplerCubeArray(u_separateTexture0, u_separateSampler0), vec4(float(-0.171875), float(-1), float(0.03125), float(0)), 0.0);
+    else if (quadrant_id == 2)
+        result_color += textureLod(samplerCubeArray(u_separateTexture0, u_separateSampler0), vec4(float(-1), float(0.28125), float(-0.328125), float(1)), 0.0);
+    else
+        result_color += textureLod(samplerCubeArray(u_separateTexture0, u_separateSampler0), vec4(float(1), float(-0.296875), float(0.234375), float(1)), 0.0);
+    if (quadrant_id == 0)
+        result_color += textureLod(samplerCubeArray(u_separateTexture1, u_separateSampler1), vec4(float(-0.953125), float(-0.96875), float(1), float(1)), 0.0);
+    else if (quadrant_id == 1)
+        result_color += textureLod(samplerCubeArray(u_separateTexture1, u_separateSampler1), vec4(float(-0.171875), float(-1), float(0.03125), float(0)), 0.0);
+    else if (quadrant_id == 2)
+        result_color += textureLod(samplerCubeArray(u_separateTexture1, u_separateSampler1), vec4(float(-1), float(0.28125), float(-0.328125), float(1)), 0.0);
+    else
+        result_color += textureLod(samplerCubeArray(u_separateTexture1, u_separateSampler1), vec4(float(1), float(-0.296875), float(0.234375), float(1)), 0.0);
+    result_color /= vec4(2.0);
+    b_out.read_colors[gl_WorkGroupID.x] = result_color;
+}

@@ -1,0 +1,13 @@
+#version 450
+layout(points) in;
+layout(points, max_vertices = 2) out;
+layout(xfb_buffer = 0, xfb_offset = 0, xfb_stride = 16, location = 0, stream = 0) out vec4 xfb;
+void main (void)
+{
+    gl_PointSize = 1.0;
+    xfb = vec4(42);
+    EmitStreamVertex(1);
+    EndStreamPrimitive(1);
+    EmitStreamVertex(0);
+    EndStreamPrimitive(0);
+}

@@ -1,0 +1,56 @@
+# Shader manifest for dEQP-VK.compute.pipeline.zero_initialize_workgroup_memory.*
+#
+# Unlike compute_basic.toml, most of the cases in this group share a single shader and
+# differ only in specialization-constant values chosen at run time. Upstream registers
+# them with a loop (8x8x8 for specialize_workgroup), so the loop lives in the Rust and
+# only the shader is declared here - one manifest entry, 512 test cases.
+
+upstream_source = "external/vulkancts/modules/vulkan/compute/vktComputeZeroInitializeWorkgroupMemoryTests.cpp"
+rust_module = "compute/zero_initialize_workgroup_memory_tests"
+
+# --- SpecializeWorkgroupTest ------------------------------------------------------
+# The workgroup dimensions are spec constants (WGX/WGY/WGZ), so all 8*8*8 = 512 cases
+# run this exact SPIR-V and vary only VkSpecializationInfo.
+[[case]]
+name = "specialize_workgroup"
+rust_const = "SPECIALIZE_WORKGROUP"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "compute/zero_init_specialize_workgroup.comp", stage = "comp" }]
+
+# --- MaxWorkgroupsTest ------------------------------------------------------------
+# One shader for all three axes: upstream computes a `dim` string in initPrograms but
+# never uses it, so x/y/z differ only in the dispatch made by the instance.
+[[case]]
+name = "max_workgroups"
+rust_const = "MAX_WORKGROUPS"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "compute/zero_init_max_workgroups.comp", stage = "comp" }]
+
+# --- MaxWorkgroupMemoryTest -------------------------------------------------------
+# One shader; the element count and workgroup dimensions are spec constants read from
+# the device limits, and the 6 cases differ only in how many workgroups are dispatched.
+[[case]]
+name = "max_workgroup_memory"
+rust_const = "MAX_WORKGROUP_MEMORY"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "compute/zero_init_max_workgroup_memory.comp", stage = "comp" }]
+
+# --- RepeatedPipelineTest ---------------------------------------------------------
+# `odd` is the only thing baked into the shader, so 4 xSizes x 4 repeat counts x 2
+# parities = 32 cases need just these two shaders. WGX is a spec constant, and the
+# repeat count is host-side (the same command buffer is submitted N times).
+[[case]]
+name = "repeat_pipeline_even"
+rust_const = "REPEAT_PIPELINE_EVEN"
+rust_type = "SharedProgramOdd"
+programs = [{ name = "comp", template = "compute/zero_init_repeat_pipeline.comp", stage = "comp" }]
+[case.params]
+odd = { type = "u32", value = 0 }
+
+[[case]]
+name = "repeat_pipeline_odd"
+rust_const = "REPEAT_PIPELINE_ODD"
+rust_type = "SharedProgramOdd"
+programs = [{ name = "comp", template = "compute/zero_init_repeat_pipeline.comp", stage = "comp" }]
+[case.params]
+odd = { type = "u32", value = 1 }

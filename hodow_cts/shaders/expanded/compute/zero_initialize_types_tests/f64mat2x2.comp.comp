@@ -1,0 +1,41 @@
+#version 450
+#extension GL_EXT_null_initializer : enable
+#extension GL_EXT_shader_explicit_arithmetic_types : enable
+layout(local_size_x = 4, local_size_y = 1, local_size_z = 1) in;
+layout(set = 0, binding = 0) buffer A  { uint a[]; } a;
+shared f64mat2x2 wg_mem0 = {};
+shared f64mat2x2 wg_mem1 = {};
+shared f64mat2x2 wg_mem2 = {};
+shared f64mat2x2 wg_mem3 = {};
+shared f64mat2x2 wg_mem4 = {};
+shared f64mat2x2 wg_mem5 = {};
+shared f64mat2x2 wg_mem6 = {};
+shared f64mat2x2 wg_mem7 = {};
+shared f64mat2x2 wg_mem8 = {};
+shared f64mat2x2 wg_mem9 = {};
+shared f64mat2x2 wg_mem10 = {};
+shared f64mat2x2 wg_mem11 = {};
+shared f64mat2x2 wg_mem12 = {};
+shared f64mat2x2 wg_mem13 = {};
+shared f64mat2x2 wg_mem14 = {};
+shared f64mat2x2 wg_mem15 = {};
+void main() {
+  uint row = gl_LocalInvocationID.x % 2;
+  uint col = gl_LocalInvocationID.x / 2;
+  a.a[0 + gl_LocalInvocationID.x] = (int64_t(wg_mem0[row][col]) ==  0) ? 0 : 1;
+  a.a[4 + gl_LocalInvocationID.x] = (int64_t(wg_mem1[row][col]) ==  0) ? 0 : 1;
+  a.a[8 + gl_LocalInvocationID.x] = (int64_t(wg_mem2[row][col]) ==  0) ? 0 : 1;
+  a.a[12 + gl_LocalInvocationID.x] = (int64_t(wg_mem3[row][col]) ==  0) ? 0 : 1;
+  a.a[16 + gl_LocalInvocationID.x] = (int64_t(wg_mem4[row][col]) ==  0) ? 0 : 1;
+  a.a[20 + gl_LocalInvocationID.x] = (int64_t(wg_mem5[row][col]) ==  0) ? 0 : 1;
+  a.a[24 + gl_LocalInvocationID.x] = (int64_t(wg_mem6[row][col]) ==  0) ? 0 : 1;
+  a.a[28 + gl_LocalInvocationID.x] = (int64_t(wg_mem7[row][col]) ==  0) ? 0 : 1;
+  a.a[32 + gl_LocalInvocationID.x] = (int64_t(wg_mem8[row][col]) ==  0) ? 0 : 1;
+  a.a[36 + gl_LocalInvocationID.x] = (int64_t(wg_mem9[row][col]) ==  0) ? 0 : 1;
+  a.a[40 + gl_LocalInvocationID.x] = (int64_t(wg_mem10[row][col]) ==  0) ? 0 : 1;
+  a.a[44 + gl_LocalInvocationID.x] = (int64_t(wg_mem11[row][col]) ==  0) ? 0 : 1;
+  a.a[48 + gl_LocalInvocationID.x] = (int64_t(wg_mem12[row][col]) ==  0) ? 0 : 1;
+  a.a[52 + gl_LocalInvocationID.x] = (int64_t(wg_mem13[row][col]) ==  0) ? 0 : 1;
+  a.a[56 + gl_LocalInvocationID.x] = (int64_t(wg_mem14[row][col]) ==  0) ? 0 : 1;
+  a.a[60 + gl_LocalInvocationID.x] = (int64_t(wg_mem15[row][col]) ==  0) ? 0 : 1;
+}

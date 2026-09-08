@@ -4,6 +4,7 @@ use crate::cpu::auto_generated::wasm32::memory::part1::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 
+#[allow(non_camel_case_types)]
 pub struct MEMORY;
 
 impl ExtensionTest for MEMORY {

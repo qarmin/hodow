@@ -1,0 +1,13 @@
+#version 440
+
+layout(local_size_x = 1) in;
+
+layout(set = 0, binding = 0, rgba32f) readonly  uniform image2D srcImg;
+layout(set = 0, binding = 1, rgba32f) writeonly uniform image2D dstImg;
+
+void main (void)
+{
+    for (int y = 0; y < 128; ++y)
+    for (int x = 0; x < 128; ++x)
+        imageStore(dstImg, ivec2(x, y), imageLoad(srcImg, ivec2(x, y)));
+}

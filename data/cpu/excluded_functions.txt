@@ -1,0 +1,94 @@
+# Functions excluded entirely from CPU test generation (never generated).
+# Deprecated intrinsics and functions requiring CPU features not testable here.
+
+# Deprecated
+_MM_GET_EXCEPTION_MASK
+_MM_GET_EXCEPTION_STATE
+_MM_GET_FLUSH_ZERO_MODE
+_MM_GET_ROUNDING_MODE
+_MM_SET_EXCEPTION_MASK
+_MM_SET_EXCEPTION_STATE
+_MM_SET_FLUSH_ZERO_MODE
+_MM_SET_ROUNDING_MODE
+_MM_TRANSPOSE4_PS
+#Undefined Behavior: calling a function that requires unavailable target features
+_mm256_madd52hi_avx_epu64
+_mm256_madd52lo_avx_epu64
+_mm_madd52hi_avx_epu64
+_mm_madd52lo_avx_epu64
+_mm256_dpbssd_epi32
+_mm256_dpbssds_epi32
+_mm256_dpbsud_epi32
+_mm256_dpbsuds_epi32
+_mm256_dpbusd_avx_epi32
+_mm256_dpbusds_avx_epi32
+_mm256_dpbuud_epi32
+_mm256_dpbuuds_epi32
+_mm256_dpwssd_avx_epi32
+_mm256_dpwssds_avx_epi32
+_mm256_dpwsud_epi32
+_mm256_dpwsuds_epi32
+_mm256_dpwusd_epi32
+_mm256_dpwusds_epi32
+_mm256_dpwuud_epi32
+_mm256_dpwuuds_epi32
+_mm256_sha512msg1_epi64
+_mm256_sha512msg2_epi64
+_mm256_sha512rnds2_epi64
+_mm256_sm4key4_epi32
+_mm256_sm4rnds4_epi32
+_mm_dpbssd_epi32
+_mm_dpbssds_epi32
+_mm_dpbsud_epi32
+_mm_dpbsuds_epi32
+_mm_dpbusd_avx_epi32
+_mm_dpbusds_avx_epi32
+_mm_dpbuud_epi32
+_mm_dpbuuds_epi32
+_mm_dpwssd_avx_epi32
+_mm_dpwssds_avx_epi32
+_mm_dpwsud_epi32
+_mm_dpwsuds_epi32
+_mm_dpwusd_epi32
+_mm_dpwusds_epi32
+_mm_dpwuud_epi32
+_mm_dpwuuds_epi32
+_mm_sm3msg1_epi32
+_mm_sm3msg2_epi32
+_mm_sm3rnds2_epi32
+_mm_sm4key4_epi32
+_mm_sm4rnds4_epi32
+
+# State-restore / control-register writes: applying arbitrary buffer contents
+# faults (#GP on invalid MXCSR/XCR0) or corrupts process state - cannot be fuzzed safely.
+_fxrstor
+_fxrstor64
+_xrstor
+_xrstor64
+_xrstors
+_xrstors64
+_xsetbv
+
+# Privileged (supervisor-only) - faults in user mode.
+_xsaves
+_xsaves64
+
+# aarch64 MTE: generic over a bare type parameter T (not just the OFFSET const generic),
+# e.g. `__arm_mte_increment_tag<const OFFSET: i64, T>(src: *const T)` - the generator has
+# no substitution for a free (non-sealed-trait-bounded) type parameter, so it emits a call
+# missing the required ::<OFFSET, T> second argument. Also genuinely hardware-dependent:
+# MTE is an optional ARMv8.5 extension real ARM64 chips may not implement.
+__arm_mte_create_random_tag
+__arm_mte_increment_tag
+__arm_mte_ptrdiff
+
+# arm/neon.rs's entire current signature set (extract_signatures.py, likely confused by a
+# doc comment or macro template mentioning the poly64 name next to the real function) -
+# stdarch only ever defines the _s64/_u64 (signed/unsigned) forms of these four shift-
+# insert intrinsics, never a _p64 (poly64) one. Confirmed against
+# arm_shared/neon/generated.rs directly: grep it for "fn vsli_n_p64" (or vsliq_n_p64/
+# vsri_n_p64/vsriq_n_p64) and compare to "fn vsli_n_s64" et al, both actually there.
+vsli_n_p64
+vsliq_n_p64
+vsri_n_p64
+vsriq_n_p64

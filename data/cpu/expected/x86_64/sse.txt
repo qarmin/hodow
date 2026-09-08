@@ -1,0 +1,11 @@
+# Expected values captured from real hardware for this extension's generated tests.
+# Format: test_name - rust_expr
+#
+# One file per (architecture, extension) - written by scripts/cpu/capture_expected.py and
+# capture_expected_cross.py, read by generate_tests.py. Do not hand-edit: recapture instead.
+# A qemu-derived value is not a real-silicon one; see CLAUDE.md's "Non-x86 architectures".
+
+test_x86_64_sse_mm_cvtss_si64 - 1
+test_x86_64_sse_mm_cvtss_si64_normal3 - 100
+test_x86_64_sse_mm_cvttss_si64 - 1
+test_x86_64_sse_mm_cvttss_si64_normal3 - 100

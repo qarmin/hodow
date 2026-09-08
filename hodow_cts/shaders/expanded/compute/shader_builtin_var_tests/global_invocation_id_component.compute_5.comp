@@ -1,0 +1,19 @@
+#version 310 es
+layout (local_size_x = 2, local_size_y = 3, local_size_z = 4) in;
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0) uniform Stride
+{
+    uvec2 u_stride;
+}stride;
+layout(set = 0, binding = 1, std430) buffer Output
+{
+    uvec3 result[];
+} sb_out;
+
+void main (void)
+{
+    highp uint offset = stride.u_stride.x*gl_GlobalInvocationID.z + stride.u_stride.y*gl_GlobalInvocationID.y + gl_GlobalInvocationID.x;
+    sb_out.result[offset].z = gl_GlobalInvocationID.z;
+    sb_out.result[offset].y = gl_GlobalInvocationID.y;
+    sb_out.result[offset].x = gl_GlobalInvocationID.x;
+}

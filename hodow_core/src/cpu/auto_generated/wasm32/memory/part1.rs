@@ -1,8 +1,6 @@
 use std::arch::wasm32::*;
 
 #[allow(unused_imports)]
-use crate::cpu::common::arm::*;
-#[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
 pub(super) fn test_wasm32_memory_memory_size() -> Result<(), String> {
@@ -36,7 +34,7 @@ pub(super) fn test_wasm32_memory_memory_grow() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = memory_grow::<0>(rand::random::<usize>());
+                let _ = memory_grow::<0>(rand::random::<u64>() as usize);
             }
         }
     }

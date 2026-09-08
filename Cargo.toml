@@ -4,12 +4,15 @@ members = [
     "hodow_core",
     "hodow_cli",
     "hodow_gui",
+    "hodow_cts",
 ]
+exclude = ["tmp"]
 
 [workspace.package]
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.98"
+license = "Apache-2.0"
 
 [workspace.dependencies]
 log = "0.4.34"

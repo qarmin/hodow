@@ -14,6 +14,9 @@ glutin-winit = { version = "0.5.0", default-features = false, features = ["egl",
 glow = { version = "0.18.0", optional = true }
 gl = { version = "0.14", optional = true }
 winit = { version = "0.30", optional = true }
+# Only to hand EGL a real `wl_display` on a Wayland-only system (see context.rs). Already in
+# the tree via winit; like it, libwayland-client is dlopened at runtime, not linked at build.
+wayland-client = { version = "0.31", optional = true }
 raw-window-handle = { version = "0.6.2", optional = true }
 x11-dl = { version = "2.21.0", optional = true }
 
@@ -26,7 +29,7 @@ miri_build = []
 # Feature to enable OpenGL GPU support
 # Include `winit` (GUI) as part of the `gpu` feature so GUI compiles whenever gpu is enabled.
 # Keep GUI control at runtime via arguments.
-gpu = ["glutin", "glutin-winit", "glow", "gl", "raw-window-handle", "winit", "x11-dl"]
+gpu = ["glutin", "glutin-winit", "glow", "gl", "raw-window-handle", "winit", "wayland-client", "x11-dl"]
 # Vulkan compute validation (independent of the OpenGL `gpu` feature)
 vulkan = ["dep:ash", "dep:naga"]
 

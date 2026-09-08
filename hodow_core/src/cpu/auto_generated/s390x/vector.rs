@@ -10,6 +10,7 @@ use crate::cpu::auto_generated::s390x::vector::part4::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 
+#[allow(non_camel_case_types)]
 pub struct VECTOR;
 
 impl ExtensionTest for VECTOR {

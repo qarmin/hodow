@@ -1,0 +1,25 @@
+#version 450
+#extension GL_EXT_null_initializer : enable
+layout(local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0) buffer A { uint a[]; } a;
+layout(constant_id = 3) const uint num_elems = 1024;
+layout(constant_id = 4) const uint num_wgs = 0;
+shared uvec4 wg_mem[num_elems] = {};
+void main() {
+  uint idx_z = gl_LocalInvocationID.z * gl_WorkGroupSize.x * gl_WorkGroupSize.y;
+  uint idx_y = gl_LocalInvocationID.y * gl_WorkGroupSize.x;
+  uint idx_x = gl_LocalInvocationID.x;
+  uint idx = idx_x + idx_y + idx_z;
+  uint wg_size = gl_WorkGroupSize.x * gl_WorkGroupSize.y * gl_WorkGroupSize.z;
+  for (uint i = 0; i < num_elems; ++i) {
+    for (uint j = 0; j < 4; ++j) {
+      uint shared_idx = 4*i + j;
+      uint wg_val = wg_mem[i][j];
+      if (idx == shared_idx) {
+        atomicAdd(a.a[idx], wg_val == 0 ? 1 : 0);
+      } else if (idx == 0 && shared_idx >= wg_size) {
+        atomicAdd(a.a[shared_idx], wg_val == 0 ? 1 : 0);
+      }
+    }
+  }
+}

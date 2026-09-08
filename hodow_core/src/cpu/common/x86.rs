@@ -3,6 +3,21 @@ use std::arch::x86_64::*;
 
 use crate::cpu::common;
 
+/// `is_x86_feature_detected!("kl")` expands to `cfg!(target_feature = "kl") || <cpuid>`, and
+/// `-C target-cpu=native` sets `+kl` from CPUID.07H:ECX.KL - the bit saying the silicon has Key
+/// Locker, not that it is usable. Usability requires CR4.KL (mainline Linux never sets it) and
+/// shows up as CPUID.19H:EBX.AESKLE; without it every KL instruction raises #UD. WIDE_KL is
+/// required too because the generated `kl` group also covers the `*wide*kl` intrinsics.
+pub fn keylocker_usable() -> bool {
+    unsafe {
+        if __get_cpuid_max(0).0 < 0x19 || __cpuid_count(7, 0).ecx & (1 << 23) == 0 {
+            return false;
+        }
+        let ebx = __cpuid(0x19).ebx;
+        ebx & 1 != 0 && ebx & (1 << 2) != 0
+    }
+}
+
 #[inline]
 pub fn create__m128_from(vals: [f32; 4]) -> __m128 {
     unsafe { std::mem::transmute(vals) }

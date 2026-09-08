@@ -1,0 +1,23 @@
+#version 450
+#extension GL_EXT_null_initializer : enable
+
+layout(local_size_x = 128) in;
+layout(set = 0, binding = 0) buffer A
+{
+    uint a[];
+} a;
+
+shared uint wg_mem = {};
+
+void main()
+{
+    uint idx = gl_LocalInvocationID.x;
+
+    if (gl_LocalInvocationIndex == 0)
+    {
+        wg_mem = 1;
+    }
+
+    barrier();
+    a.a[idx] = wg_mem;
+}

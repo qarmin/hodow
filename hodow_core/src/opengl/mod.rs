@@ -118,6 +118,110 @@ pub fn available_opengl_modes() -> Vec<String> {
     vec!["default-headless".to_string()]
 }
 
+/// What a headless context reports about the driver. Strings straight from `glGetString`.
+pub struct GlInfo {
+    pub vendor: String,
+    pub renderer: String,
+    pub version: String,
+    pub glsl_version: String,
+}
+
+/// The combinations `probe_opengl` walks, in order. The default alone is not enough: it asks
+/// for desktop OpenGL, which a GLES-only driver (Vivante/imx-gpu-viv, Mali, VideoCore) cannot
+/// give at all, and it asks EGL for the default display, which the Wayland build of such a
+/// driver rejects outright ("No default display support on wayland") when nothing else set up
+/// a `wl_display`. Reporting "unavailable" off that one attempt says nothing about whether the
+/// GPU works - only that one combination did not.
+const PROBE_ATTEMPTS: &[(&str, DisplayApiHint, GlApiHint)] = &[
+    ("EGL + OpenGL", DisplayApiHint::Egl, GlApiHint::Auto),
+    ("EGL + GLES 3.0", DisplayApiHint::Egl, GlApiHint::Gles { major: 3, minor: 0 }),
+    ("EGL + GLES 2.0", DisplayApiHint::Egl, GlApiHint::Gles { major: 2, minor: 0 }),
+    ("GLX + OpenGL", DisplayApiHint::Glx, GlApiHint::Auto),
+];
+
+/// Create a throwaway headless context just to read the driver's identification strings.
+/// Unlike `test_all_opengl` this renders nothing, but it does still load and initialize the
+/// GL driver, so it is the one part of `hodow_cli info` that can be affected by a broken one.
+///
+/// On failure the error lists every combination tried and why each one was refused, which is
+/// what tells a GLES-only or Wayland-only driver apart from having no driver at all.
+pub fn probe_opengl() -> Result<GlInfo, String> {
+    let mut failures: Vec<(String, String)> = Vec::new();
+    for (label, display_api, gl_api) in PROBE_ATTEMPTS {
+        let _ = label;
+        let opts = GpuOptions {
+            no_window: true,
+            display_api: *display_api,
+            gl_api: *gl_api,
+            ..Default::default()
+        };
+        match probe_with(&opts) {
+            Ok(info) => return Ok(info),
+            Err(e) => {
+                // Every attempt after a repeat is wasted: the display/API hints only take
+                // effect once an EGLDisplay exists (see OpenGLMode::create_with_opts - with no
+                // $DISPLAY it ignores both and goes straight to the device platform, then the
+                // default display). An identical message means the run died before that, so
+                // continuing just makes the driver print the same warning again.
+                let repeat = failures.last().is_some_and(|(_, prev)| *prev == e);
+                failures.push((label.to_string(), e));
+                if repeat {
+                    break;
+                }
+            }
+        }
+    }
+    Err(format_failures(&failures))
+}
+
+/// Collapse repeated identical failures, and add the environment that decides which display
+/// path is even reachable - "failed to create EGLDisplay" plus "no compositor and no X server"
+/// is a diagnosis, on its own it is not.
+fn format_failures(failures: &[(String, String)]) -> String {
+    let mut out = Vec::new();
+    let mut i = 0;
+    while i < failures.len() {
+        let (label, message) = &failures[i];
+        let same = failures[i..].iter().take_while(|(_, m)| m == message).count();
+        if same > 1 {
+            out.push(format!("{message} (identically for {label} and {} other combination(s))", same - 1));
+        } else {
+            out.push(format!("{label}: {message}"));
+        }
+        i += same;
+    }
+    let env = |k: &str| std::env::var(k).ok().filter(|v| !v.is_empty()).unwrap_or_else(|| "unset".into());
+    out.push(format!(
+        "environment: DISPLAY={}, WAYLAND_DISPLAY={}, XDG_RUNTIME_DIR={}",
+        env("DISPLAY"),
+        env("WAYLAND_DISPLAY"),
+        env("XDG_RUNTIME_DIR")
+    ));
+    out.join("; ")
+}
+
+fn probe_with(opts: &GpuOptions) -> Result<GlInfo, String> {
+    let ctx = init_opengl(opts).map_err(|e| e.to_string())?;
+    let info = unsafe {
+        let get = |name: u32| -> String {
+            let ptr = gl::GetString(name);
+            if ptr.is_null() {
+                "unknown".to_string()
+            } else {
+                std::ffi::CStr::from_ptr(ptr as *const std::os::raw::c_char).to_string_lossy().into_owned()
+            }
+        };
+        GlInfo {
+            vendor: get(gl::VENDOR),
+            renderer: get(gl::RENDERER),
+            version: get(gl::VERSION),
+            glsl_version: get(gl::SHADING_LANGUAGE_VERSION),
+        }
+    };
+    drop(ctx);
+    Ok(info)
+}
+
 pub fn test_all_opengl(opts: &GpuOptions) -> GLTestResult {
     tests::test_all_gl(opts)
 }

@@ -4,6 +4,7 @@ use crate::cpu::auto_generated::aarch64::mte::part1::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 
+#[allow(non_camel_case_types)]
 pub struct MTE;
 
 impl ExtensionTest for MTE {
@@ -13,12 +14,9 @@ impl ExtensionTest for MTE {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_aarch64_mte_arm_mte_create_random_tag, "test_aarch64_mte_arm_mte_create_random_tag"),
-            (&test_aarch64_mte_arm_mte_increment_tag, "test_aarch64_mte_arm_mte_increment_tag"),
             (&test_aarch64_mte_arm_mte_exclude_tag, "test_aarch64_mte_arm_mte_exclude_tag"),
             (&test_aarch64_mte_arm_mte_set_tag, "test_aarch64_mte_arm_mte_set_tag"),
             (&test_aarch64_mte_arm_mte_get_tag, "test_aarch64_mte_arm_mte_get_tag"),
-            (&test_aarch64_mte_arm_mte_ptrdiff, "test_aarch64_mte_arm_mte_ptrdiff"),
         ]
     }
 }

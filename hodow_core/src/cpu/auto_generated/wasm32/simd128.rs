@@ -12,6 +12,7 @@ use crate::cpu::auto_generated::wasm32::simd128::part5::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 
+#[allow(non_camel_case_types)]
 pub struct SIMD128;
 
 impl ExtensionTest for SIMD128 {

@@ -16,12 +16,14 @@
 //! worker starting just after it, so a single bad instruction never aborts the whole run.
 
 use std::io::{BufRead, BufReader, Write};
+use std::path::Path;
 use std::process::{Command, Stdio};
 use std::sync::mpsc;
 use std::thread;
 use std::time::Duration;
 
-use log::info;
+use log::{error, info};
+use serde::Serialize;
 
 use crate::cli::CpuArgs;
 
@@ -34,7 +36,40 @@ pub(crate) enum Outcome {
     Fail(String),
     Panic,
     Timeout,
-    Crashed,
+    /// How the child died - a signal name where there was one, otherwise the exit status.
+    Crashed(String),
+}
+
+/// Turn a dead child's exit status into something a reader can act on: SIGILL means the
+/// instruction is not available here, SIGSEGV means a bad address, SIGBUS a misaligned one,
+/// SIGKILL is usually the OOM killer rather than the test at all. Reporting all of them as a
+/// bare "CRASHED" throws that away.
+fn crash_reason(status: Option<std::process::ExitStatus>) -> String {
+    let Some(status) = status else {
+        return "could not be reaped".to_string();
+    };
+    #[cfg(unix)]
+    {
+        use std::os::unix::process::ExitStatusExt;
+        if let Some(sig) = status.signal() {
+            let name = match sig {
+                4 => "SIGILL (illegal instruction)",
+                5 => "SIGTRAP (trap)",
+                6 => "SIGABRT (abort)",
+                7 => "SIGBUS (bus error - misaligned or unmapped access)",
+                8 => "SIGFPE (arithmetic error)",
+                9 => "SIGKILL (killed - usually the OOM killer)",
+                11 => "SIGSEGV (segmentation fault)",
+                15 => "SIGTERM (terminated)",
+                other => return format!("signal {other}"),
+            };
+            return format!("{name}{}", if status.core_dumped() { ", core dumped" } else { "" });
+        }
+    }
+    match status.code() {
+        Some(code) => format!("exit code {code}"),
+        None => "terminated for an unknown reason".to_string(),
+    }
 }
 
 /// The filtered test list (name, fn) both the worker and the parent must agree on, so
@@ -47,6 +82,17 @@ fn filtered_tests() -> Vec<(&'static str, &'static hodow_core::TestFunction)> {
         .into_iter()
         .filter(|(name, feature, _)| !hodow_core::should_skip_test_or_feature(name, feature))
         .map(|(name, _feature, f)| (name, f))
+        .collect()
+}
+
+/// The feature each entry of `filtered_tests()`/`run_isolated_core`'s `names` belongs to, in
+/// the same order - kept as a separate pass (rather than widening `filtered_tests()`'s return
+/// type) so `run_isolated_core`'s signature, shared with the server executor, doesn't change.
+fn filtered_features() -> Vec<&'static str> {
+    hodow_core::all_tests()
+        .into_iter()
+        .filter(|(name, feature, _)| !hodow_core::should_skip_test_or_feature(name, feature))
+        .map(|(_name, feature, _)| feature)
         .collect()
 }
 
@@ -89,6 +135,12 @@ pub fn run_isolated(args: &CpuArgs) {
     let Some((names, outcome)) = run_isolated_core(args, |_, _, _| {}) else {
         return;
     };
+    if let Some(path) = &args.report {
+        match write_report(path, &names, &outcome) {
+            Ok(()) => info!("Wrote machine-readable report to {}", path.display()),
+            Err(e) => error!("Failed to write report to {}: {e}", path.display()),
+        }
+    }
     print_report(&names, &outcome);
 }
 
@@ -199,15 +251,16 @@ pub(crate) fn run_isolated_core(args: &CpuArgs, mut on_event: impl FnMut(usize, 
             }
         }
 
-        let _ = child.wait();
+        let status = child.wait().ok();
         let _ = reader.join();
 
         // Child died mid-test without a DONE line => it crashed on that test.
         if let Some(culprit) = in_flight
             && culprit < total
         {
-            info!("CRASHED: {}", names[culprit]);
-            outcome[culprit] = Outcome::Crashed;
+            let reason = crash_reason(status);
+            info!("CRASHED ({reason}): {}", names[culprit]);
+            outcome[culprit] = Outcome::Crashed(reason);
             on_event(culprit, names[culprit], &outcome[culprit]);
             advanced_to = culprit + 1;
         }
@@ -216,7 +269,9 @@ pub(crate) fn run_isolated_core(args: &CpuArgs, mut on_event: impl FnMut(usize, 
         // Guard against a startup crash producing no progress (avoid an infinite respawn loop).
         if next == prev_next && next < total {
             if outcome[next] == Outcome::Pending {
-                outcome[next] = Outcome::Crashed;
+                let reason = crash_reason(status);
+                error!("CRASHED before reporting any progress ({reason}): {}", names[next]);
+                outcome[next] = Outcome::Crashed(reason);
                 on_event(next, names[next], &outcome[next]);
             }
             next += 1;
@@ -240,7 +295,7 @@ fn print_report(names: &[&'static str], outcome: &[Outcome]) {
             Outcome::Fail(_) => fail += 1,
             Outcome::Panic => panic += 1,
             Outcome::Timeout => timeout += 1,
-            Outcome::Crashed => crashed += 1,
+            Outcome::Crashed(_) => crashed += 1,
             Outcome::Pending => pending += 1,
         }
     }
@@ -267,7 +322,7 @@ fn print_report(names: &[&'static str], outcome: &[Outcome]) {
             Outcome::Fail(msg) => Some((*name, format!("FAIL: {msg}"))),
             Outcome::Panic => Some((*name, "PANIC".to_string())),
             Outcome::Timeout => Some((*name, "TIMEOUT".to_string())),
-            Outcome::Crashed => Some((*name, "CRASHED".to_string())),
+            Outcome::Crashed(reason) => Some((*name, format!("CRASHED: {reason}"))),
             _ => None,
         })
         .collect();
@@ -283,5 +338,124 @@ fn print_report(names: &[&'static str], outcome: &[Outcome]) {
 
     if fail + panic + timeout + crashed > 0 {
         std::process::exit(1);
+    }
+}
+
+#[derive(Serialize)]
+struct ReportRecord {
+    name: String,
+    feature: String,
+    verdict: &'static str,
+    got: Option<String>,
+    expected: Option<String>,
+    message: Option<String>,
+}
+
+/// Every `common::check_*` helper formats a mismatch as `"Got {a:?}, expected {b:?}..."`, so
+/// this splits that prefix back out into separate fields instead of leaving callers to diff
+/// the whole message (which also carries call-site/context text that differs run to run).
+fn split_got_expected(msg: &str) -> (Option<String>, Option<String>) {
+    let Some(rest) = msg.strip_prefix("Got ") else {
+        return (None, None);
+    };
+    let Some(sep) = rest.find(", expected ") else {
+        return (None, None);
+    };
+    let got = rest[..sep].to_string();
+    let after = &rest[sep + ", expected ".len()..];
+    let end = after.find(" (").or_else(|| after.find(" | call:")).unwrap_or(after.len());
+    (Some(got), Some(after[..end].to_string()))
+}
+
+fn build_records(names: &[&'static str], outcome: &[Outcome]) -> Vec<ReportRecord> {
+    let features = filtered_features();
+    names
+        .iter()
+        .zip(features)
+        .zip(outcome)
+        .map(|((name, feature), o)| {
+            let (verdict, message) = match o {
+                Outcome::Pass => ("pass", None),
+                Outcome::Fail(msg) => ("fail", Some(msg.clone())),
+                Outcome::Panic => ("panic", None),
+                Outcome::Timeout => ("timeout", None),
+                Outcome::Crashed(reason) => ("crashed", Some(reason.clone())),
+                Outcome::Pending => ("pending", None),
+            };
+            let (got, expected) = message.as_deref().map(split_got_expected).unwrap_or((None, None));
+            ReportRecord {
+                name: name.to_string(),
+                feature: feature.to_string(),
+                verdict,
+                got,
+                expected,
+                message,
+            }
+        })
+        .collect()
+}
+
+fn csv_field(s: &str) -> String {
+    if s.contains(',') || s.contains('"') || s.contains('\n') {
+        format!("\"{}\"", s.replace('"', "\"\""))
+    } else {
+        s.to_string()
+    }
+}
+
+fn write_report(path: &Path, names: &[&'static str], outcome: &[Outcome]) -> std::io::Result<()> {
+    let records = build_records(names, outcome);
+    let is_csv = path.extension().and_then(|e| e.to_str()).is_some_and(|e| e.eq_ignore_ascii_case("csv"));
+
+    let out = if is_csv {
+        let mut s = String::from("name,feature,verdict,got,expected,message\n");
+        for r in &records {
+            let fields = [
+                r.name.as_str(),
+                r.feature.as_str(),
+                r.verdict,
+                r.got.as_deref().unwrap_or(""),
+                r.expected.as_deref().unwrap_or(""),
+                r.message.as_deref().unwrap_or(""),
+            ];
+            s.push_str(&fields.map(csv_field).join(","));
+            s.push('\n');
+        }
+        s
+    } else {
+        serde_json::to_string_pretty(&records).map_err(std::io::Error::other)?
+    };
+
+    std::fs::write(path, out)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::split_got_expected;
+
+    #[test]
+    fn parses_plain_got_expected() {
+        assert_eq!(split_got_expected("Got 3, expected 1"), (Some("3".into()), Some("1".into())));
+    }
+
+    #[test]
+    fn parses_got_expected_with_call_suffix() {
+        assert_eq!(
+            split_got_expected("Got 3, expected 1 | call: _mm_cvtsd_si64(create__m128d_from([1.0, 2.0]))"),
+            (Some("3".into()), Some("1".into()))
+        );
+    }
+
+    #[test]
+    fn parses_got_expected_with_paren_suffix() {
+        assert_eq!(
+            split_got_expected("Got [1.0, 2.0], expected [1.0, 3.0] (Difference is too big)"),
+            (Some("[1.0, 2.0]".into()), Some("[1.0, 3.0]".into()))
+        );
+    }
+
+    #[test]
+    fn non_matching_message_returns_none() {
+        assert_eq!(split_got_expected("some other error"), (None, None));
     }
 }

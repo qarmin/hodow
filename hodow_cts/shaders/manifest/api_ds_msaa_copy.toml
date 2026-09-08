@@ -1,0 +1,56 @@
+# Shader manifest for dEQP-VK.api.copy_and_blit.*.depth_stencil_msaa_copy.*
+#
+# The source image is filled by a draw and then copied; the copy is checked by a second
+# render pass that reads both images as multisampled subpass inputs and writes every
+# sample to a pair of SSBOs. Upstream generates that verification shader per case, but
+# it only varies in two things - the scalar prefix (stencil is uint, depth is float) and
+# the number of input attachments, which is one per destination layer - so it collapses
+# to four variants.
+
+upstream_source = "external/vulkancts/modules/vulkan/api/vktApiCopyDepthStencilMSAATests.cpp"
+rust_module = "api/depth_stencil_msaa_copy_tests"
+
+[[case]]
+name = "fill"
+rust_const = "DS_MSAA_FILL"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "api/ds_msaa_fill.vert", stage = "vert" },
+    { name = "frag", template = "api/ds_msaa_fill.frag", stage = "frag" },
+]
+
+[[case]]
+name = "verify_depth_single"
+rust_const = "DS_MSAA_VERIFY_DEPTH_SINGLE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "api/ds_msaa_fill.vert", stage = "vert" },
+    { name = "frag", template = "api/ds_msaa_verify_depth_single.frag", stage = "frag" },
+]
+
+[[case]]
+name = "verify_stencil_single"
+rust_const = "DS_MSAA_VERIFY_STENCIL_SINGLE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "api/ds_msaa_fill.vert", stage = "vert" },
+    { name = "frag", template = "api/ds_msaa_verify_stencil_single.frag", stage = "frag" },
+]
+
+[[case]]
+name = "verify_depth_array"
+rust_const = "DS_MSAA_VERIFY_DEPTH_ARRAY"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "api/ds_msaa_fill.vert", stage = "vert" },
+    { name = "frag", template = "api/ds_msaa_verify_depth_array.frag", stage = "frag" },
+]
+
+[[case]]
+name = "verify_stencil_array"
+rust_const = "DS_MSAA_VERIFY_STENCIL_ARRAY"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "api/ds_msaa_fill.vert", stage = "vert" },
+    { name = "frag", template = "api/ds_msaa_verify_stencil_array.frag", stage = "frag" },
+]

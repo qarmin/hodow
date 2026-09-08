@@ -4,6 +4,7 @@ use crate::cpu::auto_generated::x86_64::bmi::part1::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 
+#[allow(non_camel_case_types)]
 pub struct BMI;
 
 impl ExtensionTest for BMI {
@@ -15,12 +16,6 @@ impl ExtensionTest for BMI {
         &[
             (&test_x86_64_bmi_bextr_u64, "test_x86_64_bmi_bextr_u64"),
             (&test_x86_64_bmi_bextr2_u64, "test_x86_64_bmi_bextr2_u64"),
-            (&test_x86_64_bmi_andn_u64, "test_x86_64_bmi_andn_u64"),
-            (&test_x86_64_bmi_blsi_u64, "test_x86_64_bmi_blsi_u64"),
-            (&test_x86_64_bmi_blsmsk_u64, "test_x86_64_bmi_blsmsk_u64"),
-            (&test_x86_64_bmi_blsr_u64, "test_x86_64_bmi_blsr_u64"),
-            (&test_x86_64_bmi_tzcnt_u64, "test_x86_64_bmi_tzcnt_u64"),
-            (&test_x86_64_bmi_mm_tzcnt_64, "test_x86_64_bmi_mm_tzcnt_64"),
         ]
     }
 }

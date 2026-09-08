@@ -1,8 +1,6 @@
 use std::arch::powerpc64::*;
 
 #[allow(unused_imports)]
-use crate::cpu::common::arm::*;
-#[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
 pub(super) fn test_powerpc64_vsx_vec_xl_len() -> Result<(), String> {
@@ -17,7 +15,7 @@ pub(super) fn test_powerpc64_vsx_vec_xl_len() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                vec_xl_len(0 /* T */, rand::random::<usize>());
+                vec_xl_len(0 /* T */, rand::random::<u64>() as usize);
             }
         }
     }
@@ -36,7 +34,7 @@ pub(super) fn test_powerpc64_vsx_vec_xst_len() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                vec_xst_len(0 /* T */, 0 /* Out */, rand::random::<usize>());
+                vec_xst_len(0 /* T */, 0 /* Out */, rand::random::<u64>() as usize);
             }
         }
     }

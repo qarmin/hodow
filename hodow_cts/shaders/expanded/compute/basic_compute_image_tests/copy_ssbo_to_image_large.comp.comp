@@ -1,0 +1,12 @@
+#version 310 es
+layout (local_size_x = 2, local_size_y = 4) in;
+layout(binding = 1, r32ui) writeonly uniform highp uimage2D u_dstImg;
+layout(binding = 0) readonly buffer Input {
+    uint values[262144];
+} sb_in;
+
+void main (void) {
+    uint stride = gl_NumWorkGroups.x*gl_WorkGroupSize.x;
+    uint value  = sb_in.values[gl_GlobalInvocationID.y*stride + gl_GlobalInvocationID.x];
+    imageStore(u_dstImg, ivec2(gl_GlobalInvocationID.xy), uvec4(value, 0, 0, 0));
+}

@@ -1,0 +1,13 @@
+#version 450
+#extension GL_EXT_null_initializer : enable
+#extension GL_EXT_shader_explicit_arithmetic_types : enable
+layout(local_size_x = 3, local_size_y = 1, local_size_z = 1) in;
+layout(set = 0, binding = 0) buffer A  { uint a[]; } a;
+shared ivec3 wg_mem0 = {};
+shared ivec3 wg_mem1 = {};
+shared ivec3 wg_mem2 = {};
+void main() {
+  a.a[0 + gl_LocalInvocationID.x] = (int(wg_mem0[gl_LocalInvocationID.x]) ==  0) ? 0 : 1;
+  a.a[3 + gl_LocalInvocationID.x] = (int(wg_mem1[gl_LocalInvocationID.x]) ==  0) ? 0 : 1;
+  a.a[6 + gl_LocalInvocationID.x] = (int(wg_mem2[gl_LocalInvocationID.x]) ==  0) ? 0 : 1;
+}

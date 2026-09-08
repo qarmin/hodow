@@ -1,0 +1,18 @@
+#version 450
+#extension GL_EXT_null_initializer : enable
+
+layout(local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0) buffer A { uint a[]; } a;
+shared uint wg_mem[2] = {};
+
+void main() {
+  uint idx_z = gl_LocalInvocationID.z * gl_WorkGroupSize.x * gl_WorkGroupSize.y;
+  uint idx_y = gl_LocalInvocationID.y * gl_WorkGroupSize.x;
+  uint idx_x = gl_LocalInvocationID.x;
+  uint idx = idx_x + idx_y + idx_z;
+  if (gl_LocalInvocationID.x == 0) {
+    wg_mem[0] = atomicExchange(wg_mem[1], wg_mem[0]);
+  }
+  barrier();
+  atomicAdd(a.a[idx], wg_mem[idx_x % 2] == 0 ? 1 : 0);
+}

@@ -1,0 +1,16 @@
+#version 310 es
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout(set = 0, binding = 0, std430) buffer Out
+{
+    highp uint data[];
+};
+void writeCmd (uint offset, uvec3 numWorkGroups)
+{
+    data[offset+0u] = numWorkGroups.x;
+    data[offset+1u] = numWorkGroups.y;
+    data[offset+2u] = numWorkGroups.z;
+}
+void main (void)
+{
+	writeCmd(262147u, uvec3(1u, 1u, 1u));
+}

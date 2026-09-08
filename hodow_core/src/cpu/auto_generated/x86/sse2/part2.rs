@@ -8,10 +8,11 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_x86_sse2_mm_srl_epi64() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comieq_sd_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i64_array(_mm_srl_epi64(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
-        check_array_equality(&result, &[0; 2]).map_err(|e| format!("{e} | call: _mm_srl_epi64(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
+        let result = _mm_comieq_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comieq_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -21,17 +22,622 @@ pub(super) fn test_x86_sse2_mm_srl_epi64() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_srl_epi64(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comieq_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_srl_epi64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_comieq_sd() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comieq_sd_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comieq_sd_normal2_impl() -> Result<(), String> {
+    unsafe {
+        let result = _mm_comieq_sd(create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comieq_sd(create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_comieq_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comieq_sd_normal2() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comieq_sd_normal2_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comieq_sd_normal3_impl() -> Result<(), String> {
+    unsafe {
+        let result = _mm_comieq_sd(create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comieq_sd(create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_comieq_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comieq_sd_normal3() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comieq_sd_normal3_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comieq_sd_boundary_min_impl() -> Result<(), String> {
+    unsafe {
+        let result = _mm_comieq_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_comieq_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_comieq_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comieq_sd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comieq_sd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comieq_sd_boundary_max_impl() -> Result<(), String> {
+    unsafe {
+        let result = _mm_comieq_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_comieq_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_comieq_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comieq_sd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comieq_sd_boundary_max_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comieq_sd_boundary_zero_impl() -> Result<(), String> {
+    unsafe {
+        let result = _mm_comieq_sd(create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_comieq_sd(create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_comieq_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comieq_sd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comieq_sd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comieq_sd_boundary_allones_impl() -> Result<(), String> {
+    unsafe {
+        let result = _mm_comieq_sd(create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comieq_sd(create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_comieq_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comieq_sd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comieq_sd_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comieq_sd_boundary_mixed_impl() -> Result<(), String> {
+    unsafe {
+        let result = _mm_comieq_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_comieq_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_comieq_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comieq_sd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comieq_sd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comieq_sd_asym_min_max_impl() -> Result<(), String> {
+    unsafe {
+        let result = _mm_comieq_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comieq_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_comieq_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comieq_sd_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comieq_sd_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comieq_sd_asym_max_min_impl() -> Result<(), String> {
+    unsafe {
+        let result = _mm_comieq_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comieq_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_comieq_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comieq_sd_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comieq_sd_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comilt_sd_impl() -> Result<(), String> {
+    unsafe {
+        let result = _mm_comilt_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_comilt_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_comilt_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comilt_sd() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comilt_sd_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comilt_sd_normal2_impl() -> Result<(), String> {
+    unsafe {
+        let result = _mm_comilt_sd(create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_comilt_sd(create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_comilt_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comilt_sd_normal2() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comilt_sd_normal2_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comilt_sd_normal3_impl() -> Result<(), String> {
+    unsafe {
+        let result = _mm_comilt_sd(create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_comilt_sd(create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_comilt_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comilt_sd_normal3() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comilt_sd_normal3_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comilt_sd_boundary_min_impl() -> Result<(), String> {
+    unsafe {
+        let result = _mm_comilt_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comilt_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_comilt_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comilt_sd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comilt_sd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comilt_sd_boundary_max_impl() -> Result<(), String> {
+    unsafe {
+        let result = _mm_comilt_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comilt_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_comilt_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comilt_sd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comilt_sd_boundary_max_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comilt_sd_boundary_zero_impl() -> Result<(), String> {
+    unsafe {
+        let result = _mm_comilt_sd(create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comilt_sd(create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_comilt_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comilt_sd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comilt_sd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comilt_sd_boundary_allones_impl() -> Result<(), String> {
+    unsafe {
+        let result = _mm_comilt_sd(create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comilt_sd(create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_comilt_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comilt_sd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comilt_sd_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comilt_sd_boundary_mixed_impl() -> Result<(), String> {
+    unsafe {
+        let result = _mm_comilt_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comilt_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_comilt_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comilt_sd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comilt_sd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comilt_sd_asym_min_max_impl() -> Result<(), String> {
+    unsafe {
+        let result = _mm_comilt_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_comilt_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_comilt_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comilt_sd_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comilt_sd_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comilt_sd_asym_max_min_impl() -> Result<(), String> {
+    unsafe {
+        let result = _mm_comilt_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comilt_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_comilt_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comilt_sd_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comilt_sd_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comile_sd_impl() -> Result<(), String> {
+    unsafe {
+        let result = _mm_comile_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_comile_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_comile_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comile_sd() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comile_sd_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comile_sd_normal2_impl() -> Result<(), String> {
+    unsafe {
+        let result = _mm_comile_sd(create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_comile_sd(create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_comile_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comile_sd_normal2() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comile_sd_normal2_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comile_sd_normal3_impl() -> Result<(), String> {
+    unsafe {
+        let result = _mm_comile_sd(create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_comile_sd(create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_comile_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comile_sd_normal3() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comile_sd_normal3_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comile_sd_boundary_min_impl() -> Result<(), String> {
+    unsafe {
+        let result = _mm_comile_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_comile_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_comile_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comile_sd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comile_sd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comile_sd_boundary_max_impl() -> Result<(), String> {
+    unsafe {
+        let result = _mm_comile_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_comile_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_comile_sd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comile_sd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comile_sd_boundary_max_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comile_sd_boundary_zero_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i64_array(_mm_srl_epi64(create__m128i_from_i64_array([0, -1]), create__m128i_from_i64_array([10, 9])));
-        check_array_equality(&result, &[0, 18014398509481983]).map_err(|e| format!("{e} | call: _mm_srl_epi64(create__m128i_from_i64_array([0, -1]), create__m128i_from_i64_array([10, 9]))"))?;
+        let result = _mm_comile_sd(create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_comile_sd(create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -41,17 +647,22 @@ pub(super) fn test_x86_sse2_mm_srl_epi64_normal2() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_srl_epi64(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comile_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_srl_epi64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_comile_sd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comile_sd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comile_sd_boundary_allones_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i64_array(_mm_srl_epi64(create__m128i_from_i64_array([100, 200]), create__m128i_from_i64_array([110, 210])));
-        check_array_equality(&result, &[0; 2]).map_err(|e| format!("{e} | call: _mm_srl_epi64(create__m128i_from_i64_array([100, 200]), create__m128i_from_i64_array([110, 210]))"))?;
+        let result = _mm_comile_sd(create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comile_sd(create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -61,17 +672,22 @@ pub(super) fn test_x86_sse2_mm_srl_epi64_normal3() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_srl_epi64(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comile_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comile_sd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comile_sd_boundary_allones_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_srl_epi64_boundary_min() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comile_sd_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i64_array(_mm_srl_epi64(create__m128i_from_i64_array([i64::MIN, i64::MIN]), create__m128i_from_i64_array([i64::MIN, i64::MIN])));
-        check_array_equality(&result, &[0; 2]).map_err(|e| format!("{e} | call: _mm_srl_epi64(create__m128i_from_i64_array([i64::MIN, i64::MIN]), create__m128i_from_i64_array([i64::MIN, i64::MIN]))"))?;
+        let result = _mm_comile_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_comile_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -81,17 +697,22 @@ pub(super) fn test_x86_sse2_mm_srl_epi64_boundary_min() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_srl_epi64(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comile_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_srl_epi64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_comile_sd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comile_sd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comile_sd_asym_min_max_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i64_array(_mm_srl_epi64(create__m128i_from_i64_array([i64::MAX, i64::MAX]), create__m128i_from_i64_array([i64::MAX, i64::MAX])));
-        check_array_equality(&result, &[0; 2]).map_err(|e| format!("{e} | call: _mm_srl_epi64(create__m128i_from_i64_array([i64::MAX, i64::MAX]), create__m128i_from_i64_array([i64::MAX, i64::MAX]))"))?;
+        let result = _mm_comile_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_comile_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -101,17 +722,22 @@ pub(super) fn test_x86_sse2_mm_srl_epi64_boundary_max() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_srl_epi64(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comile_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comile_sd_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comile_sd_asym_min_max_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_srl_epi64_boundary_zero() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comile_sd_asym_max_min_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i64_array(_mm_srl_epi64(create__m128i_from_i64_array([0, 0]), create__m128i_from_i64_array([0, 0])));
-        check_array_equality(&result, &[0; 2]).map_err(|e| format!("{e} | call: _mm_srl_epi64(create__m128i_from_i64_array([0, 0]), create__m128i_from_i64_array([0, 0]))"))?;
+        let result = _mm_comile_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comile_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -121,17 +747,22 @@ pub(super) fn test_x86_sse2_mm_srl_epi64_boundary_zero() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_srl_epi64(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comile_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_srl_epi64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_comile_sd_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comile_sd_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comigt_sd_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i64_array(_mm_srl_epi64(create__m128i_from_i64_array([-1, -1]), create__m128i_from_i64_array([-1, -1])));
-        check_array_equality(&result, &[0; 2]).map_err(|e| format!("{e} | call: _mm_srl_epi64(create__m128i_from_i64_array([-1, -1]), create__m128i_from_i64_array([-1, -1]))"))?;
+        let result = _mm_comigt_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comigt_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -141,17 +772,22 @@ pub(super) fn test_x86_sse2_mm_srl_epi64_boundary_allones() -> Result<(), String
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_srl_epi64(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comigt_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comigt_sd() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comigt_sd_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_srl_epi64_boundary_mixed() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comigt_sd_normal2_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i64_array(_mm_srl_epi64(create__m128i_from_i64_array([i64::MIN, i64::MAX]), create__m128i_from_i64_array([i64::MIN, i64::MAX])));
-        check_array_equality(&result, &[0; 2]).map_err(|e| format!("{e} | call: _mm_srl_epi64(create__m128i_from_i64_array([i64::MIN, i64::MAX]), create__m128i_from_i64_array([i64::MIN, i64::MAX]))"))?;
+        let result = _mm_comigt_sd(create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comigt_sd(create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -161,17 +797,22 @@ pub(super) fn test_x86_sse2_mm_srl_epi64_boundary_mixed() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_srl_epi64(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comigt_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_srl_epi64_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_comigt_sd_normal2() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comigt_sd_normal2_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comigt_sd_normal3_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i64_array(_mm_srl_epi64(create__m128i_from_i64_array([i64::MIN, i64::MIN]), create__m128i_from_i64_array([i64::MAX, i64::MAX])));
-        check_array_equality(&result, &[0; 2]).map_err(|e| format!("{e} | call: _mm_srl_epi64(create__m128i_from_i64_array([i64::MIN, i64::MIN]), create__m128i_from_i64_array([i64::MAX, i64::MAX]))"))?;
+        let result = _mm_comigt_sd(create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comigt_sd(create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -181,17 +822,22 @@ pub(super) fn test_x86_sse2_mm_srl_epi64_asym_min_max() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_srl_epi64(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comigt_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comigt_sd_normal3() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comigt_sd_normal3_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_srl_epi64_asym_max_min() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comigt_sd_boundary_min_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i64_array(_mm_srl_epi64(create__m128i_from_i64_array([i64::MAX, i64::MAX]), create__m128i_from_i64_array([i64::MIN, i64::MIN])));
-        check_array_equality(&result, &[0; 2]).map_err(|e| format!("{e} | call: _mm_srl_epi64(create__m128i_from_i64_array([i64::MAX, i64::MAX]), create__m128i_from_i64_array([i64::MIN, i64::MIN]))"))?;
+        let result = _mm_comigt_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comigt_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -201,17 +847,22 @@ pub(super) fn test_x86_sse2_mm_srl_epi64_asym_max_min() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_srl_epi64(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comigt_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_and_si128() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_comigt_sd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comigt_sd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comigt_sd_boundary_max_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_and_si128(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
-        check_array_equality(&result, &[1, 2, 3, 0]).map_err(|e| format!("{e} | call: _mm_and_si128(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
+        let result = _mm_comigt_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comigt_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -221,17 +872,22 @@ pub(super) fn test_x86_sse2_mm_and_si128() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_and_si128(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comigt_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comigt_sd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comigt_sd_boundary_max_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_andnot_si128() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comigt_sd_boundary_zero_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_andnot_si128(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
-        check_array_equality(&result, &[4, 4, 4, 8]).map_err(|e| format!("{e} | call: _mm_andnot_si128(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
+        let result = _mm_comigt_sd(create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comigt_sd(create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -241,17 +897,22 @@ pub(super) fn test_x86_sse2_mm_andnot_si128() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_andnot_si128(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comigt_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_or_si128() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_comigt_sd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comigt_sd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comigt_sd_boundary_allones_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_or_si128(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
-        check_array_equality(&result, &[5, 6, 7, 12]).map_err(|e| format!("{e} | call: _mm_or_si128(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
+        let result = _mm_comigt_sd(create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comigt_sd(create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -261,17 +922,22 @@ pub(super) fn test_x86_sse2_mm_or_si128() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_or_si128(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comigt_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comigt_sd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comigt_sd_boundary_allones_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_xor_si128() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comigt_sd_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_xor_si128(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
-        check_array_equality(&result, &[4, 4, 4, 12]).map_err(|e| format!("{e} | call: _mm_xor_si128(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
+        let result = _mm_comigt_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comigt_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -281,17 +947,22 @@ pub(super) fn test_x86_sse2_mm_xor_si128() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_xor_si128(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comigt_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmpeq_epi8() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_comigt_sd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comigt_sd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comigt_sd_asym_min_max_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i8_array(_mm_cmpeq_epi8(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
-        check_array_equality(&result, &[0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_cmpeq_epi8(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
+        let result = _mm_comigt_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comigt_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -301,17 +972,22 @@ pub(super) fn test_x86_sse2_mm_cmpeq_epi8() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpeq_epi8(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comigt_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comigt_sd_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comigt_sd_asym_min_max_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmpeq_epi8_normal2() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comigt_sd_asym_max_min_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i8_array(_mm_cmpeq_epi8(create__m128i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__m128i_from_i8_array([10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3])));
-        check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm_cmpeq_epi8(create__m128i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__m128i_from_i8_array([10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3]))"))?;
+        let result = _mm_comigt_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_comigt_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -321,17 +997,22 @@ pub(super) fn test_x86_sse2_mm_cmpeq_epi8_normal2() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpeq_epi8(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comigt_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmpeq_epi8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_comigt_sd_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comigt_sd_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comige_sd_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i8_array(_mm_cmpeq_epi8(create__m128i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64]), create__m128i_from_i8_array([110, -46, 54, -102, -2, 98, -58, 42, -114, -14, 86, -70, 30, -126, -26, 74])));
-        check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm_cmpeq_epi8(create__m128i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64]), create__m128i_from_i8_array([110, -46, 54, -102, -2, 98, -58, 42, -114, -14, 86, -70, 30, -126, -26, 74]))"))?;
+        let result = _mm_comige_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comige_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -341,17 +1022,22 @@ pub(super) fn test_x86_sse2_mm_cmpeq_epi8_normal3() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpeq_epi8(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comige_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comige_sd() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comige_sd_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmpeq_epi8_boundary_min() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comige_sd_normal2_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i8_array(_mm_cmpeq_epi8(create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN])));
-        check_array_equality(&result, &[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_cmpeq_epi8(create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]))"))?;
+        let result = _mm_comige_sd(create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comige_sd(create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -361,17 +1047,22 @@ pub(super) fn test_x86_sse2_mm_cmpeq_epi8_boundary_min() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpeq_epi8(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comige_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmpeq_epi8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_comige_sd_normal2() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comige_sd_normal2_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comige_sd_normal3_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i8_array(_mm_cmpeq_epi8(create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX])));
-        check_array_equality(&result, &[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_cmpeq_epi8(create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]))"))?;
+        let result = _mm_comige_sd(create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comige_sd(create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -381,17 +1072,22 @@ pub(super) fn test_x86_sse2_mm_cmpeq_epi8_boundary_max() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpeq_epi8(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comige_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comige_sd_normal3() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comige_sd_normal3_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmpeq_epi8_boundary_zero() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comige_sd_boundary_min_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i8_array(_mm_cmpeq_epi8(create__m128i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])));
-        check_array_equality(&result, &[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_cmpeq_epi8(create__m128i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))"))?;
+        let result = _mm_comige_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_comige_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -401,17 +1097,22 @@ pub(super) fn test_x86_sse2_mm_cmpeq_epi8_boundary_zero() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpeq_epi8(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comige_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmpeq_epi8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_comige_sd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comige_sd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comige_sd_boundary_max_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i8_array(_mm_cmpeq_epi8(create__m128i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1])));
-        check_array_equality(&result, &[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_cmpeq_epi8(create__m128i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]))"))?;
+        let result = _mm_comige_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_comige_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -421,17 +1122,22 @@ pub(super) fn test_x86_sse2_mm_cmpeq_epi8_boundary_allones() -> Result<(), Strin
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpeq_epi8(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comige_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comige_sd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comige_sd_boundary_max_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmpeq_epi8_boundary_mixed() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comige_sd_boundary_zero_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i8_array(_mm_cmpeq_epi8(create__m128i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]), create__m128i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1])));
-        check_array_equality(&result, &[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_cmpeq_epi8(create__m128i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]), create__m128i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]))"))?;
+        let result = _mm_comige_sd(create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_comige_sd(create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -441,17 +1147,22 @@ pub(super) fn test_x86_sse2_mm_cmpeq_epi8_boundary_mixed() -> Result<(), String>
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpeq_epi8(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comige_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmpeq_epi8_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_comige_sd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comige_sd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comige_sd_boundary_allones_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i8_array(_mm_cmpeq_epi8(create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX])));
-        check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm_cmpeq_epi8(create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]))"))?;
+        let result = _mm_comige_sd(create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comige_sd(create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -461,17 +1172,22 @@ pub(super) fn test_x86_sse2_mm_cmpeq_epi8_asym_min_max() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpeq_epi8(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comige_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comige_sd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comige_sd_boundary_allones_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmpeq_epi8_asym_max_min() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comige_sd_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i8_array(_mm_cmpeq_epi8(create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN])));
-        check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm_cmpeq_epi8(create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]))"))?;
+        let result = _mm_comige_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_comige_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -481,17 +1197,22 @@ pub(super) fn test_x86_sse2_mm_cmpeq_epi8_asym_max_min() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpeq_epi8(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comige_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmpeq_epi16() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_comige_sd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comige_sd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comige_sd_asym_min_max_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i16_array(_mm_cmpeq_epi16(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
-        check_array_equality(&result, &[0, -1, 0, -1, 0, -1, 0, -1]).map_err(|e| format!("{e} | call: _mm_cmpeq_epi16(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
+        let result = _mm_comige_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comige_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -501,17 +1222,22 @@ pub(super) fn test_x86_sse2_mm_cmpeq_epi16() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpeq_epi16(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comige_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comige_sd_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comige_sd_asym_min_max_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmpeq_epi16_normal2() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comige_sd_asym_max_min_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i16_array(_mm_cmpeq_epi16(create__m128i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7]), create__m128i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3])));
-        check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_cmpeq_epi16(create__m128i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7]), create__m128i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3]))"))?;
+        let result = _mm_comige_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_comige_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -521,17 +1247,22 @@ pub(super) fn test_x86_sse2_mm_cmpeq_epi16_normal2() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpeq_epi16(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comige_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmpeq_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_comige_sd_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comige_sd_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comineq_sd_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i16_array(_mm_cmpeq_epi16(create__m128i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800]), create__m128i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810])));
-        check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_cmpeq_epi16(create__m128i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800]), create__m128i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810]))"))?;
+        let result = _mm_comineq_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_comineq_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -541,17 +1272,22 @@ pub(super) fn test_x86_sse2_mm_cmpeq_epi16_normal3() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpeq_epi16(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comineq_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comineq_sd() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comineq_sd_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmpeq_epi16_boundary_min() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comineq_sd_normal2_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i16_array(_mm_cmpeq_epi16(create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN])));
-        check_array_equality(&result, &[-1, -1, -1, -1, -1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_cmpeq_epi16(create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]))"))?;
+        let result = _mm_comineq_sd(create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_comineq_sd(create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -561,17 +1297,22 @@ pub(super) fn test_x86_sse2_mm_cmpeq_epi16_boundary_min() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpeq_epi16(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comineq_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmpeq_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_comineq_sd_normal2() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comineq_sd_normal2_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comineq_sd_normal3_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i16_array(_mm_cmpeq_epi16(create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX])));
-        check_array_equality(&result, &[-1, -1, -1, -1, -1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_cmpeq_epi16(create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]))"))?;
+        let result = _mm_comineq_sd(create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_comineq_sd(create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -581,17 +1322,22 @@ pub(super) fn test_x86_sse2_mm_cmpeq_epi16_boundary_max() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpeq_epi16(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comineq_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comineq_sd_normal3() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comineq_sd_normal3_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmpeq_epi16_boundary_zero() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comineq_sd_boundary_min_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i16_array(_mm_cmpeq_epi16(create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0])));
-        check_array_equality(&result, &[-1, -1, -1, -1, -1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_cmpeq_epi16(create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]))"))?;
+        let result = _mm_comineq_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comineq_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -601,17 +1347,22 @@ pub(super) fn test_x86_sse2_mm_cmpeq_epi16_boundary_zero() -> Result<(), String>
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpeq_epi16(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comineq_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmpeq_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_comineq_sd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comineq_sd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comineq_sd_boundary_max_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i16_array(_mm_cmpeq_epi16(create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1])));
-        check_array_equality(&result, &[-1, -1, -1, -1, -1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_cmpeq_epi16(create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]))"))?;
+        let result = _mm_comineq_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comineq_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -621,17 +1372,22 @@ pub(super) fn test_x86_sse2_mm_cmpeq_epi16_boundary_allones() -> Result<(), Stri
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpeq_epi16(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comineq_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comineq_sd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comineq_sd_boundary_max_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmpeq_epi16_boundary_mixed() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comineq_sd_boundary_zero_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i16_array(_mm_cmpeq_epi16(create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1])));
-        check_array_equality(&result, &[-1, -1, -1, -1, -1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_cmpeq_epi16(create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]))"))?;
+        let result = _mm_comineq_sd(create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comineq_sd(create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -641,17 +1397,22 @@ pub(super) fn test_x86_sse2_mm_cmpeq_epi16_boundary_mixed() -> Result<(), String
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpeq_epi16(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comineq_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmpeq_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_comineq_sd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comineq_sd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comineq_sd_boundary_allones_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i16_array(_mm_cmpeq_epi16(create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX])));
-        check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_cmpeq_epi16(create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]))"))?;
+        let result = _mm_comineq_sd(create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_comineq_sd(create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -661,17 +1422,22 @@ pub(super) fn test_x86_sse2_mm_cmpeq_epi16_asym_min_max() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpeq_epi16(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comineq_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comineq_sd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comineq_sd_boundary_allones_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmpeq_epi16_asym_max_min() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comineq_sd_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i16_array(_mm_cmpeq_epi16(create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN])));
-        check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_cmpeq_epi16(create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]))"))?;
+        let result = _mm_comineq_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_comineq_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -681,17 +1447,22 @@ pub(super) fn test_x86_sse2_mm_cmpeq_epi16_asym_max_min() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpeq_epi16(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comineq_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmpeq_epi32() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_comineq_sd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comineq_sd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comineq_sd_asym_min_max_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmpeq_epi32(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
-        check_array_equality(&result, &[0; 4]).map_err(|e| format!("{e} | call: _mm_cmpeq_epi32(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
+        let result = _mm_comineq_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_comineq_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -701,17 +1472,22 @@ pub(super) fn test_x86_sse2_mm_cmpeq_epi32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpeq_epi32(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comineq_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_comineq_sd_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comineq_sd_asym_min_max_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmpeq_epi32_normal2() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_comineq_sd_asym_max_min_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmpeq_epi32(create__m128i_from_i32_array([0, -1, 2, -3]), create__m128i_from_i32_array([10, 9, 12, 7])));
-        check_array_equality(&result, &[0; 4]).map_err(|e| format!("{e} | call: _mm_cmpeq_epi32(create__m128i_from_i32_array([0, -1, 2, -3]), create__m128i_from_i32_array([10, 9, 12, 7]))"))?;
+        let result = _mm_comineq_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_comineq_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -721,17 +1497,22 @@ pub(super) fn test_x86_sse2_mm_cmpeq_epi32_normal2() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpeq_epi32(create_random__m128i(), create_random__m128i());
+                let _ = _mm_comineq_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmpeq_epi32_normal3() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_comineq_sd_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_comineq_sd_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomieq_sd_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmpeq_epi32(create__m128i_from_i32_array([100, 200, 300, 400]), create__m128i_from_i32_array([110, 210, 310, 410])));
-        check_array_equality(&result, &[0; 4]).map_err(|e| format!("{e} | call: _mm_cmpeq_epi32(create__m128i_from_i32_array([100, 200, 300, 400]), create__m128i_from_i32_array([110, 210, 310, 410]))"))?;
+        let result = _mm_ucomieq_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomieq_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -741,17 +1522,22 @@ pub(super) fn test_x86_sse2_mm_cmpeq_epi32_normal3() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpeq_epi32(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomieq_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_ucomieq_sd() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomieq_sd_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmpeq_epi32_boundary_min() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomieq_sd_normal2_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmpeq_epi32(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN])));
-        check_array_equality(&result, &[-1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_cmpeq_epi32(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]))"))?;
+        let result = _mm_ucomieq_sd(create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomieq_sd(create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -761,17 +1547,22 @@ pub(super) fn test_x86_sse2_mm_cmpeq_epi32_boundary_min() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpeq_epi32(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomieq_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmpeq_epi32_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_ucomieq_sd_normal2() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomieq_sd_normal2_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomieq_sd_normal3_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmpeq_epi32(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
-        check_array_equality(&result, &[-1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_cmpeq_epi32(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
+        let result = _mm_ucomieq_sd(create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomieq_sd(create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -781,17 +1572,22 @@ pub(super) fn test_x86_sse2_mm_cmpeq_epi32_boundary_max() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpeq_epi32(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomieq_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_ucomieq_sd_normal3() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomieq_sd_normal3_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmpeq_epi32_boundary_zero() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomieq_sd_boundary_min_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmpeq_epi32(create__m128i_from_i32_array([0, 0, 0, 0]), create__m128i_from_i32_array([0, 0, 0, 0])));
-        check_array_equality(&result, &[-1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_cmpeq_epi32(create__m128i_from_i32_array([0, 0, 0, 0]), create__m128i_from_i32_array([0, 0, 0, 0]))"))?;
+        let result = _mm_ucomieq_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_ucomieq_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -801,17 +1597,22 @@ pub(super) fn test_x86_sse2_mm_cmpeq_epi32_boundary_zero() -> Result<(), String>
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpeq_epi32(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomieq_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmpeq_epi32_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_ucomieq_sd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomieq_sd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomieq_sd_boundary_max_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmpeq_epi32(create__m128i_from_i32_array([-1, -1, -1, -1]), create__m128i_from_i32_array([-1, -1, -1, -1])));
-        check_array_equality(&result, &[-1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_cmpeq_epi32(create__m128i_from_i32_array([-1, -1, -1, -1]), create__m128i_from_i32_array([-1, -1, -1, -1]))"))?;
+        let result = _mm_ucomieq_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_ucomieq_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -821,17 +1622,22 @@ pub(super) fn test_x86_sse2_mm_cmpeq_epi32_boundary_allones() -> Result<(), Stri
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpeq_epi32(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomieq_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_ucomieq_sd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomieq_sd_boundary_max_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmpeq_epi32_boundary_mixed() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomieq_sd_boundary_zero_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmpeq_epi32(create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]), create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1])));
-        check_array_equality(&result, &[-1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_cmpeq_epi32(create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]), create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]))"))?;
+        let result = _mm_ucomieq_sd(create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_ucomieq_sd(create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -841,17 +1647,22 @@ pub(super) fn test_x86_sse2_mm_cmpeq_epi32_boundary_mixed() -> Result<(), String
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpeq_epi32(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomieq_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmpeq_epi32_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_ucomieq_sd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomieq_sd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomieq_sd_boundary_allones_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmpeq_epi32(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
-        check_array_equality(&result, &[0; 4]).map_err(|e| format!("{e} | call: _mm_cmpeq_epi32(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
+        let result = _mm_ucomieq_sd(create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomieq_sd(create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -861,17 +1672,22 @@ pub(super) fn test_x86_sse2_mm_cmpeq_epi32_asym_min_max() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpeq_epi32(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomieq_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_ucomieq_sd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomieq_sd_boundary_allones_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmpeq_epi32_asym_max_min() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomieq_sd_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmpeq_epi32(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN])));
-        check_array_equality(&result, &[0; 4]).map_err(|e| format!("{e} | call: _mm_cmpeq_epi32(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]))"))?;
+        let result = _mm_ucomieq_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_ucomieq_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -881,17 +1697,22 @@ pub(super) fn test_x86_sse2_mm_cmpeq_epi32_asym_max_min() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpeq_epi32(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomieq_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmpgt_epi8() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_ucomieq_sd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomieq_sd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomieq_sd_asym_min_max_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i8_array(_mm_cmpgt_epi8(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
-        check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm_cmpgt_epi8(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
+        let result = _mm_ucomieq_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomieq_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -901,17 +1722,22 @@ pub(super) fn test_x86_sse2_mm_cmpgt_epi8() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpgt_epi8(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomieq_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_ucomieq_sd_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomieq_sd_asym_min_max_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmpgt_epi8_normal2() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomieq_sd_asym_max_min_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i8_array(_mm_cmpgt_epi8(create__m128i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__m128i_from_i8_array([10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3])));
-        check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm_cmpgt_epi8(create__m128i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__m128i_from_i8_array([10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3]))"))?;
+        let result = _mm_ucomieq_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomieq_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -921,17 +1747,22 @@ pub(super) fn test_x86_sse2_mm_cmpgt_epi8_normal2() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpgt_epi8(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomieq_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmpgt_epi8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_ucomieq_sd_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomieq_sd_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomilt_sd_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i8_array(_mm_cmpgt_epi8(create__m128i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64]), create__m128i_from_i8_array([110, -46, 54, -102, -2, 98, -58, 42, -114, -14, 86, -70, 30, -126, -26, 74])));
-        check_array_equality(&result, &[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0]).map_err(|e| format!("{e} | call: _mm_cmpgt_epi8(create__m128i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64]), create__m128i_from_i8_array([110, -46, 54, -102, -2, 98, -58, 42, -114, -14, 86, -70, 30, -126, -26, 74]))"))?;
+        let result = _mm_ucomilt_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_ucomilt_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -941,17 +1772,22 @@ pub(super) fn test_x86_sse2_mm_cmpgt_epi8_normal3() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpgt_epi8(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomilt_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_ucomilt_sd() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomilt_sd_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmpgt_epi8_boundary_min() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomilt_sd_normal2_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i8_array(_mm_cmpgt_epi8(create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN])));
-        check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm_cmpgt_epi8(create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]))"))?;
+        let result = _mm_ucomilt_sd(create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_ucomilt_sd(create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -961,17 +1797,22 @@ pub(super) fn test_x86_sse2_mm_cmpgt_epi8_boundary_min() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpgt_epi8(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomilt_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmpgt_epi8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_ucomilt_sd_normal2() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomilt_sd_normal2_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomilt_sd_normal3_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i8_array(_mm_cmpgt_epi8(create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX])));
-        check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm_cmpgt_epi8(create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]))"))?;
+        let result = _mm_ucomilt_sd(create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_ucomilt_sd(create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -981,17 +1822,22 @@ pub(super) fn test_x86_sse2_mm_cmpgt_epi8_boundary_max() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpgt_epi8(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomilt_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_ucomilt_sd_normal3() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomilt_sd_normal3_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmpgt_epi8_boundary_zero() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomilt_sd_boundary_min_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i8_array(_mm_cmpgt_epi8(create__m128i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])));
-        check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm_cmpgt_epi8(create__m128i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))"))?;
+        let result = _mm_ucomilt_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomilt_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1001,17 +1847,22 @@ pub(super) fn test_x86_sse2_mm_cmpgt_epi8_boundary_zero() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpgt_epi8(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomilt_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmpgt_epi8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_ucomilt_sd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomilt_sd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomilt_sd_boundary_max_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i8_array(_mm_cmpgt_epi8(create__m128i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1])));
-        check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm_cmpgt_epi8(create__m128i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]))"))?;
+        let result = _mm_ucomilt_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomilt_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1021,17 +1872,22 @@ pub(super) fn test_x86_sse2_mm_cmpgt_epi8_boundary_allones() -> Result<(), Strin
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpgt_epi8(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomilt_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_ucomilt_sd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomilt_sd_boundary_max_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmpgt_epi8_boundary_mixed() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomilt_sd_boundary_zero_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i8_array(_mm_cmpgt_epi8(create__m128i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]), create__m128i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1])));
-        check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm_cmpgt_epi8(create__m128i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]), create__m128i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]))"))?;
+        let result = _mm_ucomilt_sd(create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomilt_sd(create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1041,17 +1897,22 @@ pub(super) fn test_x86_sse2_mm_cmpgt_epi8_boundary_mixed() -> Result<(), String>
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpgt_epi8(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomilt_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmpgt_epi8_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_ucomilt_sd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomilt_sd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomilt_sd_boundary_allones_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i8_array(_mm_cmpgt_epi8(create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX])));
-        check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm_cmpgt_epi8(create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]))"))?;
+        let result = _mm_ucomilt_sd(create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomilt_sd(create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1061,17 +1922,22 @@ pub(super) fn test_x86_sse2_mm_cmpgt_epi8_asym_min_max() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpgt_epi8(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomilt_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_ucomilt_sd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomilt_sd_boundary_allones_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmpgt_epi8_asym_max_min() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomilt_sd_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i8_array(_mm_cmpgt_epi8(create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN])));
-        check_array_equality(&result, &[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_cmpgt_epi8(create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]))"))?;
+        let result = _mm_ucomilt_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomilt_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1081,17 +1947,22 @@ pub(super) fn test_x86_sse2_mm_cmpgt_epi8_asym_max_min() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpgt_epi8(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomilt_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmpgt_epi16() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_ucomilt_sd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomilt_sd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomilt_sd_asym_min_max_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i16_array(_mm_cmpgt_epi16(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
-        check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_cmpgt_epi16(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
+        let result = _mm_ucomilt_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_ucomilt_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1101,17 +1972,22 @@ pub(super) fn test_x86_sse2_mm_cmpgt_epi16() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpgt_epi16(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomilt_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_ucomilt_sd_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomilt_sd_asym_min_max_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmpgt_epi16_normal2() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomilt_sd_asym_max_min_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i16_array(_mm_cmpgt_epi16(create__m128i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7]), create__m128i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3])));
-        check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_cmpgt_epi16(create__m128i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7]), create__m128i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3]))"))?;
+        let result = _mm_ucomilt_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomilt_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1121,17 +1997,22 @@ pub(super) fn test_x86_sse2_mm_cmpgt_epi16_normal2() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpgt_epi16(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomilt_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmpgt_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_ucomilt_sd_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomilt_sd_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomile_sd_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i16_array(_mm_cmpgt_epi16(create__m128i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800]), create__m128i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810])));
-        check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_cmpgt_epi16(create__m128i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800]), create__m128i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810]))"))?;
+        let result = _mm_ucomile_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_ucomile_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1141,17 +2022,22 @@ pub(super) fn test_x86_sse2_mm_cmpgt_epi16_normal3() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpgt_epi16(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomile_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_ucomile_sd() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomile_sd_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmpgt_epi16_boundary_min() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomile_sd_normal2_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i16_array(_mm_cmpgt_epi16(create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN])));
-        check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_cmpgt_epi16(create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]))"))?;
+        let result = _mm_ucomile_sd(create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_ucomile_sd(create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1161,17 +2047,22 @@ pub(super) fn test_x86_sse2_mm_cmpgt_epi16_boundary_min() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpgt_epi16(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomile_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmpgt_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_ucomile_sd_normal2() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomile_sd_normal2_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomile_sd_normal3_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i16_array(_mm_cmpgt_epi16(create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX])));
-        check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_cmpgt_epi16(create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]))"))?;
+        let result = _mm_ucomile_sd(create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_ucomile_sd(create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1181,17 +2072,22 @@ pub(super) fn test_x86_sse2_mm_cmpgt_epi16_boundary_max() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpgt_epi16(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomile_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_ucomile_sd_normal3() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomile_sd_normal3_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmpgt_epi16_boundary_zero() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomile_sd_boundary_min_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i16_array(_mm_cmpgt_epi16(create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0])));
-        check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_cmpgt_epi16(create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]))"))?;
+        let result = _mm_ucomile_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_ucomile_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1201,17 +2097,22 @@ pub(super) fn test_x86_sse2_mm_cmpgt_epi16_boundary_zero() -> Result<(), String>
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpgt_epi16(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomile_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmpgt_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_ucomile_sd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomile_sd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomile_sd_boundary_max_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i16_array(_mm_cmpgt_epi16(create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1])));
-        check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_cmpgt_epi16(create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]))"))?;
+        let result = _mm_ucomile_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_ucomile_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1221,17 +2122,22 @@ pub(super) fn test_x86_sse2_mm_cmpgt_epi16_boundary_allones() -> Result<(), Stri
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpgt_epi16(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomile_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_ucomile_sd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomile_sd_boundary_max_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmpgt_epi16_boundary_mixed() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomile_sd_boundary_zero_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i16_array(_mm_cmpgt_epi16(create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1])));
-        check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_cmpgt_epi16(create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]))"))?;
+        let result = _mm_ucomile_sd(create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_ucomile_sd(create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1241,17 +2147,22 @@ pub(super) fn test_x86_sse2_mm_cmpgt_epi16_boundary_mixed() -> Result<(), String
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpgt_epi16(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomile_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmpgt_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_ucomile_sd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomile_sd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomile_sd_boundary_allones_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i16_array(_mm_cmpgt_epi16(create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX])));
-        check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_cmpgt_epi16(create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]))"))?;
+        let result = _mm_ucomile_sd(create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomile_sd(create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1261,17 +2172,22 @@ pub(super) fn test_x86_sse2_mm_cmpgt_epi16_asym_min_max() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpgt_epi16(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomile_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_ucomile_sd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomile_sd_boundary_allones_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmpgt_epi16_asym_max_min() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomile_sd_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i16_array(_mm_cmpgt_epi16(create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN])));
-        check_array_equality(&result, &[-1, -1, -1, -1, -1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_cmpgt_epi16(create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]))"))?;
+        let result = _mm_ucomile_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_ucomile_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1281,17 +2197,22 @@ pub(super) fn test_x86_sse2_mm_cmpgt_epi16_asym_max_min() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpgt_epi16(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomile_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmpgt_epi32() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_ucomile_sd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomile_sd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomile_sd_asym_min_max_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmpgt_epi32(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
-        check_array_equality(&result, &[0; 4]).map_err(|e| format!("{e} | call: _mm_cmpgt_epi32(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
+        let result = _mm_ucomile_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_ucomile_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1301,17 +2222,22 @@ pub(super) fn test_x86_sse2_mm_cmpgt_epi32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpgt_epi32(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomile_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_ucomile_sd_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomile_sd_asym_min_max_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmpgt_epi32_normal2() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomile_sd_asym_max_min_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmpgt_epi32(create__m128i_from_i32_array([0, -1, 2, -3]), create__m128i_from_i32_array([10, 9, 12, 7])));
-        check_array_equality(&result, &[0; 4]).map_err(|e| format!("{e} | call: _mm_cmpgt_epi32(create__m128i_from_i32_array([0, -1, 2, -3]), create__m128i_from_i32_array([10, 9, 12, 7]))"))?;
+        let result = _mm_ucomile_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomile_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1321,17 +2247,22 @@ pub(super) fn test_x86_sse2_mm_cmpgt_epi32_normal2() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpgt_epi32(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomile_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmpgt_epi32_normal3() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_ucomile_sd_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomile_sd_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomigt_sd_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmpgt_epi32(create__m128i_from_i32_array([100, 200, 300, 400]), create__m128i_from_i32_array([110, 210, 310, 410])));
-        check_array_equality(&result, &[0; 4]).map_err(|e| format!("{e} | call: _mm_cmpgt_epi32(create__m128i_from_i32_array([100, 200, 300, 400]), create__m128i_from_i32_array([110, 210, 310, 410]))"))?;
+        let result = _mm_ucomigt_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomigt_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1341,17 +2272,22 @@ pub(super) fn test_x86_sse2_mm_cmpgt_epi32_normal3() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpgt_epi32(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomigt_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_ucomigt_sd() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomigt_sd_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmpgt_epi32_boundary_min() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomigt_sd_normal2_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmpgt_epi32(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN])));
-        check_array_equality(&result, &[0; 4]).map_err(|e| format!("{e} | call: _mm_cmpgt_epi32(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]))"))?;
+        let result = _mm_ucomigt_sd(create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomigt_sd(create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1361,17 +2297,22 @@ pub(super) fn test_x86_sse2_mm_cmpgt_epi32_boundary_min() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpgt_epi32(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomigt_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmpgt_epi32_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_ucomigt_sd_normal2() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomigt_sd_normal2_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomigt_sd_normal3_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmpgt_epi32(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
-        check_array_equality(&result, &[0; 4]).map_err(|e| format!("{e} | call: _mm_cmpgt_epi32(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
+        let result = _mm_ucomigt_sd(create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomigt_sd(create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1381,17 +2322,22 @@ pub(super) fn test_x86_sse2_mm_cmpgt_epi32_boundary_max() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpgt_epi32(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomigt_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_ucomigt_sd_normal3() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomigt_sd_normal3_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmpgt_epi32_boundary_zero() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomigt_sd_boundary_min_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmpgt_epi32(create__m128i_from_i32_array([0, 0, 0, 0]), create__m128i_from_i32_array([0, 0, 0, 0])));
-        check_array_equality(&result, &[0; 4]).map_err(|e| format!("{e} | call: _mm_cmpgt_epi32(create__m128i_from_i32_array([0, 0, 0, 0]), create__m128i_from_i32_array([0, 0, 0, 0]))"))?;
+        let result = _mm_ucomigt_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomigt_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1401,17 +2347,22 @@ pub(super) fn test_x86_sse2_mm_cmpgt_epi32_boundary_zero() -> Result<(), String>
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpgt_epi32(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomigt_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmpgt_epi32_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_ucomigt_sd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomigt_sd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomigt_sd_boundary_max_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmpgt_epi32(create__m128i_from_i32_array([-1, -1, -1, -1]), create__m128i_from_i32_array([-1, -1, -1, -1])));
-        check_array_equality(&result, &[0; 4]).map_err(|e| format!("{e} | call: _mm_cmpgt_epi32(create__m128i_from_i32_array([-1, -1, -1, -1]), create__m128i_from_i32_array([-1, -1, -1, -1]))"))?;
+        let result = _mm_ucomigt_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomigt_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1421,17 +2372,22 @@ pub(super) fn test_x86_sse2_mm_cmpgt_epi32_boundary_allones() -> Result<(), Stri
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpgt_epi32(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomigt_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_ucomigt_sd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomigt_sd_boundary_max_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmpgt_epi32_boundary_mixed() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomigt_sd_boundary_zero_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmpgt_epi32(create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]), create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1])));
-        check_array_equality(&result, &[0; 4]).map_err(|e| format!("{e} | call: _mm_cmpgt_epi32(create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]), create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]))"))?;
+        let result = _mm_ucomigt_sd(create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomigt_sd(create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1441,17 +2397,22 @@ pub(super) fn test_x86_sse2_mm_cmpgt_epi32_boundary_mixed() -> Result<(), String
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpgt_epi32(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomigt_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmpgt_epi32_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_ucomigt_sd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomigt_sd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomigt_sd_boundary_allones_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmpgt_epi32(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
-        check_array_equality(&result, &[0; 4]).map_err(|e| format!("{e} | call: _mm_cmpgt_epi32(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
+        let result = _mm_ucomigt_sd(create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomigt_sd(create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1461,17 +2422,22 @@ pub(super) fn test_x86_sse2_mm_cmpgt_epi32_asym_min_max() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpgt_epi32(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomigt_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_ucomigt_sd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomigt_sd_boundary_allones_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmpgt_epi32_asym_max_min() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomigt_sd_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmpgt_epi32(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN])));
-        check_array_equality(&result, &[-1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_cmpgt_epi32(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]))"))?;
+        let result = _mm_ucomigt_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomigt_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1481,17 +2447,22 @@ pub(super) fn test_x86_sse2_mm_cmpgt_epi32_asym_max_min() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmpgt_epi32(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomigt_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmplt_epi8() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_ucomigt_sd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomigt_sd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomigt_sd_asym_min_max_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i8_array(_mm_cmplt_epi8(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
-        check_array_equality(&result, &[-1, 0, 0, 0, -1, 0, 0, 0, -1, 0, 0, 0, -1, 0, 0, 0]).map_err(|e| format!("{e} | call: _mm_cmplt_epi8(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
+        let result = _mm_ucomigt_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomigt_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1501,17 +2472,22 @@ pub(super) fn test_x86_sse2_mm_cmplt_epi8() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmplt_epi8(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomigt_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_ucomigt_sd_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomigt_sd_asym_min_max_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmplt_epi8_normal2() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomigt_sd_asym_max_min_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i8_array(_mm_cmplt_epi8(create__m128i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__m128i_from_i8_array([10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3])));
-        check_array_equality(&result, &[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_cmplt_epi8(create__m128i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__m128i_from_i8_array([10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3]))"))?;
+        let result = _mm_ucomigt_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_ucomigt_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1521,17 +2497,22 @@ pub(super) fn test_x86_sse2_mm_cmplt_epi8_normal2() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmplt_epi8(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomigt_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmplt_epi8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_ucomigt_sd_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomigt_sd_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomige_sd_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i8_array(_mm_cmplt_epi8(create__m128i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64]), create__m128i_from_i8_array([110, -46, 54, -102, -2, 98, -58, 42, -114, -14, 86, -70, 30, -126, -26, 74])));
-        check_array_equality(&result, &[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, -1, -1]).map_err(|e| format!("{e} | call: _mm_cmplt_epi8(create__m128i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64]), create__m128i_from_i8_array([110, -46, 54, -102, -2, 98, -58, 42, -114, -14, 86, -70, 30, -126, -26, 74]))"))?;
+        let result = _mm_ucomige_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomige_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1541,17 +2522,22 @@ pub(super) fn test_x86_sse2_mm_cmplt_epi8_normal3() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmplt_epi8(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomige_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_ucomige_sd() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomige_sd_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmplt_epi8_boundary_min() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomige_sd_normal2_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i8_array(_mm_cmplt_epi8(create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN])));
-        check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm_cmplt_epi8(create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]))"))?;
+        let result = _mm_ucomige_sd(create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomige_sd(create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1561,17 +2547,22 @@ pub(super) fn test_x86_sse2_mm_cmplt_epi8_boundary_min() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmplt_epi8(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomige_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmplt_epi8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_ucomige_sd_normal2() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomige_sd_normal2_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomige_sd_normal3_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i8_array(_mm_cmplt_epi8(create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX])));
-        check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm_cmplt_epi8(create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]))"))?;
+        let result = _mm_ucomige_sd(create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomige_sd(create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1581,17 +2572,22 @@ pub(super) fn test_x86_sse2_mm_cmplt_epi8_boundary_max() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmplt_epi8(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomige_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_ucomige_sd_normal3() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomige_sd_normal3_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmplt_epi8_boundary_zero() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomige_sd_boundary_min_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i8_array(_mm_cmplt_epi8(create__m128i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])));
-        check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm_cmplt_epi8(create__m128i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))"))?;
+        let result = _mm_ucomige_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_ucomige_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1601,17 +2597,22 @@ pub(super) fn test_x86_sse2_mm_cmplt_epi8_boundary_zero() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmplt_epi8(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomige_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmplt_epi8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_ucomige_sd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomige_sd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomige_sd_boundary_max_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i8_array(_mm_cmplt_epi8(create__m128i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1])));
-        check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm_cmplt_epi8(create__m128i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]))"))?;
+        let result = _mm_ucomige_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_ucomige_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1621,17 +2622,22 @@ pub(super) fn test_x86_sse2_mm_cmplt_epi8_boundary_allones() -> Result<(), Strin
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmplt_epi8(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomige_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_ucomige_sd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomige_sd_boundary_max_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmplt_epi8_boundary_mixed() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomige_sd_boundary_zero_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i8_array(_mm_cmplt_epi8(create__m128i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]), create__m128i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1])));
-        check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm_cmplt_epi8(create__m128i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]), create__m128i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]))"))?;
+        let result = _mm_ucomige_sd(create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_ucomige_sd(create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1641,17 +2647,22 @@ pub(super) fn test_x86_sse2_mm_cmplt_epi8_boundary_mixed() -> Result<(), String>
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmplt_epi8(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomige_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmplt_epi8_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_ucomige_sd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomige_sd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomige_sd_boundary_allones_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i8_array(_mm_cmplt_epi8(create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX])));
-        check_array_equality(&result, &[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_cmplt_epi8(create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]), create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]))"))?;
+        let result = _mm_ucomige_sd(create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomige_sd(create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1661,17 +2672,22 @@ pub(super) fn test_x86_sse2_mm_cmplt_epi8_asym_min_max() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmplt_epi8(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomige_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_ucomige_sd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomige_sd_boundary_allones_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmplt_epi8_asym_max_min() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomige_sd_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i8_array(_mm_cmplt_epi8(create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN])));
-        check_array_equality(&result, &[0; 16]).map_err(|e| format!("{e} | call: _mm_cmplt_epi8(create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]), create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]))"))?;
+        let result = _mm_ucomige_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_ucomige_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1681,17 +2697,22 @@ pub(super) fn test_x86_sse2_mm_cmplt_epi8_asym_max_min() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmplt_epi8(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomige_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmplt_epi16() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_ucomige_sd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomige_sd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomige_sd_asym_min_max_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i16_array(_mm_cmplt_epi16(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
-        check_array_equality(&result, &[-1, 0, -1, 0, -1, 0, -1, 0]).map_err(|e| format!("{e} | call: _mm_cmplt_epi16(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
+        let result = _mm_ucomige_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomige_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1701,17 +2722,22 @@ pub(super) fn test_x86_sse2_mm_cmplt_epi16() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmplt_epi16(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomige_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_ucomige_sd_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomige_sd_asym_min_max_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmplt_epi16_normal2() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomige_sd_asym_max_min_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i16_array(_mm_cmplt_epi16(create__m128i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7]), create__m128i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3])));
-        check_array_equality(&result, &[-1, -1, -1, -1, -1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_cmplt_epi16(create__m128i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7]), create__m128i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3]))"))?;
+        let result = _mm_ucomige_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_ucomige_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1721,17 +2747,22 @@ pub(super) fn test_x86_sse2_mm_cmplt_epi16_normal2() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmplt_epi16(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomige_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmplt_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_ucomige_sd_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomige_sd_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomineq_sd_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i16_array(_mm_cmplt_epi16(create__m128i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800]), create__m128i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810])));
-        check_array_equality(&result, &[-1, -1, -1, -1, -1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_cmplt_epi16(create__m128i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800]), create__m128i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810]))"))?;
+        let result = _mm_ucomineq_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_ucomineq_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1741,17 +2772,22 @@ pub(super) fn test_x86_sse2_mm_cmplt_epi16_normal3() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmplt_epi16(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomineq_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_ucomineq_sd() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomineq_sd_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmplt_epi16_boundary_min() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomineq_sd_normal2_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i16_array(_mm_cmplt_epi16(create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN])));
-        check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_cmplt_epi16(create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]))"))?;
+        let result = _mm_ucomineq_sd(create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_ucomineq_sd(create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1761,17 +2797,22 @@ pub(super) fn test_x86_sse2_mm_cmplt_epi16_boundary_min() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmplt_epi16(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomineq_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmplt_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_ucomineq_sd_normal2() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomineq_sd_normal2_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomineq_sd_normal3_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i16_array(_mm_cmplt_epi16(create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX])));
-        check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_cmplt_epi16(create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]))"))?;
+        let result = _mm_ucomineq_sd(create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_ucomineq_sd(create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1781,17 +2822,22 @@ pub(super) fn test_x86_sse2_mm_cmplt_epi16_boundary_max() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmplt_epi16(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomineq_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_ucomineq_sd_normal3() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomineq_sd_normal3_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmplt_epi16_boundary_zero() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomineq_sd_boundary_min_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i16_array(_mm_cmplt_epi16(create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0])));
-        check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_cmplt_epi16(create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]))"))?;
+        let result = _mm_ucomineq_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomineq_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1801,17 +2847,22 @@ pub(super) fn test_x86_sse2_mm_cmplt_epi16_boundary_zero() -> Result<(), String>
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmplt_epi16(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomineq_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmplt_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_ucomineq_sd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomineq_sd_boundary_min_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomineq_sd_boundary_max_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i16_array(_mm_cmplt_epi16(create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1])));
-        check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_cmplt_epi16(create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]))"))?;
+        let result = _mm_ucomineq_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomineq_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1821,17 +2872,22 @@ pub(super) fn test_x86_sse2_mm_cmplt_epi16_boundary_allones() -> Result<(), Stri
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmplt_epi16(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomineq_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_ucomineq_sd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomineq_sd_boundary_max_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmplt_epi16_boundary_mixed() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomineq_sd_boundary_zero_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i16_array(_mm_cmplt_epi16(create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1])));
-        check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_cmplt_epi16(create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]))"))?;
+        let result = _mm_ucomineq_sd(create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomineq_sd(create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1841,17 +2897,22 @@ pub(super) fn test_x86_sse2_mm_cmplt_epi16_boundary_mixed() -> Result<(), String
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmplt_epi16(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomineq_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmplt_epi16_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_ucomineq_sd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomineq_sd_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomineq_sd_boundary_allones_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i16_array(_mm_cmplt_epi16(create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX])));
-        check_array_equality(&result, &[-1, -1, -1, -1, -1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_cmplt_epi16(create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]))"))?;
+        let result = _mm_ucomineq_sd(create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_ucomineq_sd(create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1861,17 +2922,22 @@ pub(super) fn test_x86_sse2_mm_cmplt_epi16_asym_min_max() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmplt_epi16(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomineq_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_ucomineq_sd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomineq_sd_boundary_allones_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmplt_epi16_asym_max_min() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomineq_sd_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i16_array(_mm_cmplt_epi16(create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN])));
-        check_array_equality(&result, &[0; 8]).map_err(|e| format!("{e} | call: _mm_cmplt_epi16(create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]))"))?;
+        let result = _mm_ucomineq_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_ucomineq_sd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1881,17 +2947,22 @@ pub(super) fn test_x86_sse2_mm_cmplt_epi16_asym_max_min() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmplt_epi16(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomineq_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmplt_epi32() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_ucomineq_sd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomineq_sd_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomineq_sd_asym_min_max_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmplt_epi32(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
-        check_array_equality(&result, &[-1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_cmplt_epi32(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
+        let result = _mm_ucomineq_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_ucomineq_sd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1901,17 +2972,22 @@ pub(super) fn test_x86_sse2_mm_cmplt_epi32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmplt_epi32(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomineq_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_ucomineq_sd_asym_min_max() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomineq_sd_asym_min_max_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmplt_epi32_normal2() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_ucomineq_sd_asym_max_min_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmplt_epi32(create__m128i_from_i32_array([0, -1, 2, -3]), create__m128i_from_i32_array([10, 9, 12, 7])));
-        check_array_equality(&result, &[-1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_cmplt_epi32(create__m128i_from_i32_array([0, -1, 2, -3]), create__m128i_from_i32_array([10, 9, 12, 7]))"))?;
+        let result = _mm_ucomineq_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_ucomineq_sd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1921,17 +2997,22 @@ pub(super) fn test_x86_sse2_mm_cmplt_epi32_normal2() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmplt_epi32(create_random__m128i(), create_random__m128i());
+                let _ = _mm_ucomineq_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmplt_epi32_normal3() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_ucomineq_sd_asym_max_min() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_ucomineq_sd_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_cvtpd_epi32_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmplt_epi32(create__m128i_from_i32_array([100, 200, 300, 400]), create__m128i_from_i32_array([110, 210, 310, 410])));
-        check_array_equality(&result, &[-1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_cmplt_epi32(create__m128i_from_i32_array([100, 200, 300, 400]), create__m128i_from_i32_array([110, 210, 310, 410]))"))?;
+        let result = unpack__m128i_to_i32_array(_mm_cvtpd_epi32(create__m128d_from([1.0, 2.0])));
+        check_array_equality(&result, &[1, 2, 0, 0]).map_err(|e| format!("{e} | call: _mm_cvtpd_epi32(create__m128d_from([1.0, 2.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1941,17 +3022,22 @@ pub(super) fn test_x86_sse2_mm_cmplt_epi32_normal3() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmplt_epi32(create_random__m128i(), create_random__m128i());
+                let _ = _mm_cvtpd_epi32(create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtpd_epi32() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_cvtpd_epi32_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmplt_epi32_boundary_min() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_cvtsd_si32_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmplt_epi32(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN])));
-        check_array_equality(&result, &[0; 4]).map_err(|e| format!("{e} | call: _mm_cmplt_epi32(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]))"))?;
+        let result = _mm_cvtsd_si32(create__m128d_from([1.0, 2.0]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_cvtsd_si32(create__m128d_from([1.0, 2.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1961,17 +3047,22 @@ pub(super) fn test_x86_sse2_mm_cmplt_epi32_boundary_min() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmplt_epi32(create_random__m128i(), create_random__m128i());
+                let _ = _mm_cvtsd_si32(create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmplt_epi32_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_cvtsd_si32() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_cvtsd_si32_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_cvtsd_si32_normal2_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmplt_epi32(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
-        check_array_equality(&result, &[0; 4]).map_err(|e| format!("{e} | call: _mm_cmplt_epi32(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
+        let result = _mm_cvtsd_si32(create__m128d_from([0.0f64, -1.0f64]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_cvtsd_si32(create__m128d_from([0.0f64, -1.0f64]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1981,17 +3072,22 @@ pub(super) fn test_x86_sse2_mm_cmplt_epi32_boundary_max() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmplt_epi32(create_random__m128i(), create_random__m128i());
+                let _ = _mm_cvtsd_si32(create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtsd_si32_normal2() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_cvtsd_si32_normal2_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmplt_epi32_boundary_zero() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_cvtsd_si32_normal3_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmplt_epi32(create__m128i_from_i32_array([0, 0, 0, 0]), create__m128i_from_i32_array([0, 0, 0, 0])));
-        check_array_equality(&result, &[0; 4]).map_err(|e| format!("{e} | call: _mm_cmplt_epi32(create__m128i_from_i32_array([0, 0, 0, 0]), create__m128i_from_i32_array([0, 0, 0, 0]))"))?;
+        let result = _mm_cvtsd_si32(create__m128d_from([100.0f64, 200.0f64]));
+        check_int_equality(result as i32, 100).map_err(|e| format!("{e} | call: _mm_cvtsd_si32(create__m128d_from([100.0f64, 200.0f64]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2001,17 +3097,22 @@ pub(super) fn test_x86_sse2_mm_cmplt_epi32_boundary_zero() -> Result<(), String>
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmplt_epi32(create_random__m128i(), create_random__m128i());
+                let _ = _mm_cvtsd_si32(create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmplt_epi32_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_cvtsd_si32_normal3() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_cvtsd_si32_normal3_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_cvtsd_si32_boundary_min_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmplt_epi32(create__m128i_from_i32_array([-1, -1, -1, -1]), create__m128i_from_i32_array([-1, -1, -1, -1])));
-        check_array_equality(&result, &[0; 4]).map_err(|e| format!("{e} | call: _mm_cmplt_epi32(create__m128i_from_i32_array([-1, -1, -1, -1]), create__m128i_from_i32_array([-1, -1, -1, -1]))"))?;
+        let result = _mm_cvtsd_si32(create__m128d_from([f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, -2147483648).map_err(|e| format!("{e} | call: _mm_cvtsd_si32(create__m128d_from([f64::MIN, f64::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2021,17 +3122,22 @@ pub(super) fn test_x86_sse2_mm_cmplt_epi32_boundary_allones() -> Result<(), Stri
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmplt_epi32(create_random__m128i(), create_random__m128i());
+                let _ = _mm_cvtsd_si32(create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtsd_si32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_cvtsd_si32_boundary_min_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmplt_epi32_boundary_mixed() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_cvtsd_si32_boundary_max_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmplt_epi32(create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]), create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1])));
-        check_array_equality(&result, &[0; 4]).map_err(|e| format!("{e} | call: _mm_cmplt_epi32(create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]), create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]))"))?;
+        let result = _mm_cvtsd_si32(create__m128d_from([f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, -2147483648).map_err(|e| format!("{e} | call: _mm_cvtsd_si32(create__m128d_from([f64::MAX, f64::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2041,17 +3147,22 @@ pub(super) fn test_x86_sse2_mm_cmplt_epi32_boundary_mixed() -> Result<(), String
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmplt_epi32(create_random__m128i(), create_random__m128i());
+                let _ = _mm_cvtsd_si32(create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cmplt_epi32_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_cvtsd_si32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_cvtsd_si32_boundary_max_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_cvtsd_si32_boundary_zero_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmplt_epi32(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
-        check_array_equality(&result, &[-1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_cmplt_epi32(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
+        let result = _mm_cvtsd_si32(create__m128d_from([0.0, 0.0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_cvtsd_si32(create__m128d_from([0.0, 0.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2061,17 +3172,22 @@ pub(super) fn test_x86_sse2_mm_cmplt_epi32_asym_min_max() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmplt_epi32(create_random__m128i(), create_random__m128i());
+                let _ = _mm_cvtsd_si32(create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtsd_si32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_cvtsd_si32_boundary_zero_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cmplt_epi32_asym_max_min() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_cvtsd_si32_boundary_allones_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmplt_epi32(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN])));
-        check_array_equality(&result, &[0; 4]).map_err(|e| format!("{e} | call: _mm_cmplt_epi32(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]))"))?;
+        let result = _mm_cvtsd_si32(create__m128d_from([f64::NAN, f64::NAN]));
+        check_int_equality(result as i32, -2147483648).map_err(|e| format!("{e} | call: _mm_cvtsd_si32(create__m128d_from([f64::NAN, f64::NAN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2081,17 +3197,22 @@ pub(super) fn test_x86_sse2_mm_cmplt_epi32_asym_max_min() -> Result<(), String> 
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cmplt_epi32(create_random__m128i(), create_random__m128i());
+                let _ = _mm_cvtsd_si32(create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cvtepi32_pd() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_cvtsd_si32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_cvtsd_si32_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_cvtsd_si32_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_cvtepi32_pd(create__m128i_from_i32_array([1, 2, 3, 4])));
-        check_float_array_equality(&result, &[1.0, 2.0]).map_err(|e| format!("{e} | call: _mm_cvtepi32_pd(create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
+        let result = _mm_cvtsd_si32(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]));
+        check_int_equality(result as i32, -2147483648).map_err(|e| format!("{e} | call: _mm_cvtsd_si32(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2101,17 +3222,22 @@ pub(super) fn test_x86_sse2_mm_cvtepi32_pd() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cvtepi32_pd(create_random__m128i());
+                let _ = _mm_cvtsd_si32(create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtsd_si32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_cvtsd_si32_boundary_mixed_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cvtsi32_sd() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_cvtsd_ss_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_cvtsi32_sd(create__m128d_from([1.0, 2.0]), 3i32));
-        check_float_array_equality(&result, &[3.0, 2.0]).map_err(|e| format!("{e} | call: _mm_cvtsi32_sd(create__m128d_from([1.0, 2.0]), 3i32)"))?;
+        let result = unpack__m128_to_f32_array(_mm_cvtsd_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128d_from([5.0, 6.0])));
+        check_float_array_equality(&result, &[5.0, 2.0, 3.0, 4.0]).map_err(|e| format!("{e} | call: _mm_cvtsd_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128d_from([5.0, 6.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2121,17 +3247,22 @@ pub(super) fn test_x86_sse2_mm_cvtsi32_sd() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cvtsi32_sd(create_random__m128d(), rand::random::<i32>());
+                let _ = _mm_cvtsd_ss(create_random__m128(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cvtepi32_ps() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_cvtsd_ss() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_cvtsd_ss_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_cvtsd_ss_normal2_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_cvtepi32_ps(create__m128i_from_i32_array([1, 2, 3, 4])));
-        check_float_array_equality(&result, &[1.0, 2.0, 3.0, 4.0]).map_err(|e| format!("{e} | call: _mm_cvtepi32_ps(create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
+        let result = unpack__m128_to_f32_array(_mm_cvtsd_ss(create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]), create__m128d_from([1.0, 2.0])));
+        check_float_array_equality(&result, &[1.0, -1.0, 2.0, -3.0]).map_err(|e| format!("{e} | call: _mm_cvtsd_ss(create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]), create__m128d_from([1.0, 2.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2141,17 +3272,22 @@ pub(super) fn test_x86_sse2_mm_cvtepi32_ps() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cvtepi32_ps(create_random__m128i());
+                let _ = _mm_cvtsd_ss(create_random__m128(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtsd_ss_normal2() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_cvtsd_ss_normal2_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cvtps_epi32() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_cvtsd_ss_normal3_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cvtps_epi32(create__m128_from([1.0, 2.0, 3.0, 4.0])));
-        check_array_equality(&result, &[1, 2, 3, 4]).map_err(|e| format!("{e} | call: _mm_cvtps_epi32(create__m128_from([1.0, 2.0, 3.0, 4.0]))"))?;
+        let result = unpack__m128_to_f32_array(_mm_cvtsd_ss(create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]), create__m128d_from([1.0, 2.0])));
+        check_float_array_equality(&result, &[1.0, 200.0, 300.0, 400.0]).map_err(|e| format!("{e} | call: _mm_cvtsd_ss(create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]), create__m128d_from([1.0, 2.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2161,17 +3297,22 @@ pub(super) fn test_x86_sse2_mm_cvtps_epi32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cvtps_epi32(create_random__m128());
+                let _ = _mm_cvtsd_ss(create_random__m128(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_cvtsi32_si128() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_cvtsd_ss_normal3() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_cvtsd_ss_normal3_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_cvtsd_ss_boundary_min_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cvtsi32_si128(1i32));
-        check_array_equality(&result, &[1, 0, 0, 0]).map_err(|e| format!("{e} | call: _mm_cvtsi32_si128(1i32)"))?;
+        let result = unpack__m128_to_f32_array(_mm_cvtsd_ss(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128d_from([1.0, 2.0])));
+        check_float_array_equality(&result, &[1.0, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm_cvtsd_ss(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128d_from([1.0, 2.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2181,17 +3322,22 @@ pub(super) fn test_x86_sse2_mm_cvtsi32_si128() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cvtsi32_si128(rand::random::<i32>());
+                let _ = _mm_cvtsd_ss(create_random__m128(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtsd_ss_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_cvtsd_ss_boundary_min_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_cvtsi128_si32() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_cvtsd_ss_boundary_max_impl() -> Result<(), String> {
     unsafe {
-        let result = _mm_cvtsi128_si32(create__m128i_from_i32_array([1, 2, 3, 4]));
-        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_cvtsi128_si32(create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
+        let result = unpack__m128_to_f32_array(_mm_cvtsd_ss(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128d_from([1.0, 2.0])));
+        check_float_array_equality(&result, &[1.0, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm_cvtsd_ss(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128d_from([1.0, 2.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2201,17 +3347,22 @@ pub(super) fn test_x86_sse2_mm_cvtsi128_si32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_cvtsi128_si32(create_random__m128i());
+                let _ = _mm_cvtsd_ss(create_random__m128(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_set_epi64x() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_cvtsd_ss_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_cvtsd_ss_boundary_max_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_cvtsd_ss_boundary_zero_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_set_epi64x(1i64, 2i64));
-        check_array_equality(&result, &[2, 0, 1, 0]).map_err(|e| format!("{e} | call: _mm_set_epi64x(1i64, 2i64)"))?;
+        let result = unpack__m128_to_f32_array(_mm_cvtsd_ss(create__m128_from([0.0, 0.0, 0.0, 0.0]), create__m128d_from([1.0, 2.0])));
+        check_float_array_equality(&result, &[1.0, 0.0, 0.0, 0.0]).map_err(|e| format!("{e} | call: _mm_cvtsd_ss(create__m128_from([0.0, 0.0, 0.0, 0.0]), create__m128d_from([1.0, 2.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2221,17 +3372,22 @@ pub(super) fn test_x86_sse2_mm_set_epi64x() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_set_epi64x(rand::random::<i64>(), rand::random::<i64>());
+                let _ = _mm_cvtsd_ss(create_random__m128(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtsd_ss_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_cvtsd_ss_boundary_zero_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_set_epi32() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_cvtsd_ss_boundary_allones_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_set_epi32(1i32, 2i32, 3i32, 4i32));
-        check_array_equality(&result, &[4, 3, 2, 1]).map_err(|e| format!("{e} | call: _mm_set_epi32(1i32, 2i32, 3i32, 4i32)"))?;
+        let result = unpack__m128_to_f32_array(_mm_cvtsd_ss(create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m128d_from([1.0, 2.0])));
+        check_float_array_equality(&result, &[1.0, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm_cvtsd_ss(create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m128d_from([1.0, 2.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2241,17 +3397,22 @@ pub(super) fn test_x86_sse2_mm_set_epi32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_set_epi32(rand::random::<i32>(), rand::random::<i32>(), rand::random::<i32>(), rand::random::<i32>());
+                let _ = _mm_cvtsd_ss(create_random__m128(), create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_set_epi16() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_cvtsd_ss_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_cvtsd_ss_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_cvtsd_ss_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_set_epi16(1i16, 2i16, 3i16, 4i16, 5i16, 6i16, 7i16, 8i16));
-        check_array_equality(&result, &[458760, 327686, 196612, 65538]).map_err(|e| format!("{e} | call: _mm_set_epi16(1i16, 2i16, 3i16, 4i16, 5i16, 6i16, 7i16, 8i16)"))?;
+        let result = unpack__m128_to_f32_array(_mm_cvtsd_ss(create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m128d_from([1.0, 2.0])));
+        check_float_array_equality(&result, &[1.0, -f32::INFINITY, -0.0, 5.877472e-39]).map_err(|e| format!("{e} | call: _mm_cvtsd_ss(create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m128d_from([1.0, 2.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2261,17 +3422,22 @@ pub(super) fn test_x86_sse2_mm_set_epi16() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_set_epi16(rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>());
+                let _ = _mm_cvtsd_ss(create_random__m128(), create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvtsd_ss_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_cvtsd_ss_boundary_mixed_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_set_epi8() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_cvttpd_epi32_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_set_epi8(1i8, 2i8, 3i8, 4i8, 5i8, 6i8, 7i8, 8i8, 9i8, 10i8, 11i8, 12i8, 13i8, 14i8, 15i8, 16i8));
-        check_array_equality(&result, &[219025168, 151653132, 84281096, 16909060]).map_err(|e| format!("{e} | call: _mm_set_epi8(1i8, 2i8, 3i8, 4i8, 5i8, 6i8, 7i8, 8i8, 9i8, 10i8, 11i8, 12i8, 13i8, 14i8, 15i8, 16i8)"))?;
+        let result = unpack__m128i_to_i32_array(_mm_cvttpd_epi32(create__m128d_from([1.0, 2.0])));
+        check_array_equality(&result, &[1, 2, 0, 0]).map_err(|e| format!("{e} | call: _mm_cvttpd_epi32(create__m128d_from([1.0, 2.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2281,17 +3447,22 @@ pub(super) fn test_x86_sse2_mm_set_epi8() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_set_epi8(rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>());
+                let _ = _mm_cvttpd_epi32(create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_set1_epi64x() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_cvttpd_epi32() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_cvttpd_epi32_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_cvttsd_si32_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_set1_epi64x(1i64));
-        check_array_equality(&result, &[1, 0, 1, 0]).map_err(|e| format!("{e} | call: _mm_set1_epi64x(1i64)"))?;
+        let result = _mm_cvttsd_si32(create__m128d_from([1.0, 2.0]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_cvttsd_si32(create__m128d_from([1.0, 2.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2301,17 +3472,22 @@ pub(super) fn test_x86_sse2_mm_set1_epi64x() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_set1_epi64x(rand::random::<i64>());
+                let _ = _mm_cvttsd_si32(create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvttsd_si32() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_cvttsd_si32_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_set1_epi32() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_cvttsd_si32_normal2_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_set1_epi32(1i32));
-        check_array_equality(&result, &[1, 1, 1, 1]).map_err(|e| format!("{e} | call: _mm_set1_epi32(1i32)"))?;
+        let result = _mm_cvttsd_si32(create__m128d_from([0.0f64, -1.0f64]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_cvttsd_si32(create__m128d_from([0.0f64, -1.0f64]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2321,17 +3497,22 @@ pub(super) fn test_x86_sse2_mm_set1_epi32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_set1_epi32(rand::random::<i32>());
+                let _ = _mm_cvttsd_si32(create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_set1_epi16() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_cvttsd_si32_normal2() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_cvttsd_si32_normal2_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_cvttsd_si32_normal3_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_set1_epi16(1i16));
-        check_array_equality(&result, &[65537, 65537, 65537, 65537]).map_err(|e| format!("{e} | call: _mm_set1_epi16(1i16)"))?;
+        let result = _mm_cvttsd_si32(create__m128d_from([100.0f64, 200.0f64]));
+        check_int_equality(result as i32, 100).map_err(|e| format!("{e} | call: _mm_cvttsd_si32(create__m128d_from([100.0f64, 200.0f64]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2341,17 +3522,22 @@ pub(super) fn test_x86_sse2_mm_set1_epi16() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_set1_epi16(rand::random::<i16>());
+                let _ = _mm_cvttsd_si32(create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvttsd_si32_normal3() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_cvttsd_si32_normal3_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_set1_epi8() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_cvttsd_si32_boundary_min_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_set1_epi8(1i8));
-        check_array_equality(&result, &[16843009, 16843009, 16843009, 16843009]).map_err(|e| format!("{e} | call: _mm_set1_epi8(1i8)"))?;
+        let result = _mm_cvttsd_si32(create__m128d_from([f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, -2147483648).map_err(|e| format!("{e} | call: _mm_cvttsd_si32(create__m128d_from([f64::MIN, f64::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2361,17 +3547,22 @@ pub(super) fn test_x86_sse2_mm_set1_epi8() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_set1_epi8(rand::random::<i8>());
+                let _ = _mm_cvttsd_si32(create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_setr_epi32() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_cvttsd_si32_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_cvttsd_si32_boundary_min_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_cvttsd_si32_boundary_max_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_setr_epi32(1i32, 2i32, 3i32, 4i32));
-        check_array_equality(&result, &[1, 2, 3, 4]).map_err(|e| format!("{e} | call: _mm_setr_epi32(1i32, 2i32, 3i32, 4i32)"))?;
+        let result = _mm_cvttsd_si32(create__m128d_from([f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, -2147483648).map_err(|e| format!("{e} | call: _mm_cvttsd_si32(create__m128d_from([f64::MAX, f64::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2381,17 +3572,22 @@ pub(super) fn test_x86_sse2_mm_setr_epi32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_setr_epi32(rand::random::<i32>(), rand::random::<i32>(), rand::random::<i32>(), rand::random::<i32>());
+                let _ = _mm_cvttsd_si32(create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvttsd_si32_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_cvttsd_si32_boundary_max_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_setr_epi16() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_cvttsd_si32_boundary_zero_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_setr_epi16(1i16, 2i16, 3i16, 4i16, 5i16, 6i16, 7i16, 8i16));
-        check_array_equality(&result, &[131073, 262147, 393221, 524295]).map_err(|e| format!("{e} | call: _mm_setr_epi16(1i16, 2i16, 3i16, 4i16, 5i16, 6i16, 7i16, 8i16)"))?;
+        let result = _mm_cvttsd_si32(create__m128d_from([0.0, 0.0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_cvttsd_si32(create__m128d_from([0.0, 0.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2401,17 +3597,22 @@ pub(super) fn test_x86_sse2_mm_setr_epi16() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_setr_epi16(rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>());
+                let _ = _mm_cvttsd_si32(create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_setr_epi8() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_cvttsd_si32_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_cvttsd_si32_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_cvttsd_si32_boundary_allones_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_setr_epi8(1i8, 2i8, 3i8, 4i8, 5i8, 6i8, 7i8, 8i8, 9i8, 10i8, 11i8, 12i8, 13i8, 14i8, 15i8, 16i8));
-        check_array_equality(&result, &[67305985, 134678021, 202050057, 269422093]).map_err(|e| format!("{e} | call: _mm_setr_epi8(1i8, 2i8, 3i8, 4i8, 5i8, 6i8, 7i8, 8i8, 9i8, 10i8, 11i8, 12i8, 13i8, 14i8, 15i8, 16i8)"))?;
+        let result = _mm_cvttsd_si32(create__m128d_from([f64::NAN, f64::NAN]));
+        check_int_equality(result as i32, -2147483648).map_err(|e| format!("{e} | call: _mm_cvttsd_si32(create__m128d_from([f64::NAN, f64::NAN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2421,17 +3622,22 @@ pub(super) fn test_x86_sse2_mm_setr_epi8() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_setr_epi8(rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>());
+                let _ = _mm_cvttsd_si32(create_random__m128d());
             }
         }
     }
     Ok(())
+}
+
+pub(super) fn test_x86_sse2_mm_cvttsd_si32_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_cvttsd_si32_boundary_allones_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_setzero_si128() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_cvttsd_si32_boundary_mixed_impl() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_setzero_si128());
-        check_array_equality(&result, &[0i32; 4]).map_err(|e| format!("{e} | call: _mm_setzero_si128()"))?;
+        let result = _mm_cvttsd_si32(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]));
+        check_int_equality(result as i32, -2147483648).map_err(|e| format!("{e} | call: _mm_cvttsd_si32(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2441,280 +3647,174 @@ pub(super) fn test_x86_sse2_mm_setzero_si128() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm_setzero_si128();
+                let _ = _mm_cvttsd_si32(create_random__m128d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_loadl_epi64() -> Result<(), String> {
-    unsafe {
-        let ptr_mem_addr = crate::cpu::common::Aligned64([create__m128i_from_i32_array([1, 2, 3, 4]); 4]);
-        let result = unpack__m128i_to_i32_array(_mm_loadl_epi64(ptr_mem_addr.0.as_ptr()));
-        check_array_equality(&result, &[1, 2, 0, 0]).map_err(|e| format!("{e} | call: _mm_loadl_epi64(ptr_mem_addr.0.as_ptr())"))?;
-    }
-    Ok(())
+pub(super) fn test_x86_sse2_mm_cvttsd_si32_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_cvttsd_si32_boundary_mixed_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_load_si128() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_cvttps_epi32_impl() -> Result<(), String> {
     unsafe {
-        let ptr_mem_addr = crate::cpu::common::Aligned64([create__m128i_from_i32_array([1, 2, 3, 4]); 4]);
-        let result = unpack__m128i_to_i32_array(_mm_load_si128(ptr_mem_addr.0.as_ptr()));
-        check_array_equality(&result, &[1, 2, 3, 4]).map_err(|e| format!("{e} | call: _mm_load_si128(ptr_mem_addr.0.as_ptr())"))?;
+        let result = unpack__m128i_to_i32_array(_mm_cvttps_epi32(create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        check_array_equality(&result, &[1, 2, 3, 4]).map_err(|e| format!("{e} | call: _mm_cvttps_epi32(create__m128_from([1.0, 2.0, 3.0, 4.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_cvttps_epi32(create_random__m128());
+            }
+        }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_loadu_si128() -> Result<(), String> {
-    unsafe {
-        let ptr_mem_addr = crate::cpu::common::Aligned64([create__m128i_from_i32_array([1, 2, 3, 4]); 4]);
-        let result = unpack__m128i_to_i32_array(_mm_loadu_si128(ptr_mem_addr.0.as_ptr()));
-        check_array_equality(&result, &[1, 2, 3, 4]).map_err(|e| format!("{e} | call: _mm_loadu_si128(ptr_mem_addr.0.as_ptr())"))?;
-    }
-    Ok(())
+pub(super) fn test_x86_sse2_mm_cvttps_epi32() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_cvttps_epi32_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_maskmoveu_si128() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_stream_pd_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let a = create__m128i_from_i32_array([1, 2, 3, 4]);
-        let mask = create__m128i_from_i32_array([5, 6, 7, 8]);
-        let mut ptr_mem_addr = crate::cpu::common::Aligned64([9i8; 64]);
-        _mm_maskmoveu_si128(a, mask, ptr_mem_addr.0.as_mut_ptr());
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([2.0, 3.0]);
+        _mm_stream_pd(ptr_mem_addr.0.as_mut_ptr(), a);
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_store_si128() -> Result<(), String> {
-    unsafe {
-        let mut ptr_mem_addr = crate::cpu::common::Aligned64([create__m128i_from_i32_array([1, 2, 3, 4]); 4]);
-        let a = create__m128i_from_i32_array([5, 6, 7, 8]);
-        _mm_store_si128(ptr_mem_addr.0.as_mut_ptr(), a);
-    }
-    Ok(())
+pub(super) fn test_x86_sse2_mm_stream_pd() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_stream_pd_impl() }
 }
 
-pub(super) fn test_x86_sse2_mm_storeu_si128() -> Result<(), String> {
-    unsafe {
-        let mut ptr_mem_addr = crate::cpu::common::Aligned64([create__m128i_from_i32_array([1, 2, 3, 4]); 4]);
-        let a = create__m128i_from_i32_array([5, 6, 7, 8]);
-        _mm_storeu_si128(ptr_mem_addr.0.as_mut_ptr(), a);
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_sse2_mm_storel_epi64() -> Result<(), String> {
-    unsafe {
-        let mut ptr_mem_addr = crate::cpu::common::Aligned64([create__m128i_from_i32_array([1, 2, 3, 4]); 4]);
-        let a = create__m128i_from_i32_array([5, 6, 7, 8]);
-        _mm_storel_epi64(ptr_mem_addr.0.as_mut_ptr(), a);
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_sse2_mm_stream_si128() -> Result<(), String> {
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_stream_pd_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let mut ptr_mem_addr = crate::cpu::common::Aligned64([create__m128i_from_i32_array([1, 2, 3, 4]); 4]);
-        let a = create__m128i_from_i32_array([5, 6, 7, 8]);
-        _mm_stream_si128(ptr_mem_addr.0.as_mut_ptr(), a);
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([0.0f64, -1.0f64]);
+        _mm_stream_pd(ptr_mem_addr.0.as_mut_ptr(), a);
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_stream_si32() -> Result<(), String> {
+pub(super) fn test_x86_sse2_mm_stream_pd_normal2() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_stream_pd_normal2_impl() }
+}
+
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_stream_pd_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
     unsafe {
-        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
-        let a = 2i32;
-        _mm_stream_si32(ptr_mem_addr.0.as_mut_ptr(), a);
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([100.0f64, 200.0f64]);
+        _mm_stream_pd(ptr_mem_addr.0.as_mut_ptr(), a);
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_move_epi64() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_move_epi64(create__m128i_from_i32_array([1, 2, 3, 4])));
-        check_array_equality(&result, &[1, 2, 0, 0]).map_err(|e| format!("{e} | call: _mm_move_epi64(create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
+pub(super) fn test_x86_sse2_mm_stream_pd_normal3() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_stream_pd_normal3_impl() }
+}
 
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm_move_epi64(create_random__m128i());
-            }
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_stream_pd_boundary_min_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
         }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::MIN, f64::MIN]);
+        _mm_stream_pd(ptr_mem_addr.0.as_mut_ptr(), a);
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_packs_epi16() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_packs_epi16(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
-        check_array_equality(&result, &[131073, 262147, 393221, 524295]).map_err(|e| format!("{e} | call: _mm_packs_epi16(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
+pub(super) fn test_x86_sse2_mm_stream_pd_boundary_min() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_stream_pd_boundary_min_impl() }
+}
 
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm_packs_epi16(create_random__m128i(), create_random__m128i());
-            }
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_stream_pd_boundary_max_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
         }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::MAX, f64::MAX]);
+        _mm_stream_pd(ptr_mem_addr.0.as_mut_ptr(), a);
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_packs_epi32() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_packs_epi32(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
-        check_array_equality(&result, &[131073, 262147, 393221, 524295]).map_err(|e| format!("{e} | call: _mm_packs_epi32(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
+pub(super) fn test_x86_sse2_mm_stream_pd_boundary_max() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_stream_pd_boundary_max_impl() }
+}
 
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm_packs_epi32(create_random__m128i(), create_random__m128i());
-            }
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_stream_pd_boundary_zero_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
         }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([0.0, 0.0]);
+        _mm_stream_pd(ptr_mem_addr.0.as_mut_ptr(), a);
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_packus_epi16() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_packus_epi16(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
-        check_array_equality(&result, &[131073, 262147, 393221, 524295]).map_err(|e| format!("{e} | call: _mm_packus_epi16(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
+pub(super) fn test_x86_sse2_mm_stream_pd_boundary_zero() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_stream_pd_boundary_zero_impl() }
+}
 
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm_packus_epi16(create_random__m128i(), create_random__m128i());
-            }
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_stream_pd_boundary_allones_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
         }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::NAN, f64::NAN]);
+        _mm_stream_pd(ptr_mem_addr.0.as_mut_ptr(), a);
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_extract_epi16() -> Result<(), String> {
-    unsafe {
-        let result = _mm_extract_epi16::<0>(create__m128i_from_i32_array([1, 2, 3, 4]));
-        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm_extract_epi16::<0>(create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
+pub(super) fn test_x86_sse2_mm_stream_pd_boundary_allones() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_stream_pd_boundary_allones_impl() }
+}
 
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm_extract_epi16::<0>(create_random__m128i());
-            }
+#[target_feature(enable = "sse2")]
+fn test_x86_sse2_mm_stream_pd_boundary_mixed_impl() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
         }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]);
+        _mm_stream_pd(ptr_mem_addr.0.as_mut_ptr(), a);
     }
     Ok(())
 }
 
-pub(super) fn test_x86_sse2_mm_insert_epi16() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_insert_epi16::<0>(create__m128i_from_i32_array([1, 2, 3, 4]), 5i32));
-        check_array_equality(&result, &[5, 2, 3, 4]).map_err(|e| format!("{e} | call: _mm_insert_epi16::<0>(create__m128i_from_i32_array([1, 2, 3, 4]), 5i32)"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm_insert_epi16::<0>(create_random__m128i(), rand::random::<i32>());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_sse2_mm_movemask_epi8() -> Result<(), String> {
-    unsafe {
-        let result = _mm_movemask_epi8(create__m128i_from_i32_array([1, 2, 3, 4]));
-        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_movemask_epi8(create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm_movemask_epi8(create_random__m128i());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_sse2_mm_shuffle_epi32() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_shuffle_epi32::<0>(create__m128i_from_i32_array([1, 2, 3, 4])));
-        check_array_equality(&result, &[1, 1, 1, 1]).map_err(|e| format!("{e} | call: _mm_shuffle_epi32::<0>(create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm_shuffle_epi32::<0>(create_random__m128i());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_sse2_mm_shufflehi_epi16() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_shufflehi_epi16::<0>(create__m128i_from_i32_array([1, 2, 3, 4])));
-        check_array_equality(&result, &[1, 2, 196611, 196611]).map_err(|e| format!("{e} | call: _mm_shufflehi_epi16::<0>(create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm_shufflehi_epi16::<0>(create_random__m128i());
-            }
-        }
-    }
-    Ok(())
+pub(super) fn test_x86_sse2_mm_stream_pd_boundary_mixed() -> Result<(), String> {
+    unsafe { test_x86_sse2_mm_stream_pd_boundary_mixed_impl() }
 }

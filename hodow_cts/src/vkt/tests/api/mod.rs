@@ -1,0 +1,56 @@
+// SPDX-License-Identifier: Apache-2.0
+//
+// Derived from VK-GL-CTS:
+//   external/vulkancts/modules/vulkan/api/vktApiTests.cpp
+// Upstream revision: see hodow_cts/upstream/COMMIT
+//
+// Copyright (c) 2015 The Khronos Group Inc.
+// Licensed under the Apache License, Version 2.0 (see LICENSE at the repo root).
+//
+// Modifications: rewritten in Rust for hodow_cts.
+//
+// None of the ported groups here uses a shader, so every case hands back an empty
+// `BinaryCollection` and nothing in this subtree has a manifest entry.
+
+pub mod blitting_tests;
+pub mod buffer_view_access_tests;
+pub mod compressed_image_to_buffer_tests;
+pub mod copies_buffer_tests;
+pub mod copies_image_tests;
+pub mod copy_format_lists;
+pub mod depth_stencil_msaa_copy_tests;
+pub mod ds_color_copy_tests;
+pub mod feature_info_tests;
+pub mod feature_struct_list;
+pub mod image_clearing_formats;
+pub mod image_clearing_tests;
+pub mod object_management_tests;
+pub mod object_tests;
+pub mod resolve_image_tests;
+
+use crate::vkt::TestCaseGroup;
+
+/// `createApiTests`.
+///
+/// The groups upstream registers here that are absent - copy_and_blit,
+/// image_clearing, smoke, descriptor_set, external, ... - are absent rather than
+/// present-and-skipped, so a comparison against `deqp-vk` reports them as missing
+/// instead of as passing.
+pub fn create_tests() -> TestCaseGroup {
+    let mut api_tests = TestCaseGroup::new("api");
+
+    api_tests.add_child(copies_buffer_tests::create_buffer_copy_tests());
+    api_tests.add_child(ds_color_copy_tests::create_ds_color_copy_tests());
+    api_tests.add_child(image_clearing_tests::create_image_clearing_tests());
+
+    api_tests.add_child(object_management_tests::create_object_management_tests());
+
+    for group in object_tests::create_object_groups() {
+        api_tests.add_child(group);
+    }
+    for group in feature_info_tests::create_info_groups() {
+        api_tests.add_child(group);
+    }
+
+    api_tests
+}

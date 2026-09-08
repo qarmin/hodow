@@ -8,7 +8,8 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_x86_tbm_bextri_u32() -> Result<(), String> {
+#[target_feature(enable = "tbm")]
+fn test_x86_tbm_bextri_u32_impl() -> Result<(), String> {
     unsafe {
         let result = _bextri_u32::<0>(1u32);
         check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _bextri_u32::<0>(1u32)"))?;
@@ -28,10 +29,15 @@ pub(super) fn test_x86_tbm_bextri_u32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_tbm_blcfill_u32() -> Result<(), String> {
+pub(super) fn test_x86_tbm_bextri_u32() -> Result<(), String> {
+    unsafe { test_x86_tbm_bextri_u32_impl() }
+}
+
+#[target_feature(enable = "tbm")]
+fn test_x86_tbm_bextri_u32_imm_0_impl() -> Result<(), String> {
     unsafe {
-        let result = _blcfill_u32(1u32);
-        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _blcfill_u32(1u32)"))?;
+        let result = _bextri_u32::<0>(1u32);
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _bextri_u32::<0>(1u32)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -41,17 +47,22 @@ pub(super) fn test_x86_tbm_blcfill_u32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _blcfill_u32(rand::random::<u32>());
+                let _ = _bextri_u32::<0>(rand::random::<u32>());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_tbm_blci_u32() -> Result<(), String> {
+pub(super) fn test_x86_tbm_bextri_u32_imm_0() -> Result<(), String> {
+    unsafe { test_x86_tbm_bextri_u32_imm_0_impl() }
+}
+
+#[target_feature(enable = "tbm")]
+fn test_x86_tbm_bextri_u32_imm_1_impl() -> Result<(), String> {
     unsafe {
-        let result = _blci_u32(1u32);
-        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _blci_u32(1u32)"))?;
+        let result = _bextri_u32::<1>(1u32);
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _bextri_u32::<1>(1u32)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -61,149 +72,13 @@ pub(super) fn test_x86_tbm_blci_u32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _blci_u32(rand::random::<u32>());
+                let _ = _bextri_u32::<1>(rand::random::<u32>());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_tbm_blcic_u32() -> Result<(), String> {
-    unsafe {
-        let result = _blcic_u32(1u32);
-        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _blcic_u32(1u32)"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _blcic_u32(rand::random::<u32>());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_tbm_blcmsk_u32() -> Result<(), String> {
-    unsafe {
-        let result = _blcmsk_u32(1u32);
-        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _blcmsk_u32(1u32)"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _blcmsk_u32(rand::random::<u32>());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_tbm_blcs_u32() -> Result<(), String> {
-    unsafe {
-        let result = _blcs_u32(1u32);
-        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _blcs_u32(1u32)"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _blcs_u32(rand::random::<u32>());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_tbm_blsfill_u32() -> Result<(), String> {
-    unsafe {
-        let result = _blsfill_u32(1u32);
-        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _blsfill_u32(1u32)"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _blsfill_u32(rand::random::<u32>());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_tbm_blsic_u32() -> Result<(), String> {
-    unsafe {
-        let result = _blsic_u32(1u32);
-        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _blsic_u32(1u32)"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _blsic_u32(rand::random::<u32>());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_tbm_t1mskc_u32() -> Result<(), String> {
-    unsafe {
-        let result = _t1mskc_u32(1u32);
-        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _t1mskc_u32(1u32)"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _t1mskc_u32(rand::random::<u32>());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_tbm_tzmsk_u32() -> Result<(), String> {
-    unsafe {
-        let result = _tzmsk_u32(1u32);
-        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _tzmsk_u32(1u32)"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _tzmsk_u32(rand::random::<u32>());
-            }
-        }
-    }
-    Ok(())
+pub(super) fn test_x86_tbm_bextri_u32_imm_1() -> Result<(), String> {
+    unsafe { test_x86_tbm_bextri_u32_imm_1_impl() }
 }

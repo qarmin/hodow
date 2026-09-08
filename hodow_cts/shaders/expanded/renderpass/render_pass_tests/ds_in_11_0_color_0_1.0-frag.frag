@@ -1,0 +1,4 @@
+#version 450
+void main (void) {
+	gl_FragDepth = ((int(gl_FragCoord.x) % 2 == 1) && (int(gl_FragCoord.y) % 2 == 0) ? 0.0f/255.0f : 1.0f/255.0f);
+}

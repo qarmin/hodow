@@ -1,0 +1,14 @@
+#version 440
+
+layout(local_size_x = 1) in;
+
+layout(set = 0, binding = 0, r32f) readonly  uniform image3D srcImg;
+layout(set = 0, binding = 1, r32f) writeonly uniform image3D dstImg;
+
+void main (void)
+{
+    for (int z = 0; z < 8; ++z)
+    for (int y = 0; y < 64; ++y)
+    for (int x = 0; x < 64; ++x)
+        imageStore(dstImg, ivec3(x, y, z), imageLoad(srcImg, ivec3(x, y, z)));
+}

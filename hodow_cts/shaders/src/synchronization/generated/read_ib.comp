@@ -1,0 +1,12 @@
+#version 440
+
+layout(local_size_x = 1) in;
+
+layout(set = 0, binding = 0, std140) coherent buffer Data {
+    uint value;
+} sb_out;
+
+void main (void)
+{
+    atomicAdd(sb_out.value, 1u);
+}

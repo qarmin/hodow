@@ -1,0 +1,997 @@
+# Expected values captured from real hardware for this extension's generated tests.
+# Format: test_name - rust_expr
+#
+# One file per (architecture, extension) - written by scripts/cpu/capture_expected.py and
+# capture_expected_cross.py, read by generate_tests.py. Do not hand-edit: recapture instead.
+# A qemu-derived value is not a real-silicon one; see CLAUDE.md's "Non-x86 architectures".
+
+test_aarch64_neon_vabal_high_s16 - [9, 10, 11, 12]
+test_aarch64_neon_vabal_high_s32 - [5, 6]
+test_aarch64_neon_vabal_high_s8 - [17, 18, 19, 20, 21, 22, 23, 24]
+test_aarch64_neon_vabal_high_u16 - [9, 10, 11, 12]
+test_aarch64_neon_vabal_high_u32 - [5, 6]
+test_aarch64_neon_vabal_high_u8 - [17, 18, 19, 20, 21, 22, 23, 24]
+test_aarch64_neon_vabd_f64 - [1.0]
+test_aarch64_neon_vabdl_high_s16 - [8, 8, 8, 8]
+test_aarch64_neon_vabdl_high_s32 - [4, 4]
+test_aarch64_neon_vabdl_high_s8 - [16, 16, 16, 16, 16, 16, 16, 16]
+test_aarch64_neon_vabdl_high_u16 - [8, 8, 8, 8]
+test_aarch64_neon_vabdl_high_u32 - [4, 4]
+test_aarch64_neon_vabdl_high_u8 - [16, 16, 16, 16, 16, 16, 16, 16]
+test_aarch64_neon_vabdq_f64 - [2.0, 2.0]
+test_aarch64_neon_vabs_f64 - [1.0]
+test_aarch64_neon_vabs_s64 - [1]
+test_aarch64_neon_vabsd_s64 - 1
+test_aarch64_neon_vabsq_f64 - [1.0, 2.0]
+test_aarch64_neon_vabsq_s64 - [1, 2]
+test_aarch64_neon_vaddd_s64 - 3
+test_aarch64_neon_vaddd_u64 - 3
+test_aarch64_neon_vaddlv_s16 - 10
+test_aarch64_neon_vaddlv_s32 - 3
+test_aarch64_neon_vaddlv_s8 - 36
+test_aarch64_neon_vaddlv_u16 - 10
+test_aarch64_neon_vaddlv_u32 - 3
+test_aarch64_neon_vaddlv_u8 - 36
+test_aarch64_neon_vaddlvq_s16 - 36
+test_aarch64_neon_vaddlvq_s32 - 10
+test_aarch64_neon_vaddlvq_s8 - 136
+test_aarch64_neon_vaddlvq_u16 - 36
+test_aarch64_neon_vaddlvq_u32 - 10
+test_aarch64_neon_vaddlvq_u8 - 136
+test_aarch64_neon_vaddv_s16 - 10
+test_aarch64_neon_vaddv_s32 - 3
+test_aarch64_neon_vaddv_s8 - 36
+test_aarch64_neon_vaddv_u16 - 10
+test_aarch64_neon_vaddv_u32 - 3
+test_aarch64_neon_vaddv_u8 - 36
+test_aarch64_neon_vaddvq_s16 - 36
+test_aarch64_neon_vaddvq_s32 - 10
+test_aarch64_neon_vaddvq_s64 - 3
+test_aarch64_neon_vaddvq_s8 - -120
+test_aarch64_neon_vaddvq_u16 - 36
+test_aarch64_neon_vaddvq_u32 - 10
+test_aarch64_neon_vaddvq_u64 - 3
+test_aarch64_neon_vaddvq_u8 - 136
+test_aarch64_neon_vcale_f64 - [18446744073709551615]
+test_aarch64_neon_vcaled_f64 - -1
+test_aarch64_neon_vcaleq_f64 - [18446744073709551615, 18446744073709551615]
+test_aarch64_neon_vcales_f32 - -1
+test_aarch64_neon_vcalt_f64 - [18446744073709551615]
+test_aarch64_neon_vcaltd_f64 - -1
+test_aarch64_neon_vcaltq_f64 - [18446744073709551615, 18446744073709551615]
+test_aarch64_neon_vcalts_f32 - -1
+test_aarch64_neon_vcgez_f32 - [4294967295, 4294967295]
+test_aarch64_neon_vcgez_f64 - [18446744073709551615]
+test_aarch64_neon_vcgez_s16 - [65535, 65535, 65535, 65535]
+test_aarch64_neon_vcgez_s32 - [4294967295, 4294967295]
+test_aarch64_neon_vcgez_s64 - [18446744073709551615]
+test_aarch64_neon_vcgez_s8 - [255, 255, 255, 255, 255, 255, 255, 255]
+test_aarch64_neon_vcgezd_f64 - -1
+test_aarch64_neon_vcgezd_s64 - -1
+test_aarch64_neon_vcgezq_f32 - [4294967295, 4294967295, 4294967295, 4294967295]
+test_aarch64_neon_vcgezq_f64 - [18446744073709551615, 18446744073709551615]
+test_aarch64_neon_vcgezq_s16 - [65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535]
+test_aarch64_neon_vcgezq_s32 - [4294967295, 4294967295, 4294967295, 4294967295]
+test_aarch64_neon_vcgezq_s64 - [18446744073709551615, 18446744073709551615]
+test_aarch64_neon_vcgezq_s8 - [255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255]
+test_aarch64_neon_vcgezs_f32 - -1
+test_aarch64_neon_vcgtz_f32 - [4294967295, 4294967295]
+test_aarch64_neon_vcgtz_f64 - [18446744073709551615]
+test_aarch64_neon_vcgtz_s16 - [65535, 65535, 65535, 65535]
+test_aarch64_neon_vcgtz_s32 - [4294967295, 4294967295]
+test_aarch64_neon_vcgtz_s64 - [18446744073709551615]
+test_aarch64_neon_vcgtz_s8 - [255, 255, 255, 255, 255, 255, 255, 255]
+test_aarch64_neon_vcgtzd_f64 - -1
+test_aarch64_neon_vcgtzd_s64 - -1
+test_aarch64_neon_vcgtzq_f32 - [4294967295, 4294967295, 4294967295, 4294967295]
+test_aarch64_neon_vcgtzq_f64 - [18446744073709551615, 18446744073709551615]
+test_aarch64_neon_vcgtzq_s16 - [65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535]
+test_aarch64_neon_vcgtzq_s32 - [4294967295, 4294967295, 4294967295, 4294967295]
+test_aarch64_neon_vcgtzq_s64 - [18446744073709551615, 18446744073709551615]
+test_aarch64_neon_vcgtzq_s8 - [255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255]
+test_aarch64_neon_vcgtzs_f32 - -1
+test_aarch64_neon_vcle_f64 - [18446744073709551615]
+test_aarch64_neon_vcle_s64 - [18446744073709551615]
+test_aarch64_neon_vcle_u64 - [18446744073709551615]
+test_aarch64_neon_vcled_f64 - -1
+test_aarch64_neon_vcled_s64 - -1
+test_aarch64_neon_vcled_u64 - -1
+test_aarch64_neon_vcleq_f64 - [18446744073709551615, 18446744073709551615]
+test_aarch64_neon_vcleq_s64 - [18446744073709551615, 18446744073709551615]
+test_aarch64_neon_vcleq_u64 - [18446744073709551615, 18446744073709551615]
+test_aarch64_neon_vcles_f32 - -1
+test_aarch64_neon_vclt_f64 - [18446744073709551615]
+test_aarch64_neon_vclt_s64 - [18446744073709551615]
+test_aarch64_neon_vclt_u64 - [18446744073709551615]
+test_aarch64_neon_vcltd_f64 - -1
+test_aarch64_neon_vcltd_s64 - -1
+test_aarch64_neon_vcltd_u64 - -1
+test_aarch64_neon_vcltq_f64 - [18446744073709551615, 18446744073709551615]
+test_aarch64_neon_vcltq_s64 - [18446744073709551615, 18446744073709551615]
+test_aarch64_neon_vcltq_u64 - [18446744073709551615, 18446744073709551615]
+test_aarch64_neon_vclts_f32 - -1
+test_aarch64_neon_vcombine_f64 - [1.0, 2.0]
+test_aarch64_neon_vcopy_lane_f32 - [3.0, 2.0]
+test_aarch64_neon_vcopy_lane_f64 - [2.0]
+test_aarch64_neon_vcopy_lane_p16 - [5, 2, 3, 4]
+test_aarch64_neon_vcopy_lane_p64 - [2]
+test_aarch64_neon_vcopy_lane_p8 - [9, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_neon_vcopy_lane_s16 - [5, 2, 3, 4]
+test_aarch64_neon_vcopy_lane_s32 - [3, 2]
+test_aarch64_neon_vcopy_lane_s64 - [2]
+test_aarch64_neon_vcopy_lane_s8 - [9, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_neon_vcopy_lane_u16 - [5, 2, 3, 4]
+test_aarch64_neon_vcopy_lane_u32 - [3, 2]
+test_aarch64_neon_vcopy_lane_u64 - [2]
+test_aarch64_neon_vcopy_lane_u8 - [9, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_neon_vcopy_laneq_f32 - [3.0, 2.0]
+test_aarch64_neon_vcopy_laneq_f64 - [2.0]
+test_aarch64_neon_vcopy_laneq_p16 - [5, 2, 3, 4]
+test_aarch64_neon_vcopy_laneq_p64 - [2]
+test_aarch64_neon_vcopy_laneq_p8 - [9, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_neon_vcopy_laneq_s16 - [5, 2, 3, 4]
+test_aarch64_neon_vcopy_laneq_s32 - [3, 2]
+test_aarch64_neon_vcopy_laneq_s64 - [2]
+test_aarch64_neon_vcopy_laneq_s8 - [9, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_neon_vcopy_laneq_u16 - [5, 2, 3, 4]
+test_aarch64_neon_vcopy_laneq_u32 - [3, 2]
+test_aarch64_neon_vcopy_laneq_u64 - [2]
+test_aarch64_neon_vcopy_laneq_u8 - [9, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_neon_vcopyq_lane_f32 - [5.0, 2.0, 3.0, 4.0]
+test_aarch64_neon_vcopyq_lane_f64 - [3.0, 2.0]
+test_aarch64_neon_vcopyq_lane_p16 - [9, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_neon_vcopyq_lane_p64 - [3, 2]
+test_aarch64_neon_vcopyq_lane_p8 - [17, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+test_aarch64_neon_vcopyq_lane_s16 - [9, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_neon_vcopyq_lane_s32 - [5, 2, 3, 4]
+test_aarch64_neon_vcopyq_lane_s64 - [3, 2]
+test_aarch64_neon_vcopyq_lane_s8 - [17, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+test_aarch64_neon_vcopyq_lane_u16 - [9, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_neon_vcopyq_lane_u32 - [5, 2, 3, 4]
+test_aarch64_neon_vcopyq_lane_u64 - [3, 2]
+test_aarch64_neon_vcopyq_lane_u8 - [17, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+test_aarch64_neon_vcopyq_laneq_f32 - [5.0, 2.0, 3.0, 4.0]
+test_aarch64_neon_vcopyq_laneq_f64 - [3.0, 2.0]
+test_aarch64_neon_vcopyq_laneq_p16 - [9, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_neon_vcopyq_laneq_p64 - [3, 2]
+test_aarch64_neon_vcopyq_laneq_p8 - [17, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+test_aarch64_neon_vcopyq_laneq_s16 - [9, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_neon_vcopyq_laneq_s32 - [5, 2, 3, 4]
+test_aarch64_neon_vcopyq_laneq_s64 - [3, 2]
+test_aarch64_neon_vcopyq_laneq_s8 - [17, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+test_aarch64_neon_vcopyq_laneq_u16 - [9, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_neon_vcopyq_laneq_u32 - [5, 2, 3, 4]
+test_aarch64_neon_vcopyq_laneq_u64 - [3, 2]
+test_aarch64_neon_vcopyq_laneq_u8 - [17, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+test_aarch64_neon_vcreate_f64 - [5e-324]
+test_aarch64_neon_vcvt_f32_f64 - [1.0, 2.0]
+test_aarch64_neon_vcvt_f64_f32 - [1.0, 2.0]
+test_aarch64_neon_vcvt_f64_s64 - [1.0]
+test_aarch64_neon_vcvt_f64_u64 - [1.0]
+test_aarch64_neon_vcvt_high_f32_f64 - [1.0, 2.0, 3.0, 4.0]
+test_aarch64_neon_vcvt_high_f64_f32 - [3.0, 4.0]
+test_aarch64_neon_vcvt_n_f64_s64 - [0.5]
+test_aarch64_neon_vcvt_n_f64_u64 - [0.5]
+test_aarch64_neon_vcvt_n_s64_f64 - [2]
+test_aarch64_neon_vcvt_n_u64_f64 - [2]
+test_aarch64_neon_vcvt_s64_f64 - [1]
+test_aarch64_neon_vcvt_u64_f64 - [1]
+test_aarch64_neon_vcvta_s32_f32 - [1, 2]
+test_aarch64_neon_vcvta_s64_f64 - [1]
+test_aarch64_neon_vcvta_u32_f32 - [1, 2]
+test_aarch64_neon_vcvta_u64_f64 - [1]
+test_aarch64_neon_vcvtad_s64_f64 - 1
+test_aarch64_neon_vcvtad_u64_f64 - 1
+test_aarch64_neon_vcvtaq_s32_f32 - [1, 2, 3, 4]
+test_aarch64_neon_vcvtaq_s64_f64 - [1, 2]
+test_aarch64_neon_vcvtaq_u32_f32 - [1, 2, 3, 4]
+test_aarch64_neon_vcvtaq_u64_f64 - [1, 2]
+test_aarch64_neon_vcvtas_s32_f32 - 1
+test_aarch64_neon_vcvtas_u32_f32 - 1
+test_aarch64_neon_vcvtd_n_s64_f64 - 2
+test_aarch64_neon_vcvtd_n_u64_f64 - 2
+test_aarch64_neon_vcvtd_s64_f64 - 1
+test_aarch64_neon_vcvtd_u64_f64 - 1
+test_aarch64_neon_vcvtm_s32_f32 - [1, 2]
+test_aarch64_neon_vcvtm_s64_f64 - [1]
+test_aarch64_neon_vcvtm_u32_f32 - [1, 2]
+test_aarch64_neon_vcvtm_u64_f64 - [1]
+test_aarch64_neon_vcvtmd_s64_f64 - 1
+test_aarch64_neon_vcvtmd_u64_f64 - 1
+test_aarch64_neon_vcvtmq_s32_f32 - [1, 2, 3, 4]
+test_aarch64_neon_vcvtmq_s64_f64 - [1, 2]
+test_aarch64_neon_vcvtmq_u32_f32 - [1, 2, 3, 4]
+test_aarch64_neon_vcvtmq_u64_f64 - [1, 2]
+test_aarch64_neon_vcvtms_s32_f32 - 1
+test_aarch64_neon_vcvtms_u32_f32 - 1
+test_aarch64_neon_vcvtn_s32_f32 - [1, 2]
+test_aarch64_neon_vcvtn_s64_f64 - [1]
+test_aarch64_neon_vcvtn_u32_f32 - [1, 2]
+test_aarch64_neon_vcvtn_u64_f64 - [1]
+test_aarch64_neon_vcvtnd_s64_f64 - 1
+test_aarch64_neon_vcvtnd_u64_f64 - 1
+test_aarch64_neon_vcvtnq_s32_f32 - [1, 2, 3, 4]
+test_aarch64_neon_vcvtnq_s64_f64 - [1, 2]
+test_aarch64_neon_vcvtnq_u32_f32 - [1, 2, 3, 4]
+test_aarch64_neon_vcvtnq_u64_f64 - [1, 2]
+test_aarch64_neon_vcvtns_s32_f32 - 1
+test_aarch64_neon_vcvtns_u32_f32 - 1
+test_aarch64_neon_vcvtp_s32_f32 - [1, 2]
+test_aarch64_neon_vcvtp_s64_f64 - [1]
+test_aarch64_neon_vcvtp_u32_f32 - [1, 2]
+test_aarch64_neon_vcvtp_u64_f64 - [1]
+test_aarch64_neon_vcvtpd_s64_f64 - 1
+test_aarch64_neon_vcvtpd_u64_f64 - 1
+test_aarch64_neon_vcvtpq_s32_f32 - [1, 2, 3, 4]
+test_aarch64_neon_vcvtpq_s64_f64 - [1, 2]
+test_aarch64_neon_vcvtpq_u32_f32 - [1, 2, 3, 4]
+test_aarch64_neon_vcvtpq_u64_f64 - [1, 2]
+test_aarch64_neon_vcvtps_s32_f32 - 1
+test_aarch64_neon_vcvtps_u32_f32 - 1
+test_aarch64_neon_vcvtq_f64_s64 - [1.0, 2.0]
+test_aarch64_neon_vcvtq_f64_u64 - [1.0, 2.0]
+test_aarch64_neon_vcvtq_n_f64_s64 - [0.5, 1.0]
+test_aarch64_neon_vcvtq_n_f64_u64 - [0.5, 1.0]
+test_aarch64_neon_vcvtq_n_s64_f64 - [2, 4]
+test_aarch64_neon_vcvtq_n_u64_f64 - [2, 4]
+test_aarch64_neon_vcvtq_s64_f64 - [1, 2]
+test_aarch64_neon_vcvtq_u64_f64 - [1, 2]
+test_aarch64_neon_vcvts_n_s32_f32 - 2
+test_aarch64_neon_vcvts_n_u32_f32 - 2
+test_aarch64_neon_vcvts_s32_f32 - 1
+test_aarch64_neon_vcvts_u32_f32 - 1
+test_aarch64_neon_vcvtx_f32_f64 - [1.0, 2.0]
+test_aarch64_neon_vcvtx_high_f32_f64 - [1.0, 2.0, 3.0, 4.0]
+test_aarch64_neon_vdiv_f32 - [0.33333334, 0.5]
+test_aarch64_neon_vdiv_f64 - [0.5]
+test_aarch64_neon_vdivq_f32 - [0.2, 0.33333334, 0.42857143, 0.5]
+test_aarch64_neon_vdivq_f64 - [0.3333333333333333, 0.5]
+test_aarch64_neon_vdup_lane_f64 - [1.0]
+test_aarch64_neon_vdup_lane_p64 - [1]
+test_aarch64_neon_vdup_laneq_f64 - [1.0]
+test_aarch64_neon_vdup_laneq_p64 - [1]
+test_aarch64_neon_vdupb_lane_s8 - 1
+test_aarch64_neon_vdupb_lane_u8 - 1
+test_aarch64_neon_vdupb_laneq_s8 - 1
+test_aarch64_neon_vdupb_laneq_u8 - 1
+test_aarch64_neon_vdupd_lane_s64 - 1
+test_aarch64_neon_vdupd_lane_u64 - 1
+test_aarch64_neon_vdupd_laneq_s64 - 1
+test_aarch64_neon_vdupd_laneq_u64 - 1
+test_aarch64_neon_vduph_lane_s16 - 1
+test_aarch64_neon_vduph_lane_u16 - 1
+test_aarch64_neon_vduph_laneq_s16 - 1
+test_aarch64_neon_vduph_laneq_u16 - 1
+test_aarch64_neon_vdupq_lane_f64 - [1.0, 1.0]
+test_aarch64_neon_vdupq_lane_p64 - [1, 1]
+test_aarch64_neon_vdupq_laneq_f64 - [1.0, 1.0]
+test_aarch64_neon_vdupq_laneq_p64 - [1, 1]
+test_aarch64_neon_vdups_lane_s32 - 1
+test_aarch64_neon_vdups_lane_u32 - 1
+test_aarch64_neon_vdups_laneq_s32 - 1
+test_aarch64_neon_vdups_laneq_u32 - 1
+test_aarch64_neon_vextq_f64 - [1.0, 2.0]
+test_aarch64_neon_vextq_p64 - [1, 2]
+test_aarch64_neon_vfma_f64 - [7.0]
+test_aarch64_neon_vfma_lane_f32 - [16.0, 22.0]
+test_aarch64_neon_vfma_lane_f64 - [7.0]
+test_aarch64_neon_vfma_laneq_f32 - [16.0, 22.0]
+test_aarch64_neon_vfma_laneq_f64 - [7.0]
+test_aarch64_neon_vfma_n_f64 - [7.0]
+test_aarch64_neon_vfmaq_f64 - [16.0, 26.0]
+test_aarch64_neon_vfmaq_lane_f32 - [46.0, 56.0, 66.0, 76.0]
+test_aarch64_neon_vfmaq_lane_f64 - [16.0, 22.0]
+test_aarch64_neon_vfmaq_laneq_f32 - [46.0, 56.0, 66.0, 76.0]
+test_aarch64_neon_vfmaq_laneq_f64 - [16.0, 22.0]
+test_aarch64_neon_vfmaq_n_f64 - [16.0, 22.0]
+test_aarch64_neon_vfms_f64 - [-5.0]
+test_aarch64_neon_vfms_lane_f32 - [-14.0, -18.0]
+test_aarch64_neon_vfms_lane_f64 - [-5.0]
+test_aarch64_neon_vfms_laneq_f32 - [-14.0, -18.0]
+test_aarch64_neon_vfms_laneq_f64 - [-5.0]
+test_aarch64_neon_vfms_n_f64 - [-5.0]
+test_aarch64_neon_vfmsq_f64 - [-14.0, -22.0]
+test_aarch64_neon_vfmsq_lane_f32 - [-44.0, -52.0, -60.0, -68.0]
+test_aarch64_neon_vfmsq_lane_f64 - [-14.0, -18.0]
+test_aarch64_neon_vfmsq_laneq_f32 - [-44.0, -52.0, -60.0, -68.0]
+test_aarch64_neon_vfmsq_laneq_f64 - [-14.0, -18.0]
+test_aarch64_neon_vfmsq_n_f64 - [-14.0, -18.0]
+test_aarch64_neon_vget_high_f64 - [2.0]
+test_aarch64_neon_vget_low_f64 - [1.0]
+test_aarch64_neon_vld1_f32 - [1.0, 1.0]
+test_aarch64_neon_vld1_f64 - [1.0]
+test_aarch64_neon_vld1_p16 - [1, 1, 1, 1]
+test_aarch64_neon_vld1_p8 - [1, 1, 1, 1, 1, 1, 1, 1]
+test_aarch64_neon_vld1_s16 - [1, 1, 1, 1]
+test_aarch64_neon_vld1_s32 - [1, 1]
+test_aarch64_neon_vld1_s64 - [1]
+test_aarch64_neon_vld1_s8 - [1, 1, 1, 1, 1, 1, 1, 1]
+test_aarch64_neon_vld1_u16 - [1, 1, 1, 1]
+test_aarch64_neon_vld1_u32 - [1, 1]
+test_aarch64_neon_vld1_u64 - [1]
+test_aarch64_neon_vld1_u8 - [1, 1, 1, 1, 1, 1, 1, 1]
+test_aarch64_neon_vld1q_f32 - [1.0, 1.0, 1.0, 1.0]
+test_aarch64_neon_vld1q_f64 - [1.0, 1.0]
+test_aarch64_neon_vld1q_p16 - [1, 1, 1, 1, 1, 1, 1, 1]
+test_aarch64_neon_vld1q_p8 - [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+test_aarch64_neon_vld1q_s16 - [1, 1, 1, 1, 1, 1, 1, 1]
+test_aarch64_neon_vld1q_s32 - [1, 1, 1, 1]
+test_aarch64_neon_vld1q_s64 - [1, 1]
+test_aarch64_neon_vld1q_s8 - [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+test_aarch64_neon_vld1q_u16 - [1, 1, 1, 1, 1, 1, 1, 1]
+test_aarch64_neon_vld1q_u32 - [1, 1, 1, 1]
+test_aarch64_neon_vld1q_u64 - [1, 1]
+test_aarch64_neon_vld1q_u8 - [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+test_aarch64_neon_vmax_f64 - [2.0]
+test_aarch64_neon_vmaxnm_f64 - [2.0]
+test_aarch64_neon_vmaxnmq_f64 - [3.0, 4.0]
+test_aarch64_neon_vmaxq_f64 - [3.0, 4.0]
+test_aarch64_neon_vmaxv_s16 - 4
+test_aarch64_neon_vmaxv_s32 - 2
+test_aarch64_neon_vmaxv_s8 - 8
+test_aarch64_neon_vmaxv_u16 - 4
+test_aarch64_neon_vmaxv_u32 - 2
+test_aarch64_neon_vmaxv_u8 - 8
+test_aarch64_neon_vmaxvq_s16 - 8
+test_aarch64_neon_vmaxvq_s32 - 4
+test_aarch64_neon_vmaxvq_s8 - 16
+test_aarch64_neon_vmaxvq_u16 - 8
+test_aarch64_neon_vmaxvq_u32 - 4
+test_aarch64_neon_vmaxvq_u8 - 16
+test_aarch64_neon_vmin_f64 - [1.0]
+test_aarch64_neon_vminnm_f64 - [1.0]
+test_aarch64_neon_vminnmq_f64 - [1.0, 2.0]
+test_aarch64_neon_vminq_f64 - [1.0, 2.0]
+test_aarch64_neon_vminv_s16 - 1
+test_aarch64_neon_vminv_s32 - 1
+test_aarch64_neon_vminv_s8 - 1
+test_aarch64_neon_vminv_u16 - 1
+test_aarch64_neon_vminv_u32 - 1
+test_aarch64_neon_vminv_u8 - 1
+test_aarch64_neon_vminvq_s16 - 1
+test_aarch64_neon_vminvq_s32 - 1
+test_aarch64_neon_vminvq_s8 - 1
+test_aarch64_neon_vminvq_u16 - 1
+test_aarch64_neon_vminvq_u32 - 1
+test_aarch64_neon_vminvq_u8 - 1
+test_aarch64_neon_vmla_f64 - [7.0]
+test_aarch64_neon_vmlal_high_lane_s16 - [118, 132, 146, 160]
+test_aarch64_neon_vmlal_high_lane_s32 - [36, 44]
+test_aarch64_neon_vmlal_high_lane_u16 - [118, 132, 146, 160]
+test_aarch64_neon_vmlal_high_lane_u32 - [36, 44]
+test_aarch64_neon_vmlal_high_laneq_s16 - [118, 132, 146, 160]
+test_aarch64_neon_vmlal_high_laneq_s32 - [36, 44]
+test_aarch64_neon_vmlal_high_laneq_u16 - [118, 132, 146, 160]
+test_aarch64_neon_vmlal_high_laneq_u32 - [36, 44]
+test_aarch64_neon_vmlal_high_n_s16 - [118, 132, 146, 160]
+test_aarch64_neon_vmlal_high_n_s32 - [36, 44]
+test_aarch64_neon_vmlal_high_n_u16 - [118, 132, 146, 160]
+test_aarch64_neon_vmlal_high_n_u32 - [36, 44]
+test_aarch64_neon_vmlal_high_s16 - [154, 182, 212, 244]
+test_aarch64_neon_vmlal_high_s32 - [46, 62]
+test_aarch64_neon_vmlal_high_s8 - [562, 614, 668, 724, 782, 842, 904, 968]
+test_aarch64_neon_vmlal_high_u16 - [154, 182, 212, 244]
+test_aarch64_neon_vmlal_high_u32 - [46, 62]
+test_aarch64_neon_vmlal_high_u8 - [562, 614, 668, 724, 782, 842, 904, 968]
+test_aarch64_neon_vmlaq_f64 - [16.0, 26.0]
+test_aarch64_neon_vmls_f64 - [-5.0]
+test_aarch64_neon_vmlsl_high_lane_s16 - [-116, -128, -140, -152]
+test_aarch64_neon_vmlsl_high_lane_s32 - [-34, -40]
+test_aarch64_neon_vmlsl_high_lane_u16 - [4294967180, 4294967168, 4294967156, 4294967144]
+test_aarch64_neon_vmlsl_high_lane_u32 - [18446744073709551582, 18446744073709551576]
+test_aarch64_neon_vmlsl_high_laneq_s16 - [-116, -128, -140, -152]
+test_aarch64_neon_vmlsl_high_laneq_s32 - [-34, -40]
+test_aarch64_neon_vmlsl_high_laneq_u16 - [4294967180, 4294967168, 4294967156, 4294967144]
+test_aarch64_neon_vmlsl_high_laneq_u32 - [18446744073709551582, 18446744073709551576]
+test_aarch64_neon_vmlsl_high_n_s16 - [-116, -128, -140, -152]
+test_aarch64_neon_vmlsl_high_n_s32 - [-34, -40]
+test_aarch64_neon_vmlsl_high_n_u16 - [4294967180, 4294967168, 4294967156, 4294967144]
+test_aarch64_neon_vmlsl_high_n_u32 - [18446744073709551582, 18446744073709551576]
+test_aarch64_neon_vmlsl_high_s16 - [-152, -178, -206, -236]
+test_aarch64_neon_vmlsl_high_s32 - [-44, -58]
+test_aarch64_neon_vmlsl_high_s8 - [-560, -610, -662, -716, -772, -830, -890, -952]
+test_aarch64_neon_vmlsl_high_u16 - [4294967144, 4294967118, 4294967090, 4294967060]
+test_aarch64_neon_vmlsl_high_u32 - [18446744073709551572, 18446744073709551558]
+test_aarch64_neon_vmlsl_high_u8 - [64976, 64926, 64874, 64820, 64764, 64706, 64646, 64584]
+test_aarch64_neon_vmlsq_f64 - [-14.0, -22.0]
+test_aarch64_neon_vmovl_high_s16 - [5, 6, 7, 8]
+test_aarch64_neon_vmovl_high_s32 - [3, 4]
+test_aarch64_neon_vmovl_high_s8 - [9, 10, 11, 12, 13, 14, 15, 16]
+test_aarch64_neon_vmovl_high_u16 - [5, 6, 7, 8]
+test_aarch64_neon_vmovl_high_u32 - [3, 4]
+test_aarch64_neon_vmovl_high_u8 - [9, 10, 11, 12, 13, 14, 15, 16]
+test_aarch64_neon_vmovn_high_s16 - [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+test_aarch64_neon_vmovn_high_s32 - [1, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_neon_vmovn_high_s64 - [1, 2, 3, 4]
+test_aarch64_neon_vmovn_high_u16 - [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+test_aarch64_neon_vmovn_high_u32 - [1, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_neon_vmovn_high_u64 - [1, 2, 3, 4]
+test_aarch64_neon_vmul_f64 - [2.0]
+test_aarch64_neon_vmul_lane_f64 - [2.0]
+test_aarch64_neon_vmul_laneq_f64 - [2.0]
+test_aarch64_neon_vmul_n_f64 - [2.0]
+test_aarch64_neon_vmull_high_lane_s16 - [45, 54, 63, 72]
+test_aarch64_neon_vmull_high_lane_s32 - [15, 20]
+test_aarch64_neon_vmull_high_lane_u16 - [45, 54, 63, 72]
+test_aarch64_neon_vmull_high_lane_u32 - [15, 20]
+test_aarch64_neon_vmull_high_laneq_s16 - [45, 54, 63, 72]
+test_aarch64_neon_vmull_high_laneq_s32 - [15, 20]
+test_aarch64_neon_vmull_high_laneq_u16 - [45, 54, 63, 72]
+test_aarch64_neon_vmull_high_laneq_u32 - [15, 20]
+test_aarch64_neon_vmull_high_n_s16 - [45, 54, 63, 72]
+test_aarch64_neon_vmull_high_n_s32 - [15, 20]
+test_aarch64_neon_vmull_high_n_u16 - [45, 54, 63, 72]
+test_aarch64_neon_vmull_high_n_u32 - [15, 20]
+test_aarch64_neon_vmull_high_p8 - [209, 228, 245, 144, 129, 180, 165, 512]
+test_aarch64_neon_vmull_high_s16 - [65, 84, 105, 128]
+test_aarch64_neon_vmull_high_s32 - [21, 32]
+test_aarch64_neon_vmull_high_s8 - [225, 260, 297, 336, 377, 420, 465, 512]
+test_aarch64_neon_vmull_high_u16 - [65, 84, 105, 128]
+test_aarch64_neon_vmull_high_u32 - [21, 32]
+test_aarch64_neon_vmull_high_u8 - [225, 260, 297, 336, 377, 420, 465, 512]
+test_aarch64_neon_vmulq_f64 - [3.0, 8.0]
+test_aarch64_neon_vmulq_lane_f64 - [3.0, 6.0]
+test_aarch64_neon_vmulq_laneq_f64 - [3.0, 6.0]
+test_aarch64_neon_vmulq_n_f64 - [3.0, 6.0]
+test_aarch64_neon_vmulx_f32 - [3.0, 8.0]
+test_aarch64_neon_vmulx_f64 - [2.0]
+test_aarch64_neon_vmulx_lane_f32 - [3.0, 6.0]
+test_aarch64_neon_vmulx_lane_f64 - [2.0]
+test_aarch64_neon_vmulx_laneq_f32 - [3.0, 6.0]
+test_aarch64_neon_vmulx_laneq_f64 - [2.0]
+test_aarch64_neon_vmulxq_f32 - [5.0, 12.0, 21.0, 32.0]
+test_aarch64_neon_vmulxq_f64 - [3.0, 8.0]
+test_aarch64_neon_vmulxq_lane_f32 - [5.0, 10.0, 15.0, 20.0]
+test_aarch64_neon_vmulxq_lane_f64 - [3.0, 6.0]
+test_aarch64_neon_vmulxq_laneq_f32 - [5.0, 10.0, 15.0, 20.0]
+test_aarch64_neon_vmulxq_laneq_f64 - [3.0, 6.0]
+test_aarch64_neon_vneg_f64 - [-1.0]
+test_aarch64_neon_vneg_s64 - [-1]
+test_aarch64_neon_vnegd_s64 - -1
+test_aarch64_neon_vnegq_f64 - [-1.0, -2.0]
+test_aarch64_neon_vnegq_s64 - [-1, -2]
+test_aarch64_neon_vpaddd_s64 - 3
+test_aarch64_neon_vpaddd_u64 - 3
+test_aarch64_neon_vpaddq_f32 - [3.0, 7.0, 11.0, 15.0]
+test_aarch64_neon_vpaddq_f64 - [3.0, 7.0]
+test_aarch64_neon_vpaddq_s16 - [3, 7, 11, 15, 19, 23, 27, 31]
+test_aarch64_neon_vpaddq_s32 - [3, 7, 11, 15]
+test_aarch64_neon_vpaddq_s64 - [3, 7]
+test_aarch64_neon_vpaddq_s8 - [3, 7, 11, 15, 19, 23, 27, 31, 35, 39, 43, 47, 51, 55, 59, 63]
+test_aarch64_neon_vpaddq_u16 - [3, 7, 11, 15, 19, 23, 27, 31]
+test_aarch64_neon_vpaddq_u32 - [3, 7, 11, 15]
+test_aarch64_neon_vpaddq_u64 - [3, 7]
+test_aarch64_neon_vpaddq_u8 - [3, 7, 11, 15, 19, 23, 27, 31, 35, 39, 43, 47, 51, 55, 59, 63]
+test_aarch64_neon_vpmaxnm_f32 - [2.0, 4.0]
+test_aarch64_neon_vpmaxnmq_f32 - [2.0, 4.0, 6.0, 8.0]
+test_aarch64_neon_vpmaxnmq_f64 - [2.0, 4.0]
+test_aarch64_neon_vpmaxq_f32 - [2.0, 4.0, 6.0, 8.0]
+test_aarch64_neon_vpmaxq_f64 - [2.0, 4.0]
+test_aarch64_neon_vpmaxq_s16 - [2, 4, 6, 8, 10, 12, 14, 16]
+test_aarch64_neon_vpmaxq_s32 - [2, 4, 6, 8]
+test_aarch64_neon_vpmaxq_s8 - [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32]
+test_aarch64_neon_vpmaxq_u16 - [2, 4, 6, 8, 10, 12, 14, 16]
+test_aarch64_neon_vpmaxq_u32 - [2, 4, 6, 8]
+test_aarch64_neon_vpmaxq_u8 - [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32]
+test_aarch64_neon_vpminnm_f32 - [1.0, 3.0]
+test_aarch64_neon_vpminnmq_f32 - [1.0, 3.0, 5.0, 7.0]
+test_aarch64_neon_vpminnmq_f64 - [1.0, 3.0]
+test_aarch64_neon_vpminq_f32 - [1.0, 3.0, 5.0, 7.0]
+test_aarch64_neon_vpminq_f64 - [1.0, 3.0]
+test_aarch64_neon_vpminq_s16 - [1, 3, 5, 7, 9, 11, 13, 15]
+test_aarch64_neon_vpminq_s32 - [1, 3, 5, 7]
+test_aarch64_neon_vpminq_s8 - [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31]
+test_aarch64_neon_vpminq_u16 - [1, 3, 5, 7, 9, 11, 13, 15]
+test_aarch64_neon_vpminq_u32 - [1, 3, 5, 7]
+test_aarch64_neon_vpminq_u8 - [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31]
+test_aarch64_neon_vqabs_s64 - [1]
+test_aarch64_neon_vqabsb_s8 - 1
+test_aarch64_neon_vqabsd_s64 - 1
+test_aarch64_neon_vqabsh_s16 - 1
+test_aarch64_neon_vqabsq_s64 - [1, 2]
+test_aarch64_neon_vqabss_s32 - 1
+test_aarch64_neon_vqaddb_s8 - 3
+test_aarch64_neon_vqaddb_u8 - 3
+test_aarch64_neon_vqaddd_s64 - 3
+test_aarch64_neon_vqaddd_u64 - 3
+test_aarch64_neon_vqaddh_s16 - 3
+test_aarch64_neon_vqaddh_u16 - 3
+test_aarch64_neon_vqadds_s32 - 3
+test_aarch64_neon_vqadds_u32 - 3
+test_aarch64_neon_vqdmlal_high_lane_s16 - [235, 262, 289, 316]
+test_aarch64_neon_vqdmlal_high_lane_s32 - [71, 86]
+test_aarch64_neon_vqdmlal_high_laneq_s16 - [235, 262, 289, 316]
+test_aarch64_neon_vqdmlal_high_laneq_s32 - [71, 86]
+test_aarch64_neon_vqdmlal_high_n_s16 - [235, 262, 289, 316]
+test_aarch64_neon_vqdmlal_high_n_s32 - [71, 86]
+test_aarch64_neon_vqdmlal_high_s16 - [307, 362, 421, 484]
+test_aarch64_neon_vqdmlal_high_s32 - [91, 122]
+test_aarch64_neon_vqdmlal_laneq_s16 - [91, 110, 129, 148]
+test_aarch64_neon_vqdmlal_laneq_s32 - [31, 42]
+test_aarch64_neon_vqdmlalh_lane_s16 - 13
+test_aarch64_neon_vqdmlalh_laneq_s16 - 13
+test_aarch64_neon_vqdmlalh_s16 - 13
+test_aarch64_neon_vqdmlals_lane_s32 - 13
+test_aarch64_neon_vqdmlals_laneq_s32 - 13
+test_aarch64_neon_vqdmlals_s32 - 13
+test_aarch64_neon_vqdmlsl_high_lane_s16 - [-233, -258, -283, -308]
+test_aarch64_neon_vqdmlsl_high_lane_s32 - [-69, -82]
+test_aarch64_neon_vqdmlsl_high_laneq_s16 - [-233, -258, -283, -308]
+test_aarch64_neon_vqdmlsl_high_laneq_s32 - [-69, -82]
+test_aarch64_neon_vqdmlsl_high_n_s16 - [-233, -258, -283, -308]
+test_aarch64_neon_vqdmlsl_high_n_s32 - [-69, -82]
+test_aarch64_neon_vqdmlsl_high_s16 - [-305, -358, -415, -476]
+test_aarch64_neon_vqdmlsl_high_s32 - [-89, -118]
+test_aarch64_neon_vqdmlsl_laneq_s16 - [-89, -106, -123, -140]
+test_aarch64_neon_vqdmlsl_laneq_s32 - [-29, -38]
+test_aarch64_neon_vqdmlslh_lane_s16 - -11
+test_aarch64_neon_vqdmlslh_laneq_s16 - -11
+test_aarch64_neon_vqdmlslh_s16 - -11
+test_aarch64_neon_vqdmlsls_lane_s32 - -11
+test_aarch64_neon_vqdmlsls_laneq_s32 - -11
+test_aarch64_neon_vqdmlsls_s32 - -11
+test_aarch64_neon_vqdmull_high_lane_s16 - [90, 108, 126, 144]
+test_aarch64_neon_vqdmull_high_lane_s32 - [30, 40]
+test_aarch64_neon_vqdmull_high_laneq_s16 - [90, 108, 126, 144]
+test_aarch64_neon_vqdmull_high_laneq_s32 - [30, 40]
+test_aarch64_neon_vqdmull_high_n_s16 - [90, 108, 126, 144]
+test_aarch64_neon_vqdmull_high_n_s32 - [30, 40]
+test_aarch64_neon_vqdmull_high_s16 - [130, 168, 210, 256]
+test_aarch64_neon_vqdmull_high_s32 - [42, 64]
+test_aarch64_neon_vqdmull_laneq_s16 - [10, 20, 30, 40]
+test_aarch64_neon_vqdmull_laneq_s32 - [6, 12]
+test_aarch64_neon_vqdmullh_lane_s16 - 4
+test_aarch64_neon_vqdmullh_laneq_s16 - 4
+test_aarch64_neon_vqdmullh_s16 - 4
+test_aarch64_neon_vqdmulls_lane_s32 - 4
+test_aarch64_neon_vqdmulls_laneq_s32 - 4
+test_aarch64_neon_vqdmulls_s32 - 4
+test_aarch64_neon_vqmovn_high_s16 - [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+test_aarch64_neon_vqmovn_high_s32 - [1, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_neon_vqmovn_high_s64 - [1, 2, 3, 4]
+test_aarch64_neon_vqmovn_high_u16 - [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+test_aarch64_neon_vqmovn_high_u32 - [1, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_neon_vqmovn_high_u64 - [1, 2, 3, 4]
+test_aarch64_neon_vqmovnd_s64 - 1
+test_aarch64_neon_vqmovnd_u64 - 1
+test_aarch64_neon_vqmovnh_s16 - 1
+test_aarch64_neon_vqmovnh_u16 - 1
+test_aarch64_neon_vqmovns_s32 - 1
+test_aarch64_neon_vqmovns_u32 - 1
+test_aarch64_neon_vqmovun_high_s16 - [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+test_aarch64_neon_vqmovun_high_s32 - [1, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_neon_vqmovun_high_s64 - [1, 2, 3, 4]
+test_aarch64_neon_vqmovund_s64 - 1
+test_aarch64_neon_vqmovunh_s16 - 1
+test_aarch64_neon_vqmovuns_s32 - 1
+test_aarch64_neon_vqneg_s64 - [-1]
+test_aarch64_neon_vqnegb_s8 - -1
+test_aarch64_neon_vqnegd_s64 - -1
+test_aarch64_neon_vqnegh_s16 - -1
+test_aarch64_neon_vqnegq_s64 - [-1, -2]
+test_aarch64_neon_vqnegs_s32 - -1
+test_aarch64_neon_vqrshlb_s8 - 4
+test_aarch64_neon_vqrshlb_u8 - 4
+test_aarch64_neon_vqrshld_s64 - 4
+test_aarch64_neon_vqrshld_u64 - 4
+test_aarch64_neon_vqrshlh_s16 - 4
+test_aarch64_neon_vqrshlh_u16 - 4
+test_aarch64_neon_vqrshls_s32 - 4
+test_aarch64_neon_vqrshls_u32 - 4
+test_aarch64_neon_vqrshrn_high_n_s16 - [1, 2, 3, 4, 5, 6, 7, 8, 5, 5, 6, 6, 7, 7, 8, 8]
+test_aarch64_neon_vqrshrn_high_n_s32 - [1, 2, 3, 4, 3, 3, 4, 4]
+test_aarch64_neon_vqrshrn_high_n_s64 - [1, 2, 2, 2]
+test_aarch64_neon_vqrshrn_high_n_u16 - [1, 2, 3, 4, 5, 6, 7, 8, 5, 5, 6, 6, 7, 7, 8, 8]
+test_aarch64_neon_vqrshrn_high_n_u32 - [1, 2, 3, 4, 3, 3, 4, 4]
+test_aarch64_neon_vqrshrn_high_n_u64 - [1, 2, 2, 2]
+test_aarch64_neon_vqrshrnd_n_s64 - 1
+test_aarch64_neon_vqrshrnd_n_u64 - 1
+test_aarch64_neon_vqrshrnh_n_s16 - 1
+test_aarch64_neon_vqrshrnh_n_u16 - 1
+test_aarch64_neon_vqrshrns_n_s32 - 1
+test_aarch64_neon_vqrshrns_n_u32 - 1
+test_aarch64_neon_vqrshrun_high_n_s16 - [1, 2, 3, 4, 5, 6, 7, 8, 5, 5, 6, 6, 7, 7, 8, 8]
+test_aarch64_neon_vqrshrun_high_n_s32 - [1, 2, 3, 4, 3, 3, 4, 4]
+test_aarch64_neon_vqrshrun_high_n_s64 - [1, 2, 2, 2]
+test_aarch64_neon_vqrshrund_n_s64 - 1
+test_aarch64_neon_vqrshrunh_n_s16 - 1
+test_aarch64_neon_vqrshruns_n_s32 - 1
+test_aarch64_neon_vqshlb_n_s8 - 2
+test_aarch64_neon_vqshlb_n_u8 - 2
+test_aarch64_neon_vqshlb_s8 - 4
+test_aarch64_neon_vqshlb_u8 - 4
+test_aarch64_neon_vqshld_n_s64 - 2
+test_aarch64_neon_vqshld_n_u64 - 2
+test_aarch64_neon_vqshld_s64 - 4
+test_aarch64_neon_vqshld_u64 - 4
+test_aarch64_neon_vqshlh_n_s16 - 2
+test_aarch64_neon_vqshlh_n_u16 - 2
+test_aarch64_neon_vqshlh_s16 - 4
+test_aarch64_neon_vqshlh_u16 - 4
+test_aarch64_neon_vqshls_n_s32 - 2
+test_aarch64_neon_vqshls_n_u32 - 2
+test_aarch64_neon_vqshls_s32 - 4
+test_aarch64_neon_vqshls_u32 - 4
+test_aarch64_neon_vqshlub_n_s8 - 2
+test_aarch64_neon_vqshlud_n_s64 - 2
+test_aarch64_neon_vqshluh_n_s16 - 2
+test_aarch64_neon_vqshlus_n_s32 - 2
+test_aarch64_neon_vqshrn_high_n_s16 - [1, 2, 3, 4, 5, 6, 7, 8, 4, 5, 5, 6, 6, 7, 7, 8]
+test_aarch64_neon_vqshrn_high_n_s32 - [1, 2, 3, 4, 2, 3, 3, 4]
+test_aarch64_neon_vqshrn_high_n_s64 - [1, 2, 1, 2]
+test_aarch64_neon_vqshrn_high_n_u16 - [1, 2, 3, 4, 5, 6, 7, 8, 4, 5, 5, 6, 6, 7, 7, 8]
+test_aarch64_neon_vqshrn_high_n_u32 - [1, 2, 3, 4, 2, 3, 3, 4]
+test_aarch64_neon_vqshrn_high_n_u64 - [1, 2, 1, 2]
+test_aarch64_neon_vqshrun_high_n_s16 - [1, 2, 3, 4, 5, 6, 7, 8, 4, 5, 5, 6, 6, 7, 7, 8]
+test_aarch64_neon_vqshrun_high_n_s32 - [1, 2, 3, 4, 2, 3, 3, 4]
+test_aarch64_neon_vqshrun_high_n_s64 - [1, 2, 1, 2]
+test_aarch64_neon_vqsubb_s8 - -1
+test_aarch64_neon_vqsubd_s64 - -1
+test_aarch64_neon_vqsubh_s16 - -1
+test_aarch64_neon_vqsubs_s32 - -1
+test_aarch64_neon_vqtbx1_p8 - [1, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_neon_vqtbx1_s8 - [1, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_neon_vqtbx1_u8 - [1, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_neon_vqtbx1q_p8 - [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+test_aarch64_neon_vqtbx1q_s8 - [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+test_aarch64_neon_vqtbx1q_u8 - [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+test_aarch64_neon_vrbit_p8 - [128, 64, 192, 32, 160, 96, 224, 16]
+test_aarch64_neon_vrbit_s8 - [-128, 64, -64, 32, -96, 96, -32, 16]
+test_aarch64_neon_vrbit_u8 - [128, 64, 192, 32, 160, 96, 224, 16]
+test_aarch64_neon_vrbitq_p8 - [128, 64, 192, 32, 160, 96, 224, 16, 144, 80, 208, 48, 176, 112, 240, 8]
+test_aarch64_neon_vrbitq_s8 - [-128, 64, -64, 32, -96, 96, -32, 16, -112, 80, -48, 48, -80, 112, -16, 8]
+test_aarch64_neon_vrbitq_u8 - [128, 64, 192, 32, 160, 96, 224, 16, 144, 80, 208, 48, 176, 112, 240, 8]
+test_aarch64_neon_vrecpe_f64 - [0.998046875]
+test_aarch64_neon_vrecpeq_f64 - [0.998046875, 0.4990234375]
+test_aarch64_neon_vrecpsq_f64 - [-1.0, -6.0]
+test_aarch64_neon_vreinterpret_f32_f64 - [0.0, 1.875]
+test_aarch64_neon_vreinterpret_f32_p64 - [1e-45, 0.0]
+test_aarch64_neon_vreinterpret_f64_f32 - [2.000000473111868]
+test_aarch64_neon_vreinterpret_f64_p16 - [5.56274830678932e-309]
+test_aarch64_neon_vreinterpret_f64_p64 - [5e-324]
+test_aarch64_neon_vreinterpret_f64_p8 - [5.447603722011605e-270]
+test_aarch64_neon_vreinterpret_f64_s16 - [5.56274830678932e-309]
+test_aarch64_neon_vreinterpret_f64_s32 - [4.2439915824e-314]
+test_aarch64_neon_vreinterpret_f64_s64 - [5e-324]
+test_aarch64_neon_vreinterpret_f64_s8 - [5.447603722011605e-270]
+test_aarch64_neon_vreinterpret_f64_u16 - [5.56274830678932e-309]
+test_aarch64_neon_vreinterpret_f64_u32 - [4.2439915824e-314]
+test_aarch64_neon_vreinterpret_f64_u64 - [5e-324]
+test_aarch64_neon_vreinterpret_f64_u8 - [5.447603722011605e-270]
+test_aarch64_neon_vreinterpret_p16_f64 - [0, 0, 0, 16368]
+test_aarch64_neon_vreinterpret_p64_f32 - [4611686019492741120]
+test_aarch64_neon_vreinterpret_p64_f64 - [4607182418800017408]
+test_aarch64_neon_vreinterpret_p64_s64 - [1]
+test_aarch64_neon_vreinterpret_p64_u64 - [1]
+test_aarch64_neon_vreinterpret_p8_f64 - [0, 0, 0, 0, 0, 0, 240, 63]
+test_aarch64_neon_vreinterpret_s16_f64 - [0, 0, 0, 16368]
+test_aarch64_neon_vreinterpret_s32_f64 - [0, 1072693248]
+test_aarch64_neon_vreinterpret_s64_f64 - [4607182418800017408]
+test_aarch64_neon_vreinterpret_s64_p64 - [1]
+test_aarch64_neon_vreinterpret_s8_f64 - [0, 0, 0, 0, 0, 0, -16, 63]
+test_aarch64_neon_vreinterpret_u16_f64 - [0, 0, 0, 16368]
+test_aarch64_neon_vreinterpret_u32_f64 - [0, 1072693248]
+test_aarch64_neon_vreinterpret_u64_f64 - [4607182418800017408]
+test_aarch64_neon_vreinterpret_u64_p64 - [1]
+test_aarch64_neon_vreinterpret_u8_f64 - [0, 0, 0, 0, 0, 0, 240, 63]
+test_aarch64_neon_vreinterpretq_f32_f64 - [0.0, 1.875, 0.0, 2.0]
+test_aarch64_neon_vreinterpretq_f32_p64 - [1e-45, 0.0, 3e-45, 0.0]
+test_aarch64_neon_vreinterpretq_f64_f32 - [2.000000473111868, 512.0001225471497]
+test_aarch64_neon_vreinterpretq_f64_p128 - [5e-324, 0.0]
+test_aarch64_neon_vreinterpretq_f64_p16 - [5.56274830678932e-309, 1.1125517834184144e-308]
+test_aarch64_neon_vreinterpretq_f64_p64 - [5e-324, 1e-323]
+test_aarch64_neon_vreinterpretq_f64_p8 - [5.447603722011605e-270, 2.500364306227096e-231]
+test_aarch64_neon_vreinterpretq_f64_s16 - [5.56274830678932e-309, 1.1125517834184144e-308]
+test_aarch64_neon_vreinterpretq_f64_s32 - [4.2439915824e-314, 8.4879831653e-314]
+test_aarch64_neon_vreinterpretq_f64_s64 - [5e-324, 1e-323]
+test_aarch64_neon_vreinterpretq_f64_s8 - [5.447603722011605e-270, 2.500364306227096e-231]
+test_aarch64_neon_vreinterpretq_f64_u16 - [5.56274830678932e-309, 1.1125517834184144e-308]
+test_aarch64_neon_vreinterpretq_f64_u32 - [4.2439915824e-314, 8.4879831653e-314]
+test_aarch64_neon_vreinterpretq_f64_u64 - [5e-324, 1e-323]
+test_aarch64_neon_vreinterpretq_f64_u8 - [5.447603722011605e-270, 2.500364306227096e-231]
+test_aarch64_neon_vreinterpretq_p16_f64 - [0, 0, 0, 16368, 0, 0, 0, 16384]
+test_aarch64_neon_vreinterpretq_p64_f32 - [4611686019492741120, 4647714816524288000]
+test_aarch64_neon_vreinterpretq_p64_f64 - [4607182418800017408, 4611686018427387904]
+test_aarch64_neon_vreinterpretq_p64_s64 - [1, 2]
+test_aarch64_neon_vreinterpretq_p64_u64 - [1, 2]
+test_aarch64_neon_vreinterpretq_p8_f64 - [0, 0, 0, 0, 0, 0, 240, 63, 0, 0, 0, 0, 0, 0, 0, 64]
+test_aarch64_neon_vreinterpretq_s16_f64 - [0, 0, 0, 16368, 0, 0, 0, 16384]
+test_aarch64_neon_vreinterpretq_s32_f64 - [0, 1072693248, 0, 1073741824]
+test_aarch64_neon_vreinterpretq_s64_f64 - [4607182418800017408, 4611686018427387904]
+test_aarch64_neon_vreinterpretq_s64_p64 - [1, 2]
+test_aarch64_neon_vreinterpretq_s8_f64 - [0, 0, 0, 0, 0, 0, -16, 63, 0, 0, 0, 0, 0, 0, 0, 64]
+test_aarch64_neon_vreinterpretq_u16_f64 - [0, 0, 0, 16368, 0, 0, 0, 16384]
+test_aarch64_neon_vreinterpretq_u32_f64 - [0, 1072693248, 0, 1073741824]
+test_aarch64_neon_vreinterpretq_u64_f64 - [4607182418800017408, 4611686018427387904]
+test_aarch64_neon_vreinterpretq_u64_p64 - [1, 2]
+test_aarch64_neon_vreinterpretq_u8_f64 - [0, 0, 0, 0, 0, 0, 240, 63, 0, 0, 0, 0, 0, 0, 0, 64]
+test_aarch64_neon_vrnd_f32 - [1.0, 2.0]
+test_aarch64_neon_vrnd_f64 - [1.0]
+test_aarch64_neon_vrnda_f32 - [1.0, 2.0]
+test_aarch64_neon_vrnda_f64 - [1.0]
+test_aarch64_neon_vrndaq_f32 - [1.0, 2.0, 3.0, 4.0]
+test_aarch64_neon_vrndaq_f64 - [1.0, 2.0]
+test_aarch64_neon_vrndi_f32 - [1.0, 2.0]
+test_aarch64_neon_vrndi_f64 - [1.0]
+test_aarch64_neon_vrndiq_f32 - [1.0, 2.0, 3.0, 4.0]
+test_aarch64_neon_vrndiq_f64 - [1.0, 2.0]
+test_aarch64_neon_vrndm_f32 - [1.0, 2.0]
+test_aarch64_neon_vrndm_f64 - [1.0]
+test_aarch64_neon_vrndmq_f32 - [1.0, 2.0, 3.0, 4.0]
+test_aarch64_neon_vrndmq_f64 - [1.0, 2.0]
+test_aarch64_neon_vrndn_f64 - [1.0]
+test_aarch64_neon_vrndnq_f64 - [1.0, 2.0]
+test_aarch64_neon_vrndp_f32 - [1.0, 2.0]
+test_aarch64_neon_vrndp_f64 - [1.0]
+test_aarch64_neon_vrndpq_f32 - [1.0, 2.0, 3.0, 4.0]
+test_aarch64_neon_vrndpq_f64 - [1.0, 2.0]
+test_aarch64_neon_vrndq_f32 - [1.0, 2.0, 3.0, 4.0]
+test_aarch64_neon_vrndq_f64 - [1.0, 2.0]
+test_aarch64_neon_vrndx_f32 - [1.0, 2.0]
+test_aarch64_neon_vrndx_f64 - [1.0]
+test_aarch64_neon_vrndxq_f32 - [1.0, 2.0, 3.0, 4.0]
+test_aarch64_neon_vrndxq_f64 - [1.0, 2.0]
+test_aarch64_neon_vrshld_s64 - 4
+test_aarch64_neon_vrshld_u64 - 4
+test_aarch64_neon_vrshrd_n_s64 - 1
+test_aarch64_neon_vrshrd_n_u64 - 1
+test_aarch64_neon_vrshrn_high_n_s16 - [1, 2, 3, 4, 5, 6, 7, 8, 5, 5, 6, 6, 7, 7, 8, 8]
+test_aarch64_neon_vrshrn_high_n_s32 - [1, 2, 3, 4, 3, 3, 4, 4]
+test_aarch64_neon_vrshrn_high_n_s64 - [1, 2, 2, 2]
+test_aarch64_neon_vrshrn_high_n_u16 - [1, 2, 3, 4, 5, 6, 7, 8, 5, 5, 6, 6, 7, 7, 8, 8]
+test_aarch64_neon_vrshrn_high_n_u32 - [1, 2, 3, 4, 3, 3, 4, 4]
+test_aarch64_neon_vrshrn_high_n_u64 - [1, 2, 2, 2]
+test_aarch64_neon_vrsqrte_f64 - [0.998046875]
+test_aarch64_neon_vrsqrteq_f64 - [0.998046875, 0.705078125]
+test_aarch64_neon_vrsqrts_f64 - [0.5]
+test_aarch64_neon_vrsqrtsq_f64 - [0.0, -2.5]
+test_aarch64_neon_vrsrad_n_s64 - 2
+test_aarch64_neon_vrsrad_n_u64 - 2
+test_aarch64_neon_vrsubhn_high_s16 - [1, 2, 3, 4, 5, 6, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0]
+test_aarch64_neon_vrsubhn_high_s32 - [1, 2, 3, 4, 0, 0, 0, 0]
+test_aarch64_neon_vrsubhn_high_s64 - [1, 2, 0, 0]
+test_aarch64_neon_vrsubhn_high_u16 - [1, 2, 3, 4, 5, 6, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0]
+test_aarch64_neon_vrsubhn_high_u32 - [1, 2, 3, 4, 0, 0, 0, 0]
+test_aarch64_neon_vrsubhn_high_u64 - [1, 2, 0, 0]
+test_aarch64_neon_vset_lane_f64 - [1.0]
+test_aarch64_neon_vsetq_lane_f64 - [1.0, 3.0]
+test_aarch64_neon_vshld_s64 - 4
+test_aarch64_neon_vshld_u64 - 4
+test_aarch64_neon_vshll_high_n_s16 - [10, 12, 14, 16]
+test_aarch64_neon_vshll_high_n_s32 - [6, 8]
+test_aarch64_neon_vshll_high_n_s8 - [18, 20, 22, 24, 26, 28, 30, 32]
+test_aarch64_neon_vshll_high_n_u16 - [10, 12, 14, 16]
+test_aarch64_neon_vshll_high_n_u32 - [6, 8]
+test_aarch64_neon_vshll_high_n_u8 - [18, 20, 22, 24, 26, 28, 30, 32]
+test_aarch64_neon_vshrn_high_n_s16 - [1, 2, 3, 4, 5, 6, 7, 8, 4, 5, 5, 6, 6, 7, 7, 8]
+test_aarch64_neon_vshrn_high_n_s32 - [1, 2, 3, 4, 2, 3, 3, 4]
+test_aarch64_neon_vshrn_high_n_s64 - [1, 2, 1, 2]
+test_aarch64_neon_vshrn_high_n_u16 - [1, 2, 3, 4, 5, 6, 7, 8, 4, 5, 5, 6, 6, 7, 7, 8]
+test_aarch64_neon_vshrn_high_n_u32 - [1, 2, 3, 4, 2, 3, 3, 4]
+test_aarch64_neon_vshrn_high_n_u64 - [1, 2, 1, 2]
+test_aarch64_neon_vsli_n_p16 - [11, 12, 15, 16]
+test_aarch64_neon_vsli_n_p8 - [19, 20, 23, 24, 27, 28, 31, 32]
+test_aarch64_neon_vsli_n_s16 - [11, 12, 15, 16]
+test_aarch64_neon_vsli_n_s32 - [7, 8]
+test_aarch64_neon_vsli_n_s64 - [5]
+test_aarch64_neon_vsli_n_s8 - [19, 20, 23, 24, 27, 28, 31, 32]
+test_aarch64_neon_vsli_n_u16 - [11, 12, 15, 16]
+test_aarch64_neon_vsli_n_u32 - [7, 8]
+test_aarch64_neon_vsli_n_u64 - [5]
+test_aarch64_neon_vsli_n_u8 - [19, 20, 23, 24, 27, 28, 31, 32]
+test_aarch64_neon_vslid_n_s64 - 5
+test_aarch64_neon_vslid_n_u64 - 5
+test_aarch64_neon_vsliq_n_p16 - [19, 20, 23, 24, 27, 28, 31, 32]
+test_aarch64_neon_vsliq_n_p8 - [35, 36, 39, 40, 43, 44, 47, 48, 51, 52, 55, 56, 59, 60, 63, 64]
+test_aarch64_neon_vsliq_n_s16 - [19, 20, 23, 24, 27, 28, 31, 32]
+test_aarch64_neon_vsliq_n_s32 - [11, 12, 15, 16]
+test_aarch64_neon_vsliq_n_s64 - [7, 8]
+test_aarch64_neon_vsliq_n_s8 - [35, 36, 39, 40, 43, 44, 47, 48, 51, 52, 55, 56, 59, 60, 63, 64]
+test_aarch64_neon_vsliq_n_u16 - [19, 20, 23, 24, 27, 28, 31, 32]
+test_aarch64_neon_vsliq_n_u32 - [11, 12, 15, 16]
+test_aarch64_neon_vsliq_n_u64 - [7, 8]
+test_aarch64_neon_vsliq_n_u8 - [35, 36, 39, 40, 43, 44, 47, 48, 51, 52, 55, 56, 59, 60, 63, 64]
+test_aarch64_neon_vsqadd_u16 - [6, 8, 10, 12]
+test_aarch64_neon_vsqadd_u32 - [4, 6]
+test_aarch64_neon_vsqadd_u64 - [3]
+test_aarch64_neon_vsqadd_u8 - [10, 12, 14, 16, 18, 20, 22, 24]
+test_aarch64_neon_vsqaddb_u8 - 3
+test_aarch64_neon_vsqaddd_u64 - 3
+test_aarch64_neon_vsqaddh_u16 - 3
+test_aarch64_neon_vsqaddq_u16 - [10, 12, 14, 16, 18, 20, 22, 24]
+test_aarch64_neon_vsqaddq_u32 - [6, 8, 10, 12]
+test_aarch64_neon_vsqaddq_u64 - [4, 6]
+test_aarch64_neon_vsqaddq_u8 - [18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48]
+test_aarch64_neon_vsqadds_u32 - 3
+test_aarch64_neon_vsqrt_f32 - [1.0, 1.4142135]
+test_aarch64_neon_vsqrt_f64 - [1.0]
+test_aarch64_neon_vsqrtq_f32 - [1.0, 1.4142135, 1.7320508, 2.0]
+test_aarch64_neon_vsqrtq_f64 - [1.0, 1.4142135623730951]
+test_aarch64_neon_vsri_n_p16 - [2, 3, 3, 4]
+test_aarch64_neon_vsri_n_p8 - [4, 5, 5, 6, 6, 7, 7, 8]
+test_aarch64_neon_vsri_n_s16 - [2, 3, 3, 4]
+test_aarch64_neon_vsri_n_s32 - [1, 2]
+test_aarch64_neon_vsri_n_s64 - [1]
+test_aarch64_neon_vsri_n_s8 - [4, 5, 5, 6, 6, 7, 7, 8]
+test_aarch64_neon_vsri_n_u16 - [2, 3, 3, 4]
+test_aarch64_neon_vsri_n_u32 - [1, 2]
+test_aarch64_neon_vsri_n_u64 - [1]
+test_aarch64_neon_vsri_n_u8 - [4, 5, 5, 6, 6, 7, 7, 8]
+test_aarch64_neon_vsrid_n_s64 - 1
+test_aarch64_neon_vsrid_n_u64 - 1
+test_aarch64_neon_vsriq_n_p16 - [4, 5, 5, 6, 6, 7, 7, 8]
+test_aarch64_neon_vsriq_n_p8 - [8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16]
+test_aarch64_neon_vsriq_n_s16 - [4, 5, 5, 6, 6, 7, 7, 8]
+test_aarch64_neon_vsriq_n_s32 - [2, 3, 3, 4]
+test_aarch64_neon_vsriq_n_s64 - [1, 2]
+test_aarch64_neon_vsriq_n_s8 - [8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16]
+test_aarch64_neon_vsriq_n_u16 - [4, 5, 5, 6, 6, 7, 7, 8]
+test_aarch64_neon_vsriq_n_u32 - [2, 3, 3, 4]
+test_aarch64_neon_vsriq_n_u64 - [1, 2]
+test_aarch64_neon_vsriq_n_u8 - [8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16]
+test_aarch64_neon_vsub_f64 - [-1.0]
+test_aarch64_neon_vsubd_s64 - -1
+test_aarch64_neon_vsubd_u64 - -1
+test_aarch64_neon_vsubl_high_s16 - [-8, -8, -8, -8]
+test_aarch64_neon_vsubl_high_s32 - [-4, -4]
+test_aarch64_neon_vsubl_high_s8 - [-16, -16, -16, -16, -16, -16, -16, -16]
+test_aarch64_neon_vsubl_high_u16 - [4294967288, 4294967288, 4294967288, 4294967288]
+test_aarch64_neon_vsubl_high_u32 - [18446744073709551612, 18446744073709551612]
+test_aarch64_neon_vsubl_high_u8 - [65520, 65520, 65520, 65520, 65520, 65520, 65520, 65520]
+test_aarch64_neon_vsubq_f64 - [-2.0, -2.0]
+test_aarch64_neon_vsubw_high_s16 - [-8, -8, -8, -8]
+test_aarch64_neon_vsubw_high_s32 - [-4, -4]
+test_aarch64_neon_vsubw_high_s8 - [-16, -16, -16, -16, -16, -16, -16, -16]
+test_aarch64_neon_vsubw_high_u16 - [4294967288, 4294967288, 4294967288, 4294967288]
+test_aarch64_neon_vsubw_high_u32 - [18446744073709551612, 18446744073709551612]
+test_aarch64_neon_vsubw_high_u8 - [65520, 65520, 65520, 65520, 65520, 65520, 65520, 65520]
+test_aarch64_neon_vtbx1_p8 - [1, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_neon_vtbx1_s8 - [1, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_neon_vtbx1_u8 - [1, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_neon_vtrn1_f32 - [1.0, 3.0]
+test_aarch64_neon_vtrn1_p16 - [1, 5, 3, 7]
+test_aarch64_neon_vtrn1_p8 - [1, 9, 3, 11, 5, 13, 7, 15]
+test_aarch64_neon_vtrn1_s16 - [1, 5, 3, 7]
+test_aarch64_neon_vtrn1_s32 - [1, 3]
+test_aarch64_neon_vtrn1_s8 - [1, 9, 3, 11, 5, 13, 7, 15]
+test_aarch64_neon_vtrn1_u16 - [1, 5, 3, 7]
+test_aarch64_neon_vtrn1_u32 - [1, 3]
+test_aarch64_neon_vtrn1_u8 - [1, 9, 3, 11, 5, 13, 7, 15]
+test_aarch64_neon_vtrn1q_f32 - [1.0, 5.0, 3.0, 7.0]
+test_aarch64_neon_vtrn1q_f64 - [1.0, 3.0]
+test_aarch64_neon_vtrn1q_p16 - [1, 9, 3, 11, 5, 13, 7, 15]
+test_aarch64_neon_vtrn1q_p64 - [1, 3]
+test_aarch64_neon_vtrn1q_p8 - [1, 17, 3, 19, 5, 21, 7, 23, 9, 25, 11, 27, 13, 29, 15, 31]
+test_aarch64_neon_vtrn1q_s16 - [1, 9, 3, 11, 5, 13, 7, 15]
+test_aarch64_neon_vtrn1q_s32 - [1, 5, 3, 7]
+test_aarch64_neon_vtrn1q_s64 - [1, 3]
+test_aarch64_neon_vtrn1q_s8 - [1, 17, 3, 19, 5, 21, 7, 23, 9, 25, 11, 27, 13, 29, 15, 31]
+test_aarch64_neon_vtrn1q_u16 - [1, 9, 3, 11, 5, 13, 7, 15]
+test_aarch64_neon_vtrn1q_u32 - [1, 5, 3, 7]
+test_aarch64_neon_vtrn1q_u64 - [1, 3]
+test_aarch64_neon_vtrn1q_u8 - [1, 17, 3, 19, 5, 21, 7, 23, 9, 25, 11, 27, 13, 29, 15, 31]
+test_aarch64_neon_vtrn2_f32 - [2.0, 4.0]
+test_aarch64_neon_vtrn2_p16 - [2, 6, 4, 8]
+test_aarch64_neon_vtrn2_p8 - [2, 10, 4, 12, 6, 14, 8, 16]
+test_aarch64_neon_vtrn2_s16 - [2, 6, 4, 8]
+test_aarch64_neon_vtrn2_s32 - [2, 4]
+test_aarch64_neon_vtrn2_s8 - [2, 10, 4, 12, 6, 14, 8, 16]
+test_aarch64_neon_vtrn2_u16 - [2, 6, 4, 8]
+test_aarch64_neon_vtrn2_u32 - [2, 4]
+test_aarch64_neon_vtrn2_u8 - [2, 10, 4, 12, 6, 14, 8, 16]
+test_aarch64_neon_vtrn2q_f32 - [2.0, 6.0, 4.0, 8.0]
+test_aarch64_neon_vtrn2q_f64 - [2.0, 4.0]
+test_aarch64_neon_vtrn2q_p16 - [2, 10, 4, 12, 6, 14, 8, 16]
+test_aarch64_neon_vtrn2q_p64 - [2, 4]
+test_aarch64_neon_vtrn2q_p8 - [2, 18, 4, 20, 6, 22, 8, 24, 10, 26, 12, 28, 14, 30, 16, 32]
+test_aarch64_neon_vtrn2q_s16 - [2, 10, 4, 12, 6, 14, 8, 16]
+test_aarch64_neon_vtrn2q_s32 - [2, 6, 4, 8]
+test_aarch64_neon_vtrn2q_s64 - [2, 4]
+test_aarch64_neon_vtrn2q_s8 - [2, 18, 4, 20, 6, 22, 8, 24, 10, 26, 12, 28, 14, 30, 16, 32]
+test_aarch64_neon_vtrn2q_u16 - [2, 10, 4, 12, 6, 14, 8, 16]
+test_aarch64_neon_vtrn2q_u32 - [2, 6, 4, 8]
+test_aarch64_neon_vtrn2q_u64 - [2, 4]
+test_aarch64_neon_vtrn2q_u8 - [2, 18, 4, 20, 6, 22, 8, 24, 10, 26, 12, 28, 14, 30, 16, 32]
+test_aarch64_neon_vtstq_p64 - [18446744073709551615, 0]
+test_aarch64_neon_vtstq_s64 - [18446744073709551615, 0]
+test_aarch64_neon_vtstq_u64 - [18446744073709551615, 0]
+test_aarch64_neon_vuqadd_s16 - [6, 8, 10, 12]
+test_aarch64_neon_vuqadd_s32 - [4, 6]
+test_aarch64_neon_vuqadd_s64 - [3]
+test_aarch64_neon_vuqadd_s8 - [10, 12, 14, 16, 18, 20, 22, 24]
+test_aarch64_neon_vuqaddb_s8 - 3
+test_aarch64_neon_vuqaddd_s64 - 3
+test_aarch64_neon_vuqaddh_s16 - 3
+test_aarch64_neon_vuqaddq_s16 - [10, 12, 14, 16, 18, 20, 22, 24]
+test_aarch64_neon_vuqaddq_s32 - [6, 8, 10, 12]
+test_aarch64_neon_vuqaddq_s64 - [4, 6]
+test_aarch64_neon_vuqaddq_s8 - [18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48]
+test_aarch64_neon_vuqadds_s32 - 3
+test_aarch64_neon_vuzp1_f32 - [1.0, 3.0]
+test_aarch64_neon_vuzp1_p16 - [1, 3, 5, 7]
+test_aarch64_neon_vuzp1_p8 - [1, 3, 5, 7, 9, 11, 13, 15]
+test_aarch64_neon_vuzp1_s16 - [1, 3, 5, 7]
+test_aarch64_neon_vuzp1_s32 - [1, 3]
+test_aarch64_neon_vuzp1_s8 - [1, 3, 5, 7, 9, 11, 13, 15]
+test_aarch64_neon_vuzp1_u16 - [1, 3, 5, 7]
+test_aarch64_neon_vuzp1_u32 - [1, 3]
+test_aarch64_neon_vuzp1_u8 - [1, 3, 5, 7, 9, 11, 13, 15]
+test_aarch64_neon_vuzp1q_f32 - [1.0, 3.0, 5.0, 7.0]
+test_aarch64_neon_vuzp1q_f64 - [1.0, 3.0]
+test_aarch64_neon_vuzp1q_p16 - [1, 3, 5, 7, 9, 11, 13, 15]
+test_aarch64_neon_vuzp1q_p64 - [1, 3]
+test_aarch64_neon_vuzp1q_p8 - [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31]
+test_aarch64_neon_vuzp1q_s16 - [1, 3, 5, 7, 9, 11, 13, 15]
+test_aarch64_neon_vuzp1q_s32 - [1, 3, 5, 7]
+test_aarch64_neon_vuzp1q_s64 - [1, 3]
+test_aarch64_neon_vuzp1q_s8 - [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31]
+test_aarch64_neon_vuzp1q_u16 - [1, 3, 5, 7, 9, 11, 13, 15]
+test_aarch64_neon_vuzp1q_u32 - [1, 3, 5, 7]
+test_aarch64_neon_vuzp1q_u64 - [1, 3]
+test_aarch64_neon_vuzp1q_u8 - [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31]
+test_aarch64_neon_vuzp2_f32 - [2.0, 4.0]
+test_aarch64_neon_vuzp2_p16 - [2, 4, 6, 8]
+test_aarch64_neon_vuzp2_p8 - [2, 4, 6, 8, 10, 12, 14, 16]
+test_aarch64_neon_vuzp2_s16 - [2, 4, 6, 8]
+test_aarch64_neon_vuzp2_s32 - [2, 4]
+test_aarch64_neon_vuzp2_s8 - [2, 4, 6, 8, 10, 12, 14, 16]
+test_aarch64_neon_vuzp2_u16 - [2, 4, 6, 8]
+test_aarch64_neon_vuzp2_u32 - [2, 4]
+test_aarch64_neon_vuzp2_u8 - [2, 4, 6, 8, 10, 12, 14, 16]
+test_aarch64_neon_vuzp2q_f32 - [2.0, 4.0, 6.0, 8.0]
+test_aarch64_neon_vuzp2q_f64 - [2.0, 4.0]
+test_aarch64_neon_vuzp2q_p16 - [2, 4, 6, 8, 10, 12, 14, 16]
+test_aarch64_neon_vuzp2q_p64 - [2, 4]
+test_aarch64_neon_vuzp2q_p8 - [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32]
+test_aarch64_neon_vuzp2q_s16 - [2, 4, 6, 8, 10, 12, 14, 16]
+test_aarch64_neon_vuzp2q_s32 - [2, 4, 6, 8]
+test_aarch64_neon_vuzp2q_s64 - [2, 4]
+test_aarch64_neon_vuzp2q_s8 - [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32]
+test_aarch64_neon_vuzp2q_u16 - [2, 4, 6, 8, 10, 12, 14, 16]
+test_aarch64_neon_vuzp2q_u32 - [2, 4, 6, 8]
+test_aarch64_neon_vuzp2q_u64 - [2, 4]
+test_aarch64_neon_vuzp2q_u8 - [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32]
+test_aarch64_neon_vzip1_f32 - [1.0, 3.0]
+test_aarch64_neon_vzip1_p16 - [1, 5, 2, 6]
+test_aarch64_neon_vzip1_p8 - [1, 9, 2, 10, 3, 11, 4, 12]
+test_aarch64_neon_vzip1_s16 - [1, 5, 2, 6]
+test_aarch64_neon_vzip1_s32 - [1, 3]
+test_aarch64_neon_vzip1_s8 - [1, 9, 2, 10, 3, 11, 4, 12]
+test_aarch64_neon_vzip1_u16 - [1, 5, 2, 6]
+test_aarch64_neon_vzip1_u32 - [1, 3]
+test_aarch64_neon_vzip1_u8 - [1, 9, 2, 10, 3, 11, 4, 12]
+test_aarch64_neon_vzip1q_f32 - [1.0, 5.0, 2.0, 6.0]
+test_aarch64_neon_vzip1q_f64 - [1.0, 3.0]
+test_aarch64_neon_vzip1q_p16 - [1, 9, 2, 10, 3, 11, 4, 12]
+test_aarch64_neon_vzip1q_p64 - [1, 3]
+test_aarch64_neon_vzip1q_p8 - [1, 17, 2, 18, 3, 19, 4, 20, 5, 21, 6, 22, 7, 23, 8, 24]
+test_aarch64_neon_vzip1q_s16 - [1, 9, 2, 10, 3, 11, 4, 12]
+test_aarch64_neon_vzip1q_s32 - [1, 5, 2, 6]
+test_aarch64_neon_vzip1q_s64 - [1, 3]
+test_aarch64_neon_vzip1q_s8 - [1, 17, 2, 18, 3, 19, 4, 20, 5, 21, 6, 22, 7, 23, 8, 24]
+test_aarch64_neon_vzip1q_u16 - [1, 9, 2, 10, 3, 11, 4, 12]
+test_aarch64_neon_vzip1q_u32 - [1, 5, 2, 6]
+test_aarch64_neon_vzip1q_u64 - [1, 3]
+test_aarch64_neon_vzip1q_u8 - [1, 17, 2, 18, 3, 19, 4, 20, 5, 21, 6, 22, 7, 23, 8, 24]
+test_aarch64_neon_vzip2_f32 - [2.0, 4.0]
+test_aarch64_neon_vzip2_p16 - [3, 7, 4, 8]
+test_aarch64_neon_vzip2_p8 - [5, 13, 6, 14, 7, 15, 8, 16]
+test_aarch64_neon_vzip2_s16 - [3, 7, 4, 8]
+test_aarch64_neon_vzip2_s32 - [2, 4]
+test_aarch64_neon_vzip2_s8 - [5, 13, 6, 14, 7, 15, 8, 16]
+test_aarch64_neon_vzip2_u16 - [3, 7, 4, 8]
+test_aarch64_neon_vzip2_u32 - [2, 4]
+test_aarch64_neon_vzip2_u8 - [5, 13, 6, 14, 7, 15, 8, 16]
+test_aarch64_neon_vzip2q_f32 - [3.0, 7.0, 4.0, 8.0]
+test_aarch64_neon_vzip2q_f64 - [2.0, 4.0]
+test_aarch64_neon_vzip2q_p16 - [5, 13, 6, 14, 7, 15, 8, 16]
+test_aarch64_neon_vzip2q_p64 - [2, 4]
+test_aarch64_neon_vzip2q_p8 - [9, 25, 10, 26, 11, 27, 12, 28, 13, 29, 14, 30, 15, 31, 16, 32]
+test_aarch64_neon_vzip2q_s16 - [5, 13, 6, 14, 7, 15, 8, 16]
+test_aarch64_neon_vzip2q_s32 - [3, 7, 4, 8]
+test_aarch64_neon_vzip2q_s64 - [2, 4]
+test_aarch64_neon_vzip2q_s8 - [9, 25, 10, 26, 11, 27, 12, 28, 13, 29, 14, 30, 15, 31, 16, 32]
+test_aarch64_neon_vzip2q_u16 - [5, 13, 6, 14, 7, 15, 8, 16]
+test_aarch64_neon_vzip2q_u32 - [3, 7, 4, 8]
+test_aarch64_neon_vzip2q_u64 - [2, 4]
+test_aarch64_neon_vzip2q_u8 - [9, 25, 10, 26, 11, 27, 12, 28, 13, 29, 14, 30, 15, 31, 16, 32]

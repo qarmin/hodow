@@ -1,0 +1,188 @@
+#!/usr/bin/env python3
+"""Generate src/vkt/tests/ycbcr/format_tables.rs from upstream's format metadata.
+
+The ycbcr copy tests cross every format in `basicUnsignedFloatFormats` with every
+other and keep the pairs `isCopyCompatible` accepts. Answering that needs two things
+neither of which is worth retyping:
+
+  * how many planes a YCbCr format has, and which single-plane format each plane is
+    copy-compatible with - `getYCbCrPlanarFormatDescription` in vkImageUtil.cpp
+  * the bit-width compatibility classes - `compatibleFormats*Bit` in vkFormatLists.inl
+
+A wrong entry here does not fail to build. It registers a case upstream does not have,
+or drops one it does, which is exactly what the case-list diff is there to catch - but
+only after the fact.
+
+Usage:
+    python3 hodow_cts/scripts/gen_ycbcr_formats.py [--cts-dir tmp/VK-GL-CTS]
+"""
+
+from __future__ import annotations
+
+import argparse
+import re
+import subprocess
+import sys
+from pathlib import Path
+
+CRATE_DIR = Path(__file__).resolve().parent.parent
+REPO_DIR = CRATE_DIR.parent
+OUT = CRATE_DIR / "src" / "vkt" / "tests" / "ycbcr" / "format_tables.rs"
+
+BIT_GROUPS = [8, 16, 24, 32, 48, 64, 96, 128, 192, 256]
+
+
+# The same identifier mapping the copy-format generator uses. Shared rather than
+# reimplemented: it carries two rules that are easy to get subtly wrong - the ASTC block
+# dimensions uppercase, and the vendor suffix is dropped only where the format was
+# promoted to core.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gen_format_lists import rust_name as _enum_rust_name  # noqa: E402
+
+
+def rust_name(vk_name: str) -> str:
+    return _enum_rust_name(vk_name.removeprefix("VK_FORMAT_"))
+
+
+def read_group(text: str, group: str) -> list[str]:
+    m = re.search(rf"inline const std::vector<VkFormat> {group}\s*\{{(.*?)\n\}};", text, re.S)
+    if not m:
+        raise SystemExit(f"format group {group} not found")
+    return re.findall(r"VK_FORMAT_[A-Za-z0-9_]+", m.group(1))
+
+
+def read_planar_descriptions(text: str) -> dict[str, list[str]]:
+    """Every `// VK_FORMAT_...` entry of the YCbCr descriptor tables, mapped to the
+    plane-compatible format of each of its planes.
+
+    The entries are laid out as a comment naming the format, then `{N, // planes`, then
+    one `{size, wDiv, hDiv, VK_FORMAT_...}` row per plane. Only the plane count and
+    those formats matter here; the sizes and divisors do not.
+    """
+    body = text[text.index("const PlanarFormatDescription &getYCbCrPlanarFormatDescription") :]
+    body = body[: body.index("\nbool isYCbCrExtensionFormat") if "\nbool isYCbCrExtensionFormat" in body else len(body)]
+
+    out: dict[str, list[str]] = {}
+    # Split on the comment that names each entry, keeping the name.
+    chunks = re.split(r"\n\s*//\s*(VK_FORMAT_[A-Za-z0-9_]+)\s*\n", body)
+    for i in range(1, len(chunks) - 1, 2):
+        name = chunks[i]
+        entry = chunks[i + 1]
+        # `{numPlanes, <channel flags>, blockWidth, blockHeight, { <plane rows> } }`.
+        # The chroma-subsampled single-plane formats are the ones with a block wider
+        # than one texel, which is why the block size cannot be assumed.
+        planes_m = re.match(
+            r"\s*\{\s*(\d+)\s*,\s*//\s*planes\s*\n\s*[^,]+,\s*\n\s*(\d+)\s*,\s*\n\s*(\d+)\s*,",
+            entry,
+        )
+        if not planes_m:
+            continue
+        num_planes = int(planes_m.group(1))
+        block_width = int(planes_m.group(2))
+        block_height = int(planes_m.group(3))
+        # The plane rows follow: element size, the width and height divisors that give
+        # the plane's extent from the image's, and the format the plane copies as.
+        rows = re.findall(
+            r"\{\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(VK_FORMAT_[A-Za-z0-9_]+)\s*\}", entry
+        )
+        if len(rows) < num_planes:
+            continue
+        # An entry may be listed once per aliased name; first definition wins.
+        out.setdefault(name, (block_width, block_height, [(int(a), int(b), int(c), d) for a, b, c, d in rows[:num_planes]]))
+    return out
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--cts-dir", default=str(REPO_DIR / "tmp" / "VK-GL-CTS"))
+    args = parser.parse_args()
+    cts = Path(args.cts_dir)
+
+    lists_text = (cts / "external/vulkancts/framework/vulkan/generated/vulkan/vkFormatLists.inl").read_text()
+    image_util_text = (cts / "external/vulkancts/framework/vulkan/vkImageUtil.cpp").read_text()
+
+    planar = read_planar_descriptions(image_util_text)
+    print(f"planar descriptions: {len(planar)} formats")
+
+    lines = [
+        "// SPDX-License-Identifier: Apache-2.0",
+        "//",
+        "// Derived from VK-GL-CTS:",
+        "//   external/vulkancts/framework/vulkan/vkImageUtil.cpp",
+        "//   external/vulkancts/framework/vulkan/generated/vulkan/vkFormatLists.inl",
+        "// Upstream revision: see hodow_cts/upstream/COMMIT",
+        "//",
+        "// Copyright (c) 2025 The Khronos Group Inc.",
+        "// Licensed under the Apache License, Version 2.0 (see LICENSE at the repo root).",
+        "//",
+        "// Generated by scripts/gen_ycbcr_formats.py; do not hand-edit.",
+        "",
+        "use vulkanalia::vk;",
+        "",
+        "/// One plane of a `PlanarFormatDescription`.",
+        "#[derive(Clone, Copy)]",
+        "pub struct PlaneInfo {",
+        "    /// `elementSizeBytes`",
+        "    pub element_size: u32,",
+        "    /// `widthDivisor` - a chroma plane of a subsampled format is narrower than the image.",
+        "    pub width_divisor: u32,",
+        "    /// `heightDivisor`",
+        "    pub height_divisor: u32,",
+        "    /// `planeCompatibleFormat` - the single-plane format a copy of this plane moves.",
+        "    pub compatible_format: vk::Format,",
+        "}",
+        "",
+        "/// `getYCbCrPlanarFormatDescription`, reduced to what the copy tests read.",
+        "pub struct FormatInfo {",
+        "    /// `blockWidth` - wider than one texel for the subsampled single-plane formats.",
+        "    pub block_width: u32,",
+        "    /// `blockHeight`",
+        "    pub block_height: u32,",
+        "    pub planes: &'static [PlaneInfo],",
+        "}",
+        "",
+        "pub static PLANE_COMPATIBLE_FORMATS: &[(vk::Format, FormatInfo)] = &[",
+    ]
+    for name, (bw, bh, planes) in sorted(planar.items()):
+        entries = ", ".join(
+            f"PlaneInfo {{ element_size: {sz}, width_divisor: {w}, height_divisor: {h}, "
+            f"compatible_format: vk::Format::{rust_name(f)} }}"
+            for sz, w, h, f in planes
+        )
+        lines.append(
+            f"    (vk::Format::{rust_name(name)}, FormatInfo {{ block_width: {bw}, block_height: {bh}, planes: &[{entries}] }}),"
+        )
+    lines += ["];", ""]
+
+    lines.append("/// `formats::compatibleFormats*Bit` - the bit-width classes a copy may")
+    lines.append("/// reinterpret between.")
+    lines.append("pub static COMPATIBLE_FORMAT_CLASSES: &[&[vk::Format]] = &[")
+    for bits in BIT_GROUPS:
+        fmts = read_group(lists_text, f"compatibleFormats{bits}Bit")
+        print(f"compatibleFormats{bits}Bit: {len(fmts)} formats")
+        lines.append(f"    // {bits}-bit")
+        lines.append("    &[")
+        for f in fmts:
+            lines.append(f"        vk::Format::{rust_name(f)},")
+        lines.append("    ],")
+    lines += ["];", ""]
+
+    for group in ("compressedFormatsFloats", "compressedFormatsSrgb"):
+        fmts = read_group(lists_text, group)
+        print(f"{group}: {len(fmts)} formats")
+        const = re.sub(r"(?<!^)(?=[A-Z])", "_", group).upper()
+        lines.append(f"/// `formats::{group}`")
+        lines.append(f"pub static {const}: &[vk::Format] = &[")
+        for f in fmts:
+            lines.append(f"    vk::Format::{rust_name(f)},")
+        lines += ["];", ""]
+
+    OUT.parent.mkdir(parents=True, exist_ok=True)
+    OUT.write_text("\n".join(lines))
+    subprocess.run(["rustfmt", "--edition", "2024", str(OUT)], cwd=CRATE_DIR, check=False)
+    print(f"wrote {OUT.relative_to(REPO_DIR)}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

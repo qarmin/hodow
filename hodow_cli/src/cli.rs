@@ -22,6 +22,22 @@ pub enum Commands {
     /// Run a persistent job-queue server with a web dashboard
     #[cfg(feature = "serve")]
     Serve(ServeArgs),
+    /// Print what this machine is and which CPU extensions this binary can test on it
+    Info(InfoArgs),
+}
+
+// ── Info ─────────────────────────────────────────────────────────────────────
+
+#[derive(Args, Debug)]
+pub struct InfoArgs {
+    /// One line per extension instead of two grouped lists
+    #[arg(short = 'v', long = "verbose")]
+    pub verbose: bool,
+
+    /// Skip the Graphics section. That section is the only part of `info` that loads a GPU
+    /// driver, so this keeps the command usable on a machine where doing so hangs or crashes.
+    #[arg(long = "no-gpu")]
+    pub no_gpu: bool,
 }
 
 // ── Serve ───────────────────────────────────────────────────────────────────
@@ -102,6 +118,13 @@ pub struct CpuArgs {
     /// Internal: run as an isolation worker starting at the given test index. Hidden.
     #[arg(long = "worker-start", value_name = "INDEX", hide = true)]
     pub worker_start: Option<usize>,
+
+    /// Write a machine-readable per-test report to this path (only with --isolate).
+    /// Format is picked from the extension: `.csv` for CSV, anything else for JSON.
+    /// Each record is (name, feature, verdict, got, expected, message) - meant for diffing
+    /// a native run against one under an emulator (box64, FEX-Emu, ...).
+    #[arg(long = "report", value_name = "PATH")]
+    pub report: Option<std::path::PathBuf>,
 
     /// Submit this as a job to a running `hodow_cli serve` instead of running it locally
     /// (e.g. --submit-to http://localhost:7878).

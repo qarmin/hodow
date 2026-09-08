@@ -9,7 +9,7 @@ use glutin::context::{ContextApi, ContextAttributesBuilder, PossiblyCurrentConte
 use glutin::display::{Display, DisplayApiPreference};
 use glutin::prelude::*;
 use glutin::surface::{PbufferSurface, SurfaceAttributesBuilder};
-use raw_window_handle::{DisplayHandle, HandleError, HasDisplayHandle, RawDisplayHandle, XlibDisplayHandle};
+use raw_window_handle::{DisplayHandle, HandleError, HasDisplayHandle, RawDisplayHandle, WaylandDisplayHandle, XlibDisplayHandle};
 
 use crate::opengl::{DisplayApiHint, GlApiHint, GpuOptions};
 
@@ -25,6 +25,9 @@ pub struct OpenGLMode {
     /// pointer, so we must keep it valid until the context is destroyed.
     #[cfg(target_os = "linux")]
     _xlib_display: Option<XlibDisplayGuard>,
+    /// Same, for the `wl_display` borrowed from a compositor connection.
+    #[cfg(target_os = "linux")]
+    _wayland: Option<WaylandConnectionGuard>,
 }
 /// Error type for OpenGL context creation/initialization
 #[derive(Debug)]
@@ -144,16 +147,26 @@ impl OpenGLMode {
             // With no X server (and often no DRM node) the Xlib/GLX path cannot initialize.
             // Fall back to EGL's device platform, which Mesa serves via surfaceless llvmpipe,
             // so GPU tests still run in CI/containers/headless boxes.
+            let mut wayland_guard = None;
             let display = if raw_xlib_ptr.is_none() {
-                match create_egl_device_display() {
-                    Ok(d) => d,
-                    Err(e) => {
-                        log::warn!("EGL device platform unavailable ({e}); trying default EGL display");
-                        unsafe {
-                            let dh = headless.display_handle().map_err(OpenGlError::from)?;
-                            Display::new(dh.as_raw(), DisplayApiPreference::Egl).map_err(|e| OpenGlError::Other(Box::new(e)))?
-                        }
+                // Order matters: a Wayland-only driver refuses both fallbacks below, and Mesa
+                // under a compositor is happy either way, so trying the compositor first costs
+                // nothing and is the only thing that works on i.MX/Vivante.
+                match create_wayland_display() {
+                    Ok((d, guard)) => {
+                        wayland_guard = Some(guard);
+                        d
                     }
+                    Err(wl_err) => match create_egl_device_display() {
+                        Ok(d) => d,
+                        Err(e) => {
+                            log::warn!("Wayland unavailable ({wl_err}); EGL device platform unavailable ({e}); trying default EGL display");
+                            unsafe {
+                                let dh = headless.display_handle().map_err(OpenGlError::from)?;
+                                Display::new(dh.as_raw(), DisplayApiPreference::Egl).map_err(|e| OpenGlError::Other(Box::new(e)))?
+                            }
+                        }
+                    },
                 }
             } else {
                 unsafe {
@@ -166,6 +179,7 @@ impl OpenGLMode {
                 inner,
                 display,
                 _xlib_display: xlib_guard,
+                _wayland: wayland_guard,
             })
         }
         #[cfg(not(target_os = "linux"))]
@@ -218,6 +232,33 @@ fn create_egl_device_display() -> Result<Display, OpenGlError> {
     let egl_display = unsafe { EglDisplay::with_device(device, None).map_err(|e| OpenGlError::Other(Box::new(e)))? };
     Ok(Display::Egl(egl_display))
 }
+
+/// Create a glutin EGL display from a running Wayland compositor.
+///
+/// Needed by drivers whose libEGL is the Wayland build and serves nothing else - i.MX/Vivante's
+/// `imx-gpu-viv` answers `eglGetDisplay(EGL_DEFAULT_DISPLAY)` with "No default display support
+/// on wayland" and refuses the EGL device platform too, so without this the GPU suite cannot
+/// start at all on such a board even with Weston running. Requires `WAYLAND_DISPLAY` (and
+/// `XDG_RUNTIME_DIR`) in the environment - over SSH they usually have to be set by hand.
+#[cfg(target_os = "linux")]
+fn create_wayland_display() -> Result<(Display, WaylandConnectionGuard), OpenGlError> {
+    use wayland_client::Connection;
+
+    let connection = Connection::connect_to_env().map_err(|e| OpenGlError::Glutin(format!("no Wayland compositor: {e}")))?;
+    let ptr = NonNull::new(connection.backend().display_ptr() as *mut std::ffi::c_void)
+        .ok_or_else(|| OpenGlError::Glutin("Wayland connection has a null wl_display".into()))?;
+    log::info!("Using the Wayland compositor's wl_display for EGL");
+    let raw = RawDisplayHandle::Wayland(WaylandDisplayHandle::new(ptr));
+    // SAFETY: `connection` is returned alongside and kept alive by the caller for as long as
+    // the display lives, so the wl_display this borrows stays valid.
+    let display = unsafe { Display::new(raw, DisplayApiPreference::Egl).map_err(|e| OpenGlError::Other(Box::new(e)))? };
+    Ok((display, WaylandConnectionGuard(connection)))
+}
+
+/// Keeps the compositor connection - and therefore the `wl_display` EGL borrowed - alive for
+/// the lifetime of the context.
+#[cfg(target_os = "linux")]
+pub struct WaylandConnectionGuard(#[allow(dead_code)] wayland_client::Connection);
 
 /// A display handle that wraps an optional Xlib Display pointer.
 struct XlibBorrowedDisplay {

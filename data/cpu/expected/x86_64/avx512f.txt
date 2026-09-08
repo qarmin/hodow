@@ -1,0 +1,127 @@
+# Expected values captured from real hardware for this extension's generated tests.
+# Format: test_name - rust_expr
+#
+# One file per (architecture, extension) - written by scripts/cpu/capture_expected.py and
+# capture_expected_cross.py, read by generate_tests.py. Do not hand-edit: recapture instead.
+# A qemu-derived value is not a real-silicon one; see CLAUDE.md's "Non-x86 architectures".
+
+test_x86_64_avx512f_mm_cvt_roundi64_sd - [3.0, 2.0]
+test_x86_64_avx512f_mm_cvt_roundi64_sd_boundary_allones - [1.0, f32::NAN]
+test_x86_64_avx512f_mm_cvt_roundi64_sd_boundary_max - [1.0, 1.7976931348623157e308]
+test_x86_64_avx512f_mm_cvt_roundi64_sd_boundary_min - [1.0, -1.7976931348623157e308]
+test_x86_64_avx512f_mm_cvt_roundi64_sd_boundary_mixed - [1.0, -f32::INFINITY]
+test_x86_64_avx512f_mm_cvt_roundi64_sd_boundary_zero - [1.0, 0.0]
+test_x86_64_avx512f_mm_cvt_roundi64_sd_normal2 - [1.0, -1.0]
+test_x86_64_avx512f_mm_cvt_roundi64_sd_normal3 - [1.0, 200.0]
+test_x86_64_avx512f_mm_cvt_roundi64_ss - [5.0, 2.0, 3.0, 4.0]
+test_x86_64_avx512f_mm_cvt_roundi64_ss_boundary_allones - [1.0, f32::NAN, f32::NAN, f32::NAN]
+test_x86_64_avx512f_mm_cvt_roundi64_ss_boundary_max - [1.0, 3.4028235e38, 3.4028235e38, 3.4028235e38]
+test_x86_64_avx512f_mm_cvt_roundi64_ss_boundary_min - [1.0, -3.4028235e38, -3.4028235e38, -3.4028235e38]
+test_x86_64_avx512f_mm_cvt_roundi64_ss_boundary_mixed - [1.0, -f32::INFINITY, -0.0, 5.877472e-39]
+test_x86_64_avx512f_mm_cvt_roundi64_ss_boundary_zero - [1.0, 0.0, 0.0, 0.0]
+test_x86_64_avx512f_mm_cvt_roundi64_ss_normal2 - [1.0, -1.0, 2.0, -3.0]
+test_x86_64_avx512f_mm_cvt_roundi64_ss_normal3 - [1.0, 200.0, 300.0, 400.0]
+test_x86_64_avx512f_mm_cvt_roundsd_i64 - 1
+test_x86_64_avx512f_mm_cvt_roundsd_i64_normal3 - 100
+test_x86_64_avx512f_mm_cvt_roundsd_si64 - 1
+test_x86_64_avx512f_mm_cvt_roundsd_si64_normal3 - 100
+test_x86_64_avx512f_mm_cvt_roundsd_u64 - 1
+test_x86_64_avx512f_mm_cvt_roundsd_u64_boundary_allones - -1
+test_x86_64_avx512f_mm_cvt_roundsd_u64_boundary_max - -1
+test_x86_64_avx512f_mm_cvt_roundsd_u64_boundary_min - -1
+test_x86_64_avx512f_mm_cvt_roundsd_u64_boundary_mixed - -1
+test_x86_64_avx512f_mm_cvt_roundsd_u64_normal3 - 100
+test_x86_64_avx512f_mm_cvt_roundsi64_sd - [3.0, 2.0]
+test_x86_64_avx512f_mm_cvt_roundsi64_sd_boundary_allones - [1.0, f32::NAN]
+test_x86_64_avx512f_mm_cvt_roundsi64_sd_boundary_max - [1.0, 1.7976931348623157e308]
+test_x86_64_avx512f_mm_cvt_roundsi64_sd_boundary_min - [1.0, -1.7976931348623157e308]
+test_x86_64_avx512f_mm_cvt_roundsi64_sd_boundary_mixed - [1.0, -f32::INFINITY]
+test_x86_64_avx512f_mm_cvt_roundsi64_sd_boundary_zero - [1.0, 0.0]
+test_x86_64_avx512f_mm_cvt_roundsi64_sd_normal2 - [1.0, -1.0]
+test_x86_64_avx512f_mm_cvt_roundsi64_sd_normal3 - [1.0, 200.0]
+test_x86_64_avx512f_mm_cvt_roundsi64_ss - [5.0, 2.0, 3.0, 4.0]
+test_x86_64_avx512f_mm_cvt_roundsi64_ss_boundary_allones - [1.0, f32::NAN, f32::NAN, f32::NAN]
+test_x86_64_avx512f_mm_cvt_roundsi64_ss_boundary_max - [1.0, 3.4028235e38, 3.4028235e38, 3.4028235e38]
+test_x86_64_avx512f_mm_cvt_roundsi64_ss_boundary_min - [1.0, -3.4028235e38, -3.4028235e38, -3.4028235e38]
+test_x86_64_avx512f_mm_cvt_roundsi64_ss_boundary_mixed - [1.0, -f32::INFINITY, -0.0, 5.877472e-39]
+test_x86_64_avx512f_mm_cvt_roundsi64_ss_boundary_zero - [1.0, 0.0, 0.0, 0.0]
+test_x86_64_avx512f_mm_cvt_roundsi64_ss_normal2 - [1.0, -1.0, 2.0, -3.0]
+test_x86_64_avx512f_mm_cvt_roundsi64_ss_normal3 - [1.0, 200.0, 300.0, 400.0]
+test_x86_64_avx512f_mm_cvt_roundss_i64 - 1
+test_x86_64_avx512f_mm_cvt_roundss_i64_normal3 - 100
+test_x86_64_avx512f_mm_cvt_roundss_si64 - 1
+test_x86_64_avx512f_mm_cvt_roundss_si64_normal3 - 100
+test_x86_64_avx512f_mm_cvt_roundss_u64 - 1
+test_x86_64_avx512f_mm_cvt_roundss_u64_boundary_allones - -1
+test_x86_64_avx512f_mm_cvt_roundss_u64_boundary_max - -1
+test_x86_64_avx512f_mm_cvt_roundss_u64_boundary_min - -1
+test_x86_64_avx512f_mm_cvt_roundss_u64_boundary_mixed - -1
+test_x86_64_avx512f_mm_cvt_roundss_u64_normal3 - 100
+test_x86_64_avx512f_mm_cvt_roundu64_sd - [3.0, 2.0]
+test_x86_64_avx512f_mm_cvt_roundu64_sd_boundary_allones - [1.0, f32::NAN]
+test_x86_64_avx512f_mm_cvt_roundu64_sd_boundary_max - [1.0, 1.7976931348623157e308]
+test_x86_64_avx512f_mm_cvt_roundu64_sd_boundary_min - [1.0, -1.7976931348623157e308]
+test_x86_64_avx512f_mm_cvt_roundu64_sd_boundary_mixed - [1.0, -f32::INFINITY]
+test_x86_64_avx512f_mm_cvt_roundu64_sd_boundary_zero - [1.0, 0.0]
+test_x86_64_avx512f_mm_cvt_roundu64_sd_normal2 - [1.0, -1.0]
+test_x86_64_avx512f_mm_cvt_roundu64_sd_normal3 - [1.0, 200.0]
+test_x86_64_avx512f_mm_cvt_roundu64_ss - [5.0, 2.0, 3.0, 4.0]
+test_x86_64_avx512f_mm_cvt_roundu64_ss_boundary_allones - [1.0, f32::NAN, f32::NAN, f32::NAN]
+test_x86_64_avx512f_mm_cvt_roundu64_ss_boundary_max - [1.0, 3.4028235e38, 3.4028235e38, 3.4028235e38]
+test_x86_64_avx512f_mm_cvt_roundu64_ss_boundary_min - [1.0, -3.4028235e38, -3.4028235e38, -3.4028235e38]
+test_x86_64_avx512f_mm_cvt_roundu64_ss_boundary_mixed - [1.0, -f32::INFINITY, -0.0, 5.877472e-39]
+test_x86_64_avx512f_mm_cvt_roundu64_ss_boundary_zero - [1.0, 0.0, 0.0, 0.0]
+test_x86_64_avx512f_mm_cvt_roundu64_ss_normal2 - [1.0, -1.0, 2.0, -3.0]
+test_x86_64_avx512f_mm_cvt_roundu64_ss_normal3 - [1.0, 200.0, 300.0, 400.0]
+test_x86_64_avx512f_mm_cvtsd_i64 - 1
+test_x86_64_avx512f_mm_cvtsd_i64_normal3 - 100
+test_x86_64_avx512f_mm_cvtsd_u64 - 1
+test_x86_64_avx512f_mm_cvtsd_u64_boundary_allones - -1
+test_x86_64_avx512f_mm_cvtsd_u64_boundary_max - -1
+test_x86_64_avx512f_mm_cvtsd_u64_boundary_min - -1
+test_x86_64_avx512f_mm_cvtsd_u64_boundary_mixed - -1
+test_x86_64_avx512f_mm_cvtsd_u64_normal3 - 100
+test_x86_64_avx512f_mm_cvtss_i64 - 1
+test_x86_64_avx512f_mm_cvtss_i64_normal3 - 100
+test_x86_64_avx512f_mm_cvtss_u64 - 1
+test_x86_64_avx512f_mm_cvtss_u64_boundary_allones - -1
+test_x86_64_avx512f_mm_cvtss_u64_boundary_max - -1
+test_x86_64_avx512f_mm_cvtss_u64_boundary_min - -1
+test_x86_64_avx512f_mm_cvtss_u64_boundary_mixed - -1
+test_x86_64_avx512f_mm_cvtss_u64_normal3 - 100
+test_x86_64_avx512f_mm_cvtt_roundsd_i64 - 1
+test_x86_64_avx512f_mm_cvtt_roundsd_i64_normal3 - 100
+test_x86_64_avx512f_mm_cvtt_roundsd_si64 - 1
+test_x86_64_avx512f_mm_cvtt_roundsd_si64_normal3 - 100
+test_x86_64_avx512f_mm_cvtt_roundsd_u64 - 1
+test_x86_64_avx512f_mm_cvtt_roundsd_u64_boundary_allones - -1
+test_x86_64_avx512f_mm_cvtt_roundsd_u64_boundary_max - -1
+test_x86_64_avx512f_mm_cvtt_roundsd_u64_boundary_min - -1
+test_x86_64_avx512f_mm_cvtt_roundsd_u64_boundary_mixed - -1
+test_x86_64_avx512f_mm_cvtt_roundsd_u64_normal3 - 100
+test_x86_64_avx512f_mm_cvtt_roundss_i64 - 1
+test_x86_64_avx512f_mm_cvtt_roundss_i64_normal3 - 100
+test_x86_64_avx512f_mm_cvtt_roundss_si64 - 1
+test_x86_64_avx512f_mm_cvtt_roundss_si64_normal3 - 100
+test_x86_64_avx512f_mm_cvtt_roundss_u64 - 1
+test_x86_64_avx512f_mm_cvtt_roundss_u64_boundary_allones - -1
+test_x86_64_avx512f_mm_cvtt_roundss_u64_boundary_max - -1
+test_x86_64_avx512f_mm_cvtt_roundss_u64_boundary_min - -1
+test_x86_64_avx512f_mm_cvtt_roundss_u64_boundary_mixed - -1
+test_x86_64_avx512f_mm_cvtt_roundss_u64_normal3 - 100
+test_x86_64_avx512f_mm_cvttsd_i64 - 1
+test_x86_64_avx512f_mm_cvttsd_i64_normal3 - 100
+test_x86_64_avx512f_mm_cvttsd_u64 - 1
+test_x86_64_avx512f_mm_cvttsd_u64_boundary_allones - -1
+test_x86_64_avx512f_mm_cvttsd_u64_boundary_max - -1
+test_x86_64_avx512f_mm_cvttsd_u64_boundary_min - -1
+test_x86_64_avx512f_mm_cvttsd_u64_boundary_mixed - -1
+test_x86_64_avx512f_mm_cvttsd_u64_normal3 - 100
+test_x86_64_avx512f_mm_cvttss_i64 - 1
+test_x86_64_avx512f_mm_cvttss_i64_normal3 - 100
+test_x86_64_avx512f_mm_cvttss_u64 - 1
+test_x86_64_avx512f_mm_cvttss_u64_boundary_allones - -1
+test_x86_64_avx512f_mm_cvttss_u64_boundary_max - -1
+test_x86_64_avx512f_mm_cvttss_u64_boundary_min - -1
+test_x86_64_avx512f_mm_cvttss_u64_boundary_mixed - -1
+test_x86_64_avx512f_mm_cvttss_u64_normal3 - 100

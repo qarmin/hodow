@@ -1,8 +1,6 @@
 use std::arch::riscv64::*;
 
 #[allow(unused_imports)]
-use crate::cpu::common::arm::*;
-#[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
 pub(super) fn test_riscv64_zk_aes64es() -> Result<(), String> {

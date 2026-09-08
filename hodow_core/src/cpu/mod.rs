@@ -12,7 +12,7 @@ use log::{error, info};
 pub mod auto_generated;
 pub(crate) mod common;
 
-pub use auto_generated::registry::{all_tests, available_modes, count_available_features, list_all_functions, test_all_extensions};
+pub use auto_generated::registry::{all_tests, available_modes, count_available_features, extension_status, list_all_functions, test_all_extensions};
 #[allow(unused_imports)]
 pub use auto_generated::*;
 
@@ -134,6 +134,20 @@ pub fn reset_stop_flag() {
 }
 
 pub type TestFunction = (dyn Fn() -> Result<(), String> + Send + Sync + 'static);
+
+/// One row of `extension_status()`.
+pub struct ExtensionStatus {
+    pub arch: &'static str,
+    pub ext: &'static str,
+    pub test_count: usize,
+    /// Detected on this machine at runtime.
+    pub supported: bool,
+    /// Whether a runtime check exists at all. `false` for extensions with no
+    /// `is_*_feature_detected!` string (`UNSUPPORTED_FEATURES` in the generator, e.g. `rdtsc`,
+    /// `cpuid`) - compiled in but never run anywhere, which is not the same as "this CPU
+    /// lacks it".
+    pub detectable: bool,
+}
 
 #[allow(dead_code)]
 pub trait ExtensionTest {
