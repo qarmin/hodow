@@ -54,6 +54,7 @@ sub-group.
 | `dEQP-GLES2.functional.negative_api.*` | 246 of 246 | - |
 | `dEQP-GLES2.functional.state_query.*` | 396 of 396 | - |
 | `dEQP-GLES3.info.*` | 6 of 6 | - |
+| `dEQP-GLES3.functional.negative_api.*` | 54 of 314 | `buffer` (38), `texture` (103), `shader` (63) and `state` (56) |
 | `dEQP-GLES31.functional.compute.basic.*` | 33 of 41 | the eight image cases (`copy_image_to_ssbo`, `copy_ssbo_to_image`, `image_atomic_op`, `image_barrier`) |
 
 The OpenGL ES side is where the work is going: the target hardware for this port is an
@@ -643,8 +644,9 @@ that is the order in which a driver's problems compound:
 3. `shaders` (by far the largest ES 2.0 group), `texture`, `fragment_ops`, `fbo`,
    `vertex_arrays`, `rasterization`, `multisample`.
 
-Then the same walk again for `dEQP-GLES3` (whose `negative_api` alone is 148 cases in
-four sub-groups) and the rest of `dEQP-GLES31`. A case that cannot be verified here is
+Then the same walk again for `dEQP-GLES3` (whose `negative_api` alone is 314 cases in
+six sub-groups, of which `fragment` and `vertex_array` are done) and the rest of
+`dEQP-GLES31`. A case that cannot be verified here is
 still worth writing - it is verified on the hardware instead, which is the only place
 the answer counts.
 

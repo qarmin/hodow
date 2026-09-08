@@ -9,12 +9,14 @@
 //
 // Modifications: rewritten in Rust for hodow_cts.
 
+pub mod functional;
+
 use crate::glu::{TestCaseGroup, info_tests};
 
-/// `TestPackage::init` for `dEQP-GLES3`. Only `info` is ported so far; the ES 3.0
-/// functional groups are next, and each one lands here in upstream's order.
+/// `TestPackage::init` for `dEQP-GLES3`.
 pub fn create_tests() -> TestCaseGroup {
     let mut root = TestCaseGroup::new("dEQP-GLES3");
     root.add_child(info_tests::create_tests());
+    root.add_child(functional::create_tests());
     root
 }
