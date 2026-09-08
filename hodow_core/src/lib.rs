@@ -10,8 +10,32 @@
 // generated runtime-detection calls for arm/riscv*, see generate_tests.py's
 // get_feature_detect_fn) are separately unstable from the aarch64 ones above and from each
 // other, gated the same way per architecture.
-#![cfg_attr(target_arch = "aarch64", feature(stdarch_aarch64_mte, stdarch_aarch64_prefetch))]
-#![cfg_attr(target_arch = "arm", feature(stdarch_arm_feature_detection))]
+#![cfg_attr(
+    target_arch = "aarch64",
+    feature(
+        stdarch_aarch64_mte,
+        stdarch_aarch64_prefetch,
+        stdarch_aarch64_rand,
+        faminmax,
+        stdarch_neon_fcma,
+        stdarch_neon_feat_lrcpc3,
+        stdarch_neon_feat_lut,
+        stdarch_neon_fp8,
+        stdarch_neon_ftts,
+        stdarch_neon_sm4,
+        stdarch_neon_i8mm,
+        stdarch_aarch64_sve,
+    )
+)]
+#![cfg_attr(
+    target_arch = "arm",
+    feature(
+        stdarch_arm_feature_detection,
+        stdarch_aarch32_crc32,
+        stdarch_arm_neon_intrinsics,
+        stdarch_neon_i8mm,
+    )
+)]
 #![cfg_attr(any(target_arch = "riscv32", target_arch = "riscv64"), feature(stdarch_riscv_feature_detection, riscv_ext_intrinsics))]
 
 use std::sync::OnceLock;

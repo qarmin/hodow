@@ -19,6 +19,33 @@ miri *args:
 clippy:
     RUSTFLAGS="-C target-cpu=native" cargo clippy -p hodow_cli --all-features --all-targets
 
+# --- Install ----------------------------------------------------------------------
+# No systemd service, no daemon - hodow is a one-shot test tool you invoke by hand
+# (`hodow_cli cpu`, `hodow_cli gpu`, ...), not something that needs to keep running.
+
+# Install `hodow_cli` onto PATH (~/.cargo/bin) - portable build (no target-cpu=native),
+# default features (cpu + gpu + serve, no vulkan). Good enough for everyday local use;
+# CPU extensions are still detected at runtime, just fewer of them get compiled in.
+install:
+    cargo install --path hodow_cli --force
+
+# Same, but adds the `vulkan` feature and builds with target-cpu=native, so the CPU
+# suite compiles in every extension *this exact machine's* compiler can see (matches
+# `just cpu`'s build profile - see its comment on why AVX-512 etc. need this even though
+# detection itself is always a runtime check). The resulting binary is tied to this
+# machine's CPU - do not copy it to another one.
+install-all:
+    RUSTFLAGS="-C target-cpu=native" cargo install --path hodow_cli --force --features vulkan
+
+# Cross-build for 32-bit ARM (same target as `just arm`) and copy the binary straight
+# onto a perimeter device via scp - nothing installed remotely, no service, just the
+# binary landing there ready to run by hand, e.g. `ssh {{user}}@<ip> ./hodow_cli cpu`.
+# Usage: just install-arm 192.168.1.50 [user]
+install-arm ip_address user="root":
+    cargo zigbuild -p hodow_cli --target armv7-unknown-linux-gnueabihf.2.28 --release --no-default-features --features gpu
+    scp -O target/armv7-unknown-linux-gnueabihf/release/hodow_cli {{user}}@{{ip_address}}:~/hodow_cli
+    @echo "Copied to {{user}}@{{ip_address}}:~/hodow_cli - run e.g. './hodow_cli cpu --isolate' there."
+
 # All recipes below that run `hodow_cli` in the *default* debug profile (no --release, no
 # --target) share the same on-disk binary at target/debug/hodow_cli. If one of them rebuilds
 # it with a DIFFERENT --features set while `just serve` is running off that same binary,

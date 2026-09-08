@@ -4,6 +4,9 @@ pub mod x86;
 #[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
 pub mod arm;
 
+#[cfg(target_arch = "aarch64")]
+pub mod sve;
+
 use std::fmt::Debug;
 
 use rand::random;
@@ -179,6 +182,54 @@ pub fn get_random_i64_array<const N: usize>() -> [i64; N] {
     let mut arr = [0; N];
     for item in arr.iter_mut() {
         *item = random::<i64>();
+    }
+    arr
+}
+
+pub fn get_random_i8_array<const N: usize>() -> [i8; N] {
+    let mut arr = [0; N];
+    for item in arr.iter_mut() {
+        *item = random::<i8>();
+    }
+    arr
+}
+
+pub fn get_random_i16_array<const N: usize>() -> [i16; N] {
+    let mut arr = [0; N];
+    for item in arr.iter_mut() {
+        *item = random::<i16>();
+    }
+    arr
+}
+
+pub fn get_random_u8_array<const N: usize>() -> [u8; N] {
+    let mut arr = [0; N];
+    for item in arr.iter_mut() {
+        *item = random::<u8>();
+    }
+    arr
+}
+
+pub fn get_random_u16_array<const N: usize>() -> [u16; N] {
+    let mut arr = [0; N];
+    for item in arr.iter_mut() {
+        *item = random::<u16>();
+    }
+    arr
+}
+
+pub fn get_random_u32_array<const N: usize>() -> [u32; N] {
+    let mut arr = [0; N];
+    for item in arr.iter_mut() {
+        *item = random::<u32>();
+    }
+    arr
+}
+
+pub fn get_random_u64_array<const N: usize>() -> [u64; N] {
+    let mut arr = [0; N];
+    for item in arr.iter_mut() {
+        *item = random::<u64>();
     }
     arr
 }

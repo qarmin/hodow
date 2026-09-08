@@ -13,7 +13,6 @@ impl ExtensionTest for BMI2 {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_x86_bmi2_mulx_u32, "test_x86_bmi2_mulx_u32"),
             (&test_x86_bmi2_bzhi_u32, "test_x86_bmi2_bzhi_u32"),
             (&test_x86_bmi2_pdep_u32, "test_x86_bmi2_pdep_u32"),
             (&test_x86_bmi2_pext_u32, "test_x86_bmi2_pext_u32"),

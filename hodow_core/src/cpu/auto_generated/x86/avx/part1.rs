@@ -8,2086 +8,6 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_x86_avx_mm256_add_pd() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_add_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0])));
-        check_float_array_equality(&result, &[6.0, 8.0, 10.0, 12.0]).map_err(|e| format!("{e} | call: _mm256_add_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_add_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_add_pd_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_add_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64])));
-        check_float_array_equality(&result, &[10.0, 8.0, 14.0, 4.0]).map_err(|e| format!("{e} | call: _mm256_add_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_add_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_add_pd_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_add_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64])));
-        check_float_array_equality(&result, &[210.0, 410.0, 610.0, 810.0]).map_err(|e| format!("{e} | call: _mm256_add_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_add_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_add_pd_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_add_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN])));
-        check_float_array_equality(&result, &[-f64::INFINITY, -f64::INFINITY, -f64::INFINITY, -f64::INFINITY]).map_err(|e| format!("{e} | call: _mm256_add_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_add_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_add_pd_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_add_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
-        check_float_array_equality(&result, &[f64::INFINITY, f64::INFINITY, f64::INFINITY, f64::INFINITY]).map_err(|e| format!("{e} | call: _mm256_add_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_add_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_add_pd_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_add_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_add_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_add_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_add_pd_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_add_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN])));
-        check_float_array_equality(&result, &[f64::NAN, f64::NAN, f64::NAN, f64::NAN]).map_err(|e| format!("{e} | call: _mm256_add_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_add_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_add_pd_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_add_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[f64::INFINITY, -f64::INFINITY, -0.0, 2.2250738585072014e-308]).map_err(|e| format!("{e} | call: _mm256_add_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_add_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_add_pd_asym_min_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_add_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_add_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_add_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_add_pd_asym_max_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_add_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_add_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_add_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_add_ps() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_add_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_float_array_equality(&result, &[10.0, 12.0, 14.0, 16.0, 18.0, 20.0, 22.0, 24.0]).map_err(|e| format!("{e} | call: _mm256_add_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_add_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_add_ps_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_add_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32])));
-        check_float_array_equality(&result, &[10.0, 8.0, 14.0, 4.0, 18.0, 0.0, 22.0, -4.0]).map_err(|e| format!("{e} | call: _mm256_add_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_add_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_add_ps_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_add_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32])));
-        check_float_array_equality(&result, &[210.0, 410.0, 610.0, 810.0, 1010.0, 1210.0, 1410.0, 1610.0]).map_err(|e| format!("{e} | call: _mm256_add_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_add_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_add_ps_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_add_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
-        check_float_array_equality(&result, &[-f32::INFINITY, -f32::INFINITY, -f32::INFINITY, -f32::INFINITY, -f32::INFINITY, -f32::INFINITY, -f32::INFINITY, -f32::INFINITY]).map_err(|e| format!("{e} | call: _mm256_add_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_add_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_add_ps_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_add_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
-        check_float_array_equality(&result, &[f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY]).map_err(|e| format!("{e} | call: _mm256_add_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_add_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_add_ps_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_add_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_add_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_add_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_add_ps_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_add_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
-        check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm256_add_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_add_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_add_ps_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_add_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[f32::INFINITY, -f32::INFINITY, -0.0, 1.1754944e-38, f32::INFINITY, -f32::INFINITY, -0.0, 1.1754944e-38]).map_err(|e| format!("{e} | call: _mm256_add_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_add_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_add_ps_asym_min_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_add_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_add_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_add_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_add_ps_asym_max_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_add_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_add_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_add_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_and_pd() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_and_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0])));
-        check_float_array_equality(&result, &[2.2250738585072014e-308, 2.0, 3.0, 2.0]).map_err(|e| format!("{e} | call: _mm256_and_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_and_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_and_pd_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_and_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64])));
-        check_float_array_equality(&result, &[0.0, 4.450147717014403e-308, 2.0, 3.0]).map_err(|e| format!("{e} | call: _mm256_and_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_and_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_and_pd_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_and_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64])));
-        check_float_array_equality(&result, &[100.0, 192.0, 292.0, 400.0]).map_err(|e| format!("{e} | call: _mm256_and_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_and_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_and_pd_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_and_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN])));
-        check_float_array_equality(&result, &[-1.7976931348623157e308, -1.7976931348623157e308, -1.7976931348623157e308, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm256_and_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_and_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_and_pd_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_and_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
-        check_float_array_equality(&result, &[1.7976931348623157e308, 1.7976931348623157e308, 1.7976931348623157e308, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm256_and_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_and_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_and_pd_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_and_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_and_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_and_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_and_pd_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_and_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN])));
-        check_float_array_equality(&result, &[f64::NAN, f64::NAN, f64::NAN, f64::NAN]).map_err(|e| format!("{e} | call: _mm256_and_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_and_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_and_pd_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_and_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[f64::INFINITY, -f64::INFINITY, -0.0, 1.1125369292536007e-308]).map_err(|e| format!("{e} | call: _mm256_and_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_and_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_and_pd_asym_min_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_and_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
-        check_float_array_equality(&result, &[1.7976931348623157e308, 1.7976931348623157e308, 1.7976931348623157e308, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm256_and_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_and_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_and_pd_asym_max_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_and_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN])));
-        check_float_array_equality(&result, &[1.7976931348623157e308, 1.7976931348623157e308, 1.7976931348623157e308, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm256_and_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_and_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_and_ps() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_and_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_float_array_equality(&result, &[2.3509887e-38, 2.0, 2.0, 2.0, 2.0, 3.0, 3.5, 8.0]).map_err(|e| format!("{e} | call: _mm256_and_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_and_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_and_ps_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_and_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32])));
-        check_float_array_equality(&result, &[0.0, 2.3509887e-38, 2.0, 3.0, 2.0, 5.0, 4.0, 3.0]).map_err(|e| format!("{e} | call: _mm256_and_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_and_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_and_ps_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_and_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32])));
-        check_float_array_equality(&result, &[100.0, 192.0, 292.0, 400.0, 500.0, 576.0, 644.0, 800.0]).map_err(|e| format!("{e} | call: _mm256_and_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_and_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_and_ps_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_and_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
-        check_float_array_equality(&result, &[-3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_and_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_and_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_and_ps_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_and_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
-        check_float_array_equality(&result, &[3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_and_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_and_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_and_ps_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_and_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_and_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_and_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_and_ps_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_and_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
-        check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm256_and_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_and_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_and_ps_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_and_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[f32::INFINITY, -f32::INFINITY, -0.0, 5.877472e-39, f32::INFINITY, -f32::INFINITY, -0.0, 5.877472e-39]).map_err(|e| format!("{e} | call: _mm256_and_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_and_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_and_ps_asym_min_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_and_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
-        check_float_array_equality(&result, &[3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_and_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_and_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_and_ps_asym_max_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_and_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
-        check_float_array_equality(&result, &[3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_and_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_and_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_or_pd() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_or_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0])));
-        check_float_array_equality(&result, &[f64::NAN, 6.0, 7.0, 16.0]).map_err(|e| format!("{e} | call: _mm256_or_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_or_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_or_pd_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_or_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64])));
-        check_float_array_equality(&result, &[10.0, f64::NAN, 12.0, -7.0]).map_err(|e| format!("{e} | call: _mm256_or_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_or_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_or_pd_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_or_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64])));
-        check_float_array_equality(&result, &[110.0, 218.0, 318.0, 410.0]).map_err(|e| format!("{e} | call: _mm256_or_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_or_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_or_pd_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_or_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN])));
-        check_float_array_equality(&result, &[-1.7976931348623157e308, -1.7976931348623157e308, -1.7976931348623157e308, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm256_or_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_or_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_or_pd_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_or_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
-        check_float_array_equality(&result, &[1.7976931348623157e308, 1.7976931348623157e308, 1.7976931348623157e308, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm256_or_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_or_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_or_pd_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_or_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_or_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_or_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_or_pd_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_or_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN])));
-        check_float_array_equality(&result, &[f64::NAN, f64::NAN, f64::NAN, f64::NAN]).map_err(|e| format!("{e} | call: _mm256_or_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_or_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_or_pd_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_or_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[f64::INFINITY, -f64::INFINITY, -0.0, 1.1125369292536007e-308]).map_err(|e| format!("{e} | call: _mm256_or_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_or_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_or_pd_asym_min_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_or_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
-        check_float_array_equality(&result, &[-1.7976931348623157e308, -1.7976931348623157e308, -1.7976931348623157e308, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm256_or_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_or_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_or_pd_asym_max_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_or_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN])));
-        check_float_array_equality(&result, &[-1.7976931348623157e308, -1.7976931348623157e308, -1.7976931348623157e308, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm256_or_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_or_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_or_ps() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_or_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_float_array_equality(&result, &[f32::NAN, 10.0, 15.0, 24.0, 30.0, 28.0, 30.0, 16.0]).map_err(|e| format!("{e} | call: _mm256_or_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_or_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_or_ps_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_or_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32])));
-        check_float_array_equality(&result, &[10.0, f32::NAN, 12.0, -7.0, 28.0, -5.0, 24.0, -7.0]).map_err(|e| format!("{e} | call: _mm256_or_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_or_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_or_ps_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_or_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32])));
-        check_float_array_equality(&result, &[110.0, 218.0, 318.0, 410.0, 510.0, 634.0, 766.0, 810.0]).map_err(|e| format!("{e} | call: _mm256_or_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_or_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_or_ps_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_or_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
-        check_float_array_equality(&result, &[-3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_or_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_or_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_or_ps_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_or_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
-        check_float_array_equality(&result, &[3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_or_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_or_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_or_ps_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_or_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_or_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_or_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_or_ps_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_or_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
-        check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm256_or_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_or_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_or_ps_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_or_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[f32::INFINITY, -f32::INFINITY, -0.0, 5.877472e-39, f32::INFINITY, -f32::INFINITY, -0.0, 5.877472e-39]).map_err(|e| format!("{e} | call: _mm256_or_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_or_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_or_ps_asym_min_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_or_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
-        check_float_array_equality(&result, &[-3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_or_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_or_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_or_ps_asym_max_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_or_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
-        check_float_array_equality(&result, &[-3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_or_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_or_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_shuffle_pd() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_shuffle_pd::<0>(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0])));
-        check_float_array_equality(&result, &[1.0, 5.0, 3.0, 7.0]).map_err(|e| format!("{e} | call: _mm256_shuffle_pd::<0>(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_shuffle_pd::<0>(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_shuffle_pd_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_shuffle_pd::<0>(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64])));
-        check_float_array_equality(&result, &[0.0, 10.0, 2.0, 12.0]).map_err(|e| format!("{e} | call: _mm256_shuffle_pd::<0>(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_shuffle_pd::<0>(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_shuffle_pd_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_shuffle_pd::<0>(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64])));
-        check_float_array_equality(&result, &[100.0, 110.0, 300.0, 310.0]).map_err(|e| format!("{e} | call: _mm256_shuffle_pd::<0>(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_shuffle_pd::<0>(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_shuffle_pd_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_shuffle_pd::<0>(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN])));
-        check_float_array_equality(&result, &[-1.7976931348623157e308, -1.7976931348623157e308, -1.7976931348623157e308, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm256_shuffle_pd::<0>(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_shuffle_pd::<0>(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_shuffle_pd_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_shuffle_pd::<0>(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
-        check_float_array_equality(&result, &[1.7976931348623157e308, 1.7976931348623157e308, 1.7976931348623157e308, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm256_shuffle_pd::<0>(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_shuffle_pd::<0>(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_shuffle_pd_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_shuffle_pd::<0>(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_shuffle_pd::<0>(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_shuffle_pd::<0>(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_shuffle_pd_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_shuffle_pd::<0>(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN])));
-        check_float_array_equality(&result, &[f64::NAN, f64::NAN, f64::NAN, f64::NAN]).map_err(|e| format!("{e} | call: _mm256_shuffle_pd::<0>(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_shuffle_pd::<0>(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_shuffle_pd_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_shuffle_pd::<0>(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[f64::INFINITY, f64::INFINITY, -0.0, -0.0]).map_err(|e| format!("{e} | call: _mm256_shuffle_pd::<0>(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_shuffle_pd::<0>(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_shuffle_pd_asym_min_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_shuffle_pd::<0>(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
-        check_float_array_equality(&result, &[-1.7976931348623157e308, 1.7976931348623157e308, -1.7976931348623157e308, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm256_shuffle_pd::<0>(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_shuffle_pd::<0>(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_shuffle_pd_asym_max_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_shuffle_pd::<0>(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN])));
-        check_float_array_equality(&result, &[1.7976931348623157e308, -1.7976931348623157e308, 1.7976931348623157e308, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm256_shuffle_pd::<0>(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_shuffle_pd::<0>(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_shuffle_pd_imm_0() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_shuffle_pd::<0>(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0])));
-        check_float_array_equality(&result, &[1.0, 5.0, 3.0, 7.0]).map_err(|e| format!("{e} | call: _mm256_shuffle_pd::<0>(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_shuffle_pd::<0>(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_shuffle_pd_imm_1() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_shuffle_pd::<1>(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0])));
-        check_float_array_equality(&result, &[2.0, 5.0, 3.0, 7.0]).map_err(|e| format!("{e} | call: _mm256_shuffle_pd::<1>(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_shuffle_pd::<1>(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_shuffle_ps() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_shuffle_ps::<0>(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_float_array_equality(&result, &[1.0, 1.0, 9.0, 9.0, 5.0, 5.0, 13.0, 13.0]).map_err(|e| format!("{e} | call: _mm256_shuffle_ps::<0>(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_shuffle_ps::<0>(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_shuffle_ps_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_shuffle_ps::<0>(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32])));
-        check_float_array_equality(&result, &[0.0, 0.0, 10.0, 10.0, 4.0, 4.0, 14.0, 14.0]).map_err(|e| format!("{e} | call: _mm256_shuffle_ps::<0>(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_shuffle_ps::<0>(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_shuffle_ps_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_shuffle_ps::<0>(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32])));
-        check_float_array_equality(&result, &[100.0, 100.0, 110.0, 110.0, 500.0, 500.0, 510.0, 510.0]).map_err(|e| format!("{e} | call: _mm256_shuffle_ps::<0>(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_shuffle_ps::<0>(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_shuffle_ps_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_shuffle_ps::<0>(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
-        check_float_array_equality(&result, &[-3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_shuffle_ps::<0>(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_shuffle_ps::<0>(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_shuffle_ps_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_shuffle_ps::<0>(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
-        check_float_array_equality(&result, &[3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_shuffle_ps::<0>(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_shuffle_ps::<0>(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_shuffle_ps_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_shuffle_ps::<0>(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_shuffle_ps::<0>(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_shuffle_ps::<0>(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_shuffle_ps_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_shuffle_ps::<0>(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
-        check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm256_shuffle_ps::<0>(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_shuffle_ps::<0>(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_shuffle_ps_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_shuffle_ps::<0>(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY]).map_err(|e| format!("{e} | call: _mm256_shuffle_ps::<0>(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_shuffle_ps::<0>(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_shuffle_ps_asym_min_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_shuffle_ps::<0>(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
-        check_float_array_equality(&result, &[-3.4028235e38, -3.4028235e38, 3.4028235e38, 3.4028235e38, -3.4028235e38, -3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_shuffle_ps::<0>(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_shuffle_ps::<0>(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_shuffle_ps_asym_max_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_shuffle_ps::<0>(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
-        check_float_array_equality(&result, &[3.4028235e38, 3.4028235e38, -3.4028235e38, -3.4028235e38, 3.4028235e38, 3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_shuffle_ps::<0>(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_shuffle_ps::<0>(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_shuffle_ps_imm_0() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_shuffle_ps::<0>(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_float_array_equality(&result, &[1.0, 1.0, 9.0, 9.0, 5.0, 5.0, 13.0, 13.0]).map_err(|e| format!("{e} | call: _mm256_shuffle_ps::<0>(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_shuffle_ps::<0>(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_shuffle_ps_imm_1() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_shuffle_ps::<1>(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_float_array_equality(&result, &[2.0, 1.0, 9.0, 9.0, 6.0, 5.0, 13.0, 13.0]).map_err(|e| format!("{e} | call: _mm256_shuffle_ps::<1>(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_shuffle_ps::<1>(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_andnot_pd() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_andnot_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0])));
-        check_float_array_equality(&result, &[2.5, 3.337610787760802e-308, 2.7813423231340017e-308, 4.450147717014403e-308]).map_err(|e| format!("{e} | call: _mm256_andnot_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_andnot_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_andnot_pd_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_andnot_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64])));
-        check_float_array_equality(&result, &[10.0, 2.25, 6.675221575521604e-308, 2.7813423231340017e-308]).map_err(|e| format!("{e} | call: _mm256_andnot_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_andnot_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_andnot_pd_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_andnot_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_andnot_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_andnot_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_andnot_pd_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_andnot_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_andnot_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_andnot_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_andnot_pd_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_andnot_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_andnot_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_andnot_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_andnot_pd_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_andnot_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_andnot_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_andnot_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_andnot_pd_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_andnot_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_andnot_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_andnot_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_andnot_pd_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_andnot_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_andnot_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_andnot_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_andnot_pd_asym_min_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_andnot_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_andnot_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_andnot_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_andnot_pd_asym_max_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_andnot_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_andnot_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_andnot_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_andnot_ps() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_andnot_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_float_array_equality(&result, &[2.25, 2.938736e-38, 3.2326095e-38, 3.526483e-38, 3.8203566e-38, 2.938736e-38, 2.6448623e-38, 1.1754944e-38]).map_err(|e| format!("{e} | call: _mm256_andnot_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_andnot_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_andnot_ps_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_andnot_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32])));
-        check_float_array_equality(&result, &[10.0, 2.25, 3.526483e-38, 1.469368e-38, 4.1142302e-38, 0.0, 2.3509887e-38, 0.0]).map_err(|e| format!("{e} | call: _mm256_andnot_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_andnot_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_andnot_ps_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_andnot_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_andnot_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_andnot_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_andnot_ps_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_andnot_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_andnot_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_andnot_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_andnot_ps_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_andnot_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_andnot_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_andnot_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_andnot_ps_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_andnot_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_andnot_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_andnot_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_andnot_ps_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_andnot_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_andnot_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_andnot_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_andnot_ps_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_andnot_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_andnot_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_andnot_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_andnot_ps_asym_min_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_andnot_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_andnot_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_andnot_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_andnot_ps_asym_max_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_andnot_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_andnot_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_andnot_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
 pub(super) fn test_x86_avx_mm256_max_pd() -> Result<(), String> {
     unsafe {
         let result = unpack__m256d_to_f64_array(_mm256_max_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0])));
@@ -2888,1606 +808,6 @@ pub(super) fn test_x86_avx_mm256_min_ps_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx_mm256_mul_pd() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_mul_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0])));
-        check_float_array_equality(&result, &[5.0, 12.0, 21.0, 32.0]).map_err(|e| format!("{e} | call: _mm256_mul_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_mul_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_mul_pd_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_mul_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64])));
-        check_float_array_equality(&result, &[0.0, -9.0, 24.0, -21.0]).map_err(|e| format!("{e} | call: _mm256_mul_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_mul_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_mul_pd_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_mul_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64])));
-        check_float_array_equality(&result, &[11000.0, 42000.0, 93000.0, 164000.0]).map_err(|e| format!("{e} | call: _mm256_mul_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_mul_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_mul_pd_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_mul_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN])));
-        check_float_array_equality(&result, &[f64::INFINITY, f64::INFINITY, f64::INFINITY, f64::INFINITY]).map_err(|e| format!("{e} | call: _mm256_mul_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_mul_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_mul_pd_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_mul_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
-        check_float_array_equality(&result, &[f64::INFINITY, f64::INFINITY, f64::INFINITY, f64::INFINITY]).map_err(|e| format!("{e} | call: _mm256_mul_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_mul_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_mul_pd_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_mul_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_mul_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_mul_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_mul_pd_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_mul_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN])));
-        check_float_array_equality(&result, &[f64::NAN, f64::NAN, f64::NAN, f64::NAN]).map_err(|e| format!("{e} | call: _mm256_mul_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_mul_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_mul_pd_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_mul_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[f64::INFINITY, f64::INFINITY, 0.0, 0.0]).map_err(|e| format!("{e} | call: _mm256_mul_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_mul_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_mul_pd_asym_min_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_mul_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
-        check_float_array_equality(&result, &[-f64::INFINITY, -f64::INFINITY, -f64::INFINITY, -f64::INFINITY]).map_err(|e| format!("{e} | call: _mm256_mul_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_mul_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_mul_pd_asym_max_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_mul_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN])));
-        check_float_array_equality(&result, &[-f64::INFINITY, -f64::INFINITY, -f64::INFINITY, -f64::INFINITY]).map_err(|e| format!("{e} | call: _mm256_mul_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_mul_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_mul_ps() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_mul_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_float_array_equality(&result, &[9.0, 20.0, 33.0, 48.0, 65.0, 84.0, 105.0, 128.0]).map_err(|e| format!("{e} | call: _mm256_mul_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_mul_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_mul_ps_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_mul_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32])));
-        check_float_array_equality(&result, &[0.0, -9.0, 24.0, -21.0, 56.0, -25.0, 96.0, -21.0]).map_err(|e| format!("{e} | call: _mm256_mul_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_mul_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_mul_ps_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_mul_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32])));
-        check_float_array_equality(&result, &[11000.0, 42000.0, 93000.0, 164000.0, 255000.0, 366000.0, 497000.0, 648000.0]).map_err(|e| format!("{e} | call: _mm256_mul_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_mul_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_mul_ps_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_mul_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
-        check_float_array_equality(&result, &[f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY]).map_err(|e| format!("{e} | call: _mm256_mul_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_mul_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_mul_ps_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_mul_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
-        check_float_array_equality(&result, &[f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY]).map_err(|e| format!("{e} | call: _mm256_mul_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_mul_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_mul_ps_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_mul_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_mul_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_mul_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_mul_ps_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_mul_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
-        check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm256_mul_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_mul_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_mul_ps_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_mul_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[f32::INFINITY, f32::INFINITY, 0.0, 0.0, f32::INFINITY, f32::INFINITY, 0.0, 0.0]).map_err(|e| format!("{e} | call: _mm256_mul_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_mul_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_mul_ps_asym_min_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_mul_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
-        check_float_array_equality(&result, &[-f32::INFINITY, -f32::INFINITY, -f32::INFINITY, -f32::INFINITY, -f32::INFINITY, -f32::INFINITY, -f32::INFINITY, -f32::INFINITY]).map_err(|e| format!("{e} | call: _mm256_mul_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_mul_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_mul_ps_asym_max_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_mul_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
-        check_float_array_equality(&result, &[-f32::INFINITY, -f32::INFINITY, -f32::INFINITY, -f32::INFINITY, -f32::INFINITY, -f32::INFINITY, -f32::INFINITY, -f32::INFINITY]).map_err(|e| format!("{e} | call: _mm256_mul_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_mul_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_addsub_pd() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_addsub_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0])));
-        check_float_array_equality(&result, &[-4.0, 8.0, -4.0, 12.0]).map_err(|e| format!("{e} | call: _mm256_addsub_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_addsub_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_addsub_pd_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_addsub_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64])));
-        check_float_array_equality(&result, &[-10.0, 8.0, -10.0, 4.0]).map_err(|e| format!("{e} | call: _mm256_addsub_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_addsub_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_addsub_pd_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_addsub_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64])));
-        check_float_array_equality(&result, &[-10.0, 410.0, -10.0, 810.0]).map_err(|e| format!("{e} | call: _mm256_addsub_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_addsub_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_addsub_pd_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_addsub_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN])));
-        check_float_array_equality(&result, &[0.0, -f64::INFINITY, 0.0, -f64::INFINITY]).map_err(|e| format!("{e} | call: _mm256_addsub_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_addsub_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_addsub_pd_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_addsub_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
-        check_float_array_equality(&result, &[0.0, f64::INFINITY, 0.0, f64::INFINITY]).map_err(|e| format!("{e} | call: _mm256_addsub_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_addsub_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_addsub_pd_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_addsub_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_addsub_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_addsub_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_addsub_pd_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_addsub_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN])));
-        check_float_array_equality(&result, &[f64::NAN, f64::NAN, f64::NAN, f64::NAN]).map_err(|e| format!("{e} | call: _mm256_addsub_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_addsub_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_addsub_pd_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_addsub_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[f64::NAN, -f64::INFINITY, 0.0, 2.2250738585072014e-308]).map_err(|e| format!("{e} | call: _mm256_addsub_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_addsub_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_addsub_pd_asym_min_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_addsub_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
-        check_float_array_equality(&result, &[-f64::INFINITY, 0.0, -f64::INFINITY, 0.0]).map_err(|e| format!("{e} | call: _mm256_addsub_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_addsub_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_addsub_pd_asym_max_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_addsub_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN])));
-        check_float_array_equality(&result, &[f64::INFINITY, 0.0, f64::INFINITY, 0.0]).map_err(|e| format!("{e} | call: _mm256_addsub_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_addsub_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_addsub_ps() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_addsub_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_float_array_equality(&result, &[-8.0, 12.0, -8.0, 16.0, -8.0, 20.0, -8.0, 24.0]).map_err(|e| format!("{e} | call: _mm256_addsub_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_addsub_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_addsub_ps_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_addsub_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32])));
-        check_float_array_equality(&result, &[-10.0, 8.0, -10.0, 4.0, -10.0, 0.0, -10.0, -4.0]).map_err(|e| format!("{e} | call: _mm256_addsub_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_addsub_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_addsub_ps_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_addsub_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32])));
-        check_float_array_equality(&result, &[-10.0, 410.0, -10.0, 810.0, -10.0, 1210.0, -10.0, 1610.0]).map_err(|e| format!("{e} | call: _mm256_addsub_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_addsub_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_addsub_ps_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_addsub_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
-        check_float_array_equality(&result, &[0.0, -f32::INFINITY, 0.0, -f32::INFINITY, 0.0, -f32::INFINITY, 0.0, -f32::INFINITY]).map_err(|e| format!("{e} | call: _mm256_addsub_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_addsub_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_addsub_ps_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_addsub_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
-        check_float_array_equality(&result, &[0.0, f32::INFINITY, 0.0, f32::INFINITY, 0.0, f32::INFINITY, 0.0, f32::INFINITY]).map_err(|e| format!("{e} | call: _mm256_addsub_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_addsub_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_addsub_ps_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_addsub_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_addsub_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_addsub_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_addsub_ps_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_addsub_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
-        check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm256_addsub_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_addsub_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_addsub_ps_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_addsub_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[f32::NAN, -f32::INFINITY, 0.0, 1.1754944e-38, f32::NAN, -f32::INFINITY, 0.0, 1.1754944e-38]).map_err(|e| format!("{e} | call: _mm256_addsub_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_addsub_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_addsub_ps_asym_min_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_addsub_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
-        check_float_array_equality(&result, &[-f32::INFINITY, 0.0, -f32::INFINITY, 0.0, -f32::INFINITY, 0.0, -f32::INFINITY, 0.0]).map_err(|e| format!("{e} | call: _mm256_addsub_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_addsub_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_addsub_ps_asym_max_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_addsub_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
-        check_float_array_equality(&result, &[f32::INFINITY, 0.0, f32::INFINITY, 0.0, f32::INFINITY, 0.0, f32::INFINITY, 0.0]).map_err(|e| format!("{e} | call: _mm256_addsub_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_addsub_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_sub_pd() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_sub_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0])));
-        check_float_array_equality(&result, &[-4.0, -4.0, -4.0, -4.0]).map_err(|e| format!("{e} | call: _mm256_sub_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_sub_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_sub_pd_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_sub_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64])));
-        check_float_array_equality(&result, &[-10.0, -10.0, -10.0, -10.0]).map_err(|e| format!("{e} | call: _mm256_sub_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_sub_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_sub_pd_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_sub_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64])));
-        check_float_array_equality(&result, &[-10.0, -10.0, -10.0, -10.0]).map_err(|e| format!("{e} | call: _mm256_sub_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_sub_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_sub_pd_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_sub_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_sub_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_sub_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_sub_pd_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_sub_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_sub_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_sub_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_sub_pd_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_sub_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_sub_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_sub_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_sub_pd_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_sub_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN])));
-        check_float_array_equality(&result, &[f64::NAN, f64::NAN, f64::NAN, f64::NAN]).map_err(|e| format!("{e} | call: _mm256_sub_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_sub_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_sub_pd_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_sub_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[f64::NAN, f64::NAN, 0.0, 0.0]).map_err(|e| format!("{e} | call: _mm256_sub_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_sub_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_sub_pd_asym_min_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_sub_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
-        check_float_array_equality(&result, &[-f64::INFINITY, -f64::INFINITY, -f64::INFINITY, -f64::INFINITY]).map_err(|e| format!("{e} | call: _mm256_sub_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_sub_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_sub_pd_asym_max_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_sub_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN])));
-        check_float_array_equality(&result, &[f64::INFINITY, f64::INFINITY, f64::INFINITY, f64::INFINITY]).map_err(|e| format!("{e} | call: _mm256_sub_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_sub_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_sub_ps() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_sub_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_float_array_equality(&result, &[-8.0, -8.0, -8.0, -8.0, -8.0, -8.0, -8.0, -8.0]).map_err(|e| format!("{e} | call: _mm256_sub_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_sub_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_sub_ps_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_sub_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32])));
-        check_float_array_equality(&result, &[-10.0, -10.0, -10.0, -10.0, -10.0, -10.0, -10.0, -10.0]).map_err(|e| format!("{e} | call: _mm256_sub_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_sub_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_sub_ps_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_sub_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32])));
-        check_float_array_equality(&result, &[-10.0, -10.0, -10.0, -10.0, -10.0, -10.0, -10.0, -10.0]).map_err(|e| format!("{e} | call: _mm256_sub_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_sub_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_sub_ps_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_sub_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_sub_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_sub_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_sub_ps_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_sub_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_sub_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_sub_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_sub_ps_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_sub_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_sub_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_sub_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_sub_ps_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_sub_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
-        check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm256_sub_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_sub_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_sub_ps_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_sub_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[f32::NAN, f32::NAN, 0.0, 0.0, f32::NAN, f32::NAN, 0.0, 0.0]).map_err(|e| format!("{e} | call: _mm256_sub_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_sub_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_sub_ps_asym_min_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_sub_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
-        check_float_array_equality(&result, &[-f32::INFINITY, -f32::INFINITY, -f32::INFINITY, -f32::INFINITY, -f32::INFINITY, -f32::INFINITY, -f32::INFINITY, -f32::INFINITY]).map_err(|e| format!("{e} | call: _mm256_sub_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_sub_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_sub_ps_asym_max_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_sub_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
-        check_float_array_equality(&result, &[f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY]).map_err(|e| format!("{e} | call: _mm256_sub_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_sub_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_div_ps() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_div_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_float_array_equality(&result, &[0.11111111, 0.2, 0.27272728, 0.33333334, 0.3846154, 0.42857143, 0.46666667, 0.5]).map_err(|e| format!("{e} | call: _mm256_div_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_div_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_div_ps_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_div_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32])));
-        check_float_array_equality(&result, &[0.0, -0.11111111, 0.16666667, -0.42857143, 0.2857143, -1.0, 0.375, -2.3333333]).map_err(|e| format!("{e} | call: _mm256_div_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_div_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_div_ps_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_div_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32])));
-        check_float_array_equality(&result, &[0.90909094, 0.95238096, 0.9677419, 0.9756098, 0.98039216, 0.9836066, 0.9859155, 0.9876543]).map_err(|e| format!("{e} | call: _mm256_div_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_div_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_div_ps_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_div_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
-        check_float_array_equality(&result, &[1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]).map_err(|e| format!("{e} | call: _mm256_div_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_div_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_div_ps_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_div_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
-        check_float_array_equality(&result, &[1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]).map_err(|e| format!("{e} | call: _mm256_div_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_div_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_div_ps_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_div_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm256_div_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_div_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_div_ps_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_div_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
-        check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm256_div_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_div_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_div_ps_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_div_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, 1.0, f32::NAN, f32::NAN, f32::NAN, 1.0]).map_err(|e| format!("{e} | call: _mm256_div_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_div_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_div_ps_asym_min_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_div_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
-        check_float_array_equality(&result, &[-1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0]).map_err(|e| format!("{e} | call: _mm256_div_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_div_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_div_ps_asym_max_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_div_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
-        check_float_array_equality(&result, &[-1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0]).map_err(|e| format!("{e} | call: _mm256_div_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_div_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_div_pd() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_div_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0])));
-        check_float_array_equality(&result, &[0.2, 0.3333333333333333, 0.42857142857142855, 0.5]).map_err(|e| format!("{e} | call: _mm256_div_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_div_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_div_pd_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_div_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64])));
-        check_float_array_equality(&result, &[0.0, -0.1111111111111111, 0.16666666666666666, -0.42857142857142855]).map_err(|e| format!("{e} | call: _mm256_div_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_div_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_div_pd_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_div_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64])));
-        check_float_array_equality(&result, &[0.9090909090909091, 0.9523809523809523, 0.967741935483871, 0.975609756097561]).map_err(|e| format!("{e} | call: _mm256_div_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_div_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_div_pd_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_div_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN])));
-        check_float_array_equality(&result, &[1.0, 1.0, 1.0, 1.0]).map_err(|e| format!("{e} | call: _mm256_div_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_div_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_div_pd_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_div_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
-        check_float_array_equality(&result, &[1.0, 1.0, 1.0, 1.0]).map_err(|e| format!("{e} | call: _mm256_div_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_div_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_div_pd_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_div_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[f64::NAN, f64::NAN, f64::NAN, f64::NAN]).map_err(|e| format!("{e} | call: _mm256_div_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_div_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_div_pd_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_div_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN])));
-        check_float_array_equality(&result, &[f64::NAN, f64::NAN, f64::NAN, f64::NAN]).map_err(|e| format!("{e} | call: _mm256_div_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_div_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_div_pd_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_div_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[f64::NAN, f64::NAN, f64::NAN, 1.0]).map_err(|e| format!("{e} | call: _mm256_div_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_div_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_div_pd_asym_min_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_div_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
-        check_float_array_equality(&result, &[-1.0, -1.0, -1.0, -1.0]).map_err(|e| format!("{e} | call: _mm256_div_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_div_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_div_pd_asym_max_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_div_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN])));
-        check_float_array_equality(&result, &[-1.0, -1.0, -1.0, -1.0]).map_err(|e| format!("{e} | call: _mm256_div_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_div_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
 pub(super) fn test_x86_avx_mm256_round_pd() -> Result<(), String> {
     unsafe {
         let result = unpack__m256d_to_f64_array(_mm256_round_pd::<8>(create__m256d_from([1.0, 2.0, 3.0, 4.0])));
@@ -4648,326 +968,6 @@ pub(super) fn test_x86_avx_mm256_round_pd_boundary_mixed() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_x86_avx_mm256_ceil_pd() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_ceil_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0])));
-        check_float_array_equality(&result, &[1.0, 2.0, 3.0, 4.0]).map_err(|e| format!("{e} | call: _mm256_ceil_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_ceil_pd(create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_ceil_pd_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_ceil_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64])));
-        check_float_array_equality(&result, &[0.0, -1.0, 2.0, -3.0]).map_err(|e| format!("{e} | call: _mm256_ceil_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_ceil_pd(create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_ceil_pd_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_ceil_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64])));
-        check_float_array_equality(&result, &[100.0, 200.0, 300.0, 400.0]).map_err(|e| format!("{e} | call: _mm256_ceil_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_ceil_pd(create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_ceil_pd_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_ceil_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN])));
-        check_float_array_equality(&result, &[-1.7976931348623157e308, -1.7976931348623157e308, -1.7976931348623157e308, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm256_ceil_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_ceil_pd(create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_ceil_pd_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_ceil_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
-        check_float_array_equality(&result, &[1.7976931348623157e308, 1.7976931348623157e308, 1.7976931348623157e308, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm256_ceil_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_ceil_pd(create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_ceil_pd_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_ceil_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_ceil_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_ceil_pd(create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_ceil_pd_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_ceil_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN])));
-        check_float_array_equality(&result, &[f64::NAN, f64::NAN, f64::NAN, f64::NAN]).map_err(|e| format!("{e} | call: _mm256_ceil_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_ceil_pd(create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_ceil_pd_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_ceil_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[f64::INFINITY, -f64::INFINITY, -0.0, 1.0]).map_err(|e| format!("{e} | call: _mm256_ceil_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_ceil_pd(create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_floor_pd() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_floor_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0])));
-        check_float_array_equality(&result, &[1.0, 2.0, 3.0, 4.0]).map_err(|e| format!("{e} | call: _mm256_floor_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_floor_pd(create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_floor_pd_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_floor_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64])));
-        check_float_array_equality(&result, &[0.0, -1.0, 2.0, -3.0]).map_err(|e| format!("{e} | call: _mm256_floor_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_floor_pd(create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_floor_pd_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_floor_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64])));
-        check_float_array_equality(&result, &[100.0, 200.0, 300.0, 400.0]).map_err(|e| format!("{e} | call: _mm256_floor_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_floor_pd(create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_floor_pd_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_floor_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN])));
-        check_float_array_equality(&result, &[-1.7976931348623157e308, -1.7976931348623157e308, -1.7976931348623157e308, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm256_floor_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_floor_pd(create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_floor_pd_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_floor_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
-        check_float_array_equality(&result, &[1.7976931348623157e308, 1.7976931348623157e308, 1.7976931348623157e308, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm256_floor_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_floor_pd(create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_floor_pd_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_floor_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_floor_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_floor_pd(create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_floor_pd_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_floor_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN])));
-        check_float_array_equality(&result, &[f64::NAN, f64::NAN, f64::NAN, f64::NAN]).map_err(|e| format!("{e} | call: _mm256_floor_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_floor_pd(create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_floor_pd_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_floor_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[f64::INFINITY, -f64::INFINITY, -0.0, 0.0]).map_err(|e| format!("{e} | call: _mm256_floor_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_floor_pd(create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
 pub(super) fn test_x86_avx_mm256_round_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_round_ps::<8>(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
@@ -5122,326 +1122,6 @@ pub(super) fn test_x86_avx_mm256_round_ps_boundary_mixed() -> Result<(), String>
                     break;
                 }
                 let _ = _mm256_round_ps::<8>(create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_ceil_ps() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_ceil_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
-        check_float_array_equality(&result, &[1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]).map_err(|e| format!("{e} | call: _mm256_ceil_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_ceil_ps(create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_ceil_ps_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_ceil_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32])));
-        check_float_array_equality(&result, &[0.0, -1.0, 2.0, -3.0, 4.0, -5.0, 6.0, -7.0]).map_err(|e| format!("{e} | call: _mm256_ceil_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_ceil_ps(create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_ceil_ps_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_ceil_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32])));
-        check_float_array_equality(&result, &[100.0, 200.0, 300.0, 400.0, 500.0, 600.0, 700.0, 800.0]).map_err(|e| format!("{e} | call: _mm256_ceil_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_ceil_ps(create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_ceil_ps_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_ceil_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
-        check_float_array_equality(&result, &[-3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_ceil_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_ceil_ps(create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_ceil_ps_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_ceil_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
-        check_float_array_equality(&result, &[3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_ceil_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_ceil_ps(create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_ceil_ps_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_ceil_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_ceil_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_ceil_ps(create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_ceil_ps_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_ceil_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
-        check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm256_ceil_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_ceil_ps(create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_ceil_ps_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_ceil_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[f32::INFINITY, -f32::INFINITY, -0.0, 1.0, f32::INFINITY, -f32::INFINITY, -0.0, 1.0]).map_err(|e| format!("{e} | call: _mm256_ceil_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_ceil_ps(create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_floor_ps() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_floor_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
-        check_float_array_equality(&result, &[1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]).map_err(|e| format!("{e} | call: _mm256_floor_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_floor_ps(create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_floor_ps_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_floor_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32])));
-        check_float_array_equality(&result, &[0.0, -1.0, 2.0, -3.0, 4.0, -5.0, 6.0, -7.0]).map_err(|e| format!("{e} | call: _mm256_floor_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_floor_ps(create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_floor_ps_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_floor_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32])));
-        check_float_array_equality(&result, &[100.0, 200.0, 300.0, 400.0, 500.0, 600.0, 700.0, 800.0]).map_err(|e| format!("{e} | call: _mm256_floor_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_floor_ps(create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_floor_ps_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_floor_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
-        check_float_array_equality(&result, &[-3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_floor_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_floor_ps(create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_floor_ps_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_floor_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
-        check_float_array_equality(&result, &[3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_floor_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_floor_ps(create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_floor_ps_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_floor_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_floor_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_floor_ps(create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_floor_ps_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_floor_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
-        check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm256_floor_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_floor_ps(create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_floor_ps_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_floor_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[f32::INFINITY, -f32::INFINITY, -0.0, 0.0, f32::INFINITY, -f32::INFINITY, -0.0, 0.0]).map_err(|e| format!("{e} | call: _mm256_floor_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_floor_ps(create_random__m256());
             }
         }
     }
@@ -5768,926 +1448,6 @@ pub(super) fn test_x86_avx_mm256_sqrt_pd_boundary_mixed() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_x86_avx_mm256_blend_pd() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_blend_pd::<0>(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0])));
-        check_float_array_equality(&result, &[1.0, 2.0, 3.0, 4.0]).map_err(|e| format!("{e} | call: _mm256_blend_pd::<0>(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blend_pd::<0>(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blend_pd_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_blend_pd::<0>(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64])));
-        check_float_array_equality(&result, &[0.0, -1.0, 2.0, -3.0]).map_err(|e| format!("{e} | call: _mm256_blend_pd::<0>(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blend_pd::<0>(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blend_pd_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_blend_pd::<0>(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64])));
-        check_float_array_equality(&result, &[100.0, 200.0, 300.0, 400.0]).map_err(|e| format!("{e} | call: _mm256_blend_pd::<0>(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blend_pd::<0>(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blend_pd_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_blend_pd::<0>(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN])));
-        check_float_array_equality(&result, &[-1.7976931348623157e308, -1.7976931348623157e308, -1.7976931348623157e308, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm256_blend_pd::<0>(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blend_pd::<0>(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blend_pd_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_blend_pd::<0>(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
-        check_float_array_equality(&result, &[1.7976931348623157e308, 1.7976931348623157e308, 1.7976931348623157e308, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm256_blend_pd::<0>(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blend_pd::<0>(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blend_pd_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_blend_pd::<0>(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_blend_pd::<0>(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blend_pd::<0>(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blend_pd_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_blend_pd::<0>(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN])));
-        check_float_array_equality(&result, &[f64::NAN, f64::NAN, f64::NAN, f64::NAN]).map_err(|e| format!("{e} | call: _mm256_blend_pd::<0>(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blend_pd::<0>(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blend_pd_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_blend_pd::<0>(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[f64::INFINITY, -f64::INFINITY, -0.0, 1.1125369292536007e-308]).map_err(|e| format!("{e} | call: _mm256_blend_pd::<0>(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blend_pd::<0>(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blend_pd_asym_min_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_blend_pd::<0>(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
-        check_float_array_equality(&result, &[-1.7976931348623157e308, -1.7976931348623157e308, -1.7976931348623157e308, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm256_blend_pd::<0>(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blend_pd::<0>(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blend_pd_asym_max_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_blend_pd::<0>(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN])));
-        check_float_array_equality(&result, &[1.7976931348623157e308, 1.7976931348623157e308, 1.7976931348623157e308, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm256_blend_pd::<0>(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blend_pd::<0>(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blend_pd_imm_0() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_blend_pd::<0>(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0])));
-        check_float_array_equality(&result, &[1.0, 2.0, 3.0, 4.0]).map_err(|e| format!("{e} | call: _mm256_blend_pd::<0>(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blend_pd::<0>(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blend_pd_imm_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_blend_pd::<15>(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0])));
-        check_float_array_equality(&result, &[5.0, 6.0, 7.0, 8.0]).map_err(|e| format!("{e} | call: _mm256_blend_pd::<15>(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blend_pd::<15>(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blend_pd_imm_alt() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_blend_pd::<5>(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0])));
-        check_float_array_equality(&result, &[5.0, 2.0, 7.0, 4.0]).map_err(|e| format!("{e} | call: _mm256_blend_pd::<5>(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blend_pd::<5>(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blend_ps() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_blend_ps::<0>(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_float_array_equality(&result, &[1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]).map_err(|e| format!("{e} | call: _mm256_blend_ps::<0>(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blend_ps::<0>(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blend_ps_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_blend_ps::<0>(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32])));
-        check_float_array_equality(&result, &[0.0, -1.0, 2.0, -3.0, 4.0, -5.0, 6.0, -7.0]).map_err(|e| format!("{e} | call: _mm256_blend_ps::<0>(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blend_ps::<0>(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blend_ps_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_blend_ps::<0>(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32])));
-        check_float_array_equality(&result, &[100.0, 200.0, 300.0, 400.0, 500.0, 600.0, 700.0, 800.0]).map_err(|e| format!("{e} | call: _mm256_blend_ps::<0>(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blend_ps::<0>(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blend_ps_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_blend_ps::<0>(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
-        check_float_array_equality(&result, &[-3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_blend_ps::<0>(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blend_ps::<0>(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blend_ps_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_blend_ps::<0>(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
-        check_float_array_equality(&result, &[3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_blend_ps::<0>(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blend_ps::<0>(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blend_ps_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_blend_ps::<0>(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_blend_ps::<0>(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blend_ps::<0>(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blend_ps_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_blend_ps::<0>(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
-        check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm256_blend_ps::<0>(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blend_ps::<0>(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blend_ps_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_blend_ps::<0>(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[f32::INFINITY, -f32::INFINITY, -0.0, 5.877472e-39, f32::INFINITY, -f32::INFINITY, -0.0, 5.877472e-39]).map_err(|e| format!("{e} | call: _mm256_blend_ps::<0>(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blend_ps::<0>(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blend_ps_asym_min_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_blend_ps::<0>(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
-        check_float_array_equality(&result, &[-3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_blend_ps::<0>(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blend_ps::<0>(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blend_ps_asym_max_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_blend_ps::<0>(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
-        check_float_array_equality(&result, &[3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_blend_ps::<0>(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blend_ps::<0>(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blend_ps_imm_0() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_blend_ps::<0>(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_float_array_equality(&result, &[1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]).map_err(|e| format!("{e} | call: _mm256_blend_ps::<0>(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blend_ps::<0>(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blend_ps_imm_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_blend_ps::<255>(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_float_array_equality(&result, &[9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]).map_err(|e| format!("{e} | call: _mm256_blend_ps::<255>(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blend_ps::<255>(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blend_ps_imm_alt() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_blend_ps::<85>(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_float_array_equality(&result, &[9.0, 2.0, 11.0, 4.0, 13.0, 6.0, 15.0, 8.0]).map_err(|e| format!("{e} | call: _mm256_blend_ps::<85>(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blend_ps::<85>(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blendv_pd() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_blendv_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0]), create__m256d_from([9.0, 10.0, 11.0, 12.0])));
-        check_float_array_equality(&result, &[1.0, 2.0, 3.0, 4.0]).map_err(|e| format!("{e} | call: _mm256_blendv_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0]), create__m256d_from([9.0, 10.0, 11.0, 12.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blendv_pd(create_random__m256d(), create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blendv_pd_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_blendv_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64]), create__m256d_from([20.0f64, 19.0f64, 22.0f64, 17.0f64])));
-        check_float_array_equality(&result, &[0.0, -1.0, 2.0, -3.0]).map_err(|e| format!("{e} | call: _mm256_blendv_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64]), create__m256d_from([20.0f64, 19.0f64, 22.0f64, 17.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blendv_pd(create_random__m256d(), create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blendv_pd_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_blendv_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64]), create__m256d_from([120.0f64, 220.0f64, 320.0f64, 420.0f64])));
-        check_float_array_equality(&result, &[100.0, 200.0, 300.0, 400.0]).map_err(|e| format!("{e} | call: _mm256_blendv_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64]), create__m256d_from([120.0f64, 220.0f64, 320.0f64, 420.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blendv_pd(create_random__m256d(), create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blendv_pd_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_blendv_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN])));
-        check_float_array_equality(&result, &[-1.7976931348623157e308, -1.7976931348623157e308, -1.7976931348623157e308, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm256_blendv_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blendv_pd(create_random__m256d(), create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blendv_pd_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_blendv_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
-        check_float_array_equality(&result, &[1.7976931348623157e308, 1.7976931348623157e308, 1.7976931348623157e308, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm256_blendv_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blendv_pd(create_random__m256d(), create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blendv_pd_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_blendv_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_blendv_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blendv_pd(create_random__m256d(), create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blendv_pd_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_blendv_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN])));
-        check_float_array_equality(&result, &[f64::NAN, f64::NAN, f64::NAN, f64::NAN]).map_err(|e| format!("{e} | call: _mm256_blendv_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blendv_pd(create_random__m256d(), create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blendv_pd_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_blendv_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[f64::INFINITY, -f64::INFINITY, -0.0, 1.1125369292536007e-308]).map_err(|e| format!("{e} | call: _mm256_blendv_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blendv_pd(create_random__m256d(), create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blendv_pd_asym_min_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_blendv_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([1.0, 2.0, 3.0, 4.0])));
-        check_float_array_equality(&result, &[-1.7976931348623157e308, -1.7976931348623157e308, -1.7976931348623157e308, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm256_blendv_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([1.0, 2.0, 3.0, 4.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blendv_pd(create_random__m256d(), create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blendv_pd_asym_max_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_blendv_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([1.0, 2.0, 3.0, 4.0])));
-        check_float_array_equality(&result, &[1.7976931348623157e308, 1.7976931348623157e308, 1.7976931348623157e308, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm256_blendv_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([1.0, 2.0, 3.0, 4.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blendv_pd(create_random__m256d(), create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blendv_ps() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_blendv_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__m256_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0])));
-        check_float_array_equality(&result, &[1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]).map_err(|e| format!("{e} | call: _mm256_blendv_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__m256_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blendv_ps(create_random__m256(), create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blendv_ps_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_blendv_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32]), create__m256_from([20.0f32, 19.0f32, 22.0f32, 17.0f32, 24.0f32, 15.0f32, 26.0f32, 13.0f32])));
-        check_float_array_equality(&result, &[0.0, -1.0, 2.0, -3.0, 4.0, -5.0, 6.0, -7.0]).map_err(|e| format!("{e} | call: _mm256_blendv_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32]), create__m256_from([20.0f32, 19.0f32, 22.0f32, 17.0f32, 24.0f32, 15.0f32, 26.0f32, 13.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blendv_ps(create_random__m256(), create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blendv_ps_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_blendv_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32]), create__m256_from([120.0f32, 220.0f32, 320.0f32, 420.0f32, 520.0f32, 620.0f32, 720.0f32, 820.0f32])));
-        check_float_array_equality(&result, &[100.0, 200.0, 300.0, 400.0, 500.0, 600.0, 700.0, 800.0]).map_err(|e| format!("{e} | call: _mm256_blendv_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32]), create__m256_from([120.0f32, 220.0f32, 320.0f32, 420.0f32, 520.0f32, 620.0f32, 720.0f32, 820.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blendv_ps(create_random__m256(), create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blendv_ps_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_blendv_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
-        check_float_array_equality(&result, &[-3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_blendv_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blendv_ps(create_random__m256(), create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blendv_ps_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_blendv_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
-        check_float_array_equality(&result, &[3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_blendv_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blendv_ps(create_random__m256(), create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blendv_ps_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_blendv_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_blendv_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blendv_ps(create_random__m256(), create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blendv_ps_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_blendv_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
-        check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm256_blendv_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blendv_ps(create_random__m256(), create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blendv_ps_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_blendv_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[f32::INFINITY, -f32::INFINITY, -0.0, 5.877472e-39, f32::INFINITY, -f32::INFINITY, -0.0, 5.877472e-39]).map_err(|e| format!("{e} | call: _mm256_blendv_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blendv_ps(create_random__m256(), create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blendv_ps_asym_min_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_blendv_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
-        check_float_array_equality(&result, &[-3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_blendv_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blendv_ps(create_random__m256(), create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_blendv_ps_asym_max_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_blendv_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
-        check_float_array_equality(&result, &[3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_blendv_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_blendv_ps(create_random__m256(), create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
 pub(super) fn test_x86_avx_mm256_dp_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_dp_ps::<0>(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
@@ -6922,1206 +1682,6 @@ pub(super) fn test_x86_avx_mm256_dp_ps_imm_1() -> Result<(), String> {
                     break;
                 }
                 let _ = _mm256_dp_ps::<1>(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hadd_pd() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_hadd_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0])));
-        check_float_array_equality(&result, &[3.0, 11.0, 7.0, 15.0]).map_err(|e| format!("{e} | call: _mm256_hadd_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hadd_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hadd_pd_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_hadd_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64])));
-        check_float_array_equality(&result, &[-1.0, 19.0, -1.0, 19.0]).map_err(|e| format!("{e} | call: _mm256_hadd_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hadd_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hadd_pd_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_hadd_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64])));
-        check_float_array_equality(&result, &[300.0, 320.0, 700.0, 720.0]).map_err(|e| format!("{e} | call: _mm256_hadd_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hadd_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hadd_pd_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_hadd_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN])));
-        check_float_array_equality(&result, &[-f64::INFINITY, -f64::INFINITY, -f64::INFINITY, -f64::INFINITY]).map_err(|e| format!("{e} | call: _mm256_hadd_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hadd_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hadd_pd_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_hadd_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
-        check_float_array_equality(&result, &[f64::INFINITY, f64::INFINITY, f64::INFINITY, f64::INFINITY]).map_err(|e| format!("{e} | call: _mm256_hadd_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hadd_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hadd_pd_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_hadd_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_hadd_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hadd_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hadd_pd_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_hadd_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN])));
-        check_float_array_equality(&result, &[f64::NAN, f64::NAN, f64::NAN, f64::NAN]).map_err(|e| format!("{e} | call: _mm256_hadd_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hadd_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hadd_pd_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_hadd_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[f64::NAN, f64::NAN, 1.1125369292536007e-308, 1.1125369292536007e-308]).map_err(|e| format!("{e} | call: _mm256_hadd_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hadd_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hadd_pd_asym_min_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_hadd_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
-        check_float_array_equality(&result, &[-f64::INFINITY, f64::INFINITY, -f64::INFINITY, f64::INFINITY]).map_err(|e| format!("{e} | call: _mm256_hadd_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hadd_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hadd_pd_asym_max_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_hadd_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN])));
-        check_float_array_equality(&result, &[f64::INFINITY, -f64::INFINITY, f64::INFINITY, -f64::INFINITY]).map_err(|e| format!("{e} | call: _mm256_hadd_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hadd_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hadd_ps() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_hadd_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_float_array_equality(&result, &[3.0, 7.0, 19.0, 23.0, 11.0, 15.0, 27.0, 31.0]).map_err(|e| format!("{e} | call: _mm256_hadd_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hadd_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hadd_ps_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_hadd_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32])));
-        check_float_array_equality(&result, &[-1.0, -1.0, 19.0, 19.0, -1.0, -1.0, 19.0, 19.0]).map_err(|e| format!("{e} | call: _mm256_hadd_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hadd_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hadd_ps_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_hadd_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32])));
-        check_float_array_equality(&result, &[300.0, 700.0, 320.0, 720.0, 1100.0, 1500.0, 1120.0, 1520.0]).map_err(|e| format!("{e} | call: _mm256_hadd_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hadd_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hadd_ps_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_hadd_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
-        check_float_array_equality(&result, &[-f32::INFINITY, -f32::INFINITY, -f32::INFINITY, -f32::INFINITY, -f32::INFINITY, -f32::INFINITY, -f32::INFINITY, -f32::INFINITY]).map_err(|e| format!("{e} | call: _mm256_hadd_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hadd_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hadd_ps_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_hadd_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
-        check_float_array_equality(&result, &[f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY]).map_err(|e| format!("{e} | call: _mm256_hadd_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hadd_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hadd_ps_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_hadd_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_hadd_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hadd_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hadd_ps_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_hadd_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
-        check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm256_hadd_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hadd_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hadd_ps_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_hadd_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[f32::NAN, 5.877472e-39, f32::NAN, 5.877472e-39, f32::NAN, 5.877472e-39, f32::NAN, 5.877472e-39]).map_err(|e| format!("{e} | call: _mm256_hadd_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hadd_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hadd_ps_asym_min_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_hadd_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
-        check_float_array_equality(&result, &[-f32::INFINITY, -f32::INFINITY, f32::INFINITY, f32::INFINITY, -f32::INFINITY, -f32::INFINITY, f32::INFINITY, f32::INFINITY]).map_err(|e| format!("{e} | call: _mm256_hadd_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hadd_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hadd_ps_asym_max_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_hadd_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
-        check_float_array_equality(&result, &[f32::INFINITY, f32::INFINITY, -f32::INFINITY, -f32::INFINITY, f32::INFINITY, f32::INFINITY, -f32::INFINITY, -f32::INFINITY]).map_err(|e| format!("{e} | call: _mm256_hadd_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hadd_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hsub_pd() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_hsub_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0])));
-        check_float_array_equality(&result, &[-1.0, -1.0, -1.0, -1.0]).map_err(|e| format!("{e} | call: _mm256_hsub_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hsub_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hsub_pd_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_hsub_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64])));
-        check_float_array_equality(&result, &[1.0, 1.0, 5.0, 5.0]).map_err(|e| format!("{e} | call: _mm256_hsub_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hsub_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hsub_pd_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_hsub_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64])));
-        check_float_array_equality(&result, &[-100.0, -100.0, -100.0, -100.0]).map_err(|e| format!("{e} | call: _mm256_hsub_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hsub_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hsub_pd_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_hsub_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_hsub_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hsub_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hsub_pd_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_hsub_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_hsub_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hsub_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hsub_pd_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_hsub_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_hsub_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hsub_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hsub_pd_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_hsub_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN])));
-        check_float_array_equality(&result, &[f64::NAN, f64::NAN, f64::NAN, f64::NAN]).map_err(|e| format!("{e} | call: _mm256_hsub_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hsub_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hsub_pd_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_hsub_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[f64::INFINITY, f64::INFINITY, -1.1125369292536007e-308, -1.1125369292536007e-308]).map_err(|e| format!("{e} | call: _mm256_hsub_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hsub_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hsub_pd_asym_min_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_hsub_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_hsub_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hsub_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hsub_pd_asym_max_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_hsub_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_hsub_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hsub_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hsub_ps() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_hsub_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_float_array_equality(&result, &[-1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0]).map_err(|e| format!("{e} | call: _mm256_hsub_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hsub_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hsub_ps_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_hsub_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32])));
-        check_float_array_equality(&result, &[1.0, 5.0, 1.0, 5.0, 9.0, 13.0, 9.0, 13.0]).map_err(|e| format!("{e} | call: _mm256_hsub_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hsub_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hsub_ps_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_hsub_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32])));
-        check_float_array_equality(&result, &[-100.0, -100.0, -100.0, -100.0, -100.0, -100.0, -100.0, -100.0]).map_err(|e| format!("{e} | call: _mm256_hsub_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hsub_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hsub_ps_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_hsub_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_hsub_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hsub_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hsub_ps_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_hsub_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_hsub_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hsub_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hsub_ps_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_hsub_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_hsub_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hsub_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hsub_ps_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_hsub_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
-        check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm256_hsub_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hsub_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hsub_ps_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_hsub_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[f32::INFINITY, -5.877472e-39, f32::INFINITY, -5.877472e-39, f32::INFINITY, -5.877472e-39, f32::INFINITY, -5.877472e-39]).map_err(|e| format!("{e} | call: _mm256_hsub_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hsub_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hsub_ps_asym_min_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_hsub_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_hsub_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hsub_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_hsub_ps_asym_max_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_hsub_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_hsub_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_hsub_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_xor_pd() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_xor_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0])));
-        check_float_array_equality(&result, &[1.1235582092889474e308, 3.337610787760802e-308, 2.7813423231340017e-308, 8.900295434028806e-308]).map_err(|e| format!("{e} | call: _mm256_xor_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_xor_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_xor_pd_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_xor_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64])));
-        check_float_array_equality(&result, &[10.0, -5.056011941800263e307, 6.675221575521604e-308, -2.7813423231340017e-308]).map_err(|e| format!("{e} | call: _mm256_xor_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_xor_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_xor_pd_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_xor_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_xor_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_xor_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_xor_pd_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_xor_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_xor_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_xor_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_xor_pd_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_xor_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_xor_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_xor_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_xor_pd_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_xor_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_xor_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_xor_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_xor_pd_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_xor_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_xor_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_xor_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_xor_pd_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_xor_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_xor_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_xor_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_xor_pd_asym_min_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_xor_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_xor_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_xor_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_xor_pd_asym_max_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_xor_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN])));
-        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_xor_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_xor_pd(create_random__m256d(), create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_xor_ps() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_xor_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
-        check_float_array_equality(&result, &[9.570442e37, 2.938736e-38, 4.4081038e-38, 7.052966e-38, 8.8162076e-38, 5.877472e-38, 5.2897246e-38, 1.1754944e-38]).map_err(|e| format!("{e} | call: _mm256_xor_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_xor_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_xor_ps_normal2() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_xor_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32])));
-        check_float_array_equality(&result, &[10.0, -9.570442e37, 3.526483e-38, -1.469368e-38, 8.2284605e-38, -0.0, 3.526483e-38, -1.469368e-38]).map_err(|e| format!("{e} | call: _mm256_xor_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_xor_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_xor_ps_normal3() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_xor_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_xor_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_xor_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_xor_ps_boundary_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_xor_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_xor_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_xor_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_xor_ps_boundary_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_xor_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_xor_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_xor_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_xor_ps_boundary_zero() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_xor_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_xor_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_xor_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_xor_ps_boundary_allones() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_xor_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_xor_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_xor_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_xor_ps_boundary_mixed() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_xor_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_xor_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_xor_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_xor_ps_asym_min_max() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_xor_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_xor_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_xor_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_x86_avx_mm256_xor_ps_asym_max_min() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_xor_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
-        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_xor_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_xor_ps(create_random__m256(), create_random__m256());
             }
         }
     }
@@ -9568,10 +3128,10 @@ pub(super) fn test_x86_avx_mm_cmp_ss_imm_1() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_x86_avx_mm256_cvtepi32_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx_mm256_cvtps_epi32() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_cvtepi32_pd(create__m128i_from_i32_array([1, 2, 3, 4])));
-        check_float_array_equality(&result, &[1.0, 2.0, 3.0, 4.0]).map_err(|e| format!("{e} | call: _mm256_cvtepi32_pd(create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
+        let result = unpack__m256i_to_i32_array(_mm256_cvtps_epi32(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
+        check_array_equality(&result, &[1, 2, 3, 4, 5, 6, 7, 8]).map_err(|e| format!("{e} | call: _mm256_cvtps_epi32(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -9581,17 +3141,17 @@ pub(super) fn test_x86_avx_mm256_cvtepi32_pd() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm256_cvtepi32_pd(create_random__m128i());
+                let _ = _mm256_cvtps_epi32(create_random__m256());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx_mm256_cvtepi32_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx_mm256_cvttpd_epi32() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_cvtepi32_ps(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
-        check_float_array_equality(&result, &[1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]).map_err(|e| format!("{e} | call: _mm256_cvtepi32_ps(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
+        let result = unpack__m128i_to_i32_array(_mm256_cvttpd_epi32(create__m256d_from([1.0, 2.0, 3.0, 4.0])));
+        check_array_equality(&result, &[1, 2, 3, 4]).map_err(|e| format!("{e} | call: _mm256_cvttpd_epi32(create__m256d_from([1.0, 2.0, 3.0, 4.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -9601,17 +3161,17 @@ pub(super) fn test_x86_avx_mm256_cvtepi32_ps() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm256_cvtepi32_ps(create_random__m256i());
+                let _ = _mm256_cvttpd_epi32(create_random__m256d());
             }
         }
     }
     Ok(())
 }
 
-pub(super) fn test_x86_avx_mm256_cvtpd_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx_mm256_cvtpd_epi32() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm256_cvtpd_ps(create__m256d_from([1.0, 2.0, 3.0, 4.0])));
-        check_float_array_equality(&result, &[1.0, 2.0, 3.0, 4.0]).map_err(|e| format!("{e} | call: _mm256_cvtpd_ps(create__m256d_from([1.0, 2.0, 3.0, 4.0]))"))?;
+        let result = unpack__m128i_to_i32_array(_mm256_cvtpd_epi32(create__m256d_from([1.0, 2.0, 3.0, 4.0])));
+        check_array_equality(&result, &[1, 2, 3, 4]).map_err(|e| format!("{e} | call: _mm256_cvtpd_epi32(create__m256d_from([1.0, 2.0, 3.0, 4.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -9621,7 +3181,3122 @@ pub(super) fn test_x86_avx_mm256_cvtpd_ps() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm256_cvtpd_ps(create_random__m256d());
+                let _ = _mm256_cvtpd_epi32(create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_cvttps_epi32() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256i_to_i32_array(_mm256_cvttps_epi32(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
+        check_array_equality(&result, &[1, 2, 3, 4, 5, 6, 7, 8]).map_err(|e| format!("{e} | call: _mm256_cvttps_epi32(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_cvttps_epi32(create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_zeroall() -> Result<(), String> {
+    unsafe {
+        _mm256_zeroall();
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                _mm256_zeroall();
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_zeroupper() -> Result<(), String> {
+    unsafe {
+        _mm256_zeroupper();
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                _mm256_zeroupper();
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_permutevar_ps() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256_to_f32_array(_mm256_permutevar_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
+        check_float_array_equality(&result, &[2.0, 3.0, 4.0, 1.0, 6.0, 7.0, 8.0, 5.0]).map_err(|e| format!("{e} | call: _mm256_permutevar_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_permutevar_ps(create_random__m256(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_permutevar_ps_normal2() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256_to_f32_array(_mm256_permutevar_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        check_float_array_equality(&result, &[-1.0, 2.0, -3.0, 0.0, -5.0, 6.0, -7.0, 4.0]).map_err(|e| format!("{e} | call: _mm256_permutevar_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_permutevar_ps(create_random__m256(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_permutevar_ps_normal3() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256_to_f32_array(_mm256_permutevar_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        check_float_array_equality(&result, &[200.0, 300.0, 400.0, 100.0, 600.0, 700.0, 800.0, 500.0]).map_err(|e| format!("{e} | call: _mm256_permutevar_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_permutevar_ps(create_random__m256(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_permutevar_ps_boundary_min() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256_to_f32_array(_mm256_permutevar_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        check_float_array_equality(&result, &[-3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_permutevar_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_permutevar_ps(create_random__m256(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_permutevar_ps_boundary_max() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256_to_f32_array(_mm256_permutevar_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        check_float_array_equality(&result, &[3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_permutevar_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_permutevar_ps(create_random__m256(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_permutevar_ps_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256_to_f32_array(_mm256_permutevar_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_permutevar_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_permutevar_ps(create_random__m256(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_permutevar_ps_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256_to_f32_array(_mm256_permutevar_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm256_permutevar_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_permutevar_ps(create_random__m256(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_permutevar_ps_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256_to_f32_array(_mm256_permutevar_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        check_float_array_equality(&result, &[-f32::INFINITY, -0.0, 5.877472e-39, f32::INFINITY, -f32::INFINITY, -0.0, 5.877472e-39, f32::INFINITY]).map_err(|e| format!("{e} | call: _mm256_permutevar_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_permutevar_ps(create_random__m256(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_permutevar_ps() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_permutevar_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128i_from_i32_array([5, 6, 7, 8])));
+        check_float_array_equality(&result, &[2.0, 3.0, 4.0, 1.0]).map_err(|e| format!("{e} | call: _mm_permutevar_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_permutevar_ps(create_random__m128(), create_random__m128i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_permutevar_ps_normal2() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_permutevar_ps(create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]), create__m128i_from_i32_array([1, 2, 3, 4])));
+        check_float_array_equality(&result, &[-1.0, 2.0, -3.0, 0.0]).map_err(|e| format!("{e} | call: _mm_permutevar_ps(create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_permutevar_ps(create_random__m128(), create_random__m128i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_permutevar_ps_normal3() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_permutevar_ps(create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]), create__m128i_from_i32_array([1, 2, 3, 4])));
+        check_float_array_equality(&result, &[200.0, 300.0, 400.0, 100.0]).map_err(|e| format!("{e} | call: _mm_permutevar_ps(create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_permutevar_ps(create_random__m128(), create_random__m128i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_permutevar_ps_boundary_min() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_permutevar_ps(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128i_from_i32_array([1, 2, 3, 4])));
+        check_float_array_equality(&result, &[-3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm_permutevar_ps(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_permutevar_ps(create_random__m128(), create_random__m128i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_permutevar_ps_boundary_max() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_permutevar_ps(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128i_from_i32_array([1, 2, 3, 4])));
+        check_float_array_equality(&result, &[3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm_permutevar_ps(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_permutevar_ps(create_random__m128(), create_random__m128i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_permutevar_ps_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_permutevar_ps(create__m128_from([0.0, 0.0, 0.0, 0.0]), create__m128i_from_i32_array([1, 2, 3, 4])));
+        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm_permutevar_ps(create__m128_from([0.0, 0.0, 0.0, 0.0]), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_permutevar_ps(create_random__m128(), create_random__m128i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_permutevar_ps_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_permutevar_ps(create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m128i_from_i32_array([1, 2, 3, 4])));
+        check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm_permutevar_ps(create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_permutevar_ps(create_random__m128(), create_random__m128i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_permutevar_ps_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_permutevar_ps(create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m128i_from_i32_array([1, 2, 3, 4])));
+        check_float_array_equality(&result, &[-f32::INFINITY, -0.0, 5.877472e-39, f32::INFINITY]).map_err(|e| format!("{e} | call: _mm_permutevar_ps(create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_permutevar_ps(create_random__m128(), create_random__m128i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_permutevar_pd() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256d_to_f64_array(_mm256_permutevar_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256i_from_i32_array([5, 6, 7, 8, 9, 10, 11, 12])));
+        check_float_array_equality(&result, &[1.0, 2.0, 3.0, 4.0]).map_err(|e| format!("{e} | call: _mm256_permutevar_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256i_from_i32_array([5, 6, 7, 8, 9, 10, 11, 12]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_permutevar_pd(create_random__m256d(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_permutevar_pd_normal2() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256d_to_f64_array(_mm256_permutevar_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        check_float_array_equality(&result, &[0.0, -1.0, 2.0, -3.0]).map_err(|e| format!("{e} | call: _mm256_permutevar_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_permutevar_pd(create_random__m256d(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_permutevar_pd_normal3() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256d_to_f64_array(_mm256_permutevar_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        check_float_array_equality(&result, &[100.0, 200.0, 300.0, 400.0]).map_err(|e| format!("{e} | call: _mm256_permutevar_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_permutevar_pd(create_random__m256d(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_permutevar_pd_boundary_min() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256d_to_f64_array(_mm256_permutevar_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        check_float_array_equality(&result, &[-1.7976931348623157e308, -1.7976931348623157e308, -1.7976931348623157e308, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm256_permutevar_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_permutevar_pd(create_random__m256d(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_permutevar_pd_boundary_max() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256d_to_f64_array(_mm256_permutevar_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        check_float_array_equality(&result, &[1.7976931348623157e308, 1.7976931348623157e308, 1.7976931348623157e308, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm256_permutevar_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_permutevar_pd(create_random__m256d(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_permutevar_pd_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256d_to_f64_array(_mm256_permutevar_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        check_float_array_equality(&result, &[0.0; 4]).map_err(|e| format!("{e} | call: _mm256_permutevar_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_permutevar_pd(create_random__m256d(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_permutevar_pd_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256d_to_f64_array(_mm256_permutevar_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        check_float_array_equality(&result, &[f64::NAN, f64::NAN, f64::NAN, f64::NAN]).map_err(|e| format!("{e} | call: _mm256_permutevar_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_permutevar_pd(create_random__m256d(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_permutevar_pd_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256d_to_f64_array(_mm256_permutevar_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        check_float_array_equality(&result, &[f64::INFINITY, -f64::INFINITY, -0.0, 1.1125369292536007e-308]).map_err(|e| format!("{e} | call: _mm256_permutevar_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_permutevar_pd(create_random__m256d(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_permutevar_pd() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_permutevar_pd(create__m128d_from([1.0, 2.0]), create__m128i_from_i32_array([3, 4, 5, 6])));
+        check_float_array_equality(&result, &[2.0, 1.0]).map_err(|e| format!("{e} | call: _mm_permutevar_pd(create__m128d_from([1.0, 2.0]), create__m128i_from_i32_array([3, 4, 5, 6]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_permutevar_pd(create_random__m128d(), create_random__m128i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_permutevar_pd_normal2() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_permutevar_pd(create__m128d_from([0.0f64, -1.0f64]), create__m128i_from_i32_array([1, 2, 3, 4])));
+        check_float_array_equality(&result, &[0.0, -1.0]).map_err(|e| format!("{e} | call: _mm_permutevar_pd(create__m128d_from([0.0f64, -1.0f64]), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_permutevar_pd(create_random__m128d(), create_random__m128i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_permutevar_pd_normal3() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_permutevar_pd(create__m128d_from([100.0f64, 200.0f64]), create__m128i_from_i32_array([1, 2, 3, 4])));
+        check_float_array_equality(&result, &[100.0, 200.0]).map_err(|e| format!("{e} | call: _mm_permutevar_pd(create__m128d_from([100.0f64, 200.0f64]), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_permutevar_pd(create_random__m128d(), create_random__m128i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_permutevar_pd_boundary_min() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_permutevar_pd(create__m128d_from([f64::MIN, f64::MIN]), create__m128i_from_i32_array([1, 2, 3, 4])));
+        check_float_array_equality(&result, &[-1.7976931348623157e308, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_permutevar_pd(create__m128d_from([f64::MIN, f64::MIN]), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_permutevar_pd(create_random__m128d(), create_random__m128i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_permutevar_pd_boundary_max() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_permutevar_pd(create__m128d_from([f64::MAX, f64::MAX]), create__m128i_from_i32_array([1, 2, 3, 4])));
+        check_float_array_equality(&result, &[1.7976931348623157e308, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_permutevar_pd(create__m128d_from([f64::MAX, f64::MAX]), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_permutevar_pd(create_random__m128d(), create_random__m128i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_permutevar_pd_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_permutevar_pd(create__m128d_from([0.0, 0.0]), create__m128i_from_i32_array([1, 2, 3, 4])));
+        check_float_array_equality(&result, &[0.0; 2]).map_err(|e| format!("{e} | call: _mm_permutevar_pd(create__m128d_from([0.0, 0.0]), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_permutevar_pd(create_random__m128d(), create_random__m128i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_permutevar_pd_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_permutevar_pd(create__m128d_from([f64::NAN, f64::NAN]), create__m128i_from_i32_array([1, 2, 3, 4])));
+        check_float_array_equality(&result, &[f64::NAN, f64::NAN]).map_err(|e| format!("{e} | call: _mm_permutevar_pd(create__m128d_from([f64::NAN, f64::NAN]), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_permutevar_pd(create_random__m128d(), create_random__m128i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_permutevar_pd_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_permutevar_pd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128i_from_i32_array([1, 2, 3, 4])));
+        check_float_array_equality(&result, &[f64::INFINITY, -f64::INFINITY]).map_err(|e| format!("{e} | call: _mm_permutevar_pd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_permutevar_pd(create_random__m128d(), create_random__m128i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_lddqu_si256() -> Result<(), String> {
+    unsafe {
+        let ptr_mem_addr = crate::cpu::common::Aligned64([create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]); 2]);
+        let result = unpack__m256i_to_i32_array(_mm256_lddqu_si256(ptr_mem_addr.0.as_ptr()));
+        check_array_equality(&result, &[1, 2, 3, 4, 5, 6, 7, 8]).map_err(|e| format!("{e} | call: _mm256_lddqu_si256(ptr_mem_addr.0.as_ptr())"))?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_stream_si256() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]); 2]);
+        let a = create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]);
+        _mm256_stream_si256(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_stream_si256_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]); 2]);
+        let a = create__m256i_from_i32_array([0, -1, 2, -3, 4, -5, 6, -7]);
+        _mm256_stream_si256(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_stream_si256_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]); 2]);
+        let a = create__m256i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800]);
+        _mm256_stream_si256(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_stream_si256_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]); 2]);
+        let a = create__m256i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]);
+        _mm256_stream_si256(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_stream_si256_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]); 2]);
+        let a = create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]);
+        _mm256_stream_si256(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_stream_si256_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]); 2]);
+        let a = create__m256i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0]);
+        _mm256_stream_si256(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_stream_si256_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]); 2]);
+        let a = create__m256i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1]);
+        _mm256_stream_si256(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_stream_si256_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]); 2]);
+        let a = create__m256i_from_i32_array([i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1]);
+        _mm256_stream_si256(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_stream_pd() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m256d_from([2.0, 3.0, 4.0, 5.0]);
+        _mm256_stream_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_stream_pd_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]);
+        _mm256_stream_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_stream_pd_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]);
+        _mm256_stream_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_stream_pd_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]);
+        _mm256_stream_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_stream_pd_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]);
+        _mm256_stream_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_stream_pd_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m256d_from([0.0, 0.0, 0.0, 0.0]);
+        _mm256_stream_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_stream_pd_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]);
+        _mm256_stream_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_stream_pd_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
+        let a = create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]);
+        _mm256_stream_pd(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_stream_ps() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let a = create__m256_from([2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0]);
+        _mm256_stream_ps(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_stream_ps_normal2() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let a = create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]);
+        _mm256_stream_ps(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_stream_ps_normal3() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let a = create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]);
+        _mm256_stream_ps(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_stream_ps_boundary_min() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let a = create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]);
+        _mm256_stream_ps(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_stream_ps_boundary_max() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let a = create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]);
+        _mm256_stream_ps(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_stream_ps_boundary_zero() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let a = create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]);
+        _mm256_stream_ps(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_stream_ps_boundary_allones() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let a = create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]);
+        _mm256_stream_ps(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_stream_ps_boundary_mixed() -> Result<(), String> {
+        if cfg!(miri) {
+            return Ok(());
+        }
+    unsafe {
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
+        let a = create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]);
+        _mm256_stream_ps(ptr_mem_addr.0.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_rcp_ps() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256_to_f32_array(_mm256_rcp_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
+        check_float_array_equality(&result, &[0.99975586, 0.49987793, 0.333313, 0.24993896, 0.19995117, 0.1666565, 0.14282227, 0.12496948]).map_err(|e| format!("{e} | call: _mm256_rcp_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_rcp_ps(create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_rcp_ps_normal2() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256_to_f32_array(_mm256_rcp_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32])));
+        check_float_array_equality(&result, &[f32::INFINITY, -0.99975586, 0.49987793, -0.333313, 0.24993896, -0.19995117, 0.1666565, -0.14282227]).map_err(|e| format!("{e} | call: _mm256_rcp_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_rcp_ps(create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_rcp_ps_normal3() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256_to_f32_array(_mm256_rcp_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32])));
+        check_float_array_equality(&result, &[0.0099983215, 0.0049991608, 0.0033330917, 0.0024995804, 0.001999855, 0.0016665459, 0.0014286041, 0.0012497902]).map_err(|e| format!("{e} | call: _mm256_rcp_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_rcp_ps(create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_rcp_ps_boundary_min() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256_to_f32_array(_mm256_rcp_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
+        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_rcp_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_rcp_ps(create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_rcp_ps_boundary_max() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256_to_f32_array(_mm256_rcp_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
+        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_rcp_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_rcp_ps(create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_rcp_ps_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256_to_f32_array(_mm256_rcp_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])));
+        check_float_array_equality(&result, &[f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY]).map_err(|e| format!("{e} | call: _mm256_rcp_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_rcp_ps(create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_rcp_ps_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256_to_f32_array(_mm256_rcp_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
+        check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm256_rcp_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_rcp_ps(create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_rcp_ps_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256_to_f32_array(_mm256_rcp_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0])));
+        check_float_array_equality(&result, &[0.0, -0.0, -f32::INFINITY, f32::INFINITY, 0.0, -0.0, -f32::INFINITY, f32::INFINITY]).map_err(|e| format!("{e} | call: _mm256_rcp_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_rcp_ps(create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_rsqrt_ps() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256_to_f32_array(_mm256_rsqrt_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
+        check_float_array_equality(&result, &[0.9998779, 0.70703125, 0.5772705, 0.49993896, 0.44714355, 0.40826416, 0.3779297, 0.35351563]).map_err(|e| format!("{e} | call: _mm256_rsqrt_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_rsqrt_ps(create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_rsqrt_ps_normal2() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256_to_f32_array(_mm256_rsqrt_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32])));
+        check_float_array_equality(&result, &[f32::INFINITY, f32::NAN, 0.70703125, f32::NAN, 0.49993896, f32::NAN, 0.40826416, f32::NAN]).map_err(|e| format!("{e} | call: _mm256_rsqrt_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_rsqrt_ps(create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_rsqrt_ps_normal3() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256_to_f32_array(_mm256_rsqrt_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32])));
+        check_float_array_equality(&result, &[0.099990845, 0.07070923, 0.05773163, 0.049995422, 0.04471588, 0.04082489, 0.03779602, 0.035354614]).map_err(|e| format!("{e} | call: _mm256_rsqrt_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_rsqrt_ps(create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_rsqrt_ps_boundary_min() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256_to_f32_array(_mm256_rsqrt_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN])));
+        check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm256_rsqrt_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_rsqrt_ps(create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_rsqrt_ps_boundary_max() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256_to_f32_array(_mm256_rsqrt_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
+        check_float_array_equality(&result, &[0.0; 8]).map_err(|e| format!("{e} | call: _mm256_rsqrt_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_rsqrt_ps(create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_rsqrt_ps_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256_to_f32_array(_mm256_rsqrt_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])));
+        check_float_array_equality(&result, &[f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY, f32::INFINITY]).map_err(|e| format!("{e} | call: _mm256_rsqrt_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_rsqrt_ps(create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_rsqrt_ps_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256_to_f32_array(_mm256_rsqrt_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
+        check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm256_rsqrt_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_rsqrt_ps(create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_rsqrt_ps_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256_to_f32_array(_mm256_rsqrt_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0])));
+        check_float_array_equality(&result, &[0.0, f32::NAN, -f32::INFINITY, f32::INFINITY, 0.0, f32::NAN, -f32::INFINITY, f32::INFINITY]).map_err(|e| format!("{e} | call: _mm256_rsqrt_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_rsqrt_ps(create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testnzc_si256() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testnzc_si256(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testnzc_si256(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testnzc_si256(create_random__m256i(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testnzc_si256_normal2() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testnzc_si256(create__m256i_from_i32_array([0, -1, 2, -3, 4, -5, 6, -7]), create__m256i_from_i32_array([10, 9, 12, 7, 14, 5, 16, 3]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testnzc_si256(create__m256i_from_i32_array([0, -1, 2, -3, 4, -5, 6, -7]), create__m256i_from_i32_array([10, 9, 12, 7, 14, 5, 16, 3]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testnzc_si256(create_random__m256i(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testnzc_si256_normal3() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testnzc_si256(create__m256i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800]), create__m256i_from_i32_array([110, 210, 310, 410, 510, 610, 710, 810]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testnzc_si256(create__m256i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800]), create__m256i_from_i32_array([110, 210, 310, 410, 510, 610, 710, 810]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testnzc_si256(create_random__m256i(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testnzc_si256_boundary_min() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testnzc_si256(create__m256i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m256i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testnzc_si256(create__m256i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m256i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testnzc_si256(create_random__m256i(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testnzc_si256_boundary_max() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testnzc_si256(create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testnzc_si256(create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testnzc_si256(create_random__m256i(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testnzc_si256_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testnzc_si256(create__m256i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0]), create__m256i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testnzc_si256(create__m256i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0]), create__m256i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testnzc_si256(create_random__m256i(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testnzc_si256_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testnzc_si256(create__m256i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__m256i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testnzc_si256(create__m256i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__m256i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testnzc_si256(create_random__m256i(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testnzc_si256_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testnzc_si256(create__m256i_from_i32_array([i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1]), create__m256i_from_i32_array([i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testnzc_si256(create__m256i_from_i32_array([i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1]), create__m256i_from_i32_array([i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testnzc_si256(create_random__m256i(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testnzc_si256_asym_min_max() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testnzc_si256(create__m256i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testnzc_si256(create__m256i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testnzc_si256(create_random__m256i(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testnzc_si256_asym_max_min() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testnzc_si256(create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m256i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testnzc_si256(create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m256i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testnzc_si256(create_random__m256i(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testz_pd() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testz_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testz_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testz_pd(create_random__m256d(), create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testz_pd_normal2() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testz_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testz_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testz_pd(create_random__m256d(), create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testz_pd_normal3() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testz_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testz_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testz_pd(create_random__m256d(), create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testz_pd_boundary_min() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testz_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testz_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testz_pd(create_random__m256d(), create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testz_pd_boundary_max() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testz_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testz_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testz_pd(create_random__m256d(), create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testz_pd_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testz_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testz_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testz_pd(create_random__m256d(), create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testz_pd_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testz_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testz_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testz_pd(create_random__m256d(), create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testz_pd_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testz_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testz_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testz_pd(create_random__m256d(), create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testz_pd_asym_min_max() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testz_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testz_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testz_pd(create_random__m256d(), create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testz_pd_asym_max_min() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testz_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testz_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testz_pd(create_random__m256d(), create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testc_pd() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testc_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testc_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testc_pd(create_random__m256d(), create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testc_pd_normal2() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testc_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testc_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testc_pd(create_random__m256d(), create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testc_pd_normal3() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testc_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testc_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testc_pd(create_random__m256d(), create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testc_pd_boundary_min() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testc_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testc_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testc_pd(create_random__m256d(), create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testc_pd_boundary_max() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testc_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testc_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testc_pd(create_random__m256d(), create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testc_pd_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testc_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testc_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testc_pd(create_random__m256d(), create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testc_pd_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testc_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testc_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testc_pd(create_random__m256d(), create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testc_pd_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testc_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testc_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testc_pd(create_random__m256d(), create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testc_pd_asym_min_max() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testc_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testc_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testc_pd(create_random__m256d(), create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testc_pd_asym_max_min() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testc_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testc_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testc_pd(create_random__m256d(), create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testnzc_pd() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testnzc_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testnzc_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testnzc_pd(create_random__m256d(), create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testnzc_pd_normal2() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testnzc_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testnzc_pd(create__m256d_from([0.0f64, -1.0f64, 2.0f64, -3.0f64]), create__m256d_from([10.0f64, 9.0f64, 12.0f64, 7.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testnzc_pd(create_random__m256d(), create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testnzc_pd_normal3() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testnzc_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testnzc_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testnzc_pd(create_random__m256d(), create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testnzc_pd_boundary_min() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testnzc_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testnzc_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testnzc_pd(create_random__m256d(), create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testnzc_pd_boundary_max() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testnzc_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testnzc_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testnzc_pd(create_random__m256d(), create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testnzc_pd_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testnzc_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testnzc_pd(create__m256d_from([0.0, 0.0, 0.0, 0.0]), create__m256d_from([0.0, 0.0, 0.0, 0.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testnzc_pd(create_random__m256d(), create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testnzc_pd_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testnzc_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testnzc_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testnzc_pd(create_random__m256d(), create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testnzc_pd_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testnzc_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testnzc_pd(create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]), create__m256d_from([f64::INFINITY, f64::NEG_INFINITY, -0.0, f64::MIN_POSITIVE / 2.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testnzc_pd(create_random__m256d(), create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testnzc_pd_asym_min_max() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testnzc_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testnzc_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testnzc_pd(create_random__m256d(), create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testnzc_pd_asym_max_min() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testnzc_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testnzc_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testnzc_pd(create_random__m256d(), create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_testnzc_pd() -> Result<(), String> {
+    unsafe {
+        let result = _mm_testnzc_pd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_testnzc_pd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_testnzc_pd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_testnzc_pd_normal2() -> Result<(), String> {
+    unsafe {
+        let result = _mm_testnzc_pd(create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_testnzc_pd(create__m128d_from([0.0f64, -1.0f64]), create__m128d_from([10.0f64, 9.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_testnzc_pd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_testnzc_pd_normal3() -> Result<(), String> {
+    unsafe {
+        let result = _mm_testnzc_pd(create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_testnzc_pd(create__m128d_from([100.0f64, 200.0f64]), create__m128d_from([110.0f64, 210.0f64]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_testnzc_pd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_testnzc_pd_boundary_min() -> Result<(), String> {
+    unsafe {
+        let result = _mm_testnzc_pd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_testnzc_pd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_testnzc_pd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_testnzc_pd_boundary_max() -> Result<(), String> {
+    unsafe {
+        let result = _mm_testnzc_pd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_testnzc_pd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_testnzc_pd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_testnzc_pd_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let result = _mm_testnzc_pd(create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_testnzc_pd(create__m128d_from([0.0, 0.0]), create__m128d_from([0.0, 0.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_testnzc_pd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_testnzc_pd_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let result = _mm_testnzc_pd(create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_testnzc_pd(create__m128d_from([f64::NAN, f64::NAN]), create__m128d_from([f64::NAN, f64::NAN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_testnzc_pd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_testnzc_pd_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let result = _mm_testnzc_pd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_testnzc_pd(create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]), create__m128d_from([f64::INFINITY, f64::NEG_INFINITY]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_testnzc_pd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_testnzc_pd_asym_min_max() -> Result<(), String> {
+    unsafe {
+        let result = _mm_testnzc_pd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_testnzc_pd(create__m128d_from([f64::MIN, f64::MIN]), create__m128d_from([f64::MAX, f64::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_testnzc_pd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_testnzc_pd_asym_max_min() -> Result<(), String> {
+    unsafe {
+        let result = _mm_testnzc_pd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_testnzc_pd(create__m128d_from([f64::MAX, f64::MAX]), create__m128d_from([f64::MIN, f64::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_testnzc_pd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testz_ps() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testz_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testz_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testz_ps(create_random__m256(), create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testz_ps_normal2() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testz_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testz_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testz_ps(create_random__m256(), create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testz_ps_normal3() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testz_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testz_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testz_ps(create_random__m256(), create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testz_ps_boundary_min() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testz_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testz_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testz_ps(create_random__m256(), create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testz_ps_boundary_max() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testz_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testz_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testz_ps(create_random__m256(), create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testz_ps_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testz_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testz_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testz_ps(create_random__m256(), create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testz_ps_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testz_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testz_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testz_ps(create_random__m256(), create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testz_ps_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testz_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testz_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testz_ps(create_random__m256(), create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testz_ps_asym_min_max() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testz_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testz_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testz_ps(create_random__m256(), create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testz_ps_asym_max_min() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testz_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testz_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testz_ps(create_random__m256(), create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testc_ps() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testc_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testc_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testc_ps(create_random__m256(), create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testc_ps_normal2() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testc_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testc_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testc_ps(create_random__m256(), create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testc_ps_normal3() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testc_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testc_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testc_ps(create_random__m256(), create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testc_ps_boundary_min() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testc_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testc_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testc_ps(create_random__m256(), create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testc_ps_boundary_max() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testc_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testc_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testc_ps(create_random__m256(), create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testc_ps_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testc_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testc_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testc_ps(create_random__m256(), create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testc_ps_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testc_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testc_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testc_ps(create_random__m256(), create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testc_ps_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testc_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testc_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testc_ps(create_random__m256(), create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testc_ps_asym_min_max() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testc_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]));
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_testc_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testc_ps(create_random__m256(), create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testc_ps_asym_max_min() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testc_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testc_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testc_ps(create_random__m256(), create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testnzc_ps() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testnzc_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testnzc_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testnzc_ps(create_random__m256(), create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testnzc_ps_normal2() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testnzc_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testnzc_ps(create__m256_from([0.0f32, -1.0f32, 2.0f32, -3.0f32, 4.0f32, -5.0f32, 6.0f32, -7.0f32]), create__m256_from([10.0f32, 9.0f32, 12.0f32, 7.0f32, 14.0f32, 5.0f32, 16.0f32, 3.0f32]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testnzc_ps(create_random__m256(), create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testnzc_ps_normal3() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testnzc_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testnzc_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testnzc_ps(create_random__m256(), create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testnzc_ps_boundary_min() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testnzc_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testnzc_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testnzc_ps(create_random__m256(), create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testnzc_ps_boundary_max() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testnzc_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testnzc_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testnzc_ps(create_random__m256(), create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testnzc_ps_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testnzc_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testnzc_ps(create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), create__m256_from([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testnzc_ps(create_random__m256(), create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testnzc_ps_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testnzc_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testnzc_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testnzc_ps(create_random__m256(), create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testnzc_ps_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testnzc_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testnzc_ps(create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m256_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0, f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testnzc_ps(create_random__m256(), create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testnzc_ps_asym_min_max() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testnzc_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testnzc_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testnzc_ps(create_random__m256(), create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm256_testnzc_ps_asym_max_min() -> Result<(), String> {
+    unsafe {
+        let result = _mm256_testnzc_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_testnzc_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_testnzc_ps(create_random__m256(), create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_testnzc_ps() -> Result<(), String> {
+    unsafe {
+        let result = _mm_testnzc_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_testnzc_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_testnzc_ps(create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_testnzc_ps_normal2() -> Result<(), String> {
+    unsafe {
+        let result = _mm_testnzc_ps(create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]), create__m128_from([10.0f32, 9.0f32, 12.0f32, 7.0f32]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_testnzc_ps(create__m128_from([0.0f32, -1.0f32, 2.0f32, -3.0f32]), create__m128_from([10.0f32, 9.0f32, 12.0f32, 7.0f32]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_testnzc_ps(create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_testnzc_ps_normal3() -> Result<(), String> {
+    unsafe {
+        let result = _mm_testnzc_ps(create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]), create__m128_from([110.0f32, 210.0f32, 310.0f32, 410.0f32]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_testnzc_ps(create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]), create__m128_from([110.0f32, 210.0f32, 310.0f32, 410.0f32]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_testnzc_ps(create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_testnzc_ps_boundary_min() -> Result<(), String> {
+    unsafe {
+        let result = _mm_testnzc_ps(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_testnzc_ps(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_testnzc_ps(create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_testnzc_ps_boundary_max() -> Result<(), String> {
+    unsafe {
+        let result = _mm_testnzc_ps(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_testnzc_ps(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_testnzc_ps(create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_testnzc_ps_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let result = _mm_testnzc_ps(create__m128_from([0.0, 0.0, 0.0, 0.0]), create__m128_from([0.0, 0.0, 0.0, 0.0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_testnzc_ps(create__m128_from([0.0, 0.0, 0.0, 0.0]), create__m128_from([0.0, 0.0, 0.0, 0.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_testnzc_ps(create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_testnzc_ps_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let result = _mm_testnzc_ps(create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_testnzc_ps(create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_testnzc_ps(create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_testnzc_ps_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let result = _mm_testnzc_ps(create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_testnzc_ps(create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]), create__m128_from([f32::INFINITY, f32::NEG_INFINITY, -0.0, f32::MIN_POSITIVE / 2.0]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_testnzc_ps(create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_testnzc_ps_asym_min_max() -> Result<(), String> {
+    unsafe {
+        let result = _mm_testnzc_ps(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_testnzc_ps(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_testnzc_ps(create_random__m128(), create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_x86_avx_mm_testnzc_ps_asym_max_min() -> Result<(), String> {
+    unsafe {
+        let result = _mm_testnzc_ps(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]));
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_testnzc_ps(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]))"))?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_testnzc_ps(create_random__m128(), create_random__m128());
             }
         }
     }

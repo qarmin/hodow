@@ -57,11 +57,62 @@ X86_INCOMPATIBLE_FUNCTIONS = {
     "__writeeflags",   # x86: u32, x86_64: u64
 }
 
+# SVE/SVE2 functions whose CORRECT result is itself a function of the hardware's vector
+# length (queried at runtime via svcntb/svlen/..., never a fixed compile-time constant -
+# see CLAUDE.md's "Non-x86 architectures" section) - unlike ordinary element-wise SVE ops,
+# broadcasting the same scalar input on every hardware VL does NOT give the same output
+# here, so a single captured "expected" value can never be valid across different real
+# chips (found empirically: forcing qemu to a different VL via `-cpu max,sve-max-vq=N`
+# turned 0 failures into 147, every one of them in this exact family).
+# - svcnt[bhwdp](_pat)?  - "how many bytes/halfwords/words/doublewords/active-predicate-
+#   bits fit in a register" - the query *is* the vector length.
+# - svq(inc|dec)[bhwdp]  - "increment/decrement by N times the (active) element count".
+# - svindex               - fills a vector with the sequence 0,1,2,...,N-1; the *last*
+#   element (what this generator's extraction reads) is exactly N-1.
+# - svaddv                - sums every active lane; with N identical input lanes the sum
+#   scales with N (unlike svmaxv/svminv, invariant for identical lanes - hence absent here).
+# - svlen                 - the element count itself, by definition.
+# - svdupq_lane           - replicates one 128-bit quadword across the register; which
+#   quadword count exists (and so what the trailing one holds) depends on VL too.
+SVE_VL_DEPENDENT_RE = re.compile(r"^sv(cnt[bhwdp](_pat)?|q(inc|dec)[bhwdp]|index|addv|len|dupq_lane)")
+
 # Types without helpers in values.rs — functions using these are skipped entirely
 UNSTABLE_TYPES = {
     "bf16", "f16",
     "__m128h", "__m256h", "__m512h",
     "__m128bh_avx", "__m256bh_avx",  # extra aliases that may appear
+    # NEON f16-lane vectors: no create_/unpack_ helper without a stable `f16` scalar type
+    # to build the backing array from (bare "f16" is excluded above, but that check is a
+    # substring match against the *whole* type name, and "f16" is never a substring of
+    # "float16x4_t" - needs its own explicit entry).
+    "float16x4_t", "float16x8_t",
+    # NEON multi-register tuple types (vld2/vld3/vld4/vst2/vst3/vst4, "load/store N
+    # registers at once") - each is just N copies of an already-supported base type
+    # (int8x16x2_t is two int8x16_t), deliberately deferred rather than building tuple
+    # construction/unpacking on top of the base-type helpers; see CLAUDE.md.
+    "float16x4x2_t", "float16x4x3_t", "float16x4x4_t", "float16x8x2_t", "float16x8x3_t", "float16x8x4_t",
+    "float32x2x2_t", "float32x2x3_t", "float32x2x4_t", "float32x4x2_t", "float32x4x3_t", "float32x4x4_t",
+    "float64x1x2_t", "float64x1x3_t", "float64x1x4_t", "float64x2x2_t", "float64x2x3_t", "float64x2x4_t",
+    "int16x4x2_t", "int16x4x3_t", "int16x4x4_t", "int16x8x2_t", "int16x8x3_t", "int16x8x4_t",
+    "int32x2x2_t", "int32x2x3_t", "int32x2x4_t", "int32x4x2_t", "int32x4x3_t", "int32x4x4_t",
+    "int64x1x2_t", "int64x1x3_t", "int64x1x4_t", "int64x2x2_t", "int64x2x3_t", "int64x2x4_t",
+    "int8x16x2_t", "int8x16x3_t", "int8x16x4_t", "int8x8x2_t", "int8x8x3_t", "int8x8x4_t",
+    "poly16x4x2_t", "poly16x4x3_t", "poly16x4x4_t", "poly16x8x2_t", "poly16x8x3_t", "poly16x8x4_t",
+    "poly64x1x2_t", "poly64x1x3_t", "poly64x1x4_t", "poly64x2x2_t", "poly64x2x3_t", "poly64x2x4_t",
+    "poly8x16x2_t", "poly8x16x3_t", "poly8x16x4_t", "poly8x8x2_t", "poly8x8x3_t", "poly8x8x4_t",
+    "uint16x4x2_t", "uint16x4x3_t", "uint16x4x4_t", "uint16x8x2_t", "uint16x8x3_t", "uint16x8x4_t",
+    "uint32x2x2_t", "uint32x2x3_t", "uint32x2x4_t", "uint32x4x2_t", "uint32x4x3_t", "uint32x4x4_t",
+    "uint64x1x2_t", "uint64x1x3_t", "uint64x1x4_t", "uint64x2x2_t", "uint64x2x3_t", "uint64x2x4_t",
+    "uint8x16x2_t", "uint8x16x3_t", "uint8x16x4_t", "uint8x8x2_t", "uint8x8x3_t", "uint8x8x4_t",
+    # SVE multi-vector tuple types (svld2/svld3/svld4-style "load N vectors at once") -
+    # same deferral as the NEON tuple types above: each is just N copies of an
+    # already-supported base type, not built here.
+    "svfloat32x2_t", "svfloat32x3_t", "svfloat32x4_t", "svfloat64x2_t", "svfloat64x3_t",
+    "svfloat64x4_t", "svint16x2_t", "svint16x3_t", "svint16x4_t", "svint32x2_t",
+    "svint32x3_t", "svint32x4_t", "svint64x2_t", "svint64x3_t", "svint64x4_t",
+    "svint8x2_t", "svint8x3_t", "svint8x4_t", "svuint16x2_t", "svuint16x3_t",
+    "svuint16x4_t", "svuint32x2_t", "svuint32x3_t", "svuint32x4_t", "svuint64x2_t",
+    "svuint64x3_t", "svuint64x4_t", "svuint8x2_t", "svuint8x3_t", "svuint8x4_t",
 }
 
 # Extension stem → Rust target_feature string (only where they differ)
@@ -155,6 +206,51 @@ RANDOM_CREATORS: dict[str, str] = {
     "bool":  "rand::random::<bool>()",
     "u128":  "rand::random::<u128>()",
     "Ordering": "core::sync::atomic::Ordering::Relaxed",
+    # NEON base vector types (common/arm.rs helpers) - p8/p16/p64/p128 are stdarch-internal
+    # aliases (pub(crate) type p64 = u64, ...) for the polynomial-multiply scalar types, so
+    # an ordinary integer literal of the aliased width type-checks fine in their place.
+    "int8x8_t": "create_random_int8x8_t()",
+    "int8x16_t": "create_random_int8x16_t()",
+    "int16x4_t": "create_random_int16x4_t()",
+    "int16x8_t": "create_random_int16x8_t()",
+    "int32x2_t": "create_random_int32x2_t()",
+    "int32x4_t": "create_random_int32x4_t()",
+    "int64x1_t": "create_random_int64x1_t()",
+    "int64x2_t": "create_random_int64x2_t()",
+    "uint8x8_t": "create_random_uint8x8_t()",
+    "uint8x16_t": "create_random_uint8x16_t()",
+    "uint16x4_t": "create_random_uint16x4_t()",
+    "uint16x8_t": "create_random_uint16x8_t()",
+    "uint32x2_t": "create_random_uint32x2_t()",
+    "uint32x4_t": "create_random_uint32x4_t()",
+    "uint64x1_t": "create_random_uint64x1_t()",
+    "uint64x2_t": "create_random_uint64x2_t()",
+    "float32x2_t": "create_random_float32x2_t()",
+    "float32x4_t": "create_random_float32x4_t()",
+    "float64x1_t": "create_random_float64x1_t()",
+    "float64x2_t": "create_random_float64x2_t()",
+    "poly8x8_t": "create_random_poly8x8_t()",
+    "poly8x16_t": "create_random_poly8x16_t()",
+    "poly16x4_t": "create_random_poly16x4_t()",
+    "poly16x8_t": "create_random_poly16x8_t()",
+    "poly64x1_t": "create_random_poly64x1_t()",
+    "poly64x2_t": "create_random_poly64x2_t()",
+    "p8": "rand::random::<u8>()", "p16": "rand::random::<u16>()",
+    "p64": "rand::random::<u64>()", "p128": "rand::random::<u128>()",
+    "svint8_t": "create_random_svint8_t()",
+    "svuint8_t": "create_random_svuint8_t()",
+    "svint16_t": "create_random_svint16_t()",
+    "svuint16_t": "create_random_svuint16_t()",
+    "svint32_t": "create_random_svint32_t()",
+    "svuint32_t": "create_random_svuint32_t()",
+    "svint64_t": "create_random_svint64_t()",
+    "svuint64_t": "create_random_svuint64_t()",
+    "svfloat32_t": "create_random_svfloat32_t()",
+    "svfloat64_t": "create_random_svfloat64_t()",
+    # svbool_t stays the fixed all-active predicate even when fuzzing - randomizing which
+    # lanes are active would break the uniform-broadcast-in/uniform-out invariant every SVE
+    # value/return check here depends on (see CLAUDE.md's "Non-x86 architectures" section).
+    "svbool_t": "create_svbool_t()",
 }
 
 # SIMD type → fixed initializer (simple, deterministic values)
@@ -189,6 +285,44 @@ FIXED_INITS: dict[str, str] = {
     "bool":  "true",
     "u128":  "1u128",
     "Ordering": "core::sync::atomic::Ordering::Relaxed",
+    "int8x8_t": "create_int8x8_t_from([1, 2, 3, 4, 5, 6, 7, 8])",
+    "int8x16_t": "create_int8x16_t_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])",
+    "int16x4_t": "create_int16x4_t_from([1, 2, 3, 4])",
+    "int16x8_t": "create_int16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8])",
+    "int32x2_t": "create_int32x2_t_from([1, 2])",
+    "int32x4_t": "create_int32x4_t_from([1, 2, 3, 4])",
+    "int64x1_t": "create_int64x1_t_from([1])",
+    "int64x2_t": "create_int64x2_t_from([1, 2])",
+    "uint8x8_t": "create_uint8x8_t_from([1, 2, 3, 4, 5, 6, 7, 8])",
+    "uint8x16_t": "create_uint8x16_t_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])",
+    "uint16x4_t": "create_uint16x4_t_from([1, 2, 3, 4])",
+    "uint16x8_t": "create_uint16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8])",
+    "uint32x2_t": "create_uint32x2_t_from([1, 2])",
+    "uint32x4_t": "create_uint32x4_t_from([1, 2, 3, 4])",
+    "uint64x1_t": "create_uint64x1_t_from([1])",
+    "uint64x2_t": "create_uint64x2_t_from([1, 2])",
+    "float32x2_t": "create_float32x2_t_from([1.0, 2.0])",
+    "float32x4_t": "create_float32x4_t_from([1.0, 2.0, 3.0, 4.0])",
+    "float64x1_t": "create_float64x1_t_from([1.0])",
+    "float64x2_t": "create_float64x2_t_from([1.0, 2.0])",
+    "poly8x8_t": "create_poly8x8_t_from([1, 2, 3, 4, 5, 6, 7, 8])",
+    "poly8x16_t": "create_poly8x16_t_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])",
+    "poly16x4_t": "create_poly16x4_t_from([1, 2, 3, 4])",
+    "poly16x8_t": "create_poly16x8_t_from([1, 2, 3, 4, 5, 6, 7, 8])",
+    "poly64x1_t": "create_poly64x1_t_from([1])",
+    "poly64x2_t": "create_poly64x2_t_from([1, 2])",
+    "p8": "1u8", "p16": "1u16", "p64": "1u64", "p128": "1u128",
+    "svint8_t": "create_svint8_t_from(3i8)",
+    "svuint8_t": "create_svuint8_t_from(3u8)",
+    "svint16_t": "create_svint16_t_from(3i16)",
+    "svuint16_t": "create_svuint16_t_from(3u16)",
+    "svint32_t": "create_svint32_t_from(3i32)",
+    "svuint32_t": "create_svuint32_t_from(3u32)",
+    "svint64_t": "create_svint64_t_from(3i64)",
+    "svuint64_t": "create_svuint64_t_from(3u64)",
+    "svfloat32_t": "create_svfloat32_t_from(3.0f32)",
+    "svfloat64_t": "create_svfloat64_t_from(3.0f64)",
+    "svbool_t": "create_svbool_t()",
 }
 
 # Byte size of a pointee type, used to size pointer buffers large enough to hold a
@@ -251,6 +385,45 @@ SEQ_TYPES: dict[str, tuple[int, object]] = {
     "u64":  (1, lambda v: f"{v[0]}u64"),
     "f32":  (1, lambda v: f"{v[0]}.0f32"),
     "f64":  (1, lambda v: f"{v[0]}.0f64"),
+    "int8x8_t": (8, lambda v: _f("create_int8x8_t_from", v, False)),
+    "int8x16_t": (16, lambda v: _f("create_int8x16_t_from", v, False)),
+    "int16x4_t": (4, lambda v: _f("create_int16x4_t_from", v, False)),
+    "int16x8_t": (8, lambda v: _f("create_int16x8_t_from", v, False)),
+    "int32x2_t": (2, lambda v: _f("create_int32x2_t_from", v, False)),
+    "int32x4_t": (4, lambda v: _f("create_int32x4_t_from", v, False)),
+    "int64x1_t": (1, lambda v: _f("create_int64x1_t_from", v, False)),
+    "int64x2_t": (2, lambda v: _f("create_int64x2_t_from", v, False)),
+    "uint8x8_t": (8, lambda v: _f("create_uint8x8_t_from", v, False)),
+    "uint8x16_t": (16, lambda v: _f("create_uint8x16_t_from", v, False)),
+    "uint16x4_t": (4, lambda v: _f("create_uint16x4_t_from", v, False)),
+    "uint16x8_t": (8, lambda v: _f("create_uint16x8_t_from", v, False)),
+    "uint32x2_t": (2, lambda v: _f("create_uint32x2_t_from", v, False)),
+    "uint32x4_t": (4, lambda v: _f("create_uint32x4_t_from", v, False)),
+    "uint64x1_t": (1, lambda v: _f("create_uint64x1_t_from", v, False)),
+    "uint64x2_t": (2, lambda v: _f("create_uint64x2_t_from", v, False)),
+    "float32x2_t": (2, lambda v: _f("create_float32x2_t_from", v, True)),
+    "float32x4_t": (4, lambda v: _f("create_float32x4_t_from", v, True)),
+    "float64x1_t": (1, lambda v: _f("create_float64x1_t_from", v, True)),
+    "float64x2_t": (2, lambda v: _f("create_float64x2_t_from", v, True)),
+    "poly8x8_t": (8, lambda v: _f("create_poly8x8_t_from", v, False)),
+    "poly8x16_t": (16, lambda v: _f("create_poly8x16_t_from", v, False)),
+    "poly16x4_t": (4, lambda v: _f("create_poly16x4_t_from", v, False)),
+    "poly16x8_t": (8, lambda v: _f("create_poly16x8_t_from", v, False)),
+    "poly64x1_t": (1, lambda v: _f("create_poly64x1_t_from", v, False)),
+    "poly64x2_t": (2, lambda v: _f("create_poly64x2_t_from", v, False)),
+    "p8": (1, lambda v: f"{v[0]}u8"), "p16": (1, lambda v: f"{v[0]}u16"),
+    "p64": (1, lambda v: f"{v[0]}u64"), "p128": (1, lambda v: f"{v[0]}u128"),
+    "svint8_t": (1, lambda v: f"create_svint8_t_from({v[0]}i8)"),
+    "svuint8_t": (1, lambda v: f"create_svuint8_t_from({v[0]}u8)"),
+    "svint16_t": (1, lambda v: f"create_svint16_t_from({v[0]}i16)"),
+    "svuint16_t": (1, lambda v: f"create_svuint16_t_from({v[0]}u16)"),
+    "svint32_t": (1, lambda v: f"create_svint32_t_from({v[0]}i32)"),
+    "svuint32_t": (1, lambda v: f"create_svuint32_t_from({v[0]}u32)"),
+    "svint64_t": (1, lambda v: f"create_svint64_t_from({v[0]}i64)"),
+    "svuint64_t": (1, lambda v: f"create_svuint64_t_from({v[0]}u64)"),
+    "svfloat32_t": (1, lambda v: f"create_svfloat32_t_from({v[0]}.0f32)"),
+    "svfloat64_t": (1, lambda v: f"create_svfloat64_t_from({v[0]}.0f64)"),
+    "svbool_t": (1, lambda v: "create_svbool_t()"),
 }
 
 
@@ -275,6 +448,47 @@ UNPACK_INFO: dict[str, tuple[str, int, str]] = {
     "__m512":  ("unpack__m512_to_f32_array",  16, "0.0f32"),
     "__m512d": ("unpack__m512d_to_f64_array", 8,  "0.0f64"),
     "__m512i": ("unpack__m512i_to_i32_array", 16, "0i32"),
+    "int8x8_t": ("unpack_int8x8_t_to_i8_array", 8, "0i8"),
+    "int8x16_t": ("unpack_int8x16_t_to_i8_array", 16, "0i8"),
+    "int16x4_t": ("unpack_int16x4_t_to_i16_array", 4, "0i16"),
+    "int16x8_t": ("unpack_int16x8_t_to_i16_array", 8, "0i16"),
+    "int32x2_t": ("unpack_int32x2_t_to_i32_array", 2, "0i32"),
+    "int32x4_t": ("unpack_int32x4_t_to_i32_array", 4, "0i32"),
+    "int64x1_t": ("unpack_int64x1_t_to_i64_array", 1, "0i64"),
+    "int64x2_t": ("unpack_int64x2_t_to_i64_array", 2, "0i64"),
+    "uint8x8_t": ("unpack_uint8x8_t_to_u8_array", 8, "0u8"),
+    "uint8x16_t": ("unpack_uint8x16_t_to_u8_array", 16, "0u8"),
+    "uint16x4_t": ("unpack_uint16x4_t_to_u16_array", 4, "0u16"),
+    "uint16x8_t": ("unpack_uint16x8_t_to_u16_array", 8, "0u16"),
+    "uint32x2_t": ("unpack_uint32x2_t_to_u32_array", 2, "0u32"),
+    "uint32x4_t": ("unpack_uint32x4_t_to_u32_array", 4, "0u32"),
+    "uint64x1_t": ("unpack_uint64x1_t_to_u64_array", 1, "0u64"),
+    "uint64x2_t": ("unpack_uint64x2_t_to_u64_array", 2, "0u64"),
+    "float32x2_t": ("unpack_float32x2_t_to_f32_array", 2, "0.0f32"),
+    "float32x4_t": ("unpack_float32x4_t_to_f32_array", 4, "0.0f32"),
+    "float64x1_t": ("unpack_float64x1_t_to_f64_array", 1, "0.0f64"),
+    "float64x2_t": ("unpack_float64x2_t_to_f64_array", 2, "0.0f64"),
+    "poly8x8_t": ("unpack_poly8x8_t_to_u8_array", 8, "0u8"),
+    "poly8x16_t": ("unpack_poly8x16_t_to_u8_array", 16, "0u8"),
+    "poly16x4_t": ("unpack_poly16x4_t_to_u16_array", 4, "0u16"),
+    "poly16x8_t": ("unpack_poly16x8_t_to_u16_array", 8, "0u16"),
+    "poly64x1_t": ("unpack_poly64x1_t_to_u64_array", 1, "0u64"),
+    "poly64x2_t": ("unpack_poly64x2_t_to_u64_array", 2, "0u64"),
+    # SVE base types unpack to a single scalar (svlastb_*/svptest_any - see
+    # CLAUDE.md's "Non-x86 architectures" section for why: the real vector length is
+    # runtime-determined, so a fixed-size array can't represent it; the array-of-1 shape
+    # here just lets these reuse check_array_equality/check_float_array_equality unchanged.
+    "svint8_t": ("unpack_svint8_t_to_i8_array", 1, "0i8"),
+    "svuint8_t": ("unpack_svuint8_t_to_u8_array", 1, "0u8"),
+    "svint16_t": ("unpack_svint16_t_to_i16_array", 1, "0i16"),
+    "svuint16_t": ("unpack_svuint16_t_to_u16_array", 1, "0u16"),
+    "svint32_t": ("unpack_svint32_t_to_i32_array", 1, "0i32"),
+    "svuint32_t": ("unpack_svuint32_t_to_u32_array", 1, "0u32"),
+    "svint64_t": ("unpack_svint64_t_to_i64_array", 1, "0i64"),
+    "svuint64_t": ("unpack_svuint64_t_to_u64_array", 1, "0u64"),
+    "svfloat32_t": ("unpack_svfloat32_t_to_f32_array", 1, "0.0f32"),
+    "svfloat64_t": ("unpack_svfloat64_t_to_f64_array", 1, "0.0f64"),
+    "svbool_t": ("unpack_svbool_t_to_i32_array", 1, "0i32"),
 }
 
 # Primitive return types handled via check_int_equality
@@ -505,6 +719,11 @@ def source_to_ext(src_path: str) -> tuple[str, str]:
     if len(parts) >= 2:
         arch = parts[0]
         ext = Path(parts[-1]).stem
+        # stdarch names the real intrinsic body file `generated.rs` inside a per-extension
+        # subdirectory (aarch64/neon/generated.rs, arm_shared/neon/generated.rs, ...) - the
+        # stem alone is a generic, colliding name, so fall back to the subdirectory name.
+        if ext == "generated" and len(parts) >= 3:
+            ext = parts[-2]
         return (arch, ext)
     # Fallback for unexpected formats
     return ("unknown", Path(src_path).stem)
@@ -592,12 +811,17 @@ def parse_signatures(path: Path) -> dict[tuple[str, str], list[dict]]:
             continue
         if current_key is None:
             continue
-        m = re.match(r"^\d+:(pub\s+(?:unsafe\s+)?fn\s+.+)", line)
+        m = re.match(r"^\d+(?:@(\w+))?:(pub\s+(?:unsafe\s+)?fn\s+.+)", line)
         if not m:
             continue
-        sig = parse_sig(m.group(1))
+        sig = parse_sig(m.group(2))
         if sig is None:
             continue
+        # Set only for arm_shared entries hard-gated to a single target_arch upstream
+        # (see extract_signatures.py's find_hard_arch_gate) - the generated wrapper test
+        # must carry the same #[cfg(target_arch = ...)], since arm_shared is compiled
+        # unconditionally for both arm and aarch64.
+        sig["arch_only"] = m.group(1)
 
         arch, ext = current_key
         key = (arch, ext, sig["name"])
@@ -630,8 +854,14 @@ def skip_fuzz(name: str, params: list | None) -> bool:
     return has_ptr(params) or name in NO_FUZZ_FUNCTIONS
 
 
-def const_val(cg_name: str) -> str:
+def const_val(cg_name: str, func_name: str = "", cg_type: str = "") -> str:
     """Return a safe literal for a const generic parameter."""
+    if cg_type == "svpattern":
+        # SVE predicate-pattern enum, not an integer - SV_ALL activates every element,
+        # valid for every svpattern-typed const generic regardless of what it governs.
+        # Braces are required here (unlike a bare integer literal): a path const-generic
+        # argument needs `{ }` to disambiguate it from a type argument.
+        return "{ svpattern::SV_ALL }"
     upper = cg_name.upper()
     if upper == "SCALE":
         return "1"    # gather/scatter: must be 1, 2, 4, or 8
@@ -639,11 +869,30 @@ def const_val(cg_name: str) -> str:
         return "8"    # static_assert_sae!: must be 4 or 8
     if upper == "ROUNDING":
         return "8"    # static_assert_rounding!: must be 4, 8, 9, 10, or 11
+    if func_name.startswith("sv") and (upper == "IMM_FACTOR" or upper in ("IMM2", "IMM3")):
+        # SVE svqdec*/svqinc*-style: static_assert_range!(IMM_FACTOR, 1..=16), and
+        # svasrd_n_*-style IMM2 (shift amount, also range 1..=N for varying N depending on
+        # element width) - 1 is always in range regardless of which. Gated to SVE's own
+        # "sv"-prefixed naming convention: aarch64/neon's unrelated SM3 crypto functions
+        # (vsm3tt1aq_u32 etc.) also happen to name a const generic "IMM2", but theirs has
+        # no range restriction at all and its already-captured expected value assumes the
+        # blanket default of 0 - do not disturb that one.
+        return "1"
+    if upper == "IMM_ROTATION":
+        return "90"   # SVE FCMA-style: static_assert!(IMM_ROTATION == 90 || == 270) (some
+                       # variants also allow 0/180, so 90 is the one value valid everywhere)
+    if upper == "N" and re.search(r"_n_|_n$", func_name):
+        # NEON's own naming convention: an "_n_"/"_n" infix/suffix specifically marks an
+        # immediate *magnitude* operand (fixed-point convert vcvt_n_*, shift vshr_n_*/
+        # vsli_n_*/...) - almost every one asserts `N >= 1`. A same-named "N" elsewhere
+        # (e.g. vdup_lane_f64's single-lane index, asserting `N == 0`) is a lane index in
+        # disguise, not a magnitude - excluded by requiring the "_n_"/"_n" name pattern too.
+        return "1"
     return "0"
 
 
-def const_suffix(cg: list) -> str:
-    return f"::<{', '.join(const_val(n) for n, _ in cg)}>" if cg else ""
+def const_suffix(cg: list, func_name: str = "") -> str:
+    return f"::<{', '.join(const_val(n, func_name, t) for n, t in cg)}>" if cg else ""
 
 
 def immediate_catalog(func_name: str, cg_name: str, elem_type: str) -> list[tuple[str, str]]:
@@ -726,6 +975,8 @@ def _elem_type_for_unpack(ret: str) -> str | None:
         "__m128i": "i32",
         "__m256i": "i32",
         "__m512i": "i32",
+        "svfloat32_t": "f32",
+        "svfloat64_t": "f64",
     }
     return mapping.get(ret)
 
@@ -762,8 +1013,11 @@ def _adjust_expected_for_ret(expected: str, ret: str) -> str:
 
 
 def rust_str_lit(s: str) -> str:
-    """Escape `s` for embedding as the body of a Rust `"..."` string literal."""
-    return s.replace("\\", "\\\\").replace('"', '\\"')
+    """Escape `s` for embedding as the body of a Rust `format!("...")` string literal - the
+    only current caller (`_checked`) always uses it inside one, so `{`/`}` (from SVE's
+    `{ svpattern::SV_ALL }` braced const-generic argument) need `{{`/`}}` doubling too, not
+    just quote/backslash escaping."""
+    return s.replace("\\", "\\\\").replace('"', '\\"').replace("{", "{{").replace("}", "}}")
 
 
 def _checked(check_call: str, call: str) -> str:
@@ -861,7 +1115,7 @@ def gen_fn_body(sig: dict, expected: str | None, param_overrides: dict[str, str]
     ret: str = sig["return_type"] or "()"
     cg: list = sig["const_generics"]
     complete: bool = sig["is_complete"]
-    cs = f"::<{cg_override}>" if cg_override is not None else const_suffix(cg)
+    cs = f"::<{cg_override}>" if cg_override is not None else const_suffix(cg, name)
     no_fuzz = skip_fuzz(name, params)
     overrides = param_overrides or {}
     width_override = None
@@ -959,11 +1213,40 @@ def gen_fn_body(sig: dict, expected: str | None, param_overrides: dict[str, str]
     return lines
 
 
+def arch_only_cfg_line(sig: dict) -> list[str]:
+    """`arm_shared` is compiled unconditionally for both arm and aarch64 - a signature
+    hard-gated upstream to a single one of them (see extract_signatures.py's
+    find_hard_arch_gate) needs the same `#[cfg(target_arch = ...)]` on the generated
+    wrapper, or it fails to compile on the other target."""
+    arch_only = sig.get("arch_only")
+    return [f'#[cfg(target_arch = "{arch_only}")]'] if arch_only else []
+
+
 def gen_fn(sig: dict, arch: str, ext: str, expected_values: dict[str, str] | None = None) -> str:
     test = test_name(sig["name"], arch, ext)
     expected = (expected_values or {}).get(test)
-    lines = [f"pub(super) fn {test}() -> Result<(), String> {{"]
-    lines += gen_fn_body(sig, expected)
+    lines = arch_only_cfg_line(sig)
+    body = gen_fn_body(sig, expected)
+    if arch == "aarch64" and ext in ("sve", "sve2"):
+        # SVE's scalable-vector types need #[target_feature(enable = "sve")] on ANY function
+        # whose signature or locals touch one (a hard ABI requirement, not an optimization
+        # hint like on x86/NEON) - but a #[target_feature] function no longer implements
+        # `Fn`, which breaks `&'static TestFunction = &dyn Fn() -> Result<...>` in the
+        # registry. Splitting into a target_feature-carrying inner fn plus a plain safe
+        # outer wrapper (calling it through one unsafe block, itself untouched by any
+        # scalable type) keeps the registry-visible symbol Fn-compatible. Verified directly
+        # against rustc - this is the only shape found that both compiles and registers.
+        impl_name = f"{test}_impl"
+        lines.append('#[target_feature(enable = "sve")]')
+        lines.append(f"fn {impl_name}() -> Result<(), String> {{")
+        lines += body
+        lines += ["    Ok(())", "}", ""]
+        lines.append(f"pub(super) fn {test}() -> Result<(), String> {{")
+        lines.append(f"    unsafe {{ {impl_name}() }}")
+        lines.append("}")
+        return "\n".join(lines)
+    lines.append(f"pub(super) fn {test}() -> Result<(), String> {{")
+    lines += body
     lines += ["    Ok(())", "}"]
     return "\n".join(lines)
 
@@ -1080,7 +1363,8 @@ def gen_scenarios(sig: dict, arch: str, ext: str, expected_values: dict[str, str
     for suffix, overrides, cg_override in expand_scenarios(sig):
         tname = base + (f"_{suffix}" if suffix else "")
         expected = (expected_values or {}).get(tname)
-        lines = [f"pub(super) fn {tname}() -> Result<(), String> {{"]
+        lines = arch_only_cfg_line(sig)
+        lines.append(f"pub(super) fn {tname}() -> Result<(), String> {{")
         lines += gen_fn_body(sig, expected, overrides or None, cg_override, elem)
         lines += ["    Ok(())", "}"]
         bodies.append("\n".join(lines))
@@ -1101,6 +1385,18 @@ def get_arch_import(arch: str) -> str:
             'use std::arch::x86_64::*;'
         )
 
+    # arm_shared is compiled unconditionally for both arm and aarch64 (see
+    # auto_generated/mod.rs's `cfg(any(target_arch = "arm", target_arch = "aarch64"))`) -
+    # `std::arch::arm` doesn't exist at all on an aarch64 build and vice versa, so the
+    # import itself must be arch-conditional, not just the functions it brings into scope.
+    if arch == "arm_shared":
+        return (
+            '#[cfg(target_arch = "arm")]\n'
+            'use std::arch::arm::*;\n'
+            '#[cfg(target_arch = "aarch64")]\n'
+            'use std::arch::aarch64::*;'
+        )
+
     # Map architecture names to their std::arch module names
     arch_map = {
         "x86_64": "std::arch::x86_64",
@@ -1109,7 +1405,6 @@ def get_arch_import(arch: str) -> str:
         "riscv32": "std::arch::riscv32",
         "riscv64": "std::arch::riscv64",
         "riscv_shared": "std::arch::riscv64",  # Use riscv64 as fallback
-        "arm_shared": "std::arch::arm",  # Use arm as fallback
         "loongarch32": "std::arch::loongarch32",
         "loongarch64": "std::arch::loongarch64",
         "loongarch_shared": "std::arch::loongarch64",
@@ -1124,26 +1419,29 @@ def get_arch_import(arch: str) -> str:
     return f"use {module}::*;"
 
 
-def get_common_helper(arch: str) -> str | None:
-    """Return the path to the common helper module for architecture, or None if it doesn't
-    have one yet (hodow_core/src/cpu/common.rs only declares `x86`, cfg-gated to x86/x86_64,
-    and `arm`, cfg-gated to arm/aarch64 - riscv*/mips/powerpc/... have no module to import at
-    all, not even a generic fallback one, since `common::arm` is only *present* on an
-    arm/aarch64 build in the first place)."""
+def get_common_helpers(arch: str) -> list[str]:
+    """Return the path(s) to the common helper module(s) for architecture (possibly empty -
+    hodow_core/src/cpu/common.rs only declares `x86`, cfg-gated to x86/x86_64, `arm`,
+    cfg-gated to arm/aarch64, and `sve`, cfg-gated to aarch64 only (SVE has no arm32 form at
+    all) - riscv*/mips/powerpc/... have no module to import at all, not even a generic
+    fallback one, since these modules are only *present* on a matching build in the first
+    place). `aarch64` gets both `arm` (shared NEON helpers) and `sve`."""
     if arch in ("x86", "x86_64"):
-        return "crate::cpu::common::x86"
-    elif arch in ("arm", "aarch64", "arm_shared"):
-        return "crate::cpu::common::arm"
-    return None
+        return ["crate::cpu::common::x86"]
+    elif arch in ("arm", "arm_shared"):
+        return ["crate::cpu::common::arm"]
+    elif arch == "aarch64":
+        return ["crate::cpu::common::arm", "crate::cpu::common::sve"]
+    return []
 
 
 def gen_part(funcs: list[dict], arch: str, ext: str, expected_values: dict[str, str] | None = None) -> str:
     arch_import = get_arch_import(arch)
-    common_helper = get_common_helper(arch)
+    common_helpers = get_common_helpers(arch)
 
     header = [arch_import, ""]
-    if common_helper is not None:
-        header += ["#[allow(unused_imports)]", f"use {common_helper}::*;"]
+    for helper in common_helpers:
+        header += ["#[allow(unused_imports)]", f"use {helper}::*;"]
     header += [
         "#[allow(unused_imports)]",
         "use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};",
@@ -1179,11 +1477,14 @@ def gen_ext_rs(arch: str, ext: str, funcs: list[dict], n_parts: int) -> str:
         "        &[",
     ]
     for sig in funcs:
+        cfg = arch_only_cfg_line(sig)
         if in_pilot_scope(arch, ext, sig["name"]):
             for tname in list_scenario_names(sig, arch, ext):
+                lines += [f"            {c}" for c in cfg]
                 lines.append(f"            (&{tname}, \"{tname}\"),")
         else:
             tname = test_name(sig["name"], arch, ext)
+            lines += [f"            {c}" for c in cfg]
             lines.append(f"            (&{tname}, \"{tname}\"),")
     lines += ["        ]", "    }", "}"]
     return "\n".join(lines) + "\n"
@@ -1284,12 +1585,44 @@ def get_feature_detect_fn(arch: str, feature: str) -> str:
         # detection macro, separate from stdarch_arm_neon_intrinsics/_hints/_sat gating the
         # intrinsics of dsp/hints/sat/simd32 themselves (SKIP_EXTENSIONS, not reached here).
         return f'std::arch::is_arm_feature_detected!("{feature}")'
+    if arch == "arm_shared":
+        # See gen_arm_shared_detect_helpers - neither detection macro compiles standalone
+        # on the "wrong" one of arm/aarch64, so this dispatches to a per-feature helper
+        # that's internally cfg-split instead of emitting either macro call directly here.
+        return f"detect_arm_shared_{feature}()"
     if arch in ("riscv32", "riscv64", "riscv_shared"):
         # Unstable (stdarch_riscv_feature_detection) - see lib.rs's cfg_attr.
         return f'std::arch::is_riscv_feature_detected!("{feature}")'
     # For other architectures, we'll need to add detection when available
     # For now, return a placeholder that always returns false
     return "false /* feature detection not yet implemented */"
+
+
+def gen_arm_shared_detect_helpers(all_data: dict[str, dict[str, list[dict]]]) -> list[str]:
+    """`arm_shared` is compiled unconditionally for both arm and aarch64 (see
+    get_target_arch_cfg) - but `is_arm_feature_detected!`/`is_aarch64_feature_detected!`
+    each only compile under their OWN target_arch (a plain `cfg!()` runtime check isn't
+    enough, confirmed against rustc directly: the macro itself refuses to expand on the
+    "wrong" arch). One small dispatch function per feature, cfg-split internally, lets
+    get_feature_detect_fn hand back a single always-valid call for the arm_shared case."""
+    features = sorted({
+        ext_to_feature(ext)
+        for ext, funcs in all_data.get("arm_shared", {}).items()
+        if ext not in SKIP_EXTENSIONS and funcs
+    })
+    lines: list[str] = []
+    for feature in features:
+        lines += [
+            "#[cfg(any(target_arch = \"arm\", target_arch = \"aarch64\"))]",
+            f"fn detect_arm_shared_{feature}() -> bool {{",
+            "    #[cfg(target_arch = \"arm\")]",
+            f"    {{ return std::arch::is_arm_feature_detected!(\"{feature}\"); }}",
+            "    #[cfg(target_arch = \"aarch64\")]",
+            f"    {{ return std::arch::is_aarch64_feature_detected!(\"{feature}\"); }}",
+            "}",
+            "",
+        ]
+    return lines
 
 
 def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
@@ -1301,6 +1634,9 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
         "use crate::cpu::{ExtensionTest, FeatureStats, TestStatistics, ProgressCallback, TestFunction};",
         "use crate::cpu::{reset_stop_flag, should_stop, should_skip_feature};",
         "",
+    ]
+    lines += gen_arm_shared_detect_helpers(all_data)
+    lines += [
         "/// Count how many CPU features/extensions are available on this machine",
         "pub fn count_available_features() -> usize {",
         "    let mut count = 0;",
@@ -1586,7 +1922,18 @@ def main() -> None:
                       and not has_unstable_type(s["params"], s["return_type"] or "()")
                       and s["name"] not in DEPRECATED_FUNCTIONS
                       and s["name"] not in IGNORED_FUNCTIONS
-                      and (arch != "x86" or s["name"] not in X86_INCOMPATIBLE_FUNCTIONS)]
+                      and (arch != "x86" or s["name"] not in X86_INCOMPATIBLE_FUNCTIONS)
+                      and not (ext in ("sve", "sve2") and (
+                          has_ptr(s["params"])
+                          # Gather/scatter/prefetch: the "pointer" is a vector of per-lane
+                          # base addresses (svuint32_t/svuint64_t), not a *const/*mut has_ptr
+                          # can see - same out-of-bounds hazard as x86 gather/scatter, plus
+                          # svprfop-typed prefetch-kind const generics this generator has no
+                          # literal for (all such functions are named-matched here, verified
+                          # against every real `const OP: svprfop` signature in stdarch).
+                          or re.search(r"prf|gather|scatter", s["name"])
+                          or SVE_VL_DEPENDENT_RE.match(s["name"])
+                      ))]
             skipped_count = len(all_funcs) - len(stable)
 
             feature = ext_to_feature(ext)

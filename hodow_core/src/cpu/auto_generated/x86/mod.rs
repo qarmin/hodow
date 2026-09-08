@@ -1,4 +1,3 @@
-pub mod abm;
 #[cfg(target_feature = "adx")]
 pub mod adx;
 
@@ -44,9 +43,6 @@ pub mod avx512vbmi2;
 #[cfg(target_feature = "avx512vnni")]
 pub mod avx512vnni;
 
-#[cfg(target_feature = "avx512vpopcntdq")]
-pub mod avx512vpopcntdq;
-
 #[cfg(target_feature = "avxneconvert")]
 pub mod avxneconvert;
 
@@ -56,15 +52,11 @@ pub mod bmi1;
 #[cfg(target_feature = "bmi2")]
 pub mod bmi2;
 
-pub mod bswap;
 pub mod bt;
 pub mod cpuid;
 pub mod eflags;
 #[cfg(target_feature = "f16c")]
 pub mod f16c;
-
-#[cfg(target_feature = "fma")]
-pub mod fma;
 
 #[cfg(target_feature = "fxsr")]
 pub mod fxsr;

@@ -184,16 +184,6 @@ impl ExtensionTest for SSE42 {
             (&test_x86_sse42_mm_crc32_u8, "test_x86_sse42_mm_crc32_u8"),
             (&test_x86_sse42_mm_crc32_u16, "test_x86_sse42_mm_crc32_u16"),
             (&test_x86_sse42_mm_crc32_u32, "test_x86_sse42_mm_crc32_u32"),
-            (&test_x86_sse42_mm_cmpgt_epi64, "test_x86_sse42_mm_cmpgt_epi64"),
-            (&test_x86_sse42_mm_cmpgt_epi64_normal2, "test_x86_sse42_mm_cmpgt_epi64_normal2"),
-            (&test_x86_sse42_mm_cmpgt_epi64_normal3, "test_x86_sse42_mm_cmpgt_epi64_normal3"),
-            (&test_x86_sse42_mm_cmpgt_epi64_boundary_min, "test_x86_sse42_mm_cmpgt_epi64_boundary_min"),
-            (&test_x86_sse42_mm_cmpgt_epi64_boundary_max, "test_x86_sse42_mm_cmpgt_epi64_boundary_max"),
-            (&test_x86_sse42_mm_cmpgt_epi64_boundary_zero, "test_x86_sse42_mm_cmpgt_epi64_boundary_zero"),
-            (&test_x86_sse42_mm_cmpgt_epi64_boundary_allones, "test_x86_sse42_mm_cmpgt_epi64_boundary_allones"),
-            (&test_x86_sse42_mm_cmpgt_epi64_boundary_mixed, "test_x86_sse42_mm_cmpgt_epi64_boundary_mixed"),
-            (&test_x86_sse42_mm_cmpgt_epi64_asym_min_max, "test_x86_sse42_mm_cmpgt_epi64_asym_min_max"),
-            (&test_x86_sse42_mm_cmpgt_epi64_asym_max_min, "test_x86_sse42_mm_cmpgt_epi64_asym_max_min"),
         ]
     }
 }

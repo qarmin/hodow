@@ -15,56 +15,82 @@ For now it checks specific cpu and opengl features, runs them to find crashes(in
 Project was created, basing on Rust 1.93 and Glutin 0.31.2, so later updates, may add other cpu/opengl features, not available now yet.
 
 ## Usage
-### Default(not recommended - uses very basic cpu features)
-`cargo run`
-```
-Feature   Run  Skipped  Errors
-----------------------------
-SSE     88        0       0
-SSE2   208        0       0
-----------------------------
-TOTAL   296        0       0
-```
-### Native target cpu(not recommended, due random features enabled in build)
-`RUSTFLAGS="-C target-cpu=native" cargo run`
-```
-Feature        Run  Skipped  Errors
-------------------------------------
-SSE             88        0       0
-SSE2           208        0       0
-SSE3            11        0       0
-SSSE3           16        0       0
-SSE41           60        0       0
-SSE42           19        0       0
-AVX            174        0       0
-AVX2           192        0       0
-AES              5        0       0
-------------------------------------
-TOTAL          773        0       0
-```
-### All features enabled(recommended, because not supported features are skipped in runtime)
-`RUSTFLAGS="-C target-feature=+aes,+amx-bf16,+amx-complex,+amx-fp16,+amx-int8,+avx,+avx2,+avx512bf16,+avx512bitalg,+avx512bw,+avx512cd,+avx512dq,+avx512f,+avx512fp16,+avx512ifma,+avx512vbmi,+avx512vbmi2,+avx512vl,+avx512vnni,+avx512vp2intersect,+avx512vpopcntdq,+avxifma,+avxneconvert,+avxvnni,+avxvnniint16,+avxvnniint8,+f16c,+fma,+gfni,+kl,+pclmulqdq,+sha,+sha512,+sm3,+sm4,+sse,+sse2,+sse3,+sse4.1,+sse4.2,+sse4a,+ssse3,+vaes,+vpclmulqdq,+widekl,+xop,+xsave,+xsavec,+xsaveopt,+xsaves" +nightly build --release;target/release/hodow_cli`
-```
-Feature        Run  Skipped  Errors
-------------------------------------
-SSE             88        0       0
-SSE2           208        0       0
-SSE3            11        0       0
-SSSE3           16        0       0
-SSE41           60        0       0
-SSE42           19        0       0
-AVX            174        0       0
-AVX2           192        0       0
-FMA             32        0       0
-AVX512F       1478        0       0
-AVX512BITALG    18        0       0
-AVX512CD        24        0       0
-AES              5        0       0
-------------------------------------
-TOTAL         2325        0       0
+
+### Install
+
+Needs [`just`](https://github.com/casey/just) and the Rust toolchain (`rustup`); `install-arm`
+additionally needs [`cargo-zigbuild`](https://github.com/rust-cross/cargo-zigbuild) + `zig`, for
+cross-compiling to a 32-bit ARM device.
+
+```bash
+just install        # onto PATH (~/.cargo/bin) - portable build, cpu + gpu + serve
+just install-all    # same, but + vulkan and target-cpu=native (fastest/widest CPU coverage
+                     # on THIS machine specifically - do not copy the binary elsewhere)
+just install-arm 192.168.1.50            # cross-build + scp straight onto an ARM perimeter
+just install-arm 192.168.1.50 pi         # ...as a specific remote user instead of root
 ```
 
+`install-arm` doesn't set up a service or install anything remotely - no systemd, nothing
+persistent. It cross-builds and copies the binary over via `scp`; from there you run it by hand,
+e.g. `ssh pi@192.168.1.50 ./hodow_cli cpu --isolate`. There's no `install-aarch64` recipe yet -
+`cargo build --release --target aarch64-unknown-linux-gnu -p hodow_cli --no-default-features
+--features gpu` (with `CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER` pointed at a matching
+cross-`gcc`) does the same cross-build by hand for a 64-bit target in the meantime; see
+`CLAUDE.md`'s "Non-x86 architectures" section for the full cross-compile + qemu-user recipe this
+project already uses to verify that build.
 
+No `just`? Plain `cargo install --path hodow_cli` (optionally with `--features vulkan` and/or
+`RUSTFLAGS="-C target-cpu=native"`) does the same thing directly.
+
+### Run
+
+Once installed, `hodow_cli` has one subcommand per thing it can test - run `hodow_cli --help` or
+`hodow_cli <subcommand> --help` for the full flag list. There is no single "run everything" flag;
+CPU/GPU/Vulkan are independent test suites with different runtimes and different failure modes
+(a GPU test can open a window, a CPU test can crash the whole process), so they stay separate
+commands rather than one that silently swallows which one broke.
+
+```bash
+hodow_cli cpu                    # run the CPU SIMD instruction-set suite
+hodow_cli cpu --isolate          # same, but crash-safe: a segfaulting instruction is
+                                  # reported as CRASHED for that one test, not a dead process
+hodow_cli gpu                    # run the OpenGL test suite (opens a window by default)
+hodow_cli gpu --no-window        # ...headless instead
+hodow_cli vulkan                 # Vulkan compute validation on every Vulkan device found
+hodow_cli serve                  # persistent job-queue server + web dashboard (0.0.0.0:7878)
+```
+
+A real `cpu --isolate` run looks like this (`install-all`'s build, on this machine - the 16
+failures are a single already-diagnosed SSE4A quirk, not a bug; see `CLAUDE.md` if curious):
+
+```
+ISOLATED TEST STATISTICS
+================================================================================
+Passed            16825
+Failed               16
+Panicked              0
+Timed out             0
+Crashed               0
+--------------------------------------------------------------------------------
+Total             16841
+```
+
+`--report results.json` (alongside `--isolate`) additionally writes one machine-readable record
+per test - handy for diffing a native run against one under box64/FEX-Emu/qemu, see "Test x86_64
+emulators with the CPU suite" below (and `CLAUDE.md`'s "Non-x86 architectures" section for the
+ARM/qemu side of the same idea).
+
+Once `hodow_cli serve` is running somewhere, submit jobs to it from another machine instead of
+running locally:
+
+```bash
+hodow_cli cpu --submit-to http://192.168.1.50:7878
+hodow_cli gpu --submit-to http://192.168.1.50:7878
+hodow_cli vulkan --submit-to http://192.168.1.50:7878
+```
+
+The dashboard itself is just the server's own address in a browser (`http://192.168.1.50:7878`) -
+job history, per-test outcomes, and live progress over a websocket, no separate UI to install.
 
 ## AI Usage
 This project heavily(but not fully) relies on AI for code generation, bug fixing, refactoring etc., so if you have any objections to this, don't use it.
@@ -76,7 +102,7 @@ This project is not AI slop, although it does have a fairly narrow specializatio
 | Feature    |                Implemented |
 |------------|---------------------------:|
 | CPU x86_64 | ✅(only supported by rustc) |
-| CPU arm    |                          ❌ |
+| CPU arm/aarch64 (NEON + SVE/SVE2) | ✅(cross-compile + qemu-user verified) |
 | OpenGL     | ✅(only supported by glium) |
 | Vulkan     |                          ❌ |
 

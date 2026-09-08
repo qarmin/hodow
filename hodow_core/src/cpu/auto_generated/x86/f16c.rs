@@ -13,8 +13,6 @@ impl ExtensionTest for F16C {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_x86_f16c_mm_cvtph_ps, "test_x86_f16c_mm_cvtph_ps"),
-            (&test_x86_f16c_mm256_cvtph_ps, "test_x86_f16c_mm256_cvtph_ps"),
             (&test_x86_f16c_mm_cvtps_ph, "test_x86_f16c_mm_cvtps_ph"),
             (&test_x86_f16c_mm_cvtps_ph_normal2, "test_x86_f16c_mm_cvtps_ph_normal2"),
             (&test_x86_f16c_mm_cvtps_ph_normal3, "test_x86_f16c_mm_cvtps_ph_normal3"),

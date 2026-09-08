@@ -7,6 +7,9 @@ pub mod arm;
 #[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
 pub mod arm_shared;
 
+#[cfg(target_arch = "loongarch64")]
+pub mod loongarch64;
+
 #[cfg(target_arch = "mips")]
 pub mod mips;
 

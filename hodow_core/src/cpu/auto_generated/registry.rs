@@ -4,6 +4,14 @@
 use crate::cpu::{ExtensionTest, FeatureStats, TestStatistics, ProgressCallback, TestFunction};
 use crate::cpu::{reset_stop_flag, should_stop, should_skip_feature};
 
+#[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
+fn detect_arm_shared_neon() -> bool {
+    #[cfg(target_arch = "arm")]
+    { return std::arch::is_arm_feature_detected!("neon"); }
+    #[cfg(target_arch = "aarch64")]
+    { return std::arch::is_aarch64_feature_detected!("neon"); }
+}
+
 /// Count how many CPU features/extensions are available on this machine
 pub fn count_available_features() -> usize {
     let mut count = 0;
@@ -14,7 +22,23 @@ pub fn count_available_features() -> usize {
             count += 1;
         }
 
+        if std::arch::is_aarch64_feature_detected!("neon") {
+            count += 1;
+        }
+
         if true /* baseline ISA, not an optional feature - see BASELINE_ALWAYS_TRUE_FEATURES */ {
+            count += 1;
+        }
+
+        if std::arch::is_aarch64_feature_detected!("rand") {
+            count += 1;
+        }
+
+        if std::arch::is_aarch64_feature_detected!("sve") {
+            count += 1;
+        }
+
+        if std::arch::is_aarch64_feature_detected!("sve2") {
             count += 1;
         }
 
@@ -30,6 +54,22 @@ pub fn count_available_features() -> usize {
 
     #[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
     {
+        if detect_arm_shared_neon() {
+            count += 1;
+        }
+
+    }
+
+    #[cfg(target_arch = "loongarch64")]
+    {
+        if false /* feature detection not yet implemented */ {
+            count += 1;
+        }
+
+        if false /* feature detection not yet implemented */ {
+            count += 1;
+        }
+
     }
 
     #[cfg(target_arch = "mips")]
@@ -130,10 +170,6 @@ pub fn count_available_features() -> usize {
 
     #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     {
-        if false /* no runtime detection available */ {
-            count += 1;
-        }
-
         #[cfg(target_feature = "adx")]
         if std::arch::is_x86_feature_detected!("adx") {
             count += 1;
@@ -209,11 +245,6 @@ pub fn count_available_features() -> usize {
             count += 1;
         }
 
-        #[cfg(target_feature = "avx512vpopcntdq")]
-        if std::arch::is_x86_feature_detected!("avx512vpopcntdq") {
-            count += 1;
-        }
-
         #[cfg(target_feature = "avxneconvert")]
         if std::arch::is_x86_feature_detected!("avxneconvert") {
             count += 1;
@@ -241,17 +272,8 @@ pub fn count_available_features() -> usize {
             count += 1;
         }
 
-        if false /* no runtime detection available */ {
-            count += 1;
-        }
-
         #[cfg(target_feature = "f16c")]
         if std::arch::is_x86_feature_detected!("f16c") {
-            count += 1;
-        }
-
-        #[cfg(target_feature = "fma")]
-        if std::arch::is_x86_feature_detected!("fma") {
             count += 1;
         }
 
@@ -353,22 +375,8 @@ pub fn count_available_features() -> usize {
 
     #[cfg(target_arch = "x86_64")]
     {
-        if false /* no runtime detection available */ {
-            count += 1;
-        }
-
         #[cfg(target_feature = "adx")]
         if std::arch::is_x86_feature_detected!("adx") {
-            count += 1;
-        }
-
-        #[cfg(target_feature = "avx")]
-        if std::arch::is_x86_feature_detected!("avx") {
-            count += 1;
-        }
-
-        #[cfg(target_feature = "avx512bw")]
-        if std::arch::is_x86_feature_detected!("avx512bw") {
             count += 1;
         }
 
@@ -389,10 +397,6 @@ pub fn count_available_features() -> usize {
 
         #[cfg(target_feature = "bmi2")]
         if std::arch::is_x86_feature_detected!("bmi2") {
-            count += 1;
-        }
-
-        if false /* no runtime detection available */ {
             count += 1;
         }
 
@@ -422,11 +426,6 @@ pub fn count_available_features() -> usize {
 
         #[cfg(target_feature = "sse2")]
         if std::arch::is_x86_feature_detected!("sse2") {
-            count += 1;
-        }
-
-        #[cfg(target_feature = "sse4.1")]
-        if std::arch::is_x86_feature_detected!("sse4.1") {
             count += 1;
         }
 
@@ -461,8 +460,20 @@ pub fn available_modes() -> Vec<String> {
         if std::arch::is_aarch64_feature_detected!("mte") {
             modes.insert(format!("{}:{}", "aarch64", "mte"));
         }
+        if std::arch::is_aarch64_feature_detected!("neon") {
+            modes.insert(format!("{}:{}", "aarch64", "neon"));
+        }
         if true /* baseline ISA, not an optional feature - see BASELINE_ALWAYS_TRUE_FEATURES */ {
             modes.insert(format!("{}:{}", "aarch64", "prefetch"));
+        }
+        if std::arch::is_aarch64_feature_detected!("rand") {
+            modes.insert(format!("{}:{}", "aarch64", "rand"));
+        }
+        if std::arch::is_aarch64_feature_detected!("sve") {
+            modes.insert(format!("{}:{}", "aarch64", "sve"));
+        }
+        if std::arch::is_aarch64_feature_detected!("sve2") {
+            modes.insert(format!("{}:{}", "aarch64", "sve2"));
         }
     }
 
@@ -475,6 +486,19 @@ pub fn available_modes() -> Vec<String> {
 
     #[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
     {
+        if detect_arm_shared_neon() {
+            modes.insert(format!("{}:{}", "arm", "neon"));
+        }
+    }
+
+    #[cfg(target_arch = "loongarch64")]
+    {
+        if false /* feature detection not yet implemented */ {
+            modes.insert(format!("{}:{}", "loongarch64", "lasx"));
+        }
+        if false /* feature detection not yet implemented */ {
+            modes.insert(format!("{}:{}", "loongarch64", "lsx"));
+        }
     }
 
     #[cfg(target_arch = "mips")]
@@ -560,9 +584,6 @@ pub fn available_modes() -> Vec<String> {
 
     #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     {
-        if false /* no runtime detection available */ {
-            modes.insert(format!("{}:{}", "x86", "abm"));
-        }
         #[cfg(target_feature = "adx")]
         if std::arch::is_x86_feature_detected!("adx") {
             modes.insert(format!("{}:{}", "x86", "adx"));
@@ -623,10 +644,6 @@ pub fn available_modes() -> Vec<String> {
         if std::arch::is_x86_feature_detected!("avx512vnni") {
             modes.insert(format!("{}:{}", "x86", "avx512vnni"));
         }
-        #[cfg(target_feature = "avx512vpopcntdq")]
-        if std::arch::is_x86_feature_detected!("avx512vpopcntdq") {
-            modes.insert(format!("{}:{}", "x86", "avx512vpopcntdq"));
-        }
         #[cfg(target_feature = "avxneconvert")]
         if std::arch::is_x86_feature_detected!("avxneconvert") {
             modes.insert(format!("{}:{}", "x86", "avxneconvert"));
@@ -640,9 +657,6 @@ pub fn available_modes() -> Vec<String> {
             modes.insert(format!("{}:{}", "x86", "bmi2"));
         }
         if false /* no runtime detection available */ {
-            modes.insert(format!("{}:{}", "x86", "bswap"));
-        }
-        if false /* no runtime detection available */ {
             modes.insert(format!("{}:{}", "x86", "bt"));
         }
         if false /* no runtime detection available */ {
@@ -654,10 +668,6 @@ pub fn available_modes() -> Vec<String> {
         #[cfg(target_feature = "f16c")]
         if std::arch::is_x86_feature_detected!("f16c") {
             modes.insert(format!("{}:{}", "x86", "f16c"));
-        }
-        #[cfg(target_feature = "fma")]
-        if std::arch::is_x86_feature_detected!("fma") {
-            modes.insert(format!("{}:{}", "x86", "fma"));
         }
         #[cfg(target_feature = "fxsr")]
         if std::arch::is_x86_feature_detected!("fxsr") {
@@ -738,20 +748,9 @@ pub fn available_modes() -> Vec<String> {
 
     #[cfg(target_arch = "x86_64")]
     {
-        if false /* no runtime detection available */ {
-            modes.insert(format!("{}:{}", "x86_64", "abm"));
-        }
         #[cfg(target_feature = "adx")]
         if std::arch::is_x86_feature_detected!("adx") {
             modes.insert(format!("{}:{}", "x86_64", "adx"));
-        }
-        #[cfg(target_feature = "avx")]
-        if std::arch::is_x86_feature_detected!("avx") {
-            modes.insert(format!("{}:{}", "x86_64", "avx"));
-        }
-        #[cfg(target_feature = "avx512bw")]
-        if std::arch::is_x86_feature_detected!("avx512bw") {
-            modes.insert(format!("{}:{}", "x86_64", "avx512bw"));
         }
         #[cfg(target_feature = "avx512f")]
         if std::arch::is_x86_feature_detected!("avx512f") {
@@ -768,9 +767,6 @@ pub fn available_modes() -> Vec<String> {
         #[cfg(target_feature = "bmi2")]
         if std::arch::is_x86_feature_detected!("bmi2") {
             modes.insert(format!("{}:{}", "x86_64", "bmi2"));
-        }
-        if false /* no runtime detection available */ {
-            modes.insert(format!("{}:{}", "x86_64", "bswap"));
         }
         if false /* no runtime detection available */ {
             modes.insert(format!("{}:{}", "x86_64", "bt"));
@@ -794,10 +790,6 @@ pub fn available_modes() -> Vec<String> {
         #[cfg(target_feature = "sse2")]
         if std::arch::is_x86_feature_detected!("sse2") {
             modes.insert(format!("{}:{}", "x86_64", "sse2"));
-        }
-        #[cfg(target_feature = "sse4.1")]
-        if std::arch::is_x86_feature_detected!("sse4.1") {
-            modes.insert(format!("{}:{}", "x86_64", "sse4.1"));
         }
         #[cfg(target_feature = "sse4.2")]
         if std::arch::is_x86_feature_detected!("sse4.2") {
@@ -845,6 +837,25 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                     completed_features += 1;
             }
 
+            if std::arch::is_aarch64_feature_detected!("neon") && !should_skip_feature("neon") {
+                    if should_stop() {
+                        return Ok(TestStatistics { features, was_cancelled: true });
+                    }
+                    let (r, s, e) = crate::cpu::auto_generated::aarch64::neon::NEON::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::aarch64::neon::NEON::get_tests().len(),
+                    progress_callback,
+                    )?;
+                    features.push(FeatureStats {
+                        feature_name: crate::cpu::auto_generated::aarch64::neon::NEON::get_name(),
+                        tests_run: r,
+                        tests_skipped: s,
+                        tests_errored: e,
+                    });
+                    completed_features += 1;
+            }
+
             if true /* baseline ISA, not an optional feature - see BASELINE_ALWAYS_TRUE_FEATURES */ && !should_skip_feature("prefetch") {
                     if should_stop() {
                         return Ok(TestStatistics { features, was_cancelled: true });
@@ -857,6 +868,63 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                     )?;
                     features.push(FeatureStats {
                         feature_name: crate::cpu::auto_generated::aarch64::prefetch::PREFETCH::get_name(),
+                        tests_run: r,
+                        tests_skipped: s,
+                        tests_errored: e,
+                    });
+                    completed_features += 1;
+            }
+
+            if std::arch::is_aarch64_feature_detected!("rand") && !should_skip_feature("rand") {
+                    if should_stop() {
+                        return Ok(TestStatistics { features, was_cancelled: true });
+                    }
+                    let (r, s, e) = crate::cpu::auto_generated::aarch64::rand::RAND::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::aarch64::rand::RAND::get_tests().len(),
+                    progress_callback,
+                    )?;
+                    features.push(FeatureStats {
+                        feature_name: crate::cpu::auto_generated::aarch64::rand::RAND::get_name(),
+                        tests_run: r,
+                        tests_skipped: s,
+                        tests_errored: e,
+                    });
+                    completed_features += 1;
+            }
+
+            if std::arch::is_aarch64_feature_detected!("sve") && !should_skip_feature("sve") {
+                    if should_stop() {
+                        return Ok(TestStatistics { features, was_cancelled: true });
+                    }
+                    let (r, s, e) = crate::cpu::auto_generated::aarch64::sve::SVE::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::aarch64::sve::SVE::get_tests().len(),
+                    progress_callback,
+                    )?;
+                    features.push(FeatureStats {
+                        feature_name: crate::cpu::auto_generated::aarch64::sve::SVE::get_name(),
+                        tests_run: r,
+                        tests_skipped: s,
+                        tests_errored: e,
+                    });
+                    completed_features += 1;
+            }
+
+            if std::arch::is_aarch64_feature_detected!("sve2") && !should_skip_feature("sve2") {
+                    if should_stop() {
+                        return Ok(TestStatistics { features, was_cancelled: true });
+                    }
+                    let (r, s, e) = crate::cpu::auto_generated::aarch64::sve2::SVE2::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::aarch64::sve2::SVE2::get_tests().len(),
+                    progress_callback,
+                    )?;
+                    features.push(FeatureStats {
+                        feature_name: crate::cpu::auto_generated::aarch64::sve2::SVE2::get_name(),
                         tests_run: r,
                         tests_skipped: s,
                         tests_errored: e,
@@ -891,6 +959,67 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
 
     #[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
     {
+            if detect_arm_shared_neon() && !should_skip_feature("neon") {
+                    if should_stop() {
+                        return Ok(TestStatistics { features, was_cancelled: true });
+                    }
+                    let (r, s, e) = crate::cpu::auto_generated::arm_shared::neon::NEON::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::arm_shared::neon::NEON::get_tests().len(),
+                    progress_callback,
+                    )?;
+                    features.push(FeatureStats {
+                        feature_name: crate::cpu::auto_generated::arm_shared::neon::NEON::get_name(),
+                        tests_run: r,
+                        tests_skipped: s,
+                        tests_errored: e,
+                    });
+                    completed_features += 1;
+            }
+
+    }
+
+    #[cfg(target_arch = "loongarch64")]
+    {
+            if false /* feature detection not yet implemented */ && !should_skip_feature("lasx") {
+                    if should_stop() {
+                        return Ok(TestStatistics { features, was_cancelled: true });
+                    }
+                    let (r, s, e) = crate::cpu::auto_generated::loongarch64::lasx::LASX::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::loongarch64::lasx::LASX::get_tests().len(),
+                    progress_callback,
+                    )?;
+                    features.push(FeatureStats {
+                        feature_name: crate::cpu::auto_generated::loongarch64::lasx::LASX::get_name(),
+                        tests_run: r,
+                        tests_skipped: s,
+                        tests_errored: e,
+                    });
+                    completed_features += 1;
+            }
+
+            if false /* feature detection not yet implemented */ && !should_skip_feature("lsx") {
+                    if should_stop() {
+                        return Ok(TestStatistics { features, was_cancelled: true });
+                    }
+                    let (r, s, e) = crate::cpu::auto_generated::loongarch64::lsx::LSX::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::loongarch64::lsx::LSX::get_tests().len(),
+                    progress_callback,
+                    )?;
+                    features.push(FeatureStats {
+                        feature_name: crate::cpu::auto_generated::loongarch64::lsx::LSX::get_name(),
+                        tests_run: r,
+                        tests_skipped: s,
+                        tests_errored: e,
+                    });
+                    completed_features += 1;
+            }
+
     }
 
     #[cfg(target_arch = "mips")]
@@ -1216,25 +1345,6 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
 
     #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     {
-            if false /* no runtime detection available */ && !should_skip_feature("abm") {
-                    if should_stop() {
-                        return Ok(TestStatistics { features, was_cancelled: true });
-                    }
-                    let (r, s, e) = crate::cpu::auto_generated::x86::abm::ABM::test_with_progress(
-                    total_features,
-                    completed_features,
-                    crate::cpu::auto_generated::x86::abm::ABM::get_tests().len(),
-                    progress_callback,
-                    )?;
-                    features.push(FeatureStats {
-                        feature_name: crate::cpu::auto_generated::x86::abm::ABM::get_name(),
-                        tests_run: r,
-                        tests_skipped: s,
-                        tests_errored: e,
-                    });
-                    completed_features += 1;
-            }
-
         #[cfg(target_feature = "adx")]
         {
             if std::arch::is_x86_feature_detected!("adx") && !should_skip_feature("adx") {
@@ -1565,28 +1675,6 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
             }
         }
 
-        #[cfg(target_feature = "avx512vpopcntdq")]
-        {
-            if std::arch::is_x86_feature_detected!("avx512vpopcntdq") && !should_skip_feature("avx512vpopcntdq") {
-                    if should_stop() {
-                        return Ok(TestStatistics { features, was_cancelled: true });
-                    }
-                    let (r, s, e) = crate::cpu::auto_generated::x86::avx512vpopcntdq::AVX512VPOPCNTDQ::test_with_progress(
-                    total_features,
-                    completed_features,
-                    crate::cpu::auto_generated::x86::avx512vpopcntdq::AVX512VPOPCNTDQ::get_tests().len(),
-                    progress_callback,
-                    )?;
-                    features.push(FeatureStats {
-                        feature_name: crate::cpu::auto_generated::x86::avx512vpopcntdq::AVX512VPOPCNTDQ::get_name(),
-                        tests_run: r,
-                        tests_skipped: s,
-                        tests_errored: e,
-                    });
-                    completed_features += 1;
-            }
-        }
-
         #[cfg(target_feature = "avxneconvert")]
         {
             if std::arch::is_x86_feature_detected!("avxneconvert") && !should_skip_feature("avxneconvert") {
@@ -1652,25 +1740,6 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                     completed_features += 1;
             }
         }
-
-            if false /* no runtime detection available */ && !should_skip_feature("bswap") {
-                    if should_stop() {
-                        return Ok(TestStatistics { features, was_cancelled: true });
-                    }
-                    let (r, s, e) = crate::cpu::auto_generated::x86::bswap::BSWAP::test_with_progress(
-                    total_features,
-                    completed_features,
-                    crate::cpu::auto_generated::x86::bswap::BSWAP::get_tests().len(),
-                    progress_callback,
-                    )?;
-                    features.push(FeatureStats {
-                        feature_name: crate::cpu::auto_generated::x86::bswap::BSWAP::get_name(),
-                        tests_run: r,
-                        tests_skipped: s,
-                        tests_errored: e,
-                    });
-                    completed_features += 1;
-            }
 
             if false /* no runtime detection available */ && !should_skip_feature("bt") {
                     if should_stop() {
@@ -1743,28 +1812,6 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                     )?;
                     features.push(FeatureStats {
                         feature_name: crate::cpu::auto_generated::x86::f16c::F16C::get_name(),
-                        tests_run: r,
-                        tests_skipped: s,
-                        tests_errored: e,
-                    });
-                    completed_features += 1;
-            }
-        }
-
-        #[cfg(target_feature = "fma")]
-        {
-            if std::arch::is_x86_feature_detected!("fma") && !should_skip_feature("fma") {
-                    if should_stop() {
-                        return Ok(TestStatistics { features, was_cancelled: true });
-                    }
-                    let (r, s, e) = crate::cpu::auto_generated::x86::fma::FMA::test_with_progress(
-                    total_features,
-                    completed_features,
-                    crate::cpu::auto_generated::x86::fma::FMA::get_tests().len(),
-                    progress_callback,
-                    )?;
-                    features.push(FeatureStats {
-                        feature_name: crate::cpu::auto_generated::x86::fma::FMA::get_name(),
                         tests_run: r,
                         tests_skipped: s,
                         tests_errored: e,
@@ -2192,25 +2239,6 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
 
     #[cfg(target_arch = "x86_64")]
     {
-            if false /* no runtime detection available */ && !should_skip_feature("abm") {
-                    if should_stop() {
-                        return Ok(TestStatistics { features, was_cancelled: true });
-                    }
-                    let (r, s, e) = crate::cpu::auto_generated::x86_64::abm::ABM::test_with_progress(
-                    total_features,
-                    completed_features,
-                    crate::cpu::auto_generated::x86_64::abm::ABM::get_tests().len(),
-                    progress_callback,
-                    )?;
-                    features.push(FeatureStats {
-                        feature_name: crate::cpu::auto_generated::x86_64::abm::ABM::get_name(),
-                        tests_run: r,
-                        tests_skipped: s,
-                        tests_errored: e,
-                    });
-                    completed_features += 1;
-            }
-
         #[cfg(target_feature = "adx")]
         {
             if std::arch::is_x86_feature_detected!("adx") && !should_skip_feature("adx") {
@@ -2225,50 +2253,6 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                     )?;
                     features.push(FeatureStats {
                         feature_name: crate::cpu::auto_generated::x86_64::adx::ADX::get_name(),
-                        tests_run: r,
-                        tests_skipped: s,
-                        tests_errored: e,
-                    });
-                    completed_features += 1;
-            }
-        }
-
-        #[cfg(target_feature = "avx")]
-        {
-            if std::arch::is_x86_feature_detected!("avx") && !should_skip_feature("avx") {
-                    if should_stop() {
-                        return Ok(TestStatistics { features, was_cancelled: true });
-                    }
-                    let (r, s, e) = crate::cpu::auto_generated::x86_64::avx::AVX::test_with_progress(
-                    total_features,
-                    completed_features,
-                    crate::cpu::auto_generated::x86_64::avx::AVX::get_tests().len(),
-                    progress_callback,
-                    )?;
-                    features.push(FeatureStats {
-                        feature_name: crate::cpu::auto_generated::x86_64::avx::AVX::get_name(),
-                        tests_run: r,
-                        tests_skipped: s,
-                        tests_errored: e,
-                    });
-                    completed_features += 1;
-            }
-        }
-
-        #[cfg(target_feature = "avx512bw")]
-        {
-            if std::arch::is_x86_feature_detected!("avx512bw") && !should_skip_feature("avx512bw") {
-                    if should_stop() {
-                        return Ok(TestStatistics { features, was_cancelled: true });
-                    }
-                    let (r, s, e) = crate::cpu::auto_generated::x86_64::avx512bw::AVX512BW::test_with_progress(
-                    total_features,
-                    completed_features,
-                    crate::cpu::auto_generated::x86_64::avx512bw::AVX512BW::get_tests().len(),
-                    progress_callback,
-                    )?;
-                    features.push(FeatureStats {
-                        feature_name: crate::cpu::auto_generated::x86_64::avx512bw::AVX512BW::get_name(),
                         tests_run: r,
                         tests_skipped: s,
                         tests_errored: e,
@@ -2364,25 +2348,6 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                     completed_features += 1;
             }
         }
-
-            if false /* no runtime detection available */ && !should_skip_feature("bswap") {
-                    if should_stop() {
-                        return Ok(TestStatistics { features, was_cancelled: true });
-                    }
-                    let (r, s, e) = crate::cpu::auto_generated::x86_64::bswap::BSWAP::test_with_progress(
-                    total_features,
-                    completed_features,
-                    crate::cpu::auto_generated::x86_64::bswap::BSWAP::get_tests().len(),
-                    progress_callback,
-                    )?;
-                    features.push(FeatureStats {
-                        feature_name: crate::cpu::auto_generated::x86_64::bswap::BSWAP::get_name(),
-                        tests_run: r,
-                        tests_skipped: s,
-                        tests_errored: e,
-                    });
-                    completed_features += 1;
-            }
 
             if false /* no runtime detection available */ && !should_skip_feature("bt") {
                     if should_stop() {
@@ -2513,28 +2478,6 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
             }
         }
 
-        #[cfg(target_feature = "sse4.1")]
-        {
-            if std::arch::is_x86_feature_detected!("sse4.1") && !should_skip_feature("sse41") {
-                    if should_stop() {
-                        return Ok(TestStatistics { features, was_cancelled: true });
-                    }
-                    let (r, s, e) = crate::cpu::auto_generated::x86_64::sse41::SSE41::test_with_progress(
-                    total_features,
-                    completed_features,
-                    crate::cpu::auto_generated::x86_64::sse41::SSE41::get_tests().len(),
-                    progress_callback,
-                    )?;
-                    features.push(FeatureStats {
-                        feature_name: crate::cpu::auto_generated::x86_64::sse41::SSE41::get_name(),
-                        tests_run: r,
-                        tests_skipped: s,
-                        tests_errored: e,
-                    });
-                    completed_features += 1;
-            }
-        }
-
         #[cfg(target_feature = "sse4.2")]
         {
             if std::arch::is_x86_feature_detected!("sse4.2") && !should_skip_feature("sse42") {
@@ -2622,7 +2565,31 @@ pub fn list_all_functions() -> Vec<String> {
         }
 
         {
+            for (_, name) in crate::cpu::auto_generated::aarch64::neon::NEON::get_tests() {
+                functions.push(name.to_string());
+            }
+        }
+
+        {
             for (_, name) in crate::cpu::auto_generated::aarch64::prefetch::PREFETCH::get_tests() {
+                functions.push(name.to_string());
+            }
+        }
+
+        {
+            for (_, name) in crate::cpu::auto_generated::aarch64::rand::RAND::get_tests() {
+                functions.push(name.to_string());
+            }
+        }
+
+        {
+            for (_, name) in crate::cpu::auto_generated::aarch64::sve::SVE::get_tests() {
+                functions.push(name.to_string());
+            }
+        }
+
+        {
+            for (_, name) in crate::cpu::auto_generated::aarch64::sve2::SVE2::get_tests() {
                 functions.push(name.to_string());
             }
         }
@@ -2641,6 +2608,28 @@ pub fn list_all_functions() -> Vec<String> {
 
     #[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
     {
+        {
+            for (_, name) in crate::cpu::auto_generated::arm_shared::neon::NEON::get_tests() {
+                functions.push(name.to_string());
+            }
+        }
+
+    }
+
+    #[cfg(target_arch = "loongarch64")]
+    {
+        {
+            for (_, name) in crate::cpu::auto_generated::loongarch64::lasx::LASX::get_tests() {
+                functions.push(name.to_string());
+            }
+        }
+
+        {
+            for (_, name) in crate::cpu::auto_generated::loongarch64::lsx::LSX::get_tests() {
+                functions.push(name.to_string());
+            }
+        }
+
     }
 
     #[cfg(target_arch = "mips")]
@@ -2771,12 +2760,6 @@ pub fn list_all_functions() -> Vec<String> {
 
     #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     {
-        {
-            for (_, name) in crate::cpu::auto_generated::x86::abm::ABM::get_tests() {
-                functions.push(name.to_string());
-            }
-        }
-
         #[cfg(target_feature = "adx")]
         {
             for (_, name) in crate::cpu::auto_generated::x86::adx::ADX::get_tests() {
@@ -2882,13 +2865,6 @@ pub fn list_all_functions() -> Vec<String> {
             }
         }
 
-        #[cfg(target_feature = "avx512vpopcntdq")]
-        {
-            for (_, name) in crate::cpu::auto_generated::x86::avx512vpopcntdq::AVX512VPOPCNTDQ::get_tests() {
-                functions.push(name.to_string());
-            }
-        }
-
         #[cfg(target_feature = "avxneconvert")]
         {
             for (_, name) in crate::cpu::auto_generated::x86::avxneconvert::AVXNECONVERT::get_tests() {
@@ -2906,12 +2882,6 @@ pub fn list_all_functions() -> Vec<String> {
         #[cfg(target_feature = "bmi2")]
         {
             for (_, name) in crate::cpu::auto_generated::x86::bmi2::BMI2::get_tests() {
-                functions.push(name.to_string());
-            }
-        }
-
-        {
-            for (_, name) in crate::cpu::auto_generated::x86::bswap::BSWAP::get_tests() {
                 functions.push(name.to_string());
             }
         }
@@ -2937,13 +2907,6 @@ pub fn list_all_functions() -> Vec<String> {
         #[cfg(target_feature = "f16c")]
         {
             for (_, name) in crate::cpu::auto_generated::x86::f16c::F16C::get_tests() {
-                functions.push(name.to_string());
-            }
-        }
-
-        #[cfg(target_feature = "fma")]
-        {
-            for (_, name) in crate::cpu::auto_generated::x86::fma::FMA::get_tests() {
                 functions.push(name.to_string());
             }
         }
@@ -3084,29 +3047,9 @@ pub fn list_all_functions() -> Vec<String> {
 
     #[cfg(target_arch = "x86_64")]
     {
-        {
-            for (_, name) in crate::cpu::auto_generated::x86_64::abm::ABM::get_tests() {
-                functions.push(name.to_string());
-            }
-        }
-
         #[cfg(target_feature = "adx")]
         {
             for (_, name) in crate::cpu::auto_generated::x86_64::adx::ADX::get_tests() {
-                functions.push(name.to_string());
-            }
-        }
-
-        #[cfg(target_feature = "avx")]
-        {
-            for (_, name) in crate::cpu::auto_generated::x86_64::avx::AVX::get_tests() {
-                functions.push(name.to_string());
-            }
-        }
-
-        #[cfg(target_feature = "avx512bw")]
-        {
-            for (_, name) in crate::cpu::auto_generated::x86_64::avx512bw::AVX512BW::get_tests() {
                 functions.push(name.to_string());
             }
         }
@@ -3135,12 +3078,6 @@ pub fn list_all_functions() -> Vec<String> {
         #[cfg(target_feature = "bmi2")]
         {
             for (_, name) in crate::cpu::auto_generated::x86_64::bmi2::BMI2::get_tests() {
-                functions.push(name.to_string());
-            }
-        }
-
-        {
-            for (_, name) in crate::cpu::auto_generated::x86_64::bswap::BSWAP::get_tests() {
                 functions.push(name.to_string());
             }
         }
@@ -3182,13 +3119,6 @@ pub fn list_all_functions() -> Vec<String> {
         #[cfg(target_feature = "sse2")]
         {
             for (_, name) in crate::cpu::auto_generated::x86_64::sse2::SSE2::get_tests() {
-                functions.push(name.to_string());
-            }
-        }
-
-        #[cfg(target_feature = "sse4.1")]
-        {
-            for (_, name) in crate::cpu::auto_generated::x86_64::sse41::SSE41::get_tests() {
                 functions.push(name.to_string());
             }
         }
@@ -3235,9 +3165,33 @@ pub fn all_tests() -> Vec<(&'static str, &'static str, &'static TestFunction)> {
             }
         }
 
+        if std::arch::is_aarch64_feature_detected!("neon") {
+            for &(f, n) in crate::cpu::auto_generated::aarch64::neon::NEON::get_tests() {
+                tests.push((n, "neon", f));
+            }
+        }
+
         if true /* baseline ISA, not an optional feature - see BASELINE_ALWAYS_TRUE_FEATURES */ {
             for &(f, n) in crate::cpu::auto_generated::aarch64::prefetch::PREFETCH::get_tests() {
                 tests.push((n, "prefetch", f));
+            }
+        }
+
+        if std::arch::is_aarch64_feature_detected!("rand") {
+            for &(f, n) in crate::cpu::auto_generated::aarch64::rand::RAND::get_tests() {
+                tests.push((n, "rand", f));
+            }
+        }
+
+        if std::arch::is_aarch64_feature_detected!("sve") {
+            for &(f, n) in crate::cpu::auto_generated::aarch64::sve::SVE::get_tests() {
+                tests.push((n, "sve", f));
+            }
+        }
+
+        if std::arch::is_aarch64_feature_detected!("sve2") {
+            for &(f, n) in crate::cpu::auto_generated::aarch64::sve2::SVE2::get_tests() {
+                tests.push((n, "sve2", f));
             }
         }
 
@@ -3255,6 +3209,28 @@ pub fn all_tests() -> Vec<(&'static str, &'static str, &'static TestFunction)> {
 
     #[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
     {
+        if detect_arm_shared_neon() {
+            for &(f, n) in crate::cpu::auto_generated::arm_shared::neon::NEON::get_tests() {
+                tests.push((n, "neon", f));
+            }
+        }
+
+    }
+
+    #[cfg(target_arch = "loongarch64")]
+    {
+        if false /* feature detection not yet implemented */ {
+            for &(f, n) in crate::cpu::auto_generated::loongarch64::lasx::LASX::get_tests() {
+                tests.push((n, "lasx", f));
+            }
+        }
+
+        if false /* feature detection not yet implemented */ {
+            for &(f, n) in crate::cpu::auto_generated::loongarch64::lsx::LSX::get_tests() {
+                tests.push((n, "lsx", f));
+            }
+        }
+
     }
 
     #[cfg(target_arch = "mips")]
@@ -3385,12 +3361,6 @@ pub fn all_tests() -> Vec<(&'static str, &'static str, &'static TestFunction)> {
 
     #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     {
-        if false /* no runtime detection available */ {
-            for &(f, n) in crate::cpu::auto_generated::x86::abm::ABM::get_tests() {
-                tests.push((n, "abm", f));
-            }
-        }
-
         #[cfg(target_feature = "adx")]
         if std::arch::is_x86_feature_detected!("adx") {
             for &(f, n) in crate::cpu::auto_generated::x86::adx::ADX::get_tests() {
@@ -3496,13 +3466,6 @@ pub fn all_tests() -> Vec<(&'static str, &'static str, &'static TestFunction)> {
             }
         }
 
-        #[cfg(target_feature = "avx512vpopcntdq")]
-        if std::arch::is_x86_feature_detected!("avx512vpopcntdq") {
-            for &(f, n) in crate::cpu::auto_generated::x86::avx512vpopcntdq::AVX512VPOPCNTDQ::get_tests() {
-                tests.push((n, "avx512vpopcntdq", f));
-            }
-        }
-
         #[cfg(target_feature = "avxneconvert")]
         if std::arch::is_x86_feature_detected!("avxneconvert") {
             for &(f, n) in crate::cpu::auto_generated::x86::avxneconvert::AVXNECONVERT::get_tests() {
@@ -3521,12 +3484,6 @@ pub fn all_tests() -> Vec<(&'static str, &'static str, &'static TestFunction)> {
         if std::arch::is_x86_feature_detected!("bmi2") {
             for &(f, n) in crate::cpu::auto_generated::x86::bmi2::BMI2::get_tests() {
                 tests.push((n, "bmi2", f));
-            }
-        }
-
-        if false /* no runtime detection available */ {
-            for &(f, n) in crate::cpu::auto_generated::x86::bswap::BSWAP::get_tests() {
-                tests.push((n, "bswap", f));
             }
         }
 
@@ -3552,13 +3509,6 @@ pub fn all_tests() -> Vec<(&'static str, &'static str, &'static TestFunction)> {
         if std::arch::is_x86_feature_detected!("f16c") {
             for &(f, n) in crate::cpu::auto_generated::x86::f16c::F16C::get_tests() {
                 tests.push((n, "f16c", f));
-            }
-        }
-
-        #[cfg(target_feature = "fma")]
-        if std::arch::is_x86_feature_detected!("fma") {
-            for &(f, n) in crate::cpu::auto_generated::x86::fma::FMA::get_tests() {
-                tests.push((n, "fma", f));
             }
         }
 
@@ -3698,30 +3648,10 @@ pub fn all_tests() -> Vec<(&'static str, &'static str, &'static TestFunction)> {
 
     #[cfg(target_arch = "x86_64")]
     {
-        if false /* no runtime detection available */ {
-            for &(f, n) in crate::cpu::auto_generated::x86_64::abm::ABM::get_tests() {
-                tests.push((n, "abm", f));
-            }
-        }
-
         #[cfg(target_feature = "adx")]
         if std::arch::is_x86_feature_detected!("adx") {
             for &(f, n) in crate::cpu::auto_generated::x86_64::adx::ADX::get_tests() {
                 tests.push((n, "adx", f));
-            }
-        }
-
-        #[cfg(target_feature = "avx")]
-        if std::arch::is_x86_feature_detected!("avx") {
-            for &(f, n) in crate::cpu::auto_generated::x86_64::avx::AVX::get_tests() {
-                tests.push((n, "avx", f));
-            }
-        }
-
-        #[cfg(target_feature = "avx512bw")]
-        if std::arch::is_x86_feature_detected!("avx512bw") {
-            for &(f, n) in crate::cpu::auto_generated::x86_64::avx512bw::AVX512BW::get_tests() {
-                tests.push((n, "avx512bw", f));
             }
         }
 
@@ -3750,12 +3680,6 @@ pub fn all_tests() -> Vec<(&'static str, &'static str, &'static TestFunction)> {
         if std::arch::is_x86_feature_detected!("bmi2") {
             for &(f, n) in crate::cpu::auto_generated::x86_64::bmi2::BMI2::get_tests() {
                 tests.push((n, "bmi2", f));
-            }
-        }
-
-        if false /* no runtime detection available */ {
-            for &(f, n) in crate::cpu::auto_generated::x86_64::bswap::BSWAP::get_tests() {
-                tests.push((n, "bswap", f));
             }
         }
 
@@ -3797,13 +3721,6 @@ pub fn all_tests() -> Vec<(&'static str, &'static str, &'static TestFunction)> {
         if std::arch::is_x86_feature_detected!("sse2") {
             for &(f, n) in crate::cpu::auto_generated::x86_64::sse2::SSE2::get_tests() {
                 tests.push((n, "sse2", f));
-            }
-        }
-
-        #[cfg(target_feature = "sse4.1")]
-        if std::arch::is_x86_feature_detected!("sse4.1") {
-            for &(f, n) in crate::cpu::auto_generated::x86_64::sse41::SSE41::get_tests() {
-                tests.push((n, "sse41", f));
             }
         }
 

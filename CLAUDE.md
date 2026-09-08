@@ -45,6 +45,9 @@ heavily on AI-assisted code generation (see README.md "AI Usage").
 - `just upgrade` - `cargo upgrade --incompatible` (rewrites `Cargo.toml` requirements, including breaking
   0.x bumps) followed by `cargo update`.
 - `just arm` - cross-compile for armv7 via `cargo zigbuild`.
+- `just install` / `just install-all` / `just install-arm <ip> [user]` - see README.md's "Usage"
+  section (Install). No systemd/service anywhere - `install-arm` cross-builds and `scp`s the
+  binary onto a perimeter device, nothing more.
 - `just test-gpu-all` / `just test-gpu-window` / `just test-gpu-matrix` - exercise the full matrix of
   display-api x gl-api x software/hardware combinations.
 - `just gen-gl-table` - regenerate `hodow_core/src/opengl/FUNCTIONS_TABLE.md`.
@@ -192,40 +195,164 @@ exercised, both fixed the same way - the *entries*, not the generator, were wron
   `extracti_si64`/`inserti_si64` build-profile sensitivity (see the dedicated note on it
   elsewhere in this file); clean afterward except for those same already-known four functions.
 
-### Non-x86 architectures - a much smaller surface than x86, and mostly not yet runnable
+### Non-x86 architectures
 
-`README.md`'s own status table already says `CPU arm ❌` - this is why, precisely, so it doesn't
-need rediscovering:
+NEON (arm32 + aarch64) now has real coverage and actually runs, verified end-to-end via
+cross-compile + qemu-user on this dev machine. Two independent, unrelated bugs previously made
+this look like "Rust barely has ARM SIMD" when the real gap was entirely in this project's own
+extraction/generation, not upstream:
 
-- `get_feature_detect_fn` in `generate_tests.py` only implements runtime feature detection for
-  `x86`/`x86_64` (`std::arch::is_x86_feature_detected!`). Every other architecture's registry
-  entries (`count_available_features`, `available_modes`, `all_tests`, `test_all_extensions`) are
-  emitted as a hardcoded `false /* feature detection not yet implemented */` (or `/* no runtime
-  detection available */` for aarch64's mte/prefetch specifically) - meaning **no non-x86 test
-  currently runs at all**, regardless of what's compiled in; `--list-functions` still lists them
-  (it has no such gate), which is the one place they're visible.
-  `std::arch::is_aarch64_feature_detected!` is stable and would need no toolchain change to wire
-  up; `is_arm_feature_detected!`/`is_riscv_feature_detected!` exist but are still unstable
-  (`stdarch_arm_feature_detection`/`stdarch_riscv_feature_detection`) - reachable the same way MTE's
-  intrinsics are (see `hodow_core/src/lib.rs`'s `cfg_attr(target_arch = ..., feature(...))`), just
-  nightly-only for those two architectures specifically.
-- Even with detection wired up, there is very little to detect: `hodow_core/src/cpu/signatures.txt`
-  has **zero** aarch64 NEON signatures (only `mte.rs` and `prefetch.rs` - `extract_signatures.py`
-  never harvested `std::arch::aarch64::*`), a handful for 32-bit `arm` (`neon.rs`/`dsp.rs`/`sat.rs`/
-  `simd32.rs`, well under 20 functions combined, nowhere near real NEON coverage), and no vector/SIMD
-  extension at all for any `riscv*` (only scalar crypto `zk` and a couple of bit-manip/hint
-  extensions) - current stable Rust simply has little to no stabilized RISC-V vector API to extract
-  in the first place, a real upstream ceiling rather than something `extract_signatures.py` missed.
+- **The extraction bug**: `extract_signatures.py`'s `SKIP_FILES` unconditionally skipped any file
+  literally named `generated.rs`. That's a no-op for x86 (no such file exists there), but stdarch
+  puts NEON's real intrinsic bodies exactly there - `arm_shared/neon/generated.rs` (3025 functions,
+  shared by arm and aarch64), `aarch64/neon/generated.rs` (2165 more, aarch64-only). Fixed by
+  dropping `generated.rs` from `SKIP_FILES`. `aarch64/sve/`/`aarch64/sve2/generated.rs`
+  (3664 + 1879 more) needed the same fix plus a dedicated value-construction path - see
+  "SVE/SVE2" below.
+- **The registry bug** (found only after the extraction fix, once code was actually generated):
+  `get_feature_detect_fn` had no case for `arch == "arm_shared"` at all, silently falling through
+  to the final `false /* not yet implemented */` placeholder - so even after signatures existed
+  and compiled, `arm_shared::NEON` (the bulk of NEON, shared by both arm and aarch64) never
+  actually *ran*, on either target, though `--list-functions` showed it fine (that path has no
+  such gate, which is what made this easy to miss). `aarch64::NEON` (the smaller aarch64-only
+  slice) was unaffected and did run.
+
+Fixing the registry bug hit its own wrinkle: `is_arm_feature_detected!`/`is_aarch64_feature_detected!`
+each refuse to compile at all on the "wrong" arch (confirmed directly against rustc - a plain
+`cfg!(target_arch = ...)` runtime guard is not enough, since `cfg!` doesn't gate *compilation* of
+the branch, and the macro itself checks target_arch at expansion time and errors out otherwise).
+Since `arm_shared` is compiled unconditionally for both targets, a single `if
+{detect_fn} { ... }` template can't call either macro directly - `gen_arm_shared_detect_helpers`
+emits one small dispatch function per arm_shared feature instead, internally split by `#[cfg(target_arch
+= "arm")]`/`#[cfg(target_arch = "aarch64")]` blocks, and `get_feature_detect_fn` hands back a call
+to that instead of the macro for `arch == "arm_shared"`.
+
+A third, narrower issue specific to `arm_shared` (compiled unconditionally for both targets, unlike
+every other arch bucket): some of its 3025 functions are hard-gated upstream to a single target
+(`#[cfg(target_arch = "arm")]`, 349 raw occurrences, ~130-150 unique after name-dedup - all CRC32
+and a few others; no symmetric aarch64-only hard gate exists in the shared file). `extract_signatures.py`'s
+`find_hard_arch_gate` detects this (walking backward through attribute lines with proper paren-depth
+tracking, since the gate is often several physical lines above the `pub fn` inside a multi-line
+`cfg_attr` block) and tags the signature (`72@arm:pub fn ...` in `signatures.txt`); `generate_tests.py`
+carries the same `#[cfg(target_arch = "...")]` onto the generated wrapper function *and* its
+registry entry (`arch_only_cfg_line`), or it fails to compile on the other target. `float64x1_t`/
+`float64x2_t` are the mirror case - not gated by an attribute at all, just genuinely undefined on
+arm32 (only declared in `aarch64/neon/mod.rs`) - so their `common/arm.rs` helpers are `#[cfg(target_arch
+= "aarch64")]` directly, no generator-level tagging needed since nothing in arm_shared's own
+generated.rs references them.
+
+- **NEON base vector types** (`int8x8_t`, `float32x4_t`, `poly64x2_t`, ... - 24 fixed-width types,
+  `create_*_from`/`create_random_*`/`unpack_*_to_*_array` helpers in `hodow_core/src/cpu/common/arm.rs`,
+  transmute-from-array exactly like x86.rs's `__m128i` etc.) are supported with real per-lane
+  values, same baseline depth x86 had *before* pilot-scope multi-scenario expansion (single
+  deterministic scenario + real fuzzing) - `in_pilot_scope` stays x86/x86_64-only, so NEON doesn't
+  get `_boundary_min`/`_asym_min_max`/etc. variants yet; that would be the natural next widening,
+  same shape as the x86 one already done.
+- **NEON multi-register tuple types** (`int8x16x2_t`, ... - 84 types, `vld2q_u8`/`vst3_f32`-style
+  "load/store N registers at once") are deliberately excluded via `UNSTABLE_TYPES` rather than
+  built - each is just N copies of an already-supported base type, but tuple construction/unpacking
+  wasn't worth the added surface for this pass. `float16x4_t`/`float16x8_t` (f16-lane vectors) are
+  excluded the same way - no stable scalar `f16` to build the backing array from (bare `f16` was
+  already excluded; that check is a substring match against the whole type name and doesn't catch
+  `"float16x4_t"`, hence the separate explicit entries).
+- **SVE/SVE2** (`aarch64/sve/`, `aarch64/sve2/` - 3664 + 1879 functions) are now supported too,
+  via a genuinely different value model from every other architecture here - their vector types
+  (`svfloat32_t`, `svbool_t`, ...) are *scalable*: `#[rustc_scalable_vector(N)]`, not `#[repr(simd)]`,
+  with no fixed compile-time width at all (hardware vector length is runtime-determined, 128-2048
+  bits). Confirmed directly against rustc/qemu, not assumed:
+  - `size_of::<svfloat32_t>()` **lies** - it returned 16 (suggesting 4 lanes) when the real
+    runtime width, queried via `svcntb()`/`svcntw()`, was 64 bytes (16 lanes; confirmed by an
+    `svaddv_f32` reduction over broadcast `3.0` returning `48`, not `12`). Never size a buffer or
+    infer a lane count from `size_of` on one of these types.
+  - Construction sidesteps the width problem entirely: `svdup_n_TYPE(scalar)` broadcasts one
+    value to every lane regardless of how many there are - no need to know N at compile time, and
+    actually *simpler* than NEON's array-literal construction.
+  - Reading a result back is the real problem, since a fixed-size array can't represent a
+    runtime-width vector - solved by extracting a single scalar via `svlastb_TYPE(pred, v)`
+    ("last active element") instead of unpacking. Because every input is a uniform broadcast, an
+    element-wise op produces a uniform-valued result too, so the extracted scalar is the same
+    regardless of hardware VL - confirmed by forcing qemu to three different VLs
+    (`-cpu max,sve-max-vq={1,2,4}`, i.e. 128/256/512-bit) against the same captured expected
+    values: all three ran clean. This reuses `UNPACK_INFO`/`expected_cpu_values.txt` completely
+    unchanged (an array of length 1). Predicate (`svbool_t`) results go through
+    `svptest_any(pred, result)` -> `bool` the same way.
+  - **Not every SVE function has that invariant, though** - found empirically, not guessed: at
+    VQ=2 exactly 147 tests that passed at the default VQ started failing. Every one of them was a
+    function whose *correct* result is itself a function of the vector length - `svcnt[bhwdp]`
+    (`_pat)?` (querying element/active-predicate counts), `svq(inc|dec)[bhwdp]` (increment/
+    decrement by N times the count), `svindex` (fills 0..N-1, so the last element genuinely is
+    N-1), `svaddv` (sum scales with lane count; `svmaxv`/`svminv` don't, since every lane holds
+    the same value, and correctly never showed up here), `svlen`, `svdupq_lane`. Excluded by name
+    via `SVE_VL_DEPENDENT_RE` - a real category, not a generator bug, and no single captured value
+    could ever be valid for these across different real chips regardless of how it's obtained.
+  - `svmmla_f64` (F64MM) genuinely requires VL >= 256 bits and traps as an illegal instruction
+    below that (confirmed at VQ=1) - not a bug and not excluded, since any real chip implementing
+    F64MM already has VL >= 256 by architectural mandate; only matters when artificially forcing
+    qemu to a smaller VL than any real F64MM part would have.
+  - **The ABI problem**: any function whose signature *or local variables* touch a scalable type
+    needs `#[target_feature(enable = "sve")]` - confirmed against rustc (`rustc-LLVM ERROR: Don't
+    know how to legalize this scalable vector type` without it). But a `#[target_feature]`
+    function no longer implements `Fn`, which breaks `&'static TestFunction = &dyn Fn() ->
+    Result<...>` in the registry. Fixed by splitting SVE/SVE2 test generation (`gen_fn`'s
+    `arch == "aarch64" and ext in ("sve", "sve2")` branch) into a `#[target_feature(enable =
+    "sve")] fn {test}_impl()` holding the real body, plus a plain safe `pub(super) fn {test}()`
+    that only calls it through one `unsafe` block and touches no scalable type itself - the only
+    shape found that both compiles and stays registry-compatible.
+  - Two SVE-only const-generic conventions needed their own literals in `const_val`: `PATTERN:
+    svpattern` (an enum, not an integer - `{ svpattern::SV_ALL }`, "activate every element";
+    braces are required for a path const-generic argument) and `IMM_FACTOR`/`IMM2`/`IMM3` (a
+    magnitude asserted `1..=N` for varying N - `1` is always in range). The `IMM2`/`IMM3` check is
+    gated to names starting with `"sv"` specifically - `aarch64/neon`'s unrelated SM3 crypto
+    functions (`vsm3tt1aq_u32`) also happen to name a const generic `IMM2`, with no range
+    restriction at all, and adding an unscoped rule broke their already-captured expected values.
+  - Multi-vector tuple types (`svint8x2_t`, ... 30 types, `svld2`-style "load N registers at
+    once") are excluded via `UNSTABLE_TYPES`, same reasoning as NEON's tuple types above.
+  - Actual memory access (`svld1`/`svst1`, plus every `_gather_`/`_scatter_`/`prf*` variant -
+    ~1060+ functions) is excluded from this pass: gather/scatter/prefetch take a *vector* of
+    per-lane base addresses (not a `*const`/`*mut` `has_ptr` can see) and a `svprfop`-typed
+    prefetch-kind const generic with no literal here - same out-of-bounds hazard as x86
+    gather/scatter, so excluded by name (`prf|gather|scatter`) rather than by pointer-shape. Plain
+    linear `svld1`/`svst1` are excluded too (`has_ptr`) for this pass, not attempted - buffer
+    sizing for a runtime-width load needs its own design (max architectural VL is 2048 bits/256
+    bytes, well past the existing 64-byte x86-derived constant), left for later.
+  - Verified clean end-to-end same as NEON: 4291 SVE/SVE2 tests via `capture_expected_cross.py`
+    against qemu-aarch64, 0 errors at the default VL and re-verified at two additional forced VLs.
+- **const generics**: NEON's own naming convention overloads what "N" means - `const_val` treats a
+  const generic literally named `N` as a lane-index needing `0` (matches the old blanket default,
+  e.g. `vdup_lane_f64::<0>`, the only valid index on a single-lane vector) UNLESS the *function
+  name* contains `_n_` or ends in `_n` (ARM's own convention for "this is an immediate magnitude,
+  not an index" - `vcvt_n_f64_s64`, `vshr_n_s8`, `vsli_n_u32`, ...), in which case it uses `1`
+  (almost every one of these asserts `N >= 1`). `LANE`/`INDEX`-named const generics still default
+  to the blanket `0`.
+- Extra unstable feature gates needed beyond MTE/prefetch/detection (`hodow_core/src/lib.rs`'s
+  per-arch `cfg_attr(target_arch = ..., feature(...))` lists) - found by cross-compiling and
+  reading each `E0658`, not guessed: aarch64 needs `stdarch_aarch64_rand`, `faminmax`,
+  `stdarch_neon_{fcma,feat_lrcpc3,feat_lut,fp8,ftts,sm4,i8mm}`; arm needs `stdarch_aarch32_crc32`,
+  `stdarch_arm_neon_intrinsics`, `stdarch_neon_i8mm`. Both lists are deliberately narrow (only
+  what NEON+MTE+prefetch+rand actually reach) - `stdarch_neon_f16`/`stdarch_arm_hints`/
+  `stdarch_arm_sat` etc. would each add an "unused feature" warning right now since nothing
+  compiled reaches them (f16 vectors and hints/sat/dsp/simd32 are excluded, see above and
+  `UNSUPPORTED_FEATURES`).
+- **qemu-user's aarch64 TCG model doesn't implement several of the newest ARM extensions at all**
+  (confirmed both with the default CPU model and `-cpu max` - unlike RISC-V's `-cpu max` gap, this
+  isn't a flag away): FAMINMAX (`vamax_f32`/`vamin_f32`/...), FEAT_LRCPC3 (`vldap1_lane_*`), and
+  FEAT_LUT (`vluti2_lane_*`/`vluti4_lane_*`) all raise a genuine "Illegal instruction" under
+  `qemu-aarch64`, found by bisecting crashes one at a time via `-s <test_name>` and re-running -
+  not a hodow bug, and not (necessarily) a real-hardware problem, just this emulator's ISA gap.
+  There is no permanent exclusion for these in the generator (real, sufficiently-new hardware may
+  well execute them fine) - when capturing expected values through qemu specifically, pass a `-s`
+  skip list for whatever it crashes on; `capture_expected_cross.py`'s trailing `-- extra cpu args`
+  is exactly for this. If a future qemu version implements them, the skip list simply becomes
+  unnecessary, not wrong.
 - `aarch64/mte.rs` also has three functions `extract_signatures.py` emits a call for that don't
   compile at all (`excluded_functions.txt` now excludes them): `__arm_mte_increment_tag<const
   OFFSET: i64, T>` has a free (non-sealed-trait-bounded) type parameter `T` alongside its const
   generic, and the generator has no substitution for that - it emits `::<0>` and drops `T` entirely.
-  `__arm_mte_create_random_tag<T>`/`__arm_mte_ptrdiff<T, U>` are the same shape. This is a narrower,
-  separate gap from the missing-detection one above - fixing it doesn't unlock more coverage by
-  itself, since MTE's own detection is also still disabled.
-- Getting real NEON coverage to x86-comparable depth is a from-scratch extraction job against
-  `std::arch::aarch64::*`/`std::arch::arm::*` in the current stdarch source, on the same order of
-  effort as the original x86 one - not a quick follow-up to the point above.
+  `__arm_mte_create_random_tag<T>`/`__arm_mte_ptrdiff<T, U>` are the same shape.
+- RISC-V (`riscv32`/`riscv64`) still has no vector/SIMD extension to extract at all (only scalar
+  crypto `zk` and a couple of bit-manip/hint extensions) - current stable Rust simply has little to
+  no stabilized RISC-V vector API to extract in the first place, a real upstream ceiling, unrelated
+  to the NEON gap above.
 - For running any of this without real ARM/RISC-V hardware: `qemu-user` (`qemu-aarch64`/
   `qemu-arm`/`qemu-riscv64`) plus the matching `gcc-*-linux-gnu` cross-compiler (see
   `box64_repro/README.md`'s sysroot-autodetection trick, `-print-file-name=crt1.o` then strip
@@ -235,7 +362,9 @@ need rediscovering:
   A qemu-derived "expected" value is not a real-silicon one - ARM/RISC-V emulation in qemu is far
   more mature than x86-on-ARM (box64/FEX), but it's still emulation, not hardware; worth a distinct
   header note in `expected_cpu_values.txt` if this is ever done at scale, so a stale/wrong qemu
-  capture doesn't get mistaken for a captured-on-real-hardware one.
+  capture doesn't get mistaken for a captured-on-real-hardware one. Confirmed clean end-to-end on
+  this dev machine: aarch64 (3044 run, 45 skipped for the qemu gap above, 0 errors) and armv7
+  (1803 run, 0 skipped, 0 errors), both via `capture_expected_cross.py`.
 
 ## GPU (OpenGL) testing
 
