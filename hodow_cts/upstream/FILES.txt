@@ -205,6 +205,7 @@ modules/gles2/functional/es2fTextureStateQueryTests.hpp
 modules/gles3/functional/es3fApiCase.cpp
 modules/gles3/functional/es3fApiCase.hpp
 modules/gles3/functional/es3fFunctionalTests.cpp
+modules/gles3/functional/es3fNegativeBufferApiTests.cpp
 modules/gles3/functional/es3fNegativeFragmentApiTests.cpp
 modules/gles3/functional/es3fNegativeVertexArrayApiTests.cpp
 
