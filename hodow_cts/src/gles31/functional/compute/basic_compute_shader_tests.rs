@@ -8,14 +8,9 @@
 // Licensed under the Apache License, Version 2.0 (see LICENSE at the repo root).
 //
 // Modifications: rewritten in Rust for hodow_cts.
-//
-// Six of the eight image cases (copy_ssbo_to_image, image_atomic_op, image_barrier)
-// are not ported yet and are deliberately not registered: a case in the tree that runs
-// nothing would inflate the coverage number. Everything else in upstream's `basic`
-// group is here, in upstream's order.
 
 use crate::glu::objects::BufferMemMap;
-use crate::glu::{self, Buffer, Context, ProgramSources, ShaderProgram, TestCase, TestCaseGroup, Texture};
+use crate::glu::{self, Buffer, Context, Framebuffer, ProgramSources, ShaderProgram, TestCase, TestCaseGroup, Texture};
 use crate::glw::{self, GLuint};
 use crate::tcu::{IVec2, IVec3, Random, TestError, TestOutcome, TestStatus, multiply_components};
 
@@ -1036,6 +1031,407 @@ impl TestCase for CopyImageToSSBOCase {
     }
 }
 
+/// `CopySSBOToImageCase`
+struct CopySsboToImageCase {
+    name: String,
+    local_size: IVec2,
+    image_size: IVec2,
+}
+
+impl TestCase for CopySsboToImageCase {
+    fn name(&self) -> &str {
+        &self.name
+    }
+
+    fn iterate(&self, context: &Context) -> TestOutcome {
+        assert_eq!(self.image_size.x() % self.local_size.x(), 0);
+        assert_eq!(self.image_size.y() % self.local_size.y(), 0);
+
+        let source = format!(
+            "{version}\n\
+             layout (local_size_x = {local_x}, local_size_y = {local_y}) in;\n\
+             layout(r32ui, binding = 1) writeonly uniform highp uimage2D u_dstImg;\n\
+             buffer Input {{\n    uint values[{num_values}];\n}} sb_in;\n\n\
+             void main (void) {{\n\
+             \x20   uint stride = gl_NumWorkGroups.x*gl_WorkGroupSize.x;\n\
+             \x20   uint value  = sb_in.values[gl_GlobalInvocationID.y*stride + gl_GlobalInvocationID.x];\n\
+             \x20   imageStore(u_dstImg, ivec2(gl_GlobalInvocationID.xy), uvec4(value, 0, 0, 0));\n\
+             }}\n",
+            version = context.context_type().glsl_version().declaration(),
+            local_x = self.local_size.x(),
+            local_y = self.local_size.y(),
+            num_values = self.image_size.x() * self.image_size.y(),
+        );
+
+        let gl = context.gl();
+        let input_buffer = Buffer::new(gl);
+        let output_texture = Texture::new(gl);
+        let program = build(gl, &source)?;
+        let work_size = IVec2::new(self.image_size.x() / self.local_size.x(), self.image_size.y() / self.local_size.y());
+        let mut rnd = Random::new(0x77238ac2);
+        let mut input_values = vec![0u32; (self.image_size.x() * self.image_size.y()) as usize];
+
+        log::debug!("Work groups: {:?}", work_size.m_data);
+
+        // SAFETY: a current context; every pointer below is to a live local.
+        unsafe {
+            gl.use_program(program.program());
+
+            // Input values
+            for value in &mut input_values {
+                *value = rnd.get_uint32();
+            }
+
+            // Input buffer setup
+            {
+                let block_index = resource_index(gl, program.program(), glw::GL_SHADER_STORAGE_BLOCK, "Input")?;
+                let block_info = glu::get_program_interface_block_info(gl, program.program(), glw::GL_SHADER_STORAGE_BLOCK, block_index)?;
+                let value_index = resource_index(gl, program.program(), glw::GL_BUFFER_VARIABLE, "Input.values")?;
+                let value_info = glu::get_program_interface_variable_info(gl, program.program(), glw::GL_BUFFER_VARIABLE, value_index)?;
+
+                gl.bind_buffer(glw::GL_SHADER_STORAGE_BUFFER, input_buffer.get());
+                gl.buffer_data(glw::GL_SHADER_STORAGE_BUFFER, block_info.data_size as isize, std::ptr::null(), glw::GL_STATIC_DRAW);
+
+                if value_info.array_size as usize != input_values.len() {
+                    return Err(TestError::Fail(format!(
+                        "Input.values has {} elements, expected {}",
+                        value_info.array_size,
+                        input_values.len()
+                    )));
+                }
+
+                {
+                    let map = BufferMemMap::new(gl, glw::GL_SHADER_STORAGE_BUFFER, 0, block_info.data_size as isize, glw::GL_MAP_WRITE_BIT)
+                        .ok_or_else(|| TestError::Fail("glMapBufferRange() returned null".to_string()))?;
+                    map.write_strided(value_info.offset as usize, value_info.array_stride as usize, &input_values);
+                }
+
+                gl.bind_buffer_base(glw::GL_SHADER_STORAGE_BUFFER, block_info.buffer_binding, input_buffer.get());
+                glu::expect_no_error(gl, "Input buffer setup failed")?;
+            }
+
+            // Output image setup
+            gl.bind_texture(glw::GL_TEXTURE_2D, output_texture.get());
+            gl.tex_storage_2d(glw::GL_TEXTURE_2D, 1, glw::GL_R32UI, self.image_size.x(), self.image_size.y());
+            gl.tex_parameteri(glw::GL_TEXTURE_2D, glw::GL_TEXTURE_MIN_FILTER, glw::GL_NEAREST as i32);
+            gl.tex_parameteri(glw::GL_TEXTURE_2D, glw::GL_TEXTURE_MAG_FILTER, glw::GL_NEAREST as i32);
+            glu::expect_no_error(gl, "Uploading image data failed")?;
+
+            // Bind to unit 1
+            gl.bind_image_texture(1, output_texture.get(), 0, glw::FALSE, 0, glw::GL_WRITE_ONLY, glw::GL_R32UI);
+            glu::expect_no_error(gl, "Image setup failed")?;
+
+            // Dispatch compute workload
+            gl.dispatch_compute(work_size.x() as u32, work_size.y() as u32, 1);
+            glu::expect_no_error(gl, "glDispatchCompute()")?;
+
+            // Read back and compare
+            {
+                let fbo = Framebuffer::new(gl);
+                let mut pixels = vec![0u32; input_values.len() * 4];
+
+                gl.bind_framebuffer(glw::GL_FRAMEBUFFER, fbo.get());
+                gl.framebuffer_texture_2d(glw::GL_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, glw::GL_TEXTURE_2D, output_texture.get(), 0);
+                if gl.check_framebuffer_status(glw::GL_FRAMEBUFFER) != glw::GL_FRAMEBUFFER_COMPLETE {
+                    return Err(TestError::Fail("the framebuffer the result image is attached to is not complete".to_string()));
+                }
+
+                // \note In ES3 we have to use GL_RGBA_INTEGER
+                gl.read_buffer(glw::GL_COLOR_ATTACHMENT0);
+                gl.read_pixels(
+                    0,
+                    0,
+                    self.image_size.x(),
+                    self.image_size.y(),
+                    glw::GL_RGBA_INTEGER,
+                    glw::GL_UNSIGNED_INT,
+                    pixels.as_mut_ptr().cast(),
+                );
+                glu::expect_no_error(gl, "Reading pixels failed")?;
+
+                for (ndx, &reference) in input_values.iter().enumerate() {
+                    let res = pixels[ndx * 4];
+
+                    if res != reference {
+                        return Err(TestError::Fail(format!("Comparison failed for pixel {ndx}")));
+                    }
+                }
+            }
+        }
+
+        Ok(TestStatus::pass("Pass"))
+    }
+}
+
+/// `ImageAtomicOpCase`
+struct ImageAtomicOpCase {
+    name: String,
+    local_size: i32,
+    image_size: IVec2,
+}
+
+impl TestCase for ImageAtomicOpCase {
+    fn name(&self) -> &str {
+        &self.name
+    }
+
+    /// `ImageAtomicOpCase::init`. Upstream also accepts a core 4.5 context; this port
+    /// is ES-only.
+    fn check_support(&self, context: &Context) -> Result<(), TestError> {
+        if !context.context_type().supports(3, 2) && !context.context_info.is_extension_supported("GL_OES_shader_image_atomic") {
+            return Err(TestError::NotSupported("Test requires OES_shader_image_atomic extension".to_string()));
+        }
+        Ok(())
+    }
+
+    fn iterate(&self, context: &Context) -> TestOutcome {
+        let supports_es32 = context.context_type().supports(3, 2);
+        let source = format!(
+            "{version}\n\
+             {extension}\
+             layout (local_size_x = {local_size}) in;\n\
+             layout(r32ui, binding = 1) uniform highp uimage2D u_dstImg;\n\
+             buffer Input {{\n    uint values[{num_values}];\n}} sb_in;\n\n\
+             void main (void) {{\n\
+             \x20   uint stride = gl_NumWorkGroups.x*gl_WorkGroupSize.x;\n\
+             \x20   uint value  = sb_in.values[gl_GlobalInvocationID.y*stride + gl_GlobalInvocationID.x];\n\
+             \n\
+             \x20   if (gl_LocalInvocationIndex == 0u)\n\
+             \x20       imageStore(u_dstImg, ivec2(gl_WorkGroupID.xy), uvec4(0));\n\
+             \x20   barrier();\n\
+             \x20   imageAtomicAdd(u_dstImg, ivec2(gl_WorkGroupID.xy), value);\n\
+             }}\n",
+            version = context.context_type().glsl_version().declaration(),
+            extension = if supports_es32 { "\n" } else { "#extension GL_OES_shader_image_atomic : require\n" },
+            local_size = self.local_size,
+            num_values = self.image_size.x() * self.image_size.y() * self.local_size,
+        );
+
+        let gl = context.gl();
+        let input_buffer = Buffer::new(gl);
+        let output_texture = Texture::new(gl);
+        let program = build(gl, &source)?;
+        let mut rnd = Random::new(0x77238ac2);
+        let mut input_values = vec![0u32; (self.image_size.x() * self.image_size.y() * self.local_size) as usize];
+
+        log::debug!("Work groups: {:?}", self.image_size.m_data);
+
+        // SAFETY: a current context; every pointer below is to a live local.
+        unsafe {
+            gl.use_program(program.program());
+
+            // Input values
+            for value in &mut input_values {
+                *value = rnd.get_uint32();
+            }
+
+            // Input buffer setup
+            {
+                let block_index = resource_index(gl, program.program(), glw::GL_SHADER_STORAGE_BLOCK, "Input")?;
+                let block_info = glu::get_program_interface_block_info(gl, program.program(), glw::GL_SHADER_STORAGE_BLOCK, block_index)?;
+                let value_index = resource_index(gl, program.program(), glw::GL_BUFFER_VARIABLE, "Input.values")?;
+                let value_info = glu::get_program_interface_variable_info(gl, program.program(), glw::GL_BUFFER_VARIABLE, value_index)?;
+
+                gl.bind_buffer(glw::GL_SHADER_STORAGE_BUFFER, input_buffer.get());
+                gl.buffer_data(glw::GL_SHADER_STORAGE_BUFFER, block_info.data_size as isize, std::ptr::null(), glw::GL_STATIC_DRAW);
+
+                if value_info.array_size as usize != input_values.len() {
+                    return Err(TestError::Fail(format!(
+                        "Input.values has {} elements, expected {}",
+                        value_info.array_size,
+                        input_values.len()
+                    )));
+                }
+
+                {
+                    let map = BufferMemMap::new(gl, glw::GL_SHADER_STORAGE_BUFFER, 0, block_info.data_size as isize, glw::GL_MAP_WRITE_BIT)
+                        .ok_or_else(|| TestError::Fail("glMapBufferRange() returned null".to_string()))?;
+                    map.write_strided(value_info.offset as usize, value_info.array_stride as usize, &input_values);
+                }
+
+                gl.bind_buffer_base(glw::GL_SHADER_STORAGE_BUFFER, block_info.buffer_binding, input_buffer.get());
+                glu::expect_no_error(gl, "Input buffer setup failed")?;
+            }
+
+            // Output image setup
+            gl.bind_texture(glw::GL_TEXTURE_2D, output_texture.get());
+            gl.tex_storage_2d(glw::GL_TEXTURE_2D, 1, glw::GL_R32UI, self.image_size.x(), self.image_size.y());
+            gl.tex_parameteri(glw::GL_TEXTURE_2D, glw::GL_TEXTURE_MIN_FILTER, glw::GL_NEAREST as i32);
+            gl.tex_parameteri(glw::GL_TEXTURE_2D, glw::GL_TEXTURE_MAG_FILTER, glw::GL_NEAREST as i32);
+            glu::expect_no_error(gl, "Uploading image data failed")?;
+
+            // Bind to unit 1
+            gl.bind_image_texture(1, output_texture.get(), 0, glw::FALSE, 0, glw::GL_READ_WRITE, glw::GL_R32UI);
+            glu::expect_no_error(gl, "Image setup failed")?;
+
+            // Dispatch compute workload
+            gl.dispatch_compute(self.image_size.x() as u32, self.image_size.y() as u32, 1);
+            glu::expect_no_error(gl, "glDispatchCompute()")?;
+
+            // Read back and compare
+            {
+                let fbo = Framebuffer::new(gl);
+                let mut pixels = vec![0u32; (self.image_size.x() * self.image_size.y() * 4) as usize];
+
+                gl.bind_framebuffer(glw::GL_FRAMEBUFFER, fbo.get());
+                gl.framebuffer_texture_2d(glw::GL_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, glw::GL_TEXTURE_2D, output_texture.get(), 0);
+                if gl.check_framebuffer_status(glw::GL_FRAMEBUFFER) != glw::GL_FRAMEBUFFER_COMPLETE {
+                    return Err(TestError::Fail("the framebuffer the result image is attached to is not complete".to_string()));
+                }
+
+                // \note In ES3 we have to use GL_RGBA_INTEGER
+                gl.read_buffer(glw::GL_COLOR_ATTACHMENT0);
+                gl.read_pixels(
+                    0,
+                    0,
+                    self.image_size.x(),
+                    self.image_size.y(),
+                    glw::GL_RGBA_INTEGER,
+                    glw::GL_UNSIGNED_INT,
+                    pixels.as_mut_ptr().cast(),
+                );
+                glu::expect_no_error(gl, "Reading pixels failed")?;
+
+                for pixel_ndx in 0..input_values.len() / self.local_size as usize {
+                    let res = pixels[pixel_ndx * 4];
+                    let mut reference = 0u32;
+
+                    for offs in 0..self.local_size as usize {
+                        reference = reference.wrapping_add(input_values[pixel_ndx * self.local_size as usize + offs]);
+                    }
+
+                    if res != reference {
+                        return Err(TestError::Fail(format!("Comparison failed for pixel {pixel_ndx}")));
+                    }
+                }
+            }
+        }
+
+        Ok(TestStatus::pass("Pass"))
+    }
+}
+
+/// `ImageBarrierCase`
+struct ImageBarrierCase {
+    name: String,
+    work_size: IVec2,
+}
+
+impl TestCase for ImageBarrierCase {
+    fn name(&self) -> &str {
+        &self.name
+    }
+
+    fn iterate(&self, context: &Context) -> TestOutcome {
+        let glsl_version_declaration = context.context_type().glsl_version().declaration();
+
+        let src0 = format!(
+            "{glsl_version_declaration}\n\
+             layout (local_size_x = 1) in;\n\
+             uniform uint u_baseVal;\n\
+             layout(r32ui, binding = 2) writeonly uniform highp uimage2D u_img;\n\
+             void main (void) {{\n\
+             \x20   uint offset = gl_NumWorkGroups.x*gl_NumWorkGroups.y*gl_WorkGroupID.z + gl_NumWorkGroups.x*gl_WorkGroupID.y + gl_WorkGroupID.x;\n\
+             \x20   imageStore(u_img, ivec2(gl_WorkGroupID.xy), uvec4(offset+u_baseVal, 0, 0, 0));\n\
+             }}\n"
+        );
+
+        let src1 = format!(
+            "{glsl_version_declaration}\n\
+             layout (local_size_x = 1) in;\n\
+             layout(r32ui, binding = 2) readonly uniform highp uimage2D u_img;\n\
+             layout(binding = 0) buffer Output {{\n\
+             \x20   coherent uint sum;\n\
+             }};\n\
+             void main (void) {{\n\
+             \x20   uint value = imageLoad(u_img, ivec2(gl_WorkGroupID.xy)).x;\n\
+             \x20   atomicAdd(sum, value);\n\
+             }}\n"
+        );
+
+        let gl = context.gl();
+        let program0 = ShaderProgram::new(gl, &ProgramSources::compute(&src0));
+        let program1 = ShaderProgram::new(gl, &ProgramSources::compute(&src1));
+
+        let temp_texture = Texture::new(gl);
+        let output_buffer = Buffer::new(gl);
+        let base_value = 127u32;
+
+        if !program0.is_ok() || !program1.is_ok() {
+            return Err(TestError::Fail("Compile failed".to_string()));
+        }
+
+        log::debug!("Work groups: {:?}", self.work_size.m_data);
+
+        let base_val_name = std::ffi::CString::new("u_baseVal").expect("the literal has no interior nul");
+
+        // SAFETY: a current context; every pointer below is to a live local.
+        unsafe {
+            // Temp texture setup
+            gl.bind_texture(glw::GL_TEXTURE_2D, temp_texture.get());
+            gl.tex_storage_2d(glw::GL_TEXTURE_2D, 1, glw::GL_R32UI, self.work_size.x(), self.work_size.y());
+            gl.tex_parameteri(glw::GL_TEXTURE_2D, glw::GL_TEXTURE_MIN_FILTER, glw::GL_NEAREST as i32);
+            gl.tex_parameteri(glw::GL_TEXTURE_2D, glw::GL_TEXTURE_MAG_FILTER, glw::GL_NEAREST as i32);
+            glu::expect_no_error(gl, "Uploading image data failed")?;
+
+            // Bind to unit 2
+            gl.bind_image_texture(2, temp_texture.get(), 0, glw::FALSE, 0, glw::GL_READ_WRITE, glw::GL_R32UI);
+            glu::expect_no_error(gl, "Image setup failed")?;
+
+            // Output buffer setup
+            {
+                let block_index = resource_index(gl, program1.program(), glw::GL_SHADER_STORAGE_BLOCK, "Output")?;
+                let block_size = glu::get_program_resource_int(gl, program1.program(), glw::GL_SHADER_STORAGE_BLOCK, block_index, glw::GL_BUFFER_DATA_SIZE)?;
+
+                gl.bind_buffer(glw::GL_SHADER_STORAGE_BUFFER, output_buffer.get());
+                gl.buffer_data(glw::GL_SHADER_STORAGE_BUFFER, block_size as isize, std::ptr::null(), glw::GL_STREAM_READ);
+
+                {
+                    let map = BufferMemMap::new(gl, glw::GL_SHADER_STORAGE_BUFFER, 0, block_size as isize, glw::GL_MAP_WRITE_BIT)
+                        .ok_or_else(|| TestError::Fail("glMapBufferRange() returned null".to_string()))?;
+                    map.get().write_bytes(0, block_size as usize);
+                }
+
+                gl.bind_buffer_base(glw::GL_SHADER_STORAGE_BUFFER, 0, output_buffer.get());
+                glu::expect_no_error(gl, "Output buffer setup failed")?;
+            }
+
+            // Dispatch compute workload
+            gl.use_program(program0.program());
+            gl.uniform_1ui(gl.get_uniform_location(program0.program(), base_val_name.as_ptr()), base_value);
+            gl.dispatch_compute(self.work_size.x() as u32, self.work_size.y() as u32, 1);
+            gl.memory_barrier(glw::GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+            gl.use_program(program1.program());
+            gl.dispatch_compute(self.work_size.x() as u32, self.work_size.y() as u32, 1);
+            glu::expect_no_error(gl, "Failed to dispatch commands")?;
+
+            // Read back and compare
+            {
+                let block_index = resource_index(gl, program1.program(), glw::GL_SHADER_STORAGE_BLOCK, "Output")?;
+                let block_size = glu::get_program_resource_int(gl, program1.program(), glw::GL_SHADER_STORAGE_BLOCK, block_index, glw::GL_BUFFER_DATA_SIZE)?;
+                let value_index = resource_index(gl, program1.program(), glw::GL_BUFFER_VARIABLE, "sum")?;
+                let value_info = glu::get_program_interface_variable_info(gl, program1.program(), glw::GL_BUFFER_VARIABLE, value_index)?;
+                let map = BufferMemMap::new(gl, glw::GL_SHADER_STORAGE_BUFFER, 0, block_size as isize, glw::GL_MAP_READ_BIT)
+                    .ok_or_else(|| TestError::Fail("glMapBufferRange() returned null".to_string()))?;
+
+                let res: u32 = map.read_strided(value_info.offset as usize, 0, 1)[0];
+                let mut reference = 0u32;
+
+                for ndx in 0..self.work_size.x() * self.work_size.y() {
+                    reference = reference.wrapping_add(base_value + ndx as u32);
+                }
+
+                if res != reference {
+                    log::error!("ERROR: comparison failed, expected {reference}, got {res}");
+                    return Err(TestError::Fail("Comparison failed".to_string()));
+                }
+            }
+        }
+
+        Ok(TestStatus::pass("Pass"))
+    }
+}
+
 /// `AtomicCounterCase`
 struct AtomicCounterCase {
     name: String,
@@ -1168,8 +1564,7 @@ impl TestCase for AtomicCounterCase {
     }
 }
 
-/// `BasicComputeShaderTests::init` - the same cases in the same order as upstream,
-/// minus the eight image ones noted at the top of this file.
+/// `BasicComputeShaderTests::init` - the same cases in the same order as upstream.
 pub fn create_tests() -> TestCaseGroup {
     let mut group = TestCaseGroup::new("basic");
 
@@ -1285,6 +1680,35 @@ pub fn create_tests() -> TestCaseGroup {
             name: name.to_string(),
             local_size,
             image_size,
+        }) as Box<dyn TestCase>);
+    }
+
+    for (name, local_size, image_size) in [
+        ("copy_ssbo_to_image_small", IVec2::new(1, 1), IVec2::new(64, 64)),
+        ("copy_ssbo_to_image_large", IVec2::new(2, 4), IVec2::new(512, 512)),
+    ] {
+        group.add_child(Box::new(CopySsboToImageCase {
+            name: name.to_string(),
+            local_size,
+            image_size,
+        }) as Box<dyn TestCase>);
+    }
+
+    for (name, local_size, image_size) in [
+        ("image_atomic_op_local_size_1", 1, IVec2::new(64, 64)),
+        ("image_atomic_op_local_size_8", 8, IVec2::new(64, 64)),
+    ] {
+        group.add_child(Box::new(ImageAtomicOpCase {
+            name: name.to_string(),
+            local_size,
+            image_size,
+        }) as Box<dyn TestCase>);
+    }
+
+    for (name, work_size) in [("image_barrier_single", IVec2::new(1, 1)), ("image_barrier_multiple", IVec2::new(64, 64))] {
+        group.add_child(Box::new(ImageBarrierCase {
+            name: name.to_string(),
+            work_size,
         }) as Box<dyn TestCase>);
     }
 

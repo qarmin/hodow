@@ -60,7 +60,7 @@ sub-group.
 | `dEQP-GLES3.functional.color_clear.*` | 19 of 19 | - |
 | `dEQP-GLES3.functional.depth_stencil_clear.*` | 11 of 11 | - |
 | `dEQP-GLES3.functional.negative_api.*` | 312 of 316 | the four `*_invalid_astc_target` cases in `texture` (they need `tcu::mapGLCompressedTexFormat` / `getBlockPixelSize` / `getBlockSize`) |
-| `dEQP-GLES31.functional.compute.basic.*` | 35 of 41 | six of the eight image cases (`copy_ssbo_to_image`, `image_atomic_op`, `image_barrier`) |
+| `dEQP-GLES31.functional.compute.basic.*` | 41 of 41 | - |
 
 The OpenGL ES side is where the work is going: the target hardware for this port is an
 embedded GPU with an ES-only driver (Vivante GC20000, OpenGL ES 3.1), so there is no
