@@ -40,7 +40,24 @@ IGNORED_FUNCTIONS: set[str] = {
 
 # Functions with memory access errors - skip in fuzzer (#[cfg(not(fuzzing))])
 NO_FUZZ_FUNCTIONS: set[str] = {
+    # _mm_loadiwkey's `control: u32` is a bitfield the CPU validates, not a value to vary
+    # freely: control[1:4] (KeySource) only allows 0 or 1, control[5:31] must be 0, and per
+    # stdarch's own doc comment "using any other value may result in a General Protection
+    # Exception" - a real #GP, not UB in the Rust-safety sense but a guaranteed crash. A raw
+    # `rand::random::<u32>()` (what the generic fuzz loop would otherwise pass) hits an
+    # invalid KeySource value on 14/16 draws. See HARDWARE_CONTROL_OVERRIDES below for the
+    # single deterministic scenario, which needs the same care.
+    "_mm_loadiwkey",
+}
 
+# Scalar bitfield parameters the CPU itself validates (not just "any value of this Rust
+# type is fine") - a per-(function, param) fixed literal, forced even in the single
+# deterministic scenario, overriding the generic sequential-counter value every other
+# same-typed parameter gets. Currently only _mm_loadiwkey's `control`: per its own doc
+# comment, `0` (NoBackup=0, KeySource=0) is the one encoding that needs no CPUID leaf 0x19
+# permission check at all - both bits documented as requiring hardware support to set.
+HARDWARE_CONTROL_OVERRIDES: dict[tuple[str, str], str] = {
+    ("_mm_loadiwkey", "control"): "0u32",
 }
 
 
@@ -1173,6 +1190,8 @@ def gen_fn_body(sig: dict, expected: str | None, param_overrides: dict[str, str]
             else:
                 if pname in overrides:
                     init = overrides[pname]
+                elif (name, pname) in HARDWARE_CONTROL_OVERRIDES:
+                    init = HARDWARE_CONTROL_OVERRIDES[(name, pname)]
                 elif is_gather:
                     # Gather/scatter: zeroed SIMD for index/offset params (all read from base+0)
                     init = ZERO_SIMD_INITS.get(ptype, FIXED_INITS.get(ptype, f"0 /* {ptype} */"))
@@ -1183,7 +1202,11 @@ def gen_fn_body(sig: dict, expected: str | None, param_overrides: dict[str, str]
         call = f"{name}{cs}({', '.join(call_args)})"
         emit_check(lines, call, ret, expected, width_override)
     else:
-        call_args = [overrides[pname] if pname in overrides else seq_init(pt, ctr) for pname, pt in params]
+        call_args = [
+            overrides[pname] if pname in overrides
+            else HARDWARE_CONTROL_OVERRIDES.get((name, pname)) or seq_init(pt, ctr)
+            for pname, pt in params
+        ]
         call = f"{name}{cs}({', '.join(call_args)})"
         emit_check(lines, call, ret, expected, width_override)
 

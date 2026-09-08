@@ -108,6 +108,18 @@ name back from a real test name for this reason - update both if the naming sche
   same reason for all ~120 of them, see the comment above `in_pilot_scope`). Expected to grow.
 - `scripts/cpu/miri_only_functions.txt` - functions generated and run natively, but skipped under Miri via a
   generated `cfg!(miri)` guard (FFI/inline-asm/alignment Miri can't model).
+- **`HARDWARE_CONTROL_OVERRIDES`/`NO_FUZZ_FUNCTIONS`** (both in `generate_tests.py`) - for a *scalar* param
+  the CPU itself validates rather than a value to vary freely, unlike the vector-typed control fields
+  `ub_on_value_scenarios.txt` covers above. `_mm_loadiwkey`'s `control: u32` is the first entry: its own
+  doc comment states `control[1:4]` (KeySource) only allows `0`/`1`, `control[5:31]` must be `0`, and
+  "using any other value may result in a General Protection Exception" - a real, guaranteed #GP fault
+  reported as a crash, found from a user report of every `kl` test crashing on one laptop (a raw
+  `rand::random::<u32>()`, what the generic fuzz loop otherwise passes every non-pointer scalar param,
+  hits an invalid KeySource on 14/16 draws - added to `NO_FUZZ_FUNCTIONS` to stop that). Also switched the
+  single deterministic scenario's `control` from `1u32` (NoBackup=1, which the same doc comment says
+  additionally requires a CPUID leaf 0x19 permission check before it's safe to set) to `0u32` via
+  `HARDWARE_CONTROL_OVERRIDES` - the one encoding needing no hardware-support check at all. Both
+  mechanisms are per-(function, param name), independent of the vector-typed-only list above.
 - Expected results come from `expected_cpu_values.txt`, captured on real hardware via
   `scripts/cpu/capture_expected.py`. A vector-returning function with no captured expected value asserts
   against zeros.
