@@ -20,6 +20,6 @@ pub mod vector;
 
 pub use defs::{TestError, TestOutcome, TestResult, TestStatus};
 pub use random::Random;
-pub use test_case::{FlatCase, TestCaseGroup, TestNode, flatten};
+pub use test_case::{FlatCase, TestCaseGroup, TestNode, TestNodeInfo, flatten};
 pub use texture::{ChannelOrder, ChannelType, TextureChannelClass, TextureFormat, map_vk_format};
 pub use vector::{IVec2, IVec3, UVec3, UVec4, Vec4, multiply_components};

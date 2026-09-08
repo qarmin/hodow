@@ -97,3 +97,30 @@ external/vulkancts/modules/vulkan/renderpass/vktRenderPassMultisampleResolveTest
 external/vulkancts/modules/vulkan/renderpass/vktRenderPassMultisampleTests.cpp
 external/vulkancts/modules/vulkan/renderpass/vktRenderPassSampleReadTests.cpp
 external/vulkancts/modules/vulkan/renderpass/vktDynamicRenderingDepthStencilResolveTests.cpp
+# --- OpenGL/EGL framework (glw::, eglw::, glu::, eglu::) ---------------------------
+framework/egl/wrapper/eglwEnums.inl
+framework/egl/wrapper/eglwFunctionTypes.inl
+framework/egl/wrapper/eglwInitCore.inl
+framework/egl/wrapper/eglwInitExtensions.inl
+framework/egl/wrapper/eglwLibrary.cpp
+framework/egl/wrapper/eglwTypes.inl
+framework/opengl/gluContextInfo.cpp
+framework/opengl/gluContextInfo.hpp
+framework/opengl/gluObjectWrapper.cpp
+framework/opengl/gluObjectWrapper.hpp
+framework/opengl/gluProgramInterfaceQuery.cpp
+framework/opengl/gluProgramInterfaceQuery.hpp
+framework/opengl/gluRenderContext.cpp
+framework/opengl/gluRenderContext.hpp
+framework/opengl/gluShaderProgram.cpp
+framework/opengl/gluShaderProgram.hpp
+framework/opengl/wrapper/glwEnums.inl
+framework/opengl/wrapper/glwFunctionTypes.inl
+framework/opengl/wrapper/glwInitES20.inl
+framework/opengl/wrapper/glwInitES30.inl
+framework/opengl/wrapper/glwInitES31.inl
+framework/opengl/wrapper/glwInitES32.inl
+framework/opengl/wrapper/glwInitExtES.inl
+framework/opengl/wrapper/glwTypes.inl
+# --- OpenGL ES 3.1 tests (deqp::gles31) --------------------------------------------
+modules/gles31/functional/es31fBasicComputeShaderTests.cpp

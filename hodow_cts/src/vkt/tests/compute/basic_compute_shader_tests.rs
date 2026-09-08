@@ -35,7 +35,7 @@ use crate::vk::obj_util::{
     make_memory_barrier,
 };
 use crate::vk::programs::BinaryCollection;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// `squared()` from the anonymous namespace at the top of the upstream file.
 fn squared(a: i32) -> u32 {
@@ -1607,10 +1607,10 @@ impl TestInstance for MaxWorkGroupSizeInstance<'_> {
 ///
 /// Registration order matches upstream, because both binaries execute in this order
 /// and a diff of the two result files is easier to read when they agree on it.
-pub fn create_basic_compute_shader_tests(construction_type: ComputePipelineConstructionType) -> tcu::TestCaseGroup {
+pub fn create_basic_compute_shader_tests(construction_type: ComputePipelineConstructionType) -> TestCaseGroup {
     debug_assert_eq!(construction_type, ComputePipelineConstructionType::Pipeline);
 
-    let mut basic_compute_tests = tcu::TestCaseGroup::new("basic");
+    let mut basic_compute_tests = TestCaseGroup::new("basic");
 
     let mut add = |case: Box<dyn TestCase>| {
         basic_compute_tests.add_child(case);

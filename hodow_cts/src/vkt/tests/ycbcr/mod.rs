@@ -2,7 +2,7 @@
 //
 // external/vulkancts/modules/vulkan/ycbcr/
 
-use crate::tcu::TestCaseGroup;
+use crate::vkt::TestCaseGroup;
 
 pub mod copy_tests;
 pub mod format_tables;

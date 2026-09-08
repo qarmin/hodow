@@ -28,13 +28,13 @@ use super::operation::{
     make_buffer_memory_barrier2, make_image_memory_barrier2,
 };
 use super::signal_order_tests::SemaphoreType;
-use crate::tcu::{self, Random, TestError, TestStatus};
+use crate::tcu::{Random, TestError, TestStatus};
 use crate::vk::VkResultExt;
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer};
 use crate::vk::obj_util::{allocate_command_buffer, make_command_pool};
 use crate::vk::programs::BinaryCollection;
 use crate::vk::ref_util::Unique;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// `SubmitInfoElements` - which of the three parts a submit info carries. The array
 /// index is the part, so a `None` in slot 1 means "no command buffers".
@@ -479,11 +479,11 @@ const IMPLICIT_WRITE_OPS: &[OperationName] = &[OperationName::WriteCopyBuffer, O
 const IMPLICIT_READ_OPS: &[OperationName] = &[OperationName::ReadCopyBuffer, OperationName::ReadSsboVertex];
 
 /// `createImplicitSyncTests`
-pub fn create_implicit_tests(sync_type: SyncType) -> tcu::TestCaseGroup {
-    let mut group = tcu::TestCaseGroup::new("implicit");
+pub fn create_implicit_tests(sync_type: SyncType) -> TestCaseGroup {
+    let mut group = TestCaseGroup::new("implicit");
 
     for semaphore_type in [SemaphoreType::Binary, SemaphoreType::Timeline] {
-        let mut semaphore_group = tcu::TestCaseGroup::new(match semaphore_type {
+        let mut semaphore_group = TestCaseGroup::new(match semaphore_type {
             SemaphoreType::Binary => "binary_semaphore",
             SemaphoreType::Timeline => "timeline_semaphore",
         });
@@ -493,7 +493,7 @@ pub fn create_implicit_tests(sync_type: SyncType) -> tcu::TestCaseGroup {
         let mut combo_cnt = 0usize;
         for &write_op in IMPLICIT_WRITE_OPS {
             for &read_op in IMPLICIT_READ_OPS {
-                let mut op_group = tcu::TestCaseGroup::new(format!("{}_{}", write_op.as_str(), read_op.as_str()));
+                let mut op_group = TestCaseGroup::new(format!("{}_{}", write_op.as_str(), read_op.as_str()));
                 let mut empty = true;
 
                 // Only the first resource the pair supports is used - the permutations
@@ -502,7 +502,7 @@ pub fn create_implicit_tests(sync_type: SyncType) -> tcu::TestCaseGroup {
                     if !write_op.supports_resource(resource) || !read_op.supports_resource(resource) {
                         continue;
                     }
-                    let mut res_group = tcu::TestCaseGroup::new(get_resource_name(resource));
+                    let mut res_group = TestCaseGroup::new(get_resource_name(resource));
                     let idx0 = combo_cnt % SUBMIT_INFO_TYPES.len();
                     for idx1 in 0..SUBMIT_INFO_TYPES.len() {
                         for idx2 in 0..SUBMIT_INFO_TYPES.len() {

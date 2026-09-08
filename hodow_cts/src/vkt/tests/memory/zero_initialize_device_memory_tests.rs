@@ -22,14 +22,14 @@
 
 use vulkanalia::prelude::v1_0::*;
 
-use crate::tcu::{self, TestError, TestOutcome, TestStatus};
+use crate::tcu::{TestError, TestOutcome, TestStatus};
 use crate::vk::VkResultExt;
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
 use crate::vk::mem_util::{MemoryRequirement, invalidate_alloc};
 use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool, make_memory_barrier};
 use crate::vk::programs::BinaryCollection;
 use crate::vk::ref_util::Unique;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 use crate::{tcu_fail, tcu_throw_not_supported};
 
 /// The extension every case in this group needs.
@@ -444,9 +444,9 @@ impl TestInstance for ClearBufferAllocationInstance<'_> {
 ///
 /// Only the `clear_buffer` group is built. `image_transition` is not ported: its cases
 /// need GLSL, and shaders in this project may only come from `shaders/manifest/*.toml`.
-pub fn create_zero_initialize_device_memory_tests() -> tcu::TestCaseGroup {
-    let mut main_group = tcu::TestCaseGroup::new("zero_initialize_device_memory");
-    let mut buffer_group = tcu::TestCaseGroup::new("clear_buffer");
+pub fn create_zero_initialize_device_memory_tests() -> TestCaseGroup {
+    let mut main_group = TestCaseGroup::new("zero_initialize_device_memory");
+    let mut buffer_group = TestCaseGroup::new("clear_buffer");
 
     let buffer_size_cases: [vk::DeviceSize; 4] = [1, 4, 4096, 4194304];
     struct BufferUsageFlagName {

@@ -39,7 +39,7 @@ use crate::vk::obj_util::{
 };
 use crate::vk::programs::{BinaryCollection, ProgramBinary, create_shader_module};
 use crate::vk::ref_util::Unique;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// The format both image-backed cases here use for their storage image.
 const IMAGE_FORMAT: vk::Format = vk::Format::R32_UINT;
@@ -1766,7 +1766,7 @@ impl TestInstance for UndefinedValuesInstance<'_> {
 ///
 /// Registration order is the upstream relative order, so a diff of the two result
 /// files stays readable once the caller splices this block into the "basic" group.
-pub fn add_basic_compute_extra_tests(group: &mut tcu::TestCaseGroup) {
+pub fn add_basic_compute_extra_tests(group: &mut TestCaseGroup) {
     use crate::generated::shaders::compute_basic_extra as g;
 
     // Concurrent compute test

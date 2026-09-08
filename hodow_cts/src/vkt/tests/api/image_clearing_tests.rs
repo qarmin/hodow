@@ -36,7 +36,7 @@ use crate::vk::mem_util::{MemoryRequirement, invalidate_alloc};
 use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool, make_framebuffer};
 use crate::vk::programs::BinaryCollection;
 use crate::vk::ref_util::Unique;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// `VK_REMAINING_ARRAY_LAYERS`
 const REMAINING_ARRAY_LAYERS: u32 = u32::MAX;
@@ -1685,16 +1685,16 @@ fn is_in_clear_range(clear_coords: [u32; 4], x: u32, y: u32, in_clear_layers: bo
 }
 
 /// The `clear_depth_stencil_image` half of `createImageClearingTestsCommon`.
-fn add_clear_depth_stencil_image_tests(group: &mut tcu::TestCaseGroup, allocation_kind: AllocationKind) {
+fn add_clear_depth_stencil_image_tests(group: &mut TestCaseGroup, allocation_kind: AllocationKind) {
     for image_type in [vk::ImageType::_2D, vk::ImageType::_3D] {
-        let mut image_type_group = tcu::TestCaseGroup::new(image_type_case_name(image_type));
+        let mut image_type_group = TestCaseGroup::new(image_type_case_name(image_type));
 
         for layer_params in IMAGE_LAYER_PARAMS_TO_TEST {
             // CUBE images are not tested in clear image tests (they are tested in clear attachment tests)
             if layer_params.is_cube {
                 continue;
             }
-            let mut layers_group = tcu::TestCaseGroup::new(layer_params.test_name);
+            let mut layers_group = TestCaseGroup::new(layer_params.test_name);
 
             for &dimensions in IMAGE_DIMENSIONS {
                 if image_type == vk::ImageType::_2D && (dimensions[2] > 1 || dimensions[1] == 1) {
@@ -1756,14 +1756,14 @@ fn add_clear_depth_stencil_image_tests(group: &mut tcu::TestCaseGroup, allocatio
     }
 }
 
-fn add_clear_color_image_tests(group: &mut tcu::TestCaseGroup, allocation_kind: AllocationKind) {
+fn add_clear_color_image_tests(group: &mut TestCaseGroup, allocation_kind: AllocationKind) {
     // The loop indices are load-bearing: `generalLayout` is chosen from their sum, so
     // they have to count positions in the full arrays, not cases actually emitted.
     for (image_type_index, image_type) in [vk::ImageType::_1D, vk::ImageType::_2D, vk::ImageType::_3D].into_iter().enumerate() {
-        let mut image_type_group = tcu::TestCaseGroup::new(image_type_case_name(image_type));
+        let mut image_type_group = TestCaseGroup::new(image_type_case_name(image_type));
 
         for (image_tiling_index, tiling) in [vk::ImageTiling::OPTIMAL, vk::ImageTiling::LINEAR].into_iter().enumerate() {
-            let mut tiling_group = tcu::TestCaseGroup::new(image_tiling_case_name(tiling));
+            let mut tiling_group = TestCaseGroup::new(image_tiling_case_name(tiling));
 
             for (image_layer_params_index, layer_params) in IMAGE_LAYER_PARAMS_TO_TEST.iter().enumerate() {
                 // 3D ARRAY images are not supported
@@ -1774,7 +1774,7 @@ fn add_clear_color_image_tests(group: &mut tcu::TestCaseGroup, allocation_kind: 
                 if layer_params.is_cube {
                     continue;
                 }
-                let mut layers_group = tcu::TestCaseGroup::new(layer_params.test_name);
+                let mut layers_group = TestCaseGroup::new(layer_params.test_name);
 
                 for (image_dimensions_index, &dimensions) in IMAGE_DIMENSIONS.iter().enumerate() {
                     if image_type == vk::ImageType::_1D && dimensions[1] > 1 {
@@ -1921,10 +1921,10 @@ fn is_64_format(tcu_format: tcu::TextureFormat) -> bool {
 
 /// The four attachment-clear groups of `createImageClearingTestsCommon`.
 fn add_clear_attachment_tests(
-    color: &mut tcu::TestCaseGroup,
-    partial_color: &mut tcu::TestCaseGroup,
-    depth_stencil: &mut tcu::TestCaseGroup,
-    partial_depth_stencil: &mut tcu::TestCaseGroup,
+    color: &mut TestCaseGroup,
+    partial_color: &mut TestCaseGroup,
+    depth_stencil: &mut TestCaseGroup,
+    partial_depth_stencil: &mut TestCaseGroup,
     allocation_kind: AllocationKind,
 ) {
     // Clear color attachment
@@ -1932,8 +1932,8 @@ fn add_clear_attachment_tests(
         if layer_params.two_step {
             continue;
         }
-        let mut color_layers_group = tcu::TestCaseGroup::new(layer_params.test_name);
-        let mut partial_color_layers_group = tcu::TestCaseGroup::new(layer_params.test_name);
+        let mut color_layers_group = TestCaseGroup::new(layer_params.test_name);
+        let mut partial_color_layers_group = TestCaseGroup::new(layer_params.test_name);
 
         for (image_dimensions_index, &dimensions) in IMAGE_DIMENSIONS.iter().enumerate() {
             let dimensions_string = extent_to_string(dimensions, vk::ImageType::_2D);
@@ -2019,8 +2019,8 @@ fn add_clear_attachment_tests(
         if layer_params.two_step {
             continue;
         }
-        let mut ds_layers_group = tcu::TestCaseGroup::new(layer_params.test_name);
-        let mut partial_ds_layers_group = tcu::TestCaseGroup::new(layer_params.test_name);
+        let mut ds_layers_group = TestCaseGroup::new(layer_params.test_name);
+        let mut partial_ds_layers_group = TestCaseGroup::new(layer_params.test_name);
 
         for &dimensions in IMAGE_DIMENSIONS {
             let dimensions_string = extent_to_string(dimensions, vk::ImageType::_2D);
@@ -2091,22 +2091,22 @@ fn add_clear_attachment_tests(
 }
 
 /// `createImageClearingTests`
-pub fn create_image_clearing_tests() -> tcu::TestCaseGroup {
-    let mut tests = tcu::TestCaseGroup::new("image_clearing");
+pub fn create_image_clearing_tests() -> TestCaseGroup {
+    let mut tests = TestCaseGroup::new("image_clearing");
 
     for (name, allocation_kind) in [("core", AllocationKind::Suballocated), ("dedicated_allocation", AllocationKind::Dedicated)] {
-        let mut kind_group = tcu::TestCaseGroup::new(name);
-        let mut color = tcu::TestCaseGroup::new("clear_color_image");
+        let mut kind_group = TestCaseGroup::new(name);
+        let mut color = TestCaseGroup::new("clear_color_image");
         add_clear_color_image_tests(&mut color, allocation_kind);
         kind_group.add_child(color);
-        let mut depth_stencil = tcu::TestCaseGroup::new("clear_depth_stencil_image");
+        let mut depth_stencil = TestCaseGroup::new("clear_depth_stencil_image");
         add_clear_depth_stencil_image_tests(&mut depth_stencil, allocation_kind);
         kind_group.add_child(depth_stencil);
 
-        let mut color_attachment = tcu::TestCaseGroup::new("clear_color_attachment");
-        let mut partial_color_attachment = tcu::TestCaseGroup::new("partial_clear_color_attachment");
-        let mut ds_attachment = tcu::TestCaseGroup::new("clear_depth_stencil_attachment");
-        let mut partial_ds_attachment = tcu::TestCaseGroup::new("partial_clear_depth_stencil_attachment");
+        let mut color_attachment = TestCaseGroup::new("clear_color_attachment");
+        let mut partial_color_attachment = TestCaseGroup::new("partial_clear_color_attachment");
+        let mut ds_attachment = TestCaseGroup::new("clear_depth_stencil_attachment");
+        let mut partial_ds_attachment = TestCaseGroup::new("partial_clear_depth_stencil_attachment");
         add_clear_attachment_tests(
             &mut color_attachment,
             &mut partial_color_attachment,

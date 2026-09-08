@@ -21,7 +21,7 @@ pub mod unused_clear_attachment_tests;
 
 use group_params::{GroupParams, RenderingType};
 
-use crate::tcu::TestCaseGroup;
+use crate::vkt::TestCaseGroup;
 
 /// `createRenderPassTests`.
 ///

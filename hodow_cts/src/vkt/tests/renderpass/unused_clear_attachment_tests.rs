@@ -24,7 +24,7 @@ use vulkanalia::prelude::v1_0::*;
 
 use crate::tcu::pixel::ConstPixelBufferAccess;
 use crate::tcu::texture::{ChannelOrder, ChannelType, TextureFormat, map_vk_format};
-use crate::tcu::{self, TestError, TestStatus};
+use crate::tcu::{TestError, TestStatus};
 use crate::vk::VkResultExt;
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
 use crate::vk::image_util::{ImageWithMemory, make_image_view};
@@ -36,7 +36,7 @@ use crate::vk::obj_util::{
 use crate::vk::programs::{BinaryCollection, create_shader_module};
 use crate::vk::ref_util::{Unique, UniqueCommandBuffer};
 use crate::vkt::tests::renderpass::group_params::{GroupParams, RenderingType};
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// The manifest declares its cases with this: the two shaders plus the bit pattern the
 /// fragment shader's outputs were generated from, so the host can assert it picked the
@@ -1091,8 +1091,8 @@ fn comb_name(array: &[bool]) -> String {
 }
 
 /// `createRenderPassUnusedClearAttachmentTests`
-pub fn create_unused_clear_attachment_tests(group_params: GroupParams) -> tcu::TestCaseGroup {
-    let mut group = tcu::TestCaseGroup::new("unused_clear_attachments");
+pub fn create_unused_clear_attachment_tests(group_params: GroupParams) -> TestCaseGroup {
+    let mut group = TestCaseGroup::new("unused_clear_attachments");
 
     for ds_type in [DepthStencilType::None, DepthStencilType::DepthOnly, DepthStencilType::StencilOnly, DepthStencilType::Both] {
         for ds_format in ds_type.formats() {

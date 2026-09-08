@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # Runs hodow_cts and tees the output to a timestamped log under tmp/cts-logs/, with
-# tmp/cts-last.log pointing at the newest one. Shared by the `cts`, `ctsr` and `cts-sw`
-# just recipes so the three cannot drift apart.
+# tmp/cts-last.log pointing at the newest one. Shared by the `cts`, `ctsr`, `cts-sw`,
+# `cts-gles` and `cts-glesr` just recipes so they cannot drift apart.
 #
 # Any core dumps that got past `ulimit -c 0` are swept before returning.
 #
 # The exit code is the test binary's, not tee's. That distinction matters: hodow_cts
-# exits 2 for "no Vulkan driver", which is not a test failure, and losing it would make
-# a machine with no GPU look like a machine with broken tests.
+# exits 2 for "no driver for the API that was asked for", which is not a test failure,
+# and losing it would make a machine with no GPU look like one with broken tests.
 #
 # Usage: run_cts.sh <debug|release> <icd-path-or-empty> [args...]
 
@@ -41,6 +41,10 @@ flags=()
     # exported it - results mean different things on lavapipe, SwiftShader and real
     # hardware, so a log without it is ambiguous.
     echo "# VK_ICD_FILENAMES=${VK_ICD_FILENAMES:-<system default>}"
+    # The GLES side has no ICD to name; what decides which driver answers is which EGL
+    # platform got a display, so the override (if any) belongs in the log too. The run
+    # itself logs the platform it ended up on.
+    echo "# HODOW_CTS_EGL_PLATFORM=${HODOW_CTS_EGL_PLATFORM:-<try each in turn>}"
     echo "# commit: $(git rev-parse --short HEAD 2>/dev/null || echo unknown)"
     echo
 } > "$log"

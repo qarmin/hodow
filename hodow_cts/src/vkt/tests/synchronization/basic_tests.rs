@@ -22,13 +22,13 @@
 use vulkanalia::prelude::v1_0::*;
 
 use super::operation::SyncType;
-use crate::tcu::{self, TestError, TestStatus};
+use crate::tcu::{TestError, TestStatus};
 use crate::vk::VkResultExt;
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer};
 use crate::vk::obj_util::{allocate_command_buffer, make_command_pool};
 use crate::vk::programs::BinaryCollection;
 use crate::vk::ref_util::Unique;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// `SHORT_FENCE_WAIT` - long enough that a driver which is going to signal has, short
 /// enough that a test which expects a timeout does not sit on it.
@@ -674,13 +674,13 @@ impl TestCase for TimelineCase {
 
 /// `createBasicFenceTests` / `createBasicEventTests` / `createBasicSemaphoreTests`,
 /// restricted to the cases that need no second queue and no video device.
-pub fn create_basic_tests(sync_type: SyncType) -> tcu::TestCaseGroup {
-    let mut group = tcu::TestCaseGroup::new("basic");
+pub fn create_basic_tests(sync_type: SyncType) -> TestCaseGroup {
+    let mut group = TestCaseGroup::new("basic");
 
     // The fence API is the same under both synchronization types, so upstream only
     // registers it once, under the legacy tree.
     if sync_type == SyncType::Legacy {
-        let mut fence = tcu::TestCaseGroup::new("fence");
+        let mut fence = TestCaseGroup::new("fence");
         for (name, run) in [
             ("one", basic_one_fence as fn(&Context<'_>, SyncType) -> Result<TestStatus, TestError>),
             ("multi", basic_multi_fence),
@@ -694,7 +694,7 @@ pub fn create_basic_tests(sync_type: SyncType) -> tcu::TestCaseGroup {
         group.add_child(fence);
     }
 
-    let mut event = tcu::TestCaseGroup::new("event");
+    let mut event = TestCaseGroup::new("event");
     // `host_set_reset` is legacy-only upstream: under synchronization2 the equivalent
     // slot is `none_set_reset`, which is a different test.
     if sync_type == SyncType::Legacy {
@@ -713,7 +713,7 @@ pub fn create_basic_tests(sync_type: SyncType) -> tcu::TestCaseGroup {
     }
     group.add_child(event);
 
-    let mut binary = tcu::TestCaseGroup::new("binary_semaphore");
+    let mut binary = TestCaseGroup::new("binary_semaphore");
     for (name, run) in [
         ("one_queue", binary_semaphore_one_queue as fn(&Context<'_>, SyncType) -> Result<TestStatus, TestError>),
         ("chain", binary_semaphore_chain),
@@ -722,7 +722,7 @@ pub fn create_basic_tests(sync_type: SyncType) -> tcu::TestCaseGroup {
     }
     group.add_child(binary);
 
-    let mut timeline = tcu::TestCaseGroup::new("timeline_semaphore");
+    let mut timeline = TestCaseGroup::new("timeline_semaphore");
     timeline.add_child(Box::new(TimelineCase {
         name: "chain",
         sync_type,

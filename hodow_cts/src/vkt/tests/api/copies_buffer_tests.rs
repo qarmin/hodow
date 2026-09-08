@@ -20,14 +20,14 @@
 use vulkanalia::prelude::v1_0::*;
 use vulkanalia::vk::{DeviceV1_3, KhrCopyCommands2ExtensionDeviceCommands};
 
-use crate::tcu::{self, TestError, TestOutcome, TestStatus};
+use crate::tcu::{TestError, TestOutcome, TestStatus};
 use crate::vk::VkResultExt;
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
 use crate::vk::mem_util::{Allocation, MemoryRequirement};
 use crate::vk::obj_util::{allocate_command_buffer, make_buffer_create_info, make_command_pool, make_memory_barrier};
 use crate::vk::programs::BinaryCollection;
 use crate::vk::ref_util::Unique;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// `defaultSize` / `defaultQuarterSize` / `defaultLargeSize` from
 /// vktApiCopiesAndBlittingUtil.hpp.
@@ -562,7 +562,7 @@ static UNALIGNED_REGIONS_LARGE: &[BufferCopyRegion] = &{
 };
 
 /// `addCopyBufferToBufferTests`
-fn add_copy_buffer_to_buffer_tests(group: &mut tcu::TestCaseGroup, allocation_kind: AllocationKind, queue_selection: QueueSelection, command_variant: CopyCommandVariant) {
+fn add_copy_buffer_to_buffer_tests(group: &mut TestCaseGroup, allocation_kind: AllocationKind, queue_selection: QueueSelection, command_variant: CopyCommandVariant) {
     let mut add = |name: &'static str, src_size: u64, dst_size: u64, regions: &'static [BufferCopyRegion]| {
         group.add_child(Box::new(BufferToBufferCase {
             name,
@@ -586,8 +586,8 @@ fn add_copy_buffer_to_buffer_tests(group: &mut tcu::TestCaseGroup, allocation_ki
 }
 
 /// `addCopyBufferToBufferOffsetTests`
-fn add_copy_buffer_to_buffer_offset_tests(group: &mut tcu::TestCaseGroup) {
-    let mut sub_group = tcu::TestCaseGroup::new("buffer_to_buffer_with_offset");
+fn add_copy_buffer_to_buffer_offset_tests(group: &mut TestCaseGroup) {
+    let mut sub_group = TestCaseGroup::new("buffer_to_buffer_with_offset");
     for src_offset in 0..K_MAX_OFFSET {
         for dst_offset in 0..K_MAX_OFFSET {
             sub_group.add_child(Box::new(BufferOffsetCase {
@@ -605,21 +605,21 @@ fn add_copy_buffer_to_buffer_offset_tests(group: &mut tcu::TestCaseGroup) {
 /// Only the sub-groups that are actually ported are registered; the rest are absent
 /// rather than present-and-skipped, so a comparison against `deqp-vk` reports them as
 /// missing instead of as passing.
-pub fn create_buffer_copy_tests() -> tcu::TestCaseGroup {
-    let mut tests = tcu::TestCaseGroup::new("copy_and_blit");
+pub fn create_buffer_copy_tests() -> TestCaseGroup {
+    let mut tests = TestCaseGroup::new("copy_and_blit");
 
     for (kind_name, allocation_kind, command_variant) in [
         ("core", AllocationKind::Suballocated, CopyCommandVariant::Core),
         ("dedicated_allocation", AllocationKind::Dedicated, CopyCommandVariant::Core),
         ("copy_commands2", AllocationKind::Dedicated, CopyCommandVariant::CopyCommands2),
     ] {
-        let mut kind_group = tcu::TestCaseGroup::new(kind_name);
+        let mut kind_group = TestCaseGroup::new(kind_name);
 
-        let mut b2b = tcu::TestCaseGroup::new("buffer_to_buffer");
+        let mut b2b = TestCaseGroup::new("buffer_to_buffer");
         add_copy_buffer_to_buffer_tests(&mut b2b, allocation_kind, QueueSelection::Universal, command_variant);
         kind_group.add_child(b2b);
 
-        let mut b2b_transfer = tcu::TestCaseGroup::new("buffer_to_buffer_transfer_queue");
+        let mut b2b_transfer = TestCaseGroup::new("buffer_to_buffer_transfer_queue");
         add_copy_buffer_to_buffer_tests(&mut b2b_transfer, allocation_kind, QueueSelection::TransferOnly, command_variant);
         kind_group.add_child(b2b_transfer);
 

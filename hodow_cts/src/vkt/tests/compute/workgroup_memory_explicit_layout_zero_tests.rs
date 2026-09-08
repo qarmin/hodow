@@ -35,14 +35,14 @@ use vulkanalia::prelude::v1_0::*;
 use vulkanalia::vk::InstanceV1_1;
 
 use crate::generated::shaders::compute_wmel_zero;
-use crate::tcu::{self, TestError, TestOutcome, TestStatus};
+use crate::tcu::{TestError, TestOutcome, TestStatus};
 use crate::vk::builder_util::{DescriptorPoolBuilder, DescriptorSetLayoutBuilder, DescriptorSetUpdateBuilder, Location};
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
 use crate::vk::compute_pipeline::{ComputePipelineConstructionType, ComputePipelineWrapper, check_shader_object_requirements};
 use crate::vk::mem_util::{MemoryRequirement, flush_alloc, invalidate_alloc};
 use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool, make_descriptor_buffer_info, make_descriptor_set};
 use crate::vk::programs::BinaryCollection;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 // ---------------------------------------------------------------------------------
 // glu::DataType, cut down to the values this group uses
@@ -1036,7 +1036,7 @@ fn is_tested_field_type(dt: DataType) -> bool {
 }
 
 /// `AddZeroTests`
-fn add_zero_tests(group: &mut tcu::TestCaseGroup, compute_pipeline_construction_type: ComputePipelineConstructionType) {
+fn add_zero_tests(group: &mut TestCaseGroup, compute_pipeline_construction_type: ComputePipelineConstructionType) {
     let mut c = CaseDef {
         zero_element_type: DataType::Invalid,
         field_type: [DataType::Invalid; 2],
@@ -1075,9 +1075,9 @@ fn add_zero_tests(group: &mut tcu::TestCaseGroup, compute_pipeline_construction_
 /// Upstream takes the construction type as a parameter and registers the whole
 /// subtree once per type; only `COMPUTE_PIPELINE_CONSTRUCTION_TYPE_PIPELINE` is
 /// ported, which is the one this port's `compute` group is built for.
-pub fn create_zero_tests() -> tcu::TestCaseGroup {
+pub fn create_zero_tests() -> TestCaseGroup {
     // Manually zero initialize a block and read from another
-    let mut zero = tcu::TestCaseGroup::new("zero");
+    let mut zero = TestCaseGroup::new("zero");
     add_zero_tests(&mut zero, ComputePipelineConstructionType::Pipeline);
     zero
 }

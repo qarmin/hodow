@@ -4,6 +4,7 @@ NIGHTLY := "nightly-2026-08-21"
 # needed to build or run hodow_cts - only to regenerate shaders and to compare verdicts
 # against upstream. See hodow_cts/README.md, "Working on the port".
 DEQP_VK := "tmp/VK-GL-CTS/build-vk-headless/external/vulkancts/modules/vulkan/deqp-vk"
+DEQP_GLES31 := "tmp/deqp-gles-build/modules/gles31/deqp-gles31"
 GLSLANG := "tmp/VK-GL-CTS/tmpbuild-glslang/StandAlone/glslang"
 CTS_DIR := "tmp/VK-GL-CTS"
 
@@ -178,6 +179,26 @@ cts-val *args:
 cts-shaders:
     python3 hodow_cts/scripts/compile_shaders.py --glslang {{GLSLANG}}
 
+# Run only the ported OpenGL ES cases, e.g. `just cts-gles -c 'dEQP-GLES31.*compute*'`.
+# Needs no ICD: the EGL platform is chosen at run time (see hodow_cts/src/eglu).
+cts-gles *args:
+    @hodow_cts/scripts/run_cts.sh debug "" --case 'dEQP-GLES31.*' {{args}}
+
+cts-glesr *args:
+    @hodow_cts/scripts/run_cts.sh release "" --case 'dEQP-GLES31.*' {{args}}
+
+# List the ported OpenGL ES cases without touching a driver.
+cts-gles-list:
+    @cargo run -q -p hodow_cts -- --list --case 'dEQP-GLES31.*'
+
+# Compare the OpenGL ES verdicts against upstream deqp-gles31 on the same driver.
+cts-gles-diff *args:
+    python3 hodow_cts/scripts/diff_vs_deqp.py --deqp-gles31 {{DEQP_GLES31}} {{args}}
+
+# Regenerate the GL/EGL entry-point wrappers from upstream's own .inl files.
+cts-wrappers:
+    python3 hodow_cts/scripts/gen_api_wrappers.py --cts-dir {{CTS_DIR}}
+
 # Compare every implemented case against upstream deqp-vk on the same driver.
 # This is the acceptance gate for a ported group.
 cts-diff *args:
@@ -209,10 +230,10 @@ cts-verify:
     bad()  { printf '  \033[31mFAIL\033[0m %s\n' "$*"; fail=1; }
     skip() { printf '  \033[33mSKIP\033[0m %s\n' "$*"; }
 
-    step "1/6  build"
+    step "1/9  build"
     if cargo build -p hodow_cts 2>&1 | tail -3; then ok "builds"; else bad "build failed"; fi
 
-    step "2/6  clippy + unit tests"
+    step "2/9  clippy + unit tests"
     n=$(cargo clippy -p hodow_cts --all-targets 2>&1 | grep -cE '^warning: [^`]' || true)
     [ "$n" -eq 0 ] && ok "clippy clean" || bad "$n clippy warning(s)"
     if cargo test -q -p hodow_cts 2>&1 | grep -q 'result: FAILED'; then
@@ -221,7 +242,7 @@ cts-verify:
         ok "unit tests pass (de::Random matches upstream bit for bit)"
     fi
 
-    step "3/6  generated shaders are up to date"
+    step "3/9  generated shaders are up to date"
     if [ -x "{{GLSLANG}}" ]; then
         if python3 hodow_cts/scripts/compile_shaders.py --check --glslang {{GLSLANG}}; then
             ok "manifest and generated Rust agree"
@@ -232,7 +253,18 @@ cts-verify:
         skip "glslang not built ({{GLSLANG}}) - see hodow_cts/README.md"
     fi
 
-    step "4/6  upstream drift"
+    step "4/9  generated GL/EGL wrappers are up to date"
+    if [ -d "{{CTS_DIR}}/framework/opengl/wrapper" ]; then
+        if python3 hodow_cts/scripts/gen_api_wrappers.py --cts-dir {{CTS_DIR}} --check; then
+            ok "glw.rs and eglw.rs match upstream's .inl files"
+        else
+            bad "generated wrappers are stale - run 'just cts-wrappers'"
+        fi
+    else
+        skip "no VK-GL-CTS checkout at {{CTS_DIR}}"
+    fi
+
+    step "5/9  upstream drift"
     if [ -d "{{CTS_DIR}}/.git" ]; then
         python3 hodow_cts/scripts/vendor_upstream.py --cts-dir {{CTS_DIR}} --check | tail -2
         ok "drift report printed above"
@@ -240,8 +272,8 @@ cts-verify:
         skip "no VK-GL-CTS checkout at {{CTS_DIR}}"
     fi
 
-    step "5/6  run the tests"
-    cargo run -q -p hodow_cts -- --output /tmp/hodow_cts_verify.jsonl
+    step "6/9  run the Vulkan tests"
+    cargo run -q -p hodow_cts -- --case 'dEQP-VK.*' --output /tmp/hodow_cts_verify.jsonl
     run_rc=$?
     # Exit 2 is "no Vulkan driver here", not "a test failed". Reporting the two the
     # same way is exactly the false accusation this project exists to avoid.
@@ -252,7 +284,20 @@ cts-verify:
         *) bad "some cases did not pass - see output above" ;;
     esac
 
-    step "6/6  differential comparison against upstream deqp-vk"
+    step "7/9  run the OpenGL ES tests"
+    cargo run -q -p hodow_cts -- --case 'dEQP-GLES31.*' --output /tmp/hodow_cts_verify_gles.jsonl
+    gles_rc=$?
+    # Same rule as above: exit 2 is "no OpenGL ES driver reachable here", which is not
+    # a test failure. On a headless box that usually means no EGL platform answered -
+    # the run prints every platform it tried and why.
+    have_gles=1
+    case "$gles_rc" in
+        0) ok "all cases passed on this driver" ;;
+        2) have_gles=0; skip "no OpenGL ES driver - nothing ran. Install mesa (libegl1, libgles2) for llvmpipe." ;;
+        *) bad "some cases did not pass - see output above" ;;
+    esac
+
+    step "8/9  differential comparison against upstream deqp-vk"
     if [ "$have_vulkan" -eq 0 ]; then
         skip "needs a working driver; both binaries have to run on the same one"
     elif [ -x "{{DEQP_VK}}" ]; then
@@ -263,6 +308,19 @@ cts-verify:
         fi
     else
         skip "deqp-vk not built ({{DEQP_VK}}) - see hodow_cts/README.md"
+    fi
+
+    step "9/9  differential comparison against upstream deqp-gles31"
+    if [ "$have_gles" -eq 0 ]; then
+        skip "needs a working driver; both binaries have to run on the same one"
+    elif [ -x "{{DEQP_GLES31}}" ]; then
+        if python3 hodow_cts/scripts/diff_vs_deqp.py --deqp-gles31 {{DEQP_GLES31}}; then
+            ok "every case agrees with upstream"
+        else
+            bad "a case disagrees with upstream - that is a bug in the port"
+        fi
+    else
+        skip "deqp-gles31 not built ({{DEQP_GLES31}}) - see hodow_cts/README.md"
     fi
 
     printf '\n'

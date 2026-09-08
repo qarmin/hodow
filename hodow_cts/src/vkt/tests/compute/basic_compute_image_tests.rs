@@ -15,7 +15,7 @@
 
 use vulkanalia::prelude::v1_0::*;
 
-use crate::tcu::{self, IVec2, Random, TestError, TestOutcome, TestStatus};
+use crate::tcu::{IVec2, Random, TestError, TestOutcome, TestStatus};
 use crate::vk::builder_util::{DescriptorPoolBuilder, DescriptorSetLayoutBuilder, DescriptorSetUpdateBuilder, Location};
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
 use crate::vk::compute_pipeline::{ComputePipelineConstructionType, ComputePipelineWrapper, check_shader_object_requirements};
@@ -27,7 +27,7 @@ use crate::vk::obj_util::{
     BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_buffer_memory_barrier, make_command_pool, make_descriptor_buffer_info, make_descriptor_set,
 };
 use crate::vk::programs::BinaryCollection;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// The format every one of these tests uses for its storage image.
 const IMAGE_FORMAT: vk::Format = vk::Format::R32_UINT;
@@ -504,7 +504,7 @@ impl TestInstance for CopySsboToImageInstance<'_> {
 /// ImageAtomicOpTest and ImageBarrierTest have their shaders generated already but
 /// their instances are not written yet, so they are absent rather than registered and
 /// failing.
-pub fn add_basic_compute_image_tests(group: &mut tcu::TestCaseGroup) {
+pub fn add_basic_compute_image_tests(group: &mut TestCaseGroup) {
     use crate::generated::shaders::compute_basic_images as g;
 
     // Image to SSBO copy

@@ -33,13 +33,13 @@
 use vulkanalia::prelude::v1_0::*;
 use vulkanalia::vk::{DeviceV1_1, DeviceV1_3, DeviceV1_4, InstanceV1_1, KhrMaintenance5ExtensionDeviceCommands};
 
-use crate::tcu::{self, Random, TestError, TestOutcome, TestResult, TestStatus};
+use crate::tcu::{Random, TestError, TestOutcome, TestResult, TestStatus};
 use crate::vk::VkResultExt;
 use crate::vk::mem_util::{MemoryRequirement, SimpleAllocator};
 use crate::vk::obj_util::{allocate_command_buffer, make_command_pool};
 use crate::vk::programs::BinaryCollection;
 use crate::vk::ref_util::Unique;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// `VK_CORE_FORMAT_LAST` - one past `VK_FORMAT_ASTC_12x12_SRGB_BLOCK`, the last format
 /// that is core rather than extension-provided. Several upstream groups iterate the
@@ -641,7 +641,7 @@ fn get_buffer_create_flags_name(flags: vk::BufferCreateFlags) -> String {
 }
 
 /// `createBufferUsageCases` - creates all VkBufferUsageFlags combinations recursively.
-fn create_buffer_usage_cases(test_group: &mut tcu::TestCaseGroup, first_ndx: u32, buffer_usage_flags: vk::BufferUsageFlags, allocation_kind: AllocationKind) {
+fn create_buffer_usage_cases(test_group: &mut TestCaseGroup, first_ndx: u32, buffer_usage_flags: vk::BufferUsageFlags, allocation_kind: AllocationKind) {
     let buffer_usage_modes = [
         vk::BufferUsageFlags::TRANSFER_SRC,
         vk::BufferUsageFlags::TRANSFER_DST,
@@ -658,7 +658,7 @@ fn create_buffer_usage_cases(test_group: &mut tcu::TestCaseGroup, first_ndx: u32
     for current_ndx in first_ndx as usize..buffer_usage_modes.len() {
         let new_buffer_usage_flags = buffer_usage_flags | buffer_usage_modes[current_ndx];
         let new_group_name = get_buffer_usage_flags_name(buffer_usage_modes[current_ndx]);
-        let mut new_test_group = tcu::TestCaseGroup::new(new_group_name);
+        let mut new_test_group = TestCaseGroup::new(new_group_name);
 
         create_buffer_usage_cases(&mut new_test_group, current_ndx as u32 + 1, new_buffer_usage_flags, allocation_kind);
         test_group.add_child(new_test_group);
@@ -682,7 +682,7 @@ fn create_buffer_usage_cases(test_group: &mut tcu::TestCaseGroup, first_ndx: u32
             1
         };
 
-        let mut new_test_group = tcu::TestCaseGroup::new("create");
+        let mut new_test_group = TestCaseGroup::new("create");
 
         for &flags in &buffer_create_flags[..num_buffer_create_flags] {
             let test_params = BufferCaseParameters {
@@ -849,23 +849,23 @@ impl TestInstance for LargeBufferInstance<'_> {
 }
 
 /// `createBufferTests`
-fn create_buffer_tests() -> tcu::TestCaseGroup {
-    let mut buffers_tests = tcu::TestCaseGroup::new("buffer");
+fn create_buffer_tests() -> TestCaseGroup {
+    let mut buffers_tests = TestCaseGroup::new("buffer");
 
     {
-        let mut regular_allocation = tcu::TestCaseGroup::new("suballocation");
+        let mut regular_allocation = TestCaseGroup::new("suballocation");
         create_buffer_usage_cases(&mut regular_allocation, 0, vk::BufferUsageFlags::empty(), AllocationKind::Suballocated);
         buffers_tests.add_child(regular_allocation);
     }
 
     {
-        let mut dedicated_allocation = tcu::TestCaseGroup::new("dedicated_alloc");
+        let mut dedicated_allocation = TestCaseGroup::new("dedicated_alloc");
         create_buffer_usage_cases(&mut dedicated_allocation, 0, vk::BufferUsageFlags::empty(), AllocationKind::Dedicated);
         buffers_tests.add_child(dedicated_allocation);
     }
 
     {
-        let mut basic_tests = tcu::TestCaseGroup::new("basic");
+        let mut basic_tests = TestCaseGroup::new("basic");
         // Creating buffer using maxBufferSize limit.
         basic_tests.add_child(Box::new(LargeBufferCase {
             name: "max_size",
@@ -898,7 +898,7 @@ fn create_buffer_tests() -> tcu::TestCaseGroup {
 
     {
         // Checks that drivers are not exposing undesired format features for depth/stencil formats.
-        let mut invalid_buffer_features = tcu::TestCaseGroup::new("invalid_buffer_features");
+        let mut invalid_buffer_features = TestCaseGroup::new("invalid_buffer_features");
 
         // `formats::depthAndStencilFormats`
         let depth_and_stencil_formats = [
@@ -1113,24 +1113,24 @@ impl TestInstance for BufferViewTestInstance<'_> {
 
 /// `createBufferViewCreateTests`, wrapped in the `buffer_view` group that
 /// `createApiTests` puts it under upstream.
-fn create_buffer_view_tests() -> tcu::TestCaseGroup {
+fn create_buffer_view_tests() -> TestCaseGroup {
     let range = vk::WHOLE_SIZE;
     let usage = [vk::BufferUsageFlags::UNIFORM_TEXEL_BUFFER, vk::BufferUsageFlags::STORAGE_TEXEL_BUFFER];
     let feature = [vk::FormatFeatureFlags::UNIFORM_TEXEL_BUFFER, vk::FormatFeatureFlags::STORAGE_TEXEL_BUFFER];
     let usage_name = ["uniform", "storage"];
 
-    let mut buffer_view_tests = tcu::TestCaseGroup::new("create");
+    let mut buffer_view_tests = TestCaseGroup::new("create");
 
     let mut buffer_view_allocation_group_tests = [
         // BufferView Construction Tests for Suballocated Buffer
-        tcu::TestCaseGroup::new("suballocation"),
+        TestCaseGroup::new("suballocation"),
         // BufferView Construction Tests for Dedicatedly Allocated Buffer
-        tcu::TestCaseGroup::new("dedicated_alloc"),
+        TestCaseGroup::new("dedicated_alloc"),
     ];
 
     for (allocation_kind_ndx, allocation_kind) in [AllocationKind::Suballocated, AllocationKind::Dedicated].into_iter().enumerate() {
         for usage_ndx in 0..usage.len() {
-            let mut usage_group = tcu::TestCaseGroup::new(usage_name[usage_ndx]);
+            let mut usage_group = TestCaseGroup::new(usage_name[usage_ndx]);
 
             for format in vk::Format::UNDEFINED.as_raw() + 1..VK_CORE_FORMAT_LAST {
                 let format = vk::Format::from_raw(format);
@@ -1158,12 +1158,12 @@ fn create_buffer_view_tests() -> tcu::TestCaseGroup {
         buffer_view_tests.add_child(group);
     }
 
-    let mut buffer_view_group = tcu::TestCaseGroup::new("buffer_view");
+    let mut buffer_view_group = TestCaseGroup::new("buffer_view");
     buffer_view_group.add_child(buffer_view_tests);
 
     // `buffer_view.access`: the memory tests, which read the view from a draw or a
     // dispatch, and the all-formats tests, which read it from a compute shader.
-    let mut access = tcu::TestCaseGroup::new("access");
+    let mut access = TestCaseGroup::new("access");
     super::buffer_view_access_tests::add_buffer_view_memory_tests(&mut access);
     super::buffer_view_access_tests::add_buffer_view_all_formats_tests(&mut access);
     buffer_view_group.add_child(access);
@@ -1576,16 +1576,16 @@ fn get_rendering_area_granularity(context: &Context<'_>, info: &vk::RenderingAre
 }
 
 /// `createGranularityQueryTests`
-fn create_granularity_query_tests() -> tcu::TestCaseGroup {
-    let mut group = tcu::TestCaseGroup::new("granularity");
+fn create_granularity_query_tests() -> TestCaseGroup {
+    let mut group = TestCaseGroup::new("granularity");
     // Subgroups
     // Single texture granularity tests.
-    let mut single = tcu::TestCaseGroup::new("single");
+    let mut single = TestCaseGroup::new("single");
     // Multiple textures with same format granularity tests.
-    let mut multi = tcu::TestCaseGroup::new("multi");
-    let mut random = tcu::TestCaseGroup::new("random");
-    let mut in_render_pass = tcu::TestCaseGroup::new("in_render_pass");
-    let mut in_dynamic_render_pass = tcu::TestCaseGroup::new("in_dynamic_render_pass");
+    let mut multi = TestCaseGroup::new("multi");
+    let mut random = TestCaseGroup::new("random");
+    let mut in_render_pass = TestCaseGroup::new("in_render_pass");
+    let mut in_dynamic_render_pass = TestCaseGroup::new("in_dynamic_render_pass");
 
     let mut rnd = Random::new(215);
 
@@ -2025,7 +2025,7 @@ impl TestInstance for FormatFeaturesInstance<'_> {
 }
 
 /// `createTestCases`
-fn create_format_features_test_cases(group: &mut tcu::TestCaseGroup, extended_flags: bool) {
+fn create_format_features_test_cases(group: &mut TestCaseGroup, extended_flags: bool) {
     for format in vk::Format::R4G4_UNORM_PACK8.as_raw()..VK_CORE_FORMAT_LAST {
         let format = vk::Format::from_raw(format);
         let test_name = format_name(format);
@@ -2037,13 +2037,13 @@ fn create_format_features_test_cases(group: &mut tcu::TestCaseGroup, extended_fl
 }
 
 /// `createFormatPropertiesExtendedKHRTests`
-fn create_format_properties_extended_khr_tests() -> tcu::TestCaseGroup {
-    let mut format_features_test_group = tcu::TestCaseGroup::new("format_features");
+fn create_format_properties_extended_khr_tests() -> TestCaseGroup {
+    let mut format_features_test_group = TestCaseGroup::new("format_features");
 
-    let mut format_feature_flags2_test_group = tcu::TestCaseGroup::new("format_feature_flags2");
+    let mut format_feature_flags2_test_group = TestCaseGroup::new("format_feature_flags2");
     create_format_features_test_cases(&mut format_feature_flags2_test_group, false);
 
-    let mut extended_flags_test_group = tcu::TestCaseGroup::new("extended_flags");
+    let mut extended_flags_test_group = TestCaseGroup::new("extended_flags");
     create_format_features_test_cases(&mut extended_flags_test_group, true);
 
     format_features_test_group.add_child(format_feature_flags2_test_group);
@@ -2058,7 +2058,7 @@ fn create_format_properties_extended_khr_tests() -> tcu::TestCaseGroup {
 
 /// One group per `dEQP-VK.api.*` sub-group ported in this file, in the order
 /// `createApiTests` registers them upstream.
-pub fn create_object_groups() -> Vec<tcu::TestCaseGroup> {
+pub fn create_object_groups() -> Vec<TestCaseGroup> {
     vec![
         create_buffer_tests(),
         create_buffer_view_tests(),

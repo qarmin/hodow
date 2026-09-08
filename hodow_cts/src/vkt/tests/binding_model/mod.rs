@@ -11,7 +11,7 @@
 
 pub mod shader_access_tests;
 
-use crate::tcu::TestCaseGroup;
+use crate::vkt::TestCaseGroup;
 
 /// `createBindingModelTests`.
 ///

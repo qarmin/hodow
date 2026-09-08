@@ -46,7 +46,7 @@ use crate::tcu::pixel::{
 use crate::tcu::random::Random;
 use crate::tcu::tex_verifier::{LookupPrecision, is_nearest_sample_result_valid_float, is_nearest_sample_result_valid_int, srgb_to_linear};
 use crate::tcu::texture::{ChannelOrder, ChannelType, TextureChannelClass, TextureFormat};
-use crate::tcu::{self, TestError, TestOutcome, TestStatus, astc, map_vk_format};
+use crate::tcu::{TestError, TestOutcome, TestStatus, astc, map_vk_format};
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
 use crate::vk::compressed_formats::{
     get_block_depth, get_block_height, get_block_size_in_bytes, get_block_width, is_astc_format, is_astc_hdr_format, is_astc_srgb_format, is_compressed_format,
@@ -55,7 +55,7 @@ use crate::vk::image_util::{ImageWithMemory, make_image_memory_barrier, make_ima
 use crate::vk::mem_util::{MemoryRequirement, flush_alloc};
 use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool};
 use crate::vk::programs::BinaryCollection;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// `defaultSize`
 const DEFAULT_SIZE: i32 = 64;
@@ -1376,7 +1376,7 @@ struct SimpleBlitParams {
 ///
 /// Only the VK_FILTER_NEAREST third of it: LINEAR and CUBIC need the reference images
 /// that `checkNonNearestFilteredResult` compares against, which is not ported.
-fn add_blitting_image_simple_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams, image_type: vk::ImageType, sp: &SimpleBlitParams) {
+fn add_blitting_image_simple_tests(group: &mut TestCaseGroup, gp: &GroupParams, image_type: vk::ImageType, sp: &SimpleBlitParams) {
     let make = |dst_format: vk::Format, name: String, filter: vk::Filter| BlitImageCase {
         name,
         src: ImageParms {
@@ -1530,7 +1530,7 @@ fn simple_without_scaling_partial(image_type: vk::ImageType) -> SimpleBlitParams
 /// The 2D and 3D subgroups. `array`, `3d_to_2d_array` and `2d_array_to_3d` are not
 /// registered: they blit between array layers and 3D slices, which needs the
 /// per-layer `getUsedZRange` path the ported verifier does not cover yet.
-fn add_blitting_image_simple_tests_group(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+fn add_blitting_image_simple_tests_group(group: &mut TestCaseGroup, gp: &GroupParams) {
     let s = DEFAULT_SIZE;
 
     for image_type in [vk::ImageType::_2D, vk::ImageType::_3D] {
@@ -1561,7 +1561,7 @@ fn add_blitting_image_simple_tests_group(group: &mut tcu::TestCaseGroup, gp: &Gr
 
         // `array` sits between `whole` and `mirror_xy` upstream, in the 2D list only.
         for (name, sp) in &subgroups {
-            let mut sub = tcu::TestCaseGroup::new(format!("{name}{suffix}"));
+            let mut sub = TestCaseGroup::new(format!("{name}{suffix}"));
             add_blitting_image_simple_tests(&mut sub, gp, t, sp);
             group.add_child(sub);
         }
@@ -1569,26 +1569,26 @@ fn add_blitting_image_simple_tests_group(group: &mut tcu::TestCaseGroup, gp: &Gr
 }
 
 /// `addBlittingImageTests`
-pub fn add_blitting_image_groups(parent: &mut tcu::TestCaseGroup, name: &str, allocation_kind: AllocationKind, command_variant: CopyCommandVariant) {
+pub fn add_blitting_image_groups(parent: &mut TestCaseGroup, name: &str, allocation_kind: AllocationKind, command_variant: CopyCommandVariant) {
     let gp = GroupParams {
         allocation_kind,
         command_variant,
         queue_selection: super::copies_buffer_tests::QueueSelection::Universal,
         general_layout: false,
     };
-    let mut group = tcu::TestCaseGroup::new(name);
-    let mut simple = tcu::TestCaseGroup::new("simple_tests");
+    let mut group = TestCaseGroup::new(name);
+    let mut simple = TestCaseGroup::new("simple_tests");
     add_blitting_image_simple_tests_group(&mut simple, &gp);
     group.add_child(simple);
 
-    let mut all_formats = tcu::TestCaseGroup::new("all_formats");
-    let mut color = tcu::TestCaseGroup::new("color");
+    let mut all_formats = TestCaseGroup::new("all_formats");
+    let mut color = TestCaseGroup::new("color");
     add_blitting_image_all_formats_color_tests(&mut color, &gp);
     all_formats.add_child(color);
-    let mut depth_stencil = tcu::TestCaseGroup::new("depth_stencil");
+    let mut depth_stencil = TestCaseGroup::new("depth_stencil");
     add_blitting_image_all_formats_depth_stencil_tests(&mut depth_stencil, &gp);
     all_formats.add_child(depth_stencil);
-    let mut mipmap = tcu::TestCaseGroup::new("generate_mipmaps");
+    let mut mipmap = TestCaseGroup::new("generate_mipmaps");
     add_blitting_image_all_formats_mipmap_tests(&mut mipmap, &gp);
     all_formats.add_child(mipmap);
     group.add_child(all_formats);
@@ -1736,7 +1736,7 @@ struct BlitColorTestParams<'a> {
 ///
 /// Only the VK_FILTER_NEAREST case of each tiling/layout combination. The `_linear`,
 /// `_cubic` and 3D `_stripes_*` cases all need a reference image.
-fn add_blitting_image_all_formats_color_src_format_dst_format_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams, p: &BlitColorTestParams<'_>, dst_format: vk::Format) {
+fn add_blitting_image_all_formats_color_src_format_dst_format_tests(group: &mut TestCaseGroup, gp: &GroupParams, p: &BlitColorTestParams<'_>, dst_format: vk::Format) {
     let blit_src_tilings = [vk::ImageTiling::OPTIMAL, vk::ImageTiling::LINEAR];
     let blit_src_layouts = [vk::ImageLayout::TRANSFER_SRC_OPTIMAL, vk::ImageLayout::GENERAL];
     let blit_dst_tilings = [vk::ImageTiling::OPTIMAL, vk::ImageTiling::LINEAR];
@@ -1821,7 +1821,7 @@ fn add_blitting_image_all_formats_color_src_format_dst_format_tests(group: &mut 
 }
 
 /// `addBlittingImageAllFormatsColorSrcFormatTests`
-fn add_blitting_image_all_formats_color_src_format_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams, p: &BlitColorTestParams<'_>, compatible_formats: Option<&[BlitFormat]>) {
+fn add_blitting_image_all_formats_color_src_format_tests(group: &mut TestCaseGroup, gp: &GroupParams, p: &BlitColorTestParams<'_>, compatible_formats: Option<&[BlitFormat]>) {
     if let Some(formats) = compatible_formats {
         for dst in formats {
             if !is_supported_by_framework(dst.format) {
@@ -1834,7 +1834,7 @@ fn add_blitting_image_all_formats_color_src_format_tests(group: &mut tcu::TestCa
             {
                 continue;
             }
-            let mut dst_group = tcu::TestCaseGroup::new(dst.name);
+            let mut dst_group = TestCaseGroup::new(dst.name);
             add_blitting_image_all_formats_color_src_format_dst_format_tests(&mut dst_group, gp, p, dst.format);
             group.add_child(dst_group);
         }
@@ -1849,7 +1849,7 @@ fn add_blitting_image_all_formats_color_src_format_tests(group: &mut tcu::TestCa
         // A compressed source gets that pairing too even when there is a list,
         // because a compressed format is never on one.
         if compatible_formats.is_none() || is_compressed_format(p.src.format) {
-            let mut dst_group = tcu::TestCaseGroup::new(p.src.name);
+            let mut dst_group = TestCaseGroup::new(p.src.name);
             add_blitting_image_all_formats_color_src_format_dst_format_tests(&mut dst_group, gp, p, p.src.format);
             group.add_child(dst_group);
         }
@@ -1892,10 +1892,10 @@ fn mipmap_color_image_formats_to_test_blit() -> [(&'static [BlitFormat], bool); 
 }
 
 /// `addBlittingImageAllFormatsColorTests`
-fn add_blitting_image_all_formats_color_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+fn add_blitting_image_all_formats_color_tests(group: &mut TestCaseGroup, gp: &GroupParams) {
     // 2D tests.
     {
-        let mut sub_group = tcu::TestCaseGroup::new("2d");
+        let mut sub_group = TestCaseGroup::new("2d");
         let regions = create_2d_copy_regions(DEFAULT_SIZE, DEFAULT_SIZE, DEFAULT_SIZE, DEFAULT_SIZE);
 
         for (source_formats, destination_formats, only_nearest) in color_image_formats_to_test_blit() {
@@ -1908,7 +1908,7 @@ fn add_blitting_image_all_formats_color_tests(group: &mut tcu::TestCaseGroup, gp
                     test_linear: !only_nearest,
                     test_cubic: !only_nearest && !ONLY_NEAREST_AND_LINEAR_FORMATS_TO_TEST.contains(&src.format),
                 };
-                let mut src_group = tcu::TestCaseGroup::new(src.name);
+                let mut src_group = TestCaseGroup::new(src.name);
                 add_blitting_image_all_formats_color_src_format_tests(&mut src_group, gp, &p, Some(destination_formats));
                 sub_group.add_child(src_group);
             }
@@ -1918,7 +1918,7 @@ fn add_blitting_image_all_formats_color_tests(group: &mut tcu::TestCaseGroup, gp
 
     // 1D tests.
     {
-        let mut sub_group = tcu::TestCaseGroup::new("1d");
+        let mut sub_group = TestCaseGroup::new("1d");
         let regions = create_1d_copy_regions();
 
         for (source_formats, _, only_nearest) in color_image_formats_to_test_blit() {
@@ -1935,7 +1935,7 @@ fn add_blitting_image_all_formats_color_tests(group: &mut tcu::TestCaseGroup, gp
                     // Cubic filtering can only be used with 2D images.
                     test_cubic: false,
                 };
-                let mut src_group = tcu::TestCaseGroup::new(src.name);
+                let mut src_group = TestCaseGroup::new(src.name);
                 add_blitting_image_all_formats_color_src_format_tests(&mut src_group, gp, &p, None);
                 sub_group.add_child(src_group);
             }
@@ -1945,7 +1945,7 @@ fn add_blitting_image_all_formats_color_tests(group: &mut tcu::TestCaseGroup, gp
 
     // 3D tests. Note we use smaller dimensions here for performance reasons.
     {
-        let mut sub_group = tcu::TestCaseGroup::new("3d");
+        let mut sub_group = TestCaseGroup::new("3d");
         let regions = create_3d_all_formats_regions();
 
         for (source_formats, _, only_nearest) in color_image_formats_to_test_blit() {
@@ -1963,7 +1963,7 @@ fn add_blitting_image_all_formats_color_tests(group: &mut tcu::TestCaseGroup, gp
                     // Cubic filtering can only be used with 2D images.
                     test_cubic: false,
                 };
-                let mut src_group = tcu::TestCaseGroup::new(src.name);
+                let mut src_group = TestCaseGroup::new(src.name);
                 add_blitting_image_all_formats_color_src_format_tests(&mut src_group, gp, &p, None);
                 sub_group.add_child(src_group);
             }
@@ -1976,7 +1976,7 @@ fn add_blitting_image_all_formats_color_tests(group: &mut tcu::TestCaseGroup, gp
 ///
 /// Only the VK_FILTER_NEAREST case - upstream registers nothing else here.
 fn add_blitting_image_all_formats_depth_stencil_formats_tests(
-    group: &mut tcu::TestCaseGroup,
+    group: &mut TestCaseGroup,
     gp: &GroupParams,
     image_type: vk::ImageType,
     extent: [u32; 3],
@@ -2118,25 +2118,25 @@ fn create_depth_stencil_regions(image_type: vk::ImageType, has_depth: bool, has_
 }
 
 /// `addBlittingImageAllFormatsDepthStencilTests`
-fn add_blitting_image_all_formats_depth_stencil_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+fn add_blitting_image_all_formats_depth_stencil_tests(group: &mut TestCaseGroup, gp: &GroupParams) {
     for (sub_name, image_type, extent) in [
         ("2d", vk::ImageType::_2D, [DEFAULT_SIZE as u32, DEFAULT_SIZE as u32, 1]),
         ("1d", vk::ImageType::_1D, [DEFAULT_SIZE as u32, 1, 1]),
         ("3d", vk::ImageType::_3D, [DEFAULT_QUARTER_SIZE as u32; 3]),
     ] {
-        let mut sub_group = tcu::TestCaseGroup::new(sub_name);
+        let mut sub_group = TestCaseGroup::new(sub_name);
         for (format, name) in DEPTH_AND_STENCIL_FORMATS {
             let Some(tcu_format) = map_vk_format(*format) else { continue };
             let has_depth = has_depth_component(tcu_format.order);
             let has_stencil = has_stencil_component(tcu_format.order);
             let regions = create_depth_stencil_regions(image_type, has_depth, has_stencil);
 
-            let mut format_group = tcu::TestCaseGroup::new(format!("{name}_{name}"));
+            let mut format_group = TestCaseGroup::new(format!("{name}_{name}"));
             add_blitting_image_all_formats_depth_stencil_formats_tests(&mut format_group, gp, image_type, extent, *format, &regions, false);
             sub_group.add_child(format_group);
 
             if has_depth && has_stencil {
-                let mut separate = tcu::TestCaseGroup::new(format!("{name}_{name}_separate_layouts"));
+                let mut separate = TestCaseGroup::new(format!("{name}_{name}_separate_layouts"));
                 add_blitting_image_all_formats_depth_stencil_formats_tests(&mut separate, gp, image_type, extent, *format, &regions, true);
                 sub_group.add_child(separate);
             }
@@ -2678,7 +2678,7 @@ impl TestInstance for BlittingMipmaps<'_> {
 /// CUBIC is not registered: sampleCubic is not ported.
 #[allow(clippy::too_many_arguments)]
 fn add_blitting_image_all_formats_mipmap_format_tests(
-    group: &mut tcu::TestCaseGroup,
+    group: &mut TestCaseGroup,
     gp: &GroupParams,
     format: vk::Format,
     layer_count: u32,
@@ -2762,11 +2762,11 @@ fn mipmap_regions(from_base_level: bool, mip_levels: u32, layer_count: u32) -> V
 
 /// `addBlittingImageAllFormatsBaseLevelMipmapTests` /
 /// `addBlittingImageAllFormatsPreviousLevelMipmapTests`
-fn add_blitting_image_all_formats_mipmap_level_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams, from_base_level: bool) {
+fn add_blitting_image_all_formats_mipmap_level_tests(group: &mut TestCaseGroup, gp: &GroupParams, from_base_level: bool) {
     let mip_levels = mipmap_level_count();
 
     for layer_count in [1u32, 6] {
-        let mut layer_group = tcu::TestCaseGroup::new(format!("layercount_{layer_count}"));
+        let mut layer_group = TestCaseGroup::new(format!("layercount_{layer_count}"));
         let regions = mipmap_regions(from_base_level, mip_levels, layer_count);
 
         for (source_formats, only_nearest) in mipmap_color_image_formats_to_test_blit() {
@@ -2777,7 +2777,7 @@ fn add_blitting_image_all_formats_mipmap_level_tests(group: &mut tcu::TestCaseGr
                 // No dedicated-allocation format filter here: upstream builds the set
                 // but only `addBlittingImageAllFormatsColorSrcFormatTests` consults it,
                 // and the mipmap path does not go through that.
-                let mut format_group = tcu::TestCaseGroup::new(src.name);
+                let mut format_group = TestCaseGroup::new(src.name);
                 add_blitting_image_all_formats_mipmap_format_tests(
                     &mut format_group,
                     gp,
@@ -2808,7 +2808,7 @@ fn add_blitting_image_all_formats_mipmap_level_tests(group: &mut tcu::TestCaseGr
                 continue;
             }
             let prefix = if multi_layer { "layerbarriercount" } else { "mipbarriercount" };
-            let mut barrier_group = tcu::TestCaseGroup::new(format!("{prefix}_{barrier_count}"));
+            let mut barrier_group = TestCaseGroup::new(format!("{prefix}_{barrier_count}"));
             let regions = mipmap_regions(false, mip_levels, layer_count);
 
             // Only go through a few common formats
@@ -2816,7 +2816,7 @@ fn add_blitting_image_all_formats_mipmap_level_tests(group: &mut tcu::TestCaseGr
                 if !is_supported_by_framework(src.format) {
                     continue;
                 }
-                let mut format_group = tcu::TestCaseGroup::new(src.name);
+                let mut format_group = TestCaseGroup::new(src.name);
                 add_blitting_image_all_formats_mipmap_format_tests(&mut format_group, gp, src.format, layer_count, &regions, mip_levels, false, barrier_count, false, false);
                 barrier_group.add_child(format_group);
             }
@@ -2826,12 +2826,12 @@ fn add_blitting_image_all_formats_mipmap_level_tests(group: &mut tcu::TestCaseGr
 }
 
 /// `addBlittingImageAllFormatsMipmapTests`
-fn add_blitting_image_all_formats_mipmap_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
-    let mut from_base = tcu::TestCaseGroup::new("from_base_level");
+fn add_blitting_image_all_formats_mipmap_tests(group: &mut TestCaseGroup, gp: &GroupParams) {
+    let mut from_base = TestCaseGroup::new("from_base_level");
     add_blitting_image_all_formats_mipmap_level_tests(&mut from_base, gp, true);
     group.add_child(from_base);
 
-    let mut from_previous = tcu::TestCaseGroup::new("from_previous_level");
+    let mut from_previous = TestCaseGroup::new("from_previous_level");
     add_blitting_image_all_formats_mipmap_level_tests(&mut from_previous, gp, false);
     group.add_child(from_previous);
 }

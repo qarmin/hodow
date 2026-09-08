@@ -34,14 +34,14 @@ use vulkanalia::vk::InstanceV1_1;
 
 // Glob-imported so the 1432-entry table below reads as a bare list of case names.
 use crate::generated::shaders::compute_wmel_alias::*;
-use crate::tcu::{self, TestError, TestOutcome, TestStatus};
+use crate::tcu::{TestError, TestOutcome, TestStatus};
 use crate::vk::builder_util::{DescriptorPoolBuilder, DescriptorSetLayoutBuilder, DescriptorSetUpdateBuilder, Location};
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
 use crate::vk::compute_pipeline::{ComputePipelineConstructionType, ComputePipelineWrapper, check_shader_object_requirements};
 use crate::vk::mem_util::{MemoryRequirement, flush_alloc, invalidate_alloc};
 use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool, make_descriptor_buffer_info, make_descriptor_set};
 use crate::vk::programs::BinaryCollection;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// `AliasTest::Requirements`
 pub const REQUIREMENT_NONE: u32 = 0;
@@ -671,8 +671,8 @@ static ALIAS_CASES: &[&AliasCase] = &[
 ];
 
 /// `createWorkgroupMemoryExplicitLayoutTests`, narrowed to the one ported subgroup.
-pub fn create_alias_tests() -> tcu::TestCaseGroup {
-    let mut alias = tcu::TestCaseGroup::new("alias");
+pub fn create_alias_tests() -> TestCaseGroup {
+    let mut alias = TestCaseGroup::new("alias");
     for case in ALIAS_CASES {
         alias.add_child(Box::new(**case) as Box<dyn TestCase>);
     }

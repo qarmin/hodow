@@ -26,7 +26,7 @@ use vulkanalia::prelude::v1_0::*;
 
 use crate::tcu::pixel::ConstPixelBufferAccess;
 use crate::tcu::texture::{ChannelOrder, ChannelType, TextureFormat};
-use crate::tcu::{self, TestError, TestStatus};
+use crate::tcu::{TestError, TestStatus};
 use crate::vk::VkResultExt;
 use crate::vk::builder_util::{DescriptorPoolBuilder, DescriptorSetLayoutBuilder};
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
@@ -36,7 +36,7 @@ use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer
 use crate::vk::programs::{BinaryCollection, create_shader_module};
 use crate::vk::ref_util::Unique;
 use crate::vkt::tests::renderpass::render_pass_tests::RenderPassType;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// The three shaders, which take no parameters - what the test varies never reaches
 /// the GLSL.
@@ -790,18 +790,18 @@ fn store_op_to_string(op: vk::AttachmentStoreOp) -> &'static str {
 }
 
 /// `createRenderPassUnusedAttachmentTests`
-pub fn create_unused_attachment_tests(render_pass_type: RenderPassType) -> tcu::TestCaseGroup {
-    let mut group = tcu::TestCaseGroup::new("unused_attachment");
+pub fn create_unused_attachment_tests(render_pass_type: RenderPassType) -> TestCaseGroup {
+    let mut group = TestCaseGroup::new("unused_attachment");
 
     let load_ops = [vk::AttachmentLoadOp::LOAD, vk::AttachmentLoadOp::CLEAR, vk::AttachmentLoadOp::DONT_CARE];
     let store_ops = [vk::AttachmentStoreOp::STORE, vk::AttachmentStoreOp::DONT_CARE];
 
     for load_op in load_ops {
-        let mut load_op_group = tcu::TestCaseGroup::new(format!("loadop{}", load_op_to_string(load_op)));
+        let mut load_op_group = TestCaseGroup::new(format!("loadop{}", load_op_to_string(load_op)));
         for store_op in store_ops {
-            let mut store_op_group = tcu::TestCaseGroup::new(format!("storeop{}", store_op_to_string(store_op)));
+            let mut store_op_group = TestCaseGroup::new(format!("storeop{}", store_op_to_string(store_op)));
             for stencil_load_op in load_ops {
-                let mut stencil_load_op_group = tcu::TestCaseGroup::new(format!("stencilloadop{}", load_op_to_string(stencil_load_op)));
+                let mut stencil_load_op_group = TestCaseGroup::new(format!("stencilloadop{}", load_op_to_string(stencil_load_op)));
                 for stencil_store_op in store_ops {
                     stencil_load_op_group.add_child(Box::new(UnusedAttachmentTest {
                         name: format!("stencilstoreop{}", store_op_to_string(stencil_store_op)),

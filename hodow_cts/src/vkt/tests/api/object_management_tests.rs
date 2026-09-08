@@ -29,7 +29,7 @@ use crate::vk::alloc_callback_util::AllocationCallbackRecorder;
 pub use crate::vk::programs::SharedProgram;
 use crate::vk::programs::{BinaryCollection, create_shader_module};
 use crate::vk::ref_util::{Unique, UniqueCommandBuffer, UniqueDescriptorSet};
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// `Environment`
 struct Environment<'a> {
@@ -2405,8 +2405,8 @@ fn all_cases() -> Vec<(&'static str, ObjectParams)> {
 }
 
 /// `createObjectManagementTests`, minus the variants and object kinds not ported.
-pub fn create_object_management_tests() -> tcu::TestCaseGroup {
-    let mut tests = tcu::TestCaseGroup::new("object_management");
+pub fn create_object_management_tests() -> TestCaseGroup {
+    let mut tests = TestCaseGroup::new("object_management");
     for (group_name, variant) in [
         ("single", Variant::Single),
         ("multiple_unique_resources", Variant::MultipleUniqueResources),
@@ -2420,7 +2420,7 @@ pub fn create_object_management_tests() -> tcu::TestCaseGroup {
         ("private_data", Variant::PrivateData),
         ("alloc_callback_fail_multiple", Variant::AllocCallbackFailMultiple),
     ] {
-        let mut group = tcu::TestCaseGroup::new(group_name);
+        let mut group = TestCaseGroup::new(group_name);
         for (name, params) in all_cases() {
             // A command pool and a descriptor pool are externally synchronised, so
             // upstream leaves out the object kinds that would allocate from a shared

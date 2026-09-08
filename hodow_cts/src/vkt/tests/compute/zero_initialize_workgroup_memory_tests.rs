@@ -16,7 +16,7 @@
 
 use vulkanalia::prelude::v1_0::*;
 
-use crate::tcu::{self, TestError, TestOutcome, TestStatus};
+use crate::tcu::{TestError, TestOutcome, TestStatus};
 use crate::vk::builder_util::{DescriptorPoolBuilder, DescriptorSetLayoutBuilder, DescriptorSetUpdateBuilder, Location};
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
 use crate::vk::compute_pipeline::{ComputePipelineConstructionType, ComputePipelineWrapper, check_shader_object_requirements};
@@ -25,7 +25,7 @@ use crate::vk::obj_util::{
     BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool, make_descriptor_buffer_info, make_descriptor_set, make_memory_barrier,
 };
 use crate::vk::programs::BinaryCollection;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// The extension every case in this group needs.
 const EXTENSION: &str = "VK_KHR_zero_initialize_workgroup_memory";
@@ -203,7 +203,7 @@ impl TestInstance for SpecializeWorkgroupInstance<'_> {
 }
 
 /// `AddSpecializeWorkgroupTests`
-fn add_specialize_workgroup_tests(group: &mut tcu::TestCaseGroup, programs: BinaryCollection) {
+fn add_specialize_workgroup_tests(group: &mut TestCaseGroup, programs: BinaryCollection) {
     for z in 1..=8u32 {
         for y in 1..=8u32 {
             for x in 1..=8u32 {
@@ -289,7 +289,7 @@ impl TestInstance for MaxWorkgroupsInstance<'_> {
 }
 
 /// `AddMaxWorkgroupsTests`
-fn add_max_workgroups_tests(group: &mut tcu::TestCaseGroup, programs: BinaryCollection) {
+fn add_max_workgroups_tests(group: &mut TestCaseGroup, programs: BinaryCollection) {
     group.add_child(Box::new(MaxWorkgroupsCase { name: "x", dim: Dim::X, programs }) as Box<dyn TestCase>);
     group.add_child(Box::new(MaxWorkgroupsCase { name: "y", dim: Dim::Y, programs }) as Box<dyn TestCase>);
     group.add_child(Box::new(MaxWorkgroupsCase { name: "z", dim: Dim::Z, programs }) as Box<dyn TestCase>);
@@ -359,7 +359,7 @@ impl TestInstance for MaxWorkgroupMemoryInstance<'_> {
 }
 
 /// `AddMaxWorkgroupMemoryTests`
-fn add_max_workgroup_memory_tests(group: &mut tcu::TestCaseGroup, programs: BinaryCollection) {
+fn add_max_workgroup_memory_tests(group: &mut TestCaseGroup, programs: BinaryCollection) {
     for num_wg in [1u32, 2, 4, 16, 64, 128] {
         group.add_child(Box::new(MaxWorkgroupMemoryCase {
             name: num_wg.to_string(),
@@ -523,7 +523,7 @@ impl TestInstance for RepeatedPipelineInstance<'_> {
 }
 
 /// `AddRepeatedPipelineTests`
-fn add_repeated_pipeline_tests(group: &mut tcu::TestCaseGroup, even: BinaryCollection, odd_programs: BinaryCollection) {
+fn add_repeated_pipeline_tests(group: &mut TestCaseGroup, even: BinaryCollection, odd_programs: BinaryCollection) {
     for x in [4u32, 16, 32, 64] {
         for odd in [0u32, 1] {
             for repeat in [2u32, 4, 8, 16] {
@@ -546,28 +546,28 @@ fn add_repeated_pipeline_tests(group: &mut tcu::TestCaseGroup, even: BinaryColle
 // ---------------------------------------------------------------------------------
 
 /// `createZeroInitializeWorkgroupMemoryTests`
-pub fn create_zero_initialize_workgroup_memory_tests(construction_type: ComputePipelineConstructionType) -> tcu::TestCaseGroup {
+pub fn create_zero_initialize_workgroup_memory_tests(construction_type: ComputePipelineConstructionType) -> TestCaseGroup {
     debug_assert_eq!(construction_type, ComputePipelineConstructionType::Pipeline);
 
     use crate::generated::shaders::compute_zero_initialize;
 
-    let mut tests = tcu::TestCaseGroup::new("zero_initialize_workgroup_memory");
+    let mut tests = TestCaseGroup::new("zero_initialize_workgroup_memory");
 
-    let mut max_workgroup_memory_group = tcu::TestCaseGroup::new("max_workgroup_memory");
+    let mut max_workgroup_memory_group = TestCaseGroup::new("max_workgroup_memory");
     add_max_workgroup_memory_tests(&mut max_workgroup_memory_group, compute_zero_initialize::MAX_WORKGROUP_MEMORY.programs);
     tests.add_child(max_workgroup_memory_group);
 
     // types and composites need a per-case GLSL table; not ported.
 
-    let mut max_workgroups_group = tcu::TestCaseGroup::new("max_workgroups");
+    let mut max_workgroups_group = TestCaseGroup::new("max_workgroups");
     add_max_workgroups_tests(&mut max_workgroups_group, compute_zero_initialize::MAX_WORKGROUPS.programs);
     tests.add_child(max_workgroups_group);
 
-    let mut specialize_workgroup_group = tcu::TestCaseGroup::new("specialize_workgroup");
+    let mut specialize_workgroup_group = TestCaseGroup::new("specialize_workgroup");
     add_specialize_workgroup_tests(&mut specialize_workgroup_group, compute_zero_initialize::SPECIALIZE_WORKGROUP.programs);
     tests.add_child(specialize_workgroup_group);
 
-    let mut repeat_pipeline_group = tcu::TestCaseGroup::new("repeat_pipeline");
+    let mut repeat_pipeline_group = TestCaseGroup::new("repeat_pipeline");
     add_repeated_pipeline_tests(
         &mut repeat_pipeline_group,
         compute_zero_initialize::REPEAT_PIPELINE_EVEN.programs,

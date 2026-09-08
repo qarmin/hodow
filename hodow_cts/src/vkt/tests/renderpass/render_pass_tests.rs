@@ -31,7 +31,7 @@ use super::super::api::copies_buffer_tests::AllocationKind;
 use crate::tcu::pixel::{ConstPixelBufferAccess, TextureLevel, get_texture_format_channel_mask};
 use crate::tcu::random::Random;
 use crate::tcu::texture::{ChannelOrder, TextureChannelClass, TextureFormat};
-use crate::tcu::{self, TestError, TestStatus, map_vk_format};
+use crate::tcu::{TestError, TestStatus, map_vk_format};
 use crate::vk::VkResultExt;
 use crate::vk::builder_util::{DescriptorPoolBuilder, DescriptorSetLayoutBuilder};
 use crate::vk::cmd_util::{begin_command_buffer, begin_secondary_command_buffer, end_command_buffer, submit_commands_and_wait};
@@ -40,7 +40,7 @@ use crate::vk::mem_util::{MemoryRequirement, invalidate_alloc};
 use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool, make_descriptor_set, make_framebuffer, make_pipeline_layout};
 use crate::vk::programs::{BinaryCollection, create_shader_module};
 use crate::vk::ref_util::{Unique, UniqueCommandBuffer, UniqueDescriptorSet};
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 // ---------------------------------------------------------------------------------
 // Render pass description
@@ -2638,7 +2638,7 @@ pub static CORE_COLOR_FORMATS: &[(vk::Format, &str)] = &[
 
 /// `addFormatTests`, colour formats only - the `input` branch needs input attachments
 /// and is not ported.
-fn add_format_tests(group: &mut tcu::TestCaseGroup, allocation_kind: AllocationKind, render_pass_type: RenderPassType) {
+fn add_format_tests(group: &mut TestCaseGroup, allocation_kind: AllocationKind, render_pass_type: RenderPassType) {
     const TARGET_SIZE: [u32; 2] = [64, 64];
     const RENDER_POS: [u32; 2] = [0, 0];
     const RENDER_SIZE: [u32; 2] = [64, 64];
@@ -2655,10 +2655,10 @@ fn add_format_tests(group: &mut tcu::TestCaseGroup, allocation_kind: AllocationK
     ];
 
     for &(format, format_name) in CORE_COLOR_FORMATS {
-        let mut format_group = tcu::TestCaseGroup::new(format_name);
+        let mut format_group = TestCaseGroup::new(format_name);
 
         for (load_op_name, load_op) in load_ops {
-            let mut load_op_group = tcu::TestCaseGroup::new(load_op_name);
+            let mut load_op_group = TestCaseGroup::new(load_op_name);
 
             for (render_type_name, render_type) in render_types {
                 let render_pass = RenderPassDesc {
@@ -2711,7 +2711,7 @@ fn add_format_tests(group: &mut tcu::TestCaseGroup, allocation_kind: AllocationK
 /// The `input` branch of `addFormatTests`, without the `self_dep_*` variants: two
 /// subpasses, the second reading the first's attachment back and writing what it found
 /// into a second, always-R8G8B8A8_UNORM attachment.
-fn add_format_input_tests(format_group: &mut tcu::TestCaseGroup, format: vk::Format, allocation_kind: AllocationKind, render_pass_type: RenderPassType) {
+fn add_format_input_tests(format_group: &mut TestCaseGroup, format: vk::Format, allocation_kind: AllocationKind, render_pass_type: RenderPassType) {
     const TARGET_SIZE: [u32; 2] = [64, 64];
     const RENDER_POS: [u32; 2] = [0, 0];
     const RENDER_SIZE: [u32; 2] = [64, 64];
@@ -2736,13 +2736,13 @@ fn add_format_input_tests(format_group: &mut tcu::TestCaseGroup, format: vk::For
         vk::ImageAspectFlags::empty()
     };
 
-    let mut input_group = tcu::TestCaseGroup::new("input");
+    let mut input_group = TestCaseGroup::new("input");
 
     for (load_op_name, load_op) in load_ops {
-        let mut load_op_group = tcu::TestCaseGroup::new(load_op_name);
+        let mut load_op_group = TestCaseGroup::new(load_op_name);
 
         for (store_op_name, store_op) in store_ops {
-            let mut store_op_group = tcu::TestCaseGroup::new(store_op_name);
+            let mut store_op_group = TestCaseGroup::new(store_op_name);
 
             for use_input_aspect in [false, true] {
                 if render_pass_type != RenderPassType::Legacy && use_input_aspect {
@@ -2857,14 +2857,14 @@ fn add_format_input_tests(format_group: &mut tcu::TestCaseGroup, format: vk::For
 /// One group per rendering type, which is how upstream splits `renderpass1` from
 /// `renderpass2`: the same descriptions built through `vkCreateRenderPass` and
 /// `vkCreateRenderPass2KHR`.
-pub fn create_render_pass_groups() -> Vec<tcu::TestCaseGroup> {
+pub fn create_render_pass_groups() -> Vec<TestCaseGroup> {
     [("renderpass1", RenderPassType::Legacy), ("renderpass2", RenderPassType::RenderPass2)]
         .into_iter()
         .map(|(name, render_pass_type)| {
-            let mut group = tcu::TestCaseGroup::new(name);
+            let mut group = TestCaseGroup::new(name);
             for (kind_name, allocation_kind) in [("suballocation", AllocationKind::Suballocated), ("dedicated_allocation", AllocationKind::Dedicated)] {
-                let mut kind_group = tcu::TestCaseGroup::new(kind_name);
-                let mut formats = tcu::TestCaseGroup::new("formats");
+                let mut kind_group = TestCaseGroup::new(kind_name);
+                let mut formats = TestCaseGroup::new("formats");
                 add_format_tests(&mut formats, allocation_kind, render_pass_type);
                 add_depth_stencil_format_tests(&mut formats, allocation_kind, render_pass_type);
                 kind_group.add_child(formats);
@@ -3072,7 +3072,7 @@ impl<'a> RenderPassTestInstance<'a> {
 /// the same subpass through a self-dependency, in both sample counts.
 #[allow(clippy::too_many_arguments)]
 fn add_self_dep_cases(
-    store_op_group: &mut tcu::TestCaseGroup,
+    store_op_group: &mut TestCaseGroup,
     format: vk::Format,
     load_op: vk::AttachmentLoadOp,
     store_op: vk::AttachmentStoreOp,
@@ -3265,7 +3265,7 @@ pub static CORE_DEPTH_STENCIL_FORMATS: &[(vk::Format, &str)] = &[
 /// A combined format also gets the two read-only layouts, where the subpass may write
 /// only one of the two aspects. Upstream skips those for a CLEAR load op, because the
 /// render pass would then clear an aspect the subpass cannot write.
-fn add_depth_stencil_format_tests(group: &mut tcu::TestCaseGroup, allocation_kind: AllocationKind, render_pass_type: RenderPassType) {
+fn add_depth_stencil_format_tests(group: &mut TestCaseGroup, allocation_kind: AllocationKind, render_pass_type: RenderPassType) {
     const TARGET_SIZE: [u32; 2] = [64, 64];
     const RENDER_POS: [u32; 2] = [0, 0];
     const RENDER_SIZE: [u32; 2] = [64, 64];
@@ -3285,10 +3285,10 @@ fn add_depth_stencil_format_tests(group: &mut tcu::TestCaseGroup, allocation_kin
         let format = map_vk_format(vk_format).expect("a core depth/stencil format maps");
         let is_depth_attachment = format.order.has_depth();
         let is_stencil_attachment = format.order.has_stencil();
-        let mut format_group = tcu::TestCaseGroup::new(format_name);
+        let mut format_group = TestCaseGroup::new(format_name);
 
         for (load_op_name, load_op) in load_ops {
-            let mut load_op_group = tcu::TestCaseGroup::new(load_op_name);
+            let mut load_op_group = TestCaseGroup::new(load_op_name);
 
             for (render_type_name, render_type) in render_types {
                 let make_attachment = || Attachment {
@@ -3438,7 +3438,7 @@ fn collection_for(config: &TestConfig) -> BinaryCollection {
 /// into a second R8G8B8A8_UNORM attachment, and the self-dependency form writes it
 /// back into the depth aspect it just read.
 fn add_depth_stencil_input_tests(
-    format_group: &mut tcu::TestCaseGroup,
+    format_group: &mut TestCaseGroup,
     vk_format: vk::Format,
     format: TextureFormat,
     allocation_kind: AllocationKind,
@@ -3485,13 +3485,13 @@ fn add_depth_stencil_input_tests(
         ));
     }
 
-    let mut input_group = tcu::TestCaseGroup::new("input");
+    let mut input_group = TestCaseGroup::new("input");
 
     for (load_op_name, load_op) in load_ops {
-        let mut load_op_group = tcu::TestCaseGroup::new(load_op_name);
+        let mut load_op_group = TestCaseGroup::new(load_op_name);
 
         for (store_op_name, store_op) in store_ops {
-            let mut store_op_group = tcu::TestCaseGroup::new(store_op_name);
+            let mut store_op_group = TestCaseGroup::new(store_op_name);
 
             for use_input_aspect in [false, true] {
                 if render_pass_type != RenderPassType::Legacy && use_input_aspect {

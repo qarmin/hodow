@@ -20,8 +20,8 @@ pub mod workgroup_memory_explicit_layout_zero_tests;
 pub mod zero_initialize_types_tests;
 pub mod zero_initialize_workgroup_memory_tests;
 
-use crate::tcu::TestCaseGroup;
 use crate::vk::compute_pipeline::ComputePipelineConstructionType;
+use crate::vkt::TestCaseGroup;
 
 /// `createTests` for the `compute` group.
 ///

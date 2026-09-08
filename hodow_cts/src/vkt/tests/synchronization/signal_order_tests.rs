@@ -28,14 +28,14 @@ use super::operation::{
     Operation, OperationName, RESOURCES, Resource, ResourceDescription, ResourceType, SyncType, build_operation, cmd_pipeline_barrier, first_difference, get_resource_name,
     make_buffer_memory_barrier2, make_image_memory_barrier2,
 };
-use crate::tcu::{self, Random, TestError, TestStatus};
+use crate::tcu::{Random, TestError, TestStatus};
 use crate::vk::VkResultExt;
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer};
 use crate::vk::obj_util::{allocate_command_buffer, make_command_pool};
 use crate::vk::programs::BinaryCollection;
 use crate::vk::ref_util::Unique;
 use crate::vkt::context::QueueFamilyQueues;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// `iterations.resize(12)` - a dozen write/read pairs, so an out-of-order signal has
 /// somewhere to hide.
@@ -518,15 +518,15 @@ const SIGNAL_ORDER_READ_OPS: &[OperationName] = &[
 ];
 
 /// `createSignalOrderTests`
-pub fn create_signal_order_tests(sync_type: SyncType) -> tcu::TestCaseGroup {
-    let mut group = tcu::TestCaseGroup::new("signal_order");
+pub fn create_signal_order_tests(sync_type: SyncType) -> TestCaseGroup {
+    let mut group = TestCaseGroup::new("signal_order");
 
     for semaphore_type in [SemaphoreType::Binary, SemaphoreType::Timeline] {
-        let mut semaphore_group = tcu::TestCaseGroup::new(semaphore_type.group_name());
+        let mut semaphore_group = TestCaseGroup::new(semaphore_type.group_name());
 
         for &write_op in SIGNAL_ORDER_WRITE_OPS {
             for &read_op in SIGNAL_ORDER_READ_OPS {
-                let mut op_group = tcu::TestCaseGroup::new(format!("{}_{}", write_op.as_str(), read_op.as_str()));
+                let mut op_group = TestCaseGroup::new(format!("{}_{}", write_op.as_str(), read_op.as_str()));
                 let mut empty = true;
 
                 for resource in RESOURCES {

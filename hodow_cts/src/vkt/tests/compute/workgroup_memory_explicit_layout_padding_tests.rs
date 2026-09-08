@@ -20,14 +20,14 @@ use vulkanalia::prelude::v1_0::*;
 use vulkanalia::vk::InstanceV1_1;
 
 use crate::generated::shaders::compute_wmel_padding;
-use crate::tcu::{self, TestError, TestOutcome, TestStatus};
+use crate::tcu::{TestError, TestOutcome, TestStatus};
 use crate::vk::builder_util::{DescriptorPoolBuilder, DescriptorSetLayoutBuilder, DescriptorSetUpdateBuilder, Location};
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
 use crate::vk::compute_pipeline::{ComputePipelineConstructionType, ComputePipelineWrapper, check_shader_object_requirements};
 use crate::vk::mem_util::{MemoryRequirement, flush_alloc, invalidate_alloc};
 use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool, make_descriptor_buffer_info, make_descriptor_set};
 use crate::vk::programs::BinaryCollection;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// The construction type this group is registered under.
 ///
@@ -307,7 +307,7 @@ impl TestInstance for PaddingInstance<'_> {
 /// arbitrary byte offsets) are expanded in `compute_wmel_padding.toml`, because each
 /// case bakes its offsets and its 32 expected words into its own shader. This walks
 /// the expansion in the order those loops produce it.
-fn add_padding_tests(group: &mut tcu::TestCaseGroup) {
+fn add_padding_tests(group: &mut TestCaseGroup) {
     for case in PADDING_CASES {
         group.add_child(Box::new(*case) as Box<dyn TestCase>);
     }
@@ -366,7 +366,7 @@ impl TestInstance for SizeInstance<'_> {
 }
 
 /// `AddSizeTests`
-fn add_size_tests(group: &mut tcu::TestCaseGroup) {
+fn add_size_tests(group: &mut TestCaseGroup) {
     for case in SIZE_CASES {
         group.add_child(Box::new(*case) as Box<dyn TestCase>);
     }
@@ -381,14 +381,14 @@ fn add_size_tests(group: &mut tcu::TestCaseGroup) {
 /// `alias`, `zero`, `copy_memory` and `zero_ext` are absent rather than
 /// present-and-skipped, so a comparison against `deqp-vk` shows them as missing
 /// instead of as passing.
-pub fn create_padding_and_size_tests() -> tcu::TestCaseGroup {
-    let mut tests = tcu::TestCaseGroup::new("workgroup_memory_explicit_layout");
+pub fn create_padding_and_size_tests() -> TestCaseGroup {
+    let mut tests = TestCaseGroup::new("workgroup_memory_explicit_layout");
 
-    let mut padding = tcu::TestCaseGroup::new("padding");
+    let mut padding = TestCaseGroup::new("padding");
     add_padding_tests(&mut padding);
     tests.add_child(padding);
 
-    let mut size = tcu::TestCaseGroup::new("size");
+    let mut size = TestCaseGroup::new("size");
     add_size_tests(&mut size);
     tests.add_child(size);
 

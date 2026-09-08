@@ -112,6 +112,13 @@ impl TestStatus {
 pub enum TestError {
     /// `tcu::NotSupportedError` - reported as NotSupported, not as a failure.
     NotSupported(String),
+    /// `tcu::TestError` - a plain failure raised from inside a test.
+    ///
+    /// Where a Vulkan test can see the verdict it wants it returns
+    /// `Ok(TestStatus::fail(..))` directly, which most of them do. A helper several
+    /// layers down - a GL error check, an interface query - has no verdict to return
+    /// and upstream throws from there, so this is the `?`-able form of the same thing.
+    Fail(String),
     /// `tcu::ResourceError` - the implementation ran out of some resource.
     ResourceError(String),
     /// `VK_ERROR_OUT_OF_HOST_MEMORY` specifically. Reported as ResourceError like any
@@ -132,6 +139,7 @@ impl TestError {
     pub fn to_status(&self) -> TestStatus {
         match self {
             Self::NotSupported(m) => TestStatus::new(TestResult::NotSupported, m.clone()),
+            Self::Fail(m) => TestStatus::new(TestResult::Fail, m.clone()),
             Self::ResourceError(m) | Self::OutOfHostMemory(m) => TestStatus::new(TestResult::ResourceError, m.clone()),
             Self::InternalError(m) => TestStatus::new(TestResult::InternalError, m.clone()),
             Self::DeviceLost(m) => TestStatus::new(TestResult::DeviceLost, m.clone()),

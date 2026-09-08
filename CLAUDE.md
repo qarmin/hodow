@@ -16,9 +16,9 @@ heavily on AI-assisted code generation (see README.md "AI Usage").
 - `hodow_cli` - CLI binary (`clap`), default features `["gpu", "serve"]`. Subcommands: `cpu`, `gpu`,
   `vulkan`, `serve` (behind the `serve` feature - see "Job-queue server" below).
 - `hodow_gui` - Slint-based GUI binary wrapping the same `hodow_core` API.
-- `hodow_cts` - a Rust rewrite of the Khronos Vulkan CTS (VK-GL-CTS). Standalone: it does **not**
-  depend on `hodow_core` or `hodow_cli` and nothing in it should ever `use hodow_core::`. See
-  "hodow_cts" below and `hodow_cts/README.md`.
+- `hodow_cts` - a Rust rewrite of the Khronos CTS (VK-GL-CTS), Vulkan **and OpenGL ES**.
+  Standalone: it does **not** depend on `hodow_core` or `hodow_cli` and nothing in it should ever
+  `use hodow_core::`. See "hodow_cts" below and `hodow_cts/README.md`.
 - `data/` - every hand-maintained input and captured output of the generators under `scripts/`,
   kept out of `src/` so it is obvious what is data and what is code. `data/cpu/signatures.txt`
   (extracted, see below), `data/cpu/expected/<arch>/<ext>.txt` (captured on hardware, one file
@@ -99,6 +99,13 @@ heavily on AI-assisted code generation (see README.md "AI Usage").
   someone else did**. The exit code stays the test binary's, so 2 still means "no driver".
 - `just cts-shaders` / `cts-diff` / `cts-drift` / `cts-sync` - regenerate SPIR-V, compare
   verdicts against upstream `deqp-vk`, report upstream drift, re-vendor upstream sources.
+- `just cts-gles` / `cts-glesr` / `cts-gles-list` / `cts-gles-diff` / `cts-wrappers` - the
+  OpenGL ES half: run the `dEQP-GLES31.*` cases (debug/release), list them without touching a
+  driver, compare verdicts against upstream `deqp-gles31`, and regenerate the GL/EGL
+  entry-point tables from upstream's `.inl` files. **No ICD and no environment needed** - the
+  EGL platform is chosen at run time (`HODOW_CTS_EGL_PLATFORM` pins it). Note upstream's own
+  `deqp-gles31` surfaceless target *does* need `EGL_PLATFORM=surfaceless` headless;
+  `diff_vs_deqp.py` sets that for it.
 - `just cts-coverage` - how many upstream cases are implemented, against three denominators.
   It counts only cases that actually run: a case tree landed ahead of its instance is
   reported separately as "registered without an instance". A stub declares itself by
@@ -571,11 +578,12 @@ a job to `/api/jobs` instead of running locally.
   capabilities line (detected CPU extensions + test count, gpu/vulkan compiled-in) sourced from
   `AppState::capabilities` (computed once at startup, logged there too).
 
-## hodow_cts (Vulkan CTS port)
+## hodow_cts (Vulkan + OpenGL ES CTS port)
 
 A rewrite of VK-GL-CTS in Rust, pinned to upstream `cf7edb26` (`hodow_cts/upstream/COMMIT`).
-Upstream has ~1.68M test cases; this is a framework plus a hand-picked, growing subset.
-Full detail is in `hodow_cts/README.md`. The rules that are easy to break:
+Upstream has ~1.68M Vulkan cases and ~38k in the OpenGL ES 3.1 mustpass; this is a framework
+plus a hand-picked, growing subset of both. Full detail is in `hodow_cts/README.md`.
+The rules that are easy to break:
 
 - **Ported code keeps the upstream C++ shape** - same `checkSupport`/`initPrograms`/`iterate`
   split, same operation order, same names. Idiomatic Rust only where it removes a real hazard
@@ -617,6 +625,40 @@ Full detail is in `hodow_cts/README.md`. The rules that are easy to break:
   from a test failure, so nothing blames a case that was never given a chance to run.
 - Add every ported upstream file to `hodow_cts/upstream/FILES.txt`; one that is missing silently
   stops being tracked for re-sync.
+
+### The two APIs share the framework and nothing else
+
+`tcu`, `report` and `runner` are API-agnostic: `tcu::TestNode`/`TestCaseGroup`/`FlatCase` are
+generic over the API's own case trait (`vkt::TestCase`, `glu::TestCase`), each API re-exports
+its own aliases, and `runner::run_case_loop` holds everything around a case that does not
+depend on the API (timing, the log prefix, the summary, the device-lost abort). Which API a
+case belongs to comes from the root of its name via `runner::Api`, so `main` splits the
+selection and brings each driver up in turn - a third API is a module plus an `Api` variant.
+Do not push API-specific knowledge back down into `tcu`/`runner`.
+
+- **`src/generated/glw.rs` and `eglw.rs` are generated from upstream's own `.inl` files** by
+  `scripts/gen_api_wrappers.py` (`just cts-wrappers`), not from gl.xml directly - the `.inl`
+  are the already-filtered set upstream declares, and a re-sync moves both in one step.
+  `--check` (part of `just cts-verify`) fails if they are stale. Every entry point is a
+  `dlopen`/`eglGetProcAddress` lookup, so the binary still links only libc/libgcc.
+  Each field has a same-named method (`gl.bind_buffer(...)` reads like the C++
+  `gl.bindBuffer(...)`); calling one the driver never exported panics with its name, which
+  means the port used something it did not check for - a port bug, not a driver defect.
+- **The GLES half commits no shaders and must not.** A GL driver consumes GLSL, so its
+  compiler is part of what is under test; every GLES case builds its source at run time with
+  `format!` exactly where the C++ uses `<<`. `shaders/manifest/` and `compile_shaders.py` are
+  the Vulkan half's business only. On an embedded GPU the compiler is usually the suspect
+  part, so this is coverage, not a shortcut.
+- **Finding a display is hodow's own code, not a port** (`src/eglu/mod.rs`): device platform,
+  then surfaceless, then Wayland (libwayland-client opened at run time for the two symbols
+  that yield a `wl_display*`), then the default display, logging every attempt. A
+  Wayland-only driver - i.MX/Vivante `imx-gpu-viv` - needs the Wayland step and refuses all
+  three others, which is the same finding `hodow_core/src/opengl/context.rs` records.
+  Upstream's platform layer is one file per windowing system chosen at CMake time; there is
+  no shape there worth keeping.
+- Buffer offsets and strides in a GLES test come from `glu::get_program_interface_*`, i.e.
+  from the driver's own answers, never from an assumed std430 layout - a conformant driver
+  may legally choose a different one.
 
 The dev container ships lavapipe (`/usr/share/vulkan/icd.d/lvp_icd.json`, also symlinked
 `lavapipe.json`) and `VK_LAYER_KHRONOS_validation`, so `just cts-sw`/`cts-swr`/`cts-val` all

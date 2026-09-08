@@ -26,11 +26,11 @@ use std::sync::Mutex;
 use vulkanalia::prelude::v1_0::*;
 use vulkanalia::vk::{DeviceV1_1, InstanceV1_1, KhrMapMemory2ExtensionDeviceCommands};
 
-use crate::tcu::{Random, TestCaseGroup, TestError, TestOutcome, TestResult, TestStatus};
+use crate::tcu::{Random, TestError, TestOutcome, TestResult, TestStatus};
 use crate::vk::VkResultExt;
 use crate::vk::programs::BinaryCollection;
 use crate::vk::ref_util::Unique;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 fn div_round_up(a: u64, b: u64) -> u64 {
     (a / b) + if a.is_multiple_of(b) { 0 } else { 1 }

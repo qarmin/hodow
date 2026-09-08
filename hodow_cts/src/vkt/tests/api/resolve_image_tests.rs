@@ -43,7 +43,7 @@ use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer
 pub use crate::vk::programs::SharedProgram;
 use crate::vk::programs::{BinaryCollection, create_shader_module};
 use crate::vk::ref_util::Unique;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// `defaultExtent`
 const DEFAULT_EXTENT: [u32; 3] = [64, 64, 1];
@@ -1453,7 +1453,7 @@ impl ResolveGroupSpec<'_> {
     }
 }
 
-fn add_resolve_group(group: &mut tcu::TestCaseGroup, allocation_kind: AllocationKind, command_variant: CopyCommandVariant, spec: &ResolveGroupSpec<'_>) {
+fn add_resolve_group(group: &mut TestCaseGroup, allocation_kind: AllocationKind, command_variant: CopyCommandVariant, spec: &ResolveGroupSpec<'_>) {
     for samples in SAMPLES {
         let make = |name: String, image_offset: bool| ResolveImageCase {
             name,
@@ -1478,11 +1478,11 @@ fn add_resolve_group(group: &mut tcu::TestCaseGroup, allocation_kind: Allocation
 }
 
 /// `addResolveImageTests`
-pub fn add_resolve_image_tests(parent: &mut tcu::TestCaseGroup, allocation_kind: AllocationKind, command_variant: CopyCommandVariant) {
-    let mut group = tcu::TestCaseGroup::new("resolve_image");
+pub fn add_resolve_image_tests(parent: &mut TestCaseGroup, allocation_kind: AllocationKind, command_variant: CopyCommandVariant) {
+    let mut group = TestCaseGroup::new("resolve_image");
 
     // `addResolveImageWholeTests`
-    let mut whole = tcu::TestCaseGroup::new("whole");
+    let mut whole = TestCaseGroup::new("whole");
     let whole_resolve = [ImageResolve::whole(RESOLVE_EXTENT)];
     add_resolve_group(
         &mut whole,
@@ -1497,7 +1497,7 @@ pub fn add_resolve_image_tests(parent: &mut tcu::TestCaseGroup, allocation_kind:
     group.add_child(whole);
 
     // `addResolveImagePartialTests`
-    let mut partial = tcu::TestCaseGroup::new("partial");
+    let mut partial = TestCaseGroup::new("partial");
     let partial_resolve = [ImageResolve {
         base_array_layer: 0,
         layer_count: 1,
@@ -1518,7 +1518,7 @@ pub fn add_resolve_image_tests(parent: &mut tcu::TestCaseGroup, allocation_kind:
     group.add_child(partial);
 
     // `addResolveImageWithRegionsTests`
-    let mut with_regions = tcu::TestCaseGroup::new("with_regions");
+    let mut with_regions = TestCaseGroup::new("with_regions");
     let regions: Vec<ImageResolve> = (0..256)
         .step_by(64)
         .map(|i| ImageResolve {
@@ -1544,7 +1544,7 @@ pub fn add_resolve_image_tests(parent: &mut tcu::TestCaseGroup, allocation_kind:
 
     // `addResolveImageWholeCopyBeforeResolvingTests`
     let default_resolve = [ImageResolve::whole(DEFAULT_EXTENT)];
-    let mut whole_copy = tcu::TestCaseGroup::new("whole_copy_before_resolving");
+    let mut whole_copy = TestCaseGroup::new("whole_copy_before_resolving");
     add_resolve_group(
         &mut whole_copy,
         allocation_kind,
@@ -1554,7 +1554,7 @@ pub fn add_resolve_image_tests(parent: &mut tcu::TestCaseGroup, allocation_kind:
     group.add_child(whole_copy);
 
     // `addResolveImageWholeCopyWithoutCabBeforeResolvingTests`
-    let mut no_cab = tcu::TestCaseGroup::new("whole_copy_before_resolving_no_cab");
+    let mut no_cab = TestCaseGroup::new("whole_copy_before_resolving_no_cab");
     add_resolve_group(
         &mut no_cab,
         allocation_kind,
@@ -1568,7 +1568,7 @@ pub fn add_resolve_image_tests(parent: &mut tcu::TestCaseGroup, allocation_kind:
         ("whole_copy_before_resolving_compute", ResolveOptions::CopyMsImageToMsImageCompute),
         ("whole_copy_before_resolving_transfer", ResolveOptions::CopyMsImageToMsImageTransfer),
     ] {
-        let mut queue_group = tcu::TestCaseGroup::new(name);
+        let mut queue_group = TestCaseGroup::new(name);
         add_resolve_group(
             &mut queue_group,
             allocation_kind,
@@ -1582,7 +1582,7 @@ pub fn add_resolve_image_tests(parent: &mut tcu::TestCaseGroup, allocation_kind:
     }
 
     // `addResolveImageWholeCopyDiffLayoutsBeforeResolvingTests`
-    let mut diff_layouts = tcu::TestCaseGroup::new("diff_layout_copy_before_resolving");
+    let mut diff_layouts = TestCaseGroup::new("diff_layout_copy_before_resolving");
     let image_layouts = [
         (vk::ImageLayout::GENERAL, "general"),
         (vk::ImageLayout::TRANSFER_SRC_OPTIMAL, "transfer_src_optimal"),
@@ -1610,7 +1610,7 @@ pub fn add_resolve_image_tests(parent: &mut tcu::TestCaseGroup, allocation_kind:
 
     // `addResolveImageLayerCopyBeforeResolvingTests` - five layers, of which only the
     // one the copy wrote holds the pattern.
-    let mut layer_copy = tcu::TestCaseGroup::new("layer_copy_before_resolving");
+    let mut layer_copy = TestCaseGroup::new("layer_copy_before_resolving");
     let layer_regions: Vec<ImageResolve> = (0..5)
         .map(|layer_ndx| ImageResolve {
             base_array_layer: layer_ndx,
@@ -1632,7 +1632,7 @@ pub fn add_resolve_image_tests(parent: &mut tcu::TestCaseGroup, allocation_kind:
 
     // `addResolveCopyImageWithRegionsTests` - two half-image regions, copied and then
     // resolved from where the copy put them.
-    let mut copy_with_regions = tcu::TestCaseGroup::new("copy_with_regions_before_resolving");
+    let mut copy_with_regions = TestCaseGroup::new("copy_with_regions_before_resolving");
     let image_half_width = (RESOLVE_EXTENT[0] / 2) as i32;
     let image_half_height = (RESOLVE_EXTENT[1] / 2) as i32;
     let half_image_extent = [RESOLVE_EXTENT[0] / 2, RESOLVE_EXTENT[1] / 2, 1];
@@ -1665,7 +1665,7 @@ pub fn add_resolve_image_tests(parent: &mut tcu::TestCaseGroup, allocation_kind:
     group.add_child(copy_with_regions);
 
     // `addResolveImageWholeArrayImageTests` - one source layer fanned out to five.
-    let mut whole_array = tcu::TestCaseGroup::new("whole_array_image");
+    let mut whole_array = TestCaseGroup::new("whole_array_image");
     let array_extent = [DEFAULT_EXTENT[0], DEFAULT_EXTENT[1], 5];
     add_resolve_group(
         &mut whole_array,
@@ -1680,7 +1680,7 @@ pub fn add_resolve_image_tests(parent: &mut tcu::TestCaseGroup, allocation_kind:
 
     // `addResolveImageWholeArrayImageSingleRegionTests` - the same fan-out written as
     // one multi-layer region, including the two maintenance5 spellings of "the rest".
-    let mut one_region = tcu::TestCaseGroup::new("whole_array_image_one_region");
+    let mut one_region = TestCaseGroup::new("whole_array_image_one_region");
     for (base_layer, layer_count, suffix, needs_maintenance5) in [
         (0u32, 5u32, "", false),
         (0, REMAINING_ARRAY_LAYERS, "_all_remaining_layers", true),
@@ -1707,7 +1707,7 @@ pub fn add_resolve_image_tests(parent: &mut tcu::TestCaseGroup, allocation_kind:
 
     // `addResolveImageDiffImageSizeTests` - the region stays the full resolveExtent
     // while one side's image is made larger in one axis.
-    let mut diff_size = tcu::TestCaseGroup::new("diff_image_size");
+    let mut diff_size = TestCaseGroup::new("diff_image_size");
     let image_extents = [
         [RESOLVE_EXTENT[0] + 10, RESOLVE_EXTENT[1], RESOLVE_EXTENT[2]],
         [RESOLVE_EXTENT[0], RESOLVE_EXTENT[1] * 2, RESOLVE_EXTENT[2]],

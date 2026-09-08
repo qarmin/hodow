@@ -18,7 +18,7 @@ pub mod binding_tests;
 pub mod mapping_tests;
 pub mod zero_initialize_device_memory_tests;
 
-use crate::tcu::TestCaseGroup;
+use crate::vkt::TestCaseGroup;
 
 /// `createMemoryTests` for the `memory` group.
 ///

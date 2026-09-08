@@ -1,18 +1,25 @@
 # hodow_cts
 
-A Rust rewrite of the Khronos Vulkan Conformance Test Suite ([VK-GL-CTS]).
+A Rust rewrite of the Khronos Conformance Test Suite ([VK-GL-CTS]) - Vulkan and
+OpenGL ES.
 
 It is a rewrite, not a wrapper: there is no C or C++ anywhere in the build, and no SDK,
 no CMake and no header packages are needed to compile or run it. The built binary links
-against `libc` and `libgcc` and nothing else - the Vulkan loader is opened at run time.
+against `libc` and `libgcc` and nothing else - the Vulkan loader, libEGL and libGLESv2
+are all opened at run time.
 
-Test case names are identical to upstream `deqp-vk`
-(`dEQP-VK.compute.pipeline.basic.empty_shader`), so a case list works with either
-binary and the results can be compared directly. That comparison is the project's
-correctness check, not a nice-to-have - see [Working on the port](#3-working-on-the-port).
+Test case names are identical to upstream `deqp-vk` and `deqp-gles31`
+(`dEQP-VK.compute.pipeline.basic.empty_shader`,
+`dEQP-GLES31.functional.compute.basic.empty`), so a case list works with either binary
+and the results can be compared directly. That comparison is the project's correctness
+check, not a nice-to-have - see [Working on the port](#4-working-on-the-port).
 
-**Scope.** Upstream has about 1.68 million test cases. This is a framework plus a
-hand-picked, growing subset, currently:
+Which API a case belongs to is decided by the root of its name, so one binary holds
+both and a run can span them: each API is brought up in turn, and one being unavailable
+does not stop the other.
+
+**Scope.** Upstream has about 1.68 million Vulkan cases and 38k in the OpenGL ES 3.1
+mustpass. This is a framework plus a hand-picked, growing subset, currently:
 
 | group | cases | not ported yet |
 |---|---|---|
@@ -30,9 +37,13 @@ Complete groups: `api.image_clearing`, `api.ds_color_copy`, `api.buffer_view`,
 `.64b_indexing`, and every `memory.mapping` / `memory.binding` / `memory.allocation`
 sub-group.
 
+| group | cases | not ported yet |
+|---|---|---|
+| `dEQP-GLES31.functional.compute.basic.*` | 33 of 41 | the eight image cases (`copy_image_to_ssbo`, `copy_ssbo_to_image`, `image_atomic_op`, `image_barrier`) |
+
 Run `hodow_cts --list` for the exact set, or `just cts-coverage` for the numbers above
 computed from the binary itself. Every implemented case is verified to give the same
-verdict as upstream `deqp-vk` on the same driver.
+verdict as upstream `deqp-vk` / `deqp-gles31` on the same driver.
 
 The graphics cases are gated on one thing: `api.smoke.triangle` compares against a
 software-rasterised reference with a colour threshold of 0 and a ±1 pixel position
@@ -47,13 +58,15 @@ an approximation of it would fail in a way indistinguishable from a driver bug.
 Two steps on a stock Ubuntu.
 
 ```bash
-# 1. Toolchain and a Vulkan driver.
+# 1. Toolchain and a driver.
 #    mesa-vulkan-drivers covers AMD and Intel; on NVIDIA the proprietary driver
-#    ships its own and you do not need this package.
-sudo apt install rustup mesa-vulkan-drivers && rustup default stable
+#    ships its own and you do not need this package. libegl1 + libgles2 are the
+#    OpenGL ES side, and are already there on any machine with a GPU driver.
+sudo apt install rustup mesa-vulkan-drivers libegl1 libgles2 && rustup default stable
 
 # 2. Build and run.
 cargo run --release -p hodow_cts -- --case 'dEQP-VK.compute.*'
+cargo run --release -p hodow_cts -- --case 'dEQP-GLES31.*'
 ```
 
 That is the whole list to *run* it. No `-dev` packages, no Vulkan SDK, no CMake.
@@ -85,13 +98,14 @@ vulkaninfo --summary | grep deviceName
 Useful flags:
 
 ```bash
-hodow_cts --list                          # what is implemented, without touching Vulkan
+hodow_cts --list                          # what is implemented, without touching a driver
 hodow_cts --case 'dEQP-VK.compute.*'      # glob filter, repeatable
 hodow_cts --case-list cases.txt           # one case name per line
 hodow_cts --output results.jsonl          # machine-readable results (see below)
 hodow_cts --device-id 2                   # second GPU, in enumeration order
 hodow_cts --isolate-per-test              # one process per case, to pin down a crash
 hodow_cts --validation                    # see "Telling a port bug from a driver bug"
+HODOW_CTS_EGL_PLATFORM=surfaceless ...    # pin the EGL platform (device|surfaceless|wayland|default)
 hodow_cts --no-color                      # or set NO_COLOR; --list is plain either way
 hodow_cts -j 8                            # eight worker processes at once
 ```
@@ -180,7 +194,75 @@ cannot tell you anything about your hardware - for that, run on the real GPU.
 
 ---
 
-## 3. Finding bugs, in the port or in a driver
+## 3. OpenGL ES
+
+The `dEQP-GLES31` half needs no ICD and no environment: `just cts-gles` runs it, and
+`just cts-gles-list` prints the cases without touching a driver.
+
+### Finding a display without being told where it is
+
+This is the part that is not a port. Upstream has one platform file per windowing
+system, chosen at CMake time (`DEQP_TARGET=surfaceless`, `x11_egl`, `wayland`, ...), and
+its `surfaceless` target brings EGL up through `eglGetDisplay(EGL_DEFAULT_DISPLAY)` and
+gives up if that fails - which is why running upstream `deqp-gles31` headless needs
+`EGL_PLATFORM=surfaceless` in the environment.
+
+`hodow_cts` tries the platforms itself, in this order, and logs each attempt:
+
+1. `HODOW_CTS_EGL_PLATFORM`, if set - for pinning one down while debugging;
+2. `EGL_EXT_platform_device`, then `EGL_MESA_platform_surfaceless` - a display with no
+   screen and no compositor, which is what makes a container or a CI runner work;
+3. Wayland, if `WAYLAND_DISPLAY` is set. libwayland-client is opened at run time for
+   the two symbols that produce a `wl_display*` - EGL needs nothing else from it, so
+   that costs no build dependency and no protocol code;
+4. `eglGetDisplay(EGL_DEFAULT_DISPLAY)`, which is what an X11 or plain-framebuffer
+   driver answers.
+
+**A Wayland-only driver needs step 3 and nothing else will do.** i.MX/Vivante's
+`imx-gpu-viv` has no device platform, no surfaceless platform, and answers the default
+display with "No default display support on wayland", so a board running it can only be
+tested with a compositor up and `WAYLAND_DISPLAY`/`XDG_RUNTIME_DIR` in the environment
+(over SSH they have to be set by hand:
+`XDG_RUNTIME_DIR=/run/user/0 WAYLAND_DISPLAY=wayland-1 hodow_cts -c 'dEQP-GLES31.*'`).
+
+When no platform answers, the failure message lists every attempt with its EGL error
+and prints `DISPLAY`/`WAYLAND_DISPLAY`/`XDG_RUNTIME_DIR` alongside - which is what
+separates "no driver here" from "driver present, but nothing to attach it to".
+
+### The render target
+
+The context renders into a 256x256 pbuffer - upstream's default surface size, and the
+one surface type that needs no window system. A driver with
+`EGL_KHR_surfaceless_context` but no pbuffer config still gets a context, with a 0x0
+default framebuffer; that is fine for compute, and it is logged as a warning because
+any case that reads pixels would be comparing against nothing.
+
+### Shaders are source, not SPIR-V
+
+The Vulkan half commits SPIR-V and never ships a compiler. The GLES half cannot and
+must not: **a GL driver consumes GLSL**, so its shader compiler is part of what is under
+test. Every ported GLES case builds its GLSL at run time from its own parameters, the
+same way upstream's C++ does with `std::ostringstream`, and there is no manifest and no
+generated shader module involved. On a driver whose compiler is the suspect part - which
+is the usual case on an embedded GPU - that is the point.
+
+### The entry-point tables are generated
+
+`src/generated/glw.rs` and `src/generated/eglw.rs` are generated by
+`scripts/gen_api_wrappers.py` from upstream's own registry-generated `.inl` files
+(`framework/opengl/wrapper/glw*.inl`, `framework/egl/wrapper/eglw*.inl`), so the entry
+points and enumerants cannot drift from what upstream declares. `just cts-wrappers`
+regenerates them; `just cts-verify` fails if they are stale. Every entry point is looked
+up at run time, so the binary links against neither libEGL nor libGLESv2.
+
+Each field has a same-named method, so a call site reads `gl.bind_buffer(...)` exactly
+as the C++ reads `gl.bindBuffer(...)`. Calling one the driver never exported panics with
+its name: that means the port used something it did not check for, which is a bug in the
+port and not a driver defect.
+
+---
+
+## 4. Finding bugs, in the port or in a driver
 
 ### The validation layer
 
@@ -212,8 +294,12 @@ rather than blaming whichever case happened to be first.
 |------|---------|
 | 0 | every case passed |
 | 1 | a test failed, or the run could not be set up |
-| 2 | **no Vulkan driver** - nothing was run, and this is not a failure |
-| 3 | Vulkan could not be initialised for another reason (a requested layer is missing) |
+| 2 | **no driver** - nothing was run at all, and this is not a failure |
+| 3 | the API could not be initialised for another reason (a requested layer is missing) |
+
+Exit 2 means *nothing* ran. In a run that spans both APIs, one API being unavailable is
+reported on the summary line and the other API's verdicts still decide the exit code -
+otherwise a machine with no Vulkan driver could never report a GLES failure.
 
 ### When a run hangs or resets the GPU
 
@@ -249,7 +335,7 @@ sudo apt install spirv-tools    # spirv-val
 
 ---
 
-## 4. Working on the port
+## 5. Working on the port
 
 Only this section needs anything beyond Rust. None of it is required to build or run.
 
@@ -268,6 +354,13 @@ make -C tmp/glslang-build -j"$(nproc)" glslang-standalone
 cmake -S tmp/VK-GL-CTS -B tmp/deqp-build -DCMAKE_BUILD_TYPE=Release \
       -DDEQP_TARGET=vulkan_headless
 make -C tmp/deqp-build -j"$(nproc)" deqp-vk
+
+# upstream deqp-gles31, the same for the OpenGL ES half. The surfaceless target needs
+# the EGL and GLES headers, which hodow_cts itself does not.
+sudo apt install libegl1-mesa-dev libgles2-mesa-dev
+cmake -S tmp/VK-GL-CTS -B tmp/deqp-gles-build -DCMAKE_BUILD_TYPE=Release \
+      -DDEQP_TARGET=surfaceless
+make -C tmp/deqp-gles-build -j"$(nproc)" deqp-gles31
 ```
 
 Then the three things you actually run:
@@ -276,9 +369,14 @@ Then the three things you actually run:
 # Regenerate shaders + parameter constants after editing a manifest.
 python3 hodow_cts/scripts/compile_shaders.py --glslang tmp/glslang-build/StandAlone/glslang
 
-# Compare every implemented case against upstream on the same driver.
+# Regenerate the GL/EGL entry-point tables after a re-sync with upstream.
+python3 hodow_cts/scripts/gen_api_wrappers.py --cts-dir tmp/VK-GL-CTS
+
+# Compare every implemented case against upstream on the same driver. Either binary
+# may be given, or both; each compares its own API's cases.
 python3 hodow_cts/scripts/diff_vs_deqp.py \
-    --deqp-vk tmp/deqp-build/external/vulkancts/modules/vulkan/deqp-vk
+    --deqp-vk tmp/deqp-build/external/vulkancts/modules/vulkan/deqp-vk \
+    --deqp-gles31 tmp/deqp-gles-build/modules/gles31/deqp-gles31
 
 # See which ported upstream files have changed since the pinned revision.
 python3 hodow_cts/scripts/vendor_upstream.py --cts-dir tmp/VK-GL-CTS --check
@@ -288,15 +386,29 @@ python3 hodow_cts/scripts/vendor_upstream.py --cts-dir tmp/VK-GL-CTS --check
 
 ```
 src/tcu/     <- framework/common, framework/delibs   (tcu::, de::)
+src/runner/  execution: the shared case loop, crash isolation, one module per API
 src/vk/      <- external/vulkancts/framework/vulkan  (vk::)
 src/vkt/     <- external/vulkancts/modules/vulkan    (vkt::)
-src/generated/     generated by compile_shaders.py - do not hand-edit
-src/generated/shaders/  one module per manifest, big ones cut into partN.rs
-shaders/manifest/  the single source of truth for every test parameter
+src/eglw/    <- framework/egl/wrapper                (eglw::)
+src/eglu/    <- framework/egl                        (eglu::)
+src/glw/     <- framework/opengl/wrapper             (glw::)
+src/glu/     <- framework/opengl                     (glu::)
+src/gles31/  <- modules/gles31                       (deqp::gles31)
+src/generated/     generated - do not hand-edit
+src/generated/shaders/  by compile_shaders.py; one module per manifest, big ones cut into partN.rs
+src/generated/glw.rs    by gen_api_wrappers.py, from upstream's glw*.inl
+src/generated/eglw.rs   by gen_api_wrappers.py, from upstream's eglw*.inl
+shaders/manifest/  the single source of truth for every Vulkan test parameter
 shaders/src/       GLSL templates, copied from the upstream C++ string literals
 shaders/expanded/  the GLSL after substitution, for review
 upstream/    verbatim copies of every upstream file that has been ported
 ```
+
+`tcu`, `report` and `runner` are shared by both APIs and know about neither: the
+hierarchy types are generic over the API's own case trait, so one case-name filter, one
+result format and one crash supervisor serve both. Everything below them belongs to one
+API. Adding a third (`dEQP-GLES3`, say) is a module under `src/` plus a variant in
+`runner::Api`.
 
 Rust files that were ported keep the upstream structure on purpose - same
 `checkSupport` / `initPrograms` / `iterate` split, same order of operations, same
@@ -517,6 +629,8 @@ not support as an attachment.
 
 ### Adding a test
 
+Vulkan:
+
 1. Add the upstream `.cpp` to `upstream/FILES.txt` and run `vendor_upstream.py --sync`.
 2. Copy the GLSL out of the C++ string literal into `shaders/src/`, replacing the
    interpolated values with `${param}`.
@@ -525,6 +639,18 @@ not support as an attachment.
 4. Write the Rust test next to its siblings, following the C++ closely.
 5. `compile_shaders.py`, then `diff_vs_deqp.py`. A new case that does not agree with
    upstream is not done.
+
+OpenGL ES - the same, minus steps 2 and 3, because the shader source is what the driver
+gets and the test builds it itself:
+
+1. Add the upstream `.cpp` to `upstream/FILES.txt` and run `vendor_upstream.py --sync`.
+2. Write the Rust test next to its siblings, building the GLSL with `format!` where the
+   C++ builds it with `<<`, in the same order and with the same names.
+3. Register it in the group's `create_tests`, in upstream's order. **A case that is
+   registered but not implemented must not be registered at all** (or must override
+   `is_stub`) - `just cts-coverage` counts what runs, and a tree that runs nothing
+   inflates it.
+4. `just cts-gles-diff`. A new case that does not agree with upstream is not done.
 
 ---
 

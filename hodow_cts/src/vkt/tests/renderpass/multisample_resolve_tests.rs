@@ -7,7 +7,7 @@ use vulkanalia::vk::{self, Handle, HasBuilder};
 
 use crate::tcu::pixel::{ConstPixelBufferAccess, get_texture_format_bit_depth, srgb_to_linear};
 use crate::tcu::texture::{ChannelOrder, ChannelType, TextureChannelClass};
-use crate::tcu::{TestCaseGroup, TestError, TestStatus, map_vk_format};
+use crate::tcu::{TestError, TestStatus, map_vk_format};
 use crate::vk::VkResultExt;
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
 use crate::vk::image_util::{ImageWithMemory, make_buffer_image_copy, make_image_memory_barrier, make_image_subresource_layers, make_image_view};
@@ -18,7 +18,7 @@ use crate::vk::obj_util::{
 use crate::vk::programs::{BinaryCollection, create_shader_module};
 use crate::vk::ref_util::{Unique, UniqueDescriptorSet};
 use crate::vkt::tests::renderpass::group_params::{GroupParams, RenderingType};
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// `TestType`
 #[derive(Clone, Copy, PartialEq, Eq)]

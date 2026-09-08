@@ -33,7 +33,7 @@ use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer
 pub use crate::vk::programs::SharedProgram;
 use crate::vk::programs::{BinaryCollection, create_shader_module};
 use crate::vk::ref_util::Unique;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// `defaultExtent` / `defaultHalfSize`
 const DEFAULT_SIZE: u32 = 64;
@@ -833,7 +833,7 @@ fn image_layout_case_name(layout: vk::ImageLayout) -> &'static str {
 }
 
 /// `addDepthStencilCopyMSAATest`
-fn add_depth_stencil_copy_msaa_test(group: &mut tcu::TestCaseGroup, allocation_kind: AllocationKind, command_variant: CopyCommandVariant, copy_options: CopyOptions) {
+fn add_depth_stencil_copy_msaa_test(group: &mut TestCaseGroup, allocation_kind: AllocationKind, command_variant: CopyCommandVariant, copy_options: CopyOptions) {
     const DS_FORMATS: [(&str, vk::Format); 4] = [
         ("d32_sfloat", vk::Format::D32_SFLOAT),
         ("s8_uint", vk::Format::S8_UINT),
@@ -898,14 +898,14 @@ fn add_depth_stencil_copy_msaa_test(group: &mut tcu::TestCaseGroup, allocation_k
 }
 
 /// `addCopyDepthStencilMSAATests`
-pub fn add_depth_stencil_msaa_tests(parent: &mut tcu::TestCaseGroup, allocation_kind: AllocationKind, command_variant: CopyCommandVariant) {
-    let mut group = tcu::TestCaseGroup::new("depth_stencil_msaa_copy");
+pub fn add_depth_stencil_msaa_tests(parent: &mut TestCaseGroup, allocation_kind: AllocationKind, command_variant: CopyCommandVariant) {
+    let mut group = TestCaseGroup::new("depth_stencil_msaa_copy");
     for (name, options) in [
         ("whole", CopyOptions::WholeImage),
         ("array_to_array", CopyOptions::ArrayToArray),
         ("partial", CopyOptions::Partial),
     ] {
-        let mut sub = tcu::TestCaseGroup::new(name);
+        let mut sub = TestCaseGroup::new(name);
         add_depth_stencil_copy_msaa_test(&mut sub, allocation_kind, command_variant, options);
         group.add_child(sub);
     }

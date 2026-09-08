@@ -2,7 +2,7 @@
 //
 // external/vulkancts/modules/vulkan/transform_feedback/
 
-use crate::tcu::TestCaseGroup;
+use crate::vkt::TestCaseGroup;
 
 pub mod primitives_generated_query_tests;
 

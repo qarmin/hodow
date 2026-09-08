@@ -35,7 +35,7 @@ use crate::vk::obj_util::{
 };
 use crate::vk::programs::{BinaryCollection, create_shader_module};
 use crate::vk::ref_util::Unique;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// The manifest declares its cases with this: the compute shader plus the three things
 /// the generator built it for, so the host can assert it picked the right one.
@@ -1560,14 +1560,14 @@ const INTERFACES: [ShaderInputInterface; 5] = [
 ///
 /// `secondary_cmd_buf` mirrors the primary tree with the draw recorded into a secondary
 /// command buffer, so it has no compute cases at all.
-pub fn create_shader_access_tests() -> tcu::TestCaseGroup {
-    let mut group = tcu::TestCaseGroup::new("shader_access");
+pub fn create_shader_access_tests() -> TestCaseGroup {
+    let mut group = TestCaseGroup::new("shader_access");
 
     for is_primary in [true, false] {
-        let mut cmd_group = tcu::TestCaseGroup::new(if is_primary { "primary_cmd_buf" } else { "secondary_cmd_buf" });
+        let mut cmd_group = TestCaseGroup::new(if is_primary { "primary_cmd_buf" } else { "secondary_cmd_buf" });
 
         for bind2 in [false, true] {
-            let mut bind = tcu::TestCaseGroup::new(if bind2 { "bind2" } else { "bind" });
+            let mut bind = TestCaseGroup::new(if bind2 { "bind2" } else { "bind" });
 
             for update_method in [
                 DescriptorUpdateMethod::Normal,
@@ -1575,7 +1575,7 @@ pub fn create_shader_access_tests() -> tcu::TestCaseGroup {
                 DescriptorUpdateMethod::WithPush,
                 DescriptorUpdateMethod::WithPushTemplate,
             ] {
-                let mut method_group = update_method.group_name().map(tcu::TestCaseGroup::new);
+                let mut method_group = update_method.group_name().map(TestCaseGroup::new);
                 for type_group in create_descriptor_type_groups(update_method, is_primary, bind2) {
                     if let Some(g) = method_group.as_mut() {
                         g.add_child(type_group);
@@ -1599,7 +1599,7 @@ pub fn create_shader_access_tests() -> tcu::TestCaseGroup {
 
 /// One group per descriptor type, in upstream's order - which puts the image types
 /// before the buffer ones.
-fn create_descriptor_type_groups(update_method: DescriptorUpdateMethod, is_primary: bool, bind2: bool) -> Vec<tcu::TestCaseGroup> {
+fn create_descriptor_type_groups(update_method: DescriptorUpdateMethod, is_primary: bool, bind2: bool) -> Vec<TestCaseGroup> {
     let mut groups = vec![
         create_image_group(update_method, is_primary, bind2, "sampler_mutable", vk::DescriptorType::SAMPLER, false),
         create_image_group(update_method, is_primary, bind2, "sampler_immutable", vk::DescriptorType::SAMPLER, true),
@@ -1633,7 +1633,7 @@ fn create_descriptor_type_groups(update_method: DescriptorUpdateMethod, is_prima
 
     for (type_name, descriptor_type, resource_kind) in descriptor_types {
         let is_dynamic = is_dynamic_descriptor_type(descriptor_type);
-        let mut type_group = tcu::TestCaseGroup::new(type_name);
+        let mut type_group = TestCaseGroup::new(type_name);
 
         // "Can't support push descriptor sets with dynamic UBOs or SSBOs" - upstream
         // drops the whole descriptor type rather than the individual cases.
@@ -1646,7 +1646,7 @@ fn create_descriptor_type_groups(update_method: DescriptorUpdateMethod, is_prima
             if !is_primary && stage_flags == vk::ShaderStageFlags::COMPUTE {
                 continue;
             }
-            let mut stage_group = tcu::TestCaseGroup::new(stage_name);
+            let mut stage_group = TestCaseGroup::new(stage_name);
 
             for (set_group_name, descriptor_set_count) in SET_COUNTS {
                 // Only one descriptor set layout may carry the push flag, so a push
@@ -1656,10 +1656,10 @@ fn create_descriptor_type_groups(update_method: DescriptorUpdateMethod, is_prima
                 }
                 // The single-set arrangement has no group of its own; its interfaces sit
                 // directly under the stage.
-                let mut set_group = (!set_group_name.is_empty()).then(|| tcu::TestCaseGroup::new(set_group_name));
+                let mut set_group = (!set_group_name.is_empty()).then(|| TestCaseGroup::new(set_group_name));
 
                 for shader_interface in INTERFACES {
-                    let mut interface_group = tcu::TestCaseGroup::new(shader_interface.case_name());
+                    let mut interface_group = TestCaseGroup::new(shader_interface.case_name());
 
                     for set_view_offset in [false, true] {
                         // The texel buffer cases drop the "view" from the name: their
@@ -1803,24 +1803,24 @@ fn create_image_group(
     group_name: &str,
     descriptor_type: vk::DescriptorType,
     is_immutable_sampler: bool,
-) -> tcu::TestCaseGroup {
-    let mut type_group = tcu::TestCaseGroup::new(group_name);
+) -> TestCaseGroup {
+    let mut type_group = TestCaseGroup::new(group_name);
 
     for (stage_name, stage_flags) in SHADER_STAGES {
         if !is_primary && stage_flags == vk::ShaderStageFlags::COMPUTE {
             continue;
         }
-        let mut stage_group = tcu::TestCaseGroup::new(stage_name);
+        let mut stage_group = TestCaseGroup::new(stage_name);
 
         for (set_group_name, descriptor_set_count) in SET_COUNTS {
             // Only one descriptor set layout may carry the push flag.
             if update_method.is_push() && descriptor_set_count != DescriptorSetCount::Single {
                 continue;
             }
-            let mut set_group = (!set_group_name.is_empty()).then(|| tcu::TestCaseGroup::new(set_group_name));
+            let mut set_group = (!set_group_name.is_empty()).then(|| TestCaseGroup::new(set_group_name));
 
             for shader_interface in INTERFACES {
-                let mut interface_group = tcu::TestCaseGroup::new(shader_interface.case_name());
+                let mut interface_group = TestCaseGroup::new(shader_interface.case_name());
 
                 for (name, view_type, base_mip_level, base_array_slice) in IMAGE_TYPES {
                     if !image_case_exists(

@@ -33,13 +33,13 @@ use super::operation::{
 use crate::tcu::pixel::PixelBufferAccess;
 use crate::tcu::random::Random;
 use crate::tcu::texture::{TextureChannelClass, map_vk_format};
-use crate::tcu::{self, TestError, TestStatus};
+use crate::tcu::{TestError, TestStatus};
 use crate::vk::VkResultExt;
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer};
 use crate::vk::obj_util::{allocate_command_buffer, make_command_pool};
 use crate::vk::programs::BinaryCollection;
 use crate::vk::ref_util::Unique;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// `s_writeOps` for `DeviceHostTestsBase::initCommonTests`, restricted to the ported
 /// operations. Upstream's list is a subset of the full catalogue to begin with - the
@@ -859,13 +859,13 @@ fn poll_signal_from_host(context: &Context<'_>, _sync: SyncType) -> Result<TestS
 }
 
 /// `DeviceHostTestsBase::initCommonTests`
-pub fn create_timeline_semaphore_tests(sync_type: SyncType) -> tcu::TestCaseGroup {
-    let mut group = tcu::TestCaseGroup::new("timeline_semaphore");
-    let mut device_host = tcu::TestCaseGroup::new("device_host");
+pub fn create_timeline_semaphore_tests(sync_type: SyncType) -> TestCaseGroup {
+    let mut group = TestCaseGroup::new("timeline_semaphore");
+    let mut device_host = TestCaseGroup::new("device_host");
 
     for &write_op in DEVICE_HOST_WRITE_OPS {
         for &read_op in DEVICE_HOST_READ_OPS {
-            let mut op_group = tcu::TestCaseGroup::new(format!("{}_{}", write_op.as_str(), read_op.as_str()));
+            let mut op_group = TestCaseGroup::new(format!("{}_{}", write_op.as_str(), read_op.as_str()));
             let mut empty = true;
 
             for resource in RESOURCES {
@@ -891,7 +891,7 @@ pub fn create_timeline_semaphore_tests(sync_type: SyncType) -> tcu::TestCaseGrou
     // `LegacyDeviceHostTests::init`'s misc group; upstream registers `initial_value`
     // only under the legacy tree.
     if sync_type == SyncType::Legacy {
-        let mut misc = tcu::TestCaseGroup::new("misc");
+        let mut misc = TestCaseGroup::new("misc");
         misc.add_child(Box::new(TimelineFunctionCase {
             name: "initial_value",
             sync_type,
@@ -902,7 +902,7 @@ pub fn create_timeline_semaphore_tests(sync_type: SyncType) -> tcu::TestCaseGrou
 
     group.add_child(device_host);
 
-    let mut wait = tcu::TestCaseGroup::new("wait");
+    let mut wait = TestCaseGroup::new("wait");
     for (name, run) in [
         (
             "all_signal_from_device",

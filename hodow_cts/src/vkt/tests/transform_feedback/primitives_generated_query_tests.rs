@@ -6,10 +6,9 @@
 use vulkanalia::Device;
 use vulkanalia::vk::{self, HasBuilder};
 
-use crate::tcu::TestCaseGroup;
 use crate::vk::programs::BinaryCollection;
 use crate::vk::{Unique, VkResultExt};
-use crate::vkt::{Context, TestCase, TestError, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestError, TestInstance};
 
 /// The one program set, holding every distinct shader this group needs; a case picks
 /// its own by name.

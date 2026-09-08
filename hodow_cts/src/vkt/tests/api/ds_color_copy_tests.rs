@@ -15,13 +15,13 @@
 
 use vulkanalia::prelude::v1_0::*;
 
-use crate::tcu::{self, Random, TestError, TestOutcome, TestStatus};
+use crate::tcu::{Random, TestError, TestOutcome, TestStatus};
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
 use crate::vk::image_util::{ImageWithMemory, make_image_memory_barrier, make_image_subresource_range};
 use crate::vk::mem_util::{MemoryRequirement, flush_alloc, invalidate_alloc};
 use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool};
 use crate::vk::programs::BinaryCollection;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// `kMinDepthFloatVal` / `kMaxDepthFloatVal`
 const MIN_DEPTH_FLOAT: f32 = 0.125;
@@ -521,8 +521,8 @@ impl TestInstance for DsColorCopyInstance<'_> {
 }
 
 /// `createDSColorBitCopyTests`
-pub fn create_ds_color_copy_tests() -> tcu::TestCaseGroup {
-    let mut group = tcu::TestCaseGroup::new("ds_color_copy");
+pub fn create_ds_color_copy_tests() -> TestCaseGroup {
+    let mut group = TestCaseGroup::new("ds_color_copy");
 
     for fg in format_groups() {
         for &(ds_format, ds_name) in fg.ds_formats {

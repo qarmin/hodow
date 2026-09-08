@@ -38,11 +38,11 @@ use std::sync::{Mutex, MutexGuard};
 use vulkanalia::prelude::v1_0::*;
 use vulkanalia::vk::InstanceV1_1;
 
-use crate::tcu::{self, Random, TestError, TestOutcome, TestResult, TestStatus};
+use crate::tcu::{Random, TestError, TestOutcome, TestResult, TestStatus};
 use crate::vk::VkResultExt;
 use crate::vk::programs::BinaryCollection;
 use crate::vk::ref_util::Unique;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// The min max for allocation count is 4096. Use 4000 to take into account
 /// possible memory allocations made by layers etc.
@@ -1290,13 +1290,13 @@ impl TestCase for RandomAllocFreeCase {
 // createAllocationTestsCommon
 // ---------------------------------------------------------------------------------
 
-fn create_allocation_tests_common(allocation_mode: AllocationMode) -> tcu::TestCaseGroup {
+fn create_allocation_tests_common(allocation_mode: AllocationMode) -> TestCaseGroup {
     let name = match allocation_mode {
         AllocationMode::Default => "allocation",
         AllocationMode::DeviceGroup => "device_group_allocation",
         AllocationMode::Pageable => "pageable_allocation",
     };
-    let mut group = tcu::TestCaseGroup::new(name);
+    let mut group = TestCaseGroup::new(name);
 
     const KIB: vk::DeviceSize = 1024;
     const MIB: vk::DeviceSize = 1024 * KIB;
@@ -1319,13 +1319,13 @@ fn create_allocation_tests_common(allocation_mode: AllocationMode) -> tcu::TestC
     let orders = [("forward", Order::AllocFree), ("reverse", Order::AllocReverseFree), ("mixed", Order::MixedAllocFree)];
 
     {
-        let mut basic_group = tcu::TestCaseGroup::new("basic");
+        let mut basic_group = TestCaseGroup::new("basic");
 
         for (allocation_size_name, allocation_size) in allocation_sizes {
-            let mut size_group = tcu::TestCaseGroup::new(format!("size_{allocation_size_name}"));
+            let mut size_group = TestCaseGroup::new(format!("size_{allocation_size_name}"));
 
             for (order_name, order) in orders {
-                let mut order_group = tcu::TestCaseGroup::new(order_name);
+                let mut order_group = TestCaseGroup::new(order_name);
 
                 for allocation_count in allocation_counts {
                     if allocation_count != -1 && allocation_count as u64 * allocation_size > 50 * MIB {
@@ -1373,10 +1373,10 @@ fn create_allocation_tests_common(allocation_mode: AllocationMode) -> tcu::TestC
         }
 
         for allocation_percent in allocation_percents {
-            let mut percent_group = tcu::TestCaseGroup::new(format!("percent_{allocation_percent}"));
+            let mut percent_group = TestCaseGroup::new(format!("percent_{allocation_percent}"));
 
             for (order_name, order) in orders {
-                let mut order_group = tcu::TestCaseGroup::new(order_name);
+                let mut order_group = TestCaseGroup::new(order_name);
 
                 for allocation_count in allocation_counts {
                     if allocation_count != -1 && (allocation_count as f32 * allocation_percent as f32) >= 1.00f32 / 8.00f32 {
@@ -1425,7 +1425,7 @@ fn create_allocation_tests_common(allocation_mode: AllocationMode) -> tcu::TestC
 
     {
         let case_count = 100u32;
-        let mut random_group = tcu::TestCaseGroup::new("random");
+        let mut random_group = TestCaseGroup::new("random");
 
         for case_ndx in 0..case_count {
             let config = TestConfigRandom {
@@ -1446,16 +1446,16 @@ fn create_allocation_tests_common(allocation_mode: AllocationMode) -> tcu::TestC
 }
 
 /// `createAllocationTests`
-pub fn create_allocation_tests() -> tcu::TestCaseGroup {
+pub fn create_allocation_tests() -> TestCaseGroup {
     create_allocation_tests_common(AllocationMode::Default)
 }
 
 /// `createDeviceGroupAllocationTests`
-pub fn create_device_group_allocation_tests() -> tcu::TestCaseGroup {
+pub fn create_device_group_allocation_tests() -> TestCaseGroup {
     create_allocation_tests_common(AllocationMode::DeviceGroup)
 }
 
 /// `createPageableAllocationTests`
-pub fn create_pageable_allocation_tests() -> tcu::TestCaseGroup {
+pub fn create_pageable_allocation_tests() -> TestCaseGroup {
     create_allocation_tests_common(AllocationMode::Pageable)
 }

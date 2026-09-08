@@ -38,9 +38,9 @@ use vulkanalia::prelude::v1_0::*;
 use vulkanalia::vk::InstanceV1_1;
 
 use super::feature_struct_list::{FEATURE_STRUCTS, FeatureStruct};
-use crate::tcu::{TestCaseGroup, TestError, TestOutcome, TestResult, TestStatus};
+use crate::tcu::{TestError, TestOutcome, TestResult, TestStatus};
 use crate::vk::programs::BinaryCollection;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 // bitflags 1.x - which is what vulkanalia uses - has no `from_bits_retain`. The
 // difference matters: upstream builds its "everything is allowed" masks as a plain

@@ -12,7 +12,7 @@
 
 use vulkanalia::vk::{self, Handle, HasBuilder};
 
-use crate::tcu::{TestCaseGroup, TestError};
+use crate::tcu::TestError;
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
 use crate::vk::image_util::{ImageWithMemory, make_image_view};
 use crate::vk::mem_util::{MemoryRequirement, invalidate_alloc};
@@ -20,7 +20,7 @@ use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer
 use crate::vk::programs::{BinaryCollection, create_shader_module};
 use crate::vk::{Unique, VkResultExt};
 use crate::vkt::tests::renderpass::group_params::GroupParams;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// `VerifyBuffer`
 #[derive(Clone, Copy, PartialEq, Eq)]

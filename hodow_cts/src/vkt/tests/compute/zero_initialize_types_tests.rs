@@ -21,7 +21,7 @@
 use vulkanalia::prelude::v1_0::*;
 use vulkanalia::vk::InstanceV1_1;
 
-use crate::tcu::{self, TestError, TestOutcome, TestStatus, UVec3};
+use crate::tcu::{TestError, TestOutcome, TestStatus, UVec3};
 use crate::vk::builder_util::{DescriptorPoolBuilder, DescriptorSetLayoutBuilder, DescriptorSetUpdateBuilder, Location};
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
 use crate::vk::compute_pipeline::{ComputePipelineConstructionType, ComputePipelineWrapper, check_shader_object_requirements};
@@ -30,7 +30,7 @@ use crate::vk::obj_util::{
     BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool, make_descriptor_buffer_info, make_descriptor_set, make_memory_barrier,
 };
 use crate::vk::programs::BinaryCollection;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// The extension every case in this group needs.
 const EXTENSION: &str = "VK_KHR_zero_initialize_workgroup_memory";
@@ -263,7 +263,7 @@ impl TestInstance for TypeTestInstance<'_> {
 /// both live in the manifest - the shader is built from them, so they cannot be
 /// re-derived here without the two disagreeing. What is left is the registration, in
 /// the same order.
-fn add_type_tests(group: &mut tcu::TestCaseGroup) {
+fn add_type_tests(group: &mut TestCaseGroup) {
     use crate::generated::shaders::compute_zero_initialize_types::*;
 
     for case in [
@@ -440,7 +440,7 @@ impl TestInstance for CompositeTestInstance<'_> {
 /// The GLSL each case injects (`typeDefinition` / `assignment`) is in the manifest,
 /// which is what the case name - the table index, as `de::toString(i)` produces - is
 /// really an index into.
-fn add_composite_tests(group: &mut tcu::TestCaseGroup) {
+fn add_composite_tests(group: &mut TestCaseGroup) {
     use crate::generated::shaders::compute_zero_initialize_types::*;
 
     for case in [
@@ -594,7 +594,7 @@ impl TestInstance for SharedMemoryBlockInstance<'_> {
 }
 
 /// `AddSharedMemoryTests`
-fn add_shared_memory_tests(group: &mut tcu::TestCaseGroup) {
+fn add_shared_memory_tests(group: &mut TestCaseGroup) {
     use crate::generated::shaders::compute_zero_initialize_types::*;
 
     for case in [
@@ -618,14 +618,14 @@ fn add_shared_memory_tests(group: &mut tcu::TestCaseGroup) {
 /// `createZeroInitializeWorkgroupMemoryTests`, in the order it adds them. The caller
 /// hangs them off the `zero_initialize_workgroup_memory` group; `types` and
 /// `composites` go before `max_workgroups` there, `shared_memory_blocks` last.
-pub fn create_types_composites_and_blocks_groups() -> Vec<tcu::TestCaseGroup> {
-    let mut type_group = tcu::TestCaseGroup::new("types");
+pub fn create_types_composites_and_blocks_groups() -> Vec<TestCaseGroup> {
+    let mut type_group = TestCaseGroup::new("types");
     add_type_tests(&mut type_group);
 
-    let mut composite_group = tcu::TestCaseGroup::new("composites");
+    let mut composite_group = TestCaseGroup::new("composites");
     add_composite_tests(&mut composite_group);
 
-    let mut subgroup_invocation_group = tcu::TestCaseGroup::new("shared_memory_blocks");
+    let mut subgroup_invocation_group = TestCaseGroup::new("shared_memory_blocks");
     add_shared_memory_tests(&mut subgroup_invocation_group);
 
     vec![type_group, composite_group, subgroup_invocation_group]

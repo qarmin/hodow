@@ -21,13 +21,13 @@ use super::operation::{
     COPY_OPS, Operation, OperationName, READ_OPS, RESOURCES, Resource, ResourceDescription, ResourceType, SyncInfo, SyncType, WRITE_OPS, buffer_resource, build_copy_operation,
     build_operation, cmd_pipeline_barrier, first_difference, get_resource_name, image_resource, make_buffer_memory_barrier2, make_image_memory_barrier2,
 };
-use crate::tcu::{self, Random, TestError, TestStatus};
+use crate::tcu::{Random, TestError, TestStatus};
 use crate::vk::VkResultExt;
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer};
 use crate::vk::obj_util::make_command_pool;
 use crate::vk::programs::BinaryCollection;
 use crate::vk::ref_util::Unique;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// `SyncPrimitive`, restricted to the four that need no timeline semaphore.
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -697,8 +697,8 @@ fn allocate_command_buffer(device: &Device, pool: vk::CommandPool) -> Result<cra
 }
 
 /// `createSynchronizedOperationSingleQueueTests` -> `createTests`
-pub fn create_single_queue_tests(sync_type: SyncType) -> tcu::TestCaseGroup {
-    let mut group = tcu::TestCaseGroup::new("single_queue");
+pub fn create_single_queue_tests(sync_type: SyncType) -> TestCaseGroup {
+    let mut group = TestCaseGroup::new("single_queue");
 
     for primitive in [
         SyncPrimitive::Fence,
@@ -707,11 +707,11 @@ pub fn create_single_queue_tests(sync_type: SyncType) -> tcu::TestCaseGroup {
         SyncPrimitive::Barrier,
         SyncPrimitive::Event,
     ] {
-        let mut primitive_group = tcu::TestCaseGroup::new(primitive.group_name());
+        let mut primitive_group = TestCaseGroup::new(primitive.group_name());
 
         for &write_op in WRITE_OPS {
             for &read_op in READ_OPS {
-                let mut op_group = tcu::TestCaseGroup::new(format!("{}_{}", write_op.as_str(), read_op.as_str()));
+                let mut op_group = TestCaseGroup::new(format!("{}_{}", write_op.as_str(), read_op.as_str()));
                 let mut empty = true;
 
                 for resource in RESOURCES {
@@ -1089,8 +1089,8 @@ const EVENT_RESOURCES: &[ResourceDescription] = &[
     ),
 ];
 
-fn create_multiple_events_tests() -> tcu::TestCaseGroup {
-    let mut group = tcu::TestCaseGroup::new("multi_events");
+fn create_multiple_events_tests() -> TestCaseGroup {
+    let mut group = TestCaseGroup::new("multi_events");
 
     let mut op_sets = Vec::new();
     for &write_op in EVENT_WRITE_OPS {
@@ -1155,12 +1155,12 @@ fn resource_supports_compute_queue(resource: &ResourceDescription) -> bool {
 }
 
 /// `createSynchronizationTests`, restricted to the two `op.single_queue` trees.
-pub fn create_tests() -> Vec<tcu::TestCaseGroup> {
+pub fn create_tests() -> Vec<TestCaseGroup> {
     [("synchronization", SyncType::Legacy), ("synchronization2", SyncType::Synchronization2)]
         .into_iter()
         .map(|(name, sync_type)| {
-            let mut group = tcu::TestCaseGroup::new(name);
-            let mut op = tcu::TestCaseGroup::new("op");
+            let mut group = TestCaseGroup::new(name);
+            let mut op = TestCaseGroup::new("op");
             op.add_child({
                 let mut single = create_single_queue_tests(sync_type);
                 if sync_type == SyncType::Synchronization2 {

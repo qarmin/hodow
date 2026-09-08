@@ -28,7 +28,7 @@ pub mod object_management_tests;
 pub mod object_tests;
 pub mod resolve_image_tests;
 
-use crate::tcu::TestCaseGroup;
+use crate::vkt::TestCaseGroup;
 
 /// `createApiTests`.
 ///

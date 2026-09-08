@@ -3,23 +3,59 @@
 // Copyright 2026 Rafal Mikrut
 // Licensed under the Apache License, Version 2.0 (see LICENSE at the repo root).
 //
-// Execution. Two layers:
-//   `execute_batch` runs cases in this process against one device.
-//   `isolate`       runs `execute_batch` in a child and supervises it.
+// Execution. Three layers:
+//   `run_case_loop`   the API-agnostic bookkeeping around one case: timing, the log
+//                     prefix, the summary, the result stream, the device-lost abort.
+//   `vulkan` / `gles` bring the API up, then drive that loop.
+//   `isolate`         runs one of those in a child process and supervises it.
 //
 // Cases run serially inside a batch, which is what upstream does. Overlapping GPU
 // work would change timings and can both hide and manufacture failures, and the
 // thing under test here is the driver, so the execution order has to stay boring.
 
+pub mod gles;
 pub mod isolate;
+pub mod vulkan;
 
-use crate::report::{CaseResult, JsonlWriter, RunHeader, Summary};
+use crate::report::{CaseResult, JsonlWriter, Summary};
 use crate::tcu::{FlatCase, TestResult, TestStatus};
-use crate::vk::platform::{Platform, VALIDATION_MESSAGES};
-use crate::vkt::Context;
-use crate::vkt::context::select_physical_device;
 
 pub const UPSTREAM_REVISION: &str = include_str!("../../upstream/COMMIT");
+
+/// Which API a case belongs to, decided by the root of its name.
+///
+/// Upstream ships one binary per API (`deqp-vk`, `deqp-gles31`) and each builds a
+/// single-root hierarchy. This binary holds several, so the root prefix - which is
+/// part of the case name either way - is what says which driver to bring up.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub enum Api {
+    Vulkan,
+    Gles31,
+}
+
+impl Api {
+    pub const ALL: [Api; 2] = [Api::Vulkan, Api::Gles31];
+
+    /// The root group name, i.e. the first component of every case name.
+    pub fn root(self) -> &'static str {
+        match self {
+            Self::Vulkan => "dEQP-VK",
+            Self::Gles31 => "dEQP-GLES31",
+        }
+    }
+
+    /// What to call the API in a message meant for a person.
+    pub fn label(self) -> &'static str {
+        match self {
+            Self::Vulkan => "Vulkan",
+            Self::Gles31 => "OpenGL ES 3.1",
+        }
+    }
+
+    pub fn from_case_name(name: &str) -> Option<Self> {
+        Self::ALL.into_iter().find(|api| name.split('.').next() == Some(api.root()))
+    }
+}
 
 /// Selects cases by the same glob rules deqp uses for `--deqp-case`: `*` matches any
 /// run of characters, everything else is literal.
@@ -42,67 +78,28 @@ pub struct RunOptions {
     pub write_header: bool,
 }
 
-/// Runs `cases` in this process, reporting each result through `on_result` as soon as
-/// it is known.
-pub fn execute_selected(
-    cases: &[&FlatCase],
-    options: &RunOptions,
+/// Runs `cases` through `run_one`, doing everything around a case that does not
+/// depend on which API it tests.
+///
+/// The API-misuse message count (validation layer, `GL_KHR_debug`) is folded in by
+/// `run_one` rather than here: what counts as misuse and how it is observed is the
+/// one part of this that is not shared.
+pub fn run_case_loop<C: ?Sized>(
+    cases: &[&FlatCase<C>],
     writer: &mut JsonlWriter,
-    mut on_result: impl FnMut(&CaseResult),
+    on_result: &mut dyn FnMut(&CaseResult),
+    mut run_one: impl FnMut(&FlatCase<C>) -> TestStatus,
 ) -> Result<Summary, Box<dyn std::error::Error>> {
-    let platform = Platform::new(options.validation)?;
-    let physical_device = select_physical_device(&platform, options.device_id)?;
-
-    // The collection is swapped per case, so any one is fine to start with.
-    let first_programs = cases.first().map_or(crate::vk::programs::BinaryCollection::new(&[]), |c| c.case.programs());
-    let mut context = Context::new(&platform, physical_device, first_programs)?;
-
-    if options.write_header {
-        let (major, minor, patch) = context.api_version();
-        writer.write_header(&RunHeader {
-            kind: "hodow_cts.run".to_string(),
-            hodow_cts_version: env!("CARGO_PKG_VERSION").to_string(),
-            upstream_revision: UPSTREAM_REVISION.trim().to_string(),
-            device_name: context.device_name(),
-            api_version: format!("{major}.{minor}.{patch}"),
-            driver_kind: format!("{:?}", context.get_device_properties().device_type),
-            translation_layer: cfg!(target_os = "macos"),
-            validation_enabled: options.validation,
-            total_cases: cases.len(),
-        })?;
-    }
-
     let mut summary = Summary::default();
 
     for flat in cases {
         let started = std::time::Instant::now();
-        VALIDATION_MESSAGES.store(0, std::sync::atomic::Ordering::Relaxed);
         // Anything a test logs from here on is prefixed with this name. Upstream logs
         // into a per-case .qpa section, which does the same job; a bare line in a
         // terminal has nothing to tell you which of 20000 cases it came from.
         crate::color::set_current_case(&flat.full_name);
 
-        context.set_binary_collection(flat.case.programs());
-
-        let status = match flat.case.check_support(&context) {
-            Err(e) => e.to_status(),
-            Ok(()) => {
-                let mut instance = flat.case.create_instance(&context);
-                match instance.iterate() {
-                    Ok(status) => status,
-                    Err(e) => e.to_status(),
-                }
-            }
-        };
-
-        // A validation message means this port misused the API. Without this, that
-        // misuse reads as a driver failure, which is the exact confusion --validation
-        // exists to remove.
-        let status = match VALIDATION_MESSAGES.load(std::sync::atomic::Ordering::Relaxed) {
-            0 => status,
-            n if options.validation => TestStatus::new(TestResult::Fail, format!("{} ({n} validation message(s) - see log)", status.description())),
-            _ => status,
-        };
+        let status = run_one(flat);
 
         crate::color::clear_current_case();
         let result = CaseResult::from_status(&flat.full_name, &status, started.elapsed().as_micros() as u64);

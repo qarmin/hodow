@@ -16,7 +16,7 @@
 
 use vulkanalia::prelude::v1_0::*;
 
-use crate::tcu::{self, IVec3, TestError, TestOutcome, TestStatus};
+use crate::tcu::{IVec3, TestError, TestOutcome, TestStatus};
 use crate::vk::builder_util::{DescriptorPoolBuilder, DescriptorSetLayoutBuilder, DescriptorSetUpdateBuilder, Location};
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
 use crate::vk::compute_pipeline::{ComputePipelineConstructionType, ComputePipelineWrapper, check_shader_object_requirements};
@@ -27,7 +27,7 @@ use crate::vk::obj_util::{
 };
 use crate::vk::programs::BinaryCollection;
 use crate::vk::ref_util::{Unique, UniqueDescriptorSet};
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// `RESULT_BLOCK_BASE_SIZE` - uvec3 expectedGroupCount + uint numPassed.
 const RESULT_BLOCK_BASE_SIZE: u64 = 4 * std::mem::size_of::<u32>() as u64;
@@ -347,7 +347,7 @@ impl TestInstance for IndirectDispatchInstanceBufferUpload<'_> {
 }
 
 /// `createIndirectComputeDispatchTests`
-pub fn create_indirect_compute_dispatch_tests(construction_type: ComputePipelineConstructionType) -> tcu::TestCaseGroup {
+pub fn create_indirect_compute_dispatch_tests(construction_type: ComputePipelineConstructionType) -> TestCaseGroup {
     debug_assert_eq!(construction_type, ComputePipelineConstructionType::Pipeline);
 
     use crate::generated::shaders::compute_indirect_dispatch as g;
@@ -367,9 +367,9 @@ pub fn create_indirect_compute_dispatch_tests(construction_type: ComputePipeline
         g::MULTI_DISPATCH_REUSE_COMMAND,
     ];
 
-    let mut tests = tcu::TestCaseGroup::new("indirect_dispatch");
+    let mut tests = TestCaseGroup::new("indirect_dispatch");
 
-    let mut group_buffer_upload = tcu::TestCaseGroup::new("upload_buffer");
+    let mut group_buffer_upload = TestCaseGroup::new("upload_buffer");
     for params in cases {
         group_buffer_upload.add_child(Box::new(IndirectDispatchUploadCase {
             params,
@@ -378,7 +378,7 @@ pub fn create_indirect_compute_dispatch_tests(construction_type: ComputePipeline
     }
     tests.add_child(group_buffer_upload);
 
-    let mut group_buffer_generate = tcu::TestCaseGroup::new("gen_in_compute");
+    let mut group_buffer_generate = TestCaseGroup::new("gen_in_compute");
     for params in cases {
         group_buffer_generate.add_child(Box::new(IndirectDispatchUploadCase {
             params,

@@ -5,14 +5,14 @@
 
 use vulkanalia::vk::{self, HasBuilder};
 
-use crate::tcu::{TestCaseGroup, TestError};
+use crate::tcu::TestError;
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
 use crate::vk::image_util::{ImageWithMemory, make_buffer_image_copy, make_image_subresource_layers, make_image_view};
 use crate::vk::mem_util::{MemoryRequirement, invalidate_alloc};
 use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool, make_framebuffer, make_memory_barrier};
 use crate::vk::programs::{BinaryCollection, create_shader_module};
 use crate::vk::{Unique, VkResultExt};
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// Which aspect a case reads back and checks. Upstream registers a separate case per
 /// aspect even though one render pass resolves both, because the expected value differs.

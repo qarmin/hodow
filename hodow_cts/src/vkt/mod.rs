@@ -18,6 +18,27 @@ pub use context::Context;
 use crate::tcu::{TestError, TestOutcome};
 use crate::vk::programs::BinaryCollection;
 
+/// The Vulkan flavours of the API-agnostic hierarchy types in `tcu`.
+///
+/// Every `dEQP-VK` group is built out of these, so a Vulkan test file never has to
+/// spell the trait parameter out.
+pub type TestCaseGroup = crate::tcu::TestCaseGroup<dyn TestCase>;
+pub type TestNode = crate::tcu::TestNode<dyn TestCase>;
+pub type FlatCase = crate::tcu::FlatCase<dyn TestCase>;
+
+/// Supplies the framework's view of a node. Implemented on the trait object rather
+/// than as a blanket impl over every `TestCase`, because the GL side needs the same
+/// thing for its own case trait and two blanket impls would overlap.
+impl crate::tcu::TestNodeInfo for dyn TestCase {
+    fn name(&self) -> &str {
+        TestCase::name(self)
+    }
+
+    fn is_stub(&self) -> bool {
+        TestCase::is_stub(self)
+    }
+}
+
 /// `vkt::TestCase` - the build-time half of a test.
 ///
 /// The two-phase split is kept from upstream: `check_support` and the shader set are

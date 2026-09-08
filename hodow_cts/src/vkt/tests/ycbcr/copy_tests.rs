@@ -9,14 +9,14 @@ use super::util::{
     MultiPlaneImageData, allocate_and_bind_image_memory, aspect_plane_ndx, block_byte_size, block_extent, download_image, fill_image_memory, format_description,
     lsb_dont_care_mask, plane_aspect, plane_extent, plane_size_in_bytes, read_image_memory, upload_image,
 };
+use crate::tcu::TestError;
 use crate::tcu::random::Random;
-use crate::tcu::{TestCaseGroup, TestError};
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
 use crate::vk::mem_util::MemoryRequirement;
 use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool};
 use crate::vk::{Unique, VkResultExt};
 use crate::vkt::tests::api::copy_format_lists::BASIC_UNSIGNED_FLOAT_FORMATS;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// `ImageConfig`
 #[derive(Clone, Copy)]

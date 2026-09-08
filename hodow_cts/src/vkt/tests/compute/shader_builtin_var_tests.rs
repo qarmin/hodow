@@ -60,7 +60,7 @@ use crate::vk::obj_util::{
 };
 use crate::vk::programs::{BinaryCollection, ProgramBinary, create_shader_module};
 use crate::vk::ref_util::Unique;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 use crate::{tcu_fail, tcu_not_ported};
 
 // =================================================================================
@@ -1508,10 +1508,10 @@ impl TestInstance for UntypedPointerInstance<'_> {
 // =================================================================================
 
 /// `createComputeShaderBuiltinVarTests` / `ComputeShaderBuiltinVarTests::init`
-fn create_compute_shader_builtin_var_tests(construction_type: ComputePipelineConstructionType) -> tcu::TestCaseGroup {
+fn create_compute_shader_builtin_var_tests(construction_type: ComputePipelineConstructionType) -> TestCaseGroup {
     debug_assert_eq!(construction_type, ComputePipelineConstructionType::Pipeline);
 
-    let mut group = tcu::TestCaseGroup::new("builtin_var");
+    let mut group = TestCaseGroup::new("builtin_var");
 
     // Builtin variables with vector values should be read whole and by component.
     group.add_child(Box::new(compute_builtin_var::NUM_WORK_GROUPS) as Box<dyn TestCase>);
@@ -1533,10 +1533,10 @@ fn create_compute_shader_builtin_var_tests(construction_type: ComputePipelineCon
 }
 
 /// `createBasicDeviceGroupComputeShaderTests`
-fn create_basic_device_group_compute_shader_tests(construction_type: ComputePipelineConstructionType) -> tcu::TestCaseGroup {
+fn create_basic_device_group_compute_shader_tests(construction_type: ComputePipelineConstructionType) -> TestCaseGroup {
     debug_assert_eq!(construction_type, ComputePipelineConstructionType::Pipeline);
 
-    let mut device_group_compute_tests = tcu::TestCaseGroup::new("device_group");
+    let mut device_group_compute_tests = TestCaseGroup::new("device_group");
 
     device_group_compute_tests.add_child(Box::new(compute_builtin_var::DISPATCH_BASE) as Box<dyn TestCase>);
     device_group_compute_tests.add_child(Box::new(compute_builtin_var::DISPATCH_BASE_MAINTENANCE5) as Box<dyn TestCase>);
@@ -1546,10 +1546,10 @@ fn create_basic_device_group_compute_shader_tests(construction_type: ComputePipe
 }
 
 /// `create64bIndexingComputeShaderTests`
-fn create_64b_indexing_compute_shader_tests(construction_type: ComputePipelineConstructionType) -> tcu::TestCaseGroup {
+fn create_64b_indexing_compute_shader_tests(construction_type: ComputePipelineConstructionType) -> TestCaseGroup {
     debug_assert_eq!(construction_type, ComputePipelineConstructionType::Pipeline);
 
-    let mut indexing64b = tcu::TestCaseGroup::new("64b_indexing");
+    let mut indexing64b = TestCaseGroup::new("64b_indexing");
 
     // >4GB buffer (512M * 16B = 8GB).
     indexing64b.add_child(Box::new(compute_builtin_var::COPY_SSBO_64B) as Box<dyn TestCase>);
@@ -1564,7 +1564,7 @@ fn create_64b_indexing_compute_shader_tests(construction_type: ComputePipelineCo
 
 /// The three groups this file owns, in the order upstream registers them under
 /// `dEQP-VK.compute.pipeline`.
-pub fn create_builtin_var_device_group_and_64b_groups() -> Vec<tcu::TestCaseGroup> {
+pub fn create_builtin_var_device_group_and_64b_groups() -> Vec<TestCaseGroup> {
     let construction_type = ComputePipelineConstructionType::Pipeline;
 
     vec![

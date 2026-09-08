@@ -41,7 +41,7 @@ use crate::vk::obj_util::{
 pub use crate::vk::programs::SharedProgram;
 use crate::vk::programs::{BinaryCollection, create_shader_module};
 use crate::vk::ref_util::Unique;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// One shader variant, as `api_buffer_view_access.toml` declares it.
 ///
@@ -347,7 +347,7 @@ impl TestInstance for BufferViewAllFormatsInstance<'_> {
 }
 
 /// `createBufferViewAccessTests`' all-formats half.
-pub fn add_buffer_view_all_formats_tests(parent: &mut tcu::TestCaseGroup) {
+pub fn add_buffer_view_all_formats_tests(parent: &mut TestCaseGroup) {
     let uniform = vk::BufferUsageFlags::UNIFORM_TEXEL_BUFFER;
     let storage = vk::BufferUsageFlags::STORAGE_TEXEL_BUFFER;
 
@@ -355,21 +355,21 @@ pub fn add_buffer_view_all_formats_tests(parent: &mut tcu::TestCaseGroup) {
         ("uniform_texel_buffer", uniform, None, BindKind::Uniform),
         ("storage_texel_buffer", storage, None, BindKind::Storage),
     ] {
-        let mut group = tcu::TestCaseGroup::new(group_name);
+        let mut group = TestCaseGroup::new(group_name);
         add_formats(&mut group, create_usage, bind_usage, bind_kind);
         parent.add_child(group);
     }
 
-    let mut uniform_storage = tcu::TestCaseGroup::new("uniform_storage_texel_buffer");
+    let mut uniform_storage = TestCaseGroup::new("uniform_storage_texel_buffer");
     for (group_name, bind_usage, bind_kind) in [("bind_as_uniform", uniform, BindKind::Uniform), ("bind_as_storage", storage, BindKind::Storage)] {
-        let mut group = tcu::TestCaseGroup::new(group_name);
+        let mut group = TestCaseGroup::new(group_name);
         add_formats(&mut group, uniform | storage, Some(bind_usage), bind_kind);
         uniform_storage.add_child(group);
     }
     parent.add_child(uniform_storage);
 }
 
-fn add_formats(group: &mut tcu::TestCaseGroup, create_usage: vk::BufferUsageFlags, bind_usage: Option<vk::BufferUsageFlags>, bind_kind: BindKind) {
+fn add_formats(group: &mut TestCaseGroup, create_usage: vk::BufferUsageFlags, bind_usage: Option<vk::BufferUsageFlags>, bind_kind: BindKind) {
     for (format, name) in BUFFER_VIEW_ACCESS_FORMATS {
         let Some(tcu_format) = map_vk_format(*format) else { continue };
         // A storage texel buffer can only be declared for a format that has an image
@@ -858,13 +858,13 @@ impl BufferViewMemoryInstance<'_> {
 }
 
 /// `createBufferViewAccessTests`' memory-test half.
-pub fn add_buffer_view_memory_tests(parent: &mut tcu::TestCaseGroup) {
+pub fn add_buffer_view_memory_tests(parent: &mut TestCaseGroup) {
     let buffer_texts = ["buffer_suballocated", "buffer_dedicated_alloc"];
     let image_texts = ["image_suballocated", "image_dedicated_alloc"];
     let queue_texts = ["graphics", "compute"];
 
-    let mut suballocation = tcu::TestCaseGroup::new("suballocation");
-    let mut dedicated = tcu::TestCaseGroup::new("dedicated_alloc");
+    let mut suballocation = TestCaseGroup::new("suballocation");
+    let mut dedicated = TestCaseGroup::new("dedicated_alloc");
 
     for buffer_dedicated in [false, true] {
         for image_dedicated in [false, true] {

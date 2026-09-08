@@ -29,14 +29,14 @@ use super::copies_buffer_tests::{AllocationKind, CopyCommandVariant, QueueSelect
 use super::copies_image_tests::GroupParams;
 use super::copy_format_lists::COMPRESSED_FORMATS_FLOATS;
 use crate::tcu::random::Random;
-use crate::tcu::{self, TestError, TestOutcome, TestStatus};
+use crate::tcu::{TestError, TestOutcome, TestStatus};
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
 use crate::vk::compressed_formats::{get_block_depth, get_block_height, get_block_size_in_bytes, get_block_width};
 use crate::vk::image_util::{ImageWithMemory, make_image_memory_barrier, make_image_subresource_range};
 use crate::vk::mem_util::{MemoryRequirement, flush_alloc, invalidate_alloc};
 use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool, make_memory_barrier};
 use crate::vk::programs::BinaryCollection;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// `tcu::computeMipPyramidLevels`
 fn compute_mip_pyramid_levels(size: u32) -> u32 {
@@ -574,7 +574,7 @@ fn make_case(gp: &GroupParams, name: String, image_type: vk::ImageType, format: 
 /// assigns `params.extensionFlags = INDIRECT_COPY` unconditionally here rather than
 /// adding a second case as the 2D group does. Reproduced as-is: the whole sub-group
 /// skips without VK_KHR_copy_memory_indirect, and that is the verdict to match.
-pub fn add_1d_compressed_mip_copies(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+pub fn add_1d_compressed_mip_copies(group: &mut TestCaseGroup, gp: &GroupParams) {
     for extent in EXTENTS_2D {
         for num_layers in ARRAY_LAYERS {
             for &(format, format_name) in COMPRESSED_FORMATS_FLOATS {
@@ -586,7 +586,7 @@ pub fn add_1d_compressed_mip_copies(group: &mut tcu::TestCaseGroup, gp: &GroupPa
 }
 
 /// The `mip_copies_*` half of `add2dImageToBufferTests`.
-pub fn add_2d_compressed_mip_copies(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+pub fn add_2d_compressed_mip_copies(group: &mut TestCaseGroup, gp: &GroupParams) {
     for extent in EXTENTS_2D {
         for num_layers in ARRAY_LAYERS {
             for &(format, format_name) in COMPRESSED_FORMATS_FLOATS {
@@ -616,7 +616,7 @@ pub fn add_2d_compressed_mip_copies(group: &mut tcu::TestCaseGroup, gp: &GroupPa
 }
 
 /// `add3dImageToBufferTests` - entirely compressed mip copies.
-pub fn add_3d_compressed_mip_copies(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+pub fn add_3d_compressed_mip_copies(group: &mut TestCaseGroup, gp: &GroupParams) {
     for extent in EXTENTS_3D {
         for &(format, format_name) in COMPRESSED_FORMATS_FLOATS {
             let name = format!("mip_copies_{format_name}_{}x{}x{}", extent[0], extent[1], extent[2]);

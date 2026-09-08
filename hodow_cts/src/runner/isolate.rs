@@ -22,25 +22,32 @@ use std::process::{Command, Stdio};
 use std::time::{Duration, Instant};
 
 use crate::report::{CaseResult, Summary};
+use crate::runner::Api;
 use crate::tcu::TestResult;
 
 /// Environment variable the parent sets to tell the child it is the worker.
 pub const WORKER_ENV: &str = "HODOW_CTS_WORKER";
 
-/// Exit code a worker uses when Vulkan could not be brought up at all.
+/// Exit code a worker uses when the API under test could not be brought up at all.
 ///
 /// This has to be distinguishable from a crash: a missing driver is an environment
 /// problem, and reporting it as a crash would blame whichever case happened to be
-/// first for something it had nothing to do with.
-pub const EXIT_VULKAN_UNAVAILABLE: i32 = 2;
+/// first for something it had nothing to do with. The value is part of the tool's
+/// contract with its callers - `just cts-verify` and CI both read it - so it stays 2
+/// whichever API was being brought up.
+pub const EXIT_DRIVER_UNAVAILABLE: i32 = 2;
 
-/// A worker that could not set Vulkan up at all, for a reason other than a missing
+/// A worker that could not set the API up at all, for a reason other than a missing
 /// driver - `--validation` without the layer installed being the one that happens in
 /// practice. Same reasoning as above: it is an environment problem, and blaming the
 /// first case for it sends whoever reads the log looking in the wrong place.
 pub const EXIT_SETUP_ERROR: i32 = 3;
 
 pub struct IsolateOptions {
+    /// Which API the batch belongs to. Only used to say what was unavailable when a
+    /// worker cannot start - a batch never mixes APIs, because the caller splits the
+    /// selection by root before it gets here.
+    pub api: Api,
     pub batch_size: usize,
     pub case_timeout: Duration,
     pub device_id: usize,
@@ -66,27 +73,32 @@ struct BatchOutcome {
     results: Vec<CaseResult>,
     /// Set when the child died or hung; this is the case that was in flight.
     culprit: Option<(String, TestResult, String)>,
-    /// The child could not bring Vulkan up. Nothing was tested.
-    vulkan_unavailable: bool,
+    /// The child could not bring the API up. Nothing was tested.
+    driver_unavailable: bool,
 }
 
-/// Raised when no worker can start because Vulkan is not usable here.
+/// Raised when no worker can start because the API is not usable here.
+///
+/// The wording keeps the fixed `is not usable here` phrase: the parallel path below
+/// can only see a worker supervisor's error as a string, and that is what it matches
+/// on to keep this distinct from a test failure.
 #[derive(Debug)]
-pub struct VulkanUnavailable;
+pub struct DriverUnavailable(pub Api);
 
-impl std::fmt::Display for VulkanUnavailable {
+impl std::fmt::Display for DriverUnavailable {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
             f,
-            "Vulkan is not usable here - no loader, or no driver behind it.\n\
+            "{} is not usable here - no loader, or no driver behind it.\n\
              No tests were run (this is not a test failure).\n\
              To run on a software driver, see the \"Running without a GPU\" section of\n\
-             hodow_cts/README.md."
+             hodow_cts/README.md.",
+            self.0.label()
         )
     }
 }
 
-impl std::error::Error for VulkanUnavailable {}
+impl std::error::Error for DriverUnavailable {}
 
 /// Runs `case_names` through child processes, `batch_size` at a time.
 ///
@@ -113,8 +125,8 @@ fn run_isolated_serial(case_names: &[String], options: &IsolateOptions, mut on_r
 
         let outcome = run_one_batch(&exe, batch, options)?;
 
-        if outcome.vulkan_unavailable {
-            return Err(Box::new(VulkanUnavailable));
+        if outcome.driver_unavailable {
+            return Err(Box::new(DriverUnavailable(options.api)));
         }
 
         for result in &outcome.results {
@@ -193,18 +205,18 @@ fn run_one_batch(exe: &Path, batch: &[String], options: &IsolateOptions) -> std:
 
     let status = wait_with_timeout(&mut child, deadline_per_case)?;
 
-    if matches!(status, WaitOutcome::Exited(EXIT_VULKAN_UNAVAILABLE)) && results.is_empty() {
+    if matches!(status, WaitOutcome::Exited(EXIT_DRIVER_UNAVAILABLE)) && results.is_empty() {
         return Ok(BatchOutcome {
             results,
             culprit: None,
-            vulkan_unavailable: true,
+            driver_unavailable: true,
         });
     }
 
     if matches!(status, WaitOutcome::Exited(EXIT_SETUP_ERROR)) && results.is_empty() {
         // The worker has already explained itself on stderr; anything further from here
         // would only bury it.
-        return Err(std::io::Error::other("worker could not initialise Vulkan - see the error above"));
+        return Err(std::io::Error::other("worker could not initialise the API under test - see the error above"));
     }
 
     let culprit = match status {
@@ -234,7 +246,7 @@ fn run_one_batch(exe: &Path, batch: &[String], options: &IsolateOptions) -> std:
     Ok(BatchOutcome {
         results,
         culprit,
-        vulkan_unavailable: false,
+        driver_unavailable: false,
     })
 }
 
@@ -336,10 +348,10 @@ fn run_isolated_parallel(
     match outcome {
         Ok(sub) => summary.merge(&sub),
         Err(e) => {
-            // A worker that could not bring Vulkan up is the same condition the serial
+            // A worker that could not bring the API up is the same condition the serial
             // path reports, and has to stay distinguishable from a test failure.
-            if e.to_string().contains("Vulkan is not usable here") {
-                return Err(Box::new(VulkanUnavailable));
+            if e.to_string().contains("is not usable here") {
+                return Err(Box::new(DriverUnavailable(options.api)));
             }
             return Err(e.to_string().into());
         }

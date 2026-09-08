@@ -25,14 +25,14 @@ use super::operation::{
     COPY_OPS, Operation, OperationName, READ_OPS, RESOURCES, Resource, ResourceDescription, ResourceType, SyncInfo, SyncType, WRITE_OPS, buffer_resource, build_copy_operation,
     build_operation, first_difference, get_resource_name, image_resource, indirect_resource, make_buffer_memory_barrier2, make_image_memory_barrier2, record_simple_barrier,
 };
-use crate::tcu::{self, Random, TestError, TestStatus};
+use crate::tcu::{Random, TestError, TestStatus};
 use crate::vk::VkResultExt;
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer};
 use crate::vk::obj_util::{allocate_command_buffer, make_command_pool};
 use crate::vk::programs::BinaryCollection;
 use crate::vk::ref_util::Unique;
 use crate::vkt::context::QueueFamilyQueues;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// `SyncPrimitive`, restricted to the three the multi-queue group registers here.
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -898,15 +898,15 @@ fn cmd_pipeline_barrier_buffers(device: &Device, sync: SyncType, cmd_buffer: vk:
 }
 
 /// `createSynchronizedOperationMultiQueueTests` -> `createTests`
-pub fn create_multi_queue_tests(sync_type: SyncType) -> tcu::TestCaseGroup {
-    let mut group = tcu::TestCaseGroup::new("multi_queue");
+pub fn create_multi_queue_tests(sync_type: SyncType) -> TestCaseGroup {
+    let mut group = TestCaseGroup::new("multi_queue");
 
     for primitive in [SyncPrimitive::Fence, SyncPrimitive::BinarySemaphore, SyncPrimitive::TimelineSemaphore] {
-        let mut primitive_group = tcu::TestCaseGroup::new(primitive.group_name());
+        let mut primitive_group = TestCaseGroup::new(primitive.group_name());
 
         for &write_op in WRITE_OPS {
             for &read_op in READ_OPS {
-                let mut op_group = tcu::TestCaseGroup::new(format!("{}_{}", write_op.as_str(), read_op.as_str()));
+                let mut op_group = TestCaseGroup::new(format!("{}_{}", write_op.as_str(), read_op.as_str()));
                 let mut empty = true;
 
                 // `optionNdx` - the sharing mode the resource is declared with.
@@ -1035,8 +1035,8 @@ const INTERMEDIATE_BARRIER_RESOURCES: &[ResourceDescription] = &[
     indirect_resource(ResourceType::IndexBuffer, 4 * 5),
 ];
 
-fn create_intermediate_barrier_tests() -> tcu::TestCaseGroup {
-    let mut group = tcu::TestCaseGroup::new("intermediate_barrier_use_all");
+fn create_intermediate_barrier_tests() -> TestCaseGroup {
+    let mut group = TestCaseGroup::new("intermediate_barrier_use_all");
 
     for resource in INTERMEDIATE_BARRIER_RESOURCES {
         for &write_op in WRITE_OPS {
@@ -1047,7 +1047,7 @@ fn create_intermediate_barrier_tests() -> tcu::TestCaseGroup {
                 if !read_op.supports_resource(resource) {
                     continue;
                 }
-                let mut op_group = tcu::TestCaseGroup::new(format!("{}_{}_{}", write_op.as_str(), read_op.as_str(), get_resource_name(resource)));
+                let mut op_group = TestCaseGroup::new(format!("{}_{}_{}", write_op.as_str(), read_op.as_str(), get_resource_name(resource)));
                 let mut empty = true;
 
                 for &extra_read_op in EXTRA_READ_STAGES {

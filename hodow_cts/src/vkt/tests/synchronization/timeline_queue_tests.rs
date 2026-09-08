@@ -29,13 +29,13 @@ use super::operation::{
 };
 use super::timeline_semaphore_tests::randomize_data;
 use crate::tcu::random::Random;
-use crate::tcu::{self, TestError, TestStatus};
+use crate::tcu::{TestError, TestStatus};
 use crate::vk::VkResultExt;
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer};
 use crate::vk::obj_util::{allocate_command_buffer, make_command_pool};
 use crate::vk::programs::BinaryCollection;
 use crate::vk::ref_util::Unique;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// `QueueTimelineIteration` - one operation, the queue it goes to, and the timeline
 /// value its submission signals.
@@ -760,12 +760,12 @@ const TIMELINE_QUEUE_READ_OPS: &[OperationName] = &[
 ];
 
 /// `WaitBeforeSignalTests::init` / `OneToNTests::init`
-pub fn create_timeline_queue_tests(kind: TimelineQueueKind, sync_type: SyncType) -> tcu::TestCaseGroup {
-    let mut group = tcu::TestCaseGroup::new(kind.group_name());
+pub fn create_timeline_queue_tests(kind: TimelineQueueKind, sync_type: SyncType) -> TestCaseGroup {
+    let mut group = TestCaseGroup::new(kind.group_name());
 
     for &write_op in TIMELINE_QUEUE_WRITE_OPS {
         for &read_op in TIMELINE_QUEUE_READ_OPS {
-            let mut op_group = tcu::TestCaseGroup::new(format!("{}_{}", write_op.as_str(), read_op.as_str()));
+            let mut op_group = TestCaseGroup::new(format!("{}_{}", write_op.as_str(), read_op.as_str()));
             let mut empty = true;
 
             for resource in RESOURCES {

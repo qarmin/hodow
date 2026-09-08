@@ -36,7 +36,7 @@ use crate::vk::mem_util::{MemoryRequirement, flush_alloc, invalidate_alloc};
 use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool};
 use crate::vk::programs::BinaryCollection;
 use crate::vk::ref_util::Unique;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// `defaultSize`
 const DEFAULT_SIZE: u32 = 64;
@@ -942,7 +942,7 @@ pub struct GroupParams {
 }
 
 /// `add1dBufferToImageTests`
-fn add_1d_buffer_to_image_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+fn add_1d_buffer_to_image_tests(group: &mut TestCaseGroup, gp: &GroupParams) {
     let image_type = vk::ImageType::_1D;
 
     for &(format, tiling, suffix) in RESTRICTED_FORMAT_LIST {
@@ -1064,7 +1064,7 @@ static RESTRICTED_FORMAT_LIST_2D: &[(vk::Format, vk::ImageTiling, &str)] = &[
 ];
 
 /// `add2dBufferToImageTests`
-fn add_2d_buffer_to_image_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+fn add_2d_buffer_to_image_tests(group: &mut TestCaseGroup, gp: &GroupParams) {
     let image_type = vk::ImageType::_2D;
 
     for &(format, tiling, suffix) in RESTRICTED_FORMAT_LIST_2D {
@@ -1342,11 +1342,11 @@ fn add_2d_buffer_to_image_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams
 }
 
 /// `addCopyBufferToImageTests`
-fn add_copy_buffer_to_image_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
-    let mut images_1d = tcu::TestCaseGroup::new("1d_images");
+fn add_copy_buffer_to_image_tests(group: &mut TestCaseGroup, gp: &GroupParams) {
+    let mut images_1d = TestCaseGroup::new("1d_images");
     add_1d_buffer_to_image_tests(&mut images_1d, gp);
     group.add_child(images_1d);
-    let mut images_2d = tcu::TestCaseGroup::new("2d_images");
+    let mut images_2d = TestCaseGroup::new("2d_images");
     add_2d_buffer_to_image_tests(&mut images_2d, gp);
     group.add_child(images_2d);
     // 3d_images is not ported yet.
@@ -1354,14 +1354,14 @@ fn add_copy_buffer_to_image_tests(group: &mut tcu::TestCaseGroup, gp: &GroupPara
 
 /// The `buffer_to_image*` groups of `createCopiesAndBlittingTests`.
 pub fn add_buffer_to_image_groups(
-    parent: &mut tcu::TestCaseGroup,
+    parent: &mut TestCaseGroup,
     name: &str,
     allocation_kind: AllocationKind,
     command_variant: CopyCommandVariant,
     queue_selection: QueueSelection,
     general_layout: bool,
 ) {
-    let mut group = tcu::TestCaseGroup::new(name);
+    let mut group = TestCaseGroup::new(name);
     add_copy_buffer_to_image_tests(
         &mut group,
         &GroupParams {
@@ -1634,7 +1634,7 @@ fn image_to_buffer_format_name(format: vk::Format) -> &'static str {
 }
 
 /// `add1dImageToBufferTests`, minus the compressed mip_copies cases.
-fn add_1d_image_to_buffer_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+fn add_1d_image_to_buffer_tests(group: &mut TestCaseGroup, gp: &GroupParams) {
     let format = vk::Format::R8G8B8A8_UNORM;
     let Some(tcu_format) = map_vk_format(format) else { return };
     let Some(pixel_size) = tcu_format.pixel_size() else { return };
@@ -1720,7 +1720,7 @@ fn add_1d_image_to_buffer_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams
 
 /// `add2dImageToBufferTests`, minus the compressed mip_copies cases and `padding_bytes`
 /// (which needs FILL_MODE_RANDOM_GRAY).
-fn add_2d_image_to_buffer_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+fn add_2d_image_to_buffer_tests(group: &mut TestCaseGroup, gp: &GroupParams) {
     for &format in IMAGE_TO_BUFFER_FORMATS_2D {
         for tiling in [vk::ImageTiling::OPTIMAL, vk::ImageTiling::LINEAR] {
             let Some(tcu_format) = map_vk_format(format) else { continue };
@@ -2040,7 +2040,7 @@ fn add_2d_image_to_buffer_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams
 
 /// The `image_to_buffer*` groups of `createCopiesAndBlittingTests`.
 pub fn add_image_to_buffer_groups(
-    parent: &mut tcu::TestCaseGroup,
+    parent: &mut TestCaseGroup,
     name: &str,
     allocation_kind: AllocationKind,
     command_variant: CopyCommandVariant,
@@ -2053,17 +2053,17 @@ pub fn add_image_to_buffer_groups(
         queue_selection,
         general_layout,
     };
-    let mut group = tcu::TestCaseGroup::new(name);
-    let mut images_1d = tcu::TestCaseGroup::new("1d_images");
+    let mut group = TestCaseGroup::new(name);
+    let mut images_1d = TestCaseGroup::new("1d_images");
     add_1d_image_to_buffer_tests(&mut images_1d, &gp);
     super::compressed_image_to_buffer_tests::add_1d_compressed_mip_copies(&mut images_1d, &gp);
     group.add_child(images_1d);
-    let mut images_2d = tcu::TestCaseGroup::new("2d_images");
+    let mut images_2d = TestCaseGroup::new("2d_images");
     add_2d_image_to_buffer_tests(&mut images_2d, &gp);
     super::compressed_image_to_buffer_tests::add_2d_compressed_mip_copies(&mut images_2d, &gp);
     group.add_child(images_2d);
     // 3d_images is entirely compressed mip_copies upstream.
-    let mut images_3d = tcu::TestCaseGroup::new("3d_images");
+    let mut images_3d = TestCaseGroup::new("3d_images");
     super::compressed_image_to_buffer_tests::add_3d_compressed_mip_copies(&mut images_3d, &gp);
     group.add_child(images_3d);
     parent.add_child(group);
@@ -2499,7 +2499,7 @@ impl TestInstance for CopyImageToImageInstance<'_> {
 }
 
 /// `addImageToImageSimpleTests`
-fn add_image_to_image_simple_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+fn add_image_to_image_simple_tests(group: &mut TestCaseGroup, gp: &GroupParams) {
     let parms = |format: vk::Format, extent: [u32; 3], tiling: vk::ImageTiling, fill: FillMode| ImageParms {
         image_type: vk::ImageType::_2D,
         format,
@@ -2642,7 +2642,7 @@ fn add_image_to_image_simple_tests(group: &mut tcu::TestCaseGroup, gp: &GroupPar
 }
 
 /// `addImageToImage3dImagesTests`
-fn add_image_to_image_3d_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+fn add_image_to_image_3d_tests(group: &mut TestCaseGroup, gp: &GroupParams) {
     const SLICES_LAYERS: u32 = 16;
     let extent = [DEFAULT_HALF_SIZE, DEFAULT_HALF_SIZE, SLICES_LAYERS];
 
@@ -2758,7 +2758,7 @@ fn add_image_to_image_3d_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams)
 
 /// `addImageToImageArrayTests`, minus the mipmap cases (which need
 /// CopyImageToImageMipmap, a separate instance).
-fn add_image_to_image_array_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+fn add_image_to_image_array_tests(group: &mut TestCaseGroup, gp: &GroupParams) {
     const ARRAY_LAYERS: u32 = 16;
     let extent = [DEFAULT_HALF_SIZE, DEFAULT_HALF_SIZE, ARRAY_LAYERS];
     let half = [DEFAULT_HALF_SIZE, DEFAULT_HALF_SIZE, 1];
@@ -2829,7 +2829,7 @@ fn add_image_to_image_array_tests(group: &mut tcu::TestCaseGroup, gp: &GroupPara
 /// Structurally the array tests with six layers, but the create flags are set
 /// explicitly on each side: a six-layer 2D image would otherwise always be derived as
 /// cube-compatible, and the array half of a cube-to-array copy must not be.
-fn add_image_to_image_cube_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+fn add_image_to_image_cube_tests(group: &mut TestCaseGroup, gp: &GroupParams) {
     const ARRAY_LAYERS: u32 = 6;
     let extent = [DEFAULT_HALF_SIZE, DEFAULT_HALF_SIZE, ARRAY_LAYERS];
     let half = [DEFAULT_HALF_SIZE, DEFAULT_HALF_SIZE, 1];
@@ -2919,20 +2919,20 @@ fn image_layout_case_name(layout: vk::ImageLayout) -> &'static str {
 }
 
 /// `addImageToImageDimensionsTests`
-fn add_image_to_image_dimensions_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+fn add_image_to_image_dimensions_tests(group: &mut TestCaseGroup, gp: &GroupParams) {
     const SRC_LAYOUTS: [vk::ImageLayout; 2] = [vk::ImageLayout::TRANSFER_SRC_OPTIMAL, vk::ImageLayout::GENERAL];
     const DST_LAYOUTS: [vk::ImageLayout; 2] = [vk::ImageLayout::TRANSFER_DST_OPTIMAL, vk::ImageLayout::GENERAL];
 
     for &[width, height] in IMAGE_DIMENSIONS_2D {
         let extent = [width, height, 1];
-        let mut size_group = tcu::TestCaseGroup::new(format!("src{width}x{height}_dst{width}x{height}"));
+        let mut size_group = TestCaseGroup::new(format!("src{width}x{height}_dst{width}x{height}"));
 
         for compatible in DIMENSION_TEST_FORMATS {
             for &(src_format, src_name) in *compatible {
-                let mut src_group = tcu::TestCaseGroup::new(src_name);
+                let mut src_group = TestCaseGroup::new(src_name);
 
                 for &(dst_format, dst_name) in *compatible {
-                    let mut dst_group = tcu::TestCaseGroup::new(dst_name);
+                    let mut dst_group = TestCaseGroup::new(dst_name);
 
                     for src_layout in SRC_LAYOUTS {
                         for dst_layout in DST_LAYOUTS {
@@ -3340,7 +3340,7 @@ struct AllFormatsBlock {
 }
 
 /// One `<src>_to_<dst>` block of `addImageToImageAllFormatsColorTests`.
-fn add_image_to_image_all_formats_block(group: &mut tcu::TestCaseGroup, gp: &GroupParams, block: &AllFormatsBlock) {
+fn add_image_to_image_all_formats_block(group: &mut TestCaseGroup, gp: &GroupParams, block: &AllFormatsBlock) {
     const SRC_LAYOUTS: [vk::ImageLayout; 2] = [vk::ImageLayout::TRANSFER_SRC_OPTIMAL, vk::ImageLayout::GENERAL];
     const DST_LAYOUTS: [vk::ImageLayout; 2] = [vk::ImageLayout::TRANSFER_DST_OPTIMAL, vk::ImageLayout::GENERAL];
 
@@ -3362,7 +3362,7 @@ fn add_image_to_image_all_formats_block(group: &mut tcu::TestCaseGroup, gp: &Gro
             let allowed = |src: vk::Format, dst: vk::Format| {
                 gp.allocation_kind != AllocationKind::Dedicated || DEDICATED_ALLOCATION_FORMATS.contains(&src) || DEDICATED_ALLOCATION_FORMATS.contains(&dst)
             };
-            let mut src_group = tcu::TestCaseGroup::new(entry.name);
+            let mut src_group = TestCaseGroup::new(entry.name);
 
             // Either the whole compatible group, or just this format.
             let destinations: Vec<&CopyFormat> = if block.cross_format {
@@ -3390,7 +3390,7 @@ fn add_image_to_image_all_formats_block(group: &mut tcu::TestCaseGroup, gp: &Gro
             }
 
             for dst_entry in destinations {
-                let mut dst_group = tcu::TestCaseGroup::new(dst_entry.name);
+                let mut dst_group = TestCaseGroup::new(dst_entry.name);
 
                 for src_layout in SRC_LAYOUTS {
                     for dst_layout in DST_LAYOUTS {
@@ -3438,7 +3438,7 @@ fn add_image_to_image_all_formats_block(group: &mut tcu::TestCaseGroup, gp: &Gro
 /// A combined format copies one region per aspect, and gets a `_separate_layouts`
 /// sibling on top - the layout pair is the same, but the aspects are transitioned
 /// independently, which needs VK_KHR_separate_depth_stencil_layouts.
-fn add_image_to_image_all_formats_depth_stencil(group: &mut tcu::TestCaseGroup, gp: &GroupParams, block: &AllFormatsBlock) {
+fn add_image_to_image_all_formats_depth_stencil(group: &mut TestCaseGroup, gp: &GroupParams, block: &AllFormatsBlock) {
     const SRC_LAYOUTS: [vk::ImageLayout; 2] = [vk::ImageLayout::TRANSFER_SRC_OPTIMAL, vk::ImageLayout::GENERAL];
     const DST_LAYOUTS: [vk::ImageLayout; 2] = [vk::ImageLayout::TRANSFER_DST_OPTIMAL, vk::ImageLayout::GENERAL];
 
@@ -3483,7 +3483,7 @@ fn add_image_to_image_all_formats_depth_stencil(group: &mut tcu::TestCaseGroup, 
         }
 
         for &(suffix, separate_layouts, variant_regions) in &variants {
-            let mut format_group = tcu::TestCaseGroup::new(format!("{name}_{name}{suffix}"));
+            let mut format_group = TestCaseGroup::new(format!("{name}_{name}{suffix}"));
             for src_layout in SRC_LAYOUTS {
                 for dst_layout in DST_LAYOUTS {
                     format_group.add_child(Box::new(CopyImageToImageCase {
@@ -3525,7 +3525,7 @@ fn add_image_to_image_all_formats_depth_stencil(group: &mut tcu::TestCaseGroup, 
 
 /// The `image_to_image*` groups.
 pub fn add_image_to_image_groups(
-    parent: &mut tcu::TestCaseGroup,
+    parent: &mut TestCaseGroup,
     name: &str,
     allocation_kind: AllocationKind,
     command_variant: CopyCommandVariant,
@@ -3538,45 +3538,45 @@ pub fn add_image_to_image_groups(
         queue_selection,
         general_layout,
     };
-    let mut group = tcu::TestCaseGroup::new(name);
-    let mut simple = tcu::TestCaseGroup::new("simple_tests");
+    let mut group = TestCaseGroup::new(name);
+    let mut simple = TestCaseGroup::new("simple_tests");
     add_image_to_image_simple_tests(&mut simple, &gp);
     group.add_child(simple);
 
     // `image_to_image_general_layout` goes through addCopyImageToImageTestsSimpleOnly
     // upstream, so it gets simple_tests and nothing else.
     if !general_layout {
-        let mut images_3d = tcu::TestCaseGroup::new("3d_images");
+        let mut images_3d = TestCaseGroup::new("3d_images");
         add_image_to_image_3d_tests(&mut images_3d, &gp);
         group.add_child(images_3d);
 
-        let mut all_formats = tcu::TestCaseGroup::new("all_formats");
-        let mut color = tcu::TestCaseGroup::new("color");
+        let mut all_formats = TestCaseGroup::new("all_formats");
+        let mut color = TestCaseGroup::new("color");
         for (name, block) in all_formats_same_format_blocks() {
-            let mut sub = tcu::TestCaseGroup::new(name);
+            let mut sub = TestCaseGroup::new(name);
             add_image_to_image_all_formats_block(&mut sub, &gp, &block);
             color.add_child(sub);
         }
         all_formats.add_child(color);
 
-        let mut depth_stencil = tcu::TestCaseGroup::new("depth_stencil");
+        let mut depth_stencil = TestCaseGroup::new("depth_stencil");
         for (name, block) in all_formats_same_format_blocks() {
-            let mut sub = tcu::TestCaseGroup::new(name);
+            let mut sub = TestCaseGroup::new(name);
             add_image_to_image_all_formats_depth_stencil(&mut sub, &gp, &block);
             depth_stencil.add_child(sub);
         }
         all_formats.add_child(depth_stencil);
         group.add_child(all_formats);
 
-        let mut dimensions = tcu::TestCaseGroup::new("dimensions");
+        let mut dimensions = TestCaseGroup::new("dimensions");
         add_image_to_image_dimensions_tests(&mut dimensions, &gp);
         group.add_child(dimensions);
 
-        let mut cube = tcu::TestCaseGroup::new("cube");
+        let mut cube = TestCaseGroup::new("cube");
         add_image_to_image_cube_tests(&mut cube, &gp);
         group.add_child(cube);
 
-        let mut array = tcu::TestCaseGroup::new("array");
+        let mut array = TestCaseGroup::new("array");
         add_image_to_image_array_tests(&mut array, &gp);
         group.add_child(array);
     }
@@ -3880,7 +3880,7 @@ impl TestInstance for CopyBufferToDepthStencilInstance<'_> {
 }
 
 /// `addCopyBufferToDepthStencilTests`
-fn add_copy_buffer_to_depth_stencil_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+fn add_copy_buffer_to_depth_stencil_tests(group: &mut TestCaseGroup, gp: &GroupParams) {
     let region = |aspect: vk::ImageAspectFlags, offset: bool| BufferImageCopy {
         aspect_mask: aspect,
         buffer_offset: if offset { 32 } else { 0 },
@@ -3952,14 +3952,14 @@ fn add_copy_buffer_to_depth_stencil_tests(group: &mut tcu::TestCaseGroup, gp: &G
 
 /// The `buffer_to_depthstencil*` groups.
 pub fn add_buffer_to_depth_stencil_groups(
-    parent: &mut tcu::TestCaseGroup,
+    parent: &mut TestCaseGroup,
     name: &str,
     allocation_kind: AllocationKind,
     command_variant: CopyCommandVariant,
     queue_selection: QueueSelection,
     general_layout: bool,
 ) {
-    let mut group = tcu::TestCaseGroup::new(name);
+    let mut group = TestCaseGroup::new(name);
     add_copy_buffer_to_depth_stencil_tests(
         &mut group,
         &GroupParams {
@@ -4282,7 +4282,7 @@ impl TestInstance for CopyDepthStencilToBufferInstance<'_> {
 }
 
 /// `addCopyDepthStencilToBufferTests`
-fn add_copy_depth_stencil_to_buffer_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+fn add_copy_depth_stencil_to_buffer_tests(group: &mut TestCaseGroup, gp: &GroupParams) {
     // Same seven formats, listed in this group's own order.
     static FORMATS: &[(vk::Format, &str)] = &[
         (vk::Format::S8_UINT, "s8_uint"),
@@ -4363,14 +4363,14 @@ fn add_copy_depth_stencil_to_buffer_tests(group: &mut tcu::TestCaseGroup, gp: &G
 
 /// The `depthstencil_to_buffer*` groups.
 pub fn add_depth_stencil_to_buffer_groups(
-    parent: &mut tcu::TestCaseGroup,
+    parent: &mut TestCaseGroup,
     name: &str,
     allocation_kind: AllocationKind,
     command_variant: CopyCommandVariant,
     queue_selection: QueueSelection,
     general_layout: bool,
 ) {
-    let mut group = tcu::TestCaseGroup::new(name);
+    let mut group = TestCaseGroup::new(name);
     add_copy_depth_stencil_to_buffer_tests(
         &mut group,
         &GroupParams {

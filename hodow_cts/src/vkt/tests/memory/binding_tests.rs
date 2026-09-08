@@ -35,14 +35,14 @@ use vulkanalia::prelude::v1_0::*;
 use vulkanalia::vk::{DeviceV1_1, ExtPageableDeviceLocalMemoryExtensionDeviceCommands, InstanceV1_1};
 use vulkanalia::{Device, ResultExt};
 
-use crate::tcu::{self, TestError, TestOutcome, TestStatus};
+use crate::tcu::{TestError, TestOutcome, TestStatus};
 use crate::tcu_throw_not_supported;
 use crate::vk::VkResultExt;
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
 use crate::vk::obj_util::allocate_command_buffer;
 use crate::vk::programs::BinaryCollection;
 use crate::vk::ref_util::Unique;
-use crate::vkt::{Context, TestCase, TestInstance};
+use crate::vkt::{Context, TestCase, TestCaseGroup, TestInstance};
 
 /// `ConstDedicatedInfo`
 type ConstDedicatedInfo = vk::MemoryDedicatedAllocateInfo;
@@ -1440,10 +1440,10 @@ impl TestCase for MemoryBindingTest {
 }
 
 /// `createMemoryBindingTests`
-pub fn create_memory_binding_tests() -> tcu::TestCaseGroup {
-    let mut group = tcu::TestCaseGroup::new("binding");
+pub fn create_memory_binding_tests() -> TestCaseGroup {
+    let mut group = TestCaseGroup::new("binding");
     // Maintenance6 memory binding tests.
-    let mut maint6 = tcu::TestCaseGroup::new("maintenance6");
+    let mut maint6 = TestCaseGroup::new("maintenance6");
 
     let iterations = 6;
 
@@ -1452,16 +1452,16 @@ pub fn create_memory_binding_tests() -> tcu::TestCaseGroup {
         let check_individual_bind_results = i / 3 != 0;
 
         // Basic memory binding tests.
-        let mut regular = tcu::TestCaseGroup::new("regular");
+        let mut regular = TestCaseGroup::new("regular");
         // Memory binding tests with aliasing of two resources.
-        let mut aliasing = tcu::TestCaseGroup::new("aliasing");
+        let mut aliasing = TestCaseGroup::new("aliasing");
 
-        let mut regular_suballocated = tcu::TestCaseGroup::new("suballocated");
-        let mut regular_dedicated = tcu::TestCaseGroup::new("dedicated");
+        let mut regular_suballocated = TestCaseGroup::new("suballocated");
+        let mut regular_dedicated = TestCaseGroup::new("dedicated");
 
-        let mut aliasing_suballocated = tcu::TestCaseGroup::new("suballocated");
+        let mut aliasing_suballocated = TestCaseGroup::new("suballocated");
 
-        let mut overallocated = tcu::TestCaseGroup::new("overallocated");
+        let mut overallocated = TestCaseGroup::new("overallocated");
 
         let allocation_sizes: [vk::DeviceSize; 5] = [33, 257, 4087, 8095, 1024 * 1024 + 1];
 
@@ -1590,7 +1590,7 @@ pub fn create_memory_binding_tests() -> tcu::TestCaseGroup {
         let parent = if check_individual_bind_results { &mut maint6 } else { &mut group };
         if priority_mode != PriorityMode::Default {
             // Using VK_EXT_pageable_device_local_memory / VK_EXT_memory_priority.
-            let mut priority = tcu::TestCaseGroup::new(if priority_mode == PriorityMode::Dynamic { "priority_dynamic" } else { "priority" });
+            let mut priority = TestCaseGroup::new(if priority_mode == PriorityMode::Dynamic { "priority_dynamic" } else { "priority" });
             priority.add_child(regular);
             priority.add_child(aliasing);
             parent.add_child(priority);
