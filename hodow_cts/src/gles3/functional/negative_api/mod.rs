@@ -8,8 +8,7 @@
 // Licensed under the Apache License, Version 2.0 (see LICENSE at the repo root).
 //
 // Modifications: rewritten in Rust for hodow_cts. Upstream registers six sub-groups
-// here; `texture`, `shader` and `state` are not ported yet, and `buffer` is 22 of its
-// 38 cases (see the note at the top of `buffer.rs`).
+// here; `texture`, `shader` and `state` are not ported yet.
 
 pub mod buffer;
 pub mod fragment;

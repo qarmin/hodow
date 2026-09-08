@@ -11,10 +11,6 @@
 // function and the registration is a table of them; see the note in
 // `gles2/functional/negative_api/buffer.rs`.
 //
-// **22 of upstream's 38 cases are here** - `bind_buffer` through `unmap_buffer`, i.e.
-// everything before upstream's `// Framebuffer Objects` comment. The 16 after it
-// (`bind_framebuffer` .. `renderbuffer_storage_multisample`) are not ported yet.
-//
 // Upstream's `isES` / `isContextTypeGLCore` branches are resolved here: `ApiType` in
 // this port is ES-only by construction (see `Api::gl_api_type`), so `isES` is always
 // true and `isContextTypeGLCore` always false, and only those branches are written.
@@ -22,6 +18,9 @@
 use crate::glu::api_case::BAD_ENUM;
 use crate::glu::{ApiCase, ApiCaseFn, TestCaseGroup, add_api_cases};
 use crate::glw::{self, GLenum, GLint, GLuint};
+
+/// The literal `-1` upstream passes where the parameter is a `GLuint` name.
+const BAD_NAME: GLuint = u32::MAX;
 
 // Buffers
 
@@ -1157,7 +1156,789 @@ fn unmap_buffer(case: &mut ApiCase<'_>) {
     unsafe { gl.delete_buffers(1, &buf) };
 }
 
-/// `NegativeBufferApiTests::init`, restricted to the 22 ported cases.
+// Framebuffer Objects
+
+fn bind_framebuffer(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    case.section("GL_INVALID_ENUM is generated if target is not GL_FRAMEBUFFER.");
+    // SAFETY: a current context; the target is invalid on purpose.
+    unsafe {
+        gl.bind_framebuffer(BAD_ENUM, 0);
+        case.expect_error(glw::GL_INVALID_ENUM);
+        gl.bind_framebuffer(glw::GL_RENDERBUFFER, 0);
+        case.expect_error(glw::GL_INVALID_ENUM);
+    }
+}
+
+fn bind_renderbuffer(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    case.section("GL_INVALID_ENUM is generated if target is not GL_RENDERBUFFER.");
+    // SAFETY: as above.
+    unsafe {
+        gl.bind_renderbuffer(BAD_ENUM, 0);
+        case.expect_error(glw::GL_INVALID_ENUM);
+        gl.bind_renderbuffer(glw::GL_FRAMEBUFFER, 0);
+        case.expect_error(glw::GL_INVALID_ENUM);
+    }
+}
+
+fn check_framebuffer_status(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    case.section("GL_INVALID_ENUM is generated if target is not GL_FRAMEBUFFER.");
+    // SAFETY: as above.
+    unsafe {
+        gl.check_framebuffer_status(BAD_ENUM);
+        case.expect_error(glw::GL_INVALID_ENUM);
+        gl.check_framebuffer_status(glw::GL_RENDERBUFFER);
+        case.expect_error(glw::GL_INVALID_ENUM);
+    }
+}
+
+fn gen_framebuffers(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    case.section("GL_INVALID_VALUE is generated if n is negative.");
+    // SAFETY: the negative count is rejected before the null array is read, which is
+    // what upstream relies on here.
+    unsafe { gl.gen_framebuffers(-1, std::ptr::null_mut()) };
+    case.expect_error(glw::GL_INVALID_VALUE);
+}
+
+fn gen_renderbuffers(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    case.section("GL_INVALID_VALUE is generated if n is negative.");
+    // SAFETY: as above.
+    unsafe { gl.gen_renderbuffers(-1, std::ptr::null_mut()) };
+    case.expect_error(glw::GL_INVALID_VALUE);
+}
+
+fn delete_framebuffers(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    case.section("GL_INVALID_VALUE is generated if n is negative.");
+    // SAFETY: as above.
+    unsafe { gl.delete_framebuffers(-1, std::ptr::null()) };
+    case.expect_error(glw::GL_INVALID_VALUE);
+}
+
+fn delete_renderbuffers(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    case.section("GL_INVALID_VALUE is generated if n is negative.");
+    // SAFETY: as above.
+    unsafe { gl.delete_renderbuffers(-1, std::ptr::null()) };
+    case.expect_error(glw::GL_INVALID_VALUE);
+}
+
+fn framebuffer_renderbuffer(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    let mut fbo: GLuint = 0;
+    let mut rbo: GLuint = 0;
+    // SAFETY: both names are this case's own and are deleted at the end.
+    unsafe {
+        gl.gen_framebuffers(1, &mut fbo);
+        gl.bind_framebuffer(glw::GL_FRAMEBUFFER, fbo);
+        gl.gen_renderbuffers(1, &mut rbo);
+    }
+
+    case.section("GL_INVALID_ENUM is generated if target is not one of the accepted tokens.");
+    // SAFETY: a current context; no pointer is involved.
+    unsafe { gl.framebuffer_renderbuffer(BAD_ENUM, glw::GL_COLOR_ATTACHMENT0, glw::GL_RENDERBUFFER, 0) };
+    case.expect_error(glw::GL_INVALID_ENUM);
+
+    case.section("GL_INVALID_ENUM is generated if renderbuffertarget is not GL_RENDERBUFFER.");
+    // SAFETY: as above.
+    unsafe {
+        gl.bind_renderbuffer(glw::GL_RENDERBUFFER, rbo);
+        gl.framebuffer_renderbuffer(glw::GL_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, BAD_ENUM, rbo);
+        case.expect_error(glw::GL_INVALID_ENUM);
+        gl.bind_renderbuffer(glw::GL_RENDERBUFFER, 0);
+    }
+
+    case.section("GL_INVALID_OPERATION is generated if renderbuffer is neither 0 nor the name of an existing renderbuffer object.");
+    // SAFETY: a name GL never handed out, which it rejects.
+    unsafe { gl.framebuffer_renderbuffer(glw::GL_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, glw::GL_RENDERBUFFER, BAD_NAME) };
+    case.expect_error(glw::GL_INVALID_OPERATION);
+
+    case.section("GL_INVALID_OPERATION is generated if zero is bound to target.");
+    // SAFETY: as above.
+    unsafe {
+        gl.bind_framebuffer(glw::GL_FRAMEBUFFER, 0);
+        gl.framebuffer_renderbuffer(glw::GL_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, glw::GL_RENDERBUFFER, 0);
+    }
+    case.expect_error(glw::GL_INVALID_OPERATION);
+
+    // SAFETY: both names are this case's own.
+    unsafe {
+        gl.delete_renderbuffers(1, &rbo);
+        gl.delete_framebuffers(1, &fbo);
+    }
+}
+
+/// `deLog2Floor32`
+fn de_log2_floor32(a: i32) -> i32 {
+    31 - (a as u32).leading_zeros() as i32
+}
+
+fn framebuffer_texture2d(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    let mut fbo: GLuint = 0;
+    let mut tex2d: GLuint = 0;
+    let mut tex_cube: GLuint = 0;
+    // SAFETY: every name is this case's own; both textures are left without storage,
+    // exactly as upstream leaves them.
+    unsafe {
+        gl.gen_framebuffers(1, &mut fbo);
+        gl.bind_framebuffer(glw::GL_FRAMEBUFFER, fbo);
+        gl.gen_textures(1, &mut tex2d);
+        gl.bind_texture(glw::GL_TEXTURE_2D, tex2d);
+        gl.gen_textures(1, &mut tex_cube);
+        gl.bind_texture(glw::GL_TEXTURE_CUBE_MAP, tex_cube);
+    }
+    case.expect_error(glw::GL_NO_ERROR);
+
+    case.section("GL_INVALID_ENUM is generated if target is not one of the accepted tokens.");
+    // SAFETY: a current context; no pointer is involved.
+    unsafe { gl.framebuffer_texture_2d(BAD_ENUM, glw::GL_COLOR_ATTACHMENT0, glw::GL_TEXTURE_2D, 0, 0) };
+    case.expect_error(glw::GL_INVALID_ENUM);
+
+    case.section("GL_INVALID_ENUM is generated if textarget is not an accepted texture target.");
+    // SAFETY: as above.
+    unsafe { gl.framebuffer_texture_2d(glw::GL_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, BAD_ENUM, tex2d, 0) };
+    case.expect_error(glw::GL_INVALID_ENUM);
+
+    case.section("GL_INVALID_VALUE is generated if level is less than 0 or larger than log_2 of maximum texture size.");
+    // SAFETY: as above.
+    unsafe { gl.framebuffer_texture_2d(glw::GL_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, glw::GL_TEXTURE_2D, tex2d, -1) };
+    case.expect_error(glw::GL_INVALID_VALUE);
+    let mut max_size = de_log2_floor32(case.get_int(glw::GL_MAX_TEXTURE_SIZE)) + 1;
+    // SAFETY: as above.
+    unsafe { gl.framebuffer_texture_2d(glw::GL_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, glw::GL_TEXTURE_2D, tex2d, max_size) };
+    case.expect_error(glw::GL_INVALID_VALUE);
+    max_size = de_log2_floor32(case.get_int(glw::GL_MAX_CUBE_MAP_TEXTURE_SIZE)) + 1;
+    // SAFETY: as above.
+    unsafe { gl.framebuffer_texture_2d(glw::GL_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, glw::GL_TEXTURE_CUBE_MAP_POSITIVE_X, tex_cube, max_size) };
+    case.expect_error(glw::GL_INVALID_VALUE);
+
+    case.section("GL_INVALID_OPERATION is generated if texture is neither 0 nor the name of an existing texture object.");
+    // SAFETY: a name GL never handed out, which it rejects.
+    unsafe { gl.framebuffer_texture_2d(glw::GL_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, glw::GL_TEXTURE_2D, BAD_NAME, 0) };
+    case.expect_error(glw::GL_INVALID_OPERATION);
+
+    case.section("GL_INVALID_OPERATION is generated if textarget and texture are not compatible.");
+    // SAFETY: both names are this case's own, and each is deleted right after the call
+    // that names it, exactly where upstream deletes it.
+    unsafe {
+        gl.framebuffer_texture_2d(glw::GL_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, glw::GL_TEXTURE_CUBE_MAP_POSITIVE_X, tex2d, 0);
+        case.expect_error(glw::GL_INVALID_OPERATION);
+        gl.delete_textures(1, &tex2d);
+
+        gl.framebuffer_texture_2d(glw::GL_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, glw::GL_TEXTURE_2D, tex_cube, 0);
+        case.expect_error(glw::GL_INVALID_OPERATION);
+        gl.delete_textures(1, &tex_cube);
+    }
+
+    case.section("GL_INVALID_OPERATION is generated if zero is bound to target.");
+    // SAFETY: as above.
+    unsafe {
+        gl.bind_framebuffer(glw::GL_FRAMEBUFFER, 0);
+        gl.framebuffer_texture_2d(glw::GL_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, glw::GL_TEXTURE_2D, 0, 0);
+    }
+    case.expect_error(glw::GL_INVALID_OPERATION);
+
+    // SAFETY: the name is this case's own.
+    unsafe { gl.delete_framebuffers(1, &fbo) };
+}
+
+fn renderbuffer_storage(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    let mut rbo: GLuint = 0;
+
+    // SAFETY: the name is this case's own and is deleted at the end.
+    unsafe {
+        gl.gen_renderbuffers(1, &mut rbo);
+        gl.bind_renderbuffer(glw::GL_RENDERBUFFER, rbo);
+    }
+
+    case.section("GL_INVALID_ENUM is generated if target is not GL_RENDERBUFFER.");
+    // SAFETY: a current context; no pointer is involved.
+    unsafe {
+        gl.renderbuffer_storage(BAD_ENUM, glw::GL_RGBA4, 1, 1);
+        case.expect_error(glw::GL_INVALID_ENUM);
+        gl.renderbuffer_storage(glw::GL_FRAMEBUFFER, glw::GL_RGBA4, 1, 1);
+        case.expect_error(glw::GL_INVALID_ENUM);
+    }
+
+    case.section("GL_INVALID_ENUM is generated if internalformat is not a color-renderable, depth-renderable, or stencil-renderable format.");
+    // SAFETY: as above.
+    unsafe { gl.renderbuffer_storage(glw::GL_RENDERBUFFER, BAD_ENUM, 1, 1) };
+    case.expect_error(glw::GL_INVALID_ENUM);
+
+    if !case.context().context_info.is_extension_supported("GL_EXT_color_buffer_half_float") {
+        // GL_EXT_color_buffer_half_float disables error
+        // SAFETY: as above.
+        unsafe { gl.renderbuffer_storage(glw::GL_RENDERBUFFER, glw::GL_RGB16F, 1, 1) };
+        case.expect_error(glw::GL_INVALID_ENUM);
+    }
+
+    if !case.context().context_info.is_extension_supported("GL_EXT_render_snorm") {
+        // GL_EXT_render_snorm disables error
+        // SAFETY: as above.
+        unsafe { gl.renderbuffer_storage(glw::GL_RENDERBUFFER, glw::GL_RGBA8_SNORM, 1, 1) };
+        case.expect_error(glw::GL_INVALID_ENUM);
+    }
+
+    case.section("GL_INVALID_VALUE is generated if width or height is less than zero.");
+    // SAFETY: as above.
+    unsafe {
+        gl.renderbuffer_storage(glw::GL_RENDERBUFFER, glw::GL_RGBA4, -1, 1);
+        case.expect_error(glw::GL_INVALID_VALUE);
+        gl.renderbuffer_storage(glw::GL_RENDERBUFFER, glw::GL_RGBA4, 1, -1);
+        case.expect_error(glw::GL_INVALID_VALUE);
+        gl.renderbuffer_storage(glw::GL_RENDERBUFFER, glw::GL_RGBA4, -1, -1);
+        case.expect_error(glw::GL_INVALID_VALUE);
+    }
+
+    case.section("GL_INVALID_VALUE is generated if width or height is greater than GL_MAX_RENDERBUFFER_SIZE.");
+    let mut max_size: GLint = 0;
+    // SAFETY: one integer of output, then a size past the limit on purpose.
+    unsafe {
+        gl.get_integerv(glw::GL_MAX_RENDERBUFFER_SIZE, &mut max_size);
+        gl.renderbuffer_storage(glw::GL_RENDERBUFFER, glw::GL_RGBA4, 1, max_size + 1);
+        case.expect_error(glw::GL_INVALID_VALUE);
+        gl.renderbuffer_storage(glw::GL_RENDERBUFFER, glw::GL_RGBA4, max_size + 1, 1);
+        case.expect_error(glw::GL_INVALID_VALUE);
+        gl.renderbuffer_storage(glw::GL_RENDERBUFFER, glw::GL_RGBA4, max_size + 1, max_size + 1);
+        case.expect_error(glw::GL_INVALID_VALUE);
+    }
+
+    // SAFETY: the name is this case's own.
+    unsafe { gl.delete_renderbuffers(1, &rbo) };
+}
+
+fn blit_framebuffer(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    let mut fbo = [0u32; 2];
+    let mut rbo = [0u32; 2];
+    let mut texture = [0u32; 2];
+
+    // SAFETY: every name is this case's own; the textures are left with unspecified
+    // contents, as upstream's null pointer asks for.
+    unsafe {
+        gl.gen_framebuffers(2, fbo.as_mut_ptr());
+        gl.gen_textures(2, texture.as_mut_ptr());
+        gl.gen_renderbuffers(2, rbo.as_mut_ptr());
+
+        gl.bind_texture(glw::GL_TEXTURE_2D, texture[0]);
+        gl.bind_renderbuffer(glw::GL_RENDERBUFFER, rbo[0]);
+        gl.bind_framebuffer(glw::GL_READ_FRAMEBUFFER, fbo[0]);
+
+        gl.tex_image_2d(
+            glw::GL_TEXTURE_2D,
+            0,
+            glw::GL_RGBA8 as GLint,
+            32,
+            32,
+            0,
+            glw::GL_RGBA,
+            glw::GL_UNSIGNED_BYTE,
+            std::ptr::null(),
+        );
+        gl.renderbuffer_storage(glw::GL_RENDERBUFFER, glw::GL_DEPTH24_STENCIL8, 32, 32);
+        gl.framebuffer_texture_2d(glw::GL_READ_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, glw::GL_TEXTURE_2D, texture[0], 0);
+        gl.framebuffer_renderbuffer(glw::GL_READ_FRAMEBUFFER, glw::GL_DEPTH_STENCIL_ATTACHMENT, glw::GL_RENDERBUFFER, rbo[0]);
+        gl.check_framebuffer_status(glw::GL_READ_FRAMEBUFFER);
+
+        gl.bind_texture(glw::GL_TEXTURE_2D, texture[1]);
+        gl.bind_renderbuffer(glw::GL_RENDERBUFFER, rbo[1]);
+        gl.bind_framebuffer(glw::GL_DRAW_FRAMEBUFFER, fbo[1]);
+
+        gl.tex_image_2d(
+            glw::GL_TEXTURE_2D,
+            0,
+            glw::GL_RGBA8 as GLint,
+            32,
+            32,
+            0,
+            glw::GL_RGBA,
+            glw::GL_UNSIGNED_BYTE,
+            std::ptr::null(),
+        );
+        gl.renderbuffer_storage(glw::GL_RENDERBUFFER, glw::GL_DEPTH24_STENCIL8, 32, 32);
+        gl.framebuffer_texture_2d(glw::GL_DRAW_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, glw::GL_TEXTURE_2D, texture[1], 0);
+        gl.framebuffer_renderbuffer(glw::GL_DRAW_FRAMEBUFFER, glw::GL_DEPTH_STENCIL_ATTACHMENT, glw::GL_RENDERBUFFER, rbo[1]);
+        gl.check_framebuffer_status(glw::GL_DRAW_FRAMEBUFFER);
+    }
+    case.expect_error(glw::GL_NO_ERROR);
+
+    case.section("GL_INVALID_OPERATION is generated if mask contains any of the GL_DEPTH_BUFFER_BIT or GL_STENCIL_BUFFER_BIT and filter is not GL_NEAREST.");
+    // SAFETY: a current context; a blit takes no client pointer.
+    unsafe {
+        gl.blit_framebuffer(0, 0, 16, 16, 0, 0, 16, 16, glw::GL_COLOR_BUFFER_BIT | glw::GL_STENCIL_BUFFER_BIT, glw::GL_LINEAR);
+        case.expect_error(glw::GL_INVALID_OPERATION);
+        gl.blit_framebuffer(0, 0, 16, 16, 0, 0, 16, 16, glw::GL_COLOR_BUFFER_BIT | glw::GL_DEPTH_BUFFER_BIT, glw::GL_LINEAR);
+        case.expect_error(glw::GL_INVALID_OPERATION);
+        gl.blit_framebuffer(0, 0, 16, 16, 0, 0, 16, 16, glw::GL_DEPTH_BUFFER_BIT | glw::GL_STENCIL_BUFFER_BIT, glw::GL_LINEAR);
+        case.expect_error(glw::GL_INVALID_OPERATION);
+    }
+
+    case.section("GL_INVALID_OPERATION is generated if mask contains GL_COLOR_BUFFER_BIT and read buffer format is incompatible with draw buffer format.");
+    // SAFETY: as above; every texture is this case's own and left unspecified.
+    unsafe {
+        gl.bind_texture(glw::GL_TEXTURE_2D, texture[0]);
+
+        gl.tex_image_2d(
+            glw::GL_TEXTURE_2D,
+            0,
+            glw::GL_RGBA32UI as GLint,
+            32,
+            32,
+            0,
+            glw::GL_RGBA_INTEGER,
+            glw::GL_UNSIGNED_INT,
+            std::ptr::null(),
+        );
+        gl.framebuffer_texture_2d(glw::GL_READ_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, glw::GL_TEXTURE_2D, texture[0], 0);
+        log::info!("// Read buffer: GL_RGBA32UI, draw buffer: GL_RGBA");
+        gl.blit_framebuffer(0, 0, 16, 16, 0, 0, 16, 16, glw::GL_COLOR_BUFFER_BIT, glw::GL_NEAREST);
+        case.expect_error(glw::GL_INVALID_OPERATION);
+
+        gl.tex_image_2d(
+            glw::GL_TEXTURE_2D,
+            0,
+            glw::GL_RGBA32I as GLint,
+            32,
+            32,
+            0,
+            glw::GL_RGBA_INTEGER,
+            glw::GL_INT,
+            std::ptr::null(),
+        );
+        gl.framebuffer_texture_2d(glw::GL_READ_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, glw::GL_TEXTURE_2D, texture[0], 0);
+        log::info!("// Read buffer: GL_RGBA32I, draw buffer: GL_RGBA");
+        gl.blit_framebuffer(0, 0, 16, 16, 0, 0, 16, 16, glw::GL_COLOR_BUFFER_BIT, glw::GL_NEAREST);
+        case.expect_error(glw::GL_INVALID_OPERATION);
+
+        gl.tex_image_2d(
+            glw::GL_TEXTURE_2D,
+            0,
+            glw::GL_RGBA8 as GLint,
+            32,
+            32,
+            0,
+            glw::GL_RGBA,
+            glw::GL_UNSIGNED_BYTE,
+            std::ptr::null(),
+        );
+        gl.framebuffer_texture_2d(glw::GL_READ_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, glw::GL_TEXTURE_2D, texture[0], 0);
+        gl.bind_texture(glw::GL_TEXTURE_2D, texture[1]);
+        gl.tex_image_2d(
+            glw::GL_TEXTURE_2D,
+            0,
+            glw::GL_RGBA32I as GLint,
+            32,
+            32,
+            0,
+            glw::GL_RGBA_INTEGER,
+            glw::GL_INT,
+            std::ptr::null(),
+        );
+        gl.framebuffer_texture_2d(glw::GL_DRAW_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, glw::GL_TEXTURE_2D, texture[1], 0);
+        log::info!("// Read buffer: GL_RGBA8, draw buffer: GL_RGBA32I");
+        gl.blit_framebuffer(0, 0, 16, 16, 0, 0, 16, 16, glw::GL_COLOR_BUFFER_BIT, glw::GL_NEAREST);
+        case.expect_error(glw::GL_INVALID_OPERATION);
+    }
+
+    case.section("GL_INVALID_OPERATION is generated if filter is GL_LINEAR and the read buffer contains integer data.");
+    // SAFETY: as above.
+    unsafe {
+        gl.bind_texture(glw::GL_TEXTURE_2D, texture[0]);
+        gl.tex_image_2d(
+            glw::GL_TEXTURE_2D,
+            0,
+            glw::GL_RGBA32UI as GLint,
+            32,
+            32,
+            0,
+            glw::GL_RGBA_INTEGER,
+            glw::GL_UNSIGNED_INT,
+            std::ptr::null(),
+        );
+        gl.framebuffer_texture_2d(glw::GL_READ_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, glw::GL_TEXTURE_2D, texture[0], 0);
+
+        gl.bind_texture(glw::GL_TEXTURE_2D, texture[1]);
+        gl.tex_image_2d(
+            glw::GL_TEXTURE_2D,
+            0,
+            glw::GL_RGBA32UI as GLint,
+            32,
+            32,
+            0,
+            glw::GL_RGBA_INTEGER,
+            glw::GL_UNSIGNED_INT,
+            std::ptr::null(),
+        );
+        gl.framebuffer_texture_2d(glw::GL_DRAW_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, glw::GL_TEXTURE_2D, texture[1], 0);
+        log::info!("// Read buffer: GL_RGBA32UI, draw buffer: GL_RGBA32UI");
+        gl.blit_framebuffer(0, 0, 16, 16, 0, 0, 16, 16, glw::GL_COLOR_BUFFER_BIT, glw::GL_LINEAR);
+        case.expect_error(glw::GL_INVALID_OPERATION);
+    }
+
+    case.section(
+        "GL_INVALID_OPERATION is generated if mask contains GL_DEPTH_BUFFER_BIT or GL_STENCIL_BUFFER_BIT and the source and destination depth and stencil formats do not match.",
+    );
+    // SAFETY: as above.
+    unsafe {
+        gl.bind_renderbuffer(glw::GL_RENDERBUFFER, rbo[0]);
+        gl.renderbuffer_storage(glw::GL_RENDERBUFFER, glw::GL_DEPTH32F_STENCIL8, 32, 32);
+        gl.framebuffer_renderbuffer(glw::GL_READ_FRAMEBUFFER, glw::GL_DEPTH_STENCIL_ATTACHMENT, glw::GL_RENDERBUFFER, rbo[0]);
+        gl.blit_framebuffer(0, 0, 16, 16, 0, 0, 16, 16, glw::GL_DEPTH_BUFFER_BIT, glw::GL_NEAREST);
+        case.expect_error(glw::GL_INVALID_OPERATION);
+        gl.blit_framebuffer(0, 0, 16, 16, 0, 0, 16, 16, glw::GL_STENCIL_BUFFER_BIT, glw::GL_NEAREST);
+        case.expect_error(glw::GL_INVALID_OPERATION);
+    }
+
+    // SAFETY: every name is this case's own.
+    unsafe {
+        gl.bind_framebuffer(glw::GL_FRAMEBUFFER, 0);
+        gl.delete_framebuffers(2, fbo.as_ptr());
+        gl.delete_textures(2, texture.as_ptr());
+        gl.delete_renderbuffers(2, rbo.as_ptr());
+    }
+}
+
+fn blit_framebuffer_multisample(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    let mut fbo = [0u32; 2];
+    let mut rbo = [0u32; 2];
+
+    // SAFETY: every name is this case's own and is deleted at the end.
+    unsafe {
+        gl.gen_framebuffers(2, fbo.as_mut_ptr());
+        gl.gen_renderbuffers(2, rbo.as_mut_ptr());
+
+        gl.bind_renderbuffer(glw::GL_RENDERBUFFER, rbo[0]);
+        gl.bind_framebuffer(glw::GL_READ_FRAMEBUFFER, fbo[0]);
+        gl.renderbuffer_storage_multisample(glw::GL_RENDERBUFFER, 4, glw::GL_RGBA8, 32, 32);
+        gl.framebuffer_renderbuffer(glw::GL_READ_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, glw::GL_RENDERBUFFER, rbo[0]);
+        gl.check_framebuffer_status(glw::GL_READ_FRAMEBUFFER);
+
+        gl.bind_renderbuffer(glw::GL_RENDERBUFFER, rbo[1]);
+        gl.bind_framebuffer(glw::GL_DRAW_FRAMEBUFFER, fbo[1]);
+    }
+    case.expect_error(glw::GL_NO_ERROR);
+
+    if !case.context().context_info.is_extension_supported("GL_NV_framebuffer_multisample") {
+        case.section("GL_INVALID_OPERATION is generated if the value of GL_SAMPLE_BUFFERS for the draw buffer is greater than zero.");
+        // SAFETY: a current context; a blit takes no client pointer.
+        unsafe {
+            gl.renderbuffer_storage_multisample(glw::GL_RENDERBUFFER, 4, glw::GL_RGBA8, 32, 32);
+            gl.framebuffer_renderbuffer(glw::GL_DRAW_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, glw::GL_RENDERBUFFER, rbo[1]);
+            gl.blit_framebuffer(0, 0, 16, 16, 0, 0, 16, 16, glw::GL_COLOR_BUFFER_BIT, glw::GL_NEAREST);
+        }
+        case.expect_error(glw::GL_INVALID_OPERATION);
+
+        case.section("GL_INVALID_OPERATION is generated if GL_SAMPLE_BUFFERS for the read buffer is greater than zero and the formats of draw and read buffers are not identical.");
+        // SAFETY: as above.
+        unsafe {
+            gl.renderbuffer_storage(glw::GL_RENDERBUFFER, glw::GL_RGBA4, 32, 32);
+            gl.framebuffer_renderbuffer(glw::GL_DRAW_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, glw::GL_RENDERBUFFER, rbo[1]);
+            gl.blit_framebuffer(0, 0, 16, 16, 0, 0, 16, 16, glw::GL_COLOR_BUFFER_BIT, glw::GL_NEAREST);
+        }
+        case.expect_error(glw::GL_INVALID_OPERATION);
+
+        case.section(
+            "GL_INVALID_OPERATION is generated if GL_SAMPLE_BUFFERS for the read buffer is greater than zero and the source and destination rectangles are not defined with the same (X0, Y0) and (X1, Y1) bounds.",
+        );
+        // SAFETY: as above.
+        unsafe {
+            gl.renderbuffer_storage(glw::GL_RENDERBUFFER, glw::GL_RGBA8, 32, 32);
+            gl.framebuffer_renderbuffer(glw::GL_DRAW_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, glw::GL_RENDERBUFFER, rbo[1]);
+            gl.blit_framebuffer(0, 0, 16, 16, 2, 2, 18, 18, glw::GL_COLOR_BUFFER_BIT, glw::GL_NEAREST);
+        }
+        case.expect_error(glw::GL_INVALID_OPERATION);
+    }
+
+    // SAFETY: every name is this case's own.
+    unsafe {
+        gl.bind_framebuffer(glw::GL_FRAMEBUFFER, 0);
+        gl.delete_renderbuffers(2, rbo.as_ptr());
+        gl.delete_framebuffers(2, fbo.as_ptr());
+    }
+}
+
+fn framebuffer_texture_layer(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    let mut fbo: GLuint = 0;
+    let mut tex3d: GLuint = 0;
+    let mut tex2d_array: GLuint = 0;
+    let mut tex2d: GLuint = 0;
+
+    // SAFETY: every name is this case's own; each texture is left with unspecified
+    // contents, as upstream's null pointer asks for.
+    unsafe {
+        gl.gen_framebuffers(1, &mut fbo);
+        gl.gen_textures(1, &mut tex3d);
+        gl.gen_textures(1, &mut tex2d_array);
+        gl.gen_textures(1, &mut tex2d);
+        gl.bind_framebuffer(glw::GL_FRAMEBUFFER, fbo);
+
+        gl.bind_texture(glw::GL_TEXTURE_3D, tex3d);
+        gl.tex_image_3d(
+            glw::GL_TEXTURE_3D,
+            0,
+            glw::GL_RGBA as GLint,
+            4,
+            4,
+            4,
+            0,
+            glw::GL_RGBA,
+            glw::GL_UNSIGNED_BYTE,
+            std::ptr::null(),
+        );
+        gl.bind_texture(glw::GL_TEXTURE_2D_ARRAY, tex2d_array);
+        gl.tex_image_3d(
+            glw::GL_TEXTURE_2D_ARRAY,
+            0,
+            glw::GL_RGBA as GLint,
+            4,
+            4,
+            4,
+            0,
+            glw::GL_RGBA,
+            glw::GL_UNSIGNED_BYTE,
+            std::ptr::null(),
+        );
+        gl.bind_texture(glw::GL_TEXTURE_2D, tex2d);
+        gl.tex_image_2d(glw::GL_TEXTURE_2D, 0, glw::GL_RGBA as GLint, 4, 4, 0, glw::GL_RGBA, glw::GL_UNSIGNED_BYTE, std::ptr::null());
+    }
+    case.expect_error(glw::GL_NO_ERROR);
+
+    case.section("GL_INVALID_ENUM is generated if target is not one of the accepted tokens.");
+    // SAFETY: a current context; no pointer is involved.
+    unsafe {
+        gl.framebuffer_texture_layer(BAD_ENUM, glw::GL_COLOR_ATTACHMENT0, tex3d, 0, 1);
+        case.expect_error(glw::GL_INVALID_ENUM);
+        gl.framebuffer_texture_layer(glw::GL_RENDERBUFFER, glw::GL_COLOR_ATTACHMENT0, tex3d, 0, 1);
+        case.expect_error(glw::GL_INVALID_ENUM);
+    }
+
+    case.section("GL_INVALID_ENUM is generated if attachment is not one of the accepted tokens.");
+    // SAFETY: as above.
+    unsafe {
+        gl.framebuffer_texture_layer(glw::GL_FRAMEBUFFER, BAD_ENUM, tex3d, 0, 1);
+        case.expect_error(glw::GL_INVALID_ENUM);
+        gl.framebuffer_texture_layer(glw::GL_FRAMEBUFFER, glw::GL_BACK, tex3d, 0, 1);
+        case.expect_error(glw::GL_INVALID_ENUM);
+    }
+
+    case.section("GL_INVALID_OPERATION is generated if texture is non-zero and not the name of a 3D texture or 2D array texture.");
+    // SAFETY: as above; `BAD_NAME` is a name GL never handed out.
+    unsafe {
+        gl.framebuffer_texture_layer(glw::GL_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, BAD_NAME, 0, 0);
+        case.expect_error(glw::GL_INVALID_OPERATION);
+        gl.framebuffer_texture_layer(glw::GL_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, tex2d, 0, 0);
+        case.expect_error(glw::GL_INVALID_OPERATION);
+    }
+
+    case.section("GL_INVALID_VALUE is generated if texture is not zero and layer is negative.");
+    // SAFETY: as above.
+    unsafe { gl.framebuffer_texture_layer(glw::GL_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, tex3d, 0, -1) };
+    case.expect_error(glw::GL_INVALID_VALUE);
+
+    case.section("GL_INVALID_VALUE is generated if texture is not zero and layer is greater than GL_MAX_3D_TEXTURE_SIZE-1 for a 3D texture.");
+    let mut max_3d_tex_size: GLint = 0;
+    // SAFETY: one integer of output, then a layer past the limit on purpose.
+    unsafe {
+        gl.get_integerv(glw::GL_MAX_3D_TEXTURE_SIZE, &mut max_3d_tex_size);
+        gl.framebuffer_texture_layer(glw::GL_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, tex3d, 0, max_3d_tex_size);
+    }
+    case.expect_error(glw::GL_INVALID_VALUE);
+
+    case.section("GL_INVALID_VALUE is generated if texture is not zero and layer is greater than GL_MAX_ARRAY_TEXTURE_LAYERS-1 for a 2D array texture.");
+    let mut max_array_tex_layers: GLint = 0;
+    // SAFETY: as above.
+    unsafe {
+        gl.get_integerv(glw::GL_MAX_ARRAY_TEXTURE_LAYERS, &mut max_array_tex_layers);
+        gl.framebuffer_texture_layer(glw::GL_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, tex2d_array, 0, max_array_tex_layers);
+    }
+    case.expect_error(glw::GL_INVALID_VALUE);
+
+    case.section("GL_INVALID_OPERATION is generated if zero is bound to target.");
+    // SAFETY: as above.
+    unsafe {
+        gl.bind_framebuffer(glw::GL_FRAMEBUFFER, 0);
+        gl.framebuffer_texture_layer(glw::GL_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, tex3d, 0, 1);
+    }
+    case.expect_error(glw::GL_INVALID_OPERATION);
+
+    // SAFETY: every name is this case's own.
+    unsafe {
+        gl.delete_textures(1, &tex3d);
+        gl.delete_textures(1, &tex2d_array);
+        gl.delete_textures(1, &tex2d);
+        gl.delete_framebuffers(1, &fbo);
+    }
+}
+
+/// The colour-attachment FBO the two `invalidate*` cases set up, and the two-entry
+/// attachment list they pass, the second of which is out of range on purpose.
+fn setup_invalidate_fbo(case: &mut ApiCase<'_>) -> (GLuint, GLuint, [GLenum; 2]) {
+    let gl = case.gl();
+    let mut fbo: GLuint = 0;
+    let mut texture: GLuint = 0;
+    let mut max_color_attachments: GLint = 0;
+    // SAFETY: one integer of output; both names are the caller's to delete.
+    unsafe { gl.get_integerv(glw::GL_MAX_COLOR_ATTACHMENTS, &mut max_color_attachments) };
+    let attachments = [glw::GL_COLOR_ATTACHMENT0, glw::GL_COLOR_ATTACHMENT0 + max_color_attachments as GLenum];
+
+    // SAFETY: the texture is left with unspecified contents, as upstream's null
+    // pointer asks for.
+    unsafe {
+        gl.gen_framebuffers(1, &mut fbo);
+        gl.gen_textures(1, &mut texture);
+        gl.bind_framebuffer(glw::GL_FRAMEBUFFER, fbo);
+        gl.bind_texture(glw::GL_TEXTURE_2D, texture);
+        gl.tex_image_2d(
+            glw::GL_TEXTURE_2D,
+            0,
+            glw::GL_RGBA as GLint,
+            32,
+            32,
+            0,
+            glw::GL_RGBA,
+            glw::GL_UNSIGNED_BYTE,
+            std::ptr::null(),
+        );
+        gl.framebuffer_texture_2d(glw::GL_FRAMEBUFFER, glw::GL_COLOR_ATTACHMENT0, glw::GL_TEXTURE_2D, texture, 0);
+        gl.check_framebuffer_status(glw::GL_FRAMEBUFFER);
+    }
+    case.expect_error(glw::GL_NO_ERROR);
+    (fbo, texture, attachments)
+}
+
+fn invalidate_framebuffer(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    let (fbo, texture, attachments) = setup_invalidate_fbo(case);
+
+    case.section("GL_INVALID_ENUM is generated if target is not GL_FRAMEBUFFER, GL_READ_FRAMEBUFFER or GL_DRAW_FRAMEBUFFER.");
+    // SAFETY: a one-entry list read from a live two-entry array.
+    unsafe {
+        gl.invalidate_framebuffer(BAD_ENUM, 1, attachments.as_ptr());
+        case.expect_error(glw::GL_INVALID_ENUM);
+        gl.invalidate_framebuffer(glw::GL_BACK, 1, attachments.as_ptr());
+        case.expect_error(glw::GL_INVALID_ENUM);
+    }
+
+    case.section("GL_INVALID_OPERATION is generated if attachments contains GL_COLOR_ATTACHMENTm and m is greater than or equal to the value of GL_MAX_COLOR_ATTACHMENTS.");
+    // SAFETY: as above, from the second entry.
+    unsafe { gl.invalidate_framebuffer(glw::GL_FRAMEBUFFER, 1, attachments[1..].as_ptr()) };
+    case.expect_error(glw::GL_INVALID_OPERATION);
+
+    // SAFETY: both names are this case's own.
+    unsafe {
+        gl.delete_textures(1, &texture);
+        gl.delete_framebuffers(1, &fbo);
+    }
+}
+
+fn invalidate_sub_framebuffer(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    let (fbo, texture, attachments) = setup_invalidate_fbo(case);
+
+    case.section("GL_INVALID_ENUM is generated if target is not GL_FRAMEBUFFER, GL_READ_FRAMEBUFFER or GL_DRAW_FRAMEBUFFER.");
+    // SAFETY: a one-entry list read from a live two-entry array.
+    unsafe {
+        gl.invalidate_sub_framebuffer(BAD_ENUM, 1, attachments.as_ptr(), 0, 0, 16, 16);
+        case.expect_error(glw::GL_INVALID_ENUM);
+        gl.invalidate_sub_framebuffer(glw::GL_BACK, 1, attachments.as_ptr(), 0, 0, 16, 16);
+        case.expect_error(glw::GL_INVALID_ENUM);
+    }
+
+    case.section("GL_INVALID_OPERATION is generated if attachments contains GL_COLOR_ATTACHMENTm and m is greater than or equal to the value of GL_MAX_COLOR_ATTACHMENTS.");
+    // SAFETY: as above, from the second entry.
+    unsafe { gl.invalidate_sub_framebuffer(glw::GL_FRAMEBUFFER, 1, attachments[1..].as_ptr(), 0, 0, 16, 16) };
+    case.expect_error(glw::GL_INVALID_OPERATION);
+
+    // SAFETY: both names are this case's own.
+    unsafe {
+        gl.delete_textures(1, &texture);
+        gl.delete_framebuffers(1, &fbo);
+    }
+}
+
+fn renderbuffer_storage_multisample(case: &mut ApiCase<'_>) {
+    let gl = case.gl();
+    let mut rbo: GLuint = 0;
+    let mut max_samples_supported_rgba4: GLint = -1;
+
+    // SAFETY: one integer of output for a one-element query; the name is deleted at the
+    // end.
+    unsafe {
+        gl.get_internalformativ(glw::GL_RENDERBUFFER, glw::GL_RGBA4, glw::GL_SAMPLES, 1, &mut max_samples_supported_rgba4);
+        gl.gen_renderbuffers(1, &mut rbo);
+        gl.bind_renderbuffer(glw::GL_RENDERBUFFER, rbo);
+    }
+
+    case.section("GL_INVALID_ENUM is generated if target is not GL_RENDERBUFFER.");
+    // SAFETY: a current context; no pointer is involved.
+    unsafe {
+        gl.renderbuffer_storage_multisample(BAD_ENUM, 2, glw::GL_RGBA4, 1, 1);
+        case.expect_error(glw::GL_INVALID_ENUM);
+        gl.renderbuffer_storage_multisample(glw::GL_FRAMEBUFFER, 2, glw::GL_RGBA4, 1, 1);
+        case.expect_error(glw::GL_INVALID_ENUM);
+    }
+
+    case.section("GL_INVALID_OPERATION is generated if samples is greater than the maximum number of samples supported for internalformat.");
+    // SAFETY: as above.
+    unsafe { gl.renderbuffer_storage_multisample(glw::GL_RENDERBUFFER, max_samples_supported_rgba4 + 1, glw::GL_RGBA4, 1, 1) };
+    case.expect_error(glw::GL_INVALID_OPERATION);
+
+    case.section("GL_INVALID_ENUM is generated if internalformat is not a color-renderable, depth-renderable, or stencil-renderable format.");
+    // SAFETY: as above.
+    unsafe { gl.renderbuffer_storage_multisample(glw::GL_RENDERBUFFER, 2, BAD_ENUM, 1, 1) };
+    case.expect_error(glw::GL_INVALID_ENUM);
+
+    if !case.context().context_info.is_extension_supported("GL_EXT_color_buffer_half_float") {
+        // GL_EXT_color_buffer_half_float disables error
+        // SAFETY: as above.
+        unsafe { gl.renderbuffer_storage_multisample(glw::GL_RENDERBUFFER, 2, glw::GL_RGB16F, 1, 1) };
+        case.expect_error(glw::GL_INVALID_ENUM);
+    }
+
+    if !case.context().context_info.is_extension_supported("GL_EXT_render_snorm") {
+        // GL_EXT_render_snorm disables error
+        // SAFETY: as above.
+        unsafe { gl.renderbuffer_storage_multisample(glw::GL_RENDERBUFFER, 2, glw::GL_RGBA8_SNORM, 1, 1) };
+        case.expect_error(glw::GL_INVALID_ENUM);
+    }
+
+    case.section("GL_INVALID_VALUE is generated if width or height is less than zero.");
+    // SAFETY: as above.
+    unsafe {
+        gl.renderbuffer_storage_multisample(glw::GL_RENDERBUFFER, 2, glw::GL_RGBA4, -1, 1);
+        case.expect_error(glw::GL_INVALID_VALUE);
+        gl.renderbuffer_storage_multisample(glw::GL_RENDERBUFFER, 2, glw::GL_RGBA4, 1, -1);
+        case.expect_error(glw::GL_INVALID_VALUE);
+        gl.renderbuffer_storage_multisample(glw::GL_RENDERBUFFER, 2, glw::GL_RGBA4, -1, -1);
+        case.expect_error(glw::GL_INVALID_VALUE);
+    }
+
+    case.section("GL_INVALID_VALUE is generated if width or height is greater than GL_MAX_RENDERBUFFER_SIZE.");
+    let mut max_size: GLint = 0;
+    // SAFETY: one integer of output, then a size past the limit on purpose.
+    unsafe {
+        gl.get_integerv(glw::GL_MAX_RENDERBUFFER_SIZE, &mut max_size);
+        gl.renderbuffer_storage_multisample(glw::GL_RENDERBUFFER, 4, glw::GL_RGBA4, 1, max_size + 1);
+        case.expect_error(glw::GL_INVALID_VALUE);
+        gl.renderbuffer_storage_multisample(glw::GL_RENDERBUFFER, 4, glw::GL_RGBA4, max_size + 1, 1);
+        case.expect_error(glw::GL_INVALID_VALUE);
+        gl.renderbuffer_storage_multisample(glw::GL_RENDERBUFFER, 4, glw::GL_RGBA4, max_size + 1, max_size + 1);
+        case.expect_error(glw::GL_INVALID_VALUE);
+    }
+
+    // SAFETY: the name is this case's own.
+    unsafe { gl.delete_renderbuffers(1, &rbo) };
+}
+
+/// `NegativeBufferApiTests::init`
 pub fn create_tests() -> TestCaseGroup {
     let mut group = TestCaseGroup::new("buffer");
     let cases: &[(&'static str, ApiCaseFn)] = &[
@@ -1183,6 +1964,22 @@ pub fn create_tests() -> TestCaseGroup {
         ("map_buffer_range", map_buffer_range),
         ("read_buffer", read_buffer),
         ("unmap_buffer", unmap_buffer),
+        ("bind_framebuffer", bind_framebuffer),
+        ("bind_renderbuffer", bind_renderbuffer),
+        ("check_framebuffer_status", check_framebuffer_status),
+        ("gen_framebuffers", gen_framebuffers),
+        ("gen_renderbuffers", gen_renderbuffers),
+        ("delete_framebuffers", delete_framebuffers),
+        ("delete_renderbuffers", delete_renderbuffers),
+        ("framebuffer_renderbuffer", framebuffer_renderbuffer),
+        ("framebuffer_texture2d", framebuffer_texture2d),
+        ("renderbuffer_storage", renderbuffer_storage),
+        ("blit_framebuffer", blit_framebuffer),
+        ("blit_framebuffer_multisample", blit_framebuffer_multisample),
+        ("framebuffer_texture_layer", framebuffer_texture_layer),
+        ("invalidate_framebuffer", invalidate_framebuffer),
+        ("invalidate_sub_framebuffer", invalidate_sub_framebuffer),
+        ("renderbuffer_storage_multisample", renderbuffer_storage_multisample),
     ];
     add_api_cases(&mut group, cases);
     group
