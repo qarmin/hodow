@@ -61,6 +61,15 @@ fn string(gl: &glw::Functions, name: u32) -> String {
 /// Falls back to the old string when the indexed query answers nothing, which is what
 /// an ES 2.0 context does.
 pub fn query_extensions(gl: &glw::Functions) -> BTreeSet<String> {
+    // An ES 2.0 context has no glGetStringi at all, and calling one that was never
+    // loaded is a panic by design - so the presence of the entry point, not the error
+    // it would raise, is what decides which query to use.
+    if gl.get_stringi.is_none() {
+        // SAFETY: as in `string` above.
+        let joined = unsafe { glw::string_from(gl.get_string(glw::GL_EXTENSIONS)) };
+        return joined.split_whitespace().map(str::to_string).collect();
+    }
+
     let mut count = 0;
     // SAFETY: GL_NUM_EXTENSIONS is a single integer; an ES 2.0 context raises
     // GL_INVALID_ENUM and leaves it at 0, which the fallback below then covers.

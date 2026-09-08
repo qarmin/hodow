@@ -51,6 +51,7 @@ impl<T: Copy, const N: usize> Vector<T, N> {
 
 pub type IVec2 = Vector<i32, 2>;
 pub type IVec3 = Vector<i32, 3>;
+pub type IVec4 = Vector<i32, 4>;
 pub type UVec3 = Vector<u32, 3>;
 pub type UVec4 = Vector<u32, 4>;
 pub type Vec4 = Vector<f32, 4>;
@@ -64,6 +65,12 @@ impl IVec2 {
 impl IVec3 {
     pub const fn new(x: i32, y: i32, z: i32) -> Self {
         Self::from_array([x, y, z])
+    }
+}
+
+impl IVec4 {
+    pub const fn new(x: i32, y: i32, z: i32, w: i32) -> Self {
+        Self::from_array([x, y, z, w])
     }
 }
 

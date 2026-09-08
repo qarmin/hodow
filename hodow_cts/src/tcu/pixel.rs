@@ -1757,6 +1757,22 @@ impl PixelBufferAccess<'_> {
         self.format
     }
 
+    /// `getDataPtr` - the whole texel run, writable, which is what a `glReadPixels`
+    /// destination has to be.
+    pub fn raw_mut(&mut self) -> &mut [u8] {
+        self.data
+    }
+
+    /// `ConstPixelBufferAccess::getPixDepth` on the writable access.
+    pub fn get_pix_depth(&self, x: u32, y: u32, z: u32) -> f32 {
+        self.as_const().get_pix_depth(x, y, z)
+    }
+
+    /// `ConstPixelBufferAccess::getPixStencil` on the writable access.
+    pub fn get_pix_stencil(&self, x: u32, y: u32, z: u32) -> u32 {
+        self.as_const().get_pix_stencil(x, y, z)
+    }
+
     pub fn size(&self) -> [u32; 3] {
         self.size
     }
@@ -2013,6 +2029,37 @@ fn gradient_coefficients(x: u32, y: u32, z: u32, width: u32, height: u32, depth:
     } else {
         [s, t, p, 1.0 - (s + t + p) / 3.0]
     }
+}
+
+/// `tcu::clear(access, const Vec4&)`
+///
+/// Upstream has a fast path that converts the colour once and fills whole rows with it;
+/// the result is the same, so only the plain loop is here.
+pub fn clear(access: &mut PixelBufferAccess<'_>, color: [f32; 4]) {
+    let [width, height, depth] = access.size();
+    for z in 0..depth {
+        for y in 0..height {
+            for x in 0..width {
+                access.set_pixel(color, x, y, z);
+            }
+        }
+    }
+}
+
+/// `tcu::clear(access, const IVec4&)` - upstream's integer overload, which writes the
+/// channel values as they are rather than converting from normalised floats.
+pub fn clear_int(access: &mut PixelBufferAccess<'_>, color: [i32; 4]) -> bool {
+    let [width, height, depth] = access.size();
+    for z in 0..depth {
+        for y in 0..height {
+            for x in 0..width {
+                if !access.set_pixel_int(color, x, y, z) {
+                    return false;
+                }
+            }
+        }
+    }
+    true
 }
 
 /// `tcu::GradientStyle`

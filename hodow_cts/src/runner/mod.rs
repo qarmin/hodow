@@ -30,16 +30,22 @@ pub const UPSTREAM_REVISION: &str = include_str!("../../upstream/COMMIT");
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum Api {
     Vulkan,
+    Gles2,
+    Gles3,
     Gles31,
 }
 
 impl Api {
-    pub const ALL: [Api; 2] = [Api::Vulkan, Api::Gles31];
+    /// Lowest version first, which is the order a run executes them in - a driver that
+    /// fails to bring up ES 3.1 has usually already told you something on ES 2.0.
+    pub const ALL: [Api; 4] = [Api::Vulkan, Api::Gles2, Api::Gles3, Api::Gles31];
 
     /// The root group name, i.e. the first component of every case name.
     pub fn root(self) -> &'static str {
         match self {
             Self::Vulkan => "dEQP-VK",
+            Self::Gles2 => "dEQP-GLES2",
+            Self::Gles3 => "dEQP-GLES3",
             Self::Gles31 => "dEQP-GLES31",
         }
     }
@@ -48,10 +54,26 @@ impl Api {
     pub fn label(self) -> &'static str {
         match self {
             Self::Vulkan => "Vulkan",
+            Self::Gles2 => "OpenGL ES 2.0",
+            Self::Gles3 => "OpenGL ES 3.0",
             Self::Gles31 => "OpenGL ES 3.1",
         }
     }
 
+    /// The context version this API's cases must run on, or `None` for Vulkan.
+    ///
+    /// Exactly this version, not a newer one - see `RenderContext::create`.
+    pub fn gl_api_type(self) -> Option<crate::glu::ApiType> {
+        match self {
+            Self::Vulkan => None,
+            Self::Gles2 => Some(crate::glu::ApiType::es(2, 0)),
+            Self::Gles3 => Some(crate::glu::ApiType::es(3, 0)),
+            Self::Gles31 => Some(crate::glu::ApiType::es(3, 1)),
+        }
+    }
+
+    /// The first component of a case name is the whole root, so `dEQP-GLES3` and
+    /// `dEQP-GLES31` cannot be confused for one another.
     pub fn from_case_name(name: &str) -> Option<Self> {
         Self::ALL.into_iter().find(|api| name.split('.').next() == Some(api.root()))
     }

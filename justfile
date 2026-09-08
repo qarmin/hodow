@@ -4,6 +4,8 @@ NIGHTLY := "nightly-2026-08-21"
 # needed to build or run hodow_cts - only to regenerate shaders and to compare verdicts
 # against upstream. See hodow_cts/README.md, "Working on the port".
 DEQP_VK := "tmp/VK-GL-CTS/build-vk-headless/external/vulkancts/modules/vulkan/deqp-vk"
+DEQP_GLES2 := "tmp/deqp-gles-build/modules/gles2/deqp-gles2"
+DEQP_GLES3 := "tmp/deqp-gles-build/modules/gles3/deqp-gles3"
 DEQP_GLES31 := "tmp/deqp-gles-build/modules/gles31/deqp-gles31"
 GLSLANG := "tmp/VK-GL-CTS/tmpbuild-glslang/StandAlone/glslang"
 CTS_DIR := "tmp/VK-GL-CTS"
@@ -179,21 +181,24 @@ cts-val *args:
 cts-shaders:
     python3 hodow_cts/scripts/compile_shaders.py --glslang {{GLSLANG}}
 
-# Run only the ported OpenGL ES cases, e.g. `just cts-gles -c 'dEQP-GLES31.*compute*'`.
-# Needs no ICD: the EGL platform is chosen at run time (see hodow_cts/src/eglu).
+# Run every ported OpenGL ES case - all three roots, lowest version first, each on a
+# context of exactly its own version. Needs no ICD: the EGL platform is chosen at run
+# time (see hodow_cts/src/eglu). Narrow it with `-c`, e.g.
+# `just cts-gles -c 'dEQP-GLES2.functional.negative_api.*'`.
 cts-gles *args:
-    @hodow_cts/scripts/run_cts.sh debug "" --case 'dEQP-GLES31.*' {{args}}
+    @hodow_cts/scripts/run_cts.sh debug "" --case 'dEQP-GLES*' {{args}}
 
 cts-glesr *args:
-    @hodow_cts/scripts/run_cts.sh release "" --case 'dEQP-GLES31.*' {{args}}
+    @hodow_cts/scripts/run_cts.sh release "" --case 'dEQP-GLES*' {{args}}
 
 # List the ported OpenGL ES cases without touching a driver.
 cts-gles-list:
-    @cargo run -q -p hodow_cts -- --list --case 'dEQP-GLES31.*'
+    @cargo run -q -p hodow_cts -- --list --case 'dEQP-GLES*'
 
-# Compare the OpenGL ES verdicts against upstream deqp-gles31 on the same driver.
+# Compare every OpenGL ES verdict against the matching upstream binary on the same
+# driver. Each binary compares its own root, so a missing one only skips that root.
 cts-gles-diff *args:
-    python3 hodow_cts/scripts/diff_vs_deqp.py --deqp-gles31 {{DEQP_GLES31}} {{args}}
+    python3 hodow_cts/scripts/diff_vs_deqp.py --deqp-gles2 {{DEQP_GLES2}} --deqp-gles3 {{DEQP_GLES3}} --deqp-gles31 {{DEQP_GLES31}} {{args}}
 
 # Regenerate the GL/EGL entry-point wrappers from upstream's own .inl files.
 cts-wrappers:
@@ -285,7 +290,7 @@ cts-verify:
     esac
 
     step "7/9  run the OpenGL ES tests"
-    cargo run -q -p hodow_cts -- --case 'dEQP-GLES31.*' --output /tmp/hodow_cts_verify_gles.jsonl
+    cargo run -q -p hodow_cts -- --case 'dEQP-GLES*' --output /tmp/hodow_cts_verify_gles.jsonl
     gles_rc=$?
     # Same rule as above: exit 2 is "no OpenGL ES driver reachable here", which is not
     # a test failure. On a headless box that usually means no EGL platform answered -
@@ -310,17 +315,21 @@ cts-verify:
         skip "deqp-vk not built ({{DEQP_VK}}) - see hodow_cts/README.md"
     fi
 
-    step "9/9  differential comparison against upstream deqp-gles31"
+    step "9/9  differential comparison against upstream deqp-gles2/3/31"
     if [ "$have_gles" -eq 0 ]; then
         skip "needs a working driver; both binaries have to run on the same one"
-    elif [ -x "{{DEQP_GLES31}}" ]; then
-        if python3 hodow_cts/scripts/diff_vs_deqp.py --deqp-gles31 {{DEQP_GLES31}}; then
+    elif [ -x "{{DEQP_GLES2}}" ] || [ -x "{{DEQP_GLES3}}" ] || [ -x "{{DEQP_GLES31}}" ]; then
+        gles_diff_args=""
+        [ -x "{{DEQP_GLES2}}" ] && gles_diff_args="$gles_diff_args --deqp-gles2 {{DEQP_GLES2}}"
+        [ -x "{{DEQP_GLES3}}" ] && gles_diff_args="$gles_diff_args --deqp-gles3 {{DEQP_GLES3}}"
+        [ -x "{{DEQP_GLES31}}" ] && gles_diff_args="$gles_diff_args --deqp-gles31 {{DEQP_GLES31}}"
+        if python3 hodow_cts/scripts/diff_vs_deqp.py $gles_diff_args; then
             ok "every case agrees with upstream"
         else
             bad "a case disagrees with upstream - that is a bug in the port"
         fi
     else
-        skip "deqp-gles31 not built ({{DEQP_GLES31}}) - see hodow_cts/README.md"
+        skip "no upstream deqp-gles* built under tmp/deqp-gles-build - see hodow_cts/README.md"
     fi
 
     printf '\n'

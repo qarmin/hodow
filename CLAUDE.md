@@ -100,12 +100,15 @@ heavily on AI-assisted code generation (see README.md "AI Usage").
 - `just cts-shaders` / `cts-diff` / `cts-drift` / `cts-sync` - regenerate SPIR-V, compare
   verdicts against upstream `deqp-vk`, report upstream drift, re-vendor upstream sources.
 - `just cts-gles` / `cts-glesr` / `cts-gles-list` / `cts-gles-diff` / `cts-wrappers` - the
-  OpenGL ES half: run the `dEQP-GLES31.*` cases (debug/release), list them without touching a
-  driver, compare verdicts against upstream `deqp-gles31`, and regenerate the GL/EGL
-  entry-point tables from upstream's `.inl` files. **No ICD and no environment needed** - the
-  EGL platform is chosen at run time (`HODOW_CTS_EGL_PLATFORM` pins it). Note upstream's own
-  `deqp-gles31` surfaceless target *does* need `EGL_PLATFORM=surfaceless` headless;
-  `diff_vs_deqp.py` sets that for it.
+  OpenGL ES half: run every `dEQP-GLES*` root (debug/release), list them without touching a
+  driver, compare verdicts against upstream `deqp-gles2`/`deqp-gles3`/`deqp-gles31`, and
+  regenerate the GL/EGL entry-point tables from upstream's `.inl` files. **No ICD and no
+  environment needed** - the EGL platform is chosen at run time (`HODOW_CTS_EGL_PLATFORM`
+  pins it). Note upstream's own surfaceless target *does* need `EGL_PLATFORM=surfaceless`
+  headless; `diff_vs_deqp.py` sets that for it.
+  **ES only, deliberately**: the hardware this port targets (Vivante GC20000) has an
+  ES-only driver, so there is no desktop-GL root and none is planned - `gen_api_wrappers.py`
+  can emit the desktop loaders but nothing registers them.
 - `just cts-coverage` - how many upstream cases are implemented, against three denominators.
   It counts only cases that actually run: a case tree landed ahead of its instance is
   reported separately as "registered without an instance". A stub declares itself by
@@ -659,6 +662,20 @@ Do not push API-specific knowledge back down into `tcu`/`runner`.
 - Buffer offsets and strides in a GLES test come from `glu::get_program_interface_*`, i.e.
   from the driver's own answers, never from an assumed std430 layout - a conformant driver
   may legally choose a different one.
+- **Each GL root runs on a context of exactly its own version** (`Api::gl_api_type`,
+  `RenderContext::create`), and only that version's entry points are loaded. Not "at
+  least": `glUniformMatrix*fv` with `transpose = GL_TRUE` is an error in ES 2.0 and legal
+  in ES 3.0, so running the ES 2.0 negative-API cases on a newer context disagrees with
+  upstream on cases where nothing is wrong.
+- **`glu::reset_state_es` runs after every GL case**, where upstream's
+  `TestCaseWrapper::deinit` runs `glu::resetState`. Ported cases rely on it:
+  `negative_api.buffer.read_pixels` leaves an incomplete framebuffer bound, and without
+  the reset the *next* case fails with `GL_INVALID_FRAMEBUFFER_OPERATION`, which reads as
+  a driver bug. The `GL_KHR_debug` section of it is not ported yet (noted in the file).
+- The negative-API groups (`glu::ApiCase`, upstream's `ES2F_ADD_API_CASE` without the
+  macro) are the cheapest cases to add and the likeliest to catch an embedded driver: no
+  shaders, no rendering, no reference image. A case keeps its *first* failure and runs to
+  the end, so one run says how much of a family is broken.
 
 The dev container ships lavapipe (`/usr/share/vulkan/icd.d/lvp_icd.json`, also symlinked
 `lavapipe.json`) and `VK_LAYER_KHRONOS_validation`, so `just cts-sw`/`cts-swr`/`cts-val` all

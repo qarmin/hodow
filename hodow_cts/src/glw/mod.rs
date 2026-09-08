@@ -15,6 +15,15 @@
 
 pub use crate::generated::glw::*;
 
+/// `GL_TRUE` / `GL_FALSE` where a `GLboolean` is wanted.
+///
+/// The generated constants are `GLenum`-typed like every other enumerant, because the
+/// registry draws no distinction - but `glGetBooleanv`, `glIsBuffer` and
+/// `glVertexAttribPointer`'s `normalized` all deal in `GLboolean`, which is a byte.
+/// Two named constants beat a cast at every one of those call sites.
+pub const TRUE: GLboolean = GL_TRUE as GLboolean;
+pub const FALSE: GLboolean = GL_FALSE as GLboolean;
+
 /// `glu::getErrorStr` - the GL error name, for a message a person will read.
 pub fn error_name(error: GLenum) -> &'static str {
     match error {

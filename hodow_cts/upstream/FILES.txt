@@ -1,16 +1,43 @@
-#
-# --- common framework (tcu::, de::) ------------------------------------------------
-# --- test framework (vkt::) --------------------------------------------------------
-# --- tests -----------------------------------------------------------------------
-# --- vulkan framework (vk::) -------------------------------------------------------
-# Add a line here as soon as a file is ported. A ported file that is missing from this
-# Paths are relative to a VK-GL-CTS checkout. `scripts/vendor_upstream.py --sync`
 # Upstream VK-GL-CTS files that hodow_cts has ported.
-# changed since the revision in COMMIT.
+#
+# Paths are relative to a VK-GL-CTS checkout. `scripts/vendor_upstream.py --sync`
 # copies each one into this directory verbatim (Apache-2.0 section 4 requires the
 # copyright notices to be kept), and `--check` reports which of them upstream has
+# changed since the revision in COMMIT.
+#
+# Add a line here as soon as a file is ported. A ported file that is missing from this
 # list will silently stop being tracked for re-sync, which is the one failure mode this
 # whole mechanism exists to prevent.
+
+# --- common framework (tcu::, de::) ------------------------------------------------
+framework/common/tcuAstcUtil.cpp
+framework/common/tcuBilinearImageCompare.cpp
+framework/common/tcuCompressedTexture.cpp
+framework/common/tcuImageCompare.cpp
+framework/common/tcuImageCompare.hpp
+framework/common/tcuPixelFormat.hpp
+framework/common/tcuRGBA.cpp
+framework/common/tcuRGBA.hpp
+framework/common/tcuRenderTarget.hpp
+framework/common/tcuSurface.cpp
+framework/common/tcuSurface.hpp
+framework/common/tcuTestCase.hpp
+framework/common/tcuTexLookupVerifier.cpp
+framework/common/tcuTexLookupVerifier.hpp
+framework/common/tcuTexVerifierUtil.cpp
+framework/common/tcuTexVerifierUtil.hpp
+framework/common/tcuTexture.cpp
+framework/common/tcuTexture.hpp
+framework/common/tcuTextureUtil.cpp
+framework/common/tcuTextureUtil.hpp
+framework/common/tcuVector.hpp
+framework/delibs/debase/deRandom.c
+framework/delibs/debase/deRandom.h
+framework/delibs/debase/deString.c
+framework/delibs/debase/deString.h
+framework/delibs/decpp/deRandom.hpp
+
+# --- vulkan framework (vk::) -------------------------------------------------------
 external/vulkancts/framework/vulkan/generated/vulkan/vkBasicTypes.inl
 external/vulkancts/framework/vulkan/generated/vulkan/vkDeviceFeatures2.inl
 external/vulkancts/framework/vulkan/generated/vulkan/vkFormatLists.inl
@@ -33,6 +60,11 @@ external/vulkancts/framework/vulkan/vkObjUtil.cpp
 external/vulkancts/framework/vulkan/vkObjUtil.hpp
 external/vulkancts/framework/vulkan/vkRef.hpp
 external/vulkancts/framework/vulkan/vkRefUtil.hpp
+
+# --- vulkan test framework (vkt::) -------------------------------------------------
+external/vulkancts/modules/vulkan/vktTestCase.hpp
+
+# --- vulkan tests (vkt::) ----------------------------------------------------------
 external/vulkancts/modules/vulkan/api/vktApiBlittingTests.cpp
 external/vulkancts/modules/vulkan/api/vktApiCopiesAndBlittingTests.cpp
 external/vulkancts/modules/vulkan/api/vktApiCopiesAndBlittingUtil.cpp
@@ -57,6 +89,11 @@ external/vulkancts/modules/vulkan/compute/vktComputeWorkgroupMemoryExplicitLayou
 external/vulkancts/modules/vulkan/compute/vktComputeZeroInitializeWorkgroupMemoryTests.cpp
 external/vulkancts/modules/vulkan/memory/vktMemoryMappingTests.cpp
 external/vulkancts/modules/vulkan/pipeline/vktPipelineImageUtil.cpp
+external/vulkancts/modules/vulkan/renderpass/vktDynamicRenderingDepthStencilResolveTests.cpp
+external/vulkancts/modules/vulkan/renderpass/vktRenderPassDepthStencilResolveTests.cpp
+external/vulkancts/modules/vulkan/renderpass/vktRenderPassMultisampleResolveTests.cpp
+external/vulkancts/modules/vulkan/renderpass/vktRenderPassMultisampleTests.cpp
+external/vulkancts/modules/vulkan/renderpass/vktRenderPassSampleReadTests.cpp
 external/vulkancts/modules/vulkan/renderpass/vktRenderPassTests.cpp
 external/vulkancts/modules/vulkan/renderpass/vktRenderPassUnusedAttachmentTests.cpp
 external/vulkancts/modules/vulkan/renderpass/vktRenderPassUnusedClearAttachmentTests.cpp
@@ -73,30 +110,9 @@ external/vulkancts/modules/vulkan/synchronization/vktSynchronizationSignalOrderT
 external/vulkancts/modules/vulkan/synchronization/vktSynchronizationTimelineSemaphoreTests.cpp
 external/vulkancts/modules/vulkan/synchronization/vktSynchronizationUtil.cpp
 external/vulkancts/modules/vulkan/synchronization/vktSynchronizationUtil.hpp
-external/vulkancts/modules/vulkan/vktTestCase.hpp
-framework/common/tcuAstcUtil.cpp
-framework/common/tcuBilinearImageCompare.cpp
-framework/common/tcuCompressedTexture.cpp
-framework/common/tcuTestCase.hpp
-framework/common/tcuTexLookupVerifier.cpp
-framework/common/tcuTexLookupVerifier.hpp
-framework/common/tcuTexVerifierUtil.cpp
-framework/common/tcuTexVerifierUtil.hpp
-framework/common/tcuTexture.cpp
-framework/common/tcuTexture.hpp
-framework/common/tcuTextureUtil.cpp
-framework/common/tcuTextureUtil.hpp
-framework/common/tcuVector.hpp
-framework/delibs/debase/deRandom.c
-framework/delibs/debase/deRandom.h
-framework/delibs/decpp/deRandom.hpp
 external/vulkancts/modules/vulkan/transform_feedback/vktPrimitivesGeneratedQueryTests.cpp
 external/vulkancts/modules/vulkan/ycbcr/vktYCbCrCopyTests.cpp
-external/vulkancts/modules/vulkan/renderpass/vktRenderPassDepthStencilResolveTests.cpp
-external/vulkancts/modules/vulkan/renderpass/vktRenderPassMultisampleResolveTests.cpp
-external/vulkancts/modules/vulkan/renderpass/vktRenderPassMultisampleTests.cpp
-external/vulkancts/modules/vulkan/renderpass/vktRenderPassSampleReadTests.cpp
-external/vulkancts/modules/vulkan/renderpass/vktDynamicRenderingDepthStencilResolveTests.cpp
+
 # --- OpenGL/EGL framework (glw::, eglw::, glu::, eglu::) ---------------------------
 framework/egl/wrapper/eglwEnums.inl
 framework/egl/wrapper/eglwFunctionTypes.inl
@@ -108,12 +124,18 @@ framework/opengl/gluContextInfo.cpp
 framework/opengl/gluContextInfo.hpp
 framework/opengl/gluObjectWrapper.cpp
 framework/opengl/gluObjectWrapper.hpp
+framework/opengl/gluPixelTransfer.cpp
+framework/opengl/gluPixelTransfer.hpp
 framework/opengl/gluProgramInterfaceQuery.cpp
 framework/opengl/gluProgramInterfaceQuery.hpp
 framework/opengl/gluRenderContext.cpp
 framework/opengl/gluRenderContext.hpp
 framework/opengl/gluShaderProgram.cpp
 framework/opengl/gluShaderProgram.hpp
+framework/opengl/gluStateReset.cpp
+framework/opengl/gluStateReset.hpp
+framework/opengl/gluTextureUtil.cpp
+framework/opengl/gluTextureUtil.hpp
 framework/opengl/wrapper/glwEnums.inl
 framework/opengl/wrapper/glwFunctionTypes.inl
 framework/opengl/wrapper/glwInitES20.inl
@@ -122,5 +144,46 @@ framework/opengl/wrapper/glwInitES31.inl
 framework/opengl/wrapper/glwInitES32.inl
 framework/opengl/wrapper/glwInitExtES.inl
 framework/opengl/wrapper/glwTypes.inl
+
+# --- OpenGL ES shared test code (deqp::gls) ----------------------------------------
+modules/glshared/glsStateQueryUtil.cpp
+modules/glshared/glsStateQueryUtil.hpp
+
+# --- OpenGL ES 2.0 tests (deqp::gles2) ---------------------------------------------
+modules/gles2/functional/es2fApiCase.cpp
+modules/gles2/functional/es2fApiCase.hpp
+modules/gles2/functional/es2fBooleanStateQueryTests.cpp
+modules/gles2/functional/es2fBooleanStateQueryTests.hpp
+modules/gles2/functional/es2fBufferObjectQueryTests.cpp
+modules/gles2/functional/es2fBufferObjectQueryTests.hpp
+modules/gles2/functional/es2fColorClearTest.cpp
+modules/gles2/functional/es2fColorClearTest.hpp
+modules/gles2/functional/es2fDepthStencilClearTests.cpp
+modules/gles2/functional/es2fDepthStencilClearTests.hpp
+modules/gles2/functional/es2fFboStateQueryTests.cpp
+modules/gles2/functional/es2fFboStateQueryTests.hpp
+modules/gles2/functional/es2fFloatStateQueryTests.cpp
+modules/gles2/functional/es2fFloatStateQueryTests.hpp
+modules/gles2/functional/es2fFunctionalTests.cpp
+modules/gles2/functional/es2fImplementationLimitTests.cpp
+modules/gles2/functional/es2fIntegerStateQueryTests.cpp
+modules/gles2/functional/es2fIntegerStateQueryTests.hpp
+modules/gles2/functional/es2fNegativeBufferApiTests.cpp
+modules/gles2/functional/es2fNegativeFragmentApiTests.cpp
+modules/gles2/functional/es2fNegativeShaderApiTests.cpp
+modules/gles2/functional/es2fNegativeStateApiTests.cpp
+modules/gles2/functional/es2fNegativeTextureApiTests.cpp
+modules/gles2/functional/es2fNegativeVertexArrayApiTests.cpp
+modules/gles2/functional/es2fPrerequisiteTests.cpp
+modules/gles2/functional/es2fPrerequisiteTests.hpp
+modules/gles2/functional/es2fRboStateQueryTests.cpp
+modules/gles2/functional/es2fRboStateQueryTests.hpp
+modules/gles2/functional/es2fShaderStateQueryTests.cpp
+modules/gles2/functional/es2fShaderStateQueryTests.hpp
+modules/gles2/functional/es2fStringQueryTests.cpp
+modules/gles2/functional/es2fStringQueryTests.hpp
+modules/gles2/functional/es2fTextureStateQueryTests.cpp
+modules/gles2/functional/es2fTextureStateQueryTests.hpp
+
 # --- OpenGL ES 3.1 tests (deqp::gles31) --------------------------------------------
 modules/gles31/functional/es31fBasicComputeShaderTests.cpp

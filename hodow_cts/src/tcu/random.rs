@@ -170,6 +170,17 @@ impl Random {
     }
 }
 
+/// `deStringHash` (`framework/delibs/debase/deString.c`) - djb2, which several GL
+/// cases mix with the iteration index to seed themselves, so the exact arithmetic
+/// decides what data the test generates.
+pub fn de_string_hash(s: &str) -> u32 {
+    let mut hash = 5381u32;
+    for c in s.bytes() {
+        hash = (hash << 5).wrapping_add(hash).wrapping_add(u32::from(c));
+    }
+    hash
+}
+
 pub fn de_int32_hash(a: i32) -> u32 {
     let mut key = a as u32;
     key = (key ^ 61) ^ (key >> 16);

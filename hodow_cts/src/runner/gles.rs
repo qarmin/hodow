@@ -12,22 +12,24 @@
 // leaves an error pending would otherwise be reported against the next one - hence the
 // drain around each case.
 
-use crate::glu::{self, Context, ContextInfo, RenderContext};
+use crate::glu::{self, ApiType, Context, ContextInfo, RenderContext};
 use crate::report::{CaseResult, JsonlWriter, RunHeader, Summary};
 use crate::runner::{RunOptions, UPSTREAM_REVISION, run_case_loop};
 use crate::tcu::{TestResult, TestStatus};
 
-/// The lowest ES version the `dEQP-GLES31` cases need. A driver that cannot give a
-/// context at least this new is reported as unavailable, not as a suite of failures.
-const REQUIRED_ES_VERSION: (i32, i32) = (3, 1);
-
+/// Runs `cases` against a context of exactly `api`'s version.
+///
+/// A driver that will not give a context of that version is reported as unavailable,
+/// not as a suite of failures: on a board whose driver stops at ES 2.0, the ES 3.1
+/// cases were never given a chance to run and must not be counted against it.
 pub fn execute_selected(
+    api: ApiType,
     cases: &[&glu::FlatCase],
     options: &RunOptions,
     writer: &mut JsonlWriter,
     mut on_result: impl FnMut(&CaseResult),
 ) -> Result<Summary, Box<dyn std::error::Error>> {
-    let render_context = RenderContext::create(REQUIRED_ES_VERSION.0, REQUIRED_ES_VERSION.1, options.device_id)?;
+    let render_context = RenderContext::create(api, options.device_id)?;
     let context_info = ContextInfo::create(render_context.functions());
 
     if options.write_header {
@@ -61,6 +63,12 @@ pub fn execute_selected(
                 Err(e) => e.to_status(),
             },
         };
+
+        // Every case starts from the initial GL state, which is what upstream's
+        // `TestCaseWrapper::deinit` guarantees by calling `glu::resetState` after each
+        // one. Several ported cases deliberately leave state behind - an incomplete
+        // framebuffer bound, a program in use - and rely on this.
+        glu::reset_state_es(&context);
 
         // A pending GL error after a case that reported Pass means the port made a
         // call upstream does not make, or ignored one it checks. That is the GL

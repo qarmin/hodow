@@ -14,6 +14,7 @@ use crate::eglu::{self, Display};
 use crate::eglw::{self, EGLContext, EGLSurface, Library, LoadError};
 use crate::glu::GlslVersion;
 use crate::glw;
+use crate::tcu::PixelFormat;
 
 /// The render target size every case gets when there is no window.
 ///
@@ -27,6 +28,18 @@ pub const DEFAULT_SURFACE_SIZE: i32 = 256;
 pub struct ApiType {
     pub major: i32,
     pub minor: i32,
+}
+
+impl ApiType {
+    /// `glu::ApiType::es`
+    pub const fn es(major: i32, minor: i32) -> Self {
+        Self { major, minor }
+    }
+
+    /// The `EGL_RENDERABLE_TYPE` bit a config must have to hold this context.
+    fn renderable_type(self) -> u32 {
+        if self.major >= 3 { eglw::EGL_OPENGL_ES3_BIT } else { eglw::EGL_OPENGL_ES2_BIT }
+    }
 }
 
 /// `glu::ContextType`
@@ -68,6 +81,13 @@ pub struct RenderTarget {
     pub num_samples: i32,
 }
 
+impl RenderTarget {
+    /// `tcu::RenderTarget::getPixelFormat`
+    pub fn pixel_format(&self) -> PixelFormat {
+        PixelFormat::new(self.red_bits, self.green_bits, self.blue_bits, self.alpha_bits)
+    }
+}
+
 /// `glu::RenderContext` - a current ES context and the entry points to drive it.
 ///
 /// Field order is the drop order and is load-bearing: the context and the surface are
@@ -84,8 +104,15 @@ pub struct RenderContext {
 }
 
 impl RenderContext {
-    /// Brings a headless ES context up, at the highest ES version the driver offers
-    /// that is at least `want_major.want_minor`.
+    /// Brings a headless ES context up at exactly the version asked for.
+    ///
+    /// Exactly, not "at least": each upstream module asks for its own version
+    /// (`deqp-gles2` for ES 2.0, `deqp-gles31` for ES 3.1) and reports that version
+    /// from `glu::RenderContext::getType()`, which decides both the `#version` line of
+    /// every generated shader and - for the negative-API groups - what counts as an
+    /// error at all. Several ES 2.0 calls that must fail on an ES 2.0 context are
+    /// perfectly legal on an ES 3.0 one, so running the ES 2.0 cases on a newer
+    /// context would disagree with upstream on cases that are not broken.
     ///
     /// `device_index` is `--device-id`, 1-based; it only has an effect on the EGL
     /// device platform, which is the one platform that enumerates GPUs.
@@ -97,7 +124,7 @@ impl RenderContext {
     /// that has `EGL_KHR_surfaceless_context` but no pbuffer config still gets a
     /// context, with a 0x0 target - fine for compute, and any case that needs pixels
     /// will say so rather than silently comparing against nothing.
-    pub fn create(want_major: i32, want_minor: i32, device_index: usize) -> Result<Self, LoadError> {
+    pub fn create(api: ApiType, device_index: usize) -> Result<Self, LoadError> {
         let library = Library::open()?;
         let display = eglu::open_display(&library, device_index)?;
         let egl = &library.egl;
@@ -110,7 +137,7 @@ impl RenderContext {
                 return Err(LoadError(format!("eglBindAPI(EGL_OPENGL_ES_API) failed: {}", eglu::last_error(egl))));
             }
 
-            let (config, surface) = match eglu::choose_config(egl, display.handle(), true)
+            let (config, surface) = match eglu::choose_config(egl, display.handle(), true, api.renderable_type())
                 .and_then(|config| eglu::create_pbuffer_surface(egl, display.handle(), config, DEFAULT_SURFACE_SIZE, DEFAULT_SURFACE_SIZE).map(|s| (config, s)))
             {
                 Some((config, surface)) => (config, surface),
@@ -124,46 +151,30 @@ impl RenderContext {
                             eglu::last_error(egl)
                         )));
                     }
-                    let Some(config) = eglu::choose_config(egl, display.handle(), false) else {
-                        return Err(LoadError(format!("no ES3-capable EGL config: {}", eglu::last_error(egl))));
+                    let Some(config) = eglu::choose_config(egl, display.handle(), false, api.renderable_type()) else {
+                        return Err(LoadError(format!("no EGL config for OpenGL ES {}.{}: {}", api.major, api.minor, eglu::last_error(egl))));
                     };
                     log::warn!("no pbuffer surface; running surfaceless, so the default framebuffer is 0x0");
                     (config, eglw::EGL_NO_SURFACE)
                 }
             };
 
-            // Ask for the newest ES version first and walk down: a 3.2 driver runs the
-            // 3.1 suite, and asking for 3.1 on it would report the wrong version in the
-            // header and pick the wrong `#version` line for every generated shader.
-            let mut created = None;
-            for (major, minor) in [(3, 2), (3, 1), (3, 0)] {
-                if (major, minor) < (want_major, want_minor) {
-                    break;
-                }
-                let attributes: [i32; 5] = [
-                    eglw::EGL_CONTEXT_MAJOR_VERSION as i32,
-                    major,
-                    eglw::EGL_CONTEXT_MINOR_VERSION as i32,
-                    minor,
-                    eglw::EGL_NONE as i32,
-                ];
-                let context = egl.create_context(display.handle(), config, eglw::EGL_NO_CONTEXT, attributes.as_ptr());
-                if context != eglw::EGL_NO_CONTEXT {
-                    created = Some((context, ContextType { api: ApiType { major, minor } }));
-                    break;
-                }
-                log::debug!("no ES {major}.{minor} context: {}", eglu::last_error(egl));
-            }
-
-            let Some((context, context_type)) = created else {
+            let attributes: [i32; 5] = [
+                eglw::EGL_CONTEXT_MAJOR_VERSION as i32,
+                api.major,
+                eglw::EGL_CONTEXT_MINOR_VERSION as i32,
+                api.minor,
+                eglw::EGL_NONE as i32,
+            ];
+            let context = egl.create_context(display.handle(), config, eglw::EGL_NO_CONTEXT, attributes.as_ptr());
+            if context == eglw::EGL_NO_CONTEXT {
+                let error = eglu::last_error(egl);
                 if surface != eglw::EGL_NO_SURFACE {
                     egl.destroy_surface(display.handle(), surface);
                 }
-                return Err(LoadError(format!(
-                    "the driver would not create an OpenGL ES {want_major}.{want_minor} context (last EGL error: {})",
-                    eglu::last_error(egl)
-                )));
-            };
+                return Err(LoadError(format!("the driver would not create an OpenGL ES {}.{} context: {error}", api.major, api.minor)));
+            }
+            let context_type = ContextType { api };
 
             if egl.make_current(display.handle(), surface, surface, context) != eglw::EGL_TRUE {
                 let error = eglu::last_error(egl);
@@ -174,11 +185,19 @@ impl RenderContext {
                 return Err(LoadError(format!("eglMakeCurrent failed: {error}")));
             }
 
+            // Only the entry points this version has, which is what upstream's
+            // `glu::initFunctions` does. Loading the ES 3.1 table into an ES 2.0
+            // context would let a ported test reach a function that is not supposed to
+            // exist there, and the driver would be blamed for whatever happened next.
             let mut gl = glw::Functions::default();
             let mut get = |name: &str| library.get_proc(name);
             gl.load_es20(&mut get);
-            gl.load_es30(&mut get);
-            gl.load_es31(&mut get);
+            if context_type.supports(3, 0) {
+                gl.load_es30(&mut get);
+            }
+            if context_type.supports(3, 1) {
+                gl.load_es31(&mut get);
+            }
             if context_type.supports(3, 2) {
                 gl.load_es32(&mut get);
             }

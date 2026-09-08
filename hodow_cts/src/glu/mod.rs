@@ -12,17 +12,26 @@
 // Ported on demand, exactly like `tcu`: a helper no ported test uses yet is left out
 // rather than guessed at.
 
+pub mod api_case;
 pub mod context_info;
+pub mod info_tests;
 pub mod objects;
+pub mod pixel_transfer;
 pub mod program_interface_query;
 pub mod render_context;
 pub mod shader_program;
+pub mod state_reset;
+pub mod texture_util;
 
+pub use api_case::{ApiCase, ApiCaseFn, BAD_ENUM, add_api_case, add_api_cases};
 pub use context_info::ContextInfo;
 pub use objects::{Buffer, Framebuffer, Texture, VertexArray};
+pub use pixel_transfer::read_pixels;
 pub use program_interface_query::{InterfaceBlockInfo, InterfaceVariableInfo, get_program_interface_block_info, get_program_interface_variable_info, get_program_resource_int};
 pub use render_context::{ApiType, ContextType, RenderContext, RenderTarget};
 pub use shader_program::{ProgramSources, ShaderProgram, ShaderType};
+pub use state_reset::reset_state_es;
+pub use texture_util::{TransferFormat, get_transfer_format};
 
 use crate::glw;
 use crate::tcu::{TestError, TestNodeInfo, TestOutcome};
@@ -96,6 +105,16 @@ impl Context {
 
     pub fn context_type(&self) -> ContextType {
         self.render_context.context_type()
+    }
+
+    /// `deqp::Context::getRenderTarget`
+    pub fn render_target(&self) -> RenderTarget {
+        self.render_context.render_target()
+    }
+
+    /// `glu::ContextInfo::isES3Compatible`
+    pub fn is_es3_compatible(&self) -> bool {
+        self.context_type().supports(3, 0)
     }
 }
 

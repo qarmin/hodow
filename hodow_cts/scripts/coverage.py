@@ -27,6 +27,7 @@ from pathlib import Path
 CRATE_DIR = Path(__file__).resolve().parent.parent
 REPO_DIR = CRATE_DIR.parent
 CTS_DIR = REPO_DIR / "tmp" / "VK-GL-CTS"
+GLES_MUSTPASS_DIR = CTS_DIR / "external" / "openglcts" / "data" / "gl_cts" / "data" / "mustpass" / "gles" / "aosp_mustpass" / "main"
 
 # Where each API's mustpass lives in a checkout, and what its cases are called.
 #
@@ -41,10 +42,13 @@ APIS = {
         "mustpass": lambda: [CTS_DIR / "external" / "vulkancts" / "mustpass" / "main" / "vk-default"],
         "label": "upstream vk-default mustpass",
     },
-    "gles31": {
-        "prefix": "dEQP-GLES31.",
-        "mustpass": lambda: [CTS_DIR / "external" / "openglcts" / "data" / "gl_cts" / "data" / "mustpass" / "gles" / "aosp_mustpass" / "main" / "gles31-main.txt"],
-        "label": "upstream AOSP gles31-main mustpass",
+    **{
+        api: {
+            "prefix": f"dEQP-{api.upper()}.",
+            "mustpass": (lambda api: lambda: [GLES_MUSTPASS_DIR / f"{api}-main.txt"])(api),
+            "label": f"upstream AOSP {api}-main mustpass",
+        }
+        for api in ("gles2", "gles3", "gles31")
     },
 }
 

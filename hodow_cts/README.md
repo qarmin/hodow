@@ -8,18 +8,21 @@ no CMake and no header packages are needed to compile or run it. The built binar
 against `libc` and `libgcc` and nothing else - the Vulkan loader, libEGL and libGLESv2
 are all opened at run time.
 
-Test case names are identical to upstream `deqp-vk` and `deqp-gles31`
-(`dEQP-VK.compute.pipeline.basic.empty_shader`,
-`dEQP-GLES31.functional.compute.basic.empty`), so a case list works with either binary
-and the results can be compared directly. That comparison is the project's correctness
+Test case names are identical to upstream `deqp-vk`, `deqp-gles2`, `deqp-gles3` and
+`deqp-gles31` (`dEQP-VK.compute.pipeline.basic.empty_shader`,
+`dEQP-GLES2.functional.negative_api.buffer.bind_buffer`), so a case list works with
+either binary and the results can be compared directly. That comparison is the project's correctness
 check, not a nice-to-have - see [Working on the port](#4-working-on-the-port).
 
-Which API a case belongs to is decided by the root of its name, so one binary holds
-both and a run can span them: each API is brought up in turn, and one being unavailable
-does not stop the other.
+Which API a case belongs to is decided by the root of its name, so one binary holds all
+four and a run can span them: each is brought up in turn - **each GL root on a context
+of exactly its own version**, because that is what upstream does and several ES 2.0
+negative-API cases stop being errors on an ES 3.0 context. One API being unavailable
+does not stop the others.
 
-**Scope.** Upstream has about 1.68 million Vulkan cases and 38k in the OpenGL ES 3.1
-mustpass. This is a framework plus a hand-picked, growing subset, currently:
+**Scope.** Upstream has about 1.68 million Vulkan cases, and 17k / 45k / 38k in the
+OpenGL ES 2.0 / 3.0 / 3.1 mustpass files. This is a framework plus a hand-picked,
+growing subset, currently:
 
 | group | cases | not ported yet |
 |---|---|---|
@@ -39,11 +42,26 @@ sub-group.
 
 | group | cases | not ported yet |
 |---|---|---|
+| `dEQP-GLES2.info.*` | 6 of 6 | - |
+| `dEQP-GLES2.functional.prerequisite.*` | 3 of 3 | - |
+| `dEQP-GLES2.functional.implementation_limits.*` | 16 of 16 | - |
+| `dEQP-GLES2.functional.color_clear.*` | 19 of 19 | - |
+| `dEQP-GLES2.functional.depth_stencil_clear.*` | 11 of 11 | - |
+| `dEQP-GLES2.functional.negative_api.*` | 246 of 246 | - |
+| `dEQP-GLES2.functional.state_query.*` | 396 of 396 | - |
+| `dEQP-GLES3.info.*` | 6 of 6 | - |
 | `dEQP-GLES31.functional.compute.basic.*` | 33 of 41 | the eight image cases (`copy_image_to_ssbo`, `copy_ssbo_to_image`, `image_atomic_op`, `image_barrier`) |
+
+The OpenGL ES side is where the work is going: the target hardware for this port is an
+embedded GPU with an ES-only driver (Vivante GC20000, OpenGL ES 3.1), so there is no
+desktop-GL root and none is planned. `dEQP-GLES2` comes first on purpose - a driver
+that fails ES 2.0 negative-API cases will not be understood any better by starting at
+ES 3.1.
 
 Run `hodow_cts --list` for the exact set, or `just cts-coverage` for the numbers above
 computed from the binary itself. Every implemented case is verified to give the same
-verdict as upstream `deqp-vk` / `deqp-gles31` on the same driver.
+verdict as upstream `deqp-vk` / `deqp-gles2` / `deqp-gles3` / `deqp-gles31` on the same
+driver - `just cts-gles-diff` is that check for the ES roots.
 
 The graphics cases are gated on one thing: `api.smoke.triangle` compares against a
 software-rasterised reference with a colour threshold of 0 and a ±1 pixel position
@@ -196,8 +214,30 @@ cannot tell you anything about your hardware - for that, run on the real GPU.
 
 ## 3. OpenGL ES
 
-The `dEQP-GLES31` half needs no ICD and no environment: `just cts-gles` runs it, and
-`just cts-gles-list` prints the cases without touching a driver.
+The GL half needs no ICD and no environment: `just cts-gles` runs every ES root in
+turn, and `just cts-gles-list` prints the cases without touching a driver.
+
+### One context version per root
+
+`dEQP-GLES2` runs on an ES 2.0 context, `dEQP-GLES3` on ES 3.0, `dEQP-GLES31` on ES
+3.1 - exactly, never "at least". Upstream ships one binary per version and each asks
+for its own, and that decision is visible in the verdicts: `glUniformMatrix4fv` with
+`transpose = GL_TRUE` is an error in ES 2.0 and legal in ES 3.0, so the ES 2.0 case
+that demands the error would disagree with upstream on a newer context through no
+fault of the driver. The entry-point table is loaded to match, so an ES 2.0 context
+cannot reach an ES 3.1 function at all.
+
+A driver that will not give a context of some version reports that root as
+unavailable; the roots it can give still run and still decide the exit code.
+
+### State is reset between cases
+
+GL state is global and a batch shares one context, so `glu::resetStateES` runs after
+every case, where upstream's `TestCaseWrapper::deinit` runs it. This is not a
+nicety: `negative_api.buffer.read_pixels` leaves an incomplete framebuffer bound on
+purpose, and without the reset the *next* case fails with
+`GL_INVALID_FRAMEBUFFER_OPERATION` - which in a log is indistinguishable from a driver
+bug. See `src/glu/state_reset.rs`.
 
 ### Finding a display without being told where it is
 
@@ -259,6 +299,30 @@ Each field has a same-named method, so a call site reads `gl.bind_buffer(...)` e
 as the C++ reads `gl.bindBuffer(...)`. Calling one the driver never exported panics with
 its name: that means the port used something it did not check for, which is a bug in the
 port and not a driver defect.
+
+### Every state query is written into a guarded buffer
+
+`gls::state_query_util::Guarded<T>` is upstream's `StateQueryMemoryWriteGuard`: a
+`#[repr(C)]` struct of a preguard word, the value, and a postguard word, all filled with
+`0xDE` before the call. `verify_validity` then reports three separate faults that a plain
+`&mut T` out-parameter cannot tell apart:
+
+- the guards are intact but the value is still `0xDEDEDEDE` - the driver **wrote nothing**
+  and the query silently did not happen;
+- the preguard changed - it wrote **before** the buffer;
+- the postguard changed - it wrote **past** the buffer, which is what a driver returning
+  four components for a one-component state does.
+
+The last two are memory corruption in the caller's frame, and a query group that does not
+check for them reports "wrong value" for what is really an out-of-bounds write. `gles2`'s
+`state_query` group is 357 cases of exactly this, which is why the guard is framework code
+rather than something each case does itself.
+
+Each state is also queried through every entry point that can return it - a boolean state
+through `glGetBooleanv`, `glGetIntegerv` and `glGetFloatv`, hence the `_getboolean` /
+`_getinteger` / `_getfloat` case-name suffixes. The conversions are where drivers get
+caught: a normalised float state read as an integer has to be expanded onto the whole
+integer range, and an enumerant set as a float has to survive the round trip.
 
 ---
 
@@ -355,12 +419,12 @@ cmake -S tmp/VK-GL-CTS -B tmp/deqp-build -DCMAKE_BUILD_TYPE=Release \
       -DDEQP_TARGET=vulkan_headless
 make -C tmp/deqp-build -j"$(nproc)" deqp-vk
 
-# upstream deqp-gles31, the same for the OpenGL ES half. The surfaceless target needs
-# the EGL and GLES headers, which hodow_cts itself does not.
+# upstream deqp-gles2/3/31, the same for the OpenGL ES half. The surfaceless target
+# needs the EGL and GLES headers, which hodow_cts itself does not.
 sudo apt install libegl1-mesa-dev libgles2-mesa-dev
 cmake -S tmp/VK-GL-CTS -B tmp/deqp-gles-build -DCMAKE_BUILD_TYPE=Release \
       -DDEQP_TARGET=surfaceless
-make -C tmp/deqp-gles-build -j"$(nproc)" deqp-gles31
+make -C tmp/deqp-gles-build -j"$(nproc)" deqp-gles2 deqp-gles3 deqp-gles31
 ```
 
 Then the three things you actually run:
@@ -376,6 +440,8 @@ python3 hodow_cts/scripts/gen_api_wrappers.py --cts-dir tmp/VK-GL-CTS
 # may be given, or both; each compares its own API's cases.
 python3 hodow_cts/scripts/diff_vs_deqp.py \
     --deqp-vk tmp/deqp-build/external/vulkancts/modules/vulkan/deqp-vk \
+    --deqp-gles2 tmp/deqp-gles-build/modules/gles2/deqp-gles2 \
+    --deqp-gles3 tmp/deqp-gles-build/modules/gles3/deqp-gles3 \
     --deqp-gles31 tmp/deqp-gles-build/modules/gles31/deqp-gles31
 
 # See which ported upstream files have changed since the pinned revision.
@@ -393,6 +459,8 @@ src/eglw/    <- framework/egl/wrapper                (eglw::)
 src/eglu/    <- framework/egl                        (eglu::)
 src/glw/     <- framework/opengl/wrapper             (glw::)
 src/glu/     <- framework/opengl                     (glu::)
+src/gles2/   <- modules/gles2                        (deqp::gles2)
+src/gles3/   <- modules/gles3                        (deqp::gles3)
 src/gles31/  <- modules/gles31                       (deqp::gles31)
 src/generated/     generated - do not hand-edit
 src/generated/shaders/  by compile_shaders.py; one module per manifest, big ones cut into partN.rs
@@ -407,7 +475,7 @@ upstream/    verbatim copies of every upstream file that has been ported
 `tcu`, `report` and `runner` are shared by both APIs and know about neither: the
 hierarchy types are generic over the API's own case trait, so one case-name filter, one
 result format and one crash supervisor serve both. Everything below them belongs to one
-API. Adding a third (`dEQP-GLES3`, say) is a module under `src/` plus a variant in
+API. Adding another (`dEQP-GLES32`, say) is a module under `src/` plus a variant in
 `runner::Api`.
 
 Rust files that were ported keep the upstream structure on purpose - same
@@ -542,6 +610,37 @@ distinct-shader count saturates and not where it is one per case, so measure it
 before starting: run a random sample under `deqp-vk --deqp-log-shader-sources=enable`
 and count distinct `<ShaderSource>` blocks as the sample grows.
 
+### The ES porting order
+
+No sampling table for the ES roots, for two reasons: the shader-count argument above
+does not apply (GLSL ES is compiled by the driver at run time, so a case costs nothing
+extra to add), and the driver this port exists for is not the one in this container -
+llvmpipe's pass rate says little about a Vivante part. The order is simply upstream's
+own registration order in `es2fFunctionalTests.cpp`, lowest API version first, because
+that is the order in which a driver's problems compound:
+
+1. `info`, `implementation_limits`, `negative_api`, `state_query` - **done, 664 cases**.
+   None of these draw anything, so they run on a driver too broken to render, and they
+   are what tells you whether the entry points and the error semantics are there at all.
+2. `prerequisite`, `color_clear`, `depth_stencil_clear` - **done, 33 cases**; `buffer`
+   and `clip_control` remain. These are the first cases that touch the framebuffer, so
+   they are also what forced the render target to have real depth and stencil: EGL
+   sorts configs with *fewer* depth/stencil bits first, so `eglu::choose_config` now
+   asks for d24s8 and only falls back to colour-only if the driver has no such config.
+   Upstream's surfaceless target has the same problem in a worse form - it builds
+   `tcu::RenderTarget` out of the *requested* config, so every unspecified channel
+   stays `DONT_CARE` (-1) - which is why `diff_vs_deqp.py` passes it
+   `--deqp-gl-config-name=rgba8888d24s8ms0`. Without that, upstream itself fails
+   `color_clear` and `depth_stencil_clear` here for reasons that have nothing to do
+   with the driver.
+3. `shaders` (by far the largest ES 2.0 group), `texture`, `fragment_ops`, `fbo`,
+   `vertex_arrays`, `rasterization`, `multisample`.
+
+Then the same walk again for `dEQP-GLES3` (whose `negative_api` alone is 148 cases in
+four sub-groups) and the rest of `dEQP-GLES31`. A case that cannot be verified here is
+still worth writing - it is verified on the hardware instead, which is the only place
+the answer counts.
+
 Measured so far (2026-09-05):
 
 | group | sample | distinct shaders | saturating? |
@@ -651,6 +750,13 @@ gets and the test builds it itself:
    `is_stub`) - `just cts-coverage` counts what runs, and a tree that runs nothing
    inflates it.
 4. `just cts-gles-diff`. A new case that does not agree with upstream is not done.
+
+The negative-API groups are the cheapest place to add cases and the most likely to
+find a driver bug on embedded hardware: no shaders, no rendering, no reference image -
+just "the specification says this call raises this error". They are written as a table
+of `(name, fn)` pairs through `glu::ApiCase`, which is upstream's `ES2F_ADD_API_CASE`
+macro without the macro; `add_api_case` takes a closure for the families upstream
+registers once per cube-map face.
 
 ---
 

@@ -17,7 +17,7 @@ hodow_cts.
 Usage:
     python3 hodow_cts/scripts/diff_vs_deqp.py \\
         --deqp-vk /path/to/deqp-vk \\
-        [--deqp-gles31 /path/to/deqp-gles31] \\
+        [--deqp-gles2 ...] [--deqp-gles3 ...] [--deqp-gles31 ...] \\
         [--case 'dEQP-VK.compute.*']
 
 At least one upstream binary must be given; each one compares its own API's cases, so
@@ -109,14 +109,27 @@ APIS = {
         "args": lambda args: [f"--deqp-vk-device-id={args.device_id}"],
         "env": {},
     },
-    "gles31": {
-        "prefix": "dEQP-GLES31.",
-        "args": lambda args: [
-            "--deqp-surface-type=pbuffer",
-            "--deqp-surface-width=256",
-            "--deqp-surface-height=256",
-        ],
-        "env": {"EGL_PLATFORM": "surfaceless"},
+    **{
+        # The three GLES roots are driven identically; only the case-name prefix and
+        # the binary differ, so they share one entry shape.
+        api: {
+            "prefix": f"dEQP-{api.upper()}.",
+            "args": lambda args: [
+                "--deqp-surface-type=pbuffer",
+                "--deqp-surface-width=256",
+                "--deqp-surface-height=256",
+                # The surfaceless target builds its `tcu::RenderTarget` from the
+                # *requested* config rather than the one EGL chose, so without this
+                # every unspecified channel stays DONT_CARE (-1) and any case that
+                # reads the render target's bit depths - color_clear's threshold,
+                # depth_stencil_clear's buffer format - fails on upstream's side for
+                # reasons that have nothing to do with the driver. hodow_cts asks EGL
+                # for the same d24s8 config in `eglu::choose_config`.
+                "--deqp-gl-config-name=rgba8888d24s8ms0",
+            ],
+            "env": {"EGL_PLATFORM": "surfaceless"},
+        }
+        for api in ("gles2", "gles3", "gles31")
     },
 }
 
@@ -124,15 +137,21 @@ APIS = {
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--deqp-vk", type=Path, default=None, help="path to the upstream deqp-vk binary")
+    ap.add_argument("--deqp-gles2", type=Path, default=None, help="path to the upstream deqp-gles2 binary")
+    ap.add_argument("--deqp-gles3", type=Path, default=None, help="path to the upstream deqp-gles3 binary")
     ap.add_argument("--deqp-gles31", type=Path, default=None, help="path to the upstream deqp-gles31 binary")
     ap.add_argument("--case", default=None, help="glob to restrict the comparison to")
     ap.add_argument("--hodow-cts", type=Path, default=None, help="path to hodow_cts (default: cargo run)")
     ap.add_argument("--device-id", type=int, default=1)
     args = ap.parse_args()
 
-    binaries = [(api, path) for api, path in (("vk", args.deqp_vk), ("gles31", args.deqp_gles31)) if path]
+    binaries = [
+        (api, path)
+        for api, path in (("vk", args.deqp_vk), ("gles2", args.deqp_gles2), ("gles3", args.deqp_gles3), ("gles31", args.deqp_gles31))
+        if path
+    ]
     if not binaries:
-        print("error: pass --deqp-vk and/or --deqp-gles31", file=sys.stderr)
+        print("error: pass at least one of --deqp-vk, --deqp-gles2, --deqp-gles3, --deqp-gles31", file=sys.stderr)
         return 2
     for api, path in binaries:
         if not path.is_file():

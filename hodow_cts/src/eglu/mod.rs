@@ -319,19 +319,34 @@ pub fn last_error(egl: &Functions) -> String {
     format!("{} (0x{:x})", eglw::error_name(error), error)
 }
 
-/// Chooses a config that can hold an ES 3.x context.
+/// Chooses a config that can hold a context of the given renderable type.
 ///
 /// `PBUFFER_BIT` is asked for because a pbuffer is the surface type that needs no
 /// window system at all; the surfaceless path below drops the requirement.
 ///
+/// Depth and stencil are asked for first, and only dropped if the driver has no such
+/// config: EGL sorts configs with *fewer* depth/stencil bits first, so asking for a
+/// colour buffer alone reliably yields a target with no depth and no stencil at all,
+/// and every ported group that clears or tests them would report NotSupported. This is
+/// the equivalent of upstream's `--deqp-gl-config-name=rgba8888d24s8`, which
+/// `diff_vs_deqp.py` passes for the same reason.
+///
 /// # Safety
 /// `display` must be an initialised display belonging to `egl`.
-pub unsafe fn choose_config(egl: &Functions, display: EGLDisplay, want_pbuffer: bool) -> Option<EGLConfig> {
-    let attributes: [i32; 13] = [
+pub unsafe fn choose_config(egl: &Functions, display: EGLDisplay, want_pbuffer: bool, renderable_type: u32) -> Option<EGLConfig> {
+    // SAFETY: as documented on this function.
+    unsafe { choose_config_with_depth_stencil(egl, display, want_pbuffer, renderable_type, true) }
+        .or_else(|| unsafe { choose_config_with_depth_stencil(egl, display, want_pbuffer, renderable_type, false) })
+}
+
+/// # Safety
+/// As `choose_config`.
+unsafe fn choose_config_with_depth_stencil(egl: &Functions, display: EGLDisplay, want_pbuffer: bool, renderable_type: u32, depth_stencil: bool) -> Option<EGLConfig> {
+    let mut attributes: Vec<i32> = vec![
         eglw::EGL_SURFACE_TYPE as i32,
         if want_pbuffer { eglw::EGL_PBUFFER_BIT as i32 } else { 0 },
         eglw::EGL_RENDERABLE_TYPE as i32,
-        eglw::EGL_OPENGL_ES3_BIT as i32,
+        renderable_type as i32,
         eglw::EGL_RED_SIZE as i32,
         8,
         eglw::EGL_GREEN_SIZE as i32,
@@ -340,8 +355,11 @@ pub unsafe fn choose_config(egl: &Functions, display: EGLDisplay, want_pbuffer: 
         8,
         eglw::EGL_ALPHA_SIZE as i32,
         8,
-        eglw::EGL_NONE as i32,
     ];
+    if depth_stencil {
+        attributes.extend_from_slice(&[eglw::EGL_DEPTH_SIZE as i32, 24, eglw::EGL_STENCIL_SIZE as i32, 8]);
+    }
+    attributes.push(eglw::EGL_NONE as i32);
 
     let mut config: EGLConfig = std::ptr::null_mut();
     let mut count = 0;

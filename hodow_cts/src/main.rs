@@ -107,24 +107,38 @@ fn main() -> std::process::ExitCode {
     };
 
     let all_vk = hodow_cts::all_cases();
-    let all_gles = hodow_cts::all_gles31_cases();
-    let vk_selected = select_cases(&all_vk, &args, names_from_file.as_deref());
-    let gles_selected = select_cases(&all_gles, &args, names_from_file.as_deref());
-    let total = vk_selected.len() + gles_selected.len();
+    let all_gl = hodow_cts::all_gl_cases();
+
+    // One selection per API, in `Api::ALL` order, which is also the order they run in
+    // and the order `--list` prints. Vulkan's cases are a different type from the GL
+    // ones, so the two lists stay apart; everything past this point works off the
+    // per-API selection and does not care which of the two it is.
+    let selections: Vec<(Api, Selection<'_>)> = Api::ALL
+        .into_iter()
+        .map(|api| {
+            let selected = match api {
+                Api::Vulkan => Selection::Vk(select_cases(&all_vk, api, &args, names_from_file.as_deref())),
+                _ => Selection::Gl(select_cases(&all_gl, api, &args, names_from_file.as_deref())),
+            };
+            (api, selected)
+        })
+        .collect();
+    let total: usize = selections.iter().map(|(_, s)| s.len()).sum();
 
     if args.list {
-        for name in vk_selected.iter().map(|c| &c.full_name).chain(gles_selected.iter().map(|c| &c.full_name)) {
-            println!("{name}");
+        for (_, selection) in &selections {
+            for name in selection.names() {
+                println!("{name}");
+            }
         }
         return std::process::ExitCode::SUCCESS;
     }
 
     if args.list_stubs {
-        for case in vk_selected.iter().filter(|c| c.case.is_stub()) {
-            println!("{}", case.full_name);
-        }
-        for case in gles_selected.iter().filter(|c| c.case.is_stub()) {
-            println!("{}", case.full_name);
+        for (_, selection) in &selections {
+            for name in selection.stub_names() {
+                println!("{name}");
+            }
         }
         return std::process::ExitCode::SUCCESS;
     }
@@ -146,45 +160,41 @@ fn main() -> std::process::ExitCode {
         }
     };
 
-    // Each API is a separate run against a separate driver, so they go one after the
-    // other and the summaries are added up. Vulkan first, matching --list.
+    // Each API is a separate run against a separate driver - and for the GL ones, a
+    // separate context version - so they go one after the other and the summaries are
+    // added up.
     let mut summary = Summary::default();
     let mut unavailable: Vec<String> = Vec::new();
 
-    let spans_both = !vk_selected.is_empty() && !gles_selected.is_empty();
+    let spans_several = selections.iter().filter(|(_, s)| s.len() > 0).count() > 1;
 
-    for api in Api::ALL {
-        let count = match api {
-            Api::Vulkan => vk_selected.len(),
-            Api::Gles31 => gles_selected.len(),
-        };
-        if count == 0 {
+    for (api, selection) in &selections {
+        if selection.len() == 0 {
             continue;
         }
 
-        if spans_both {
-            println!("{} ({count} cases)", api.label());
+        if spans_several {
+            println!("{} ({} cases)", api.label(), selection.len());
         }
 
         let result = if args.no_isolation {
-            match api {
-                Api::Vulkan => hodow_cts::runner::vulkan::execute_selected(&vk_selected, &run_options(&args), &mut writer, print_case),
-                Api::Gles31 => hodow_cts::runner::gles::execute_selected(&gles_selected, &run_options(&args), &mut writer, print_case),
+            match selection {
+                Selection::Vk(cases) => hodow_cts::runner::vulkan::execute_selected(cases, &run_options(&args), &mut writer, print_case),
+                Selection::Gl(cases) => {
+                    let api_type = api.gl_api_type().expect("a GL selection belongs to a GL API");
+                    hodow_cts::runner::gles::execute_selected(api_type, cases, &run_options(&args), &mut writer, print_case)
+                }
             }
         } else {
-            let names: Vec<String> = match api {
-                Api::Vulkan => vk_selected.iter().map(|c| c.full_name.clone()).collect(),
-                Api::Gles31 => gles_selected.iter().map(|c| c.full_name.clone()).collect(),
-            };
-            run_supervised(api, &names, &args, &mut writer)
+            run_supervised(*api, &selection.names(), &args, &mut writer)
         };
 
         match result {
             Ok(sub) => summary.merge(&sub),
             Err(e) => {
                 if is_driver_unavailable(e.as_ref()) {
-                    // Nothing ran for this API. That is not a test failure, and if the
-                    // other API did run, its verdicts still stand.
+                    // Nothing ran for this API. That is not a test failure, and any
+                    // other API that did run keeps its verdicts.
                     eprintln!("{e}");
                     unavailable.push(api.label().to_string());
                     continue;
@@ -245,8 +255,39 @@ fn read_case_list(args: &Args) -> std::io::Result<Option<Vec<String>>> {
     ))
 }
 
-fn select_cases<'a, C: ?Sized>(all: &'a [FlatCase<C>], args: &Args, from_file: Option<&[String]>) -> Vec<&'a FlatCase<C>> {
+/// One API's share of the selection. The two arms hold different case types, which is
+/// the whole reason this enum exists rather than one list.
+enum Selection<'a> {
+    Vk(Vec<&'a hodow_cts::vkt::FlatCase>),
+    Gl(Vec<&'a hodow_cts::glu::FlatCase>),
+}
+
+impl Selection<'_> {
+    fn len(&self) -> usize {
+        match self {
+            Self::Vk(cases) => cases.len(),
+            Self::Gl(cases) => cases.len(),
+        }
+    }
+
+    fn names(&self) -> Vec<String> {
+        match self {
+            Self::Vk(cases) => cases.iter().map(|c| c.full_name.clone()).collect(),
+            Self::Gl(cases) => cases.iter().map(|c| c.full_name.clone()).collect(),
+        }
+    }
+
+    fn stub_names(&self) -> Vec<String> {
+        match self {
+            Self::Vk(cases) => cases.iter().filter(|c| c.case.is_stub()).map(|c| c.full_name.clone()).collect(),
+            Self::Gl(cases) => cases.iter().filter(|c| c.case.is_stub()).map(|c| c.full_name.clone()).collect(),
+        }
+    }
+}
+
+fn select_cases<'a, C: ?Sized>(all: &'a [FlatCase<C>], api: Api, args: &Args, from_file: Option<&[String]>) -> Vec<&'a FlatCase<C>> {
     all.iter()
+        .filter(|c| c.full_name.split('.').next() == Some(api.root()))
         .filter(|c| match from_file {
             Some(names) => names.contains(&c.full_name),
             None => args.case.is_empty() || args.case.iter().any(|p| matches_filter(&c.full_name, p)),
@@ -378,10 +419,11 @@ fn run_as_worker(args: &Args) -> std::process::ExitCode {
             let selected = pick(&all, &wanted);
             hodow_cts::runner::vulkan::execute_selected(&selected, &options, &mut writer, |_| {})
         }
-        Api::Gles31 => {
-            let all = hodow_cts::all_gles31_cases();
+        gl_api => {
+            let all = hodow_cts::all_gl_cases();
             let selected = pick(&all, &wanted);
-            hodow_cts::runner::gles::execute_selected(&selected, &options, &mut writer, |_| {})
+            let api_type = gl_api.gl_api_type().expect("every non-Vulkan API is a GL one");
+            hodow_cts::runner::gles::execute_selected(api_type, &selected, &options, &mut writer, |_| {})
         }
     };
 

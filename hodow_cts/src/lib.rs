@@ -17,6 +17,9 @@
 //   eglu/    <- framework/egl                        (eglu::)
 //   glw/     <- framework/opengl/wrapper             (glw::)
 //   glu/     <- framework/opengl                     (glu::)
+//   gls/     <- modules/glshared                     (gls::)
+//   gles2/   <- modules/gles2                        (deqp::gles2)
+//   gles3/   <- modules/gles3                        (deqp::gles3)
 //   gles31/  <- modules/gles31                       (deqp::gles31)
 //
 // `tcu`, `report` and `runner` are shared by both APIs; everything under them is one
@@ -26,7 +29,10 @@ pub mod color;
 pub mod eglu;
 pub mod eglw;
 pub mod generated;
+pub mod gles2;
+pub mod gles3;
 pub mod gles31;
+pub mod gls;
 pub mod glu;
 pub mod glw;
 pub mod report;
@@ -61,16 +67,24 @@ pub fn all_cases() -> Vec<vkt::FlatCase> {
     tcu::flatten(create_test_hierarchy())
 }
 
-/// The flat, ordered list of every `dEQP-GLES31` case.
+/// The flat, ordered list of every GL case: `dEQP-GLES2`, then `dEQP-GLES3`, then
+/// `dEQP-GLES31`.
 ///
-/// A separate list rather than a branch of one tree, because the two APIs' cases are
-/// genuinely different types: a Vulkan case hands the runner an ahead-of-time program
-/// collection and runs against a device, a GLES case compiles its own GLSL against a
-/// current context. What matters is that the hierarchy walker, the name filter, the
-/// report and the crash isolation are shared, and all of those are generic over the
-/// case type.
-pub fn all_gles31_cases() -> Vec<glu::FlatCase> {
-    tcu::flatten(gles31::create_tests())
+/// All three share one list because they share one case type - the difference between
+/// them is the context version the runner asks for, which comes from `runner::Api`.
+/// They are kept apart from the Vulkan list because *that* is a genuinely different
+/// type: a Vulkan case hands the runner an ahead-of-time program collection and runs
+/// against a device, a GL case compiles its own GLSL against a current context. What
+/// matters is that the hierarchy walker, the name filter, the report and the crash
+/// isolation are shared, and all of those are generic over the case type.
+///
+/// Lowest version first, which is the order they run in: on a driver that is failing,
+/// the ES 2.0 verdicts are the ones worth reading first.
+pub fn all_gl_cases() -> Vec<glu::FlatCase> {
+    let mut cases = tcu::flatten(gles2::create_tests());
+    cases.extend(tcu::flatten(gles3::create_tests()));
+    cases.extend(tcu::flatten(gles31::create_tests()));
+    cases
 }
 
 /// Every case name this binary knows, Vulkan first, in registration order.
@@ -79,6 +93,6 @@ pub fn all_gles31_cases() -> Vec<glu::FlatCase> {
 /// that only wants names never has to know which API a case belongs to.
 pub fn all_case_names() -> Vec<String> {
     let mut names: Vec<String> = all_cases().into_iter().map(|c| c.full_name).collect();
-    names.extend(all_gles31_cases().into_iter().map(|c| c.full_name));
+    names.extend(all_gl_cases().into_iter().map(|c| c.full_name));
     names
 }

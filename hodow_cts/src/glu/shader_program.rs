@@ -68,6 +68,11 @@ impl ProgramSources {
     pub fn compute(source: impl Into<String>) -> Self {
         Self::default().with(ShaderType::Compute, source)
     }
+
+    /// `glu::makeVtxFragSources`
+    pub fn vtx_frag(vertex: impl Into<String>, fragment: impl Into<String>) -> Self {
+        Self::default().with(ShaderType::Vertex, vertex).with(ShaderType::Fragment, fragment)
+    }
 }
 
 /// One shader's or the program's compile/link outcome.
