@@ -52,7 +52,7 @@ pub(super) fn test_arm_shared_crc_crc32cb() -> Result<(), String> {
 pub(super) fn test_arm_shared_crc_crc32cd() -> Result<(), String> {
     unsafe {
         let result = __crc32cd(1u32, 2u64);
-        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: __crc32cd(1u32, 2u64)"))?;
+        check_int_equality(result as i32, -616265879).map_err(|e| format!("{e} | call: __crc32cd(1u32, 2u64)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -113,7 +113,7 @@ pub(super) fn test_arm_shared_crc_crc32cw() -> Result<(), String> {
 pub(super) fn test_arm_shared_crc_crc32d() -> Result<(), String> {
     unsafe {
         let result = __crc32d(1u32, 2u64);
-        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: __crc32d(1u32, 2u64)"))?;
+        check_int_equality(result as i32, -1903228957).map_err(|e| format!("{e} | call: __crc32d(1u32, 2u64)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {

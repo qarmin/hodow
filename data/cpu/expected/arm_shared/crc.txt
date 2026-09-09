@@ -7,7 +7,9 @@
 
 test_arm_shared_crc_crc32b - -1727442502
 test_arm_shared_crc_crc32cb - 324072436
+test_arm_shared_crc_crc32cd - -616265879
 test_arm_shared_crc_crc32ch - 887597209
 test_arm_shared_crc_crc32cw - 1646430521
+test_arm_shared_crc_crc32d - -1903228957
 test_arm_shared_crc_crc32h - 724390851
 test_arm_shared_crc_crc32w - 313896942

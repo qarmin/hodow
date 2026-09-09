@@ -72,7 +72,11 @@ heavily on AI-assisted code generation (see README.md "AI Usage").
   instance's `current_exe()` points at, silently breaking every subprocess it spawns afterward
   ("No such file or directory"). Keep any new recipe that runs `hodow_cli` in the default
   debug/release profile on this same feature set.
-- `just memtest` - GPU memory test.
+- `just memtest` - GPU memory test. Its compute kernel ships as `#version 310 es` *and*
+  `#version 430`, tried in that order (`COMPUTE_SRCS`): a GLES 3.1 driver takes only the first
+  and a desktop context below GL 4.5 only the second, so before this the memory test could not
+  run at all on a GLES-only board. Readback goes through `glMapBufferRange`, since GLES has no
+  `glGetBufferSubData`.
 - `just miri` - run CPU tests under Miri (`miri_build` feature).
 - `just clippy` - clippy on `hodow_cli` with all features/targets.
 - `just fix` - `cargo fmt` + `cargo clippy --fix` + `cargo fmt` (all features/targets).
@@ -338,6 +342,37 @@ byte-identical across the change.
   groups check features whose detection strings are still unstable, unlike the
   `neon`/`crc`/`aes` handful that was enough before.
 
+### Multi-scenario expansion covers NEON too
+
+`in_pilot_scope` now returns true for `neon` on arm/arm_shared/aarch64, so NEON gets the same
+`boundary_min/max/zero/allones/mixed`, `asym_*` and `normal2/3` scenarios x86 has had. The
+multiplier went from 1.0x to 6.3x on arm (2564 signatures -> 16134 tests) and 2.1x on aarch64
+(the rest of aarch64 is SVE, deliberately still 1.0x). Verified under qemu: armv7 runs 14561
+tests with 0 errors, and the x86/x86_64 output is byte-identical across the change.
+
+- **NEON needs no width table.** `int8x8_t` states its own lane type and count, unlike `__m128i`,
+  so `_neon_width_info()` derives every `WIDTH_AWARE_VEC_INFO` entry from the type name and
+  `common/arm.rs`'s regular helper naming. `detect_elem_type` consults that first: guessing from
+  the function name is not merely unnecessary for NEON but wrong, since `vreinterpretq_u32_s8`
+  takes an `int8x16_t` while its name ends in the *result* type. poly lanes go through the
+  unsigned integer of the same width; there is no poly32 type.
+- **SVE is excluded on purpose**: it builds values by broadcasting one scalar into a
+  runtime-width vector (`svdup_n_*`) and reads one back with `svlastb`, not the per-lane arrays
+  every scenario builder here works with.
+- **The immediate axis stays x86-only** (`_build_immediate_scenarios`). A NEON immediate's valid
+  range is per function and not derivable from the signature - a lane index must be under that
+  vector's lane count, a shift is `1..=lane bits`, `vcvt_n_*` asserts `N >= 1` - and the x86-shaped
+  catalog produced 220 `E0080: assertion failed` at codegen. `const_val` already picks the one
+  valid immediate per NEON function, so the single scenario keeps it and only values expand.
+- **`_adjust_expected_for_ret` and the comparator choice both go through `_fallback_unpack_elem`**,
+  which knows NEON returns. Without it every NEON f64 return took the integer comparator, and
+  `NaN == NaN` is false, so 148 boundary scenarios could never pass whatever was captured for
+  them - and `f32::NAN` was never retyped to `f64::NAN`, which is 417 compile errors. Both were
+  one missing lookup, not bad data: do not "fix" this class by deleting captured entries.
+- Recapture for both ARM targets converges in one round now that
+  `arm-linux-gnueabihf-gcc`/`qemu-arm` are in the container:
+  `capture_expected_cross.py armv7-unknown-linux-gnueabihf arm-linux-gnueabihf-gcc qemu-arm`.
+
 ### Non-x86 architectures
 
 NEON (arm32 + aarch64) now has real coverage and actually runs, verified end-to-end via
@@ -512,7 +547,19 @@ generated.rs references them.
 ## GPU (OpenGL) testing
 
 - Each test implements the `GLTest` trait (`hodow_core/src/opengl/test_trait.rs`) in its own file under
-  `hodow_core/src/opengl/tests/`, registered in `tests/mod.rs`.
+  `hodow_core/src/opengl/tests/`, registered in `tests/mod.rs`. A file may hold several tests -
+  the generated requirements table splits per `impl GLTest for`, not per file, so `validation.rs`'s
+  four and `es3_validation.rs`'s five each get their own entry (before that split only the first
+  test in a multi-test file was in the table at all).
+- **`es3_validation.rs` is the GLES-native half of the suite.** Everything else targets desktop
+  GL, which on a GLES-only driver means almost nothing runs - an i.MX/Vivante GC2000+ executed 4
+  of 40. These use `#version 300 es`/`310 es` and GLES-3 APIs only (no `glGetTexImage`, no
+  `glGetBufferSubData`, no fixed function) and check bit-exact analytical results: solid fill,
+  additive blending, `texelFetch` round-trip, flat vertex attributes, and an SSBO compute kernel
+  reusing the Vulkan check's `data[i] = i*3+7` oracle. Two things they must keep doing: bind a VAO
+  (GLES 3 accepts the default VAO 0, a desktop core profile does not), and write colours as
+  `n/255.0` - blending happens against the value already quantized into the RGBA8 target, so
+  `0.25 + 0.5` lands on 192, not the 191 that `0.75` would suggest.
 - `context.rs` creates a headless context. With no `$DISPLAY` it tries, in order: the running
   Wayland compositor's own `wl_display` (`create_wayland_display`, via `wayland-client` -
   `WaylandConnectionGuard` keeps the connection alive for the context's lifetime, since EGL only
@@ -524,13 +571,37 @@ generated.rs references them.
   with Weston running. Mesa is happy either way, so the reordering costs nothing.
   Needs `WAYLAND_DISPLAY` and `XDG_RUNTIME_DIR` in the environment - over SSH they have to be set
   by hand (`XDG_RUNTIME_DIR=/run/user/0 WAYLAND_DISPLAY=wayland-1 ./hodow_cli ...`).
-  **The positive path is unverified**: the dev container has no Wayland compositor, so only the
-  fallbacks were exercised (no regression: `just gpu --no-window` still 40/40). Adding `weston`
-  to the container would make it testable.
+  Verified on an i.MX ARMv7 board running Weston (`DISTRO = fsl-imx-wayland`, no X at all):
+  `OpenGL ES 3.1 V6.4.3.p2.336687 - Vivante GC2000+`. The dev container has no compositor, so
+  only the fallbacks are exercised there (`just gpu --no-window` still 40/40).
 - Note `just gpu` *with* a window needs a display for winit and fails in a headless container
   regardless of any of the above - that is pre-existing, use `--no-window` there.
 - Tests should call `drain_gl_errors()` before running and the harness checks `glGetError` after - a test
-  that returns `Ok` but left a pending GL error is reported as failed. Many legacy-looking tests are written
+  that returns `Ok` but left a pending GL error is reported as failed. Both run loops go through
+  `run_one_test`, which classifies three ways: passed, **not supported here**, failed.
+- **A test the driver cannot run is skipped before it runs**, the same as a CPU extension the
+  chip does not have. `generate_gl_table.py` emits `opengl/generated_requirements.rs` - per test,
+  every `gl::Foo(` its own body calls, read off the source so it cannot drift - and the harness
+  checks each with the `gl` crate's `is_loaded()` first. Reporting those as *failures* would be
+  wrong in a tool that exists to find defects: "GL 4.5 DSA is absent from a GLES 3.1 driver" is
+  not one. The `skipped: ...` string some tests already return counts as skipped too, where it
+  used to count as a pass and quietly inflate the result.
+- The panic catch stays as a backstop for anything the table misses (a function reached through
+  a path the extractor cannot see): `panic!("gl function was not loaded")` becomes that test's
+  "not supported", never a dead process. Before this it killed the run on the first one, so on a
+  GLES-only board the other 39 tests never reported anything at all.
+- **`gpu --isolate` runs one test per subprocess** (`hodow_cli/src/gpu_isolate.rs`), so a driver
+  that segfaults or wedges the GPU costs that one test rather than the whole run. Unlike
+  `cpu --isolate` there is no resumable line protocol or index bookkeeping: 65 tests each needing
+  a fresh context anyway make a process per test cheap, and the child reports through one
+  `RESULT <outcome> <message>` line on stdout with logging off. `--isolate-timeout-ms` (default
+  30000) covers a hang; a crash is classified by `isolate::crash_reason`.
+- `just gpu` never prints "all tests passed" without the not-supported count beside it - a clean
+  run over mostly-skipped tests proves very little, the same caveat `hodow_cts` carries.
+- The `[GL debug]` callback logs at most `MAX_DEBUG_MESSAGES_PER_TEST` per test and then only
+  counts, printing the total afterwards. One failing test inside a render loop (`GL31_UBO` on a
+  Vivante GC2000+) emitted 6770 identical `GL_INVALID_FRAMEBUFFER_OPERATION` lines - 98% of the
+  whole run's log - which hid the ten other findings rather than adding anything. Many legacy-looking tests are written
   against a core profile (glutin default), not compatibility - watch for that when adding new ones (bind a
   non-zero VAO, look up uniform locations rather than hardcoding them, etc.).
 - `hodow_core/src/opengl/FUNCTIONS_TABLE.md` (function coverage) is generated by

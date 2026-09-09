@@ -3,6 +3,9 @@ use log::info;
 
 mod context;
 
+#[rustfmt::skip]
+mod generated_requirements;
+
 mod loader;
 
 pub mod memtest;
@@ -148,7 +151,6 @@ const PROBE_ATTEMPTS: &[(&str, DisplayApiHint, GlApiHint)] = &[
 pub fn probe_opengl() -> Result<GlInfo, String> {
     let mut failures: Vec<(String, String)> = Vec::new();
     for (label, display_api, gl_api) in PROBE_ATTEMPTS {
-        let _ = label;
         let opts = GpuOptions {
             no_window: true,
             display_api: *display_api,
@@ -274,7 +276,8 @@ pub mod gui {
         fn update(&mut self, delta_ms: u64) -> Result<bool, Box<dyn Error>>;
 
         /// Get final result (run_count, error_count)
-        fn get_result(&self) -> (usize, usize);
+        /// `(run, skipped, errors)` - skipped means the driver cannot run the test at all.
+        fn get_result(&self) -> (usize, usize, usize);
     }
 
     /// Opaque runtime handle placeholder
@@ -314,7 +317,7 @@ pub mod gui {
 
         /// Create a window with OpenGL context and run a stateful runner frame-by-frame.
         /// This makes the window visible during test execution.
-        pub fn with_window_stateful<F>(spec: Option<WindowSpec>, f: F) -> Result<(usize, usize), Box<dyn Error>>
+        pub fn with_window_stateful<F>(spec: Option<WindowSpec>, f: F) -> Result<(usize, usize, usize), Box<dyn Error>>
         where
             F: FnOnce() -> Box<dyn StatefulRunner> + 'static,
         {
@@ -532,7 +535,7 @@ pub mod gui {
         state: Option<AppState>,
         runner_factory: Option<F>,
         runner: Option<Box<dyn StatefulRunner>>,
-        result: Option<(usize, usize)>,
+        result: Option<(usize, usize, usize)>,
         last_frame_time: Option<std::time::Instant>,
         show_result_until: Option<std::time::Instant>,
     }

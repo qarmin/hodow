@@ -3,6 +3,7 @@
 //! Each module implements a test for specific OpenGL functionality,
 //! targeting a specific OpenGL version.
 
+use std::sync::atomic::{AtomicUsize, Ordering};
 use std::time::Duration;
 
 use crate::opengl::GpuOptions;
@@ -45,6 +46,7 @@ pub fn should_stop_loop(start: std::time::Instant, frames: u64) -> bool {
 /// Kept for source compatibility with existing test files
 pub const TEST_DURATION: Duration = Duration::from_millis(DEFAULT_TEST_DURATION_MS);
 
+pub mod es3_validation;
 pub mod gl10_state;
 pub mod gl10_textures;
 pub mod gl11_texcopy;
@@ -88,6 +90,31 @@ use crate::opengl::test_trait::{GLTest, GLTestResult};
 /// Get all available GL tests
 pub fn all_tests() -> Vec<&'static dyn GLTest> {
     vec![
+        &es3_validation::Es30DrawTest,
+        &es3_validation::Es30BlendTest,
+        &es3_validation::Es30TextureTest,
+        &es3_validation::Es30VertexAttribTest,
+        &es3_validation::Es31ComputeTest,
+        &es3_validation::Es30IntegerTextureTest,
+        &es3_validation::Es30TransformFeedbackTest,
+        &es3_validation::Es30UboTest,
+        &es3_validation::Es30ScissorTest,
+        &es3_validation::Es30DepthTest,
+        &es3_validation::Es30InstancedTest,
+        &es3_validation::Es30ColorMaskTest,
+        &es3_validation::Es30StencilTest,
+        &es3_validation::Es30DrawElementsTest,
+        &es3_validation::Es30MrtTest,
+        &es3_validation::Es30BlitTest,
+        &es3_validation::Es30TextureArrayTest,
+        &es3_validation::Es30Texture3DTest,
+        &es3_validation::Es30MipmapTest,
+        &es3_validation::Es30CopyBufferTest,
+        &es3_validation::Es30SyncTest,
+        &es3_validation::Es30OcclusionQueryTest,
+        &es3_validation::Es31AtomicCounterTest,
+        &es3_validation::Es31ImageStoreTest,
+        &es3_validation::Es31ComputeSharedTest,
         &gl10_state::GL10StateTest,
         &gl10_textures::GL10TexturesTest,
         &gl11_texcopy::GL11TexCopyTest,
@@ -165,14 +192,41 @@ unsafe fn drain_gl_errors() -> Option<String> {
     first
 }
 
+/// How many driver messages one test may log before the rest are only counted. A test that
+/// errors inside a render loop otherwise buries the run: one real finding (GL31_UBO on a
+/// Vivante GC2000+) produced 6770 identical lines, 98% of the whole log.
+const MAX_DEBUG_MESSAGES_PER_TEST: usize = 8;
+
+static DEBUG_MESSAGES_THIS_TEST: AtomicUsize = AtomicUsize::new(0);
+
+/// Say how many messages were held back, so a test spamming in a loop is still visible as such.
+fn report_suppressed_debug_messages(test_name: &str) {
+    let total = DEBUG_MESSAGES_THIS_TEST.load(Ordering::Relaxed);
+    if total > MAX_DEBUG_MESSAGES_PER_TEST {
+        log::warn!("[GL debug] '{test_name}' produced {total} driver messages ({} not shown)", total - MAX_DEBUG_MESSAGES_PER_TEST);
+    }
+}
+
+/// Called between tests so the budget above is per test, not per run.
+fn reset_debug_message_budget() -> usize {
+    DEBUG_MESSAGES_THIS_TEST.swap(0, Ordering::Relaxed)
+}
+
 /// GL debug-output callback: logs driver diagnostics (which call errored and why). Only
-/// non-notification messages are logged to keep the output focused.
+/// non-notification messages are logged, and only the first few per test.
 extern "system" fn gl_debug_callback(_source: u32, _gltype: u32, _id: u32, severity: u32, _length: i32, message: *const std::os::raw::c_char, _user: *mut std::ffi::c_void) {
     if severity == gl::DEBUG_SEVERITY_NOTIFICATION {
         return;
     }
+    let seen = DEBUG_MESSAGES_THIS_TEST.fetch_add(1, Ordering::Relaxed);
+    if seen >= MAX_DEBUG_MESSAGES_PER_TEST {
+        return;
+    }
     let msg = unsafe { std::ffi::CStr::from_ptr(message) }.to_string_lossy();
     log::warn!("[GL debug] {}", msg);
+    if seen + 1 == MAX_DEBUG_MESSAGES_PER_TEST {
+        log::warn!("[GL debug] ...further messages from this test are only counted");
+    }
 }
 
 /// Enable synchronous GL debug output if the context supports it (GL 4.3 / KHR_debug).
@@ -193,6 +247,39 @@ unsafe fn enable_gl_debug_output() {
 }
 
 /// Run all GL tests with the provided options
+/// How many tests `run_single` can be asked for.
+pub fn test_count() -> usize {
+    all_tests().len()
+}
+
+/// Run exactly one test, by index into `all_tests()`, in a context of its own.
+///
+/// The isolated runner gives every test its own process, so a driver that hangs or segfaults
+/// costs that one test instead of the whole run - `cpu --isolate` has had that for a while,
+/// and a GPU driver is the more likely of the two to take the process with it.
+/// Returns `(outcome, message)` where outcome is `passed`, `unsupported` or `failed`.
+pub fn run_single(opts: &crate::opengl::GpuOptions, index: usize) -> Result<(&'static str, String), String> {
+    let tests = all_tests();
+    let test = tests.get(index).ok_or_else(|| format!("test index {index} out of range ({})", tests.len()))?;
+    let _ctx = crate::opengl::init_opengl(opts).map_err(|e| format!("failed to create GL context: {e}"))?;
+    unsafe { enable_gl_debug_output() };
+    reset_debug_message_budget();
+    unsafe { drain_gl_errors() };
+    let outcome = run_one_test(test);
+    let gl_err = unsafe { drain_gl_errors() };
+    Ok(match (outcome, gl_err) {
+        (TestOutcome::Unsupported(why), _) => ("unsupported", why),
+        (TestOutcome::Passed(msg), None) => ("passed", msg),
+        (TestOutcome::Passed(_), Some(err)) => ("failed", format!("left a GL error: {err}")),
+        (TestOutcome::Failed(e), _) => ("failed", e),
+    })
+}
+
+/// The name of the test at `index`, for the parent process to attribute a crash to.
+pub fn test_name_at(index: usize) -> Option<&'static str> {
+    all_tests().get(index).map(|t| t.name())
+}
+
 pub fn test_all_gl(opts: &crate::opengl::GpuOptions) -> GLTestResult {
     apply_gpu_options(opts);
 
@@ -202,6 +289,7 @@ pub fn test_all_gl(opts: &crate::opengl::GpuOptions) -> GLTestResult {
     if opts.no_window {
         // Headless: run tests directly without a windowing system
         let mut total_run = 0usize;
+        let mut total_skipped = 0usize;
         let mut total_errors = 0usize;
 
         // Headless mode requires an OpenGL context without a visible window.
@@ -222,22 +310,28 @@ pub fn test_all_gl(opts: &crate::opengl::GpuOptions) -> GLTestResult {
             // debug-output test), which would otherwise blind diagnostics for all later tests.
             unsafe { enable_gl_debug_output() };
             unsafe { drain_gl_errors() }; // clean slate so errors are attributed to this test
-            let outcome = run_test_catching_panic(test);
+            reset_debug_message_budget();
+            let outcome = run_one_test(test);
             let gl_err = unsafe { drain_gl_errors() };
+            report_suppressed_debug_messages(test.name());
             total_run += 1;
             match (outcome, gl_err) {
-                (Ok(msg), None) => log::info!("GL Test '{}' passed: {}", test.name(), msg),
-                (Ok(_), Some(err)) => {
+                (TestOutcome::Unsupported(why), _) => {
+                    log::info!("GL Test '{}' not supported here: {}", test.name(), why);
+                    total_skipped += 1;
+                }
+                (TestOutcome::Passed(msg), None) => log::info!("GL Test '{}' passed: {}", test.name(), msg),
+                (TestOutcome::Passed(_), Some(err)) => {
                     log::error!("GL Test '{}' left a GL error: {}", test.name(), err);
                     total_errors += 1;
                 }
-                (Err(e), _) => {
+                (TestOutcome::Failed(e), _) => {
                     log::error!("GL Test '{}' failed: {}", test.name(), e);
                     total_errors += 1;
                 }
             }
         }
-        return Ok((total_run, 0, total_errors));
+        return Ok((total_run, total_skipped, total_errors));
     }
 
     let spec = crate::opengl::gui::WindowSpec {
@@ -251,6 +345,7 @@ pub fn test_all_gl(opts: &crate::opengl::GpuOptions) -> GLTestResult {
         tests,
         current_test_idx: 0,
         total_run: 0,
+        total_skipped: 0,
         total_errors: 0,
     };
 
@@ -258,7 +353,7 @@ pub fn test_all_gl(opts: &crate::opengl::GpuOptions) -> GLTestResult {
     let result = crate::opengl::gui::GuiRuntimeHandle::with_window_stateful(Some(spec), move || Box::new(test_runner));
 
     match result {
-        Ok((run, errors)) => Ok((run, 0, errors)),
+        Ok((run, skipped, errors)) => Ok((run, skipped, errors)),
         Err(e) => {
             log::error!("GL test run failed: {}", e);
             Ok((total_tests, 0, total_tests))
@@ -266,24 +361,126 @@ pub fn test_all_gl(opts: &crate::opengl::GpuOptions) -> GLTestResult {
     }
 }
 
-/// Run one test, turning a panic into that test's failure.
+/// What one test run amounted to.
+enum TestOutcome {
+    Passed(String),
+    /// The driver cannot run this test at all. Not a defect - counted as skipped.
+    Unsupported(String),
+    Failed(String),
+}
+
+/// The `gl` crate's generated bindings panic with exactly this when a test calls an entry point
+/// the driver does not export.
+const GL_FN_MISSING: &str = "gl function was not loaded";
+
+/// What shading language this context actually accepts, from `GL_SHADING_LANGUAGE_VERSION`
+/// ("4.50 ..." for desktop, "OpenGL ES GLSL ES 3.10" for ES).
+enum ContextGlsl {
+    Desktop(u32),
+    /// GLSL ES version as NNN, e.g. 310 for "OpenGL ES GLSL ES 3.10".
+    Es(u32),
+    Unknown,
+}
+
+fn context_glsl() -> ContextGlsl {
+    let raw = unsafe {
+        let ptr = gl::GetString(gl::SHADING_LANGUAGE_VERSION);
+        if ptr.is_null() {
+            return ContextGlsl::Unknown;
+        }
+        std::ffi::CStr::from_ptr(ptr as *const std::os::raw::c_char).to_string_lossy().into_owned()
+    };
+    // "4.50 - Build ..." -> 450, "OpenGL ES GLSL ES 3.10" -> 310. The minor part is two digits
+    // in both spellings.
+    let mut parts = raw.split(|c: char| !c.is_ascii_digit()).filter(|p| !p.is_empty());
+    let version = match (parts.next().and_then(|p| p.parse::<u32>().ok()), parts.next().and_then(|p| p.parse::<u32>().ok())) {
+        (Some(major), Some(minor)) => major * 100 + minor,
+        _ => return ContextGlsl::Unknown,
+    };
+    if raw.contains("ES") { ContextGlsl::Es(version) } else { ContextGlsl::Desktop(version) }
+}
+
+/// Why this context cannot compile the test's shaders, if it cannot.
+fn glsl_shortfall(test: &&'static dyn GLTest) -> Option<String> {
+    use crate::opengl::generated_requirements as req;
+    let context = context_glsl();
+    if let Some(needed) = req::required_glsl_version(test.name()) {
+        return match context {
+            ContextGlsl::Es(_) => Some(format!("its shaders are #version {needed} (desktop GLSL); this is an OpenGL ES context")),
+            ContextGlsl::Desktop(have) if have < needed => Some(format!("its shaders need GLSL {needed}, this context offers {have}")),
+            _ => None,
+        };
+    }
+    if let Some(needed) = req::required_es_glsl_version(test.name()) {
+        // A desktop context accepts ES shaders only from 4.3 (ARB_ES3_compatibility), and ES 3.1
+        // shaders only from 4.5 (ARB_ES3_1_compatibility).
+        let desktop_floor = if needed >= 310 { 450 } else { 430 };
+        return match context {
+            ContextGlsl::Es(have) if have < needed => Some(format!("its shaders are #version {needed} es, this context offers GLSL ES {have}")),
+            ContextGlsl::Desktop(have) if have < desktop_floor => {
+                Some(format!("its shaders are #version {needed} es; a desktop context needs GLSL {desktop_floor} to accept those, this one offers {have}"))
+            }
+            _ => None,
+        };
+    }
+    None
+}
+
+/// The entry points `test` needs that this driver does not export, from the generated table -
+/// checked before the test runs, so an unsupported test is never entered at all. Same shape as
+/// the CPU side, where a missing feature means the group is skipped rather than executed.
+fn missing_functions(test: &&'static dyn GLTest) -> Vec<&'static str> {
+    crate::opengl::generated_requirements::required_functions(test.name())
+        .iter()
+        .filter(|(_, loaded)| !loaded())
+        .map(|(name, _)| *name)
+        .collect()
+}
+
+/// Run one test, catching a panic and separating "this driver cannot do it" from "this driver
+/// got it wrong".
 ///
-/// The `gl` crate's generated bindings `panic!("gl function was not loaded")` when a test calls
-/// an entry point the driver does not export. That is the normal case on a GLES-only driver
-/// (Vivante/imx-gpu-viv, where the desktop-GL 1.x tests have nothing to call), and killing the
-/// process on the first one means the other 39 tests never report anything. A missing function
-/// is a result about the driver, so it belongs in the results.
-fn run_test_catching_panic(test: &&'static dyn GLTest) -> Result<String, String> {
+/// A missing entry point is routine on a GLES-only driver (Vivante/imx-gpu-viv: the desktop-GL
+/// 1.x tests have nothing to call there) and used to abort the whole process on the first one.
+/// Reporting it as a *failure* is just as wrong in the other direction - this project exists to
+/// find hardware and driver defects, and "GL 4.5 DSA is absent from a GLES 3.1 driver" is not
+/// one. Same for the `skipped: ...` string tests already return when they detect a version they
+/// need is missing; that used to count as a pass, which quietly inflated the result.
+/// Driver-supplied text reaches us through `glGet{Shader,Program}InfoLog`, and several tests
+/// hand back the whole buffer including its NUL terminator. One such byte is enough for `grep`
+/// to call the saved log a binary file and print nothing.
+fn sanitize(msg: String) -> String {
+    if msg.contains('\0') { msg.replace('\0', "").trim_end().to_string() } else { msg }
+}
+
+fn run_one_test(test: &&'static dyn GLTest) -> TestOutcome {
+    if let Some(why) = glsl_shortfall(test) {
+        return TestOutcome::Unsupported(why);
+    }
+    let missing = missing_functions(test);
+    if !missing.is_empty() {
+        return TestOutcome::Unsupported(format!(
+            "the driver does not export {} of the {} function(s) it calls, e.g. {}",
+            missing.len(),
+            crate::opengl::generated_requirements::required_functions(test.name()).len(),
+            missing.iter().take(3).copied().collect::<Vec<_>>().join(", ")
+        ));
+    }
     match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| test.run())) {
-        Ok(Ok(msg)) => Ok(msg),
-        Ok(Err(e)) => Err(e.to_string()),
+        Ok(Ok(msg)) if msg.starts_with("skipped:") => TestOutcome::Unsupported(sanitize(msg)),
+        Ok(Ok(msg)) => TestOutcome::Passed(sanitize(msg)),
+        Ok(Err(e)) => TestOutcome::Failed(sanitize(e.to_string())),
         Err(payload) => {
             let msg = payload
                 .downcast_ref::<&str>()
                 .map(|s| (*s).to_string())
                 .or_else(|| payload.downcast_ref::<String>().cloned())
                 .unwrap_or_else(|| "panicked with a non-string payload".to_string());
-            Err(format!("panicked: {msg}"))
+            if msg.contains(GL_FN_MISSING) {
+                TestOutcome::Unsupported("the driver does not export a function this test calls".into())
+            } else {
+                TestOutcome::Failed(format!("panicked: {msg}"))
+            }
         }
     }
 }
@@ -293,6 +490,7 @@ struct TestRunner {
     tests: Vec<&'static dyn GLTest>,
     current_test_idx: usize,
     total_run: usize,
+    total_skipped: usize,
     total_errors: usize,
 }
 
@@ -320,17 +518,23 @@ impl crate::opengl::gui::StatefulRunner for TestRunner {
         let test_start = std::time::Instant::now();
 
         unsafe { drain_gl_errors() }; // clean slate so errors are attributed to this test
-        let outcome = run_test_catching_panic(&test);
+        reset_debug_message_budget();
+        let outcome = run_one_test(&test);
         let gl_err = unsafe { drain_gl_errors() };
+        report_suppressed_debug_messages(test.name());
         let elapsed_ms = test_start.elapsed().as_millis();
         self.total_run += 1;
         match (outcome, gl_err) {
-            (Ok(msg), None) => log::info!("GL Test '{}' passed in {}ms: {}", test.name(), elapsed_ms, msg),
-            (Ok(_), Some(err)) => {
+            (TestOutcome::Unsupported(why), _) => {
+                log::info!("GL Test '{}' not supported here: {}", test.name(), why);
+                self.total_skipped += 1;
+            }
+            (TestOutcome::Passed(msg), None) => log::info!("GL Test '{}' passed in {}ms: {}", test.name(), elapsed_ms, msg),
+            (TestOutcome::Passed(_), Some(err)) => {
                 log::error!("GL Test '{}' left a GL error after {}ms: {}", test.name(), elapsed_ms, err);
                 self.total_errors += 1;
             }
-            (Err(e), _) => {
+            (TestOutcome::Failed(e), _) => {
                 log::error!("GL Test '{}' failed after {}ms: {}", test.name(), elapsed_ms, e);
                 self.total_errors += 1;
             }
@@ -351,7 +555,7 @@ impl crate::opengl::gui::StatefulRunner for TestRunner {
         }
     }
 
-    fn get_result(&self) -> (usize, usize) {
-        (self.total_run, self.total_errors)
+    fn get_result(&self) -> (usize, usize, usize) {
+        (self.total_run, self.total_skipped, self.total_errors)
     }
 }

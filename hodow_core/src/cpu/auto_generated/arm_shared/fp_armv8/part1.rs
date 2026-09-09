@@ -11,7 +11,7 @@ use crate::cpu::common::{check_array_equality, check_float_array_equality, check
 pub(super) fn test_arm_shared_fp_armv8_vmaxnm_f32() -> Result<(), String> {
     unsafe {
         let result = unpack_float32x2_t_to_f32_array(vmaxnm_f32(create_float32x2_t_from([1.0, 2.0]), create_float32x2_t_from([3.0, 4.0])));
-        check_array_equality(&result, &[3.0, 4.0]).map_err(|e| format!("{e} | call: vmaxnm_f32(create_float32x2_t_from([1.0, 2.0]), create_float32x2_t_from([3.0, 4.0]))"))?;
+        check_float_array_equality(&result, &[3.0, 4.0]).map_err(|e| format!("{e} | call: vmaxnm_f32(create_float32x2_t_from([1.0, 2.0]), create_float32x2_t_from([3.0, 4.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -31,7 +31,7 @@ pub(super) fn test_arm_shared_fp_armv8_vmaxnm_f32() -> Result<(), String> {
 pub(super) fn test_arm_shared_fp_armv8_vmaxnmq_f32() -> Result<(), String> {
     unsafe {
         let result = unpack_float32x4_t_to_f32_array(vmaxnmq_f32(create_float32x4_t_from([1.0, 2.0, 3.0, 4.0]), create_float32x4_t_from([5.0, 6.0, 7.0, 8.0])));
-        check_array_equality(&result, &[5.0, 6.0, 7.0, 8.0]).map_err(|e| format!("{e} | call: vmaxnmq_f32(create_float32x4_t_from([1.0, 2.0, 3.0, 4.0]), create_float32x4_t_from([5.0, 6.0, 7.0, 8.0]))"))?;
+        check_float_array_equality(&result, &[5.0, 6.0, 7.0, 8.0]).map_err(|e| format!("{e} | call: vmaxnmq_f32(create_float32x4_t_from([1.0, 2.0, 3.0, 4.0]), create_float32x4_t_from([5.0, 6.0, 7.0, 8.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -51,7 +51,7 @@ pub(super) fn test_arm_shared_fp_armv8_vmaxnmq_f32() -> Result<(), String> {
 pub(super) fn test_arm_shared_fp_armv8_vminnm_f32() -> Result<(), String> {
     unsafe {
         let result = unpack_float32x2_t_to_f32_array(vminnm_f32(create_float32x2_t_from([1.0, 2.0]), create_float32x2_t_from([3.0, 4.0])));
-        check_array_equality(&result, &[1.0, 2.0]).map_err(|e| format!("{e} | call: vminnm_f32(create_float32x2_t_from([1.0, 2.0]), create_float32x2_t_from([3.0, 4.0]))"))?;
+        check_float_array_equality(&result, &[1.0, 2.0]).map_err(|e| format!("{e} | call: vminnm_f32(create_float32x2_t_from([1.0, 2.0]), create_float32x2_t_from([3.0, 4.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -71,7 +71,7 @@ pub(super) fn test_arm_shared_fp_armv8_vminnm_f32() -> Result<(), String> {
 pub(super) fn test_arm_shared_fp_armv8_vminnmq_f32() -> Result<(), String> {
     unsafe {
         let result = unpack_float32x4_t_to_f32_array(vminnmq_f32(create_float32x4_t_from([1.0, 2.0, 3.0, 4.0]), create_float32x4_t_from([5.0, 6.0, 7.0, 8.0])));
-        check_array_equality(&result, &[1.0, 2.0, 3.0, 4.0]).map_err(|e| format!("{e} | call: vminnmq_f32(create_float32x4_t_from([1.0, 2.0, 3.0, 4.0]), create_float32x4_t_from([5.0, 6.0, 7.0, 8.0]))"))?;
+        check_float_array_equality(&result, &[1.0, 2.0, 3.0, 4.0]).map_err(|e| format!("{e} | call: vminnmq_f32(create_float32x4_t_from([1.0, 2.0, 3.0, 4.0]), create_float32x4_t_from([5.0, 6.0, 7.0, 8.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -91,7 +91,7 @@ pub(super) fn test_arm_shared_fp_armv8_vminnmq_f32() -> Result<(), String> {
 pub(super) fn test_arm_shared_fp_armv8_vrndn_f32() -> Result<(), String> {
     unsafe {
         let result = unpack_float32x2_t_to_f32_array(vrndn_f32(create_float32x2_t_from([1.0, 2.0])));
-        check_array_equality(&result, &[1.0, 2.0]).map_err(|e| format!("{e} | call: vrndn_f32(create_float32x2_t_from([1.0, 2.0]))"))?;
+        check_float_array_equality(&result, &[1.0, 2.0]).map_err(|e| format!("{e} | call: vrndn_f32(create_float32x2_t_from([1.0, 2.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -111,7 +111,7 @@ pub(super) fn test_arm_shared_fp_armv8_vrndn_f32() -> Result<(), String> {
 pub(super) fn test_arm_shared_fp_armv8_vrndnq_f32() -> Result<(), String> {
     unsafe {
         let result = unpack_float32x4_t_to_f32_array(vrndnq_f32(create_float32x4_t_from([1.0, 2.0, 3.0, 4.0])));
-        check_array_equality(&result, &[1.0, 2.0, 3.0, 4.0]).map_err(|e| format!("{e} | call: vrndnq_f32(create_float32x4_t_from([1.0, 2.0, 3.0, 4.0]))"))?;
+        check_float_array_equality(&result, &[1.0, 2.0, 3.0, 4.0]).map_err(|e| format!("{e} | call: vrndnq_f32(create_float32x4_t_from([1.0, 2.0, 3.0, 4.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {

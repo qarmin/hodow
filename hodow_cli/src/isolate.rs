@@ -44,7 +44,7 @@ pub(crate) enum Outcome {
 /// instruction is not available here, SIGSEGV means a bad address, SIGBUS a misaligned one,
 /// SIGKILL is usually the OOM killer rather than the test at all. Reporting all of them as a
 /// bare "CRASHED" throws that away.
-fn crash_reason(status: Option<std::process::ExitStatus>) -> String {
+pub(crate) fn crash_reason(status: Option<std::process::ExitStatus>) -> String {
     let Some(status) = status else {
         return "could not be reaped".to_string();
     };

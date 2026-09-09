@@ -32,7 +32,7 @@ pub(super) fn test_aarch64_rcpc3_vldap1q_lane_f64() -> Result<(), String> {
         let ptr_ptr = crate::cpu::common::Aligned64([1.0f64; 8]);
         let src = create_float64x2_t_from([2.0, 3.0]);
         let result = unpack_float64x2_t_to_f64_array(vldap1q_lane_f64::<0>(ptr_ptr.0.as_ptr(), src));
-        check_array_equality(&result, &[0.0f64; 2]).map_err(|e| format!("{e} | call: vldap1q_lane_f64::<0>(ptr_ptr.0.as_ptr(), src)"))?;
+        check_float_array_equality(&result, &[0.0f64; 2]).map_err(|e| format!("{e} | call: vldap1q_lane_f64::<0>(ptr_ptr.0.as_ptr(), src)"))?;
     }
     Ok(())
 }

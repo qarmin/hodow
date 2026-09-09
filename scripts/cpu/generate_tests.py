@@ -585,6 +585,11 @@ def in_pilot_scope(arch: str, ext: str, func_name: str) -> bool:
     # comment). Everything else that would assemble an invalid/undefined argument
     # combination from an "extreme value" override goes in that file instead, one
     # function per line with its own reason - expected to grow well past this handful.
+    if arch in ("arm", "arm_shared", "aarch64"):
+        # NEON only: SVE builds its values by broadcasting one scalar into a runtime-width
+        # vector (svdup_n_*) and reads one back with svlastb, a different model from the
+        # per-lane arrays every scenario builder here works with.
+        return ext == "neon" and func_name not in UB_ON_VALUE_SCENARIOS
     return (
         arch in ("x86", "x86_64")
         and "gather" not in func_name.lower()
@@ -616,6 +621,12 @@ def detect_elem_type(func_name: str, ptype: str) -> str:
     """Resolve the real per-lane scalar type a vector parameter is operated on as,
     from the intrinsic's name. Falls back to today's generic default (i32/f32/f64)
     for names this doesn't recognize, preserving existing behavior."""
+    # A NEON type carries its own lane type, so the name-suffix guessing below is not just
+    # unnecessary there but actively wrong: `vaddq_s8`'s `_s8` and `int8x16_t` agree, but
+    # `vreinterpretq_u32_s8` takes an int8x16_t while its name ends in the *result* type.
+    neon = _NEON_ELEM_BY_TYPE.get(ptype)
+    if neon is not None:
+        return neon
     for pattern, elem in ELEM_SUFFIX_MAP:
         if re.search(pattern, func_name):
             return elem
@@ -659,6 +670,51 @@ WIDTH_AWARE_VEC_INFO: dict[tuple[str, str], tuple[str, str, str, int]] = {
     ("__m256d", "f64"): ("create__m256d_from", "f64", "unpack__m256d_to_f64_array", 4),
     ("__m512d", "f64"): ("create__m512d_from", "f64", "unpack__m512d_to_f64_array", 8),
 }
+
+
+def _neon_width_info() -> dict[tuple[str, str], tuple[str, str, str, int]]:
+    """The same table for NEON, derived rather than written out.
+
+    A NEON type name states its own lane type and count (`int8x8_t` is eight i8), unlike
+    `__m128i`, which says nothing and forces the name-suffix guessing above. `common/arm.rs`
+    names its helpers regularly off the type, so every entry follows from the name and there is
+    nothing to keep in sync by hand as types are added.
+
+    Poly lanes are bit containers with no arithmetic of their own; they are built and read back
+    through the unsigned integer of the same width, which is what arm.rs already does."""
+    kinds = {"int": "i", "uint": "u", "float": "f", "poly": "u"}
+    out: dict[tuple[str, str], tuple[str, str, str, int]] = {}
+    for base, prefix in kinds.items():
+        for bits in (8, 16, 32, 64):
+            if base == "float" and bits < 32:
+                continue  # f16 lanes are excluded from generation entirely (UNSTABLE_TYPES)
+            if base == "poly" and bits == 32:
+                continue  # there is no poly32 NEON type
+            for lanes in (1, 2, 4, 8, 16):
+                if bits * lanes not in (64, 128):
+                    continue
+                ty = f"{base}{bits}x{lanes}_t"
+                elem = f"{prefix}{bits}"
+                out[(ty, elem)] = (f"create_{ty}_from", elem, f"unpack_{ty}_to_{elem}_array", lanes)
+    return out
+
+
+WIDTH_AWARE_VEC_INFO.update(_neon_width_info())
+
+# Every NEON vector type, for the value-axis eligibility check - the counterpart of
+# `_WIDTHED_VEC_TYPES` for x86.
+NEON_VEC_TYPES = {ty for ty, _ in _neon_width_info()}
+_NEON_ELEM_BY_TYPE = {ty: elem for ty, elem in _neon_width_info()}
+
+
+def _fallback_unpack_elem(ret: str) -> str | None:
+    """Lane type of the array a non-width-aware unpack produces, or None if unknown.
+
+    `_elem_type_for_unpack` only knows the x86 vector types, so every NEON float return fell
+    through to the integer comparator - and `NaN == NaN` is false, which no captured value can
+    ever satisfy. Returns None rather than a default so the x86 path keeps behaving exactly as
+    it did for returns neither table knows."""
+    return _NEON_ELEM_BY_TYPE.get(ret) or _elem_type_for_unpack(ret)
 
 
 def _typed_lit(elem: str, kind: str) -> str:
@@ -1113,7 +1169,7 @@ def _adjust_expected_for_ret(expected: str, ret: str) -> str:
 
     Currently this handles converting float-special tokens (NaN/inf) and common f32/f64 prefixes.
     """
-    elem = _elem_type_for_unpack(ret)
+    elem = _fallback_unpack_elem(ret)
     if not elem or expected is None:
         return expected
 
@@ -1187,7 +1243,7 @@ def emit_check(lines: list[str], call: str, ret: str, expected: str | None = Non
             lines.append(f"        let result = {fn}({call});")
             adj_expected = _adjust_expected_for_ret(expected, ret)
             # choose float-array vs generic-array comparator
-            elem = _elem_type_for_unpack(ret)
+            elem = _fallback_unpack_elem(ret)
             if elem in ("f32", "f64"):
                 lines.append("        " + _checked(f"check_float_array_equality(&result, &{adj_expected})", call))
             else:
@@ -1203,7 +1259,7 @@ def emit_check(lines: list[str], call: str, ret: str, expected: str | None = Non
         fn, size, zero = UNPACK_INFO[ret]
         lines.append(f"        let result = {fn}({call});")
         # choose comparator based on element type
-        elem = _elem_type_for_unpack(ret)
+        elem = _fallback_unpack_elem(ret)
         if elem in ("f32", "f64"):
             lines.append("        " + _checked(f"check_float_array_equality(&result, &[{zero}; {size}])", call))
         else:
@@ -1402,7 +1458,7 @@ def gen_fn(sig: dict, arch: str, ext: str, expected_values: dict[str, str] | Non
 
 # Vector types with a WIDTH_AWARE_VEC_INFO entry (any element type) — used to find the
 # value-axis-eligible parameters of a pilot-scope function.
-_WIDTHED_VEC_TYPES = {"__m128i", "__m256i", "__m512i", "__m128", "__m256", "__m512", "__m128d", "__m256d", "__m512d"}
+_WIDTHED_VEC_TYPES = {"__m128i", "__m256i", "__m512i", "__m128", "__m256", "__m512", "__m128d", "__m256d", "__m512d"} | NEON_VEC_TYPES
 
 
 def _value_params(sig: dict) -> list[tuple[int, str, str]]:
@@ -1473,10 +1529,18 @@ def _build_value_scenarios(sig: dict) -> list[tuple[str, dict[str, str]]]:
     return scenarios
 
 
-def _build_immediate_scenarios(sig: dict) -> list[tuple[str, str]]:
+def _build_immediate_scenarios(sig: dict, arch: str) -> list[tuple[str, str]]:
     """(suffix, literal) pairs for the immediate axis. Runtime values stay at 'normal1'
     (empty param_overrides) here — this axis is additive with the value axis, not a
     cartesian product with it (see expand_scenarios)."""
+    if arch not in ("x86", "x86_64"):
+        # NEON's valid immediate range is per function and not derivable from the signature:
+        # a lane index must be below that vector's lane count, a shift amount is 1..=lane bits,
+        # and `vcvt_n_*` asserts `N >= 1`. The catalog below picks values from an x86-shaped
+        # range, which produced 220 `E0080: assertion failed` at codegen. `const_val` already
+        # picks the one immediate that is valid for each NEON function, so the single scenario
+        # keeps it and only the *value* axis expands here.
+        return []
     cg: list = sig["const_generics"]
     if len(cg) != 1:
         # Pilot-scope functions have at most one const generic; multi-cg functions
@@ -1486,21 +1550,21 @@ def _build_immediate_scenarios(sig: dict) -> list[tuple[str, str]]:
     return immediate_catalog(sig["name"], cg_name, sig_elem_type(sig))
 
 
-def expand_scenarios(sig: dict) -> list[tuple[str, dict[str, str], str | None]]:
+def expand_scenarios(sig: dict, arch: str) -> list[tuple[str, dict[str, str], str | None]]:
     """All scenarios for a pilot-scope function as (suffix, param_overrides, cg_override).
     'normal1' (suffix='', no overrides) is always first, so it renders under exactly
     today's function name."""
     scenarios: list[tuple[str, dict[str, str], str | None]] = [("", {}, None)]
     for suffix, overrides in _build_value_scenarios(sig):
         scenarios.append((suffix, overrides, None))
-    for suffix, literal in _build_immediate_scenarios(sig):
+    for suffix, literal in _build_immediate_scenarios(sig, arch):
         scenarios.append((suffix, {}, literal))
     return scenarios
 
 
 def list_scenario_names(sig: dict, arch: str, ext: str) -> list[str]:
     base = test_name(sig["name"], arch, ext)
-    return [base + (f"_{suffix}" if suffix else "") for suffix, _, _ in expand_scenarios(sig)]
+    return [base + (f"_{suffix}" if suffix else "") for suffix, _, _ in expand_scenarios(sig, arch)]
 
 
 def gen_scenarios(sig: dict, arch: str, ext: str, expected_values: dict[str, str] | None = None) -> str:
@@ -1510,7 +1574,7 @@ def gen_scenarios(sig: dict, arch: str, ext: str, expected_values: dict[str, str
     elem = sig_elem_type(sig)
     tf_attr = target_feature_attr(arch, ext, ext_to_feature(ext))
     bodies = []
-    for suffix, overrides, cg_override in expand_scenarios(sig):
+    for suffix, overrides, cg_override in expand_scenarios(sig, arch):
         tname = base + (f"_{suffix}" if suffix else "")
         expected = (expected_values or {}).get(tname)
         body = gen_fn_body(sig, expected, overrides or None, cg_override, elem)

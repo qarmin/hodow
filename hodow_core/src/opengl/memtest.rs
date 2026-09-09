@@ -69,7 +69,48 @@ const PATTERNS: &[Pattern] = &[
 // Grid-stride loop: a bounded number of work groups is dispatched (a single dimension is
 // limited to GL_MAX_COMPUTE_WORK_GROUP_COUNT, guaranteed >= 65535), and each invocation strides
 // over the whole buffer. This scales to arbitrarily large buffers.
-const COMPUTE_SRC: &[u8] = b"#version 430\nlayout(local_size_x=256) in;\nlayout(std430, binding=0) buffer B { uint data[]; };\nuniform uint uCount;\nvoid main(){ uint stride = gl_NumWorkGroups.x * gl_WorkGroupSize.x; for (uint i = gl_GlobalInvocationID.x; i < uCount; i += stride) { data[i] = data[i] ^ 0xFFFFFFFFu; } }\n\0";
+/// The same kernel twice, because no single `#version` reaches every driver that can run it:
+/// `310 es` is the only one a GLES 3.1 driver accepts (an i.MX/Vivante board could not run the
+/// memory test at all before), and a desktop context needs GL 4.5 to accept that spelling, so
+/// `430` covers 4.3/4.4. Tried in order; the first that compiles wins.
+const COMPUTE_SRCS: &[&[u8]] = &[
+    b"#version 310 es\nlayout(local_size_x=256) in;\nlayout(std430, binding=0) buffer B { uint data[]; };\nuniform uint uCount;\nvoid main(){ uint stride = gl_NumWorkGroups.x * gl_WorkGroupSize.x; for (uint i = gl_GlobalInvocationID.x; i < uCount; i += stride) { data[i] = data[i] ^ 0xFFFFFFFFu; } }\n\0",
+    b"#version 430\nlayout(local_size_x=256) in;\nlayout(std430, binding=0) buffer B { uint data[]; };\nuniform uint uCount;\nvoid main(){ uint stride = gl_NumWorkGroups.x * gl_WorkGroupSize.x; for (uint i = gl_GlobalInvocationID.x; i < uCount; i += stride) { data[i] = data[i] ^ 0xFFFFFFFFu; } }\n\0",
+];
+
+/// Read the SSBO back into `dst`. GLES has no `glGetBufferSubData`, so this maps the range -
+/// which a desktop driver serves just as well, so there is one path rather than two.
+///
+/// # Safety
+/// Requires a current context with the buffer bound to `GL_SHADER_STORAGE_BUFFER`.
+unsafe fn read_ssbo(dst: &mut [u32]) -> Result<(), String> {
+    unsafe {
+        let bytes = std::mem::size_of_val(dst) as isize;
+        let ptr = gl::MapBufferRange(gl::SHADER_STORAGE_BUFFER, 0, bytes, gl::MAP_READ_BIT) as *const u32;
+        if ptr.is_null() {
+            return Err("glMapBufferRange returned null while reading the test buffer back".into());
+        }
+        std::ptr::copy_nonoverlapping(ptr, dst.as_mut_ptr(), dst.len());
+        gl::UnmapBuffer(gl::SHADER_STORAGE_BUFFER);
+        Ok(())
+    }
+}
+
+/// Build the compute program from the first source the driver accepts, reporting every
+/// rejection if none of them compiles.
+///
+/// # Safety
+/// Requires a current GL context.
+unsafe fn build_compute_any(sources: &[&[u8]]) -> Result<u32, String> {
+    let mut failures = Vec::new();
+    for src in sources {
+        match unsafe { build_compute(src) } {
+            Ok(p) => return Ok(p),
+            Err(e) => failures.push(e),
+        }
+    }
+    Err(format!("no compute shader variant compiled: {}", failures.join("; ")))
+}
 
 /// Max work groups to dispatch in one dimension (GL guarantees at least this many).
 const MAX_GROUPS: usize = 65535;
@@ -91,7 +132,7 @@ unsafe fn run_inner(count: usize) -> Result<MemtestReport, String> {
         let bytes = count * 4;
         let compute_used = gl_supports_compute();
 
-        let program = if compute_used { Some(build_compute(COMPUTE_SRC)?) } else { None };
+        let program = if compute_used { Some(build_compute_any(COMPUTE_SRCS)?) } else { None };
         let u_count_loc = program.map(|p| {
             gl::UseProgram(p);
             gl::GetUniformLocation(p, c"uCount".as_ptr())
@@ -121,7 +162,7 @@ unsafe fn run_inner(count: usize) -> Result<MemtestReport, String> {
 
             // 1) Upload -> download round-trip.
             gl::BufferSubData(gl::SHADER_STORAGE_BUFFER, 0, bytes as isize, host.as_ptr() as *const std::ffi::c_void);
-            gl::GetBufferSubData(gl::SHADER_STORAGE_BUFFER, 0, bytes as isize, readback.as_mut_ptr() as *mut std::ffi::c_void);
+            read_ssbo(&mut readback)?;
             let (rt_errors, mut first) = compare(&readback, |i| (p.word)(i));
 
             // 2) Compute read-modify-write (invert), then verify against the inverted pattern.
@@ -133,7 +174,7 @@ unsafe fn run_inner(count: usize) -> Result<MemtestReport, String> {
                 gl::DispatchCompute(groups, 1, 1);
                 gl::MemoryBarrier(gl::SHADER_STORAGE_BARRIER_BIT | gl::BUFFER_UPDATE_BARRIER_BIT);
                 gl::Finish();
-                gl::GetBufferSubData(gl::SHADER_STORAGE_BUFFER, 0, bytes as isize, readback.as_mut_ptr() as *mut std::ffi::c_void);
+                read_ssbo(&mut readback)?;
                 let (ce, cf) = compare(&readback, |i| !(p.word)(i));
                 compute_errors = ce;
                 if first.is_none() {

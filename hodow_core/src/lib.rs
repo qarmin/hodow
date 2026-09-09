@@ -63,6 +63,7 @@ pub use cpu::{
 #[cfg(feature = "gpu")]
 pub use opengl::memtest::{MemtestReport, run_memtest};
 #[cfg(feature = "gpu")]
+pub use opengl::tests::{run_single as run_single_gl_test, test_count as gl_test_count, test_name_at as gl_test_name_at};
 pub use opengl::{DisplayApiHint, GLTestResult, GlApiHint, GlInfo, GpuOptions, OpenGLMode, available_opengl_modes, init_opengl, probe_opengl, test_all_opengl};
 
 static FUZZING: OnceLock<bool> = OnceLock::new();

@@ -122,7 +122,7 @@ pub(super) fn test_arm_shared_aes_vld1q_p64() -> Result<(), String> {
     unsafe {
         let ptr_ptr = crate::cpu::common::Aligned64([1u64; 64]);
         let result = unpack_poly64x2_t_to_u64_array(vld1q_p64(ptr_ptr.0.as_ptr()));
-        check_array_equality(&result, &[0u64; 2]).map_err(|e| format!("{e} | call: vld1q_p64(ptr_ptr.0.as_ptr())"))?;
+        check_array_equality(&result, &[1, 1]).map_err(|e| format!("{e} | call: vld1q_p64(ptr_ptr.0.as_ptr())"))?;
     }
     Ok(())
 }
@@ -152,7 +152,7 @@ pub(super) fn test_arm_shared_aes_vld1_p64() -> Result<(), String> {
     unsafe {
         let ptr_ptr = crate::cpu::common::Aligned64([1u64; 64]);
         let result = unpack_poly64x1_t_to_u64_array(vld1_p64(ptr_ptr.0.as_ptr()));
-        check_array_equality(&result, &[0u64; 1]).map_err(|e| format!("{e} | call: vld1_p64(ptr_ptr.0.as_ptr())"))?;
+        check_array_equality(&result, &[1]).map_err(|e| format!("{e} | call: vld1_p64(ptr_ptr.0.as_ptr())"))?;
     }
     Ok(())
 }

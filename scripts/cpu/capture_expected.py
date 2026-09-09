@@ -23,7 +23,10 @@ FAIL_RE = re.compile(r'(test_\w+)\([^)]+\) failed: Got (.+), expected ')
 
 
 def to_rust_value(val: str) -> str:
-    """Replace Rust Debug special float tokens with valid Rust literals."""
+    """Replace Rust Debug special float tokens with valid Rust literals.
+
+    Always f32 here: the generator's `_adjust_expected_for_ret` retypes them to f64 when the
+    return's lane type calls for it, so the width does not have to be known at capture time."""
     val = re.sub(r'\bNaN\b',   'f32::NAN',          val)
     val = re.sub(r'\binf\b',   'f32::INFINITY',      val)
     val = re.sub(r'\b-inf\b',  'f32::NEG_INFINITY',  val)
@@ -97,8 +100,7 @@ def main() -> None:
         if not m:
             continue
         test_name = m.group(1)
-        got_val = to_rust_value(m.group(2).strip())
-        captured[test_name] = got_val
+        captured[test_name] = to_rust_value(m.group(2).strip())
 
     if not captured:
         print("No test failures found — no expected-value file modified.")

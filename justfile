@@ -53,6 +53,30 @@ install-arm ip_address user="root":
     scp -O target/armv7-unknown-linux-gnueabihf/release/hodow_cli {{user}}@{{ip_address}}:~/hodow_cli
     @echo "Copied to {{user}}@{{ip_address}}:~/hodow_cli - run e.g. './hodow_cli cpu --isolate' there."
 
+# Cross-build, scp onto an ARM device, run the whole suite there and drop the output into
+# tmp/arm.log locally, so the result can be read and pasted without scrolling a terminal.
+# On i.MX/Vivante the compositor is the only way to an EGL display (see
+# hodow_core/src/opengl/context.rs) and nothing sets these over SSH. Override them on the
+# command line for a device whose Weston runs as another user or on another socket.
+# `DEPLOY=0` reruns on whatever binary is already on the device, skipping the cross-build and
+# scp - useful when only the arguments changed. Bare `0` works too.
+# Usage: just arm-run 192.168.1.50 [DEPLOY=0] [user] [runtime-dir] [wayland-display]
+arm-run ip_address DEPLOY="1" user="root" runtime_dir="/run/user/0" wayland_display="wayland-0":
+    #!/usr/bin/env bash
+    set -e
+    if [ "{{ replace(DEPLOY, "DEPLOY=", "") }}" = "1" ]; then
+        just install-arm {{ip_address}} {{user}}
+    else
+        echo "DEPLOY=0 - running the binary already on {{ip_address}}"
+    fi
+    mkdir -p tmp
+    ssh {{user}}@{{ip_address}} 'export XDG_RUNTIME_DIR={{runtime_dir}} WAYLAND_DISPLAY={{wayland_display}}; \
+        echo "=== info ==="; ./hodow_cli info; \
+        echo "=== gpu ===";  ./hodow_cli gpu --no-window; \
+        echo "=== cpu ===";  ./hodow_cli cpu --isolate' > tmp/arm.log 2>&1 || true
+    echo "wrote tmp/arm.log ($(wc -l < tmp/arm.log) lines)"
+    grep -aE "OpenGL |Vulkan |GL tests finished|Clean exit|Crashed|Total " tmp/arm.log || true
+
 # All recipes below that run `hodow_cli` in the *default* debug profile (no --release, no
 # --target) share the same on-disk binary at target/debug/hodow_cli. If one of them rebuilds
 # it with a DIFFERENT --features set while `just serve` is running off that same binary,

@@ -164,6 +164,20 @@ pub struct GpuArgs {
     #[arg(short = 's', long = "force-software")]
     pub force_software: bool,
 
+    /// Run each GL test in its own subprocess, so a driver hang or segfault is reported for
+    /// that one test instead of ending the whole run.
+    #[arg(long = "isolate")]
+    pub isolate: bool,
+
+    /// Per-test timeout in isolate mode (default 30000 ms).
+    #[arg(long = "isolate-timeout-ms", value_name = "MS")]
+    pub isolate_timeout_ms: Option<u64>,
+
+    /// Internal: run only the test at this index and print one RESULT line. Set by the
+    /// isolate parent on the children it spawns.
+    #[arg(long = "gpu-worker", value_name = "INDEX", hide = true)]
+    pub gpu_worker: Option<usize>,
+
     /// Run a GPU memory test (bit-pattern upload/download + compute read-modify-write)
     /// instead of the GL feature tests.
     #[arg(short = 'm', long = "memtest")]

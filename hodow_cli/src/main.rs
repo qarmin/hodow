@@ -11,6 +11,7 @@ use log::info;
 mod cli;
 mod cpu;
 mod gpu;
+mod gpu_isolate;
 mod info;
 mod isolate;
 #[cfg(feature = "serve")]
@@ -90,7 +91,8 @@ fn main() {
     let cli = Cli::parse();
 
     // Isolation workers speak a line protocol on stdout; any log output would corrupt it.
-    let is_worker = matches!(&cli.command, Commands::Cpu(a) if a.worker_start.is_some());
+    let is_worker = matches!(&cli.command, Commands::Cpu(a) if a.worker_start.is_some())
+        || matches!(&cli.command, Commands::Gpu(a) if a.gpu_worker.is_some());
 
     // The logger must always be initialized: all user-facing output (statistics,
     // mode lists, errors) is emitted through the `log` macros. `--debug` always wins;

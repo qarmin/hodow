@@ -45,6 +45,12 @@ pub fn process_gpu(args: &GpuArgs) {
             force_software: args.force_software,
         };
 
+        if let Some(index) = args.gpu_worker {
+            return run_gpu_worker(&opts, index);
+        }
+        if args.isolate {
+            return crate::gpu_isolate::run(args, hodow_core::gl_test_count());
+        }
         if args.memtest {
             let size_mb = args.memtest_mb.unwrap_or(64);
             info!("Running GPU memory test ({} MB buffer)", size_mb);
@@ -95,12 +101,14 @@ pub fn process_gpu(args: &GpuArgs) {
 
         match hodow_core::test_all_opengl(&opts) {
             Ok((run, skipped, errors)) => {
-                info!("GL tests finished. Run: {}, Skipped: {}, Errors: {}", run, skipped, errors);
+                info!("GL tests finished. Run: {}, Not supported here: {}, Errors: {}", run, skipped, errors);
                 if errors > 0 {
                     error!("GL tests completed with {} error(s)", errors);
                     std::process::exit(1);
                 } else {
-                    info!("Clean exit - all {} tests passed", run);
+                    // A clean run over mostly-skipped tests proves very little, so never say
+                    // "all tests passed" without the count that qualifies it.
+                    info!("Clean exit - {} passed, {} not supported by this driver", run - skipped, skipped);
                 }
             }
             Err(e) => {
@@ -147,5 +155,17 @@ fn submit_to_server(args: &GpuArgs, base_url: &str) {
             error!("Failed to submit job to {url}: {e}");
             std::process::exit(1);
         }
+    }
+}
+
+/// The child half of `gpu --isolate`: run one test and print a single machine-readable line.
+///
+/// Logging is off in the child (see main.rs), so this line is the only thing on stdout and the
+/// parent does not have to parse around driver chatter.
+#[cfg(feature = "gpu")]
+fn run_gpu_worker(opts: &hodow_core::GpuOptions, index: usize) {
+    match hodow_core::run_single_gl_test(opts, index) {
+        Ok((outcome, message)) => println!("RESULT {outcome} {message}"),
+        Err(e) => println!("RESULT failed {e}"),
     }
 }
