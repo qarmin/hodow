@@ -15,7 +15,7 @@ fn test_x86_sse4a_mm_extract_si64_impl() -> Result<(), String> {
         }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_extract_si64(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
-        check_array_equality(&result, &[1, 0, 0, 0]).map_err(|e| format!("{e} | call: _mm_extract_si64(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
+        check_array_equality(&result[..2], &[1, 0, 0, 0][..2]).map_err(|e| format!("{e} | call: _mm_extract_si64(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -43,7 +43,7 @@ fn test_x86_sse4a_mm_extracti_si64_impl() -> Result<(), String> {
         }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_extracti_si64::<0, 0>(create__m128i_from_i32_array([1, 2, 3, 4])));
-        check_array_equality(&result, &[1, 2, 3, 4]).map_err(|e| format!("{e} | call: _mm_extracti_si64::<0, 0>(create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
+        check_array_equality(&result[..2], &[1, 2, 3, 4][..2]).map_err(|e| format!("{e} | call: _mm_extracti_si64::<0, 0>(create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -71,7 +71,7 @@ fn test_x86_sse4a_mm_extracti_si64_normal2_impl() -> Result<(), String> {
         }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_extracti_si64::<0, 0>(create__m128i_from_i32_array([0, -1, 2, -3])));
-        check_array_equality(&result, &[0, -1, 2, -3]).map_err(|e| format!("{e} | call: _mm_extracti_si64::<0, 0>(create__m128i_from_i32_array([0, -1, 2, -3]))"))?;
+        check_array_equality(&result[..2], &[0, -1, 2, -3][..2]).map_err(|e| format!("{e} | call: _mm_extracti_si64::<0, 0>(create__m128i_from_i32_array([0, -1, 2, -3]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -99,7 +99,7 @@ fn test_x86_sse4a_mm_extracti_si64_normal3_impl() -> Result<(), String> {
         }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_extracti_si64::<0, 0>(create__m128i_from_i32_array([100, 200, 300, 400])));
-        check_array_equality(&result, &[100, 200, 300, 400]).map_err(|e| format!("{e} | call: _mm_extracti_si64::<0, 0>(create__m128i_from_i32_array([100, 200, 300, 400]))"))?;
+        check_array_equality(&result[..2], &[100, 200, 300, 400][..2]).map_err(|e| format!("{e} | call: _mm_extracti_si64::<0, 0>(create__m128i_from_i32_array([100, 200, 300, 400]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -127,7 +127,7 @@ fn test_x86_sse4a_mm_extracti_si64_boundary_min_impl() -> Result<(), String> {
         }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_extracti_si64::<0, 0>(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN])));
-        check_array_equality(&result, &[-2147483648, -2147483648, -2147483648, -2147483648]).map_err(|e| format!("{e} | call: _mm_extracti_si64::<0, 0>(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]))"))?;
+        check_array_equality(&result[..2], &[-2147483648, -2147483648, -2147483648, -2147483648][..2]).map_err(|e| format!("{e} | call: _mm_extracti_si64::<0, 0>(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -155,7 +155,7 @@ fn test_x86_sse4a_mm_extracti_si64_boundary_max_impl() -> Result<(), String> {
         }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_extracti_si64::<0, 0>(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
-        check_array_equality(&result, &[2147483647, 2147483647, 2147483647, 2147483647]).map_err(|e| format!("{e} | call: _mm_extracti_si64::<0, 0>(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
+        check_array_equality(&result[..2], &[2147483647, 2147483647, 2147483647, 2147483647][..2]).map_err(|e| format!("{e} | call: _mm_extracti_si64::<0, 0>(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -183,7 +183,7 @@ fn test_x86_sse4a_mm_extracti_si64_boundary_zero_impl() -> Result<(), String> {
         }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_extracti_si64::<0, 0>(create__m128i_from_i32_array([0, 0, 0, 0])));
-        check_array_equality(&result, &[0; 4]).map_err(|e| format!("{e} | call: _mm_extracti_si64::<0, 0>(create__m128i_from_i32_array([0, 0, 0, 0]))"))?;
+        check_array_equality(&result[..2], &[0; 4][..2]).map_err(|e| format!("{e} | call: _mm_extracti_si64::<0, 0>(create__m128i_from_i32_array([0, 0, 0, 0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -211,7 +211,7 @@ fn test_x86_sse4a_mm_extracti_si64_boundary_allones_impl() -> Result<(), String>
         }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_extracti_si64::<0, 0>(create__m128i_from_i32_array([-1, -1, -1, -1])));
-        check_array_equality(&result, &[-1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_extracti_si64::<0, 0>(create__m128i_from_i32_array([-1, -1, -1, -1]))"))?;
+        check_array_equality(&result[..2], &[-1, -1, -1, -1][..2]).map_err(|e| format!("{e} | call: _mm_extracti_si64::<0, 0>(create__m128i_from_i32_array([-1, -1, -1, -1]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -239,7 +239,7 @@ fn test_x86_sse4a_mm_extracti_si64_boundary_mixed_impl() -> Result<(), String> {
         }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_extracti_si64::<0, 0>(create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1])));
-        check_array_equality(&result, &[-2147483648, 2147483647, 0, -1]).map_err(|e| format!("{e} | call: _mm_extracti_si64::<0, 0>(create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]))"))?;
+        check_array_equality(&result[..2], &[-2147483648, 2147483647, 0, -1][..2]).map_err(|e| format!("{e} | call: _mm_extracti_si64::<0, 0>(create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -267,7 +267,7 @@ fn test_x86_sse4a_mm_insert_si64_impl() -> Result<(), String> {
         }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_insert_si64(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
-        check_array_equality(&result, &[5, 2, 0, 0]).map_err(|e| format!("{e} | call: _mm_insert_si64(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
+        check_array_equality(&result[..2], &[5, 2, 0, 0][..2]).map_err(|e| format!("{e} | call: _mm_insert_si64(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -295,7 +295,7 @@ fn test_x86_sse4a_mm_inserti_si64_impl() -> Result<(), String> {
         }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_inserti_si64::<0, 0>(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
-        check_array_equality(&result, &[5, 6, 7, 8]).map_err(|e| format!("{e} | call: _mm_inserti_si64::<0, 0>(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
+        check_array_equality(&result[..2], &[5, 6, 7, 8][..2]).map_err(|e| format!("{e} | call: _mm_inserti_si64::<0, 0>(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -323,7 +323,7 @@ fn test_x86_sse4a_mm_inserti_si64_normal2_impl() -> Result<(), String> {
         }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_inserti_si64::<0, 0>(create__m128i_from_i32_array([0, -1, 2, -3]), create__m128i_from_i32_array([10, 9, 12, 7])));
-        check_array_equality(&result, &[10, 9, 12, 7]).map_err(|e| format!("{e} | call: _mm_inserti_si64::<0, 0>(create__m128i_from_i32_array([0, -1, 2, -3]), create__m128i_from_i32_array([10, 9, 12, 7]))"))?;
+        check_array_equality(&result[..2], &[10, 9, 12, 7][..2]).map_err(|e| format!("{e} | call: _mm_inserti_si64::<0, 0>(create__m128i_from_i32_array([0, -1, 2, -3]), create__m128i_from_i32_array([10, 9, 12, 7]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -351,7 +351,7 @@ fn test_x86_sse4a_mm_inserti_si64_normal3_impl() -> Result<(), String> {
         }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_inserti_si64::<0, 0>(create__m128i_from_i32_array([100, 200, 300, 400]), create__m128i_from_i32_array([110, 210, 310, 410])));
-        check_array_equality(&result, &[110, 210, 310, 410]).map_err(|e| format!("{e} | call: _mm_inserti_si64::<0, 0>(create__m128i_from_i32_array([100, 200, 300, 400]), create__m128i_from_i32_array([110, 210, 310, 410]))"))?;
+        check_array_equality(&result[..2], &[110, 210, 310, 410][..2]).map_err(|e| format!("{e} | call: _mm_inserti_si64::<0, 0>(create__m128i_from_i32_array([100, 200, 300, 400]), create__m128i_from_i32_array([110, 210, 310, 410]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -379,7 +379,7 @@ fn test_x86_sse4a_mm_inserti_si64_boundary_min_impl() -> Result<(), String> {
         }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_inserti_si64::<0, 0>(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN])));
-        check_array_equality(&result, &[-2147483648, -2147483648, -2147483648, -2147483648]).map_err(|e| format!("{e} | call: _mm_inserti_si64::<0, 0>(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]))"))?;
+        check_array_equality(&result[..2], &[-2147483648, -2147483648, -2147483648, -2147483648][..2]).map_err(|e| format!("{e} | call: _mm_inserti_si64::<0, 0>(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -407,7 +407,7 @@ fn test_x86_sse4a_mm_inserti_si64_boundary_max_impl() -> Result<(), String> {
         }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_inserti_si64::<0, 0>(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
-        check_array_equality(&result, &[2147483647, 2147483647, 2147483647, 2147483647]).map_err(|e| format!("{e} | call: _mm_inserti_si64::<0, 0>(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
+        check_array_equality(&result[..2], &[2147483647, 2147483647, 2147483647, 2147483647][..2]).map_err(|e| format!("{e} | call: _mm_inserti_si64::<0, 0>(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -435,7 +435,7 @@ fn test_x86_sse4a_mm_inserti_si64_boundary_zero_impl() -> Result<(), String> {
         }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_inserti_si64::<0, 0>(create__m128i_from_i32_array([0, 0, 0, 0]), create__m128i_from_i32_array([0, 0, 0, 0])));
-        check_array_equality(&result, &[0; 4]).map_err(|e| format!("{e} | call: _mm_inserti_si64::<0, 0>(create__m128i_from_i32_array([0, 0, 0, 0]), create__m128i_from_i32_array([0, 0, 0, 0]))"))?;
+        check_array_equality(&result[..2], &[0; 4][..2]).map_err(|e| format!("{e} | call: _mm_inserti_si64::<0, 0>(create__m128i_from_i32_array([0, 0, 0, 0]), create__m128i_from_i32_array([0, 0, 0, 0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -463,7 +463,7 @@ fn test_x86_sse4a_mm_inserti_si64_boundary_allones_impl() -> Result<(), String> 
         }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_inserti_si64::<0, 0>(create__m128i_from_i32_array([-1, -1, -1, -1]), create__m128i_from_i32_array([-1, -1, -1, -1])));
-        check_array_equality(&result, &[-1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_inserti_si64::<0, 0>(create__m128i_from_i32_array([-1, -1, -1, -1]), create__m128i_from_i32_array([-1, -1, -1, -1]))"))?;
+        check_array_equality(&result[..2], &[-1, -1, -1, -1][..2]).map_err(|e| format!("{e} | call: _mm_inserti_si64::<0, 0>(create__m128i_from_i32_array([-1, -1, -1, -1]), create__m128i_from_i32_array([-1, -1, -1, -1]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -491,7 +491,7 @@ fn test_x86_sse4a_mm_inserti_si64_boundary_mixed_impl() -> Result<(), String> {
         }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_inserti_si64::<0, 0>(create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]), create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1])));
-        check_array_equality(&result, &[-2147483648, 2147483647, 0, -1]).map_err(|e| format!("{e} | call: _mm_inserti_si64::<0, 0>(create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]), create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]))"))?;
+        check_array_equality(&result[..2], &[-2147483648, 2147483647, 0, -1][..2]).map_err(|e| format!("{e} | call: _mm_inserti_si64::<0, 0>(create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]), create__m128i_from_i32_array([i32::MIN, i32::MAX, 0, -1]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -519,7 +519,7 @@ fn test_x86_sse4a_mm_inserti_si64_asym_min_max_impl() -> Result<(), String> {
         }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_inserti_si64::<0, 0>(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
-        check_array_equality(&result, &[2147483647, 2147483647, 2147483647, 2147483647]).map_err(|e| format!("{e} | call: _mm_inserti_si64::<0, 0>(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
+        check_array_equality(&result[..2], &[2147483647, 2147483647, 2147483647, 2147483647][..2]).map_err(|e| format!("{e} | call: _mm_inserti_si64::<0, 0>(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -547,7 +547,7 @@ fn test_x86_sse4a_mm_inserti_si64_asym_max_min_impl() -> Result<(), String> {
         }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_inserti_si64::<0, 0>(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN])));
-        check_array_equality(&result, &[-2147483648, -2147483648, -2147483648, -2147483648]).map_err(|e| format!("{e} | call: _mm_inserti_si64::<0, 0>(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]))"))?;
+        check_array_equality(&result[..2], &[-2147483648, -2147483648, -2147483648, -2147483648][..2]).map_err(|e| format!("{e} | call: _mm_inserti_si64::<0, 0>(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {

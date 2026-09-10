@@ -25,7 +25,7 @@ pub mod vector;
 
 pub use defs::{TestError, TestOutcome, TestResult, TestStatus};
 pub use pixel_format::PixelFormat;
-pub use random::Random;
+pub use random::{Random, de_string_hash};
 pub use rgba::RGBA;
 pub use string_template::StringTemplate;
 pub use surface::Surface;

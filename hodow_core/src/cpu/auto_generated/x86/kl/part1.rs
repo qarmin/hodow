@@ -940,6 +940,9 @@ pub(super) fn test_x86_kl_mm_aesdec256kl_u8_boundary_mixed() -> Result<(), Strin
 
 #[target_feature(enable = "kl")]
 fn test_x86_kl_mm_aesencwide128kl_u8_impl() -> Result<(), String> {
+        if !(crate::cpu::common::x86::keylocker_usable()) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_output = crate::cpu::common::Aligned64([create__m128i_from_i32_array([1, 2, 3, 4]); 4]);
         let ptr_input = crate::cpu::common::Aligned64([create__m128i_from_i32_array([5, 6, 7, 8]); 4]);
@@ -956,6 +959,9 @@ pub(super) fn test_x86_kl_mm_aesencwide128kl_u8() -> Result<(), String> {
 
 #[target_feature(enable = "kl")]
 fn test_x86_kl_mm_aesdecwide128kl_u8_impl() -> Result<(), String> {
+        if !(crate::cpu::common::x86::keylocker_usable()) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_output = crate::cpu::common::Aligned64([create__m128i_from_i32_array([1, 2, 3, 4]); 4]);
         let ptr_input = crate::cpu::common::Aligned64([create__m128i_from_i32_array([5, 6, 7, 8]); 4]);
@@ -972,6 +978,9 @@ pub(super) fn test_x86_kl_mm_aesdecwide128kl_u8() -> Result<(), String> {
 
 #[target_feature(enable = "kl")]
 fn test_x86_kl_mm_aesencwide256kl_u8_impl() -> Result<(), String> {
+        if !(crate::cpu::common::x86::keylocker_usable()) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_output = crate::cpu::common::Aligned64([create__m128i_from_i32_array([1, 2, 3, 4]); 4]);
         let ptr_input = crate::cpu::common::Aligned64([create__m128i_from_i32_array([5, 6, 7, 8]); 4]);
@@ -988,6 +997,9 @@ pub(super) fn test_x86_kl_mm_aesencwide256kl_u8() -> Result<(), String> {
 
 #[target_feature(enable = "kl")]
 fn test_x86_kl_mm_aesdecwide256kl_u8_impl() -> Result<(), String> {
+        if !(crate::cpu::common::x86::keylocker_usable()) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_output = crate::cpu::common::Aligned64([create__m128i_from_i32_array([1, 2, 3, 4]); 4]);
         let ptr_input = crate::cpu::common::Aligned64([create__m128i_from_i32_array([5, 6, 7, 8]); 4]);

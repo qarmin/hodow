@@ -38,12 +38,20 @@ pub fn fill_with_random_bytes(dst: &mut [u8], seed: u32) {
     }
 }
 
-/// `BufferTestUtil::getBufferTargetName`
+/// `BufferTestUtil::getBufferTargetName` - the whole `glsBufferTestUtil.cpp` table, so
+/// the ES 3.0 groups that reuse this module can name their targets too.
 pub fn get_buffer_target_name(target: GLenum) -> &'static str {
     match target {
         glw::GL_ARRAY_BUFFER => "array",
+        glw::GL_COPY_READ_BUFFER => "copy_read",
+        glw::GL_COPY_WRITE_BUFFER => "copy_write",
         glw::GL_ELEMENT_ARRAY_BUFFER => "element_array",
-        _ => unreachable!("only the two ES 2.0 buffer targets are used"),
+        glw::GL_PIXEL_PACK_BUFFER => "pixel_pack",
+        glw::GL_PIXEL_UNPACK_BUFFER => "pixel_unpack",
+        glw::GL_TEXTURE_BUFFER => "texture",
+        glw::GL_TRANSFORM_FEEDBACK_BUFFER => "transform_feedback",
+        glw::GL_UNIFORM_BUFFER => "uniform",
+        _ => unreachable!("unknown buffer target"),
     }
 }
 
@@ -51,9 +59,15 @@ pub fn get_buffer_target_name(target: GLenum) -> &'static str {
 pub fn get_usage_hint_name(hint: GLenum) -> &'static str {
     match hint {
         glw::GL_STREAM_DRAW => "stream_draw",
+        glw::GL_STREAM_READ => "stream_read",
+        glw::GL_STREAM_COPY => "stream_copy",
         glw::GL_STATIC_DRAW => "static_draw",
+        glw::GL_STATIC_READ => "static_read",
+        glw::GL_STATIC_COPY => "static_copy",
         glw::GL_DYNAMIC_DRAW => "dynamic_draw",
-        _ => unreachable!("only the three ES 2.0 usage hints are used"),
+        glw::GL_DYNAMIC_READ => "dynamic_read",
+        glw::GL_DYNAMIC_COPY => "dynamic_copy",
+        _ => unreachable!("unknown usage hint"),
     }
 }
 
