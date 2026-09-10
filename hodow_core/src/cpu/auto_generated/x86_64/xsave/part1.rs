@@ -27,6 +27,9 @@ fn test_x86_64_xsave_xsaveopt64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("xsaveopt")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 4096]);
         let save_mask = 2u64;
@@ -42,6 +45,9 @@ pub(super) fn test_x86_64_xsave_xsaveopt64() -> Result<(), String> {
 #[target_feature(enable = "xsave")]
 fn test_x86_64_xsave_xsavec64_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("xsavec")) {
             return Ok(());
         }
     unsafe {

@@ -237,6 +237,9 @@ fn test_x86_avx512f_mm256_mask_compress_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i32_array(_mm256_mask_compress_epi32(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask8_from(0b01010101), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
         check_array_equality(&result, &[9, 11, 13, 15, 5, 6, 7, 8]).map_err(|e| format!("{e} | call: _mm256_mask_compress_epi32(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask8_from(0b01010101), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]))"))?;
@@ -263,6 +266,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32() -> Result<(), String>
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compress_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -293,6 +299,9 @@ fn test_x86_avx512f_mm256_mask_compress_epi32_normal3_impl() -> Result<(), Strin
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i32_array(_mm256_mask_compress_epi32(create__m256i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800]), create__mmask8_from(0b01010101), create__m256i_from_i32_array([110, 210, 310, 410, 510, 610, 710, 810])));
         check_array_equality(&result, &[110, 310, 510, 710, 500, 600, 700, 800]).map_err(|e| format!("{e} | call: _mm256_mask_compress_epi32(create__m256i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800]), create__mmask8_from(0b01010101), create__m256i_from_i32_array([110, 210, 310, 410, 510, 610, 710, 810]))"))?;
@@ -319,6 +328,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32_normal3() -> Result<(),
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compress_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -349,6 +361,9 @@ fn test_x86_avx512f_mm256_mask_compress_epi32_boundary_max_impl() -> Result<(), 
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i32_array(_mm256_mask_compress_epi32(create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__mmask8_from(0b01010101), create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
         check_array_equality(&result, &[2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647]).map_err(|e| format!("{e} | call: _mm256_mask_compress_epi32(create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__mmask8_from(0b01010101), create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
@@ -375,6 +390,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32_boundary_max() -> Resul
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compress_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -405,6 +423,9 @@ fn test_x86_avx512f_mm256_mask_compress_epi32_boundary_allones_impl() -> Result<
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i32_array(_mm256_mask_compress_epi32(create__m256i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__mmask8_from(0b01010101), create__m256i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1])));
         check_array_equality(&result, &[-1, -1, -1, -1, -1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm256_mask_compress_epi32(create__m256i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__mmask8_from(0b01010101), create__m256i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1]))"))?;
@@ -431,6 +452,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32_boundary_allones() -> R
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compress_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -461,6 +485,9 @@ fn test_x86_avx512f_mm256_mask_compress_epi32_asym_min_max_impl() -> Result<(), 
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i32_array(_mm256_mask_compress_epi32(create__m256i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__mmask8_from(0b01010101), create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
         check_array_equality(&result, &[2147483647, 2147483647, 2147483647, 2147483647, -2147483648, -2147483648, -2147483648, -2147483648]).map_err(|e| format!("{e} | call: _mm256_mask_compress_epi32(create__m256i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__mmask8_from(0b01010101), create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
@@ -487,6 +514,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_epi32_asym_min_max() -> Resul
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compress_epi32_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -517,6 +547,9 @@ fn test_x86_avx512f_mm256_maskz_compress_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i32_array(_mm256_maskz_compress_epi32(create__mmask8_from(0b01010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
         check_array_equality(&result, &[1, 3, 5, 7, 0, 0, 0, 0]).map_err(|e| format!("{e} | call: _mm256_maskz_compress_epi32(create__mmask8_from(0b01010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
@@ -543,6 +576,9 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi32() -> Result<(), String
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_maskz_compress_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -573,6 +609,9 @@ fn test_x86_avx512f_mm256_maskz_compress_epi32_normal3_impl() -> Result<(), Stri
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i32_array(_mm256_maskz_compress_epi32(create__mmask8_from(0b01010101), create__m256i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800])));
         check_array_equality(&result, &[100, 300, 500, 700, 0, 0, 0, 0]).map_err(|e| format!("{e} | call: _mm256_maskz_compress_epi32(create__mmask8_from(0b01010101), create__m256i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800]))"))?;
@@ -599,6 +638,9 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi32_normal3() -> Result<()
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_maskz_compress_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -629,6 +671,9 @@ fn test_x86_avx512f_mm256_maskz_compress_epi32_boundary_max_impl() -> Result<(),
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i32_array(_mm256_maskz_compress_epi32(create__mmask8_from(0b01010101), create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
         check_array_equality(&result, &[2147483647, 2147483647, 2147483647, 2147483647, 0, 0, 0, 0]).map_err(|e| format!("{e} | call: _mm256_maskz_compress_epi32(create__mmask8_from(0b01010101), create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
@@ -655,6 +700,9 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi32_boundary_max() -> Resu
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_maskz_compress_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -685,6 +733,9 @@ fn test_x86_avx512f_mm256_maskz_compress_epi32_boundary_allones_impl() -> Result
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i32_array(_mm256_maskz_compress_epi32(create__mmask8_from(0b01010101), create__m256i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1])));
         check_array_equality(&result, &[-1, -1, -1, -1, 0, 0, 0, 0]).map_err(|e| format!("{e} | call: _mm256_maskz_compress_epi32(create__mmask8_from(0b01010101), create__m256i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1]))"))?;
@@ -711,6 +762,9 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi32_boundary_allones() -> 
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_maskz_compress_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -741,6 +795,9 @@ fn test_x86_avx512f_mm_mask_compress_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_mask_compress_epi32(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([5, 6, 7, 8])));
         check_array_equality(&result, &[5, 7, 3, 4]).map_err(|e| format!("{e} | call: _mm_mask_compress_epi32(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
@@ -767,6 +824,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_epi32() -> Result<(), String> {
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compress_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -797,6 +857,9 @@ fn test_x86_avx512f_mm_mask_compress_epi32_normal3_impl() -> Result<(), String> 
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_mask_compress_epi32(create__m128i_from_i32_array([100, 200, 300, 400]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([110, 210, 310, 410])));
         check_array_equality(&result, &[110, 310, 300, 400]).map_err(|e| format!("{e} | call: _mm_mask_compress_epi32(create__m128i_from_i32_array([100, 200, 300, 400]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([110, 210, 310, 410]))"))?;
@@ -823,6 +886,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_epi32_normal3() -> Result<(), St
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compress_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -853,6 +919,9 @@ fn test_x86_avx512f_mm_mask_compress_epi32_boundary_max_impl() -> Result<(), Str
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_mask_compress_epi32(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
         check_array_equality(&result, &[2147483647, 2147483647, 2147483647, 2147483647]).map_err(|e| format!("{e} | call: _mm_mask_compress_epi32(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
@@ -879,6 +948,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_epi32_boundary_max() -> Result<(
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compress_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -909,6 +981,9 @@ fn test_x86_avx512f_mm_mask_compress_epi32_boundary_allones_impl() -> Result<(),
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_mask_compress_epi32(create__m128i_from_i32_array([-1, -1, -1, -1]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([-1, -1, -1, -1])));
         check_array_equality(&result, &[-1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_mask_compress_epi32(create__m128i_from_i32_array([-1, -1, -1, -1]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([-1, -1, -1, -1]))"))?;
@@ -935,6 +1010,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_epi32_boundary_allones() -> Resu
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compress_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -965,6 +1043,9 @@ fn test_x86_avx512f_mm_mask_compress_epi32_asym_min_max_impl() -> Result<(), Str
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_mask_compress_epi32(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
         check_array_equality(&result, &[2147483647, 2147483647, -2147483648, -2147483648]).map_err(|e| format!("{e} | call: _mm_mask_compress_epi32(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
@@ -991,6 +1072,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_epi32_asym_min_max() -> Result<(
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compress_epi32_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -1021,6 +1105,9 @@ fn test_x86_avx512f_mm_maskz_compress_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_maskz_compress_epi32(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_array_equality(&result, &[1, 3, 0, 0]).map_err(|e| format!("{e} | call: _mm_maskz_compress_epi32(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -1047,6 +1134,9 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_epi32() -> Result<(), String> {
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_maskz_compress_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -1077,6 +1167,9 @@ fn test_x86_avx512f_mm_maskz_compress_epi32_normal3_impl() -> Result<(), String>
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_maskz_compress_epi32(create__mmask8_from(0b01010101), create__m128i_from_i32_array([100, 200, 300, 400])));
         check_array_equality(&result, &[100, 300, 0, 0]).map_err(|e| format!("{e} | call: _mm_maskz_compress_epi32(create__mmask8_from(0b01010101), create__m128i_from_i32_array([100, 200, 300, 400]))"))?;
@@ -1103,6 +1196,9 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_epi32_normal3() -> Result<(), S
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_maskz_compress_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -1133,6 +1229,9 @@ fn test_x86_avx512f_mm_maskz_compress_epi32_boundary_max_impl() -> Result<(), St
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_maskz_compress_epi32(create__mmask8_from(0b01010101), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
         check_array_equality(&result, &[2147483647, 2147483647, 0, 0]).map_err(|e| format!("{e} | call: _mm_maskz_compress_epi32(create__mmask8_from(0b01010101), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
@@ -1159,6 +1258,9 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_epi32_boundary_max() -> Result<
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_maskz_compress_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -1189,6 +1291,9 @@ fn test_x86_avx512f_mm_maskz_compress_epi32_boundary_allones_impl() -> Result<()
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_maskz_compress_epi32(create__mmask8_from(0b01010101), create__m128i_from_i32_array([-1, -1, -1, -1])));
         check_array_equality(&result, &[-1, -1, 0, 0]).map_err(|e| format!("{e} | call: _mm_maskz_compress_epi32(create__mmask8_from(0b01010101), create__m128i_from_i32_array([-1, -1, -1, -1]))"))?;
@@ -1215,6 +1320,9 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_epi32_boundary_allones() -> Res
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_maskz_compress_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -1749,6 +1857,9 @@ fn test_x86_avx512f_mm256_mask_compress_epi64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i64_array(_mm256_mask_compress_epi64(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask8_from(0b01010101), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
         check_array_equality(&result, &[42949672969, 60129542157, 25769803781, 34359738375]).map_err(|e| format!("{e} | call: _mm256_mask_compress_epi64(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask8_from(0b01010101), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]))"))?;
@@ -1775,6 +1886,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64() -> Result<(), String>
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compress_epi64_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -1805,6 +1919,9 @@ fn test_x86_avx512f_mm256_mask_compress_epi64_normal3_impl() -> Result<(), Strin
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i64_array(_mm256_mask_compress_epi64(create__m256i_from([100, 200, 300, 400]), create__mmask8_from(0b01010101), create__m256i_from([110, 210, 310, 410])));
         check_array_equality(&result, &[110, 310, 300, 400]).map_err(|e| format!("{e} | call: _mm256_mask_compress_epi64(create__m256i_from([100, 200, 300, 400]), create__mmask8_from(0b01010101), create__m256i_from([110, 210, 310, 410]))"))?;
@@ -1831,6 +1948,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64_normal3() -> Result<(),
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compress_epi64_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -1861,6 +1981,9 @@ fn test_x86_avx512f_mm256_mask_compress_epi64_boundary_max_impl() -> Result<(), 
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i64_array(_mm256_mask_compress_epi64(create__m256i_from([i64::MAX, i64::MAX, i64::MAX, i64::MAX]), create__mmask8_from(0b01010101), create__m256i_from([i64::MAX, i64::MAX, i64::MAX, i64::MAX])));
         check_array_equality(&result, &[9223372036854775807, 9223372036854775807, 9223372036854775807, 9223372036854775807]).map_err(|e| format!("{e} | call: _mm256_mask_compress_epi64(create__m256i_from([i64::MAX, i64::MAX, i64::MAX, i64::MAX]), create__mmask8_from(0b01010101), create__m256i_from([i64::MAX, i64::MAX, i64::MAX, i64::MAX]))"))?;
@@ -1887,6 +2010,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64_boundary_max() -> Resul
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compress_epi64_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -1917,6 +2043,9 @@ fn test_x86_avx512f_mm256_mask_compress_epi64_boundary_allones_impl() -> Result<
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i64_array(_mm256_mask_compress_epi64(create__m256i_from([-1, -1, -1, -1]), create__mmask8_from(0b01010101), create__m256i_from([-1, -1, -1, -1])));
         check_array_equality(&result, &[-1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm256_mask_compress_epi64(create__m256i_from([-1, -1, -1, -1]), create__mmask8_from(0b01010101), create__m256i_from([-1, -1, -1, -1]))"))?;
@@ -1943,6 +2072,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64_boundary_allones() -> R
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compress_epi64_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -1973,6 +2105,9 @@ fn test_x86_avx512f_mm256_mask_compress_epi64_asym_min_max_impl() -> Result<(), 
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i64_array(_mm256_mask_compress_epi64(create__m256i_from([i64::MIN, i64::MIN, i64::MIN, i64::MIN]), create__mmask8_from(0b01010101), create__m256i_from([i64::MAX, i64::MAX, i64::MAX, i64::MAX])));
         check_array_equality(&result, &[9223372036854775807, 9223372036854775807, -9223372036854775808, -9223372036854775808]).map_err(|e| format!("{e} | call: _mm256_mask_compress_epi64(create__m256i_from([i64::MIN, i64::MIN, i64::MIN, i64::MIN]), create__mmask8_from(0b01010101), create__m256i_from([i64::MAX, i64::MAX, i64::MAX, i64::MAX]))"))?;
@@ -1999,6 +2134,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_epi64_asym_min_max() -> Resul
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compress_epi64_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2029,6 +2167,9 @@ fn test_x86_avx512f_mm256_maskz_compress_epi64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i64_array(_mm256_maskz_compress_epi64(create__mmask8_from(0b01010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
         check_array_equality(&result, &[8589934593, 25769803781, 0, 0]).map_err(|e| format!("{e} | call: _mm256_maskz_compress_epi64(create__mmask8_from(0b01010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
@@ -2055,6 +2196,9 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi64() -> Result<(), String
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_maskz_compress_epi64_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2085,6 +2229,9 @@ fn test_x86_avx512f_mm256_maskz_compress_epi64_normal3_impl() -> Result<(), Stri
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i64_array(_mm256_maskz_compress_epi64(create__mmask8_from(0b01010101), create__m256i_from([100, 200, 300, 400])));
         check_array_equality(&result, &[100, 300, 0, 0]).map_err(|e| format!("{e} | call: _mm256_maskz_compress_epi64(create__mmask8_from(0b01010101), create__m256i_from([100, 200, 300, 400]))"))?;
@@ -2111,6 +2258,9 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi64_normal3() -> Result<()
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_maskz_compress_epi64_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2141,6 +2291,9 @@ fn test_x86_avx512f_mm256_maskz_compress_epi64_boundary_max_impl() -> Result<(),
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i64_array(_mm256_maskz_compress_epi64(create__mmask8_from(0b01010101), create__m256i_from([i64::MAX, i64::MAX, i64::MAX, i64::MAX])));
         check_array_equality(&result, &[9223372036854775807, 9223372036854775807, 0, 0]).map_err(|e| format!("{e} | call: _mm256_maskz_compress_epi64(create__mmask8_from(0b01010101), create__m256i_from([i64::MAX, i64::MAX, i64::MAX, i64::MAX]))"))?;
@@ -2167,6 +2320,9 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi64_boundary_max() -> Resu
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_maskz_compress_epi64_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2197,6 +2353,9 @@ fn test_x86_avx512f_mm256_maskz_compress_epi64_boundary_allones_impl() -> Result
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i64_array(_mm256_maskz_compress_epi64(create__mmask8_from(0b01010101), create__m256i_from([-1, -1, -1, -1])));
         check_array_equality(&result, &[-1, -1, 0, 0]).map_err(|e| format!("{e} | call: _mm256_maskz_compress_epi64(create__mmask8_from(0b01010101), create__m256i_from([-1, -1, -1, -1]))"))?;
@@ -2223,6 +2382,9 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_epi64_boundary_allones() -> 
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_maskz_compress_epi64_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2253,6 +2415,9 @@ fn test_x86_avx512f_mm_mask_compress_epi64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i64_array(_mm_mask_compress_epi64(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([5, 6, 7, 8])));
         check_array_equality(&result, &[25769803781, 17179869187]).map_err(|e| format!("{e} | call: _mm_mask_compress_epi64(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
@@ -2279,6 +2444,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_epi64() -> Result<(), String> {
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compress_epi64_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2309,6 +2477,9 @@ fn test_x86_avx512f_mm_mask_compress_epi64_normal3_impl() -> Result<(), String> 
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i64_array(_mm_mask_compress_epi64(create__m128i_from_i64_array([100, 200]), create__mmask8_from(0b01010101), create__m128i_from_i64_array([110, 210])));
         check_array_equality(&result, &[110, 200]).map_err(|e| format!("{e} | call: _mm_mask_compress_epi64(create__m128i_from_i64_array([100, 200]), create__mmask8_from(0b01010101), create__m128i_from_i64_array([110, 210]))"))?;
@@ -2335,6 +2506,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_epi64_normal3() -> Result<(), St
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compress_epi64_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2365,6 +2539,9 @@ fn test_x86_avx512f_mm_mask_compress_epi64_boundary_max_impl() -> Result<(), Str
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i64_array(_mm_mask_compress_epi64(create__m128i_from_i64_array([i64::MAX, i64::MAX]), create__mmask8_from(0b01010101), create__m128i_from_i64_array([i64::MAX, i64::MAX])));
         check_array_equality(&result, &[9223372036854775807, 9223372036854775807]).map_err(|e| format!("{e} | call: _mm_mask_compress_epi64(create__m128i_from_i64_array([i64::MAX, i64::MAX]), create__mmask8_from(0b01010101), create__m128i_from_i64_array([i64::MAX, i64::MAX]))"))?;
@@ -2391,6 +2568,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_epi64_boundary_max() -> Result<(
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compress_epi64_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2421,6 +2601,9 @@ fn test_x86_avx512f_mm_mask_compress_epi64_boundary_allones_impl() -> Result<(),
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i64_array(_mm_mask_compress_epi64(create__m128i_from_i64_array([-1, -1]), create__mmask8_from(0b01010101), create__m128i_from_i64_array([-1, -1])));
         check_array_equality(&result, &[-1, -1]).map_err(|e| format!("{e} | call: _mm_mask_compress_epi64(create__m128i_from_i64_array([-1, -1]), create__mmask8_from(0b01010101), create__m128i_from_i64_array([-1, -1]))"))?;
@@ -2447,6 +2630,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_epi64_boundary_allones() -> Resu
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compress_epi64_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2477,6 +2663,9 @@ fn test_x86_avx512f_mm_mask_compress_epi64_asym_min_max_impl() -> Result<(), Str
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i64_array(_mm_mask_compress_epi64(create__m128i_from_i64_array([i64::MIN, i64::MIN]), create__mmask8_from(0b01010101), create__m128i_from_i64_array([i64::MAX, i64::MAX])));
         check_array_equality(&result, &[9223372036854775807, -9223372036854775808]).map_err(|e| format!("{e} | call: _mm_mask_compress_epi64(create__m128i_from_i64_array([i64::MIN, i64::MIN]), create__mmask8_from(0b01010101), create__m128i_from_i64_array([i64::MAX, i64::MAX]))"))?;
@@ -2503,6 +2692,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_epi64_asym_min_max() -> Result<(
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compress_epi64_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2533,6 +2725,9 @@ fn test_x86_avx512f_mm_maskz_compress_epi64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i64_array(_mm_maskz_compress_epi64(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_array_equality(&result, &[8589934593, 0]).map_err(|e| format!("{e} | call: _mm_maskz_compress_epi64(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -2559,6 +2754,9 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_epi64() -> Result<(), String> {
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_maskz_compress_epi64_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2589,6 +2787,9 @@ fn test_x86_avx512f_mm_maskz_compress_epi64_normal3_impl() -> Result<(), String>
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i64_array(_mm_maskz_compress_epi64(create__mmask8_from(0b01010101), create__m128i_from_i64_array([100, 200])));
         check_array_equality(&result, &[100, 0]).map_err(|e| format!("{e} | call: _mm_maskz_compress_epi64(create__mmask8_from(0b01010101), create__m128i_from_i64_array([100, 200]))"))?;
@@ -2615,6 +2816,9 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_epi64_normal3() -> Result<(), S
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_maskz_compress_epi64_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2645,6 +2849,9 @@ fn test_x86_avx512f_mm_maskz_compress_epi64_boundary_max_impl() -> Result<(), St
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i64_array(_mm_maskz_compress_epi64(create__mmask8_from(0b01010101), create__m128i_from_i64_array([i64::MAX, i64::MAX])));
         check_array_equality(&result, &[9223372036854775807, 0]).map_err(|e| format!("{e} | call: _mm_maskz_compress_epi64(create__mmask8_from(0b01010101), create__m128i_from_i64_array([i64::MAX, i64::MAX]))"))?;
@@ -2671,6 +2878,9 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_epi64_boundary_max() -> Result<
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_maskz_compress_epi64_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2701,6 +2911,9 @@ fn test_x86_avx512f_mm_maskz_compress_epi64_boundary_allones_impl() -> Result<()
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i64_array(_mm_maskz_compress_epi64(create__mmask8_from(0b01010101), create__m128i_from_i64_array([-1, -1])));
         check_array_equality(&result, &[-1, 0]).map_err(|e| format!("{e} | call: _mm_maskz_compress_epi64(create__mmask8_from(0b01010101), create__m128i_from_i64_array([-1, -1]))"))?;
@@ -2727,6 +2940,9 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_epi64_boundary_allones() -> Res
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_maskz_compress_epi64_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3261,6 +3477,9 @@ fn test_x86_avx512f_mm256_mask_compress_ps_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_mask_compress_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__mmask8_from(0b01010101), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
         check_float_array_equality(&result, &[9.0, 11.0, 13.0, 15.0, 5.0, 6.0, 7.0, 8.0]).map_err(|e| format!("{e} | call: _mm256_mask_compress_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__mmask8_from(0b01010101), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
@@ -3287,6 +3506,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_ps() -> Result<(), String> {
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compress_ps_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3317,6 +3539,9 @@ fn test_x86_avx512f_mm256_mask_compress_ps_normal3_impl() -> Result<(), String> 
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_mask_compress_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__mmask8_from(0b01010101), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32])));
         check_float_array_equality(&result, &[110.0, 310.0, 510.0, 710.0, 500.0, 600.0, 700.0, 800.0]).map_err(|e| format!("{e} | call: _mm256_mask_compress_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__mmask8_from(0b01010101), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32]))"))?;
@@ -3343,6 +3568,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_ps_normal3() -> Result<(), St
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compress_ps_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3373,6 +3601,9 @@ fn test_x86_avx512f_mm256_mask_compress_ps_boundary_max_impl() -> Result<(), Str
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_mask_compress_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__mmask8_from(0b01010101), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
         check_float_array_equality(&result, &[3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_mask_compress_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__mmask8_from(0b01010101), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
@@ -3399,6 +3630,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_ps_boundary_max() -> Result<(
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compress_ps_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3429,6 +3663,9 @@ fn test_x86_avx512f_mm256_mask_compress_ps_boundary_allones_impl() -> Result<(),
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_mask_compress_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__mmask8_from(0b01010101), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
         check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm256_mask_compress_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__mmask8_from(0b01010101), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
@@ -3455,6 +3692,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_ps_boundary_allones() -> Resu
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compress_ps_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3485,6 +3725,9 @@ fn test_x86_avx512f_mm256_mask_compress_ps_asym_min_max_impl() -> Result<(), Str
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_mask_compress_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__mmask8_from(0b01010101), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
         check_float_array_equality(&result, &[3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_mask_compress_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__mmask8_from(0b01010101), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
@@ -3511,6 +3754,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_ps_asym_min_max() -> Result<(
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compress_ps_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3541,6 +3787,9 @@ fn test_x86_avx512f_mm256_maskz_compress_ps_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_maskz_compress_ps(create__mmask8_from(0b01010101), create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
         check_float_array_equality(&result, &[1.0, 3.0, 5.0, 7.0, 0.0, 0.0, 0.0, 0.0]).map_err(|e| format!("{e} | call: _mm256_maskz_compress_ps(create__mmask8_from(0b01010101), create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]))"))?;
@@ -3567,6 +3816,9 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_ps() -> Result<(), String> {
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_maskz_compress_ps_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3597,6 +3849,9 @@ fn test_x86_avx512f_mm256_maskz_compress_ps_normal3_impl() -> Result<(), String>
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_maskz_compress_ps(create__mmask8_from(0b01010101), create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32])));
         check_float_array_equality(&result, &[100.0, 300.0, 500.0, 700.0, 0.0, 0.0, 0.0, 0.0]).map_err(|e| format!("{e} | call: _mm256_maskz_compress_ps(create__mmask8_from(0b01010101), create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]))"))?;
@@ -3623,6 +3878,9 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_ps_normal3() -> Result<(), S
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_maskz_compress_ps_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3653,6 +3911,9 @@ fn test_x86_avx512f_mm256_maskz_compress_ps_boundary_max_impl() -> Result<(), St
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_maskz_compress_ps(create__mmask8_from(0b01010101), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
         check_float_array_equality(&result, &[3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 0.0, 0.0, 0.0, 0.0]).map_err(|e| format!("{e} | call: _mm256_maskz_compress_ps(create__mmask8_from(0b01010101), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
@@ -3679,6 +3940,9 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_ps_boundary_max() -> Result<
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_maskz_compress_ps_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3709,6 +3973,9 @@ fn test_x86_avx512f_mm256_maskz_compress_ps_boundary_allones_impl() -> Result<()
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_maskz_compress_ps(create__mmask8_from(0b01010101), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
         check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN, 0.0, 0.0, 0.0, 0.0]).map_err(|e| format!("{e} | call: _mm256_maskz_compress_ps(create__mmask8_from(0b01010101), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
@@ -3735,6 +4002,9 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_ps_boundary_allones() -> Res
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_maskz_compress_ps_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3765,6 +4035,9 @@ fn test_x86_avx512f_mm_mask_compress_ps_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_mask_compress_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_float_array_equality(&result, &[5.0, 7.0, 3.0, 4.0]).map_err(|e| format!("{e} | call: _mm_mask_compress_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m128_from([5.0, 6.0, 7.0, 8.0]))"))?;
@@ -3791,6 +4064,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_ps() -> Result<(), String> {
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compress_ps_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3821,6 +4097,9 @@ fn test_x86_avx512f_mm_mask_compress_ps_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_mask_compress_ps(create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]), create__mmask8_from(0b01010101), create__m128_from([110.0f32, 210.0f32, 310.0f32, 410.0f32])));
         check_float_array_equality(&result, &[110.0, 310.0, 300.0, 400.0]).map_err(|e| format!("{e} | call: _mm_mask_compress_ps(create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]), create__mmask8_from(0b01010101), create__m128_from([110.0f32, 210.0f32, 310.0f32, 410.0f32]))"))?;
@@ -3847,6 +4126,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_ps_normal3() -> Result<(), Strin
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compress_ps_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3877,6 +4159,9 @@ fn test_x86_avx512f_mm_mask_compress_ps_boundary_max_impl() -> Result<(), String
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_mask_compress_ps(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
         check_float_array_equality(&result, &[3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm_mask_compress_ps(create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
@@ -3903,6 +4188,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_ps_boundary_max() -> Result<(), 
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compress_ps_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3933,6 +4221,9 @@ fn test_x86_avx512f_mm_mask_compress_ps_boundary_allones_impl() -> Result<(), St
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_mask_compress_ps(create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__mmask8_from(0b01010101), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
         check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm_mask_compress_ps(create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__mmask8_from(0b01010101), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
@@ -3959,6 +4250,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_ps_boundary_allones() -> Result<
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compress_ps_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3989,6 +4283,9 @@ fn test_x86_avx512f_mm_mask_compress_ps_asym_min_max_impl() -> Result<(), String
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_mask_compress_ps(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
         check_float_array_equality(&result, &[3.4028235e38, 3.4028235e38, -3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm_mask_compress_ps(create__m128_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
@@ -4015,6 +4312,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_ps_asym_min_max() -> Result<(), 
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compress_ps_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -4045,6 +4345,9 @@ fn test_x86_avx512f_mm_maskz_compress_ps_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_maskz_compress_ps(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0])));
         check_float_array_equality(&result, &[1.0, 3.0, 0.0, 0.0]).map_err(|e| format!("{e} | call: _mm_maskz_compress_ps(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]))"))?;
@@ -4071,6 +4374,9 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_ps() -> Result<(), String> {
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_maskz_compress_ps_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -4101,6 +4407,9 @@ fn test_x86_avx512f_mm_maskz_compress_ps_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_maskz_compress_ps(create__mmask8_from(0b01010101), create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32])));
         check_float_array_equality(&result, &[100.0, 300.0, 0.0, 0.0]).map_err(|e| format!("{e} | call: _mm_maskz_compress_ps(create__mmask8_from(0b01010101), create__m128_from([100.0f32, 200.0f32, 300.0f32, 400.0f32]))"))?;
@@ -4127,6 +4436,9 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_ps_normal3() -> Result<(), Stri
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_maskz_compress_ps_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -4157,6 +4469,9 @@ fn test_x86_avx512f_mm_maskz_compress_ps_boundary_max_impl() -> Result<(), Strin
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_maskz_compress_ps(create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
         check_float_array_equality(&result, &[3.4028235e38, 3.4028235e38, 0.0, 0.0]).map_err(|e| format!("{e} | call: _mm_maskz_compress_ps(create__mmask8_from(0b01010101), create__m128_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
@@ -4183,6 +4498,9 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_ps_boundary_max() -> Result<(),
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_maskz_compress_ps_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -4213,6 +4531,9 @@ fn test_x86_avx512f_mm_maskz_compress_ps_boundary_allones_impl() -> Result<(), S
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_maskz_compress_ps(create__mmask8_from(0b01010101), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
         check_float_array_equality(&result, &[f32::NAN, f32::NAN, 0.0, 0.0]).map_err(|e| format!("{e} | call: _mm_maskz_compress_ps(create__mmask8_from(0b01010101), create__m128_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
@@ -4239,6 +4560,9 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_ps_boundary_allones() -> Result
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_maskz_compress_ps_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -4773,6 +5097,9 @@ fn test_x86_avx512f_mm256_mask_compress_pd_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256d_to_f64_array(_mm256_mask_compress_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m256d_from([5.0, 6.0, 7.0, 8.0])));
         check_float_array_equality(&result, &[5.0, 7.0, 3.0, 4.0]).map_err(|e| format!("{e} | call: _mm256_mask_compress_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m256d_from([5.0, 6.0, 7.0, 8.0]))"))?;
@@ -4799,6 +5126,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_pd() -> Result<(), String> {
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compress_pd_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -4829,6 +5159,9 @@ fn test_x86_avx512f_mm256_mask_compress_pd_normal3_impl() -> Result<(), String> 
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256d_to_f64_array(_mm256_mask_compress_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__mmask8_from(0b01010101), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64])));
         check_float_array_equality(&result, &[110.0, 310.0, 300.0, 400.0]).map_err(|e| format!("{e} | call: _mm256_mask_compress_pd(create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]), create__mmask8_from(0b01010101), create__m256d_from([110.0f64, 210.0f64, 310.0f64, 410.0f64]))"))?;
@@ -4855,6 +5188,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_pd_normal3() -> Result<(), St
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compress_pd_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -4885,6 +5221,9 @@ fn test_x86_avx512f_mm256_mask_compress_pd_boundary_max_impl() -> Result<(), Str
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256d_to_f64_array(_mm256_mask_compress_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__mmask8_from(0b01010101), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
         check_float_array_equality(&result, &[1.7976931348623157e308, 1.7976931348623157e308, 1.7976931348623157e308, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm256_mask_compress_pd(create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]), create__mmask8_from(0b01010101), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
@@ -4911,6 +5250,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_pd_boundary_max() -> Result<(
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compress_pd_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -4941,6 +5283,9 @@ fn test_x86_avx512f_mm256_mask_compress_pd_boundary_allones_impl() -> Result<(),
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256d_to_f64_array(_mm256_mask_compress_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__mmask8_from(0b01010101), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN])));
         check_float_array_equality(&result, &[f64::NAN, f64::NAN, f64::NAN, f64::NAN]).map_err(|e| format!("{e} | call: _mm256_mask_compress_pd(create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]), create__mmask8_from(0b01010101), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]))"))?;
@@ -4967,6 +5312,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_pd_boundary_allones() -> Resu
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compress_pd_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -4997,6 +5345,9 @@ fn test_x86_avx512f_mm256_mask_compress_pd_asym_min_max_impl() -> Result<(), Str
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256d_to_f64_array(_mm256_mask_compress_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__mmask8_from(0b01010101), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
         check_float_array_equality(&result, &[1.7976931348623157e308, 1.7976931348623157e308, -1.7976931348623157e308, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm256_mask_compress_pd(create__m256d_from([f64::MIN, f64::MIN, f64::MIN, f64::MIN]), create__mmask8_from(0b01010101), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
@@ -5023,6 +5374,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compress_pd_asym_min_max() -> Result<(
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compress_pd_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5053,6 +5407,9 @@ fn test_x86_avx512f_mm256_maskz_compress_pd_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256d_to_f64_array(_mm256_maskz_compress_pd(create__mmask8_from(0b01010101), create__m256d_from([1.0, 2.0, 3.0, 4.0])));
         check_float_array_equality(&result, &[1.0, 3.0, 0.0, 0.0]).map_err(|e| format!("{e} | call: _mm256_maskz_compress_pd(create__mmask8_from(0b01010101), create__m256d_from([1.0, 2.0, 3.0, 4.0]))"))?;
@@ -5079,6 +5436,9 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_pd() -> Result<(), String> {
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_maskz_compress_pd_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5109,6 +5469,9 @@ fn test_x86_avx512f_mm256_maskz_compress_pd_normal3_impl() -> Result<(), String>
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256d_to_f64_array(_mm256_maskz_compress_pd(create__mmask8_from(0b01010101), create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64])));
         check_float_array_equality(&result, &[100.0, 300.0, 0.0, 0.0]).map_err(|e| format!("{e} | call: _mm256_maskz_compress_pd(create__mmask8_from(0b01010101), create__m256d_from([100.0f64, 200.0f64, 300.0f64, 400.0f64]))"))?;
@@ -5135,6 +5498,9 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_pd_normal3() -> Result<(), S
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_maskz_compress_pd_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5165,6 +5531,9 @@ fn test_x86_avx512f_mm256_maskz_compress_pd_boundary_max_impl() -> Result<(), St
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256d_to_f64_array(_mm256_maskz_compress_pd(create__mmask8_from(0b01010101), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX])));
         check_float_array_equality(&result, &[1.7976931348623157e308, 1.7976931348623157e308, 0.0, 0.0]).map_err(|e| format!("{e} | call: _mm256_maskz_compress_pd(create__mmask8_from(0b01010101), create__m256d_from([f64::MAX, f64::MAX, f64::MAX, f64::MAX]))"))?;
@@ -5191,6 +5560,9 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_pd_boundary_max() -> Result<
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_maskz_compress_pd_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5221,6 +5593,9 @@ fn test_x86_avx512f_mm256_maskz_compress_pd_boundary_allones_impl() -> Result<()
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256d_to_f64_array(_mm256_maskz_compress_pd(create__mmask8_from(0b01010101), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN])));
         check_float_array_equality(&result, &[f64::NAN, f64::NAN, 0.0, 0.0]).map_err(|e| format!("{e} | call: _mm256_maskz_compress_pd(create__mmask8_from(0b01010101), create__m256d_from([f64::NAN, f64::NAN, f64::NAN, f64::NAN]))"))?;
@@ -5247,6 +5622,9 @@ pub(super) fn test_x86_avx512f_mm256_maskz_compress_pd_boundary_allones() -> Res
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_maskz_compress_pd_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5277,6 +5655,9 @@ fn test_x86_avx512f_mm_mask_compress_pd_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_mask_compress_pd(create__m128d_from([1.0, 2.0]), create__mmask8_from(0b01010101), create__m128d_from([3.0, 4.0])));
         check_float_array_equality(&result, &[3.0, 2.0]).map_err(|e| format!("{e} | call: _mm_mask_compress_pd(create__m128d_from([1.0, 2.0]), create__mmask8_from(0b01010101), create__m128d_from([3.0, 4.0]))"))?;
@@ -5303,6 +5684,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_pd() -> Result<(), String> {
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compress_pd_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5333,6 +5717,9 @@ fn test_x86_avx512f_mm_mask_compress_pd_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_mask_compress_pd(create__m128d_from([100.0f64, 200.0f64]), create__mmask8_from(0b01010101), create__m128d_from([110.0f64, 210.0f64])));
         check_float_array_equality(&result, &[110.0, 200.0]).map_err(|e| format!("{e} | call: _mm_mask_compress_pd(create__m128d_from([100.0f64, 200.0f64]), create__mmask8_from(0b01010101), create__m128d_from([110.0f64, 210.0f64]))"))?;
@@ -5359,6 +5746,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_pd_normal3() -> Result<(), Strin
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compress_pd_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5389,6 +5779,9 @@ fn test_x86_avx512f_mm_mask_compress_pd_boundary_max_impl() -> Result<(), String
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_mask_compress_pd(create__m128d_from([f64::MAX, f64::MAX]), create__mmask8_from(0b01010101), create__m128d_from([f64::MAX, f64::MAX])));
         check_float_array_equality(&result, &[1.7976931348623157e308, 1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_mask_compress_pd(create__m128d_from([f64::MAX, f64::MAX]), create__mmask8_from(0b01010101), create__m128d_from([f64::MAX, f64::MAX]))"))?;
@@ -5415,6 +5808,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_pd_boundary_max() -> Result<(), 
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compress_pd_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5445,6 +5841,9 @@ fn test_x86_avx512f_mm_mask_compress_pd_boundary_allones_impl() -> Result<(), St
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_mask_compress_pd(create__m128d_from([f64::NAN, f64::NAN]), create__mmask8_from(0b01010101), create__m128d_from([f64::NAN, f64::NAN])));
         check_float_array_equality(&result, &[f64::NAN, f64::NAN]).map_err(|e| format!("{e} | call: _mm_mask_compress_pd(create__m128d_from([f64::NAN, f64::NAN]), create__mmask8_from(0b01010101), create__m128d_from([f64::NAN, f64::NAN]))"))?;
@@ -5471,6 +5870,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_pd_boundary_allones() -> Result<
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compress_pd_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5501,6 +5903,9 @@ fn test_x86_avx512f_mm_mask_compress_pd_asym_min_max_impl() -> Result<(), String
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_mask_compress_pd(create__m128d_from([f64::MIN, f64::MIN]), create__mmask8_from(0b01010101), create__m128d_from([f64::MAX, f64::MAX])));
         check_float_array_equality(&result, &[1.7976931348623157e308, -1.7976931348623157e308]).map_err(|e| format!("{e} | call: _mm_mask_compress_pd(create__m128d_from([f64::MIN, f64::MIN]), create__mmask8_from(0b01010101), create__m128d_from([f64::MAX, f64::MAX]))"))?;
@@ -5527,6 +5932,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compress_pd_asym_min_max() -> Result<(), 
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compress_pd_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5557,6 +5965,9 @@ fn test_x86_avx512f_mm_maskz_compress_pd_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_maskz_compress_pd(create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0])));
         check_float_array_equality(&result, &[1.0, 0.0]).map_err(|e| format!("{e} | call: _mm_maskz_compress_pd(create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0]))"))?;
@@ -5583,6 +5994,9 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_pd() -> Result<(), String> {
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_maskz_compress_pd_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5613,6 +6027,9 @@ fn test_x86_avx512f_mm_maskz_compress_pd_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_maskz_compress_pd(create__mmask8_from(0b01010101), create__m128d_from([100.0f64, 200.0f64])));
         check_float_array_equality(&result, &[100.0, 0.0]).map_err(|e| format!("{e} | call: _mm_maskz_compress_pd(create__mmask8_from(0b01010101), create__m128d_from([100.0f64, 200.0f64]))"))?;
@@ -5639,6 +6056,9 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_pd_normal3() -> Result<(), Stri
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_maskz_compress_pd_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5669,6 +6089,9 @@ fn test_x86_avx512f_mm_maskz_compress_pd_boundary_max_impl() -> Result<(), Strin
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_maskz_compress_pd(create__mmask8_from(0b01010101), create__m128d_from([f64::MAX, f64::MAX])));
         check_float_array_equality(&result, &[1.7976931348623157e308, 0.0]).map_err(|e| format!("{e} | call: _mm_maskz_compress_pd(create__mmask8_from(0b01010101), create__m128d_from([f64::MAX, f64::MAX]))"))?;
@@ -5695,6 +6118,9 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_pd_boundary_max() -> Result<(),
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_maskz_compress_pd_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5725,6 +6151,9 @@ fn test_x86_avx512f_mm_maskz_compress_pd_boundary_allones_impl() -> Result<(), S
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_maskz_compress_pd(create__mmask8_from(0b01010101), create__m128d_from([f64::NAN, f64::NAN])));
         check_float_array_equality(&result, &[f64::NAN, 0.0]).map_err(|e| format!("{e} | call: _mm_maskz_compress_pd(create__mmask8_from(0b01010101), create__m128d_from([f64::NAN, f64::NAN]))"))?;
@@ -5751,6 +6180,9 @@ pub(super) fn test_x86_avx512f_mm_maskz_compress_pd_boundary_allones() -> Result
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_maskz_compress_pd_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5925,6 +6357,9 @@ fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_impl() -> Result<(), String>
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -5941,6 +6376,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi32() -> Result<(), S
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5961,6 +6399,9 @@ fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_normal3_impl() -> Result<(),
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -5977,6 +6418,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_normal3() -> Resu
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5997,6 +6441,9 @@ fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_max_impl() -> Resul
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -6013,6 +6460,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_max() ->
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6033,6 +6483,9 @@ fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_allones_impl() -> R
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -6049,6 +6502,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_allones(
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compressstoreu_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6069,6 +6525,9 @@ fn test_x86_avx512f_mm_mask_compressstoreu_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -6085,6 +6544,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi32() -> Result<(), Stri
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compressstoreu_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6105,6 +6567,9 @@ fn test_x86_avx512f_mm_mask_compressstoreu_epi32_normal3_impl() -> Result<(), St
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -6121,6 +6586,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi32_normal3() -> Result<
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6141,6 +6609,9 @@ fn test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_max_impl() -> Result<(
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -6157,6 +6628,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_max() -> Re
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6177,6 +6651,9 @@ fn test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_allones_impl() -> Resu
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -6193,6 +6670,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_allones() -
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compressstoreu_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6357,6 +6837,9 @@ fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_impl() -> Result<(), String>
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1i64; 8]);
         let k = create__mmask8_from(0b01010101);
@@ -6373,6 +6856,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi64() -> Result<(), S
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6393,6 +6879,9 @@ fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_normal3_impl() -> Result<(),
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1i64; 8]);
         let k = create__mmask8_from(0b01010101);
@@ -6409,6 +6898,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_normal3() -> Resu
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6429,6 +6921,9 @@ fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_max_impl() -> Resul
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1i64; 8]);
         let k = create__mmask8_from(0b01010101);
@@ -6445,6 +6940,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_max() ->
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6465,6 +6963,9 @@ fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_allones_impl() -> R
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1i64; 8]);
         let k = create__mmask8_from(0b01010101);
@@ -6481,6 +6982,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_allones(
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compressstoreu_epi64_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6501,6 +7005,9 @@ fn test_x86_avx512f_mm_mask_compressstoreu_epi64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1i64; 8]);
         let k = create__mmask8_from(0b01010101);
@@ -6517,6 +7024,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi64() -> Result<(), Stri
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compressstoreu_epi64_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6537,6 +7047,9 @@ fn test_x86_avx512f_mm_mask_compressstoreu_epi64_normal3_impl() -> Result<(), St
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1i64; 8]);
         let k = create__mmask8_from(0b01010101);
@@ -6553,6 +7066,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi64_normal3() -> Result<
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6573,6 +7089,9 @@ fn test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_max_impl() -> Result<(
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1i64; 8]);
         let k = create__mmask8_from(0b01010101);
@@ -6589,6 +7108,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_max() -> Re
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6609,6 +7131,9 @@ fn test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_allones_impl() -> Resu
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1i64; 8]);
         let k = create__mmask8_from(0b01010101);
@@ -6625,6 +7150,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_allones() -
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compressstoreu_epi64_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6789,6 +7317,9 @@ fn test_x86_avx512f_mm256_mask_compressstoreu_ps_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -6805,6 +7336,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_ps() -> Result<(), Stri
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compressstoreu_ps_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6825,6 +7359,9 @@ fn test_x86_avx512f_mm256_mask_compressstoreu_ps_normal3_impl() -> Result<(), St
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -6841,6 +7378,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_ps_normal3() -> Result<
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6861,6 +7401,9 @@ fn test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_max_impl() -> Result<(
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -6877,6 +7420,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_max() -> Re
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6897,6 +7443,9 @@ fn test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_allones_impl() -> Resu
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -6913,6 +7462,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_allones() -
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compressstoreu_ps_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6933,6 +7485,9 @@ fn test_x86_avx512f_mm_mask_compressstoreu_ps_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -6949,6 +7504,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_ps() -> Result<(), String>
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compressstoreu_ps_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6969,6 +7527,9 @@ fn test_x86_avx512f_mm_mask_compressstoreu_ps_normal3_impl() -> Result<(), Strin
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -6985,6 +7546,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_ps_normal3() -> Result<(),
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -7005,6 +7569,9 @@ fn test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_max_impl() -> Result<(), 
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -7021,6 +7588,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_max() -> Resul
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -7041,6 +7611,9 @@ fn test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_allones_impl() -> Result<
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -7057,6 +7630,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_allones() -> R
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compressstoreu_ps_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -7221,6 +7797,9 @@ fn test_x86_avx512f_mm256_mask_compressstoreu_pd_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
         let k = create__mmask8_from(0b01010101);
@@ -7237,6 +7816,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_pd() -> Result<(), Stri
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compressstoreu_pd_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -7257,6 +7839,9 @@ fn test_x86_avx512f_mm256_mask_compressstoreu_pd_normal3_impl() -> Result<(), St
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
         let k = create__mmask8_from(0b01010101);
@@ -7273,6 +7858,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_pd_normal3() -> Result<
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -7293,6 +7881,9 @@ fn test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_max_impl() -> Result<(
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
         let k = create__mmask8_from(0b01010101);
@@ -7309,6 +7900,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_max() -> Re
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -7329,6 +7923,9 @@ fn test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_allones_impl() -> Resu
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
         let k = create__mmask8_from(0b01010101);
@@ -7345,6 +7942,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_allones() -
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_compressstoreu_pd_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -7365,6 +7965,9 @@ fn test_x86_avx512f_mm_mask_compressstoreu_pd_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
         let k = create__mmask8_from(0b01010101);
@@ -7381,6 +7984,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_pd() -> Result<(), String>
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compressstoreu_pd_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -7401,6 +8007,9 @@ fn test_x86_avx512f_mm_mask_compressstoreu_pd_normal3_impl() -> Result<(), Strin
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
         let k = create__mmask8_from(0b01010101);
@@ -7417,6 +8026,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_pd_normal3() -> Result<(),
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -7437,6 +8049,9 @@ fn test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_max_impl() -> Result<(), 
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
         let k = create__mmask8_from(0b01010101);
@@ -7453,6 +8068,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_max() -> Resul
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -7473,6 +8091,9 @@ fn test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_allones_impl() -> Result<
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
         let k = create__mmask8_from(0b01010101);
@@ -7489,6 +8110,9 @@ pub(super) fn test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_allones() -> R
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_compressstoreu_pd_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -8013,6 +8637,9 @@ fn test_x86_avx512f_mm256_mask_expand_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i32_array(_mm256_mask_expand_epi32(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask8_from(0b01010101), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
         check_array_equality(&result, &[9, 2, 10, 4, 11, 6, 12, 8]).map_err(|e| format!("{e} | call: _mm256_mask_expand_epi32(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask8_from(0b01010101), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]))"))?;
@@ -8039,6 +8666,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32() -> Result<(), String> {
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_expand_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -8069,6 +8699,9 @@ fn test_x86_avx512f_mm256_mask_expand_epi32_normal3_impl() -> Result<(), String>
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i32_array(_mm256_mask_expand_epi32(create__m256i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800]), create__mmask8_from(0b01010101), create__m256i_from_i32_array([110, 210, 310, 410, 510, 610, 710, 810])));
         check_array_equality(&result, &[110, 200, 210, 400, 310, 600, 410, 800]).map_err(|e| format!("{e} | call: _mm256_mask_expand_epi32(create__m256i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800]), create__mmask8_from(0b01010101), create__m256i_from_i32_array([110, 210, 310, 410, 510, 610, 710, 810]))"))?;
@@ -8095,6 +8728,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32_normal3() -> Result<(), S
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_expand_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -8125,6 +8761,9 @@ fn test_x86_avx512f_mm256_mask_expand_epi32_boundary_max_impl() -> Result<(), St
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i32_array(_mm256_mask_expand_epi32(create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__mmask8_from(0b01010101), create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
         check_array_equality(&result, &[2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647]).map_err(|e| format!("{e} | call: _mm256_mask_expand_epi32(create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__mmask8_from(0b01010101), create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
@@ -8151,6 +8790,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32_boundary_max() -> Result<
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_expand_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -8181,6 +8823,9 @@ fn test_x86_avx512f_mm256_mask_expand_epi32_boundary_allones_impl() -> Result<()
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i32_array(_mm256_mask_expand_epi32(create__m256i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__mmask8_from(0b01010101), create__m256i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1])));
         check_array_equality(&result, &[-1, -1, -1, -1, -1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm256_mask_expand_epi32(create__m256i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__mmask8_from(0b01010101), create__m256i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1]))"))?;
@@ -8207,6 +8852,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32_boundary_allones() -> Res
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_expand_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -8237,6 +8885,9 @@ fn test_x86_avx512f_mm256_mask_expand_epi32_asym_min_max_impl() -> Result<(), St
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i32_array(_mm256_mask_expand_epi32(create__m256i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__mmask8_from(0b01010101), create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
         check_array_equality(&result, &[2147483647, -2147483648, 2147483647, -2147483648, 2147483647, -2147483648, 2147483647, -2147483648]).map_err(|e| format!("{e} | call: _mm256_mask_expand_epi32(create__m256i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__mmask8_from(0b01010101), create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
@@ -8263,6 +8914,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_epi32_asym_min_max() -> Result<
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_expand_epi32_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -8293,6 +8947,9 @@ fn test_x86_avx512f_mm256_maskz_expand_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i32_array(_mm256_maskz_expand_epi32(create__mmask8_from(0b01010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
         check_array_equality(&result, &[1, 0, 2, 0, 3, 0, 4, 0]).map_err(|e| format!("{e} | call: _mm256_maskz_expand_epi32(create__mmask8_from(0b01010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
@@ -8319,6 +8976,9 @@ pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi32() -> Result<(), String> 
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_maskz_expand_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -8349,6 +9009,9 @@ fn test_x86_avx512f_mm256_maskz_expand_epi32_normal3_impl() -> Result<(), String
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i32_array(_mm256_maskz_expand_epi32(create__mmask8_from(0b01010101), create__m256i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800])));
         check_array_equality(&result, &[100, 0, 200, 0, 300, 0, 400, 0]).map_err(|e| format!("{e} | call: _mm256_maskz_expand_epi32(create__mmask8_from(0b01010101), create__m256i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800]))"))?;
@@ -8375,6 +9038,9 @@ pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi32_normal3() -> Result<(), 
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_maskz_expand_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -8405,6 +9071,9 @@ fn test_x86_avx512f_mm256_maskz_expand_epi32_boundary_max_impl() -> Result<(), S
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i32_array(_mm256_maskz_expand_epi32(create__mmask8_from(0b01010101), create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
         check_array_equality(&result, &[2147483647, 0, 2147483647, 0, 2147483647, 0, 2147483647, 0]).map_err(|e| format!("{e} | call: _mm256_maskz_expand_epi32(create__mmask8_from(0b01010101), create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
@@ -8431,6 +9100,9 @@ pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi32_boundary_max() -> Result
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_maskz_expand_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -8461,6 +9133,9 @@ fn test_x86_avx512f_mm256_maskz_expand_epi32_boundary_allones_impl() -> Result<(
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i32_array(_mm256_maskz_expand_epi32(create__mmask8_from(0b01010101), create__m256i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1])));
         check_array_equality(&result, &[-1, 0, -1, 0, -1, 0, -1, 0]).map_err(|e| format!("{e} | call: _mm256_maskz_expand_epi32(create__mmask8_from(0b01010101), create__m256i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1]))"))?;
@@ -8487,6 +9162,9 @@ pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi32_boundary_allones() -> Re
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_maskz_expand_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -8517,6 +9195,9 @@ fn test_x86_avx512f_mm_mask_expand_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_mask_expand_epi32(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([5, 6, 7, 8])));
         check_array_equality(&result, &[5, 2, 6, 4]).map_err(|e| format!("{e} | call: _mm_mask_expand_epi32(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
@@ -8543,6 +9224,9 @@ pub(super) fn test_x86_avx512f_mm_mask_expand_epi32() -> Result<(), String> {
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_expand_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -8573,6 +9257,9 @@ fn test_x86_avx512f_mm_mask_expand_epi32_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_mask_expand_epi32(create__m128i_from_i32_array([100, 200, 300, 400]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([110, 210, 310, 410])));
         check_array_equality(&result, &[110, 200, 210, 400]).map_err(|e| format!("{e} | call: _mm_mask_expand_epi32(create__m128i_from_i32_array([100, 200, 300, 400]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([110, 210, 310, 410]))"))?;
@@ -8599,6 +9286,9 @@ pub(super) fn test_x86_avx512f_mm_mask_expand_epi32_normal3() -> Result<(), Stri
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_expand_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -8629,6 +9319,9 @@ fn test_x86_avx512f_mm_mask_expand_epi32_boundary_max_impl() -> Result<(), Strin
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_mask_expand_epi32(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
         check_array_equality(&result, &[2147483647, 2147483647, 2147483647, 2147483647]).map_err(|e| format!("{e} | call: _mm_mask_expand_epi32(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
@@ -8655,6 +9348,9 @@ pub(super) fn test_x86_avx512f_mm_mask_expand_epi32_boundary_max() -> Result<(),
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_expand_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -8685,6 +9381,9 @@ fn test_x86_avx512f_mm_mask_expand_epi32_boundary_allones_impl() -> Result<(), S
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_mask_expand_epi32(create__m128i_from_i32_array([-1, -1, -1, -1]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([-1, -1, -1, -1])));
         check_array_equality(&result, &[-1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm_mask_expand_epi32(create__m128i_from_i32_array([-1, -1, -1, -1]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([-1, -1, -1, -1]))"))?;
@@ -8711,6 +9410,9 @@ pub(super) fn test_x86_avx512f_mm_mask_expand_epi32_boundary_allones() -> Result
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_expand_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -8741,6 +9443,9 @@ fn test_x86_avx512f_mm_mask_expand_epi32_asym_min_max_impl() -> Result<(), Strin
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_mask_expand_epi32(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
         check_array_equality(&result, &[2147483647, -2147483648, 2147483647, -2147483648]).map_err(|e| format!("{e} | call: _mm_mask_expand_epi32(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
@@ -8767,6 +9472,9 @@ pub(super) fn test_x86_avx512f_mm_mask_expand_epi32_asym_min_max() -> Result<(),
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_expand_epi32_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -8797,6 +9505,9 @@ fn test_x86_avx512f_mm_maskz_expand_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_maskz_expand_epi32(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_array_equality(&result, &[1, 0, 2, 0]).map_err(|e| format!("{e} | call: _mm_maskz_expand_epi32(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -8823,6 +9534,9 @@ pub(super) fn test_x86_avx512f_mm_maskz_expand_epi32() -> Result<(), String> {
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_maskz_expand_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -8853,6 +9567,9 @@ fn test_x86_avx512f_mm_maskz_expand_epi32_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_maskz_expand_epi32(create__mmask8_from(0b01010101), create__m128i_from_i32_array([100, 200, 300, 400])));
         check_array_equality(&result, &[100, 0, 200, 0]).map_err(|e| format!("{e} | call: _mm_maskz_expand_epi32(create__mmask8_from(0b01010101), create__m128i_from_i32_array([100, 200, 300, 400]))"))?;
@@ -8879,6 +9596,9 @@ pub(super) fn test_x86_avx512f_mm_maskz_expand_epi32_normal3() -> Result<(), Str
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_maskz_expand_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -8909,6 +9629,9 @@ fn test_x86_avx512f_mm_maskz_expand_epi32_boundary_max_impl() -> Result<(), Stri
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_maskz_expand_epi32(create__mmask8_from(0b01010101), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
         check_array_equality(&result, &[2147483647, 0, 2147483647, 0]).map_err(|e| format!("{e} | call: _mm_maskz_expand_epi32(create__mmask8_from(0b01010101), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
@@ -8935,6 +9658,9 @@ pub(super) fn test_x86_avx512f_mm_maskz_expand_epi32_boundary_max() -> Result<()
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_maskz_expand_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -8965,6 +9691,9 @@ fn test_x86_avx512f_mm_maskz_expand_epi32_boundary_allones_impl() -> Result<(), 
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_maskz_expand_epi32(create__mmask8_from(0b01010101), create__m128i_from_i32_array([-1, -1, -1, -1])));
         check_array_equality(&result, &[-1, 0, -1, 0]).map_err(|e| format!("{e} | call: _mm_maskz_expand_epi32(create__mmask8_from(0b01010101), create__m128i_from_i32_array([-1, -1, -1, -1]))"))?;
@@ -8991,6 +9720,9 @@ pub(super) fn test_x86_avx512f_mm_maskz_expand_epi32_boundary_allones() -> Resul
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_maskz_expand_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -9525,6 +10257,9 @@ fn test_x86_avx512f_mm256_mask_expand_epi64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i64_array(_mm256_mask_expand_epi64(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask8_from(0b01010101), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
         check_array_equality(&result, &[42949672969, 17179869187, 51539607563, 34359738375]).map_err(|e| format!("{e} | call: _mm256_mask_expand_epi64(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask8_from(0b01010101), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]))"))?;
@@ -9551,6 +10286,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64() -> Result<(), String> {
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_expand_epi64_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -9581,6 +10319,9 @@ fn test_x86_avx512f_mm256_mask_expand_epi64_normal3_impl() -> Result<(), String>
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i64_array(_mm256_mask_expand_epi64(create__m256i_from([100, 200, 300, 400]), create__mmask8_from(0b01010101), create__m256i_from([110, 210, 310, 410])));
         check_array_equality(&result, &[110, 200, 210, 400]).map_err(|e| format!("{e} | call: _mm256_mask_expand_epi64(create__m256i_from([100, 200, 300, 400]), create__mmask8_from(0b01010101), create__m256i_from([110, 210, 310, 410]))"))?;
@@ -9607,6 +10348,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64_normal3() -> Result<(), S
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_expand_epi64_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -9637,6 +10381,9 @@ fn test_x86_avx512f_mm256_mask_expand_epi64_boundary_max_impl() -> Result<(), St
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i64_array(_mm256_mask_expand_epi64(create__m256i_from([i64::MAX, i64::MAX, i64::MAX, i64::MAX]), create__mmask8_from(0b01010101), create__m256i_from([i64::MAX, i64::MAX, i64::MAX, i64::MAX])));
         check_array_equality(&result, &[9223372036854775807, 9223372036854775807, 9223372036854775807, 9223372036854775807]).map_err(|e| format!("{e} | call: _mm256_mask_expand_epi64(create__m256i_from([i64::MAX, i64::MAX, i64::MAX, i64::MAX]), create__mmask8_from(0b01010101), create__m256i_from([i64::MAX, i64::MAX, i64::MAX, i64::MAX]))"))?;
@@ -9663,6 +10410,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64_boundary_max() -> Result<
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_expand_epi64_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -9693,6 +10443,9 @@ fn test_x86_avx512f_mm256_mask_expand_epi64_boundary_allones_impl() -> Result<()
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i64_array(_mm256_mask_expand_epi64(create__m256i_from([-1, -1, -1, -1]), create__mmask8_from(0b01010101), create__m256i_from([-1, -1, -1, -1])));
         check_array_equality(&result, &[-1, -1, -1, -1]).map_err(|e| format!("{e} | call: _mm256_mask_expand_epi64(create__m256i_from([-1, -1, -1, -1]), create__mmask8_from(0b01010101), create__m256i_from([-1, -1, -1, -1]))"))?;
@@ -9719,6 +10472,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64_boundary_allones() -> Res
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_expand_epi64_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -9749,6 +10505,9 @@ fn test_x86_avx512f_mm256_mask_expand_epi64_asym_min_max_impl() -> Result<(), St
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i64_array(_mm256_mask_expand_epi64(create__m256i_from([i64::MIN, i64::MIN, i64::MIN, i64::MIN]), create__mmask8_from(0b01010101), create__m256i_from([i64::MAX, i64::MAX, i64::MAX, i64::MAX])));
         check_array_equality(&result, &[9223372036854775807, -9223372036854775808, 9223372036854775807, -9223372036854775808]).map_err(|e| format!("{e} | call: _mm256_mask_expand_epi64(create__m256i_from([i64::MIN, i64::MIN, i64::MIN, i64::MIN]), create__mmask8_from(0b01010101), create__m256i_from([i64::MAX, i64::MAX, i64::MAX, i64::MAX]))"))?;
@@ -9775,6 +10534,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_epi64_asym_min_max() -> Result<
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_expand_epi64_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -9805,6 +10567,9 @@ fn test_x86_avx512f_mm256_maskz_expand_epi64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i64_array(_mm256_maskz_expand_epi64(create__mmask8_from(0b01010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
         check_array_equality(&result, &[8589934593, 0, 17179869187, 0]).map_err(|e| format!("{e} | call: _mm256_maskz_expand_epi64(create__mmask8_from(0b01010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
@@ -9831,6 +10596,9 @@ pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi64() -> Result<(), String> 
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_maskz_expand_epi64_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -9861,6 +10629,9 @@ fn test_x86_avx512f_mm256_maskz_expand_epi64_normal3_impl() -> Result<(), String
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i64_array(_mm256_maskz_expand_epi64(create__mmask8_from(0b01010101), create__m256i_from([100, 200, 300, 400])));
         check_array_equality(&result, &[100, 0, 200, 0]).map_err(|e| format!("{e} | call: _mm256_maskz_expand_epi64(create__mmask8_from(0b01010101), create__m256i_from([100, 200, 300, 400]))"))?;
@@ -9887,6 +10658,9 @@ pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi64_normal3() -> Result<(), 
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_maskz_expand_epi64_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -9917,6 +10691,9 @@ fn test_x86_avx512f_mm256_maskz_expand_epi64_boundary_max_impl() -> Result<(), S
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i64_array(_mm256_maskz_expand_epi64(create__mmask8_from(0b01010101), create__m256i_from([i64::MAX, i64::MAX, i64::MAX, i64::MAX])));
         check_array_equality(&result, &[9223372036854775807, 0, 9223372036854775807, 0]).map_err(|e| format!("{e} | call: _mm256_maskz_expand_epi64(create__mmask8_from(0b01010101), create__m256i_from([i64::MAX, i64::MAX, i64::MAX, i64::MAX]))"))?;
@@ -9943,6 +10720,9 @@ pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi64_boundary_max() -> Result
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_maskz_expand_epi64_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -9973,6 +10753,9 @@ fn test_x86_avx512f_mm256_maskz_expand_epi64_boundary_allones_impl() -> Result<(
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256i_to_i64_array(_mm256_maskz_expand_epi64(create__mmask8_from(0b01010101), create__m256i_from([-1, -1, -1, -1])));
         check_array_equality(&result, &[-1, 0, -1, 0]).map_err(|e| format!("{e} | call: _mm256_maskz_expand_epi64(create__mmask8_from(0b01010101), create__m256i_from([-1, -1, -1, -1]))"))?;
@@ -9999,6 +10782,9 @@ pub(super) fn test_x86_avx512f_mm256_maskz_expand_epi64_boundary_allones() -> Re
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_maskz_expand_epi64_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -10029,6 +10815,9 @@ fn test_x86_avx512f_mm_mask_expand_epi64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i64_array(_mm_mask_expand_epi64(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([5, 6, 7, 8])));
         check_array_equality(&result, &[25769803781, 17179869187]).map_err(|e| format!("{e} | call: _mm_mask_expand_epi64(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
@@ -10055,6 +10844,9 @@ pub(super) fn test_x86_avx512f_mm_mask_expand_epi64() -> Result<(), String> {
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_expand_epi64_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -10085,6 +10877,9 @@ fn test_x86_avx512f_mm_mask_expand_epi64_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i64_array(_mm_mask_expand_epi64(create__m128i_from_i64_array([100, 200]), create__mmask8_from(0b01010101), create__m128i_from_i64_array([110, 210])));
         check_array_equality(&result, &[110, 200]).map_err(|e| format!("{e} | call: _mm_mask_expand_epi64(create__m128i_from_i64_array([100, 200]), create__mmask8_from(0b01010101), create__m128i_from_i64_array([110, 210]))"))?;
@@ -10111,6 +10906,9 @@ pub(super) fn test_x86_avx512f_mm_mask_expand_epi64_normal3() -> Result<(), Stri
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_expand_epi64_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -10141,6 +10939,9 @@ fn test_x86_avx512f_mm_mask_expand_epi64_boundary_max_impl() -> Result<(), Strin
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i64_array(_mm_mask_expand_epi64(create__m128i_from_i64_array([i64::MAX, i64::MAX]), create__mmask8_from(0b01010101), create__m128i_from_i64_array([i64::MAX, i64::MAX])));
         check_array_equality(&result, &[9223372036854775807, 9223372036854775807]).map_err(|e| format!("{e} | call: _mm_mask_expand_epi64(create__m128i_from_i64_array([i64::MAX, i64::MAX]), create__mmask8_from(0b01010101), create__m128i_from_i64_array([i64::MAX, i64::MAX]))"))?;
@@ -10167,6 +10968,9 @@ pub(super) fn test_x86_avx512f_mm_mask_expand_epi64_boundary_max() -> Result<(),
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_expand_epi64_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -10197,6 +11001,9 @@ fn test_x86_avx512f_mm_mask_expand_epi64_boundary_allones_impl() -> Result<(), S
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i64_array(_mm_mask_expand_epi64(create__m128i_from_i64_array([-1, -1]), create__mmask8_from(0b01010101), create__m128i_from_i64_array([-1, -1])));
         check_array_equality(&result, &[-1, -1]).map_err(|e| format!("{e} | call: _mm_mask_expand_epi64(create__m128i_from_i64_array([-1, -1]), create__mmask8_from(0b01010101), create__m128i_from_i64_array([-1, -1]))"))?;
@@ -10223,6 +11030,9 @@ pub(super) fn test_x86_avx512f_mm_mask_expand_epi64_boundary_allones() -> Result
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_expand_epi64_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -10253,6 +11063,9 @@ fn test_x86_avx512f_mm_mask_expand_epi64_asym_min_max_impl() -> Result<(), Strin
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i64_array(_mm_mask_expand_epi64(create__m128i_from_i64_array([i64::MIN, i64::MIN]), create__mmask8_from(0b01010101), create__m128i_from_i64_array([i64::MAX, i64::MAX])));
         check_array_equality(&result, &[9223372036854775807, -9223372036854775808]).map_err(|e| format!("{e} | call: _mm_mask_expand_epi64(create__m128i_from_i64_array([i64::MIN, i64::MIN]), create__mmask8_from(0b01010101), create__m128i_from_i64_array([i64::MAX, i64::MAX]))"))?;
@@ -10279,6 +11092,9 @@ pub(super) fn test_x86_avx512f_mm_mask_expand_epi64_asym_min_max() -> Result<(),
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_expand_epi64_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -10309,6 +11125,9 @@ fn test_x86_avx512f_mm_maskz_expand_epi64_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i64_array(_mm_maskz_expand_epi64(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_array_equality(&result, &[8589934593, 0]).map_err(|e| format!("{e} | call: _mm_maskz_expand_epi64(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
@@ -10335,6 +11154,9 @@ pub(super) fn test_x86_avx512f_mm_maskz_expand_epi64() -> Result<(), String> {
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_maskz_expand_epi64_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -10365,6 +11187,9 @@ fn test_x86_avx512f_mm_maskz_expand_epi64_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i64_array(_mm_maskz_expand_epi64(create__mmask8_from(0b01010101), create__m128i_from_i64_array([100, 200])));
         check_array_equality(&result, &[100, 0]).map_err(|e| format!("{e} | call: _mm_maskz_expand_epi64(create__mmask8_from(0b01010101), create__m128i_from_i64_array([100, 200]))"))?;
@@ -10391,6 +11216,9 @@ pub(super) fn test_x86_avx512f_mm_maskz_expand_epi64_normal3() -> Result<(), Str
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_maskz_expand_epi64_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -10421,6 +11249,9 @@ fn test_x86_avx512f_mm_maskz_expand_epi64_boundary_max_impl() -> Result<(), Stri
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i64_array(_mm_maskz_expand_epi64(create__mmask8_from(0b01010101), create__m128i_from_i64_array([i64::MAX, i64::MAX])));
         check_array_equality(&result, &[9223372036854775807, 0]).map_err(|e| format!("{e} | call: _mm_maskz_expand_epi64(create__mmask8_from(0b01010101), create__m128i_from_i64_array([i64::MAX, i64::MAX]))"))?;
@@ -10447,6 +11278,9 @@ pub(super) fn test_x86_avx512f_mm_maskz_expand_epi64_boundary_max() -> Result<()
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_maskz_expand_epi64_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -10477,6 +11311,9 @@ fn test_x86_avx512f_mm_maskz_expand_epi64_boundary_allones_impl() -> Result<(), 
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i64_array(_mm_maskz_expand_epi64(create__mmask8_from(0b01010101), create__m128i_from_i64_array([-1, -1])));
         check_array_equality(&result, &[-1, 0]).map_err(|e| format!("{e} | call: _mm_maskz_expand_epi64(create__mmask8_from(0b01010101), create__m128i_from_i64_array([-1, -1]))"))?;
@@ -10503,6 +11340,9 @@ pub(super) fn test_x86_avx512f_mm_maskz_expand_epi64_boundary_allones() -> Resul
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_maskz_expand_epi64_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -11037,6 +11877,9 @@ fn test_x86_avx512f_mm256_mask_expand_ps_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_mask_expand_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__mmask8_from(0b01010101), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
         check_float_array_equality(&result, &[9.0, 2.0, 10.0, 4.0, 11.0, 6.0, 12.0, 8.0]).map_err(|e| format!("{e} | call: _mm256_mask_expand_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__mmask8_from(0b01010101), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]))"))?;
@@ -11063,6 +11906,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_ps() -> Result<(), String> {
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_expand_ps_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -11093,6 +11939,9 @@ fn test_x86_avx512f_mm256_mask_expand_ps_normal3_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_mask_expand_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__mmask8_from(0b01010101), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32])));
         check_float_array_equality(&result, &[110.0, 200.0, 210.0, 400.0, 310.0, 600.0, 410.0, 800.0]).map_err(|e| format!("{e} | call: _mm256_mask_expand_ps(create__m256_from([100.0f32, 200.0f32, 300.0f32, 400.0f32, 500.0f32, 600.0f32, 700.0f32, 800.0f32]), create__mmask8_from(0b01010101), create__m256_from([110.0f32, 210.0f32, 310.0f32, 410.0f32, 510.0f32, 610.0f32, 710.0f32, 810.0f32]))"))?;
@@ -11119,6 +11968,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_ps_normal3() -> Result<(), Stri
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_expand_ps_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -11149,6 +12001,9 @@ fn test_x86_avx512f_mm256_mask_expand_ps_boundary_max_impl() -> Result<(), Strin
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_mask_expand_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__mmask8_from(0b01010101), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
         check_float_array_equality(&result, &[3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38, 3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_mask_expand_ps(create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]), create__mmask8_from(0b01010101), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
@@ -11175,6 +12030,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_ps_boundary_max() -> Result<(),
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_expand_ps_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -11205,6 +12063,9 @@ fn test_x86_avx512f_mm256_mask_expand_ps_boundary_allones_impl() -> Result<(), S
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_mask_expand_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__mmask8_from(0b01010101), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN])));
         check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]).map_err(|e| format!("{e} | call: _mm256_mask_expand_ps(create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]), create__mmask8_from(0b01010101), create__m256_from([f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN, f32::NAN]))"))?;
@@ -11231,6 +12092,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_ps_boundary_allones() -> Result
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_expand_ps_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -11261,6 +12125,9 @@ fn test_x86_avx512f_mm256_mask_expand_ps_asym_min_max_impl() -> Result<(), Strin
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_mask_expand_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__mmask8_from(0b01010101), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX])));
         check_float_array_equality(&result, &[3.4028235e38, -3.4028235e38, 3.4028235e38, -3.4028235e38, 3.4028235e38, -3.4028235e38, 3.4028235e38, -3.4028235e38]).map_err(|e| format!("{e} | call: _mm256_mask_expand_ps(create__m256_from([f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN, f32::MIN]), create__mmask8_from(0b01010101), create__m256_from([f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX, f32::MAX]))"))?;
@@ -11287,6 +12154,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_expand_ps_asym_min_max() -> Result<(),
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_expand_ps_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {

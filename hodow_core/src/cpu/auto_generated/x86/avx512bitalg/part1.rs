@@ -573,6 +573,9 @@ fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_impl() -> Result<(), String
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm256_bitshuffle_epi64_mask(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]));
         check_int_equality(result as i32, -286331154).map_err(|e| format!("{e} | call: _mm256_bitshuffle_epi64_mask(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]))"))?;
@@ -599,6 +602,9 @@ pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask() -> Result<(), 
 #[target_feature(enable = "avx512bitalg")]
 fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -629,6 +635,9 @@ fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_normal3_impl() -> Result<()
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm256_bitshuffle_epi64_mask(create__m256i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800]), create__m256i_from_i32_array([110, 210, 310, 410, 510, 610, 710, 810]));
         check_int_equality(result as i32, 572522496).map_err(|e| format!("{e} | call: _mm256_bitshuffle_epi64_mask(create__m256i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800]), create__m256i_from_i32_array([110, 210, 310, 410, 510, 610, 710, 810]))"))?;
@@ -655,6 +664,9 @@ pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_normal3() -> Res
 #[target_feature(enable = "avx512bitalg")]
 fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -685,6 +697,9 @@ fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_max_impl() -> Resu
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm256_bitshuffle_epi64_mask(create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]));
         check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_bitshuffle_epi64_mask(create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
@@ -711,6 +726,9 @@ pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_max() -
 #[target_feature(enable = "avx512bitalg")]
 fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -741,6 +759,9 @@ fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_allones_impl() -> 
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm256_bitshuffle_epi64_mask(create__m256i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__m256i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1]));
         check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm256_bitshuffle_epi64_mask(create__m256i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__m256i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1]))"))?;
@@ -767,6 +788,9 @@ pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_allones
 #[target_feature(enable = "avx512bitalg")]
 fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -797,6 +821,9 @@ fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_asym_min_max_impl() -> Resu
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm256_bitshuffle_epi64_mask(create__m256i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]));
         check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm256_bitshuffle_epi64_mask(create__m256i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
@@ -823,6 +850,9 @@ pub(super) fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_asym_min_max() -
 #[target_feature(enable = "avx512bitalg")]
 fn test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -853,6 +883,9 @@ fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_impl() -> Result<(), S
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm256_mask_bitshuffle_epi64_mask(create__mmask32_from(0x55555555u32), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]));
         check_int_equality(result as i32, 1145324612).map_err(|e| format!("{e} | call: _mm256_mask_bitshuffle_epi64_mask(create__mmask32_from(0x55555555u32), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]))"))?;
@@ -879,6 +912,9 @@ pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask() -> Result
 #[target_feature(enable = "avx512bitalg")]
 fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -909,6 +945,9 @@ fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_normal3_impl() -> Resu
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm256_mask_bitshuffle_epi64_mask(create__mmask32_from(0x55555555u32), create__m256i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800]), create__m256i_from_i32_array([110, 210, 310, 410, 510, 610, 710, 810]));
         check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_mask_bitshuffle_epi64_mask(create__mmask32_from(0x55555555u32), create__m256i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800]), create__m256i_from_i32_array([110, 210, 310, 410, 510, 610, 710, 810]))"))?;
@@ -935,6 +974,9 @@ pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_normal3() -
 #[target_feature(enable = "avx512bitalg")]
 fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -965,6 +1007,9 @@ fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_max_impl() ->
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm256_mask_bitshuffle_epi64_mask(create__mmask32_from(0x55555555u32), create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]));
         check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm256_mask_bitshuffle_epi64_mask(create__mmask32_from(0x55555555u32), create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
@@ -991,6 +1036,9 @@ pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_ma
 #[target_feature(enable = "avx512bitalg")]
 fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -1021,6 +1069,9 @@ fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_allones_impl(
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm256_mask_bitshuffle_epi64_mask(create__mmask32_from(0x55555555u32), create__m256i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__m256i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1]));
         check_int_equality(result as i32, 1431655765).map_err(|e| format!("{e} | call: _mm256_mask_bitshuffle_epi64_mask(create__mmask32_from(0x55555555u32), create__m256i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1]), create__m256i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1]))"))?;
@@ -1047,6 +1098,9 @@ pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_al
 #[target_feature(enable = "avx512bitalg")]
 fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -1077,6 +1131,9 @@ fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_asym_min_max_impl() ->
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm256_mask_bitshuffle_epi64_mask(create__mmask32_from(0x55555555u32), create__m256i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]));
         check_int_equality(result as i32, 1431655765).map_err(|e| format!("{e} | call: _mm256_mask_bitshuffle_epi64_mask(create__mmask32_from(0x55555555u32), create__m256i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m256i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
@@ -1103,6 +1160,9 @@ pub(super) fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_asym_min_ma
 #[target_feature(enable = "avx512bitalg")]
 fn test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -1133,6 +1193,9 @@ fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_bitshuffle_epi64_mask(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]));
         check_int_equality(result as i32, 61166).map_err(|e| format!("{e} | call: _mm_bitshuffle_epi64_mask(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
@@ -1159,6 +1222,9 @@ pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask() -> Result<(), Str
 #[target_feature(enable = "avx512bitalg")]
 fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -1189,6 +1255,9 @@ fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_normal3_impl() -> Result<(), S
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_bitshuffle_epi64_mask(create__m128i_from_i32_array([100, 200, 300, 400]), create__m128i_from_i32_array([110, 210, 310, 410]));
         check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_bitshuffle_epi64_mask(create__m128i_from_i32_array([100, 200, 300, 400]), create__m128i_from_i32_array([110, 210, 310, 410]))"))?;
@@ -1215,6 +1284,9 @@ pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_normal3() -> Result
 #[target_feature(enable = "avx512bitalg")]
 fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -1245,6 +1317,9 @@ fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_max_impl() -> Result<
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_bitshuffle_epi64_mask(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]));
         check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_bitshuffle_epi64_mask(create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
@@ -1271,6 +1346,9 @@ pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_max() -> R
 #[target_feature(enable = "avx512bitalg")]
 fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -1301,6 +1379,9 @@ fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_allones_impl() -> Res
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_bitshuffle_epi64_mask(create__m128i_from_i32_array([-1, -1, -1, -1]), create__m128i_from_i32_array([-1, -1, -1, -1]));
         check_int_equality(result as i32, 65535).map_err(|e| format!("{e} | call: _mm_bitshuffle_epi64_mask(create__m128i_from_i32_array([-1, -1, -1, -1]), create__m128i_from_i32_array([-1, -1, -1, -1]))"))?;
@@ -1327,6 +1408,9 @@ pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_allones() 
 #[target_feature(enable = "avx512bitalg")]
 fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -1357,6 +1441,9 @@ fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_asym_min_max_impl() -> Result<
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_bitshuffle_epi64_mask(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]));
         check_int_equality(result as i32, 65535).map_err(|e| format!("{e} | call: _mm_bitshuffle_epi64_mask(create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
@@ -1383,6 +1470,9 @@ pub(super) fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_asym_min_max() -> R
 #[target_feature(enable = "avx512bitalg")]
 fn test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -1413,6 +1503,9 @@ fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_impl() -> Result<(), Stri
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_mask_bitshuffle_epi64_mask(create__mmask16_from(0b0101010101010101), create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]));
         check_int_equality(result as i32, 17476).map_err(|e| format!("{e} | call: _mm_mask_bitshuffle_epi64_mask(create__mmask16_from(0b0101010101010101), create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]))"))?;
@@ -1439,6 +1532,9 @@ pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask() -> Result<()
 #[target_feature(enable = "avx512bitalg")]
 fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -1469,6 +1565,9 @@ fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_normal3_impl() -> Result<
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_mask_bitshuffle_epi64_mask(create__mmask16_from(0b0101010101010101), create__m128i_from_i32_array([100, 200, 300, 400]), create__m128i_from_i32_array([110, 210, 310, 410]));
         check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_mask_bitshuffle_epi64_mask(create__mmask16_from(0b0101010101010101), create__m128i_from_i32_array([100, 200, 300, 400]), create__m128i_from_i32_array([110, 210, 310, 410]))"))?;
@@ -1495,6 +1594,9 @@ pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_normal3() -> R
 #[target_feature(enable = "avx512bitalg")]
 fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -1525,6 +1627,9 @@ fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_max_impl() -> Re
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_mask_bitshuffle_epi64_mask(create__mmask16_from(0b0101010101010101), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]));
         check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_mask_bitshuffle_epi64_mask(create__mmask16_from(0b0101010101010101), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
@@ -1551,6 +1656,9 @@ pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_max()
 #[target_feature(enable = "avx512bitalg")]
 fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -1581,6 +1689,9 @@ fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_allones_impl() -
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_mask_bitshuffle_epi64_mask(create__mmask16_from(0b0101010101010101), create__m128i_from_i32_array([-1, -1, -1, -1]), create__m128i_from_i32_array([-1, -1, -1, -1]));
         check_int_equality(result as i32, 21845).map_err(|e| format!("{e} | call: _mm_mask_bitshuffle_epi64_mask(create__mmask16_from(0b0101010101010101), create__m128i_from_i32_array([-1, -1, -1, -1]), create__m128i_from_i32_array([-1, -1, -1, -1]))"))?;
@@ -1607,6 +1718,9 @@ pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_allon
 #[target_feature(enable = "avx512bitalg")]
 fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -1637,6 +1751,9 @@ fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_asym_min_max_impl() -> Re
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_mask_bitshuffle_epi64_mask(create__mmask16_from(0b0101010101010101), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]));
         check_int_equality(result as i32, 21845).map_err(|e| format!("{e} | call: _mm_mask_bitshuffle_epi64_mask(create__mmask16_from(0b0101010101010101), create__m128i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN]), create__m128i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
@@ -1663,6 +1780,9 @@ pub(super) fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_asym_min_max()
 #[target_feature(enable = "avx512bitalg")]
 fn test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_asym_max_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {

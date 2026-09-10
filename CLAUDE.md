@@ -200,6 +200,67 @@ name back from a real test name for this reason - update both if the naming sche
   additionally requires a CPUID leaf 0x19 permission check before it's safe to set) to `0u32` via
   `HARDWARE_CONTROL_OVERRIDES` - the one encoding needing no hardware-support check at all. Both
   mechanisms are per-(function, param name), independent of the vector-typed-only list above.
+  `_xgetbv`'s `xcr_no: u32` is the second entry, found from a user report of `just cpu`
+  segfaulting on an AMD GX-420GI (Jaguar/Puma): only `XCR0` (index `0`) is architecturally
+  defined - stdarch's own test hardcodes `_XCR_XFEATURE_ENABLED_MASK = 0` and never anything
+  else - and `XGETBV` with any other index raises a real #GP, which Linux delivers as
+  `SIGSEGV`. The generic sequential-counter default happened to assign `1u32`, which this
+  project's Ryzen 9 7900 dev machine did not fault on (returning a plausible-looking
+  value, `743`, and masking the bug in the captured expected value) but the AMD chip did -
+  the #GP is the spec-compliant behavior here, the Ryzen's silent acceptance is the outlier.
+  Fixed the same way as `_mm_loadiwkey`: `("_xgetbv", "xcr_no"): "0u32"` in
+  `HARDWARE_CONTROL_OVERRIDES`, `_xgetbv` added to `NO_FUZZ_FUNCTIONS`.
+- **`HARDWARE_IDENTITY_FUNCTIONS`** (`generate_tests.py`) - for a return value that is itself a
+  machine-identity fact rather than a function of the call's fixed arguments, so no single
+  captured constant is ever valid on more than one machine. `__cpuid`/`__cpuid_count`/
+  `__get_cpuid_max` already get this for free (their `CpuidResult`/`u32` shapes have no
+  `UNPACK_INFO`/`INT_RETURNS` entry, so `emit_check` falls through to "compile but don't
+  check"). `_xgetbv(0)`'s return type is a plain `u64` though (which IS in `INT_RETURNS`), so
+  fixing the `xcr_no` bug above just exposed a second, different bug in the same test:
+  `check_int_equality` against the one value captured on this project's Ryzen 9 7900 (`743` -
+  that CPU's XCR0, AVX-512 + PKU state bits included) then failed with `Got 7, expected 743`
+  on the AMD GX-420GI, whose OS/hardware enables a different, smaller XSAVE state subset
+  (`7` = x87+SSE+AVX only) - both values are the *correct* answer on their own machine, so
+  asserting either one against the other is a false positive, not a real bug. `emit_check`
+  now takes a `skip_check` flag (set from `name in HARDWARE_IDENTITY_FUNCTIONS`) that forces
+  the same "call it, don't check the result" arm `CpuidResult` gets.
+- **Compound `#[target_feature]` functions need a runtime gate beyond the group's own base
+  feature.** `extract_signatures.py`'s `find_target_features` already captures a function's
+  *full* feature set into `signatures.txt`'s `%a+b` marker and `parse_signatures` into
+  `sig["features"]` - `_xsaveopt`/`_xsavec` (`xsave.rs`, `%xsave+xsaveopt`/`%xsave+xsavec`)
+  need XSAVE **and** their own extra CPUID bit - but until this was found, nothing ever read
+  that list back: the pre-group check `just cpu`'s "Checking x86::XSAVE support" line prints
+  once per group and gates entry to *every* function in it on `is_x86_feature_detected!` of
+  the group's own single base feature alone (`"xsave"`), and no function-level check narrowed
+  it further. An XSAVE-only CPU (the same AMD GX-420GI that surfaced the `_xgetbv` bug above)
+  correctly passes that group gate, then genuinely lacks XSAVEC and `#UD`s -> `SIGILL` on
+  `test_x86_xsave_xsavec`, immediately after passing `test_x86_xsave_xsave`. Fixed generically,
+  not just for xsave: `extra_feature_guard_lines(arch, ext, sig)` emits
+  `if !(<detect_fn for every feature beyond the group's own>) { return Ok(()); }` as the first
+  line of every generated test body (right after the Miri guard), reusing
+  `get_feature_detect_fn` per extra feature rather than a raw `is_x86_feature_detected!`
+  format string - `kl`/`widekl` need `keylocker_usable()` instead of the plain macro (see the
+  next bullet down), and naively reformatting would have silently reintroduced that exact bug
+  for any function whose extra feature happens to be one of those two (`kl`'s
+  `*wide*kl` intrinsics all need it, confirmed in the regenerated diff). Scoped to x86/x86_64
+  only, where every captured feature string is known-valid for `is_x86_feature_detected!`
+  (same table `#[target_feature]` itself uses) - regenerating turned up ~40 affected files
+  beyond xsave.rs, all genuinely independent CPUID-bit combinations, not just theoretical:
+  `_rdseed{16,32,64}_step` (`rdrand.rs`, shared file with RDRAND, needs `rdseed` specifically
+  - RDRAND without RDSEED is a completely ordinary Ivy Bridge/Haswell-class CPU, not an edge
+  case), every AVX-512 subset function additionally gated on `avx512vl` (`avx512f+avx512vl`
+  and friends, ~480+ functions - VL is an independent CPUID bit even though every currently-
+  shipping consumer/server part happens to bundle it with F/BW/DQ/CD), and GFNI/VAES's
+  AVX-512-width intrinsics (`gfni+avx512f`, `vaes+avx512f`, `gfni+avx512bw+avx512vl`) - all
+  plausible on a modern hybrid client CPU with GFNI/VAES present but AVX-512 fused off
+  entirely. **Not yet covered: aarch64/SVE compound cases** (`sve+f64mm`, `sve2+sve2-aes`,
+  ...) - some of their extra feature strings are not confirmed-valid
+  `is_aarch64_feature_detected!` strings (see the NEON section below, where that was already
+  false for several sub-features), so the same blind treatment there risks a compile error
+  instead of a runtime skip; needs verifying each string first, then the same treatment.
+  Verified on this project's Ryzen 9 7900 (has every extra feature above): full `cpu` suite
+  unchanged at 16841 run / 0 errors before and after, confirming the new guards are inert
+  wherever the extra feature actually is present and only bite where it legitimately isn't.
 - **Key Locker (`kl`) is gated on `common::x86::keylocker_usable()`, not `is_x86_feature_detected!`.**
   That macro expands to `cfg!(target_feature = "kl") || <cpuid>`, so any build that enables `+kl`
   crate-wide (`-C target-cpu=native` did, before the portable-binary switch below) reports Key Locker
@@ -230,6 +291,20 @@ name back from a real test name for this reason - update both if the naming sche
   build (the one the box64/FEX-under-emulator workflow above uses) can show these four functions
   as a spurious mismatch that has nothing to do with the emulator being tested - it reproduces
   identically on real native hardware under that same release profile.
+  **Fixed at the root (2026-09-10), not just documented**: this applies equally to the
+  *register*-form siblings `_mm_extract_si64`/`_mm_insert_si64` (same EXTRQ/INSERTQ
+  instruction family, same "lower 64 bits" doc language, confirmed by reading upstream's own
+  `#[cfg(test)]` for them - it sidesteps the ambiguity by constructing every input with its
+  own upper 64 bits already zero rather than asserting anything about what the operation
+  itself leaves there). All four functions repeatably "failed" a `just cpu-remote` run
+  against a real AMD GX-420GI on exactly their upper two lanes (lanes 2-3 of the generic
+  4-lane i32 view) while the lower two matched the Ryzen 9 7900's captured value every time -
+  precisely the lower/upper split the doc promises. `PARTIAL_CHECK_LANES: dict[str, int]` in
+  `generate_tests.py` (`{"_mm_extract_si64": 2, "_mm_extracti_si64": 2, "_mm_insert_si64": 2,
+  "_mm_inserti_si64": 2}`) now makes `emit_check` compare only the leading N lanes (`&result[..N]`
+  vs `&expected[..N]`) for these four - the defined lower 64 bits stay checked exactly as
+  before, the undefined upper 64 bits are no longer asserted at all, so this can never produce
+  a false-positive "failure" on a different build profile or a different machine again.
 - Workflow for re-enabling an excluded function: remove it from the exclusion list -> regenerate -> capture
   expected values on real hardware -> regenerate -> run. If it segfaults, it belongs back in
   `excluded_functions.txt`.

@@ -1973,6 +1973,9 @@ fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi16_impl() -> Result<(), String
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -1989,6 +1992,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi16() -> Result<(), 
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2009,6 +2015,9 @@ fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi16_normal3_impl() -> Result<()
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -2025,6 +2034,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi16_normal3() -> Res
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2045,6 +2057,9 @@ fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi16_boundary_max_impl() -> Resu
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -2061,6 +2076,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi16_boundary_max() -
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2081,6 +2099,9 @@ fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi16_boundary_allones_impl() -> 
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -2097,6 +2118,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi16_boundary_allones
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2117,6 +2141,9 @@ fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi16_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -2133,6 +2160,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi16() -> Result<(), Str
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2153,6 +2183,9 @@ fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi16_normal3_impl() -> Result<(), S
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -2169,6 +2202,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi16_normal3() -> Result
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2189,6 +2225,9 @@ fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi16_boundary_max_impl() -> Result<
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -2205,6 +2244,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi16_boundary_max() -> R
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2225,6 +2267,9 @@ fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi16_boundary_allones_impl() -> Res
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -2241,6 +2286,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi16_boundary_allones() 
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2405,6 +2453,9 @@ fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi16_impl() -> Result<(), Strin
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -2421,6 +2472,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi16() -> Result<(),
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2441,6 +2495,9 @@ fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi16_normal3_impl() -> Result<(
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -2457,6 +2514,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi16_normal3() -> Re
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2477,6 +2537,9 @@ fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi16_boundary_max_impl() -> Res
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -2493,6 +2556,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi16_boundary_max() 
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2513,6 +2579,9 @@ fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi16_boundary_allones_impl() ->
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -2529,6 +2598,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi16_boundary_allone
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2549,6 +2621,9 @@ fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi16_impl() -> Result<(), String> 
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -2565,6 +2640,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi16() -> Result<(), St
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2585,6 +2663,9 @@ fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi16_normal3_impl() -> Result<(), 
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -2601,6 +2682,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi16_normal3() -> Resul
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2621,6 +2705,9 @@ fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi16_boundary_max_impl() -> Result
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -2637,6 +2724,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi16_boundary_max() -> 
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2657,6 +2747,9 @@ fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi16_boundary_allones_impl() -> Re
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -2673,6 +2766,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi16_boundary_allones()
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2837,6 +2933,9 @@ fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi16_impl() -> Result<(), Stri
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -2853,6 +2952,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi16() -> Result<()
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2873,6 +2975,9 @@ fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi16_normal3_impl() -> Result<
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -2889,6 +2994,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi16_normal3() -> R
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2909,6 +3017,9 @@ fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi16_boundary_max_impl() -> Re
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -2925,6 +3036,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi16_boundary_max()
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2945,6 +3059,9 @@ fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi16_boundary_allones_impl() -
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -2961,6 +3078,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi16_boundary_allon
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -2981,6 +3101,9 @@ fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi16_impl() -> Result<(), String>
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -2997,6 +3120,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi16() -> Result<(), S
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3017,6 +3143,9 @@ fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi16_normal3_impl() -> Result<(),
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -3033,6 +3162,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi16_normal3() -> Resu
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3053,6 +3185,9 @@ fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi16_boundary_max_impl() -> Resul
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -3069,6 +3204,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi16_boundary_max() ->
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3089,6 +3227,9 @@ fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi16_boundary_allones_impl() -> R
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -3105,6 +3246,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi16_boundary_allones(
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3269,6 +3413,9 @@ fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi8_impl() -> Result<(), String>
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -3285,6 +3432,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi8() -> Result<(), S
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi8_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3305,6 +3455,9 @@ fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi8_normal3_impl() -> Result<(),
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -3321,6 +3474,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi8_normal3() -> Resu
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi8_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3341,6 +3497,9 @@ fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi8_boundary_max_impl() -> Resul
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -3357,6 +3516,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi8_boundary_max() ->
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi8_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3377,6 +3539,9 @@ fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi8_boundary_allones_impl() -> R
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -3393,6 +3558,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi8_boundary_allones(
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtepi32_storeu_epi8_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3413,6 +3581,9 @@ fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi8_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -3429,6 +3600,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi8() -> Result<(), Stri
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi8_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3449,6 +3623,9 @@ fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi8_normal3_impl() -> Result<(), St
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -3465,6 +3642,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi8_normal3() -> Result<
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi8_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3485,6 +3665,9 @@ fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi8_boundary_max_impl() -> Result<(
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -3501,6 +3684,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi8_boundary_max() -> Re
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi8_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3521,6 +3707,9 @@ fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi8_boundary_allones_impl() -> Resu
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -3537,6 +3726,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi8_boundary_allones() -
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtepi32_storeu_epi8_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3701,6 +3893,9 @@ fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi8_impl() -> Result<(), String
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -3717,6 +3912,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi8() -> Result<(), 
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi8_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3737,6 +3935,9 @@ fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi8_normal3_impl() -> Result<()
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -3753,6 +3954,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi8_normal3() -> Res
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi8_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3773,6 +3977,9 @@ fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi8_boundary_max_impl() -> Resu
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -3789,6 +3996,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi8_boundary_max() -
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi8_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3809,6 +4019,9 @@ fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi8_boundary_allones_impl() -> 
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -3825,6 +4038,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi8_boundary_allones
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtsepi32_storeu_epi8_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3845,6 +4061,9 @@ fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi8_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -3861,6 +4080,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi8() -> Result<(), Str
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi8_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3881,6 +4103,9 @@ fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi8_normal3_impl() -> Result<(), S
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -3897,6 +4122,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi8_normal3() -> Result
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi8_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3917,6 +4145,9 @@ fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi8_boundary_max_impl() -> Result<
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -3933,6 +4164,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi8_boundary_max() -> R
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi8_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -3953,6 +4187,9 @@ fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi8_boundary_allones_impl() -> Res
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -3969,6 +4206,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi8_boundary_allones() 
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtsepi32_storeu_epi8_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -4133,6 +4373,9 @@ fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi8_impl() -> Result<(), Strin
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -4149,6 +4392,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi8() -> Result<(),
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi8_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -4169,6 +4415,9 @@ fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi8_normal3_impl() -> Result<(
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -4185,6 +4434,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi8_normal3() -> Re
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi8_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -4205,6 +4457,9 @@ fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi8_boundary_max_impl() -> Res
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -4221,6 +4476,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi8_boundary_max() 
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi8_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -4241,6 +4499,9 @@ fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi8_boundary_allones_impl() ->
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -4257,6 +4518,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi8_boundary_allone
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtusepi32_storeu_epi8_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -4277,6 +4541,9 @@ fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi8_impl() -> Result<(), String> 
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -4293,6 +4560,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi8() -> Result<(), St
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi8_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -4313,6 +4583,9 @@ fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi8_normal3_impl() -> Result<(), 
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -4329,6 +4602,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi8_normal3() -> Resul
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi8_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -4349,6 +4625,9 @@ fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi8_boundary_max_impl() -> Result
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -4365,6 +4644,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi8_boundary_max() -> 
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi8_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -4385,6 +4667,9 @@ fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi8_boundary_allones_impl() -> Re
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -4401,6 +4686,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi8_boundary_allones()
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtusepi32_storeu_epi8_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -4565,6 +4853,9 @@ fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi16_impl() -> Result<(), String
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -4581,6 +4872,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi16() -> Result<(), 
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -4601,6 +4895,9 @@ fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi16_normal3_impl() -> Result<()
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -4617,6 +4914,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi16_normal3() -> Res
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -4637,6 +4937,9 @@ fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi16_boundary_max_impl() -> Resu
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -4653,6 +4956,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi16_boundary_max() -
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -4673,6 +4979,9 @@ fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi16_boundary_allones_impl() -> 
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -4689,6 +4998,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi16_boundary_allones
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -4709,6 +5021,9 @@ fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi16_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -4725,6 +5040,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi16() -> Result<(), Str
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -4745,6 +5063,9 @@ fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi16_normal3_impl() -> Result<(), S
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -4761,6 +5082,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi16_normal3() -> Result
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -4781,6 +5105,9 @@ fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi16_boundary_max_impl() -> Result<
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -4797,6 +5124,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi16_boundary_max() -> R
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -4817,6 +5147,9 @@ fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi16_boundary_allones_impl() -> Res
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -4833,6 +5166,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi16_boundary_allones() 
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -4997,6 +5333,9 @@ fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi16_impl() -> Result<(), Strin
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -5013,6 +5352,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi16() -> Result<(),
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5033,6 +5375,9 @@ fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi16_normal3_impl() -> Result<(
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -5049,6 +5394,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi16_normal3() -> Re
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5069,6 +5417,9 @@ fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi16_boundary_max_impl() -> Res
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -5085,6 +5436,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi16_boundary_max() 
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5105,6 +5459,9 @@ fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi16_boundary_allones_impl() ->
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -5121,6 +5478,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi16_boundary_allone
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5141,6 +5501,9 @@ fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi16_impl() -> Result<(), String> 
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -5157,6 +5520,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi16() -> Result<(), St
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5177,6 +5543,9 @@ fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi16_normal3_impl() -> Result<(), 
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -5193,6 +5562,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi16_normal3() -> Resul
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5213,6 +5585,9 @@ fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi16_boundary_max_impl() -> Result
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -5229,6 +5604,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi16_boundary_max() -> 
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5249,6 +5627,9 @@ fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi16_boundary_allones_impl() -> Re
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -5265,6 +5646,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi16_boundary_allones()
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5429,6 +5813,9 @@ fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi16_impl() -> Result<(), Stri
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -5445,6 +5832,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi16() -> Result<()
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5465,6 +5855,9 @@ fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi16_normal3_impl() -> Result<
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -5481,6 +5874,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi16_normal3() -> R
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5501,6 +5897,9 @@ fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi16_boundary_max_impl() -> Re
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -5517,6 +5916,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi16_boundary_max()
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5537,6 +5939,9 @@ fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi16_boundary_allones_impl() -
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -5553,6 +5958,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi16_boundary_allon
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5573,6 +5981,9 @@ fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi16_impl() -> Result<(), String>
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -5589,6 +6000,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi16() -> Result<(), S
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi16_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5609,6 +6023,9 @@ fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi16_normal3_impl() -> Result<(),
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -5625,6 +6042,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi16_normal3() -> Resu
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi16_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5645,6 +6065,9 @@ fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi16_boundary_max_impl() -> Resul
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -5661,6 +6084,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi16_boundary_max() ->
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi16_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5681,6 +6107,9 @@ fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi16_boundary_allones_impl() -> R
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -5697,6 +6126,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi16_boundary_allones(
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi16_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5861,6 +6293,9 @@ fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi8_impl() -> Result<(), String>
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -5877,6 +6312,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi8() -> Result<(), S
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi8_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5897,6 +6335,9 @@ fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi8_normal3_impl() -> Result<(),
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -5913,6 +6354,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi8_normal3() -> Resu
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi8_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5933,6 +6377,9 @@ fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi8_boundary_max_impl() -> Resul
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -5949,6 +6396,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi8_boundary_max() ->
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi8_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -5969,6 +6419,9 @@ fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi8_boundary_allones_impl() -> R
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -5985,6 +6438,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi8_boundary_allones(
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi8_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6005,6 +6461,9 @@ fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi8_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -6021,6 +6480,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi8() -> Result<(), Stri
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi8_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6041,6 +6503,9 @@ fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi8_normal3_impl() -> Result<(), St
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -6057,6 +6522,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi8_normal3() -> Result<
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi8_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6077,6 +6545,9 @@ fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi8_boundary_max_impl() -> Result<(
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -6093,6 +6564,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi8_boundary_max() -> Re
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi8_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6113,6 +6587,9 @@ fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi8_boundary_allones_impl() -> Resu
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -6129,6 +6606,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi8_boundary_allones() -
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi8_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6293,6 +6773,9 @@ fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi8_impl() -> Result<(), String
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -6309,6 +6792,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi8() -> Result<(), 
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi8_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6329,6 +6815,9 @@ fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi8_normal3_impl() -> Result<()
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -6345,6 +6834,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi8_normal3() -> Res
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi8_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6365,6 +6857,9 @@ fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi8_boundary_max_impl() -> Resu
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -6381,6 +6876,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi8_boundary_max() -
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi8_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6401,6 +6899,9 @@ fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi8_boundary_allones_impl() -> 
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -6417,6 +6918,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi8_boundary_allones
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi8_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6437,6 +6941,9 @@ fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi8_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -6453,6 +6960,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi8() -> Result<(), Str
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi8_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6473,6 +6983,9 @@ fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi8_normal3_impl() -> Result<(), S
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -6489,6 +7002,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi8_normal3() -> Result
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi8_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6509,6 +7025,9 @@ fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi8_boundary_max_impl() -> Result<
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -6525,6 +7044,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi8_boundary_max() -> R
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi8_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6545,6 +7067,9 @@ fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi8_boundary_allones_impl() -> Res
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -6561,6 +7086,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi8_boundary_allones() 
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtsepi64_storeu_epi8_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6725,6 +7253,9 @@ fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi8_impl() -> Result<(), Strin
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -6741,6 +7272,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi8() -> Result<(),
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi8_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6761,6 +7295,9 @@ fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi8_normal3_impl() -> Result<(
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -6777,6 +7314,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi8_normal3() -> Re
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi8_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6797,6 +7337,9 @@ fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi8_boundary_max_impl() -> Res
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -6813,6 +7356,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi8_boundary_max() 
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi8_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6833,6 +7379,9 @@ fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi8_boundary_allones_impl() ->
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -6849,6 +7398,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi8_boundary_allone
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtusepi64_storeu_epi8_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6869,6 +7421,9 @@ fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi8_impl() -> Result<(), String> 
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -6885,6 +7440,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi8() -> Result<(), St
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi8_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6905,6 +7463,9 @@ fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi8_normal3_impl() -> Result<(), 
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -6921,6 +7482,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi8_normal3() -> Resul
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi8_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6941,6 +7505,9 @@ fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi8_boundary_max_impl() -> Result
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -6957,6 +7524,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi8_boundary_max() -> 
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi8_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -6977,6 +7547,9 @@ fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi8_boundary_allones_impl() -> Re
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -6993,6 +7566,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi8_boundary_allones()
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtusepi64_storeu_epi8_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -7157,6 +7733,9 @@ fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi32_impl() -> Result<(), String
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -7173,6 +7752,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi32() -> Result<(), 
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -7193,6 +7775,9 @@ fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi32_normal3_impl() -> Result<()
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -7209,6 +7794,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi32_normal3() -> Res
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -7229,6 +7817,9 @@ fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi32_boundary_max_impl() -> Resu
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -7245,6 +7836,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi32_boundary_max() -
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -7265,6 +7859,9 @@ fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi32_boundary_allones_impl() -> 
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -7281,6 +7878,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi32_boundary_allones
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtepi64_storeu_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -7301,6 +7901,9 @@ fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi32_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -7317,6 +7920,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi32() -> Result<(), Str
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -7337,6 +7943,9 @@ fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi32_normal3_impl() -> Result<(), S
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -7353,6 +7962,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi32_normal3() -> Result
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -7373,6 +7985,9 @@ fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi32_boundary_max_impl() -> Result<
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -7389,6 +8004,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi32_boundary_max() -> R
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -7409,6 +8027,9 @@ fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi32_boundary_allones_impl() -> Res
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -7425,6 +8046,9 @@ pub(super) fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi32_boundary_allones() 
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm_mask_cvtepi64_storeu_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -7589,6 +8213,9 @@ fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi32_impl() -> Result<(), Strin
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -7605,6 +8232,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi32() -> Result<(),
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi32_normal2_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -7625,6 +8255,9 @@ fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi32_normal3_impl() -> Result<(
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -7641,6 +8274,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi32_normal3() -> Re
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi32_boundary_min_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -7661,6 +8297,9 @@ fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi32_boundary_max_impl() -> Res
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -7677,6 +8316,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi32_boundary_max() 
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi32_boundary_zero_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
@@ -7697,6 +8339,9 @@ fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi32_boundary_allones_impl() ->
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -7713,6 +8358,9 @@ pub(super) fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi32_boundary_allone
 #[target_feature(enable = "avx512f")]
 fn test_x86_avx512f_mm256_mask_cvtsepi64_storeu_epi32_boundary_mixed_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("avx512vl")) {
             return Ok(());
         }
     unsafe {
