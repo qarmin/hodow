@@ -27,6 +27,9 @@ fn test_x86_64_rdrand_rdseed64_step_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("rdseed")) {
+            return Ok(());
+        }
     unsafe {
         let mut ref_val = 1u64;
         let result = _rdseed64_step(&mut ref_val);

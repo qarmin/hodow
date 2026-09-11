@@ -28,6 +28,7 @@ unsafe impl QueryValue for u8 {}
 unsafe impl QueryValue for i32 {}
 unsafe impl QueryValue for f32 {}
 unsafe impl QueryValue for u32 {}
+unsafe impl QueryValue for i64 {}
 unsafe impl<T: QueryValue, const N: usize> QueryValue for [T; N] {}
 // SAFETY: `glGetVertexAttribPointerv`'s output. The pointer is only ever compared, never
 // dereferenced, so a guard byte pattern in it is as valid as any other address.

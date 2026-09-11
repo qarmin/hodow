@@ -77,6 +77,26 @@ arm-run ip_address DEPLOY="1" user="root" runtime_dir="/run/user/0" wayland_disp
     echo "wrote tmp/arm.log ($(wc -l < tmp/arm.log) lines)"
     grep -aE "OpenGL |Vulkan |GL tests finished|Clean exit|Crashed|Total " tmp/arm.log || true
 
+# Cross-check a remote x86_64 box's own real CPU without building anything on it: probes
+# its CPU/glibc over ssh, cargo-zigbuilds hodow_cli pinned to that exact glibc (so the
+# binary actually runs there even if this dev machine's own glibc is newer), scp's it over
+# and runs the isolated CPU suite there. Nothing installed remotely, no service - same
+# spirit as install-arm, just for a same-architecture box that is too slow/constrained to
+# build on itself (the embedded-APU class of hardware this project targets). `user` defaults
+# to `whoami` (not root, unlike install-arm, and not $USER - unset in some shells/sandboxes
+# even when whoami resolves fine - override it explicitly if the remote account differs).
+# Extra args after user are forwarded to the remote `hodow_cli cpu --isolate` invocation,
+# e.g. `just cpu-remote 192.168.1.50 rafal -e xsave`. RUSTFLAGS is forced empty, same as
+# every zigbuild recipe in this project's other repos - a personal rustflags override
+# picked up from `~/.cargo/config.toml` (e.g. `-fuse-ld=mold -Wl,--threads=N`) is silently
+# incompatible with zig's own bundled linker (`--threads` is mold-specific; zig's lld
+# rejects it with "unsupported linker arg: --threads"). Drops this project's own
+# `+cmpxchg16b` rustflag too (see `.cargo/config.toml`'s comment on it) - harmless here
+# since that flag only matters for a debug build, and this one is always `--release`.
+# Usage: just cpu-remote 192.168.214.40 [user] [extra hodow_cli cpu args...]
+cpu-remote ip_address user=`whoami` *args:
+    RUSTFLAGS="" scripts/cpu/run_cpu_remote.sh {{NIGHTLY}} {{ip_address}} {{user}} {{args}}
+
 # All recipes below that run `hodow_cli` in the *default* debug profile (no --release, no
 # --target) share the same on-disk binary at target/debug/hodow_cli. If one of them rebuilds
 # it with a DIFFERENT --features set while `just serve` is running off that same binary,

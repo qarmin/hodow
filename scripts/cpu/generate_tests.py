@@ -52,6 +52,16 @@ NO_FUZZ_FUNCTIONS: set[str] = {
     # invalid KeySource value on 14/16 draws. See HARDWARE_CONTROL_OVERRIDES below for the
     # single deterministic scenario, which needs the same care.
     "_mm_loadiwkey",
+    # _xgetbv's `xcr_no: u32` selects which XCR to read, not a value to vary: only XCR0
+    # (index 0) is architecturally defined (stdarch's own test hardcodes
+    # `_XCR_XFEATURE_ENABLED_MASK = 0` and never anything else). Any other index is
+    # reserved and XGETBV raises #GP on it, which Linux delivers as SIGSEGV - reproduced via
+    # the generic sequential-counter default of `1u32` segfaulting `just cpu` on an AMD
+    # GX-420GI (Jaguar/Puma), while the same call happened not to fault on this project's
+    # Ryzen 9 7900 dev machine (the #GP is the spec-compliant behavior here, not the outlier).
+    # A raw `rand::random::<u32>()` fuzz value would hit an invalid index on the overwhelming
+    # majority of draws.
+    "_xgetbv",
 }
 
 # Scalar bitfield parameters the CPU itself validates (not just "any value of this Rust
@@ -62,6 +72,51 @@ NO_FUZZ_FUNCTIONS: set[str] = {
 # permission check at all - both bits documented as requiring hardware support to set.
 HARDWARE_CONTROL_OVERRIDES: dict[tuple[str, str], str] = {
     ("_mm_loadiwkey", "control"): "0u32",
+    ("_xgetbv", "xcr_no"): "0u32",
+}
+
+# Functions whose return value is a legitimate machine-identity fact - not a function of the
+# (fixed) call arguments - so it must never be asserted against one captured-on-one-machine
+# constant. `__cpuid`/`__cpuid_count`/`__get_cpuid_max` already get this for free: they return
+# `CpuidResult`/`u32` pairs the generator has no UNPACK_INFO/INT_RETURNS entry for, so
+# `emit_check` falls through to its "compile but don't check" arm. `_xgetbv(0)` returns a
+# scalar `u64` (which IS in INT_RETURNS), so without this set it silently got the generic
+# equality check instead: captured as `743` on this project's Ryzen 9 7900 (which has
+# AVX-512 + PKU enabled, contributing extra XCR0 bits), it would then "fail" with e.g. `Got
+# 7, expected 743` on any CPU whose OS/hardware enables a different XSAVE state subset (a
+# GX-420GI's `7` = x87+SSE+AVX only) - a false positive, not a real bug, on every one of
+# them. Reported by a user re-running `just cpu` on that GX-420GI right after the xcr_no fix
+# above landed.
+HARDWARE_IDENTITY_FUNCTIONS: set[str] = {
+    "_xgetbv",
+}
+
+# Functions whose UNPACK_INFO-unpacked return array has trailing lanes that are
+# architecturally unspecified rather than merely uncaptured - so, like
+# HARDWARE_IDENTITY_FUNCTIONS above, no single captured value can ever be valid on more than
+# one machine/build for those lanes specifically, even though the LEADING lanes given here
+# (the count this maps to) genuinely are a deterministic function of the inputs and stay
+# checked. SSE4A's EXTRQ/EXTRQI/INSERTQ/INSERTQI family: stdarch's own doc comment for the
+# immediate form only promises "a 128-bit integer vector whose lower 64 bits contain the
+# extracted bits" - nothing about the upper 64 (lanes 2,3 of the generic 4-lane i32 view
+# every one of these renders through, since none has an `_epi8`/`_epi16` suffix to trigger a
+# narrower WIDTH_AWARE_VEC_INFO view). Confirmed three ways: (1) this project's own dev-
+# machine note elsewhere in CLAUDE.md, where the exact same upper 64 bits come back
+# differently under a debug vs. a `--release --no-default-features` build of identical
+# source on identical hardware; (2) upstream's own `#[cfg(test)]` for the register form
+# (`_mm_extract_si64`/`_mm_insert_si64`, not just the `i` immediate form - the same EXTRQ/
+# INSERTQ instruction family, so the same guarantee, or lack of one, applies) sidesteps the
+# ambiguity entirely by constructing every input with its OWN upper 64 bits already zero
+# (`_mm_setr_epi64x(b, 0)`) rather than asserting anything about what the operation itself
+# leaves there; (3) a `just cpu-remote` run against a real AMD GX-420GI reproduced mismatches
+# on exactly these four functions (and no others) with the LOWER 64 bits (lanes 0-1) matching
+# the value captured on this project's Ryzen 9 7900 every time and only the upper 64 (lanes
+# 2-3) ever differing - i.e. precisely the lower/upper split the doc actually promises.
+PARTIAL_CHECK_LANES: dict[str, int] = {
+    "_mm_extract_si64": 2,
+    "_mm_extracti_si64": 2,
+    "_mm_insert_si64": 2,
+    "_mm_inserti_si64": 2,
 }
 
 
@@ -1213,14 +1268,30 @@ def _checked(check_call: str, call: str) -> str:
 
 
 def emit_check(lines: list[str], call: str, ret: str, expected: str | None = None,
-               width_override: tuple[str, str, int] | None = None) -> None:
+               width_override: tuple[str, str, int] | None = None, skip_check: bool = False,
+               check_lanes: int | None = None) -> None:
     """Append lines that call `call` and check its result.
+
+    `skip_check`, when true (see HARDWARE_IDENTITY_FUNCTIONS), forces the same "compile but
+    don't check" arm `CpuidResult`/`__m128h`/etc. already fall into below regardless of
+    `ret`/`expected` - the return value is a real machine-identity fact, not a function of
+    the call's fixed arguments, so no single captured constant can ever be valid everywhere.
+
+    `check_lanes`, when given (see PARTIAL_CHECK_LANES), compares only the leading N lanes
+    of the unpacked array - the rest are architecturally unspecified, not merely uncaptured,
+    so comparing them against one machine's captured value (or the zero placeholder) is a
+    guaranteed false positive somewhere else, the same shape of bug HARDWARE_IDENTITY_FUNCTIONS
+    fixes for a whole-value return.
 
     `width_override`, if given as (unpacker_fn, container_elem, lane_count), replaces the
     generic UNPACK_INFO-driven unpack for a vector return — used for pilot-scope functions
     so e.g. an `_epi8`-returning `__m128i` is unpacked per real 8-bit lane instead of the
     generic (still bit-correct, but far less readable) 4-lane i32 view every other function
     still uses."""
+    if skip_check:
+        lines.append(f"        let _result = {call};")
+        return
+    lanes = f"[..{check_lanes}]" if check_lanes is not None else ""
     if width_override is not None and ret in UNPACK_INFO:
         fn, container, size = width_override
         is_float = container in ("f32", "f64")
@@ -1229,13 +1300,13 @@ def emit_check(lines: list[str], call: str, ret: str, expected: str | None = Non
         if expected is not None:
             adj_expected = _adjust_expected_for_ret(expected, ret)
             if is_float:
-                lines.append("        " + _checked(f"check_float_array_equality(&result, &{adj_expected})", call))
+                lines.append("        " + _checked(f"check_float_array_equality(&result{lanes}, &{adj_expected}{lanes})", call))
             else:
-                lines.append("        " + _checked(f"check_array_equality(&result, &{adj_expected})", call))
+                lines.append("        " + _checked(f"check_array_equality(&result{lanes}, &{adj_expected}{lanes})", call))
         elif is_float:
-            lines.append("        " + _checked(f"check_float_array_equality(&result, &[{zero}; {size}])", call))
+            lines.append("        " + _checked(f"check_float_array_equality(&result{lanes}, &[{zero}; {size}]{lanes})", call))
         else:
-            lines.append("        " + _checked(f"check_array_equality(&result, &[{zero}; {size}])", call))
+            lines.append("        " + _checked(f"check_array_equality(&result{lanes}, &[{zero}; {size}]{lanes})", call))
     elif expected is not None:
         # User-supplied expected value: emit check based on return type
         if ret in UNPACK_INFO:
@@ -1245,9 +1316,9 @@ def emit_check(lines: list[str], call: str, ret: str, expected: str | None = Non
             # choose float-array vs generic-array comparator
             elem = _fallback_unpack_elem(ret)
             if elem in ("f32", "f64"):
-                lines.append("        " + _checked(f"check_float_array_equality(&result, &{adj_expected})", call))
+                lines.append("        " + _checked(f"check_float_array_equality(&result{lanes}, &{adj_expected}{lanes})", call))
             else:
-                lines.append("        " + _checked(f"check_array_equality(&result, &{adj_expected})", call))
+                lines.append("        " + _checked(f"check_array_equality(&result{lanes}, &{adj_expected}{lanes})", call))
         elif ret in INT_RETURNS:
             lines.append(f"        let result = {call};")
             lines.append("        " + _checked(f"check_int_equality(result as i32, {expected})", call))
@@ -1282,8 +1353,45 @@ def test_name(func_name: str, arch: str, ext: str) -> str:
     return f"test_{arch}_{ext}_" + func_name.lstrip("_")
 
 
+def extra_feature_guard_lines(arch: str | None, ext: str | None, sig: dict) -> list[str]:
+    """A function's own captured `#[target_feature]` set (`sig["features"]`, from
+    extract_signatures.py's find_target_features) can require MORE than the group's single
+    base feature that gates the whole group before any of its tests run. `_xsavec` lives in
+    the "xsave" group (so the pre-group check only ever tests
+    `is_x86_feature_detected!("xsave")`), but the function itself is
+    `#[target_feature(enable = "xsave,xsavec")]` - XSAVEC is a separate, optional CPUID bit
+    an XSAVE-only CPU need not have. Calling it there is a genuine #UD -> SIGILL, not codegen
+    UB - reproduced on an AMD GX-420GI (Jaguar/Puma), which has XSAVE but not XSAVEC/XSAVEOPT.
+    `target_feature_attr` already emits the full compound string on the function's own
+    `#[target_feature(enable = ...)]` attribute (so codegen is always correct for whichever
+    machine actually reaches it); this adds the runtime gate the group-level check alone
+    does not provide, for every feature beyond the group's own.
+
+    Scoped to x86/x86_64 only - every captured feature string there is known-valid for
+    `is_x86_feature_detected!` (the same string table `#[target_feature]` itself uses).
+    aarch64/SVE compound cases (`sve+f64mm`, `sve2+sve2-aes`, ...) need the same treatment
+    but are not covered here yet - some of their extra feature strings are not confirmed
+    valid `is_aarch64_feature_detected!` strings (see the NEON section of CLAUDE.md, where
+    that was already false for several NEON sub-features), so blindly emitting the same
+    check there risks a compile error instead of a runtime skip."""
+    if arch not in ("x86", "x86_64") or ext is None:
+        return []
+    base_feature = ext_to_feature(ext)
+    extra = [f for f in sig.get("features", []) if f and f != base_feature]
+    if not extra:
+        return []
+    # get_feature_detect_fn, not a raw is_x86_feature_detected!("{f}") format - "kl"/"widekl"
+    # need keylocker_usable() instead (see its own note: the plain macro reports Key Locker
+    # present off CPUID alone, not off CR4.KL/AESKLE actually being enabled), and reusing the
+    # same dispatch here keeps this guard from silently reintroducing that exact bug for any
+    # function whose extra feature happens to be one of those two.
+    checks = " && ".join(get_feature_detect_fn(arch, f) for f in extra)
+    return [f"        if !({checks}) {{", "            return Ok(());", "        }"]
+
+
 def gen_fn_body(sig: dict, expected: str | None, param_overrides: dict[str, str] | None = None,
-                 cg_override: str | None = None, elem_type: str | None = None) -> list[str]:
+                 cg_override: str | None = None, elem_type: str | None = None,
+                 arch: str | None = None, ext: str | None = None) -> list[str]:
     """Core per-scenario body (everything between the fn signature and its closing brace).
     With no overrides and no `elem_type` this reproduces exactly the single deterministic
     scenario every function got before scenario expansion existed — byte-identical output,
@@ -1315,6 +1423,7 @@ def gen_fn_body(sig: dict, expected: str | None, param_overrides: dict[str, str]
         lines.append("        if cfg!(miri) {")
         lines.append("            return Ok(());")
         lines.append("        }")
+    lines += extra_feature_guard_lines(arch, ext, sig)
     lines.append("    unsafe {")
 
     is_gather = any(p in name.lower() for p in ("gather", "scatter"))
@@ -1366,7 +1475,8 @@ def gen_fn_body(sig: dict, expected: str | None, param_overrides: dict[str, str]
                 lines.append(f"        let {pname} = {init};")
                 call_args.append(pname)
         call = f"{name}{cs}({', '.join(call_args)})"
-        emit_check(lines, call, ret, expected, width_override)
+        emit_check(lines, call, ret, expected, width_override, name in HARDWARE_IDENTITY_FUNCTIONS,
+                   PARTIAL_CHECK_LANES.get(name))
     else:
         call_args = [
             overrides[pname] if pname in overrides
@@ -1374,7 +1484,8 @@ def gen_fn_body(sig: dict, expected: str | None, param_overrides: dict[str, str]
             for pname, pt in params
         ]
         call = f"{name}{cs}({', '.join(call_args)})"
-        emit_check(lines, call, ret, expected, width_override)
+        emit_check(lines, call, ret, expected, width_override, name in HARDWARE_IDENTITY_FUNCTIONS,
+                   PARTIAL_CHECK_LANES.get(name))
 
     # Fuzzing block (still inside the single unsafe {})
     if not no_fuzz and complete:
@@ -1452,7 +1563,7 @@ def emit_test_fn(cfg_lines: list[str], test: str, body: list[str], tf_attr: str 
 def gen_fn(sig: dict, arch: str, ext: str, expected_values: dict[str, str] | None = None) -> str:
     test = test_name(sig["name"], arch, ext)
     expected = (expected_values or {}).get(test)
-    return emit_test_fn(arch_only_cfg_line(sig), test, gen_fn_body(sig, expected),
+    return emit_test_fn(arch_only_cfg_line(sig), test, gen_fn_body(sig, expected, arch=arch, ext=ext),
                         target_feature_attr(arch, ext, ext_to_feature(ext)))
 
 
@@ -1577,7 +1688,7 @@ def gen_scenarios(sig: dict, arch: str, ext: str, expected_values: dict[str, str
     for suffix, overrides, cg_override in expand_scenarios(sig, arch):
         tname = base + (f"_{suffix}" if suffix else "")
         expected = (expected_values or {}).get(tname)
-        body = gen_fn_body(sig, expected, overrides or None, cg_override, elem)
+        body = gen_fn_body(sig, expected, overrides or None, cg_override, elem, arch=arch, ext=ext)
         bodies.append(emit_test_fn(arch_only_cfg_line(sig), tname, body, tf_attr))
     return "\n\n".join(bodies)
 

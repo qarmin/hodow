@@ -10,6 +10,7 @@
 // Modifications: rewritten in Rust for hodow_cts.
 
 pub mod compute;
+pub mod state_query;
 
 use crate::glu::TestCaseGroup;
 
@@ -17,5 +18,6 @@ use crate::glu::TestCaseGroup;
 pub fn create_tests() -> TestCaseGroup {
     let mut group = TestCaseGroup::new("functional");
     group.add_child(compute::create_tests());
+    group.add_child(state_query::create_tests());
     group
 }

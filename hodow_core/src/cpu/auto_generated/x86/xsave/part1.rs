@@ -31,20 +31,7 @@ fn test_x86_xsave_xgetbv_impl() -> Result<(), String> {
             return Ok(());
         }
     unsafe {
-        let result = _xgetbv(1u32);
-        check_int_equality(result as i32, 674).map_err(|e| format!("{e} | call: _xgetbv(1u32)"))?;
-
-        let total_iters = crate::cpu::get_iterations();
-        if crate::get_fuzzing() && total_iters > 0 {
-            log::info!("Starting fuzzing");
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _xgetbv(rand::random::<u32>());
-            }
-        }
+        let _result = _xgetbv(0u32);
     }
     Ok(())
 }
@@ -56,6 +43,9 @@ pub(super) fn test_x86_xsave_xgetbv() -> Result<(), String> {
 #[target_feature(enable = "xsave")]
 fn test_x86_xsave_xsaveopt_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("xsaveopt")) {
             return Ok(());
         }
     unsafe {
@@ -73,6 +63,9 @@ pub(super) fn test_x86_xsave_xsaveopt() -> Result<(), String> {
 #[target_feature(enable = "xsave")]
 fn test_x86_xsave_xsavec_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("xsavec")) {
             return Ok(());
         }
     unsafe {

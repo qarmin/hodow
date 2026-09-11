@@ -27,7 +27,7 @@ pub mod texture_util;
 pub use api_case::{ApiCase, ApiCaseFn, BAD_ENUM, add_api_case, add_api_cases};
 pub use context_info::ContextInfo;
 pub use draw_util::{PrimitiveList, PrimitiveType, VertexArrayBinding, VertexArrayPointer, VertexComponentType, draw, draw_from_user_pointers, pr, va};
-pub use objects::{Buffer, Framebuffer, Renderbuffer, Texture, VertexArray};
+pub use objects::{Buffer, Framebuffer, ProgramPipeline, Renderbuffer, Texture, VertexArray};
 pub use pixel_transfer::read_pixels;
 pub use program_interface_query::{InterfaceBlockInfo, InterfaceVariableInfo, get_program_interface_block_info, get_program_interface_variable_info, get_program_resource_int};
 pub use render_context::{ApiType, ContextType, RenderContext, RenderTarget};

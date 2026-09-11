@@ -47,6 +47,9 @@ fn test_x86_rdrand_rdseed16_step_impl() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
+        if !(std::arch::is_x86_feature_detected!("rdseed")) {
+            return Ok(());
+        }
     unsafe {
         let mut ref_val = 1u16;
         let result = _rdseed16_step(&mut ref_val);
@@ -62,6 +65,9 @@ pub(super) fn test_x86_rdrand_rdseed16_step() -> Result<(), String> {
 #[target_feature(enable = "rdrand")]
 fn test_x86_rdrand_rdseed32_step_impl() -> Result<(), String> {
         if cfg!(miri) {
+            return Ok(());
+        }
+        if !(std::arch::is_x86_feature_detected!("rdseed")) {
             return Ok(());
         }
     unsafe {
