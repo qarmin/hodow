@@ -173,11 +173,22 @@ test('a result time reads in the unit that fits and the page tells whether the d
   assert.doesNotMatch(done, /disabled/);
 });
 
+test('result columns sort, and the pager sits below the table next to no stray icon', () => {
+  const meta = { id: 'x', title: 'CTS', status: 'failed', os: 'linux', arch: 'x86_64', version: '1', summary: summary(), args: [] };
+  const view = { verdict: 'all', q: '', offset: 100, limit: 100, sort: 'time', dir: 'asc', findings: { total: 250, offset: 100, items: Array.from({ length: 100 }, (_, i) => ({ name: `t${i}`, verdict: 'passed' })) } };
+  const html = ui.detailHtml({ meta, pinned: false, files: [] }, view);
+  assert.match(html, /data-action="sort" data-key="time"[^>]*>Time ▲</);
+  assert.match(html, /data-key="verdict"[^>]*>Verdict</);
+  assert.ok(html.indexOf('</table>') < html.indexOf('class="pager"'));
+  assert.match(html, /Page 2 of 3 \(101-200 of 250\)/);
+  assert.match(html, /class="ctl-name">Show <button[^>]*class="ibtn"/);
+});
+
 test('the result list has a time column and keeps a verdict on one line', () => {
   const meta = { id: 'x', title: 'CTS', status: 'failed', os: 'linux', arch: 'x86_64', version: '1', summary: summary(), args: [] };
-  const html = ui.detailHtml({ meta, pinned: false, files: [] }, { verdict: 'notable', q: '', offset: 0,
+  const html = ui.detailHtml({ meta, pinned: false, files: [] }, { verdict: 'notable', q: '', offset: 0, limit: 100,
     findings: { total: 1, offset: 0, items: [{ name: 'dEQP-GLES2.a', verdict: 'not_supported', duration_us: 2500 }] } });
-  assert.match(html, /<th class="num">Time<\/th>/);
+  assert.match(html, /<th class="num"><button[^>]*>Time</);
   assert.match(html, /2\.5 ms/);
   assert.match(html, /<td class="verdict">/);
   assert.match(html, /everything except passed/);
@@ -189,7 +200,8 @@ test('the detail view pages and can be filtered', () => {
   const view = { verdict: 'failed', q: 'a"b', offset: 0, limit: 100,
     findings: { total: 250, offset: 0, items: [{ name: 'test_a', verdict: 'failed', detail: 'got 1' }] } };
   const html = ui.detailHtml(detail, view);
-  assert.match(html, /1–1 of 250/);
+  assert.match(html, /Page 1 of 3 \(1-1 of 250\)/);
+  assert.doesNotMatch(html, /[–—]/);
   assert.match(html, /value="a&quot;b"/);
   assert.match(html, /<option value="failed" selected>/);
   assert.match(html, /Unpin/);

@@ -120,7 +120,7 @@ fn apply(state: &AppState, line: Line) {
                 active.state.apply(&event, now_ms());
             }
         }
-        Line::Err(text) => active.state.push_log(Level::Info, text),
+        Line::Err(text) => active.state.push_log(Level::Info, &text),
     }
     drop(live);
     state.bump();
@@ -133,7 +133,7 @@ fn run_job(state: &AppState, job: Job, cancel: Arc<AtomicBool>) {
         Err(e) => {
             let mut live = state.live();
             if let Some(active) = live.active.as_mut() {
-                active.state.push_log(Level::Error, format!("could not start: {e}"));
+                active.state.push_log(Level::Error, &format!("could not start: {e}"));
             }
             (None, false)
         }

@@ -97,7 +97,7 @@ function stepsHtml(steps) {
     const p = pct(s.fraction);
     const cls = s.state === 'running' ? (p == null ? 'indeterminate' : '') : s.state === 'done' ? 'finished' : s.state === 'failed' ? 'failed' : 'finished';
     const width = s.state === 'running' ? (p ?? 100) : 100;
-    const mark = s.state === 'running' ? '' : s.state === 'done' ? '✓ ' : s.state === 'failed' ? '✗ ' : '– ';
+    const mark = s.state === 'running' ? '' : s.state === 'done' ? '✓ ' : s.state === 'failed' ? '✗ ' : '- ';
     const current = s.state === 'running' && s.current ? `<div class="muted small mono">${esc(s.current)}</div>` : '';
     return `<div class="label" style="padding-left:${s.depth * 14}px" title="${esc(s.label)}">${mark}${esc(s.label)}</div>
       <div class="bar ${cls}"><i style="width:${width}%"></i></div>
@@ -221,21 +221,31 @@ function detailHtml(detail, view) {
       <td class="num small">${fmtMicros(x.duration_us)}</td>
       <td class="small">${esc(x.detail ?? '')}${x.value ? ` <span class="muted">= ${esc(x.value)}</span>` : ''}</td></tr>`).join('') : '';
   const last = f ? Math.min(f.offset + f.items.length, f.total) : 0;
+  const sortable = (key, label, cls = '') => {
+    const active = view.sort === key;
+    const mark = active ? (view.dir === 'asc' ? ' ▲' : ' ▼') : '';
+    return `<th class="${cls}"><button type="button" class="sort ${active ? 'on' : ''}" data-action="sort" data-key="${key}" title="Sort by ${label.toLowerCase()}">${label}${mark}</button></th>`;
+  };
+  const pages = f && f.total > 0 ? Math.ceil(f.total / view.limit) : 1;
+  const page = Math.floor((f?.offset ?? 0) / view.limit) + 1;
+  const pager = `<div class="pager">
+      <button data-action="page" data-dir="-1" ${view.offset === 0 ? 'disabled' : ''}>Prev</button>
+      <span class="muted small">${f ? `Page ${page} of ${pages} (${f.total === 0 ? 0 : f.offset + 1}-${last} of ${f.total})` : 'loading…'}</span>
+      <button data-action="page" data-dir="1" ${f && last >= f.total ? 'disabled' : ''}>Next</button></div>`;
   return `<h3>${esc(meta.title)} ${statusChip(meta.status)}</h3>
     <p class="muted small">${esc(meta.id)} · ${esc(meta.host ?? 'unknown host')} (${esc(meta.os)} ${esc(meta.arch)}) · hodow ${esc(meta.version)}
       ${meta.finished_ms ? ` · took ${fmtDur(meta.finished_ms - meta.started_ms)}` : ''}</p>
     <p class="mono small">${esc((meta.args ?? []).join(' '))}</p>
     <div class="chips">${countChips(meta.summary)}</div>
     ${fileLinks ? `<p class="small">Files: ${fileLinks}</p>` : ''}
-    <p class="row start">
-      <button data-action="pin-run" data-id="${esc(meta.id)}" data-pinned="${pinned ? 0 : 1}">${pinned ? 'Unpin (may be trimmed)' : 'Pin (never trimmed)'}</button>${helpBtn('pin', 'pinning')}
-      <button class="danger" data-action="delete-run" data-id="${esc(meta.id)}" ${pinned || meta.status === 'running' ? 'disabled' : ''}>Delete</button></p>
-    <div class="row start"><label>Show <select id="f-verdict">${options}</select></label>${helpBtn('filter', 'which results are listed')}
-      <label>Search <input id="f-q" value="${esc(view.q)}" placeholder="name or detail"></label>
-      <span class="muted small">${f ? `${f.total === 0 ? 0 : f.offset + 1}–${last} of ${f.total}` : 'loading…'}</span>
-      <button data-action="page" data-dir="-1" ${view.offset === 0 ? 'disabled' : ''}>Prev</button>
-      <button data-action="page" data-dir="1" ${f && last >= f.total ? 'disabled' : ''}>Next</button></div>
-    <table><tr><th>Verdict</th><th>Test</th><th class="num">Time</th><th>Detail</th></tr>${rows || '<tr><td colspan="4" class="muted">Nothing to show.</td></tr>'}</table>`;
+    <div class="tools">
+      <span class="grp"><button data-action="pin-run" data-id="${esc(meta.id)}" data-pinned="${pinned ? 0 : 1}">${pinned ? 'Unpin (may be trimmed)' : 'Pin (never trimmed)'}</button>${helpBtn('pin', 'pinning')}</span>
+      <span class="grp"><button class="danger" data-action="delete-run" data-id="${esc(meta.id)}" ${pinned || meta.status === 'running' ? 'disabled' : ''}>Delete</button></span></div>
+    <div class="tools">
+      <label class="ctl"><span class="ctl-name">Show ${helpBtn('filter', 'which results are listed')}</span><select id="f-verdict">${options}</select></label>
+      <label class="ctl"><span class="ctl-name">Search</span><input id="f-q" value="${esc(view.q)}" placeholder="name or detail"></label></div>
+    <table><tr>${sortable('verdict', 'Verdict')}${sortable('name', 'Test')}${sortable('time', 'Time', 'num')}${sortable('detail', 'Detail')}</tr>${rows || '<tr><td colspan="4" class="muted">Nothing to show.</td></tr>'}</table>
+    ${pager}`;
 }
 
 /* ---------- what each check asks before it is queued (pure data) ----------
@@ -248,7 +258,7 @@ const FLOWS = [
   { id: 'flows', type: 'flag', label: 'Also run the pipeline checks', args: ['--flows'],
     about: 'Runs 15 small made-up jobs, such as processing a camera frame, sorting or multiplying matrices, and checks every answer bit for bit. It finds faults that a single instruction does not show.' },
   { id: 'flows-size', type: 'select', label: 'Size of the pipeline checks', arg: '--flows-size', value: 'small', needs: 'flows',
-    options: [['small', 'Small: a few seconds'], ['full', 'Full: HD frames, a few minutes']], about: 'Only used when the pipeline checks are on.' },
+    options: [['small', 'Small: a few seconds'], ['full', 'Full: HD-sized frames, longer (about 10 s on a desktop)']], about: 'Only used when the pipeline checks are on.' },
 ];
 const TIME_LIMIT_MS = (arg, value) => ({ id: 'limit', type: 'number', label: 'Time limit per test (ms)', arg, placeholder: value,
   about: 'A test that has not finished by then is stopped and counted as timed out. Leave empty for the default.' });
@@ -530,7 +540,7 @@ if (typeof document !== 'undefined') {
     const id = view.id;
     const [detail, findings] = await Promise.all([
       api('GET', `/api/runs/${encodeURIComponent(id)}`),
-      api('GET', `/api/runs/${encodeURIComponent(id)}/findings?verdict=${view.verdict}&q=${encodeURIComponent(view.q)}&offset=${view.offset}&limit=${view.limit}`).catch(() => null),
+      api('GET', `/api/runs/${encodeURIComponent(id)}/findings?verdict=${view.verdict}&q=${encodeURIComponent(view.q)}&offset=${view.offset}&limit=${view.limit}${view.sort ? `&sort=${view.sort}&dir=${view.dir}` : ''}`).catch(() => null),
     ]);
     if (view.id !== id) return;
     view.detail = detail;
@@ -545,7 +555,7 @@ if (typeof document !== 'undefined') {
   }
 
   async function openRun(id) {
-    view = { id, verdict: 'notable', q: '', offset: 0, limit: 100, detail: null, findings: null };
+    view = { id, verdict: 'notable', q: '', offset: 0, limit: 100, sort: null, dir: 'desc', detail: null, findings: null };
     $('run-detail').textContent = 'Loading…';
     if (!$('run-dialog').open) $('run-dialog').showModal();
     try { await loadDetail(); } catch (err) { $('run-detail').textContent = err.message; }
@@ -582,7 +592,13 @@ if (typeof document !== 'undefined') {
       else if (action === 'reprobe') await api('POST', '/api/probe');
       else if (action === 'pin-run') { await api('POST', `/api/runs/${encodeURIComponent(id)}/pin`, { pinned: el.dataset.pinned === '1' }); await loadDetail(); }
       else if (action === 'delete-run' && confirm(`Delete ${id}?`)) { await api('DELETE', `/api/runs/${encodeURIComponent(id)}`); $('run-dialog').close(); }
-      else if (action === 'page') { view.offset = Math.max(0, view.offset + Number(el.dataset.dir) * view.limit); await loadDetail(); }
+      else if (action === 'sort') {
+        const key = el.dataset.key;
+        view.dir = view.sort === key ? (view.dir === 'asc' ? 'desc' : 'asc') : (key === 'verdict' || key === 'time' ? 'desc' : 'asc');
+        view.sort = key;
+        view.offset = 0;
+        await loadDetail();
+      } else if (action === 'page') { view.offset = Math.max(0, view.offset + Number(el.dataset.dir) * view.limit); await loadDetail(); }
     } catch (err) {
       alert(err.message);
     }

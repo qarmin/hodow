@@ -121,11 +121,11 @@ impl RunState {
     }
 
     /// A line that did not come from the run's own events, e.g. what its process wrote to stderr.
-    pub fn push_log(&mut self, level: Level, message: String) {
+    pub fn push_log(&mut self, level: Level, message: &str) {
         if self.logs.len() == LOG_CAP {
             self.logs.pop_front();
         }
-        self.logs.push_back((level, strip_ansi(&message)));
+        self.logs.push_back((level, strip_ansi(message)));
     }
 
     pub fn snapshot(&self, now_ms: u64) -> StateSnapshot<'_> {
@@ -157,7 +157,7 @@ mod tests {
         assert_eq!(strip_ansi("plain, with ünïcode"), "plain, with ünïcode");
         assert_eq!(strip_ansi("cut \x1b[3"), "cut ");
         let mut state = RunState::new("cts", "CTS", 0);
-        state.push_log(Level::Info, "\x1b[31mred\x1b[0m".into());
+        state.push_log(Level::Info, "\x1b[31mred\x1b[0m");
         assert_eq!(state.logs.back().map(|l| l.1.as_str()), Some("red"));
     }
 

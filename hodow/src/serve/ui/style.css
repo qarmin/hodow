@@ -107,3 +107,11 @@ dialog .field > div:first-child { margin-bottom: 2px; }
 dialog .field input[type=text], dialog .field input[type=number], dialog .field select { margin-top: 2px; }
 dialog .disabled { opacity: .45; }
 label.field .small.block { margin-left: 0; }
+.tools { display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: flex-end; margin: 10px 0; }
+.grp { display: inline-flex; align-items: center; gap: 4px; }
+dialog label.ctl { display: block; margin: 0; }
+.ctl-name { display: flex; align-items: center; gap: 4px; margin-bottom: 2px; }
+.ctl select, .ctl input { min-width: 14em; }
+th button.sort { border: 0; padding: 0; background: none; font: inherit; color: inherit; cursor: pointer; white-space: nowrap; }
+th button.sort:hover, th button.sort.on { color: var(--text); }
+.pager { display: flex; gap: 12px; align-items: center; justify-content: center; margin-top: 10px; }
