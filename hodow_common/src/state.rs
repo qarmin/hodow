@@ -98,6 +98,9 @@ impl RunState {
             Event::StepFinished { id, outcome } => self.tree.finish(*id, *outcome, now_ms),
             Event::Finding(finding) => {
                 self.summary.add(finding.verdict);
+                if let Some(step) = finding.step {
+                    self.tree.count_result(step);
+                }
                 if finding.verdict.is_notable() {
                     if self.notable.len() == NOTABLE_CAP {
                         self.notable.pop_front();

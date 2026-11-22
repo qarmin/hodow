@@ -148,6 +148,7 @@ pub fn process_serve(args: &ServeArgs) {
             }
         };
         executor::spawn(state.clone());
+        executor::stop_job_on_signal(state.clone());
         watch::spawn(state.clone());
 
         let local = format!("http://127.0.0.1:{port}");
