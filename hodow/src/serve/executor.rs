@@ -78,6 +78,7 @@ fn spawn_child(state: &AppState, job: &Job) -> std::io::Result<Child> {
         .arg(state.data_dir.root())
         .args(&job.args)
         .env("NO_COLOR", "1")
+        .env(hodow_common::store::SERVER_JOB_ENV, "1")
         .stdin(Stdio::null())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped());

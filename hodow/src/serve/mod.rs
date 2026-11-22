@@ -8,6 +8,7 @@
 mod api;
 mod executor;
 mod jobs;
+mod leftovers;
 pub mod submit;
 mod watch;
 
@@ -147,6 +148,7 @@ pub fn process_serve(args: &ServeArgs) {
                 return;
             }
         };
+        leftovers::cancel(&state.store);
         executor::spawn(state.clone());
         executor::stop_job_on_signal(state.clone());
         watch::spawn(state.clone());

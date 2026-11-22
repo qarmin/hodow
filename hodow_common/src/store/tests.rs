@@ -26,6 +26,8 @@ fn meta(id: &str, module: &str, started_ms: u64) -> RunMeta {
         os: "linux".into(),
         arch: "x86_64".into(),
         host: None,
+        pid: None,
+        by_server: false,
     }
 }
 

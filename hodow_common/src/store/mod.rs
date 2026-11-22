@@ -17,6 +17,8 @@ pub const EVENTS_FILE: &str = "events.jsonl";
 pub const EVENTS_GZ_FILE: &str = "events.jsonl.gz";
 const PINNED_FILE: &str = "pinned";
 /// A run still marked running whose event file has been silent this long died without saying so.
+/// Set by `hodow serve` in the environment of every job it starts.
+pub const SERVER_JOB_ENV: &str = "HODOW_SERVER_JOB";
 pub const STALE_AFTER_MS: u64 = 60 * 60 * 1000;
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
@@ -37,6 +39,11 @@ pub struct RunMeta {
     pub arch: String,
     #[serde(default)]
     pub host: Option<String>,
+    /// The process writing the run, and whether a `hodow serve` job started it: how a later server finds what it left behind.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub pid: Option<u32>,
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub by_server: bool,
 }
 
 /// One line of a result file: the event and when it was recorded.
@@ -97,6 +104,8 @@ impl Store {
             os: std::env::consts::OS.to_owned(),
             arch: std::env::consts::ARCH.to_owned(),
             host: host_name(),
+            pid: Some(std::process::id()),
+            by_server: std::env::var_os(SERVER_JOB_ENV).is_some(),
         })
     }
 
