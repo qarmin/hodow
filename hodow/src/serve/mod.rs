@@ -48,6 +48,9 @@ pub struct Live {
     pub foreign: BTreeMap<String, Foreign>,
     pub runs: Vec<RunMeta>,
     pub probes: BTreeMap<String, Availability>,
+    /// A re-check of the GPU drivers is under way, and when the last one finished.
+    pub probing: bool,
+    pub probed_ms: Option<u64>,
 }
 
 pub struct AppState {

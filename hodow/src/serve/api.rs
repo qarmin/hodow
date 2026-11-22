@@ -138,6 +138,7 @@ pub fn snapshot(state: &AppState) -> Value {
         "version": env!("CARGO_PKG_VERSION"),
         "data_dir": state.data_dir.root().display().to_string(),
         "modules": modules,
+        "probe": { "running": live.probing, "finished_ms": live.probed_ms },
         "queue": live.queue,
         "active": active,
         "foreign": foreign,
@@ -350,8 +351,8 @@ async fn cancel_job(State(state): State<Arc<AppState>>, Path(id): Path<u64>) -> 
 }
 
 async fn reprobe(State(state): State<Arc<AppState>>) -> Json<Value> {
-    watch::probe_gpu_in_background(state);
-    Json(json!({ "ok": true }))
+    let started = watch::probe_gpu_in_background(state);
+    Json(json!({ "ok": true, "started": started }))
 }
 
 async fn ws_handler(ws: WebSocketUpgrade, State(state): State<Arc<AppState>>) -> impl IntoResponse {

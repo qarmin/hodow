@@ -58,6 +58,7 @@ fn spawn_child(state: &AppState, job: &Job) -> std::io::Result<Child> {
         .arg("--data-dir")
         .arg(state.data_dir.root())
         .args(&job.args)
+        .env("NO_COLOR", "1")
         .stdin(Stdio::null())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped());

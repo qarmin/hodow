@@ -114,7 +114,7 @@ const HELP = {
     group: 'Reading results',
     title: 'Timed out',
     short: 'No answer within the time limit',
-    body: `<p>The test did not finish in time and was stopped. The limits are 10 seconds per CPU test and 30 seconds per OpenGL test in an isolated run (burn-in and benchmarks have their own hang timeouts).</p>
+    body: `<p>The test did not finish in time and was stopped. The default limits are 10 seconds per CPU test and 30 seconds per OpenGL test in an isolated run, 60 seconds without progress per conformance case, 30 seconds for a burn-in sub-test and 60 seconds for a benchmark row. Each can be changed in the window that starts the check.</p>
       <p>A hang is a finding in itself: an instruction or a driver call that never returns is exactly the kind of fault this tool looks for. Only that one test is lost; the run goes on.</p>`,
     related: ['verdict-crashed'],
   },
@@ -203,7 +203,7 @@ const HELP = {
     group: 'The page',
     title: 'Which results are listed',
     short: 'What the Show box filters',
-    body: `<p><strong>notable</strong> (the default) is everything except plain passes: failures, crashes, unverified, skipped and not supported. A run can have tens of thousands of tests; these are the ones worth reading. <strong>all</strong> lists every test. The others show one outcome only.</p>
+    body: `<p><strong>everything except passed</strong> (the default) lists every result that is not a plain pass: failures, crashes, timeouts, panics, unverified, skipped and not supported. A run can have tens of thousands of tests; these are the ones worth reading. <strong>all</strong> lists every test. The others show one outcome only.</p>
       <p>The search matches part of the test name or of the detail text. For unverified tests the detail shows the value the machine produced (<code>= 0x…</code>).</p>`,
     related: ['verdicts'],
   },
@@ -228,14 +228,6 @@ const HELP = {
       </ul>`,
     related: ['verdict-not_supported'],
   },
-  extra: {
-    group: 'The page',
-    title: 'Extra arguments',
-    short: 'Options of the command line',
-    body: `<p>Whatever is written here is added to the command, exactly as in a terminal (for example <code>-t test_name</code> to run one CPU test, or <code>--flows</code>). The line shown under the box is the command that will run. <code>hodow &lt;command&gt; --help</code> in a terminal lists everything.</p>
-      <p>The server checks the command before queueing it and refuses options that write files outside the results folder or start other programs.</p>`,
-    related: ['security'],
-  },
   security: {
     group: 'The page',
     title: 'Who can use this page',
@@ -257,7 +249,7 @@ const HELP = {
       <ul>
         <li><em>Every test in its own process</em> (recommended): takes seconds to minutes. A crash or hang is blamed on that one test and the run goes on; you get one result per test.</li>
         <li><em>Plain run</em>: faster to start, but a crash ends everything and only per-extension counts are kept.</li>
-        <li><em>Processing flows</em>: whole image pipelines (camera frame, GEMM, sort, histogram) checked bit for bit against one plain reference.</li>
+        <li><em>Pipeline checks</em>: whole image pipelines (camera frame, GEMM, sort, histogram) checked bit for bit against one plain reference.</li>
       </ul>`,
     related: ['verdict-unverified', 'verdict-skipped', 'verdict-crashed', 'check-stress'],
   },
@@ -330,8 +322,9 @@ const HELP = {
     title: 'Khronos conformance suites',
     short: 'The official conformance tests, case by case',
     body: `<p><strong>What it is.</strong> A Rust rewrite of the Khronos Conformance Test Suite, the official suite graphics drivers are certified with. The case names are identical to the original, so a result here can be compared with one from the original program on the same driver.</p>
-      <p><strong>Groups.</strong> OpenGL ES 2.0, 3.0 and 3.1, desktop OpenGL (4.5 here), and Vulkan. Pick one; the Vulkan suite has hundreds of thousands of cases and runs for many hours. You can also write your own pattern in the extra arguments, for example <code>--case dEQP-VK.compute.*</code>.</p>
+      <p><strong>Groups.</strong> OpenGL ES 2.0, 3.0 and 3.1, desktop OpenGL (4.5 here), and Vulkan. Pick one; the Vulkan suite has hundreds of thousands of cases and runs for many hours. You can also name your own cases, for example <code>dEQP-VK.compute.*</code>, with <em>Only the cases I name below</em>.</p>
       <p><strong>Reading it.</strong> <em>Not supported</em> is common and not a failure, but report it next to the passes: a clean run with many unsupported cases proves little. A <em>crashed</em> or <em>timed out</em> case is a finding about the driver.</p>
+      <p><strong>Very slow cases.</strong> A few cases (<code>flush_finish</code>) measure real time against the clock and can run for minutes on a slow or software driver, until the time limit kills them. They are skipped by default; untick <em>Skip the very slow cases</em> to run them anyway.</p>
       <p>Only available if this hodow was built with it, see the availability label on the card.</p>`,
     related: ['verdict-not_supported', 'availability'],
   },

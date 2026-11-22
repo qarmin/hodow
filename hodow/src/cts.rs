@@ -88,7 +88,7 @@ impl hodow_cts::cli::Observer for Recorder {
         if !result.message.is_empty() {
             finding = finding.detail(result.message.clone());
         }
-        run.session.reporter().finding(finding);
+        run.session.reporter().finding(finding.duration_us(result.duration_us));
         run.done += 1;
         if let Some(step) = run.step.as_mut() {
             step.progress(run.done, Some(&result.name));
