@@ -94,6 +94,7 @@ pub fn router(state: Arc<AppState>) -> Router {
         .route("/api/runs/{id}/findings", get(get_findings))
         .route("/api/runs/{id}/files/{name}", get(get_file))
         .route("/api/runs/{id}/pin", post(pin_run))
+        .route("/api/runs/{id}/cancel", post(cancel_run))
         .route("/api/jobs", post(submit_job))
         .route("/api/jobs/{id}", delete(cancel_job))
         .route("/api/probe", post(reprobe))
@@ -130,7 +131,13 @@ pub fn snapshot(state: &AppState) -> Value {
     let foreign: Vec<Value> = live
         .foreign
         .iter()
-        .map(|(id, f)| json!({ "id": id, "run": f.state.snapshot(now) }))
+        .map(|(id, f)| {
+            let cancellable = live
+                .runs
+                .iter()
+                .any(|r| &r.id == id && super::leftovers::is_server_job(r));
+            json!({ "id": id, "run": f.state.snapshot(now), "cancellable": cancellable })
+        })
         .collect();
     json!({
         "now": now,
@@ -324,6 +331,29 @@ async fn pin_run(State(state): State<Arc<AppState>>, Path(id): Path<String>, Jso
         Ok(()) => Json(json!({ "ok": true })).into_response(),
         Err(_) => not_found(),
     }
+}
+
+/// Stops a run that belongs to no live job of this server (one an earlier server left behind). A run a person started in a
+/// terminal, or the job this server is running now (it has Stop), is refused.
+async fn cancel_run(State(state): State<Arc<AppState>>, Path(id): Path<String>) -> Response {
+    let Some(meta) = state.store.meta(&id) else {
+        return not_found();
+    };
+    let ours = state.live().active.as_ref().and_then(|a| a.job.run.clone());
+    if meta.status != RunStatus::Running
+        || ours.as_deref() == Some(id.as_str())
+        || !super::leftovers::is_server_job(&meta)
+    {
+        return (
+            StatusCode::CONFLICT,
+            Json(json!({ "error": "only a run left running by an earlier server can be cancelled here" })),
+        )
+            .into_response();
+    }
+    let store_state = state.clone();
+    let _ = tokio::task::spawn_blocking(move || super::leftovers::stop_run(&store_state.store, &meta)).await;
+    watch::refresh_runs(&state);
+    Json(json!({ "ok": true })).into_response()
 }
 
 #[derive(Deserialize)]

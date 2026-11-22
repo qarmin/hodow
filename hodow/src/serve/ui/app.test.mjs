@@ -108,6 +108,13 @@ const formOf = (key, preset = 0, values = {}) => {
 };
 const argsOf = (...a) => ui.buildArgs(...formOf(...a));
 
+test('a run left by an earlier server can be cancelled, a terminal run cannot', () => {
+  const left = ui.liveHtml({ active: null, foreign: [{ id: '20261109-1-cts', run: run(), cancellable: true }] });
+  assert.match(left, /data-action="cancel-run" data-id="20261109-1-cts"/);
+  const terminal = ui.liveHtml({ active: null, foreign: [{ id: '20261109-2-cpu', run: run(), cancellable: false }] });
+  assert.doesNotMatch(terminal, /cancel-run/);
+});
+
 test('arguments are built from the choices, and the server is trusted to refuse the rest', () => {
   assert.deepEqual(argsOf('cpu'), ['test', 'cpu', '--isolate']);
   assert.deepEqual(argsOf('cpu', 0, { flows: true, 'flows-size': 'full', tests: ' test_x  test_y ', features: 'sse2, avx2', skip: 'a b', iterations: '3', limit: '5000' }),

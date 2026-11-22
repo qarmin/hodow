@@ -116,11 +116,12 @@ function findingsList(findings) {
   return `<ul class="list">${items.join('')}</ul>`;
 }
 
-function runHtml(run, { job = null, foreign = false, id = null } = {}) {
+function runHtml(run, { job = null, foreign = false, id = null, cancellable = false } = {}) {
   const root = run.steps.find((s) => s.depth === 0);
   const overall = root && pct(root.fraction);
   const where = foreign ? chip('', 'started from a terminal', 'foreign') : '';
-  const cancel = job ? `<button class="danger" data-action="cancel-job" data-id="${job.id}">Stop</button>` : '';
+  const cancel = job ? `<button class="danger" data-action="cancel-job" data-id="${job.id}">Stop</button>`
+    : cancellable && id ? `<button class="danger" data-action="cancel-run" data-id="${esc(id)}" title="Its job was started by a server that is gone">Cancel run</button>` : '';
   const open = id || job?.run;
   const link = open ? `<button data-action="open-run" data-id="${esc(open)}">Details</button>` : '';
   const logs = run.logs.length ? `<ul class="list muted small">${run.logs.slice(-4).map(([, m]) => `<li class="mono">${esc(m)}</li>`).join('')}</ul>` : '';
@@ -138,7 +139,7 @@ function runHtml(run, { job = null, foreign = false, id = null } = {}) {
 function liveHtml(state) {
   const runs = [];
   if (state.active) runs.push(runHtml(state.active.run, { job: state.active.job }));
-  for (const f of state.foreign) runs.push(runHtml(f.run, { foreign: true, id: f.id }));
+  for (const f of state.foreign) runs.push(runHtml(f.run, { foreign: true, id: f.id, cancellable: f.cancellable }));
   return runs.length ? runs.join('') : '<p class="muted">Nothing is running.</p>';
 }
 
@@ -589,6 +590,7 @@ if (typeof document !== 'undefined') {
       else if (action === 'start') openStart(module);
       else if (action === 'open-run') openRun(id);
       else if (action === 'cancel-job') await api('DELETE', `/api/jobs/${id}`);
+      else if (action === 'cancel-run' && confirm(`Cancel ${id}? Its results are kept.`)) await api('POST', `/api/runs/${encodeURIComponent(id)}/cancel`);
       else if (action === 'reprobe') await api('POST', '/api/probe');
       else if (action === 'pin-run') { await api('POST', `/api/runs/${encodeURIComponent(id)}/pin`, { pinned: el.dataset.pinned === '1' }); await loadDetail(); }
       else if (action === 'delete-run' && confirm(`Delete ${id}?`)) { await api('DELETE', `/api/runs/${encodeURIComponent(id)}`); $('run-dialog').close(); }
