@@ -7,6 +7,7 @@ use std::sync::Arc;
 use std::time::{Duration, Instant};
 
 use hodow_common::store::{EVENTS_FILE, Record};
+use hodow_common::time::now_ms;
 use hodow_common::{RunState, RunStatus};
 
 use super::{AppState, Foreign};
@@ -128,10 +129,17 @@ fn set_static_probes(state: &AppState) {
     live.probes.insert("bench".into(), unix_only("kernel timings"));
 }
 
-pub fn probe_gpu_in_background(state: Arc<AppState>) {
-    std::thread::spawn(move || {
-        for (key, kind) in [("gl", "gl"), ("vulkan", "vulkan")] {
-            state.live().probes.insert(
+/// Asks the GPU drivers what they can do, one process each. Returns false when a re-check is already under way.
+pub fn probe_gpu_in_background(state: Arc<AppState>) -> bool {
+    const KINDS: [&str; 2] = ["gl", "vulkan"];
+    {
+        let mut live = state.live();
+        if live.probing {
+            return false;
+        }
+        live.probing = true;
+        for key in KINDS {
+            live.probes.insert(
                 key.into(),
                 Availability {
                     state: "probing".into(),
@@ -139,12 +147,22 @@ pub fn probe_gpu_in_background(state: Arc<AppState>) {
                     devices: Vec::new(),
                 },
             );
-            state.bump();
-            let result = probe(&state, kind);
+        }
+    }
+    state.bump();
+    std::thread::spawn(move || {
+        for key in KINDS {
+            let result = probe(&state, key);
             state.live().probes.insert(key.into(), result);
             state.bump();
         }
+        let mut live = state.live();
+        live.probing = false;
+        live.probed_ms = Some(now_ms());
+        drop(live);
+        state.bump();
     });
+    true
 }
 
 fn probe(state: &AppState, kind: &str) -> Availability {
@@ -230,11 +248,7 @@ mod tests {
     }
 
     fn tempfile_dir() -> std::path::PathBuf {
-        let dir = std::env::temp_dir().join(format!(
-            "hodow-watch-{}-{}",
-            std::process::id(),
-            hodow_common::time::now_ms()
-        ));
+        let dir = std::env::temp_dir().join(format!("hodow-watch-{}-{}", std::process::id(), now_ms()));
         std::fs::create_dir_all(&dir).unwrap();
         dir
     }

@@ -119,6 +119,9 @@ pub struct Finding {
     /// The observed value of an unverified test, so an expectation can be captured from the run.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+    /// How long the test ran, in microseconds, when the module measures it.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub duration_us: Option<u64>,
 }
 
 impl Finding {
@@ -129,6 +132,7 @@ impl Finding {
             verdict,
             detail: None,
             value: None,
+            duration_us: None,
         }
     }
 
@@ -144,6 +148,11 @@ impl Finding {
 
     pub fn value(mut self, value: impl Into<String>) -> Self {
         self.value = Some(value.into());
+        self
+    }
+
+    pub fn duration_us(mut self, micros: u64) -> Self {
+        self.duration_us = Some(micros);
         self
     }
 }
@@ -273,7 +282,8 @@ mod tests {
             Finding::new("t", Verdict::Unverified)
                 .in_step(3)
                 .detail("d")
-                .value("0x1"),
+                .value("0x1")
+                .duration_us(1500),
         ));
         roundtrip(Event::Log {
             level: Level::Warn,

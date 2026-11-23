@@ -39,6 +39,11 @@ struct Args {
     #[arg(long)]
     exclude: Vec<String>,
 
+    /// Skip the cases that measure real time and take minutes, or never finish, on a slow driver (the `flush_finish` timing
+    /// groups). Same as adding their names to --exclude.
+    #[arg(long)]
+    skip_slow: bool,
+
     /// Print the matching case names and exit without touching a driver.
     #[arg(short, long)]
     list: bool,
@@ -208,7 +213,17 @@ pub fn validate_job(args: &[String]) -> Result<(), String> {
 const OK: u8 = 0;
 const FAILED: u8 = 1;
 
+/// Timing cases that calibrate a draw-call load against the clock: on a software or slow driver they run for minutes
+/// and are killed by the worker timeout, which says nothing about conformance.
+const SLOW_CASES: [&str; 2] = [
+    "dEQP-GLES2.functional.flush_finish.*",
+    "dEQP-GLES3.functional.flush_finish.*",
+];
+
 fn run(mut args: Args) -> u8 {
+    if args.skip_slow {
+        args.exclude.extend(SLOW_CASES.map(String::from));
+    }
     if matches!(args.cmd, Some(Command::Board(_)))
         && let Some(Command::Board(board_args)) = args.cmd.take()
     {
@@ -1073,6 +1088,22 @@ mod tests {
         assert_eq!(
             selected(&corpus(CORPUS), &Args::parse_from(["hodow_cts"]), Some(&wanted)),
             list(&["dEQP-GLES2.c", "dEQP-GLES2.a"])
+        );
+    }
+
+    #[test]
+    fn skip_slow_excludes_the_flush_finish_timing_groups() {
+        assert!(Args::parse_from(["hodow_cts", "--skip-slow"]).skip_slow);
+        for name in [
+            "dEQP-GLES2.functional.flush_finish.flush_wait",
+            "dEQP-GLES3.functional.flush_finish.finish",
+        ] {
+            assert!(SLOW_CASES.iter().any(|p| matches_filter(name, p)), "{name}");
+        }
+        assert!(
+            !SLOW_CASES
+                .iter()
+                .any(|p| matches_filter("dEQP-GLES2.functional.fbo.a", p))
         );
     }
 

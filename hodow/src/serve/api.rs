@@ -12,7 +12,7 @@ use axum::response::{Html, IntoResponse, Response};
 use axum::routing::{delete, get, post};
 use axum::{Json, Router};
 use hodow_common::time::now_ms;
-use hodow_common::{Event, RunStatus, Verdict};
+use hodow_common::{Event, Finding, RunStatus, Verdict};
 use serde::Deserialize;
 use serde_json::{Value, json};
 
@@ -94,6 +94,7 @@ pub fn router(state: Arc<AppState>) -> Router {
         .route("/api/runs/{id}/findings", get(get_findings))
         .route("/api/runs/{id}/files/{name}", get(get_file))
         .route("/api/runs/{id}/pin", post(pin_run))
+        .route("/api/runs/{id}/cancel", post(cancel_run))
         .route("/api/jobs", post(submit_job))
         .route("/api/jobs/{id}", delete(cancel_job))
         .route("/api/probe", post(reprobe))
@@ -130,7 +131,13 @@ pub fn snapshot(state: &AppState) -> Value {
     let foreign: Vec<Value> = live
         .foreign
         .iter()
-        .map(|(id, f)| json!({ "id": id, "run": f.state.snapshot(now) }))
+        .map(|(id, f)| {
+            let cancellable = live
+                .runs
+                .iter()
+                .any(|r| &r.id == id && super::leftovers::is_server_job(r));
+            json!({ "id": id, "run": f.state.snapshot(now), "cancellable": cancellable })
+        })
         .collect();
     json!({
         "now": now,
@@ -138,6 +145,7 @@ pub fn snapshot(state: &AppState) -> Value {
         "version": env!("CARGO_PKG_VERSION"),
         "data_dir": state.data_dir.root().display().to_string(),
         "modules": modules,
+        "probe": { "running": live.probing, "finished_ms": live.probed_ms },
         "queue": live.queue,
         "active": active,
         "foreign": foreign,
@@ -215,6 +223,22 @@ struct FindingsQuery {
     q: Option<String>,
     offset: Option<usize>,
     limit: Option<usize>,
+    /// `verdict` (worst first by default), `name`, `time` or `detail`; without it the findings keep the order they came in.
+    sort: Option<String>,
+    /// `asc` or `desc`: the default is the natural one for the column (worst and slowest first).
+    dir: Option<String>,
+}
+
+fn sort_findings(items: &mut [Finding], key: &str, descending: bool) {
+    match key {
+        "name" => items.sort_by(|a, b| a.name.cmp(&b.name)),
+        "time" => items.sort_by_key(|f| f.duration_us.unwrap_or(0)),
+        "detail" => items.sort_by(|a, b| a.detail.cmp(&b.detail)),
+        _ => items.sort_by_key(|f| f.verdict as u8),
+    }
+    if descending {
+        items.reverse();
+    }
 }
 
 fn collect_findings(state: &AppState, id: &str, query: &FindingsQuery) -> std::io::Result<Value> {
@@ -225,6 +249,10 @@ fn collect_findings(state: &AppState, id: &str, query: &FindingsQuery) -> std::i
     let only_notable = matches!(query.verdict.as_deref(), None | Some("notable" | ""));
     let needle = query.q.as_deref().filter(|q| !q.is_empty()).map(str::to_lowercase);
     let (offset, limit) = (query.offset.unwrap_or(0), query.limit.unwrap_or(100).min(MAX_PAGE));
+    let sort = query
+        .sort
+        .as_deref()
+        .filter(|k| matches!(*k, "verdict" | "name" | "time" | "detail"));
     let (mut total, mut items) = (0usize, Vec::new());
     let mut events = state.store.read_events(id)?;
     for record in events.by_ref().filter_map(Result::ok) {
@@ -238,10 +266,20 @@ fn collect_findings(state: &AppState, id: &str, query: &FindingsQuery) -> std::i
         {
             continue;
         }
-        if total >= offset && items.len() < limit {
+        if sort.is_some() || (total >= offset && items.len() < limit) {
             items.push(f);
         }
         total += 1;
+    }
+    if let Some(key) = sort {
+        let natural_descending = matches!(key, "verdict" | "time");
+        let descending = match query.dir.as_deref() {
+            Some("asc") => false,
+            Some("desc") => true,
+            _ => natural_descending,
+        };
+        sort_findings(&mut items, key, descending);
+        items = items.into_iter().skip(offset).take(limit).collect();
     }
     Ok(json!({ "total": total, "offset": offset, "items": items }))
 }
@@ -293,6 +331,29 @@ async fn pin_run(State(state): State<Arc<AppState>>, Path(id): Path<String>, Jso
         Ok(()) => Json(json!({ "ok": true })).into_response(),
         Err(_) => not_found(),
     }
+}
+
+/// Stops a run that belongs to no live job of this server (one an earlier server left behind). A run a person started in a
+/// terminal, or the job this server is running now (it has Stop), is refused.
+async fn cancel_run(State(state): State<Arc<AppState>>, Path(id): Path<String>) -> Response {
+    let Some(meta) = state.store.meta(&id) else {
+        return not_found();
+    };
+    let ours = state.live().active.as_ref().and_then(|a| a.job.run.clone());
+    if meta.status != RunStatus::Running
+        || ours.as_deref() == Some(id.as_str())
+        || !super::leftovers::is_server_job(&meta)
+    {
+        return (
+            StatusCode::CONFLICT,
+            Json(json!({ "error": "only a run left running by an earlier server can be cancelled here" })),
+        )
+            .into_response();
+    }
+    let store_state = state.clone();
+    let _ = tokio::task::spawn_blocking(move || super::leftovers::stop_run(&store_state.store, &meta)).await;
+    watch::refresh_runs(&state);
+    Json(json!({ "ok": true })).into_response()
 }
 
 #[derive(Deserialize)]
@@ -350,8 +411,8 @@ async fn cancel_job(State(state): State<Arc<AppState>>, Path(id): Path<u64>) -> 
 }
 
 async fn reprobe(State(state): State<Arc<AppState>>) -> Json<Value> {
-    watch::probe_gpu_in_background(state);
-    Json(json!({ "ok": true }))
+    let started = watch::probe_gpu_in_background(state);
+    Json(json!({ "ok": true, "started": started }))
 }
 
 async fn ws_handler(ws: WebSocketUpgrade, State(state): State<Arc<AppState>>) -> impl IntoResponse {
@@ -381,5 +442,39 @@ async fn push_state(mut socket: WebSocket, state: Arc<AppState>) {
         }
         // Coalesce a burst of events into one frame.
         tokio::time::sleep(PUSH_EVERY).await;
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn finding(name: &str, verdict: Verdict, micros: Option<u64>) -> Finding {
+        let finding = Finding::new(name, verdict);
+        match micros {
+            Some(us) => finding.duration_us(us),
+            None => finding,
+        }
+    }
+
+    fn names(items: &[Finding]) -> Vec<&str> {
+        items.iter().map(|f| f.name.as_str()).collect()
+    }
+
+    #[test]
+    fn findings_sort_by_the_chosen_column_in_either_direction() {
+        let mut items = vec![
+            finding("b", Verdict::Passed, Some(5)),
+            finding("c", Verdict::Crashed, None),
+            finding("a", Verdict::Failed, Some(9)),
+        ];
+        sort_findings(&mut items, "name", false);
+        assert_eq!(names(&items), ["a", "b", "c"]);
+        sort_findings(&mut items, "verdict", true);
+        assert_eq!(names(&items), ["c", "a", "b"]);
+        sort_findings(&mut items, "time", true);
+        assert_eq!(names(&items), ["a", "b", "c"]);
+        sort_findings(&mut items, "time", false);
+        assert_eq!(names(&items), ["c", "b", "a"]);
     }
 }

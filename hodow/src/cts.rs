@@ -85,10 +85,13 @@ impl hodow_cts::cli::Observer for Recorder {
         let mut guard = self.0.lock().unwrap_or_else(|e| e.into_inner());
         let Some(run) = guard.as_mut() else { return };
         let mut finding = hodow_common::Finding::new(result.name.clone(), verdict_of(result.status));
+        if let Some(step) = run.step.as_ref() {
+            finding = finding.in_step(step.id());
+        }
         if !result.message.is_empty() {
             finding = finding.detail(result.message.clone());
         }
-        run.session.reporter().finding(finding);
+        run.session.reporter().finding(finding.duration_us(result.duration_us));
         run.done += 1;
         if let Some(step) = run.step.as_mut() {
             step.progress(run.done, Some(&result.name));

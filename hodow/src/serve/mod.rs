@@ -8,6 +8,7 @@
 mod api;
 mod executor;
 mod jobs;
+mod leftovers;
 pub mod submit;
 mod watch;
 
@@ -48,6 +49,9 @@ pub struct Live {
     pub foreign: BTreeMap<String, Foreign>,
     pub runs: Vec<RunMeta>,
     pub probes: BTreeMap<String, Availability>,
+    /// A re-check of the GPU drivers is under way, and when the last one finished.
+    pub probing: bool,
+    pub probed_ms: Option<u64>,
 }
 
 pub struct AppState {
@@ -144,7 +148,9 @@ pub fn process_serve(args: &ServeArgs) {
                 return;
             }
         };
+        leftovers::cancel(&state.store);
         executor::spawn(state.clone());
+        executor::stop_job_on_signal(state.clone());
         watch::spawn(state.clone());
 
         let local = format!("http://127.0.0.1:{port}");

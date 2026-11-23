@@ -101,17 +101,104 @@ test('a run started from a terminal is labelled, and only a queued job can be st
   assert.match(ours, /data-action="cancel-job" data-id="7"/);
 });
 
-test('arguments are built from the choices and the free text, and the server is trusted to refuse the rest', () => {
-  const cpu = ui.START.cpu;
-  assert.deepEqual(ui.buildArgs(cpu, { preset: 0, flags: [true], extra: ' -t  test_x ' }), ['test', 'cpu', '--isolate', '--flows', '-t', 'test_x']);
-  assert.deepEqual(ui.buildArgs(cpu, { preset: 1, flags: [false] }), ['test', 'cpu']);
-  assert.deepEqual(ui.buildArgs(ui.START.stress, { number: 30 }), ['cpu', '--stress', '--stress-secs', '30']);
-  assert.deepEqual(ui.buildArgs(ui.START.burn, { preset: 0, text: '90s' }), ['burn', '--duration', '90s']);
-  assert.deepEqual(ui.buildArgs(ui.START.burn, { preset: 1, text: '90s' }), ['burn', '--quick']);
-  assert.deepEqual(ui.buildArgs(ui.START['gpu-memtest'], { number: 128 }), ['gpu', '--memtest', '--memtest-mb', '128']);
-  assert.deepEqual(ui.buildArgs(ui.START.bench, { preset: 2 }), ['bench', '--full']);
-  assert.deepEqual(ui.buildArgs(ui.START.cts, { preset: 2, extra: '-j 2' }), ['cts', '--case', 'dEQP-GLES31.*', '-j', '2']);
-  assert.deepEqual(ui.buildArgs(ui.START.cts, { preset: 5, extra: '--case dEQP-VK.compute.*' }), ['cts', '--case', 'dEQP-VK.compute.*']);
+const formOf = (key, preset = 0, values = {}) => {
+  const def = ui.START[key];
+  const form = ui.initialForm(def);
+  return [def, { preset, values: { ...form.values, ...values } }];
+};
+const argsOf = (...a) => ui.buildArgs(...formOf(...a));
+
+test('a run left by an earlier server can be cancelled, a terminal run cannot', () => {
+  const left = ui.liveHtml({ active: null, foreign: [{ id: '20261109-1-cts', run: run(), cancellable: true }] });
+  assert.match(left, /data-action="cancel-run" data-id="20261109-1-cts"/);
+  const terminal = ui.liveHtml({ active: null, foreign: [{ id: '20261109-2-cpu', run: run(), cancellable: false }] });
+  assert.doesNotMatch(terminal, /cancel-run/);
+});
+
+test('arguments are built from the choices, and the server is trusted to refuse the rest', () => {
+  assert.deepEqual(argsOf('cpu'), ['test', 'cpu', '--isolate']);
+  assert.deepEqual(argsOf('cpu', 0, { flows: true, 'flows-size': 'full', tests: ' test_x  test_y ', features: 'sse2, avx2', skip: 'a b', iterations: '3', limit: '5000' }),
+    ['test', 'cpu', '--isolate', '-e', 'sse2,avx2', '-t', 'test_x', 'test_y', '-s', 'a,b', '-n', '3', '--isolate-timeout', '5000', '--flows', '--flows-size', 'full']);
+  assert.deepEqual(argsOf('cpu', 1, { limit: '5000', flows: false, 'flows-size': 'full' }), ['test', 'cpu']);
+  assert.deepEqual(argsOf('stress', 0, { secs: 30 }), ['cpu', '--stress', '--stress-secs', '30']);
+  assert.deepEqual(argsOf('burn', 0, { duration: '90s' }), ['burn', '--duration', '90s']);
+  assert.deepEqual(argsOf('burn', 1, { duration: '90s' }), ['burn', '--quick']);
+  assert.deepEqual(argsOf('burn', 0, { phases: ['cpu', 'gpu'], temp: 85 }), ['burn', '--duration', '10m', '--skip', 'memory,combined', '--max-temp', '85']);
+  assert.deepEqual(argsOf('gpu-memtest', 0, { mb: 128 }), ['gpu', '--memtest', '--memtest-mb', '128']);
+  assert.deepEqual(argsOf('bench', 2), ['bench', '--full']);
+  assert.deepEqual(argsOf('bench', 0, { kernel: 'blur, r=8', backend: 'cpu' }), ['bench', '--quick', '-k', 'blur,r=8', '-b', 'cpu']);
+  assert.deepEqual(argsOf('gl', 0, { api: 'gles:3.0', software: true }), ['test', 'gl', '--isolate', '--no-window', '--force-software', '--gl-api', 'gles:3.0']);
+});
+
+test('a conformance run skips the very slow cases by default and a custom pattern needs cases', () => {
+  assert.deepEqual(argsOf('cts', 2), ['cts', '--case', 'dEQP-GLES31.*', '--skip-slow']);
+  assert.deepEqual(argsOf('cts', 2, { slow: false, timeout: 120, jobs: 2, exclude: 'a.* b.*' }),
+    ['cts', '--case', 'dEQP-GLES31.*', '--exclude', 'a.*', '--exclude', 'b.*', '--timeout-secs', '120', '-j', '2']);
+  const [def, custom] = formOf('cts', 5, { case: 'dEQP-VK.compute.* dEQP-VK.api.*' });
+  assert.deepEqual(ui.buildArgs(def, custom), ['cts', '--case', 'dEQP-VK.compute.*', '--case', 'dEQP-VK.api.*', '--skip-slow']);
+  assert.equal(ui.problem(def, custom), null);
+  assert.match(ui.problem(def, { ...custom, values: { ...custom.values, case: '  ' } }), /Cases to run/);
+  assert.equal(ui.problem(...formOf('cts', 0)), null);
+});
+
+test('options that do nothing in the chosen mode are greyed out and left out of the command', () => {
+  const [cpu, plain] = formOf('cpu', 1);
+  assert.ok(ui.disabledFields(cpu, plain).has('limit'));
+  assert.ok(ui.disabledFields(cpu, plain).has('flows-size'));
+  const [, flows] = formOf('cpu', 0, { flows: true });
+  assert.ok(!ui.disabledFields(cpu, flows).has('flows-size'));
+  const [burn, none] = formOf('burn', 0, { phases: [] });
+  assert.match(ui.problem(burn, none), /Phases/);
+  const html = ui.startFieldsHtml(...formOf('cts'));
+  assert.match(html, /Skip the very slow cases/);
+  assert.match(html, /<input type="checkbox" data-field="slow" id="fld-slow" checked>/);
+  assert.doesNotMatch(html, /Extra arguments/);
+});
+
+test('every option explains itself and nothing typed or written leaks into the markup unescaped', () => {
+  for (const [key, def] of Object.entries(ui.START)) {
+    for (const f of def.fields ?? []) assert.ok(f.about && f.label, `${key}.${f.id} needs a label and an explanation`);
+    for (const p of def.presets) assert.ok(p.about, `${key}: preset ${p.label} needs an explanation`);
+  }
+  const [def, form] = formOf('cts', 5, { case: '"><img src=x>' });
+  assert.ok(!ui.startFieldsHtml(def, form).includes('<img'));
+});
+
+test('a result time reads in the unit that fits and the page tells whether the driver check is running', () => {
+  assert.equal(ui.fmtMicros(37), '37 µs');
+  assert.equal(ui.fmtMicros(4200), '4.2 ms');
+  assert.equal(ui.fmtMicros(250000), '250 ms');
+  assert.equal(ui.fmtMicros(61300000), '61 s');
+  assert.equal(ui.fmtMicros(undefined), '');
+  const running = ui.recheckHtml({ running: true, finished_ms: null });
+  assert.match(running, /Checking…/);
+  assert.match(running, /<button data-action="reprobe" disabled>/);
+  assert.match(running, /indeterminate/);
+  const done = ui.recheckHtml({ running: false, finished_ms: Date.now() });
+  assert.match(done, /Last checked at \d\d:\d\d:\d\d/);
+  assert.match(done, /Check again/);
+  assert.doesNotMatch(done, /disabled/);
+});
+
+test('result columns sort, and the pager sits below the table next to no stray icon', () => {
+  const meta = { id: 'x', title: 'CTS', status: 'failed', os: 'linux', arch: 'x86_64', version: '1', summary: summary(), args: [] };
+  const view = { verdict: 'all', q: '', offset: 100, limit: 100, sort: 'time', dir: 'asc', findings: { total: 250, offset: 100, items: Array.from({ length: 100 }, (_, i) => ({ name: `t${i}`, verdict: 'passed' })) } };
+  const html = ui.detailHtml({ meta, pinned: false, files: [] }, view);
+  assert.match(html, /data-action="sort" data-key="time"[^>]*>Time ▲</);
+  assert.match(html, /data-key="verdict"[^>]*>Verdict</);
+  assert.ok(html.indexOf('</table>') < html.indexOf('class="pager"'));
+  assert.match(html, /Page 2 of 3 \(101-200 of 250\)/);
+  assert.match(html, /class="ctl-name">Show <button[^>]*class="ibtn"/);
+});
+
+test('the result list has a time column and keeps a verdict on one line', () => {
+  const meta = { id: 'x', title: 'CTS', status: 'failed', os: 'linux', arch: 'x86_64', version: '1', summary: summary(), args: [] };
+  const html = ui.detailHtml({ meta, pinned: false, files: [] }, { verdict: 'notable', q: '', offset: 0, limit: 100,
+    findings: { total: 1, offset: 0, items: [{ name: 'dEQP-GLES2.a', verdict: 'not_supported', duration_us: 2500 }] } });
+  assert.match(html, /<th class="num"><button[^>]*>Time</);
+  assert.match(html, /2\.5 ms/);
+  assert.match(html, /<td class="verdict">/);
+  assert.match(html, /everything except passed/);
 });
 
 test('the detail view pages and can be filtered', () => {
@@ -120,7 +207,8 @@ test('the detail view pages and can be filtered', () => {
   const view = { verdict: 'failed', q: 'a"b', offset: 0, limit: 100,
     findings: { total: 250, offset: 0, items: [{ name: 'test_a', verdict: 'failed', detail: 'got 1' }] } };
   const html = ui.detailHtml(detail, view);
-  assert.match(html, /1–1 of 250/);
+  assert.match(html, /Page 1 of 3 \(1-1 of 250\)/);
+  assert.doesNotMatch(html, /[–—]/);
   assert.match(html, /value="a&quot;b"/);
   assert.match(html, /<option value="failed" selected>/);
   assert.match(html, /Unpin/);

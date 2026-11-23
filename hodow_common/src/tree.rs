@@ -38,6 +38,8 @@ struct Node {
     unit: Option<String>,
     total: Option<u64>,
     done: u64,
+    /// Findings reported for this step: the only progress a reader that never sees progress events (a run in a file) has.
+    counted: u64,
     current: Option<String>,
     weight: Option<f64>,
     progress_driven: bool,
@@ -108,6 +110,7 @@ impl ProgressTree {
                 unit: unit.map(str::to_owned),
                 total,
                 done: 0,
+                counted: 0,
                 current: None,
                 weight,
                 progress_driven: false,
@@ -150,6 +153,13 @@ impl ProgressTree {
         node.last_done = done;
     }
 
+    /// One more result belongs to this step. Only shows while no progress event has ever arrived for it.
+    pub fn count_result(&mut self, id: StepId) {
+        if let Some(node) = self.nodes.get_mut(&id) {
+            node.counted += 1;
+        }
+    }
+
     /// Finishing a step closes everything still running below it.
     pub fn finish(&mut self, id: StepId, outcome: StepOutcome, now_ms: u64) {
         let children = match self.nodes.get_mut(&id) {
@@ -166,13 +176,18 @@ impl ProgressTree {
     }
 
     fn effective_done(&self, node: &Node) -> u64 {
-        if node.progress_driven || node.total.is_none() {
+        if node.progress_driven {
             return node.done;
         }
-        node.children
-            .iter()
-            .filter(|c| self.nodes.get(c).is_some_and(|n| n.outcome.is_some()))
-            .count() as u64
+        if node.total.is_none() {
+            return node.counted;
+        }
+        node.counted
+            + node
+                .children
+                .iter()
+                .filter(|c| self.nodes.get(c).is_some_and(|n| n.outcome.is_some()))
+                .count() as u64
     }
 
     pub fn fraction(&self, id: StepId) -> Option<f64> {
@@ -254,6 +269,19 @@ mod tests {
         t.finish(1, StepOutcome::Done, 30);
         assert_eq!(view(&t, 1).fraction, Some(1.0));
         assert_eq!(view(&t, 1).current.as_deref(), Some("_mm_add_ps"));
+    }
+
+    #[test]
+    fn results_alone_move_a_step_that_never_gets_progress_events() {
+        let mut t = ProgressTree::default();
+        t.start(1, None, "Cases", Some("cases"), Some(100), None, 0);
+        for _ in 0..25 {
+            t.count_result(1);
+        }
+        assert_eq!((view(&t, 1).done, view(&t, 1).fraction), (25, Some(0.25)));
+        t.progress(1, 40, None, None, 10);
+        t.count_result(1);
+        assert_eq!(view(&t, 1).done, 40);
     }
 
     #[test]

@@ -32,6 +32,25 @@ pub fn spawn(state: Arc<AppState>) {
     });
 }
 
+/// Ctrl+C or a termination signal stops the running job before the server exits: the job is a child in its own process group,
+/// so the terminal's signal never reaches it, and a job left behind would show up in the next server as a run nobody drives.
+pub fn stop_job_on_signal(state: Arc<AppState>) {
+    let result = ctrlc::set_handler(move || {
+        log::info!("Stopping the running job before exiting...");
+        if let Some(active) = state.live().active.as_ref() {
+            active.cancel.store(true, Ordering::Relaxed);
+        }
+        let deadline = Instant::now() + TERM_GRACE * 3;
+        while state.live().active.is_some() && Instant::now() < deadline {
+            std::thread::sleep(POLL);
+        }
+        std::process::exit(130);
+    });
+    if let Err(e) = result {
+        log::warn!("Cannot catch Ctrl+C, a running job would outlive the server: {e}");
+    }
+}
+
 fn next_job(state: &AppState) -> Option<(Job, Arc<AtomicBool>)> {
     let mut live = state.live();
     if live.active.is_some() {
@@ -58,6 +77,8 @@ fn spawn_child(state: &AppState, job: &Job) -> std::io::Result<Child> {
         .arg("--data-dir")
         .arg(state.data_dir.root())
         .args(&job.args)
+        .env("NO_COLOR", "1")
+        .env(hodow_common::store::SERVER_JOB_ENV, "1")
         .stdin(Stdio::null())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped());
@@ -119,7 +140,7 @@ fn apply(state: &AppState, line: Line) {
                 active.state.apply(&event, now_ms());
             }
         }
-        Line::Err(text) => active.state.push_log(Level::Info, text),
+        Line::Err(text) => active.state.push_log(Level::Info, &text),
     }
     drop(live);
     state.bump();
@@ -132,7 +153,7 @@ fn run_job(state: &AppState, job: Job, cancel: Arc<AtomicBool>) {
         Err(e) => {
             let mut live = state.live();
             if let Some(active) = live.active.as_mut() {
-                active.state.push_log(Level::Error, format!("could not start: {e}"));
+                active.state.push_log(Level::Error, &format!("could not start: {e}"));
             }
             (None, false)
         }

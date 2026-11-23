@@ -8,6 +8,23 @@ use crate::tree::{NodeView, ProgressTree};
 pub const NOTABLE_CAP: usize = 200;
 pub const LOG_CAP: usize = 200;
 
+/// `text` without ANSI escape sequences (colours, cursor moves): a child's stderr is shown in a page, not a terminal.
+pub fn strip_ansi(text: &str) -> String {
+    let mut out = String::with_capacity(text.len());
+    let mut chars = text.chars().peekable();
+    while let Some(c) = chars.next() {
+        if c != '\x1b' {
+            out.push(c);
+            continue;
+        }
+        if chars.next_if_eq(&'[').is_some() {
+            while chars.next_if(|n| !n.is_ascii_alphabetic()).is_some() {}
+        }
+        chars.next();
+    }
+    out
+}
+
 /// Everything a live view of one run needs, built by feeding it the run's events. Bounded: counters and the tree
 /// stay small however many tests pass, and only the latest non-passing findings are kept.
 #[derive(Debug)]
@@ -81,6 +98,9 @@ impl RunState {
             Event::StepFinished { id, outcome } => self.tree.finish(*id, *outcome, now_ms),
             Event::Finding(finding) => {
                 self.summary.add(finding.verdict);
+                if let Some(step) = finding.step {
+                    self.tree.count_result(step);
+                }
                 if finding.verdict.is_notable() {
                     if self.notable.len() == NOTABLE_CAP {
                         self.notable.pop_front();
@@ -93,7 +113,7 @@ impl RunState {
                 if self.logs.len() == LOG_CAP {
                     self.logs.pop_front();
                 }
-                self.logs.push_back((*level, message.clone()));
+                self.logs.push_back((*level, strip_ansi(message)));
             }
             Event::RunFinished { status, summary } => {
                 self.status = *status;
@@ -104,11 +124,11 @@ impl RunState {
     }
 
     /// A line that did not come from the run's own events, e.g. what its process wrote to stderr.
-    pub fn push_log(&mut self, level: Level, message: String) {
+    pub fn push_log(&mut self, level: Level, message: &str) {
         if self.logs.len() == LOG_CAP {
             self.logs.pop_front();
         }
-        self.logs.push_back((level, message));
+        self.logs.push_back((level, strip_ansi(message)));
     }
 
     pub fn snapshot(&self, now_ms: u64) -> StateSnapshot<'_> {
@@ -130,6 +150,19 @@ impl RunState {
 mod tests {
     use super::*;
     use crate::event::Verdict;
+
+    #[test]
+    fn colour_codes_are_removed_from_log_lines() {
+        assert_eq!(
+            strip_ansi("\x1b[32mINFO \x1b[0m \x1b[2mdEQP-GLES2.x\x1b[0m Minimum required: 1"),
+            "INFO  dEQP-GLES2.x Minimum required: 1"
+        );
+        assert_eq!(strip_ansi("plain, with ünïcode"), "plain, with ünïcode");
+        assert_eq!(strip_ansi("cut \x1b[3"), "cut ");
+        let mut state = RunState::new("cts", "CTS", 0);
+        state.push_log(Level::Info, "\x1b[31mred\x1b[0m");
+        assert_eq!(state.logs.back().map(|l| l.1.as_str()), Some("red"));
+    }
 
     #[test]
     fn a_hundred_thousand_passes_leave_the_state_small() {
